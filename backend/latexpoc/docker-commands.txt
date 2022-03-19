@@ -1,0 +1,8 @@
+
+# create the image
+
+docker image build -t heik2718/latex .
+
+# start container
+
+docker container run -dit --name latexpoc --entrypoint=/bin/bash heik2718/latex
