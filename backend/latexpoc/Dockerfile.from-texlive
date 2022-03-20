@@ -1,6 +1,6 @@
-FROM openjdk:11
+FROM thomasweise/docker-texlive-full:latest
 
-#RUN apt-get install -y libnetpbm10
+# RUN apt-get install -y libnetpbm10-dev
 
 COPY deb/* /tmp/
 COPY --chmod=766 deb/*.sh /tmp/

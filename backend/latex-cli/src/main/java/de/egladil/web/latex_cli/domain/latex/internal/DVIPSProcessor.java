@@ -2,22 +2,22 @@
 // Project: latex-cli
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.web.latex_cli.processes;
+package de.egladil.web.latex_cli.domain.latex.internal;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * LaTeX2PDFProcessor
+ * DVIPSProcessor
  */
-public class LaTeX2PDFProcessor extends AbstractFileProcessor {
+public class DVIPSProcessor extends AbstractFileProcessor {
 
 	@Override
 	protected ProcessBuilder createAndConfigureProcessBuilder(final File file) {
 
 		ProcessBuilder processBuilder = new ProcessBuilder();
-		processBuilder.command("pdflatex", file.getAbsolutePath());
+		processBuilder.command("dvips", file.getAbsolutePath());
 		processBuilder.directory(file.getParentFile());
 		return processBuilder;
 	}
@@ -25,13 +25,13 @@ public class LaTeX2PDFProcessor extends AbstractFileProcessor {
 	@Override
 	protected String getProcessName() {
 
-		return "pdflatex";
+		return "dvips";
 	}
 
 	@Override
 	protected File getResultingFile(final File file) {
 
-		return new File(getFilePathWithoutFileExtension(file) + ".pdf");
+		return new File(getFilePathWithoutFileExtension(file) + ".ps");
 	}
 
 	@Override
@@ -46,10 +46,7 @@ public class LaTeX2PDFProcessor extends AbstractFileProcessor {
 		List<File> result = new ArrayList<>();
 
 		String path = getFilePathWithoutFileExtension(file);
-
-		result.add(new File(path + ".aux"));
-		result.add(new File(path + ".log"));
-		result.add(new File(path + ".out"));
+		result.add(new File(path + ".dvi"));
 
 		return result;
 	}

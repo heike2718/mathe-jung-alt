@@ -2,7 +2,7 @@
 // Project: latex-cli
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.web.latex_cli.processes;
+package de.egladil.web.latex_cli.domain.latex.internal;
 
 import java.io.File;
 import java.util.ArrayList;

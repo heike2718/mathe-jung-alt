@@ -2,7 +2,7 @@
 // Project: latex-cli
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.web.latex_cli;
+package de.egladil.web.latex_cli.domain.latex;
 
 import java.io.File;
 

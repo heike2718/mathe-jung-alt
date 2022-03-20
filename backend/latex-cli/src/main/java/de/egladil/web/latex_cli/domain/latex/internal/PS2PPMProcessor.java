@@ -2,42 +2,48 @@
 // Project: latex-cli
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.web.latex_cli.processes;
+package de.egladil.web.latex_cli.domain.latex.internal;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DVIPSProcessor
+ * PS2PPMProcessor
  */
-public class DVIPSProcessor extends AbstractFileProcessor {
+public class PS2PPMProcessor extends AbstractFileProcessor {
 
 	@Override
 	protected ProcessBuilder createAndConfigureProcessBuilder(final File file) {
 
+		List<String> cmdList = new ArrayList<String>();
+		cmdList.add("sh");
+		cmdList.add(file.getParent() + File.separator + "ps2ppm.sh");
+		cmdList.add(getFileNameWithoutExtension(file));
+
 		ProcessBuilder processBuilder = new ProcessBuilder();
-		processBuilder.command("dvips", file.getAbsolutePath());
+		processBuilder.command(cmdList);
 		processBuilder.directory(file.getParentFile());
+
 		return processBuilder;
 	}
 
 	@Override
 	protected String getProcessName() {
 
-		return "dvips";
+		return "ps2ppm.sh";
 	}
 
 	@Override
 	protected File getResultingFile(final File file) {
 
-		return new File(getFilePathWithoutFileExtension(file) + ".ps");
+		return new File(getFilePathWithoutFileExtension(file) + ".ppm");
 	}
 
 	@Override
 	protected int lengthSourceFileExtension() {
 
-		return 4;
+		return 3;
 	}
 
 	@Override
@@ -46,7 +52,7 @@ public class DVIPSProcessor extends AbstractFileProcessor {
 		List<File> result = new ArrayList<>();
 
 		String path = getFilePathWithoutFileExtension(file);
-		result.add(new File(path + ".dvi"));
+		result.add(new File(path + ".ps"));
 
 		return result;
 	}
