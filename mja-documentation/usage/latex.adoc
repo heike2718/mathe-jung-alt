@@ -1,0 +1,44 @@
+LaTeX
+=====
+
+Heike Winkelvoß
+:Author Initials: HW
+:toc:
+:icons:
+:numbered:
+:website: https://mathe-jung-alt.de/
+:toc-title: Inhaltsverzeichnis
+
+.Über dieses Dokument
+***********************************************************************************************
+Dieses Dokument beschreibt, LaTeX im Docker container verwendet werden kann.
+***********************************************************************************************
+
+Docker
+------
+
+Das docker image basiert auf [thomasweise/docker-texlive-full](https://github.com/thomasWeise/docker-texlive-full) und installiert zusätzlich das paket netbpm. Außerdem enthält es 2 shell-scripts:
+
+* /bin/latex2png.sh wandelt ein tex-File in ein png um
+* /bin/latex2pdf.sh wandelt ein tex-File in ein pdf um
+
+Das umzuwandelnde file nebst seinen dependecies muss im Verzeichnis /doc liegen. Dieses Verzeichnis kann als docker volume gemounted werden, so dass
+eine andere Anwendung die tex- und image- Files dort ablegen und dann die skripte wie folgt verwenden kann:
+
+Ein anderer Service kann die zu compilierenden LaTeX-Dateien in das gemountete Verzeichnis schreiben.
+
+docker container exec -it latex /bin/latex2png.sh test1
+docker container exec -it latex /bin/latex2pdf.sh test1
+
+Image bauen
+-----------
+
+DOCKER_BUILDKIT=1 docker image build -t heik2718/latex .
+
+Container starten
+-----------------
+
+Zuvor wird der container gestartet mit
+
+docker container run -dit -v /home/heike/git/mathe-jung-alt/backend/testfiles:/doc --name latex --entrypoint=/bin/bash heik2718/latex
+

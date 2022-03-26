@@ -37,7 +37,7 @@ public class LaTeX2PNGService {
 	public static LaTeX2PNGService createForTests() {
 
 		LaTeX2PNGService result = new LaTeX2PNGService();
-		result.pathWorkdir = "/home/heike/git/mathe-jung-alt/backend/testfiles";
+		result.pathWorkdir = "/home/heike/git/mathe-jung-alt/backend/latexpoc/latex";
 		return result;
 	}
 

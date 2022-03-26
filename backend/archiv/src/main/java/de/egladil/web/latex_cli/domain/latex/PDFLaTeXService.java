@@ -32,7 +32,7 @@ public class PDFLaTeXService {
 	public static PDFLaTeXService createForTests() {
 
 		PDFLaTeXService result = new PDFLaTeXService();
-		result.pathWorkdir = "/home/heike/git/mathe-jung-alt/backend/testfiles";
+		result.pathWorkdir = "/home/heike/git/mathe-jung-alt/backend/latexpoc/latex";
 		return result;
 	}
 

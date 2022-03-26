@@ -1,0 +1,159 @@
+\newcommand{\bem}{\par {\bf Bemerkung: }}
+\newcommand{\hinw}{\par {\bf Hinweis: }}
+\newcommand{\antw}{\par {\bf Antwort: }}
+\newcommand{\begr}{\par \rule[-5cm]{0mm}{5cm}{\bf Begründung: }}
+\newcommand{\qun}{\par \par \rule{0mm}{5ex}{\bf Quellennachweis:}\par}
+\newcommand{\begrit}{{\it Begründung: }}
+
+%Euro, damit hinter dem EURO- Zeichen ein Abstand erscheint
+\newcommand{\eu}{\euro \mbox{ }}
+\newcommand{\eumath}{\mbox{ \eu }}
+\newcommand{\ctmath}{\mbox{ ct }}
+
+% Maßeinheiten für mathematische Formeln
+\newcommand{\cm}{\mbox{cm}}
+\newcommand{\Cm}{\mbox{ cm}}
+\newcommand{\CM}{\mbox{ cm }}
+\newcommand{\cM}{\mbox{cm }}
+\newcommand{\ggt}{\mbox{ggT}}
+
+%Zahlenrüume
+\newcommand{\mathnat}{{\Bbb N}}
+\newcommand{\mathrat}{{\Bbb Q}}
+\newcommand{\mathganz}{{\Bbb Z}}
+\newcommand{\mathreell}{{\Bbb R}}
+\newcommand{\mathkomp}{{\Bbb C}}
+
+%zahler zurücksetzen
+\newcommand{\resetequation}{\setcounter{equation}{0}}
+
+\newcommand{\antline}[1]{\mbox{\rule{0cm}{1cm}\rule[-2pt]{0.5em}{0em}\rule[-2pt]{#1}{1pt}\rule[-2pt]{0.5em}{0em}}} %parameter ist Länge der Linie.
+
+%  \bild{12cm}{../resources/002/00987.eps}
+\newcommand{\bild}[2] {\begin{center}\begin{tabular}{l} \setlength{\epsfxsize}{#1}\epsfbox{#2} \end{tabular}\end{center}}
+\newcommand{\leftbild}[2] {\begin{tabular}{l} \setlength{\epsfxsize}{#1}\epsfbox{#2} \end{tabular}}
+\newcommand{\graph}[3]{\includegraphics[width=(#1)cm, height=(#2)cm]{#3}}
+
+\newcommand{\bLLletterbox}[4]{\makebox[#1]{\rule[#2]{0em}{#3}\bf\LARGE{#4}}} %\letterbox{breite}{lift}{höhe}{Buchstabe} Text \bf\LARGE
+\newcommand{\bLletterbox}[4]{\makebox[#1]{\rule[#2]{0em}{#3}\bf\Large{#4}}} %\letterbox{breite}{lift}{höhe}{Buchstabe} Text \bf\Large
+\newcommand{\blletterbox}[4]{\makebox[#1]{\rule[#2]{0em}{#3}\bf\large{#4}}} %\letterbox{breite}{lift}{höhe}{Buchstabe} Text \bf\large
+\newcommand{\LLletterbox}[4]{\makebox[#1]{\rule[#2]{0em}{#3}\LARGE{#4}}} %\letterbox{breite}{lift}{höhe}{Buchstabe} Text \LARGE
+\newcommand{\Lletterbox}[4]{\makebox[#1]{\rule[#2]{0em}{#3}\Large{#4}}} %\letterbox{breite}{lift}{höhe}{Buchstabe} Text \Large
+\newcommand{\bletterbox}[4]{\makebox[#1]{\rule[#2]{0em}{#3}\bf{#4}}} %\letterbox{breite}{lift}{höhe}{Buchstabe} Text \bf
+\newcommand{\letterbox}[4]{\makebox[#1]{\rule[#2]{0em}{#3}{#4}}} %\letterbox{breite}{lift}{höhe}{Buchstabe} Text normal
+
+\newcommand{\quelle}[2]{{\small{{\bf #1:} #2}} \newline} % #1: Aufgabenüberschrift #2: Quelle
+
+\newcommand{\vertbox}[1]{\par \makebox[16cm]{\rule{0mm}{#1}}} %weiße vertikale lücke der höhe #1
+%\newcommand{\vertbox}[1]{\\[#1]}}
+
+\newcommand{\horbox}[1]{\par \makebox[#1]{\rule{0mm}{#1}}} %weiße horizontale Lücke der breite #1
+\newcommand{\horobox}[1]{\makebox[#1]{\rule{0mm}{#1}}} %weiße horizontale Lücke der breite #1 ohne paragraph
+
+\newcommand{\merkbox}[2]{\begin{center}
+\fbox{\parbox{#1}{#2}}
+\end{center}} %%gerahmte box der breite #1,die Text #2 umschließt
+
+%\newcommand{\kasten}[4]{\rule{#4}{0mm} \fbox{\rule[#3]{#1}{0mm} \rule[-5mm]{0mm}{#2}}  \rule{#1}{0mm}}
+%schwarzumrahmter kasten der breite #1 und der höhe #2,unterline #3, abstand zum Nachbarn #4
+\newcommand{\kasten}[4]{\rule{#4}{0mm} \fbox{\rule[#3]{#1}{0mm} \rule{0mm}{#2}}  \rule{#1}{0mm}}
+%schwarzumrahmter kasten der breite #1 und der höhe #2, underline #3
+\newcommand{\hwboxu}[3]{\framebox[#1]{\rule[#3]{0mm}{#2}}}
+%schwarzumrahmter kasten der breite #1 und der höhe #2
+\newcommand{\hwbox}[2]{\framebox[#1]{\rule{0mm}{#2}}}
+
+%unumrahmter kasten der breite #1 und der höhe #2,unterline #3, abstand zum Nachbarn #4
+\newcommand{\kastenblank}[4]{\rule{#4}{0mm} \rule[#3]{#1}{0mm} \rule{0mm}{#2}  \rule{#1}{0mm}}
+%unumrahmter kasten der breite #1 und der höhe #2, underline #3
+\newcommand{\hwblankboxu[3]}{\rule{#1}{0mm} \rule[#3]{0mm}{#2}}
+%unumrahmter kasten der breite #1 und der höhe #2
+\newcommand{\hwblankbox[2]}{\rule{#1}{0mm} \rule{0mm}{#2}}
+
+%Anf�hrungsstriche
+\newcommand{\anfoben}{\grqq $\,$}
+\newcommand{\anfunten}{\glqq}
+
+%Doppelpfeil links rechts 
+\newcommand{\gdw}{\Leftrightarrow}
+\newcommand{\impl}{\Rightarrow}
+
+%�nderung Formelnumerierung auf Buchstaben
+\newcounter{saveeqn}
+\newcommand{\alpheqn}{\setcounter{saveeqn}{\value{equation}}}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{\mbox{\aerabic{saveeqn}-\alph{equation}}}
+\newcommand{\reseteqn}{\setcounter{equation}{\value{saveeqn}}}
+\renewcommand{\theequation}{\arabic{equation}}
+
+%�nderung font
+\newcommand{\changefont}[3]{\fontfamily{#1} \fontseries{#2} \fontshape{#3} \selectfont}
+
+% TikZ-Commands
+% Three counters
+\newcounter{x}
+\newcounter{y}
+\newcounter{z}
+% The angles of x,y,z-axes
+\newcommand\xaxis{210}
+\newcommand\yaxis{-30}
+\newcommand\zaxis{90}
+
+% The top side of a cube
+\newcommand\topside[3]{
+  \fill[fill=lightgray, draw=black,shift={(\xaxis:#1)},shift={(\yaxis:#2)},
+  shift={(\zaxis:#3)}] (0,0) -- (30:1) -- (0,1) --(150:1)--(0,0);
+}
+
+% The left side of a cube
+\newcommand\leftside[3]{
+  \fill[fill=gray, draw=black,shift={(\xaxis:#1)},shift={(\yaxis:#2)},
+  shift={(\zaxis:#3)}] (0,0) -- (0,-1) -- (210:1) --(150:1)--(0,0);
+}
+
+% The right side of a cube
+\newcommand\rightside[3]{
+  \fill[fill=darkgray, draw=black,shift={(\xaxis:#1)},shift={(\yaxis:#2)},
+  shift={(\zaxis:#3)}] (0,0) -- (30:1) -- (-30:1) --(0,-1)--(0,0);
+}
+
+% The cube 
+\newcommand\cube[3]{
+  \topside{#1}{#2}{#3} \leftside{#1}{#2}{#3} \rightside{#1}{#2}{#3}
+}
+
+% Definition of \planepartition
+% To draw the following plane partition, just write \planepartition{ {a, b, c}, {d,e} }.
+%  a b c
+%  d e
+\newcommand\planepartition[1]{
+ \setcounter{x}{-1}
+  \foreach \a in {#1} {
+    \addtocounter{x}{1}
+    \setcounter{y}{-1}
+    \foreach \b in \a {
+      \addtocounter{y}{1}
+      \setcounter{z}{-1}
+      \foreach \c in {1,...,\b} {
+        \addtocounter{z}{1}
+        \cube{\value{x}}{\value{y}}{\value{z}}
+      }
+    }
+  }
+}
+
+\tikzset{heikes grid/.style={help lines, color=#1, step=.25cm}}
+\tikzset{heikes grid/.default=gray}
+
+\renewcommand{\figurename}{Bild}
+
+\DeclareMathOperator{\ggT}{ggT}
+\DeclareMathOperator{\kgV}{kgV}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% === Farben ===
+\definecolor{darkgreen}{RGB}{4,150,19}
+
+
