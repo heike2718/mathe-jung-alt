@@ -1,0 +1,144 @@
+LaTeX-Microservice
+==================
+
+Heike Winkelvoß
+:Author Initials: HW
+:toc:
+:icons:
+:numbered:
+:website: https://mathe-jung-alt.de/
+:toc-title: Inhaltsverzeichnis
+
+.Über dieses Dokument
+***********************************************************************************************
+Dieses Dokument beschreibt, wie der LaTeX-Microservice deployed und verwendet werden kann.
+***********************************************************************************************
+
+Zweck
+-----
+
+Der LaTeX-Microservice stellt einen http-Service zur Transformation von LaTeX nach PDF oder png zur Verfügung.
+
+*Achtung:* Der Microservice sollte besser nicht frei im Internet herumgurken, sondern im Rahmen einer sicheren Anwendung verwendet werden, die LaTeX- Injection- Angriffe zuverlässig verhindert.
+
+Wenn ein LaTeX- File als sicher identifiziert wurde, wird dieses in einen Docker-Volume gelegt, auf welchen der LaTeX-Microservice Zugriff hat und die
+gewünschte Transformation vornehmen kann.
+
+Das Transformieren der LaTeX-Datei ist nicht threadsafe, d.h. die Anwendung, die den Microservice nutzt, muss sicherstellen, dass jedes *.tex- File immer nur von einem Thread im Zugriff ist.
+
+Dockerimages
+------------
+
+Es werden 2 Dockerimages zur Verfügung gestellt.
+
+docker-java-latex
+~~~~~~~~~~~~~~~~~
+
+Dieses Image ist eina Adaption von [thomas-weise/docker-texlive-full](https://github.com/thomasWeise/docker-texlive-full).
+
+Es verwendet (anders als das aktuelle Image) ubuntu:20.04 als Basis und erweitert dieses um *openjdk-11-jre-headless*, so dass neben LaTeX auch eine Java-Runtime zur Verfügung steht.
+
+Falls jemand eine andere Java-Version benötigt, muss er das Image anpassen.
+
+docker-latex-client
+~~~~~~~~~~~~~~~~~~~
+
+Dieses Image erweitert heike2718/docker-java-latex um netbpm, damit im container das command pnm zur Verfügung steht, um aus ps-Files png-Files herauszuschneiden.
+
+Außerdem stellt es die shell-Skripte latex2pdf.sh und latex2png.sh zur Verfügung, die die Transformation von LaTeX zu PDF bzw. png kapseln, sowie einen in java geschriebenen http-Service, der diese beiden Skripte aufruft, um ein LaTeX-File in das gewünschte Format zu transformieren.
+
+Der java-Service kann bei Bedarf angepasst oder ersetzt werden, um latex2pdf.sh bzw latex2png.sh anderweitig aufzurufen.
+
+
+Bauen der Images
+----------------
+
+docker-java-latex
+~~~~~~~~~~~~~~~~~
+
+docker image build -t heike2718/docker-java-latex .
+
+
+docker-latex-client
+~~~~~~~~~~~~~~~~~~~
+
+*Achtung:* wenn der Name des docker-java-latex-Images geändert werden soll, muss das Dockerfile im Verzeichnis docker-latex-client angepasst werden.
+
+DOCKER_BUILDKIT=1 docker image build -t heike2718/docker-latex-client .
+
+(Der präfix vor docker image... ist erforderlich, weil anderenfalls chmod und chown beim Bauen des Inages nicht zur Verfügung stehen).
+
+Testen des Images
+~~~~~~~~~~~~~~~~~
+
+docker container run -it -v /home/heike/git/mathe-jung-alt/backend/testfiles:/doc --name latex --entrypoint=/bin/bash heike2718/docker-latex-client
+
+docker container exec -it latex /bin/latex2png.sh test1
+docker container exec -it latex /bin/latex2pdf.sh test1
+
+Das File test1.tex muss dazu in /home/heike/git/mathe-jung-alt/backend/testfiles vorhanden sein. Dort liegt anschließend auch das Ergebnisfile test1.pdf oder test1.png
+
+Java-LaTeX-Client
+-----------------
+
+Dies ist ein in java geschriebener minimalistischer http-Service (Microservice) under Verwendung von Undertow.
+
+Er lauscht auf dem Port 8080. Der Port ist hardcodiert, kann aber sebstverständlich beim Start des docker containers auf einen beliebigen anderen Port gemappt werden.
+
+Architekturidee und Sicherheitshinweise
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Die REST-API ist minimalistisch und verwendet *nicht* https, da in der Regel der Java-LaTeX-Client-Microservice nicht nach außen propagiert werden sollte.
+
+Die Architekturidee ist, den Java-LaTeX-Client-Microservice in ein Dockernetzwerk zu integrieren, von wo aus er durch einen nach außen sichtbarern Service aufgerufen werden kann.
+
+*Achtung:* Für die Input-Validierung des LaTeX-Codes ist der nach außen sichtbare Service zuständig. Dieser muss LaTeX-Injection zuverlässig abwehren, damit durch den Aufruf des Java-LaTeX-Client-Microservice kein Sicherheitsrisiko besteht.
+
+Die zu transformierenden Files werden über einen gemeinsam genutzten Volume ausgetauscht. Das Zielverzeichnis im Container ist /doc. Also der nach außen sichtbare Service legt in /doc ein tex-File und ggf. andere Files wie images ab, ruft dann den Microservice zum Transformieren auf und sammelt das Ergebnisfile aus /doc wieder auf.
+
+
+
+REST-API
+~~~~~~~~
+
+*Transformation LaTeX -> PDF:*
+
+http://host:port/latex2pdf?filename=name-tex-file-ohne-suffix
+
+*Transformation LaTeX -> PNG:*
+
+http://host:port/latex2png?filename=name-tex-file-ohne-suffix
+
+
+Content-Type ist application/json.
+
+Das Antwort-Format ist dieses:
+
+```
+{
+  "level": "INFO",
+  "message": "fertig: execute command PDF on file 02819 - exitCode=0"
+}
+```
+*Antworten*
+
+* Level INFO: alles ok, transformiertes File liegt neben dem source-LaTeX-File.
+* Level ERROR: Transformation konnte nicht erfolgen. Es steht dann etwas im Server-Log des docker-latex-client-Containers. Es gibt kein transformiertes File.
+
+Testen des Images
+~~~~~~~~~~~~~~~~~
+
+docker container run -it -v /home/heike/git/mathe-jung-alt/backend/testfiles:/doc -p 8080:8080 --name latex heike2718/docker-latex-client
+
+Im ocker-Volume liege eine fehlerfrei compilierbare Datei test1.tex.
+
+curl -X GET -i 'http://localhost:8080/latex2pdf?filename=test1'
+curl -X GET -i 'http://localhost:8080/latex2png?filename=test1'
+
+Testdateien
+----------
+
+unter [testfiles](./backend/testfiles) liegen 2 LaTeX- Files zum Testen.
+
+* test1.tex ist ohne weitere Ressourcen in sich vollständig
+* test2.tex testet die Verzeichnisstruktur und Referenzierungen, wenn per include oder image verschachtelt wird.

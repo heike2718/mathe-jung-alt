@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+
+  docker-latex-client:
+    image: heike2718/docker-latex-client
+    networks:
+      - mja-network
+    ports:
+      - 8080:8080
+    volumes:
+      - /home/heike/git/mathe-jung-alt/backend/testfiles:/doc
+    environment:
+      - TZ=Europe/Berlin
+    restart: on-failure:3
+    command: ["java","-jar","/opt/latex-client.jar"]
+
+networks:
+   mja-network:
+

@@ -14,9 +14,7 @@ public enum LaTeXCommand {
 		@Override
 		public String getShellScript() {
 
-			// Denkfehler: diese Anwendung läuft im gleichen Prozess, also kann das script innerhalb des docker-containers
-			// ausgeführt werden.
-			return "/home/heike/git/mathe-jung-alt/backend/latex-client/src/main/bin/call-docker-pdf.sh";
+			return "/bin/latex2pdf.sh";
 		}
 
 		@Override
@@ -30,9 +28,7 @@ public enum LaTeXCommand {
 		@Override
 		public String getShellScript() {
 
-			// Denkfehler: diese Anwendung läuft im gleichen Prozess, also kann das script innerhalb des docker-containers
-			// ausgeführt werden.
-			return "/home/heike/git/mathe-jung-alt/backend/latex-client/src/main/bin/call-docker-png.sh";
+			return "/bin/latex2png.sh";
 		}
 
 		@Override
@@ -74,5 +70,10 @@ public enum LaTeXCommand {
 
 		return relativePath;
 	}
+
+	// private String getEnvDoc() {
+	//
+	// System.getenv("PATH_DOC")
+	// }
 
 }
