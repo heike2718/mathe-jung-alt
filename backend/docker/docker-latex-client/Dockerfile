@@ -14,7 +14,7 @@ COPY --chmod=766 deb/*.sh /tmp/
  . /tmp/install-packages.sh
 
 # copy the latex-client
-COPY jar/*.jar /opt/
+COPY deployment/*.jar /opt/
 
 # cleanup packages and install-script
 RUN echo "cleanup packages and install-script." &&\

@@ -34,7 +34,7 @@ Es werden 2 Dockerimages zur Verfügung gestellt.
 docker-java-latex
 ~~~~~~~~~~~~~~~~~
 
-Dieses Image ist eina Adaption von [thomas-weise/docker-texlive-full](https://github.com/thomasWeise/docker-texlive-full).
+Dieses Image ist eina Adaption von <https://github.com/thomasWeise/docker-texlive-full>.
 
 Es verwendet (anders als das aktuelle Image) ubuntu:20.04 als Basis und erweitert dieses um *openjdk-11-jre-headless*, so dass neben LaTeX auch eine Java-Runtime zur Verfügung steht.
 
@@ -61,6 +61,8 @@ docker image build -t heike2718/docker-java-latex .
 
 docker-latex-client
 ~~~~~~~~~~~~~~~~~~~
+
+Zuerst muss mittels mvn package die latex-client.jar gebaut und ins Verzeichnis docker/docker-latex-client/deployment kopiert werden./
 
 *Achtung:* wenn der Name des docker-java-latex-Images geändert werden soll, muss das Dockerfile im Verzeichnis docker-latex-client angepasst werden.
 
