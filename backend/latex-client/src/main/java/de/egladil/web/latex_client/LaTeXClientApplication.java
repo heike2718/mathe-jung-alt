@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.web.latex_client;
 
+import de.egladil.web.latex_client.internal.CustomHttpHandler;
 import io.undertow.Undertow;
 
 /**
@@ -23,6 +24,11 @@ public class LaTeXClientApplication {
 
 		// Boot the web server
 		server.start();
+
+		System.out.println("=======================================================");
+		System.out.println("LaTeXClientApplication started - listening to port 8080");
+		System.out.println("=======================================================");
+
 	}
 
 }

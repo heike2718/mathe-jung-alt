@@ -19,6 +19,12 @@ public enum LaTeXCommand {
 			return "/home/heike/git/mathe-jung-alt/backend/latex-client/src/main/bin/call-docker-pdf.sh";
 		}
 
+		@Override
+		public String getDescription() {
+
+			return "transformiert ein .tex-File nach pdf. Das File und die erforderlichen Ressourcen müssen im gemounteten Verzeichnis /doc liegen.";
+		}
+
 	},
 	PNG("/latex2png") {
 		@Override
@@ -27,6 +33,12 @@ public enum LaTeXCommand {
 			// Denkfehler: diese Anwendung läuft im gleichen Prozess, also kann das script innerhalb des docker-containers
 			// ausgeführt werden.
 			return "/home/heike/git/mathe-jung-alt/backend/latex-client/src/main/bin/call-docker-png.sh";
+		}
+
+		@Override
+		public String getDescription() {
+
+			return "transformiert ein .tex-File nach png. Das File und die erforderlichen Ressourcen müssen im gemounteten Verzeichnis /doc liegen.";
 		}
 	};
 
@@ -55,5 +67,12 @@ public enum LaTeXCommand {
 	}
 
 	public abstract String getShellScript();
+
+	public abstract String getDescription();
+
+	public String getRelativePath() {
+
+		return relativePath;
+	}
 
 }
