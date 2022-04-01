@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'mathe-jung-alt-workspace-root',
+  selector: 'mja-admin-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
