@@ -1,0 +1,93 @@
+{
+  "projectType": "application",
+  "root": "apps/mja-aufgabenarchiv-admin",
+  "sourceRoot": "apps/mja-aufgabenarchiv-admin/src",
+  "prefix": "mathe-jung-alt-workspace",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/mja-aufgabenarchiv-admin",
+        "index": "apps/mja-aufgabenarchiv-admin/src/index.html",
+        "main": "apps/mja-aufgabenarchiv-admin/src/main.ts",
+        "polyfills": "apps/mja-aufgabenarchiv-admin/src/polyfills.ts",
+        "tsConfig": "apps/mja-aufgabenarchiv-admin/tsconfig.app.json",
+        "assets": [
+          "apps/mja-aufgabenarchiv-admin/src/favicon.ico",
+          "apps/mja-aufgabenarchiv-admin/src/assets"
+        ],
+        "styles": ["apps/mja-aufgabenarchiv-admin/src/styles.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/mja-aufgabenarchiv-admin/src/environments/environment.ts",
+              "with": "apps/mja-aufgabenarchiv-admin/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "mja-aufgabenarchiv-admin:build:production"
+        },
+        "development": {
+          "browserTarget": "mja-aufgabenarchiv-admin:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "mja-aufgabenarchiv-admin:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/mja-aufgabenarchiv-admin/src/**/*.ts",
+          "apps/mja-aufgabenarchiv-admin/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/mja-aufgabenarchiv-admin"],
+      "options": {
+        "jestConfig": "apps/mja-aufgabenarchiv-admin/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

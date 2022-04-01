@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "mja-aufgabenarchiv-admin": "apps/mja-aufgabenarchiv-admin",
+    "mja-aufgabenarchiv-admin-e2e": "apps/mja-aufgabenarchiv-admin-e2e"
+  }
+}
