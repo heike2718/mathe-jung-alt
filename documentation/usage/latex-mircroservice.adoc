@@ -68,7 +68,7 @@ Zuerst muss mittels mvn package die latex-client.jar gebaut und ins Verzeichnis 
 
 DOCKER_BUILDKIT=1 docker image build -t heike2718/docker-latex-client .
 
-(Der präfix vor docker image... ist erforderlich, weil anderenfalls chmod und chown beim Bauen des Inages nicht zur Verfügung stehen).
+(Der präfix vor docker image... ist erforderlich, weil anderenfalls chmod und chown beim Bauen des Images nicht zur Verfügung stehen).
 
 Testen des Images
 ~~~~~~~~~~~~~~~~~
@@ -90,7 +90,7 @@ Er lauscht auf dem Port 8080. Der Port ist hardcodiert, kann aber sebstverständ
 Architekturidee und Sicherheitshinweise
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Die REST-API ist minimalistisch und verwendet *nicht* https, da in der Regel der Java-LaTeX-Client-Microservice nicht nach außen propagiert werden sollte.
+Die REST-API ist minimalistisch und verwendet *nicht* https, da in der Regel der Java-LaTeX-Client-Microservice nicht nach außen propagiert werden sollte. Außerdem gibt es lediglich 2 REST-Endpoints, die keine sensiblen Daten transportieren, sondern Commands im Container triggern, die auf LaTeX-Files arbeiten.
 
 Die Architekturidee ist, den Java-LaTeX-Client-Microservice in ein Dockernetzwerk zu integrieren, von wo aus er durch einen nach außen sichtbarern Service aufgerufen werden kann.
 

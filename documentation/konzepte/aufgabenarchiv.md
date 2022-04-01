@@ -2,18 +2,11 @@
 
 Neue Anwendung: __mja-aufgabenarchiv-admin__
 
-## POC LaTeX-Generierung auf dem Server
-
-* LaTeX - full- Installation als container
-* Experimente mit den von mir benötigten LaTeX- Befehlen
-* ps2png als container verfügbar machen
-
-
 ## Übernahme der Aufgaben-Metadaten auf den Server
 
-Mit einer neuen Web-Anwendung soll in Zukunft das Aufgabenarchiv gepflegt werden. Dies die Eclipse-RCP-Anwendung ablösen und von anderen mit genutzt werden können.
+Mit einer neuen Web-Anwendung soll in Zukunft das Aufgabenarchiv gepflegt werden. Dies wird die Eclipse-RCP-Anwendung ablösen und von anderen mit genutzt werden können.
 
-Aufgaben sollen mehrfach verwendet werden können. Dazu Lösung von der zu 1- Zuordnung zu einer Klassenstufe. Statt starre Attribute übergang zu Tags.
+Aufgaben sollen mehrfach verwendet werden können. Dazu Lösung von der zu 1- Zuordnung zu einer Klassenstufe. Statt starre Attribute Übergang zu Tags.
 
 __Welche Tags sind erforderlich für die Migration des bisherigen Archivs?__
 
@@ -29,6 +22,7 @@ __Welche Tags sind erforderlich für die Migration des bisherigen Archivs?__
 
 Neue Tags müssen einfach erfasst und zugeordnet werden können. Tags einer Kategorie können mehrfach vergeben werden.
 Nach Tags muss gesucht werden können.
+
 
 __Kommentarfunktion:__
 
@@ -72,10 +66,37 @@ __Vorteile Datenbank:__
 
 * keine I/O beim Anzeigen der Quelltexte
 * alles zu einer Aufgabe in einziger Datei
+* Volltextsuche möglich
 
 __Nachteile Filesystem:__
 
 * eigener Backup-Mechanismus für Files
 
 __Vorteile Filesystem:__
+
+
+## Aufgabensammlungen
+
+Frage: wie sollen die Inhalte von Aufgabensammlungen persistiert sein?
+
+Aufgabensammlungen sind Gruppen von Aufgaben mit einem Namen. Die Aufgaben haben dabei eine feste Reihenfolge. PDFs von Aufgabensammlungen sollen einfach neu generiert werden.
+
+Eine Aufgabensammlung ist eine eigene Entität mit einem Namen und einer Liste von Items, wobei ein Item eine Aufgabe referenziert und eine alphanumerische Nummer und ggf. noch eine Sortiernummer hat.
+
+Vorhandene Aufgabensammlungen sind 
+
+* Serien
+* Minikänguruwettbewerbe mit Stufe (also bis 2016 je eine Aufgabensammlung, von 2017 bis 2019 je zwei Aufgabensammlungen, ab 2020 je 3 Aufgabensammlungen)
+* Hefte (aber da ist fraglich, ob wir die migrieren sollten)
+* Kleine Quizes (zukünftig)
+
+Die Persistierung von Aufgabensammlungen dient der Datensicherung
+
+# Nächste Schritte
+
+Aufsetzen frontend-nrwl-workspace mit nx-cli und angularachitects/ddd-cli.
+
+Gelöst: docker-laxtex-client zum Konvertieren von LaTeX zu PDF und PNG.
+
+
 
