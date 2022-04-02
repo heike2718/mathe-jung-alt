@@ -15,11 +15,29 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mathe-jung-alt-workspace/stichworte/domain": [
-        "libs/stichworte/domain/src/index.ts"
+      "@mathe-jung-alt-workspace/bilder/domain": [
+        "libs/bilder/domain/src/index.ts"
       ],
-      "@mathe-jung-alt-workspace/stichworte/feature-stichwortsuche": [
-        "libs/stichworte/feature-stichwortsuche/src/index.ts"
+      "@mathe-jung-alt-workspace/bilder/feature-search": [
+        "libs/bilder/feature-search/src/index.ts"
+      ],
+      "@mathe-jung-alt-workspace/medien/domain": [
+        "libs/medien/domain/src/index.ts"
+      ],
+      "@mathe-jung-alt-workspace/medien/feature-search": [
+        "libs/medien/feature-search/src/index.ts"
+      ],
+      "@mathe-jung-alt-workspace/quellen/domain": [
+        "libs/quellen/domain/src/index.ts"
+      ],
+      "@mathe-jung-alt-workspace/quellen/feature-search": [
+        "libs/quellen/feature-search/src/index.ts"
+      ],
+      "@mathe-jung-alt-workspace/raetsel/domain": [
+        "libs/raetsel/domain/src/index.ts"
+      ],
+      "@mathe-jung-alt-workspace/raetsel/feature-search": [
+        "libs/raetsel/feature-search/src/index.ts"
       ]
     }
   },

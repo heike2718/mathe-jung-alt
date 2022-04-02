@@ -17,11 +17,20 @@
                 "onlyDependOnLibsWithTags": ["*"]
               },
               {
-                "sourceTag": "domain:stichworte",
-                "onlyDependOnLibsWithTags": [
-                  "domain:stichworte",
-                  "domain:shared"
-                ]
+                "sourceTag": "domain:raetsel",
+                "onlyDependOnLibsWithTags": ["domain:raetsel", "domain:shared"]
+              },
+              {
+                "sourceTag": "domain:medien",
+                "onlyDependOnLibsWithTags": ["domain:medien", "domain:shared"]
+              },
+              {
+                "sourceTag": "domain:quellen",
+                "onlyDependOnLibsWithTags": ["domain:quellen", "domain:shared"]
+              },
+              {
+                "sourceTag": "domain:bilder",
+                "onlyDependOnLibsWithTags": ["domain:bilder", "domain:shared"]
               }
             ]
           }

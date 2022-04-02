@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/medien/feature-search",
+  "sourceRoot": "libs/medien/feature-search/src",
+  "prefix": "medien",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/medien/feature-search"],
+      "options": {
+        "project": "libs/medien/feature-search/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/medien/feature-search/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/medien/feature-search/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/medien/feature-search"],
+      "options": {
+        "jestConfig": "libs/medien/feature-search/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/medien/feature-search/src/**/*.ts",
+          "libs/medien/feature-search/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:medien", "type:feature"]
+}

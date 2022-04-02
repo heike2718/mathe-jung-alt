@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/bilder/domain",
+  "sourceRoot": "libs/bilder/domain/src",
+  "prefix": "bilder",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/bilder/domain"],
+      "options": {
+        "project": "libs/bilder/domain/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/bilder/domain/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/bilder/domain/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/bilder/domain"],
+      "options": {
+        "jestConfig": "libs/bilder/domain/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/bilder/domain/src/**/*.ts",
+          "libs/bilder/domain/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:bilder", "type:domain-logic"]
+}

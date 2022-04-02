@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/raetsel/domain",
+  "sourceRoot": "libs/raetsel/domain/src",
+  "prefix": "raetsel",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/raetsel/domain"],
+      "options": {
+        "project": "libs/raetsel/domain/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/raetsel/domain/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/raetsel/domain/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/raetsel/domain"],
+      "options": {
+        "jestConfig": "libs/raetsel/domain/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/raetsel/domain/src/**/*.ts",
+          "libs/raetsel/domain/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:raetsel", "type:domain-logic"]
+}

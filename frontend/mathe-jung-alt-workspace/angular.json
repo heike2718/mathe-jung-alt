@@ -1,9 +1,15 @@
 {
   "version": 2,
   "projects": {
+    "bilder-domain": "libs/bilder/domain",
+    "bilder-feature-search": "libs/bilder/feature-search",
+    "medien-domain": "libs/medien/domain",
+    "medien-feature-search": "libs/medien/feature-search",
     "mja-admin": "apps/mja-admin",
     "mja-admin-e2e": "apps/mja-admin-e2e",
-    "stichworte-domain": "libs/stichworte/domain",
-    "stichworte-feature-stichwortsuche": "libs/stichworte/feature-stichwortsuche"
+    "quellen-domain": "libs/quellen/domain",
+    "quellen-feature-search": "libs/quellen/feature-search",
+    "raetsel-domain": "libs/raetsel/domain",
+    "raetsel-feature-search": "libs/raetsel/feature-search"
   }
 }

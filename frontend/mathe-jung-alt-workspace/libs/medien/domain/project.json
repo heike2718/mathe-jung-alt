@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/medien/domain",
+  "sourceRoot": "libs/medien/domain/src",
+  "prefix": "medien",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/medien/domain"],
+      "options": {
+        "project": "libs/medien/domain/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/medien/domain/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/medien/domain/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/medien/domain"],
+      "options": {
+        "jestConfig": "libs/medien/domain/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/medien/domain/src/**/*.ts",
+          "libs/medien/domain/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:medien", "type:domain-logic"]
+}

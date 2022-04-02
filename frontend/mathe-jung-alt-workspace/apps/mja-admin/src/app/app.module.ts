@@ -7,17 +7,19 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './+state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { StichworteDomainModule } from '@mathe-jung-alt-workspace/stichworte/domain';
-import { StichworteFeatureStichwortsucheModule } from '@mathe-jung-alt-workspace/stichworte/feature-stichwortsuche';
+import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { RaetselFeatureSearchModule } from '@mathe-jung-alt-workspace/raetsel/feature-search';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    RaetselDomainModule,
+    RaetselFeatureSearchModule,
     BrowserModule,
-    StichworteDomainModule,    
     EffectsModule.forRoot([]),
-    StichworteFeatureStichwortsucheModule,
-    StoreModule.forRoot(reducers, { metaReducers }), !environment.production ? StoreDevtoolsModule.instrument() : []],
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
