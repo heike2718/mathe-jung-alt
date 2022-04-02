@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/stichworte/domain",
+  "sourceRoot": "libs/stichworte/domain/src",
+  "prefix": "stichworte",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/stichworte/domain"],
+      "options": {
+        "project": "libs/stichworte/domain/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/stichworte/domain/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/stichworte/domain/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/stichworte/domain"],
+      "options": {
+        "jestConfig": "libs/stichworte/domain/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/stichworte/domain/src/**/*.ts",
+          "libs/stichworte/domain/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:stichworte", "type:domain-logic"]
+}

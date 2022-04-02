@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@mathe-jung-alt-workspace/stichworte/domain": [
+        "libs/stichworte/domain/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
