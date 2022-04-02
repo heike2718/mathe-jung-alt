@@ -2,7 +2,6 @@
   "version": 2,
   "projects": {
     "mja-admin": "apps/mja-admin",
-    "mja-admin-e2e": "apps/mja-admin-e2e",
-    "tags-domain": "libs/tags/domain"
+    "mja-admin-e2e": "apps/mja-admin-e2e"
   }
 }
