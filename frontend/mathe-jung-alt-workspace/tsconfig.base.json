@@ -17,6 +17,9 @@
     "paths": {
       "@mathe-jung-alt-workspace/stichworte/domain": [
         "libs/stichworte/domain/src/index.ts"
+      ],
+      "@mathe-jung-alt-workspace/stichworte/feature-stichwortsuche": [
+        "libs/stichworte/feature-stichwortsuche/src/index.ts"
       ]
     }
   },

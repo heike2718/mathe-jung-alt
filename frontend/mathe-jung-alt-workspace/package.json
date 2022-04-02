@@ -1,13 +1,17 @@
 {
   "name": "mathe-jung-alt-workspace",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "test:all": "nx run-many --all --target=test --ci",
+    "lint:all": "nx run-many --all --target=lint",
+    "test:affected": "nx affected --target=test",
+    "lint:affected": "nx affected --target=lint"
   },
   "private": true,
   "dependencies": {

@@ -3,6 +3,7 @@
   "projects": {
     "mja-admin": "apps/mja-admin",
     "mja-admin-e2e": "apps/mja-admin-e2e",
-    "stichworte-domain": "libs/stichworte/domain"
+    "stichworte-domain": "libs/stichworte/domain",
+    "stichworte-feature-stichwortsuche": "libs/stichworte/feature-stichwortsuche"
   }
 }
