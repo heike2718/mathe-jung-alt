@@ -25,6 +25,7 @@
     "@angular/router": "13.2.7",
     "@ng-bootstrap/ng-bootstrap": "^12.0.1",
     "@ngrx/effects": "^13.1.0",
+    "@ngrx/entity": "^13.1.0",
     "@ngrx/schematics": "^13.1.0",
     "@ngrx/store": "^13.1.0",
     "@ngrx/store-devtools": "^13.1.0",
