@@ -14,10 +14,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'mja-aufgabenarchiv-admin'`, () => {
+  it(`should have as title 'mja-admin'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('mja-aufgabenarchiv-admin');
+    expect(app.title).toEqual('mja-admin');
   });
 
   it('should render title', () => {
@@ -25,7 +25,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Welcome to mja-aufgabenarchiv-admin!'
+      'Welcome to mja-admin!'
     );
   });
 });

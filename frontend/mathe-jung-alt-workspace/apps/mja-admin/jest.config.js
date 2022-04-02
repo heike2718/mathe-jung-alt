@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'mja-aufgabenarchiv-admin',
+  displayName: 'mja-admin',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/apps/mja-aufgabenarchiv-admin',
+  coverageDirectory: '../../coverage/apps/mja-admin',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

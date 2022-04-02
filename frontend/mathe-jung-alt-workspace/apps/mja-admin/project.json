@@ -1,27 +1,26 @@
 {
   "projectType": "application",
-  "root": "apps/mja-aufgabenarchiv-admin",
-  "sourceRoot": "apps/mja-aufgabenarchiv-admin/src",
+  "root": "apps/mja-admin",
+  "sourceRoot": "apps/mja-admin/src",
   "prefix": "mathe-jung-alt-workspace",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/mja-aufgabenarchiv-admin",
-        "index": "apps/mja-aufgabenarchiv-admin/src/index.html",
-        "main": "apps/mja-aufgabenarchiv-admin/src/main.ts",
-        "polyfills": "apps/mja-aufgabenarchiv-admin/src/polyfills.ts",
-        "tsConfig": "apps/mja-aufgabenarchiv-admin/tsconfig.app.json",
+        "outputPath": "dist/apps/mja-admin",
+        "index": "apps/mja-admin/src/index.html",
+        "main": "apps/mja-admin/src/main.ts",
+        "polyfills": "apps/mja-admin/src/polyfills.ts",
+        "tsConfig": "apps/mja-admin/tsconfig.app.json",
         "assets": [
-          "apps/mja-aufgabenarchiv-admin/src/favicon.ico",
-          "apps/mja-aufgabenarchiv-admin/src/assets"
+          "apps/mja-admin/src/favicon.ico",
+          "apps/mja-admin/src/assets"
         ],
         "styles": [
           "node_modules/bootstrap/dist/css/bootstrap.min.css",
-          "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
           "node_modules/font-awesome/css/font-awesome.min.css",
-          "apps/mja-aufgabenarchiv-admin/src/styles.css"
+          "apps/mja-admin/src/styles.css"
         ],
         "scripts": []
       },
@@ -41,8 +40,8 @@
           ],
           "fileReplacements": [
             {
-              "replace": "apps/mja-aufgabenarchiv-admin/src/environments/environment.ts",
-              "with": "apps/mja-aufgabenarchiv-admin/src/environments/environment.prod.ts"
+              "replace": "apps/mja-admin/src/environments/environment.ts",
+              "with": "apps/mja-admin/src/environments/environment.prod.ts"
             }
           ],
           "outputHashing": "all"
@@ -62,10 +61,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "mja-aufgabenarchiv-admin:build:production"
+          "browserTarget": "mja-admin:build:production"
         },
         "development": {
-          "browserTarget": "mja-aufgabenarchiv-admin:build:development"
+          "browserTarget": "mja-admin:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -73,23 +72,23 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "mja-aufgabenarchiv-admin:build"
+        "browserTarget": "mja-admin:build"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": [
-          "apps/mja-aufgabenarchiv-admin/src/**/*.ts",
-          "apps/mja-aufgabenarchiv-admin/src/**/*.html"
+          "apps/mja-admin/src/**/*.ts",
+          "apps/mja-admin/src/**/*.html"
         ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/mja-aufgabenarchiv-admin"],
+      "outputs": ["coverage/apps/mja-admin"],
       "options": {
-        "jestConfig": "apps/mja-aufgabenarchiv-admin/jest.config.js",
+        "jestConfig": "apps/mja-admin/jest.config.js",
         "passWithNoTests": true
       }
     }

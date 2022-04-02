@@ -1,0 +1,29 @@
+{
+  "root": "apps/mja-admin-e2e",
+  "sourceRoot": "apps/mja-admin-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/mja-admin-e2e/cypress.json",
+        "devServerTarget": "mja-admin:serve:development",
+        "tsConfig": "apps/mja-admin-e2e/tsconfig.json"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "mja-admin:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/mja-admin-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["mja-admin"]
+}
