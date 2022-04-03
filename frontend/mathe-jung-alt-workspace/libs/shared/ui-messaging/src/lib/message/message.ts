@@ -1,4 +1,4 @@
 export interface Message {
     text: string;
-    type: 'error' | 'warn' | 'info';
+    type: 'ERROR' | 'WARN' | 'INFO';
   }

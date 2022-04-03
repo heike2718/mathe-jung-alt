@@ -9,16 +9,21 @@ export class MessageService {
 
     public info(text: string) {
 
-        this.messageStore.add({text: text, type: 'info'});
+        this.messageStore.add({text: text, type: 'INFO'});
     }
 
     public warn(text: string) {
 
-        this.messageStore.add({text: text, type: 'warn'});
+        this.messageStore.add({text: text, type: 'WARN'});
     }
 
     public error(text: string) {
 
-        this.messageStore.add({text: text, type: 'error'});
+        this.messageStore.add({text: text, type: 'ERROR'});
+    }
+
+    public clear(): void {
+
+        this.messageStore.clear();
     }
 }

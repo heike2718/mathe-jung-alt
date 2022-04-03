@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from './message';
 
 @Injectable({ providedIn: 'root' })
 export class MessageStore {
   
-  #messages$ = new Subject<Message>();
+  #messageSubject$ = new BehaviorSubject<Message | undefined>(undefined);
 
-  messages$ = this.#messages$.asObservable();
+  public message$: Observable<Message | undefined> = this.#messageSubject$.asObservable();
 
   add(message: Message) {
-    this.#messages$.next(message);
+    this.#messageSubject$.next(message);
+  }
+
+  clear(): void {
+    this.#messageSubject$.next(undefined);
   }
 }

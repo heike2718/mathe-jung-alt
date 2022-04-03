@@ -1,43 +1,23 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Message } from "./message";
+import { MessageService } from "./message.service";
 import { MessageStore } from "./message.store";
 
 
 @Component({
-    selector: 'mja-message',
-    styles: [
-        `
-          .error {
-            background: #e9c4c4;
-          }
-    
-          .info {
-            background: #C5CAE9;
-          }
-        `,
-    ],
-    templateUrl: './message.component.html'  
+  selector: 'mja-message',
+  styleUrls: ['./message.component.scss'],
+  templateUrl: './message.component.html'
 })
-export class MessageComponent implements OnInit, OnDestroy{
+export class MessageComponent {
 
-    messages: Message[] = [];
+  messages?: Message;
 
-    #messagesSubscription: Subscription = new Subscription();
+  constructor(public messageStore: MessageStore) { }
 
-    constructor(private messageStore: MessageStore) { }
-
-
-    ngOnInit(): void {
-
-        this.#messagesSubscription = this.messageStore.messages$.subscribe(
-            messages => this.messages.push(messages)
-        );        
-    }
-
-    ngOnDestroy(): void {
-        
-        this.#messagesSubscription.unsubscribe();
-    }
+  close(): void {
+    this.messageStore.clear();
+  }
 
 }

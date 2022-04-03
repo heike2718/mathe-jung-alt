@@ -1,8 +1,13 @@
-<div *ngFor="let message of messages">
-    <mat-icon class="mr-4" *ngIf="message.type === 'info'">check_circle</mat-icon>
-    <mat-icon class="mr-4" *ngIf="message.type === 'warn'">warning</mat-icon>
-    <mat-icon class="mr-4" *ngIf="message.type === 'error'">warning</mat-icon>
-    <p class="text-sm font-normal">
-        {{ message.text }}
-    </p>
+<div *ngIf="messageStore.message$ | async as msg" (click)="close()">
+
+    <div *ngIf="msg.type === 'INFO'" class="cmn-message msg-info">
+        <mat-icon class="cmn-message-icon">check_circle</mat-icon><span class="cmn-message-text">{{ msg.text }}</span>
+    </div>
+    
+    <div *ngIf="msg.type === 'WARN'" class="cmn-message msg-warn">
+        <mat-icon class="cmn-message-icon">warning</mat-icon><span class="cmn-message-text">{{ msg.text }}</span>
+    </div>
+    <div *ngIf="msg.type === 'ERROR'" class="cmn-message msg-error">
+        <mat-icon class="cmn-message-icon">warning</mat-icon><span class="cmn-message-text">{{ msg.text }}</span>
+    </div>
 </div>
