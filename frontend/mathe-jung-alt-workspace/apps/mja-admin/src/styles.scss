@@ -34,6 +34,7 @@ $palette: (
     A700: #000000,
   ),
 );
+
 $main-color: mat-color($palette, 500);
 
 /*
@@ -48,6 +49,7 @@ $mja-admin-theme: mat-light-theme(
     $mja-admin-accent,
     $mja-admin-warn
 );
+
 @include angular-material-theme($mja-admin-theme);
 
 body {
