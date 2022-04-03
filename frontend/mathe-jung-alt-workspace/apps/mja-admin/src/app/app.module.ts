@@ -9,6 +9,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { RaetselFeatureSearchModule } from '@mathe-jung-alt-workspace/raetsel/feature-search';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +20,7 @@ import { RaetselFeatureSearchModule } from '@mathe-jung-alt-workspace/raetsel/fe
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
+    NoopAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
