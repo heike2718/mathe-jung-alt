@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["dist/libs/bilder/feature-search"],
+      "outputs": [
+        "dist/libs/bilder/feature-search"
+      ],
       "options": {
         "project": "libs/bilder/feature-search/ng-package.json"
       },
@@ -22,7 +24,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/bilder/feature-search"],
+      "outputs": [
+        "coverage/libs/bilder/feature-search"
+      ],
       "options": {
         "jestConfig": "libs/bilder/feature-search/jest.config.js",
         "passWithNoTests": true
@@ -38,5 +42,8 @@
       }
     }
   },
-  "tags": ["domain:bilder", "type:feature"]
+  "tags": [
+    "domain:bilder",
+    "type:feature"
+  ]
 }

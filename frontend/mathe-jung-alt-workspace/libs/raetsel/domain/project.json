@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["dist/libs/raetsel/domain"],
+      "outputs": [
+        "dist/libs/raetsel/domain"
+      ],
       "options": {
         "project": "libs/raetsel/domain/ng-package.json"
       },
@@ -22,7 +24,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/raetsel/domain"],
+      "outputs": [
+        "coverage/libs/raetsel/domain"
+      ],
       "options": {
         "jestConfig": "libs/raetsel/domain/jest.config.js",
         "passWithNoTests": true
@@ -38,5 +42,8 @@
       }
     }
   },
-  "tags": ["domain:raetsel", "type:domain-logic"]
+  "tags": [
+    "domain:raetsel",
+    "type:domain-logic"
+  ]
 }

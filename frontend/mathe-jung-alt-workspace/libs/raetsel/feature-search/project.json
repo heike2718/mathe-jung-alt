@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["dist/libs/raetsel/feature-search"],
+      "outputs": [
+        "dist/libs/raetsel/feature-search"
+      ],
       "options": {
         "project": "libs/raetsel/feature-search/ng-package.json"
       },
@@ -22,7 +24,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/raetsel/feature-search"],
+      "outputs": [
+        "coverage/libs/raetsel/feature-search"
+      ],
       "options": {
         "jestConfig": "libs/raetsel/feature-search/jest.config.js",
         "passWithNoTests": true
@@ -38,5 +42,8 @@
       }
     }
   },
-  "tags": ["domain:raetsel", "type:feature"]
+  "tags": [
+    "domain:raetsel",
+    "type:feature"
+  ]
 }

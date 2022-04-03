@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["dist/libs/medien/feature-search"],
+      "outputs": [
+        "dist/libs/medien/feature-search"
+      ],
       "options": {
         "project": "libs/medien/feature-search/ng-package.json"
       },
@@ -22,7 +24,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/medien/feature-search"],
+      "outputs": [
+        "coverage/libs/medien/feature-search"
+      ],
       "options": {
         "jestConfig": "libs/medien/feature-search/jest.config.js",
         "passWithNoTests": true
@@ -38,5 +42,8 @@
       }
     }
   },
-  "tags": ["domain:medien", "type:feature"]
+  "tags": [
+    "domain:medien",
+    "type:feature"
+  ]
 }

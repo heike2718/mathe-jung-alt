@@ -2,11 +2,13 @@
   "projectType": "application",
   "root": "apps/mja-admin",
   "sourceRoot": "apps/mja-admin/src",
-  "prefix": "mathe-jung-alt-workspace",
+  "prefix": "mja-admin",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/mja-admin",
         "index": "apps/mja-admin/src/index.html",
@@ -18,9 +20,7 @@
           "apps/mja-admin/src/assets"
         ],
         "styles": [
-          "node_modules/bootstrap/dist/css/bootstrap.min.css",
-          "node_modules/font-awesome/css/font-awesome.min.css",
-          "apps/mja-admin/src/styles.css"
+          "apps/mja-admin/src/styles.scss"
         ],
         "scripts": []
       },
@@ -86,11 +86,18 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/mja-admin"],
+      "outputs": [
+        "coverage/apps/mja-admin"
+      ],
       "options": {
         "jestConfig": "apps/mja-admin/jest.config.js",
         "passWithNoTests": true
       }
+    }
+  },
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
     }
   }
 }

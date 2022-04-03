@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["dist/libs/quellen/domain"],
+      "outputs": [
+        "dist/libs/quellen/domain"
+      ],
       "options": {
         "project": "libs/quellen/domain/ng-package.json"
       },
@@ -22,7 +24,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/quellen/domain"],
+      "outputs": [
+        "coverage/libs/quellen/domain"
+      ],
       "options": {
         "jestConfig": "libs/quellen/domain/jest.config.js",
         "passWithNoTests": true
@@ -38,5 +42,8 @@
       }
     }
   },
-  "tags": ["domain:quellen", "type:domain-logic"]
+  "tags": [
+    "domain:quellen",
+    "type:domain-logic"
+  ]
 }
