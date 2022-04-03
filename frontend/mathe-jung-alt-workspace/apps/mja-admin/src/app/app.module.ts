@@ -7,7 +7,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './+state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponentModule } from './app.component.module';
 
 @NgModule({
@@ -17,6 +17,7 @@ import { AppComponentModule } from './app.component.module';
   imports: [
     AppComponentModule,
     BrowserModule,
+    BrowserAnimationsModule,
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],

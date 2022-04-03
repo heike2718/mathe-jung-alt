@@ -38,6 +38,9 @@
       ],
       "@mathe-jung-alt-workspace/raetsel/feature-search": [
         "libs/raetsel/feature-search/src/index.ts"
+      ],
+      "@mathe-jung-alt-workspace/shared/ui-messaging": [
+        "libs/shared/ui-messaging/src/index.ts"
       ]
     }
   },

@@ -1,0 +1,8 @@
+<div *ngFor="let message of messages">
+    <mat-icon class="mr-4" *ngIf="message.type === 'info'">check_circle</mat-icon>
+    <mat-icon class="mr-4" *ngIf="message.type === 'warn'">warning</mat-icon>
+    <mat-icon class="mr-4" *ngIf="message.type === 'error'">warning</mat-icon>
+    <p class="text-sm font-normal">
+        {{ message.text }}
+    </p>
+</div>
