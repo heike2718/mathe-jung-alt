@@ -7,15 +7,15 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './+state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
-import { RaetselFeatureSearchModule } from '@mathe-jung-alt-workspace/raetsel/feature-search';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AppComponentModule } from './app.component.module';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+
+  ],
   imports: [
-    RaetselDomainModule,
-    RaetselFeatureSearchModule,
+    AppComponentModule,
     BrowserModule,
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers, { metaReducers }),
