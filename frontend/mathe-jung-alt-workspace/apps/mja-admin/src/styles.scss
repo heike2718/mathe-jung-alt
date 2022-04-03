@@ -1,38 +1,4 @@
-/* You can add global styles to this file, and also import other style files
+/* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
- */
-
-@import '~@angular/material/theming';
-
-// Include non-theme styles for core.
-@include mat-core();
-
-// Define a theme.
-$primary: mat-palette($mat-indigo);
-$accent:  mat-palette($mat-pink, A200, A100, A400);
-
-$theme: mat-light-theme($primary, $accent);
-
-// Include all theme styles for the components.
-@include angular-material-theme($theme);
-
-mat-checkbox + mat-checkbox, mat-radio-button + mat-radio-button {
-    margin-left: 1.5em;
-}
-  
-.content-width {
-    width: 450px;
-}
-  
-.centered {
-    text-align: center;
-}
-  
-  
-h2 {
-    font-weight: bold;
-    font-size: 125%;
-}
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
   
