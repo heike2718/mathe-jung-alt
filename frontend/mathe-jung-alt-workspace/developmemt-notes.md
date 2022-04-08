@@ -1,5 +1,39 @@
 # Notizen für Entwicklung
 
+__material data tables eingebaut__
+
+siehe [tutorial](https://www.positronx.io/angular-material-8-data-table-pagination-sorting-tutorial/)
+
+im material.module.ts folgendes importiert:
+
+```
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+```
+
+Dann in app.module
+
+```
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+...
+bootstrap: [AppComponent],
+schemas: [CUSTOM_ELEMENTS_SCHEMA]
+```
+
+__material-Modul nach ui-components verschoben__
+
+
+
+__library ui-components erzeugt__
+
+Das hier hat leider nicht geklappt: :(
+```
+npx nx generate @schematics/angular:library --name=ui-components --prefix=mja
+```
+
+daher ui-messages kopiert und die Teile angepasst
+
 ## 02.04.2022
 
 __domain bilder generiert__
