@@ -1,13 +1,17 @@
 <h2>Rätselsuche</h2>
 
-<div *ngIf="raetselList$ | async" class="wrapper m4">
+<div class="wrapper m4">
 
-  <table mat-table [dataSource]="dataSourceRaetsel" matSort class="mat-elevation-z8">
+  <mat-input-container>
+    <input matInput placeholder="suche Rätsel" #input>
+  </mat-input-container>
 
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-      <td mat-cell *matCellDef="let raetsel"> {{raetsel.id}} </td>
-    </ng-container>
+  <div class="spinner-container" *ngIf="dataSource.loading$| async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8"
+    matSort matSortActive="schluessel" matSortDirection="asc" matSortDisableClear>
 
     <ng-container matColumnDef="schluessel">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> SCHLUESSEL </th>
@@ -15,16 +19,14 @@
     </ng-container>
 
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> NAME </th>
+      <th mat-header-cell *matHeaderCellDef> NAME </th>
       <td mat-cell *matCellDef="let raetsel"> {{raetsel.name}} </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedRaetselColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedRaetselColumns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)"></tr>
 
   </table>
-   <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+  <mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[3, 10, 15]" showFirstLastButtons></mat-paginator>
 
 </div>
-
-

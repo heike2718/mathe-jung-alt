@@ -1,5 +1,19 @@
 # Notizen für Entwicklung
 
+## 09.04.2022
+
+__events in table__
+
+siehe [tutorial](https://blog.angular-university.io/angular-material-data-table/)
+
+__pagination und sort eingebaut__
+
+in raetsel/search-component.ts
+
+Zunächst ohne event-Verarbeitung - also nur die Direktiven und Components eingehängt
+
+## 08.04.2022
+
 __material data tables eingebaut__
 
 siehe [tutorial](https://www.positronx.io/angular-material-8-data-table-pagination-sorting-tutorial/)
