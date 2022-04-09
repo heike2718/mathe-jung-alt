@@ -23,7 +23,7 @@ schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 __material-Modul nach ui-components verschoben__
 
-
+hierzu dann app.module.ts und tsconfig.base.json angepasst
 
 __library ui-components erzeugt__
 

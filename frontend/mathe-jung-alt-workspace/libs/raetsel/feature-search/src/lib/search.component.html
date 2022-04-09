@@ -1,9 +1,30 @@
 <h2>Rätselsuche</h2>
 
-<table class="table">
-  <tr *ngFor="let raetsel of raetselList$ | async">
-    <td>{{ raetsel.id }}</td>
-    <td>{{ raetsel.schluessel }}</td>
-    <td>{{ raetsel.name }}</td>
-  </tr>
-</table>
+<div *ngIf="raetselList$ | async" class="wrapper m4">
+
+  <table mat-table [dataSource]="dataSourceRaetsel" matSort class="mat-elevation-z8">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let raetsel"> {{raetsel.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="schluessel">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> SCHLUESSEL </th>
+      <td mat-cell *matCellDef="let raetsel"> {{raetsel.schluessel}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> NAME </th>
+      <td mat-cell *matCellDef="let raetsel"> {{raetsel.name}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedRaetselColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedRaetselColumns;"></tr>
+
+  </table>
+   <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+
+</div>
+
+

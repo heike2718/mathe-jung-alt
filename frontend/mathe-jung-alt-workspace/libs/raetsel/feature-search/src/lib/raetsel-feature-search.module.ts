@@ -3,12 +3,16 @@ import { CommonModule } from '@angular/common';
 import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { SearchComponent } from './search.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
+
+
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule, 
-    RaetselDomainModule
+    RaetselDomainModule,
+    MaterialModule
   ],
   declarations: [SearchComponent],
   exports: [SearchComponent],

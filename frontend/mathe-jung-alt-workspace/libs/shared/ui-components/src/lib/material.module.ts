@@ -24,7 +24,7 @@ const materialModules = [
     ],
     exports: [
         CommonModule,
-        ...materialModules
+        ...materialModules,        
     ]
   })
 export class MaterialModule {}
