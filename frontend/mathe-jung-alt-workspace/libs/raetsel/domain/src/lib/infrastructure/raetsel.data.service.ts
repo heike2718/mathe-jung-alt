@@ -150,6 +150,15 @@ export class RaetselDataService {
     return of(this.#alleRaetsel);
   }
 
+  findRaetsel(filter: string): Observable<Raetsel[]> {
+
+   if (filter && filter.trim().length > 0) {
+      const filtered = this.#alleRaetsel.filter(raetsel => raetsel.name.toLocaleLowerCase().includes(filter.trim().toLocaleLowerCase()));
+      return of(filtered);
+    }
+    return of([]);
+  }
+
   loadPage(filter: string, sortDirection: string, pageIndex: number, pageSize: number): Observable<Raetsel[]> {
 
     const first = pageIndex * pageSize;
@@ -167,6 +176,19 @@ export class RaetselDataService {
     }
 
     return of(result);
+  }
+
+  countRaetsel(filter: string): Observable<number> {
+
+    if (!filter || filter.trim().length === 0) {
+      return of(0);
+    }
+
+    const treffer: Raetsel[] = this.#alleRaetsel.filter(r => r.name.toLocaleLowerCase().includes(filter.trim().toLocaleLowerCase()));
+
+    return of(treffer.length);
+
+
   }
 
   anzahlRaetsel(): number {

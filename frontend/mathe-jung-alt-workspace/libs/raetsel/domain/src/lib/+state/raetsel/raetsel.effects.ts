@@ -4,26 +4,37 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as RaetselActions from './raetsel.actions';
 import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
+import { RaetselFacade } from '../../application/reaetsel.facade';
 
 @Injectable()
 export class RaetselEffects {
-  
-  loadRaetsel$ = createEffect(() =>
+
+  findRaetsel$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(RaetselActions.loadRaetsel),
+      ofType(RaetselActions.findRaetsel),
       switchMap((action) =>
-        this.raetselDataService.load().pipe(
-          map((raetsel) => RaetselActions.loadRaetselSuccess({ raetsel })),
+        this.raetselDataService.findRaetsel(action.filter).pipe(
+          map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel })),
           catchError((error) =>
-            of(RaetselActions.loadRaetselFailure({ error }))
+            of(RaetselActions.findRaetselFailure({ error }))
           )
         )
       )
-    )
-  );
+    ));
+
+  selectPage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.selectPage),
+      switchMap((action) =>
+        this.raetselFacade.raetselList$.pipe(
+          map((raetsel) => RaetselActions.pageSelected({ raetsel: raetsel.slice(action.pageIndex * action.pageSize, (action.pageIndex + 1) * action.pageSize) }))
+        )
+      )
+    ));
 
   constructor(
     private actions$: Actions,
-    private raetselDataService: RaetselDataService
-  ) {}
+    private raetselDataService: RaetselDataService,
+    private raetselFacade: RaetselFacade
+  ) { }
 }

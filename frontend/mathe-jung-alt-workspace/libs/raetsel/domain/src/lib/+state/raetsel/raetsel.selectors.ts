@@ -1,4 +1,6 @@
+import { Renderer2 } from '@angular/core';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { Raetsel } from '../../entities/raetsel';
 import {
   RAETSEL_FEATURE_KEY,
   State,
@@ -17,6 +19,11 @@ const { selectAll, selectEntities } = raetselAdapter.getSelectors();
 export const getRaetselLoaded = createSelector(
   getRaetselState,
   (state: State) => state.loaded
+);
+
+export const getRaetselLoading = createSelector(
+  getRaetselState,
+  (state: State) => state.loading
 );
 
 export const getRaetselError = createSelector(
@@ -42,4 +49,9 @@ export const getSelected = createSelector(
   getRaetselEntities,
   getSelectedId,
   (entities, selectedId) => selectedId && entities[selectedId]
+);
+
+export const getPage = createSelector(
+  getRaetselState,
+  (state: State) => state.page
 );

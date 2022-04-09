@@ -1,14 +1,24 @@
 import { createAction, props } from '@ngrx/store';
-import { RaetselDetails, Raetsel } from '../../entities/raetsel';
+import { Raetsel } from '../../entities/raetsel';
 
-export const loadRaetsel = createAction('[Raetsel] Load Raetsel');
+export const findRaetsel = createAction('[Raetsel] Find Raetsel',
+  props<{ filter: string }>());
 
-export const loadRaetselSuccess = createAction(
-  '[Raetsel] Load Raetsel Success',
+
+export const findRaetselSuccess = createAction(
+  '[Raetsel] Find Raetsel Success',
   props<{ raetsel: Raetsel[] }>()
 );
 
-export const loadRaetselFailure = createAction(
-  '[Raetsel] Load Raetsel Failure',
+export const findRaetselFailure = createAction(
+  '[Raetsel] Find Raetsel Failure',
   props<{ error: any }>()
 );
+
+export const selectPage = createAction('[Raetsel] Select Page',
+  props<{ sortDirection: string, pageIndex: number, pageSize: number }>());
+
+export const pageSelected = createAction('[Raetsel] Page selected',
+  props<{ raetsel: Raetsel[] }>()
+);
+
