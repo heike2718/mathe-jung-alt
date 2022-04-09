@@ -2,6 +2,35 @@
 
 Neue Anwendung: __mja-aufgabenarchiv-admin__
 
+## Entitäten
+
+* Aufgaben (schluessel, text, loesungstext, deskriptoren, quellen, titel, bemerkung, antwortvorchläge(text, richtigmarker))
+* Medien (schluessel, art, name, url, deskriptoren)
+* Quellen (schluessel, medium, ausgabe, jahrgang, seite, name, autor, art)
+* Aufgabensammlungen (schluessel, name, deskriptoren, aufgabennitems[aufgabe, nummer, punktzahl])
+* Wettbewerbe (aufgabensammlungen, loesungszettel, jahr)
+* Bilder (pfad, schluessel, eps, deskriptoren)
+  
+## Valueobjekte
+
+* Deskriptoren sind Schlagworte, die aus mehreren Worten bestehen können
+
+D.h. ein Deskriptor braucht eine Klammer: (Stufe x), (Klasse 2), (Minikänguru 2020), (Zahlentheorie), (MC), ...
+
+Metasuche in Deskriptoren: alle Deskriptoren laden, dann type ahead- Suche in inputfield. Treffer kann ausgesucht werden. So können mehrere Deskriptoren gesammelt und an eine Suche übergeben werden.
+
+Suchen mit "und" - also like permutiert.
+
+Wäre es gut für einen Deskriptor zu wissen, wie viele Entitäten ihn haben?
+
+## Als Admin
+
+* Entitäten pflegen
+* Entitäten suchen
+    * nach Deskriptoren (mehrere, in beliebiger Reihenfolge mit und)
+    * nach Teilstrings im namen
+    * nach worten im text / lösungstext  - sollten Texte indiziert werden? Dann Füllwortmenge festlegen
+
 ## Übernahme der Aufgaben-Metadaten auf den Server
 
 Mit einer neuen Web-Anwendung soll in Zukunft das Aufgabenarchiv gepflegt werden. Dies wird die Eclipse-RCP-Anwendung ablösen und von anderen mit genutzt werden können.
