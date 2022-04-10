@@ -50,6 +50,9 @@
       ],
       "@mathe-jung-alt-workspace/shared/ui-messaging": [
         "libs/shared/ui-messaging/src/index.ts"
+      ],
+      "@mathe-jung-alt-workspace/shared/utils": [
+        "libs/shared/utils/src/index.ts"
       ]
     }
   },

@@ -1,8 +1,15 @@
 <h2>Deskriptoren</h2>
 
-<table class="table">
-  <tr *ngFor="let deskriptor of deskriptorList$ | async">
-    <td>{{ deskriptor.id }}</td>
-    <td>{{ deskriptor.name }}</td>
-  </tr>
-</table>
+<mat-chip-list>
+  <div *ngFor="let deskriptor of restliste$ | async">
+    <mat-chip (click) = "addToSuchliste(deskriptor)">{{deskriptor.name}}</mat-chip>
+  </div>
+</mat-chip-list>
+
+<h2>Suchliste</h2>
+
+<mat-chip-list>
+  <div *ngFor="let deskriptor of suchliste$ | async">
+    <mat-chip selected (click) = "removeFromSuchliste(deskriptor)">{{deskriptor.name}}</mat-chip>
+  </div>
+</mat-chip-list>

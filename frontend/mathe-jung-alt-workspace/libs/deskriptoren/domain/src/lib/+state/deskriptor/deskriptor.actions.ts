@@ -12,3 +12,13 @@ export const loadDeskriptorFailure = createAction(
   '[Deskriptor] Load Deskriptor Failure',
   props<{ error: any }>()
 );
+
+export const deskriptorAddedToSearchList = createAction(
+  '[Deskriptor] Deskriptor Added To Search List',
+  props<{deskriptor: Deskriptor}>()
+);
+
+export const deskriptorRemovedFromSearchList = createAction(
+  '[Deskriptor] Deskriptor Removed From Search List',
+  props<{deskriptor: Deskriptor}>()
+);

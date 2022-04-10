@@ -5,4 +5,4 @@ export * from './lib/infrastructure/deskriptor.data.service';
 
 export * from './lib/+state/deskriptor/deskriptor.actions';
 
-export * from './lib/application/deskriptoren-search.facade';
+export * from './lib/application/deskriptoren.facade';

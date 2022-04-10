@@ -1,4 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { Deskriptor } from '../../entities/deskriptor';
+import { MjaEntity, MjaSetUtils } from '@mathe-jung-alt-workspace/shared/utils';
 import {
   DESKRIPTOR_FEATURE_KEY,
   State,
@@ -44,3 +46,25 @@ export const getSelected = createSelector(
   getSelectedId,
   (entities, selectedId) => selectedId && entities[selectedId]
 );
+
+export const getSuchliste = createSelector(
+  getDeskriptorState,
+  (state: State) => state.suchliste
+);
+
+export const getRestliste = createSelector(
+  getAllDeskriptor,
+  getSuchliste,
+  (deskriptoren: Deskriptor[], suchliste: Deskriptor[]) => getDifferenzmenge(deskriptoren, suchliste)
+);
+
+// ////////////////////////////
+// private helper functions
+// ////////////////////////////
+
+function getDifferenzmenge(alle: Deskriptor[], auszuschliessen: Deskriptor[]): Deskriptor[] {
+
+  const setUtils: MjaSetUtils<Deskriptor> = new MjaSetUtils();
+  const result: Deskriptor[] = setUtils.getDifferenzmenge(setUtils.toMjaEntityArray(alle), setUtils.toMjaEntityArray(auszuschliessen));
+  return result;
+}

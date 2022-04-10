@@ -25,6 +25,7 @@
     "@angular/platform-browser": "13.2.7",
     "@angular/platform-browser-dynamic": "13.2.7",
     "@angular/router": "13.2.7",
+    "@material/chips": "^13.0.0",
     "@ngrx/effects": "^13.1.0",
     "@ngrx/entity": "^13.1.0",
     "@ngrx/schematics": "^13.1.0",

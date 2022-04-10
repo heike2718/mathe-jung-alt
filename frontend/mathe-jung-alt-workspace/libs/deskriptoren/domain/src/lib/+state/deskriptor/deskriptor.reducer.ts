@@ -10,6 +10,7 @@ export interface State extends EntityState<Deskriptor> {
   selectedId?: string | number; // which Deskriptor record has been selected
   loaded: boolean; // has the Deskriptor list been loaded
   error?: string | null; // last known error (if any)
+  suchliste: Deskriptor[];
 }
 
 export interface DeskriptorPartialState {
@@ -22,22 +23,46 @@ export const deskriptorAdapter: EntityAdapter<Deskriptor> =
 export const initialState: State = deskriptorAdapter.getInitialState({
   // set initial required properties
   loaded: false,
+  suchliste: []
 });
 
 const deskriptorReducer = createReducer(
   initialState,
+
   on(DeskriptorActions.loadDeskriptor, (state) => ({
     ...state,
     loaded: false,
     error: null,
   })),
+
   on(DeskriptorActions.loadDeskriptorSuccess, (state, { deskriptor }) =>
     deskriptorAdapter.upsertMany(deskriptor, { ...state, loaded: true })
   ),
+
   on(DeskriptorActions.loadDeskriptorFailure, (state, { error }) => ({
     ...state,
     error,
-  }))
+  })),
+
+  on(DeskriptorActions.deskriptorAddedToSearchList, (state, { deskriptor }) => {
+    return {...state, suchliste: [...state.suchliste, deskriptor]};
+  }),
+
+  on(DeskriptorActions.deskriptorRemovedFromSearchList, (state, { deskriptor }) => {
+
+    const neueSuchliste: Deskriptor[] = [];
+
+    state.suchliste.forEach(
+      d => {
+        if (d.id !== deskriptor.id) {
+          neueSuchliste.push(d);
+        }
+      }
+    );
+
+    return {...state, suchliste: neueSuchliste};
+
+  }),
 );
 
 export function reducer(state: State | undefined, action: Action) {
