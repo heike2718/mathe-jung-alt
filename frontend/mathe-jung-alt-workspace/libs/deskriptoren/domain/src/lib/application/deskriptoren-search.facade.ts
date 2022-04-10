@@ -7,7 +7,7 @@ import * as DeskriptorSelectors from '../+state/deskriptor/deskriptor.selectors'
 import { Deskriptor } from '../entities/deskriptor';
 
 @Injectable({ providedIn: 'root' })
-export class DeskriptorenFacade {
+export class DeskriptorenSearchFacade {
 
   loaded$ = this.store.pipe(select(DeskriptorSelectors.getDeskriptorLoaded));
   deskriptorList$ = this.store.pipe(select(DeskriptorSelectors.getAllDeskriptor));

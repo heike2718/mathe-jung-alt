@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Deskriptor, DeskriptorenFacade } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { Deskriptor, DeskriptorenSearchFacade } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 
 @Component({
   selector: 'mja-deskriptoren-search',
@@ -8,25 +8,25 @@ import { Deskriptor, DeskriptorenFacade } from '@mathe-jung-alt-workspace/deskri
 })
 export class DeskriptorenSearchComponent implements OnInit {
 
-  restliste$ = this.deskriptorenFacade.restliste$;
-  suchliste$ = this.deskriptorenFacade.suchliste$;
+  restliste$ = this.deskriptorenSearchFacade.restliste$;
+  suchliste$ = this.deskriptorenSearchFacade.suchliste$;
 
-  constructor(private deskriptorenFacade: DeskriptorenFacade) {}
+  constructor(private deskriptorenSearchFacade: DeskriptorenSearchFacade) {}
 
   ngOnInit() {
     this.load();
   }
 
   private load(): void {
-    this.deskriptorenFacade.load();
+    this.deskriptorenSearchFacade.load();
   }
 
   addToSuchliste(deskriptor: Deskriptor): void {
-    this.deskriptorenFacade.addToSearchlist(deskriptor);    
+    this.deskriptorenSearchFacade.addToSearchlist(deskriptor);    
   }
 
   removeFromSuchliste(deskriptor: Deskriptor): void {
-    this.deskriptorenFacade.removeFromSearchlist(deskriptor);
+    this.deskriptorenSearchFacade.removeFromSearchlist(deskriptor);
   }
 
 

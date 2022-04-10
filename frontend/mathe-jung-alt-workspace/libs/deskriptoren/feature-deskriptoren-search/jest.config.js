@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'deskriptoren-feature-deskriptoren-search',
+  displayName: 'deskriptoren-feature-search',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
