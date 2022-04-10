@@ -38,5 +38,5 @@
       }
     }
   },
-  "tags": ["domain:deskriptoren", "type:feature"]
+  "tags": ["domain:deskriptoren:search", "type:feature"]
 }

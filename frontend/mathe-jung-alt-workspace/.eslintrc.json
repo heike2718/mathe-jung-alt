@@ -18,7 +18,7 @@
               },
               {
                 "sourceTag": "domain:raetsel",
-                "onlyDependOnLibsWithTags": ["domain:raetsel", "domain:shared"]
+                "onlyDependOnLibsWithTags": ["domain:raetsel", "domain:shared", "domain:deskriptoren:search"]
               },
               {
                 "sourceTag": "domain:medien",
@@ -36,6 +36,14 @@
                 "sourceTag": "domain:deskriptoren",
                 "onlyDependOnLibsWithTags": [
                   "domain:deskriptoren",
+                  "domain:deskriptoren:search",
+                  "domain:shared"
+                ]
+              },
+              {
+                "sourceTag": "domain:deskriptoren:search",
+                "onlyDependOnLibsWithTags": [
+                  "domain:deskriptoren:search",
                   "domain:shared"
                 ]
               }
