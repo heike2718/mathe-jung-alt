@@ -6,11 +6,11 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { fromEvent, merge, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'raetsel-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss'],
+  selector: 'mja-raetsel-search',
+  templateUrl: './raetsel-search.component.html',
+  styleUrls: ['./raetsel-search.component.scss'],
 })
-export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

@@ -4,6 +4,7 @@
     "bilder-domain": "libs/bilder/domain",
     "bilder-feature-search": "libs/bilder/feature-search",
     "deskriptoren-domain": "libs/deskriptoren/domain",
+    "deskriptoren-feature-deskriptoren-search": "libs/deskriptoren/feature-deskriptoren-search",
     "medien-domain": "libs/medien/domain",
     "medien-feature-search": "libs/medien/feature-search",
     "mja-admin": "apps/mja-admin",

@@ -1,3 +1,3 @@
 export * from './lib/raetsel-feature-search.module';
 
-export * from './lib/search.component';
+export * from './lib/raetsel-search.component';

@@ -11,114 +11,114 @@ export class RaetselDataService {
     id: 'uuid-1',
     schluessel: '00001',
     name: 'Spielsteine umschichten',
-    deskriptoren: ['(Minikänguru)', '(ZWEI-A)', '(EINS-B)'],
+    deskriptoren: ['Minikänguru', 'ZWEI-A', 'EINS-B'],
   },
   {
     id: 'uuid-2',
     schluessel: '00002',
     name: 'verschachteltes Polynom auflösen',
-    deskriptoren: ['(Serie)', '(Stufe 6)']
+    deskriptoren: ['Serie', 'Stufe 6']
   },
   {
     id: 'uuid-3',
     schluessel: '00003',
     name: 'Frühlingsbeet',
-    deskriptoren: ['(Serie)', '(Stufe 2)']
+    deskriptoren: ['Serie', 'Stufe 2']
   },
   {
     id: 'uuid-4',
     schluessel: '00004',
     name: 'Klassen und Fächer',
-    deskriptoren: ['(Serie)', '(Stufe 3)']
+    deskriptoren: ['Serie', 'Stufe 3']
   },
   {
     id: 'uuid-5',
     schluessel: '00005',
     name: 'Rundreise',
-    deskriptoren: ['(Serie)', '(Stufe 2)']
+    deskriptoren: ['Serie', 'Stufe 2']
   },
   {
     id: 'uuid-6',
     schluessel: '00006',
     name: 'Kryptogramm mit Multiplikation',
-    deskriptoren: ['(Serie)', '(Stufe 3)']
+    deskriptoren: ['Serie', 'Stufe 3']
   },
   {
     id: 'uuid-7',
     schluessel: '00007',
     name: 'Geheimcode',
-    deskriptoren: ['(Serie)', '(Stufe 4)']
+    deskriptoren: ['Serie', 'Stufe 4']
   },
   {
     id: 'uuid-8',
     schluessel: '00008',
     name: 'Regenwetter',
-    deskriptoren: ['(Serie)', '(Stufe 6)']
+    deskriptoren: ['Serie', 'Stufe 6']
   },
   {
     id: 'uuid-9',
     schluessel: '00009',
     name: 'Primzahlsuche',
-    deskriptoren: ['(Serie)', '(Stufe 6)']
+    deskriptoren: ['Serie', 'Stufe 6']
   }, {
     id: 'uuid-10',
     schluessel: '00010',
     name: 'Klassenfahrt',
-    deskriptoren: ['(Serie)', '(Stufe 6)']
+    deskriptoren: ['Serie', 'Stufe 6']
   },
   {
     id: 'uuid-11',
     schluessel: '00011',
     name: 'Spielgeräte zuordnen',
-    deskriptoren: ['(Serie)', '(Stufe 1)']
+    deskriptoren: ['Serie', 'Stufe 1']
   },
   {
     id: 'uuid-12',
     schluessel: '00012',
     name: 'zerbrochene Fensterscheiben',
-    deskriptoren: ['(Serie)', '(Stufe 1)']
+    deskriptoren: ['Serie', 'Stufe 1']
   },
   {
     id: 'uuid-13',
     schluessel: '00013',
     name: 'Adventsbasar',
-    deskriptoren: ['(Serie)', '(Stufe 3)']
+    deskriptoren: ['Serie', 'Stufe 3']
   },
   {
     id: 'uuid-14',
     schluessel: '00014',
     name: 'Tiere und Beine',
-    deskriptoren: ['(Serie)', '(Stufe 2)']
+    deskriptoren: ['Serie', 'Stufe 2']
   },
   {
     id: 'uuid-15',
     schluessel: '00015',
     name: 'Hasenschule',
-    deskriptoren: ['(Serie)', '(Stufe 1)']
+    deskriptoren: ['Serie', 'Stufe 1']
   },
   {
     id: 'uuid-16',
     schluessel: '00016',
     name: 'Wettlauf',
-    deskriptoren: ['(Serie)', '(Stufe 2)']
+    deskriptoren: ['Serie', 'Stufe 2']
   },
   {
     id: 'uuid-17',
     schluessel: '00017',
     name: 'Kongruente Dreiecke finden',
-    deskriptoren: ['(Serie)', '(Stufe 4)']
+    deskriptoren: ['Serie', 'Stufe 4']
   },
   {
     id: 'uuid-18',
     schluessel: '00018',
     name: 'Labyrinth mit Kaninchen',
-    deskriptoren: ['(Serie)', '(Stufe 1)']
+    deskriptoren: ['Serie', 'Stufe 1']
   },
   {
     id: 'uuid-19',
     schluessel: '00019',
     name: 'Diophantische Gleichung',
-    deskriptoren: ['(Serie)', '(Stufe 5)']
+    deskriptoren: ['Serie', 'Stufe 5']
   }];
 
   #deskriptoren: string[] = [];
@@ -208,7 +208,7 @@ export class RaetselDataService {
           ursprung: 'NACHBAU',
           primaerquelleId: '5ec5aed7',
           sekundaerquelleId: '60cfd0da',
-          deskriptoren: ['(Minikänguru)', '(ZWEI-A)', '(EINS-B)'],
+          deskriptoren: ['Minikänguru', 'ZWEI-A', 'EINS-B'],
           antwortvorschlaege: [
             {
               buchstabe: 'A',
@@ -248,7 +248,7 @@ export class RaetselDataService {
       text: '\[ f(x) = \frac{1}{2} x^2 \]',
       ursprung: 'ZITAT',
       primaerquelleId: '0521545a',
-      deskriptoren: ['(Serie)', '(Stufe 6)']
+      deskriptoren: ['Serie', 'Stufe 6']
     })
   }
 }

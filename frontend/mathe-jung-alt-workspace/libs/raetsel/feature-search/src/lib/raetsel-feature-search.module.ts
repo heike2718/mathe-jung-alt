@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
-import { SearchComponent } from './search.component';
+import { RaetselSearchComponent } from './raetsel-search.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 
@@ -14,8 +14,8 @@ import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
     RaetselDomainModule,
     MaterialModule
   ],
-  declarations: [SearchComponent],
-  exports: [SearchComponent],
+  declarations: [RaetselSearchComponent],
+  exports: [RaetselSearchComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class RaetselFeatureSearchModule {}

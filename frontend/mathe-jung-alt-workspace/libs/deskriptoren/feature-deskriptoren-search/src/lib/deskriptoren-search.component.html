@@ -1,0 +1,8 @@
+<h2>Deskriptoren</h2>
+
+<table class="table">
+  <tr *ngFor="let deskriptor of deskriptorList$ | async">
+    <td>{{ deskriptor.id }}</td>
+    <td>{{ deskriptor.name }}</td>
+  </tr>
+</table>

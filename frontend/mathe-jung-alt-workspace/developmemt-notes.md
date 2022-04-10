@@ -2,11 +2,19 @@
 
 ## 10.04.2022
 
+__feature deskriptoren-search generiert__
+
+```
+npx ng g @angular-architects/ddd:feature deskriptoren-search --domain deskriptoren --entity deskriptor --noApp --ngrx
+```
+
 __domain deskriptoren generiert__
 
 ```
 npx nx generate @angular-architects/ddd:domain --name=deskriptoren --ngrx --no-interactive
 ```
+
+
 
 ## 09.04.2022
 
