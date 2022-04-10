@@ -3,6 +3,7 @@
   "projects": {
     "bilder-domain": "libs/bilder/domain",
     "bilder-feature-search": "libs/bilder/feature-search",
+    "deskriptoren-domain": "libs/deskriptoren/domain",
     "medien-domain": "libs/medien/domain",
     "medien-feature-search": "libs/medien/feature-search",
     "mja-admin": "apps/mja-admin",

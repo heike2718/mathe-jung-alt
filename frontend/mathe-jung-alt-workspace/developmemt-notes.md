@@ -1,5 +1,13 @@
 # Notizen für Entwicklung
 
+## 10.04.2022
+
+__domain deskriptoren generiert__
+
+```
+npx nx generate @angular-architects/ddd:domain --name=deskriptoren --ngrx --no-interactive
+```
+
 ## 09.04.2022
 
 __events in table__

@@ -31,6 +31,13 @@
               {
                 "sourceTag": "domain:bilder",
                 "onlyDependOnLibsWithTags": ["domain:bilder", "domain:shared"]
+              },
+              {
+                "sourceTag": "domain:deskriptoren",
+                "onlyDependOnLibsWithTags": [
+                  "domain:deskriptoren",
+                  "domain:shared"
+                ]
               }
             ]
           }
