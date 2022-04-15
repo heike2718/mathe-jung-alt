@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import * as RaetselActions from './raetsel.actions';
 import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { RaetselFacade } from '../../application/reaetsel.facade';
+import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 
 @Injectable()
 export class RaetselEffects {
@@ -12,19 +13,18 @@ export class RaetselEffects {
   findRaetsel$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.findRaetsel),
-      switchMap((action) =>
+      // switchMap, weil spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
+      this.safeNgrx.safeSwitchMap((action) =>
         this.raetselDataService.findRaetsel(action.filter).pipe(
-          map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel })),
-          catchError((error) =>
-            of(RaetselActions.findRaetselFailure({ error }))
-          )
-        )
+          map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))
+        ), 'Ups, beim Suchen nach Rätseln ist etwas schiefgegangen', noopAction()
       )
     ));
 
   selectPage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.selectPage),
+      // switchMap, weil das Pagen einer früheren Page-Auswahl gecanceled wird, sobald eine neue Page ausgewählt wurde
       switchMap((action) =>
         this.raetselFacade.raetselList$.pipe(
           map((raetsel) => RaetselActions.pageSelected({ raetsel: raetsel.slice(action.pageIndex * action.pageSize, (action.pageIndex + 1) * action.pageSize) }))
@@ -35,6 +35,7 @@ export class RaetselEffects {
   constructor(
     private actions$: Actions,
     private raetselDataService: RaetselDataService,
-    private raetselFacade: RaetselFacade
+    private raetselFacade: RaetselFacade,
+    private safeNgrx: SafeNgrxService
   ) { }
 }

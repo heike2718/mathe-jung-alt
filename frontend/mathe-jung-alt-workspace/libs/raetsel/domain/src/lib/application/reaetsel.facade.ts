@@ -11,7 +11,6 @@ export class RaetselFacade {
   loaded$ = this.store.pipe(select(RaetselSelectors.getRaetselLoaded));
   raetselList$ = this.store.pipe(select(RaetselSelectors.getAllRaetsel));
   selectedRaetsel$ = this.store.pipe(select(RaetselSelectors.getSelected));
-  loading$ = this.store.pipe(select(RaetselSelectors.getRaetselLoading));
   page$ = this.store.pipe(select(RaetselSelectors.getPage));
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>) { }

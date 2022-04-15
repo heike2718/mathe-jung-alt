@@ -10,11 +10,6 @@ export const findRaetselSuccess = createAction(
   props<{ raetsel: Raetsel[] }>()
 );
 
-export const findRaetselFailure = createAction(
-  '[Raetsel] Find Raetsel Failure',
-  props<{ error: any }>()
-);
-
 export const selectPage = createAction('[Raetsel] Select Page',
   props<{ sortDirection: string, pageIndex: number, pageSize: number }>());
 

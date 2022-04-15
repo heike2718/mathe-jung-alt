@@ -6,25 +6,22 @@ import { Raetsel } from '../../entities/raetsel';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel-raetsel';
 
-export interface State extends EntityState<Raetsel> {
+export interface RaetselState extends EntityState<Raetsel> {
   selectedId?: string | number; // which Raetsel record has been selected
   loaded: boolean; // has the Raetsel list been loaded
-  error?: string | null; // last known error (if any)
-  loading: boolean;
   page: Raetsel[];
 }
 
 export interface RaetselPartialState {
-  readonly [RAETSEL_FEATURE_KEY]: State;
+  readonly [RAETSEL_FEATURE_KEY]: RaetselState;
 }
 
 export const raetselAdapter: EntityAdapter<Raetsel> =
   createEntityAdapter<Raetsel>();
 
-export const initialState: State = raetselAdapter.getInitialState({
+export const initialState: RaetselState = raetselAdapter.getInitialState({
   // set initial required properties
   loaded: false,
-  loading: false,
   page: []
 });
 
@@ -33,28 +30,24 @@ const raetselReducer = createReducer(
 
   on(RaetselActions.findRaetsel, (state) => ({
     ...state,
-    loaded: false,
-    error: null,
-    loading: true
+    loaded: false
   })),
 
   on(RaetselActions.findRaetselSuccess, (state, { raetsel }) =>
 
-    raetselAdapter.setAll(raetsel, { ...state, loaded: true, loading: false, page: raetsel.slice(0, 5) })
+    raetselAdapter.setAll(raetsel, {
+      ...state,
+      loaded: true,
+      page: raetsel.slice(0, 5)
+    })
 
   ),
 
-  on(RaetselActions.findRaetselFailure, (state, { error }) => ({
-    ...state,
-    error,
-    loading: false
-  })),
-
-  on(RaetselActions.pageSelected, (state, {raetsel}) => ({
+  on(RaetselActions.pageSelected, (state, { raetsel }) => ({
     ...state, page: raetsel
   })),
 );
 
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: RaetselState | undefined, action: Action) {
   return raetselReducer(state, action);
 }

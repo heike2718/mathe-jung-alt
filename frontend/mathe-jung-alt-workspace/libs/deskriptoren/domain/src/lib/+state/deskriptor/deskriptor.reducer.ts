@@ -29,17 +29,17 @@ export const initialState: State = deskriptorAdapter.getInitialState({
 const deskriptorReducer = createReducer(
   initialState,
 
-  on(DeskriptorActions.loadDeskriptor, (state) => ({
+  on(DeskriptorActions.loadDeskriptoren, (state) => ({
     ...state,
     loaded: false,
     error: null,
   })),
 
-  on(DeskriptorActions.loadDeskriptorSuccess, (state, { deskriptor }) =>
+  on(DeskriptorActions.loadDeskriptorenSuccess, (state, { deskriptor }) =>
     deskriptorAdapter.upsertMany(deskriptor, { ...state, loaded: true })
   ),
 
-  on(DeskriptorActions.loadDeskriptorFailure, (state, { error }) => ({
+  on(DeskriptorActions.loadDeskriptorenFailure, (state, { error }) => ({
     ...state,
     error,
   })),

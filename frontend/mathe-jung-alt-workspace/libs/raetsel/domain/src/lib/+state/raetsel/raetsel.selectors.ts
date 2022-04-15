@@ -3,46 +3,32 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Raetsel } from '../../entities/raetsel';
 import {
   RAETSEL_FEATURE_KEY,
-  State,
-  RaetselPartialState,
+  RaetselState,
   raetselAdapter,
 } from './raetsel.reducer';
 
 // Lookup the 'Raetsel' feature state managed by NgRx
-export const getRaetselState = createFeatureSelector<
-  RaetselPartialState,
-  State
->(RAETSEL_FEATURE_KEY);
+export const getRaetselState = createFeatureSelector<RaetselState>(RAETSEL_FEATURE_KEY);
 
 const { selectAll, selectEntities } = raetselAdapter.getSelectors();
 
 export const getRaetselLoaded = createSelector(
   getRaetselState,
-  (state: State) => state.loaded
+  (state: RaetselState) => state.loaded
 );
 
-export const getRaetselLoading = createSelector(
-  getRaetselState,
-  (state: State) => state.loading
-);
-
-export const getRaetselError = createSelector(
-  getRaetselState,
-  (state: State) => state.error
-);
-
-export const getAllRaetsel = createSelector(getRaetselState, (state: State) =>
+export const getAllRaetsel = createSelector(getRaetselState, (state: RaetselState) =>
   selectAll(state)
 );
 
 export const getRaetselEntities = createSelector(
   getRaetselState,
-  (state: State) => selectEntities(state)
+  (state: RaetselState) => selectEntities(state)
 );
 
 export const getSelectedId = createSelector(
   getRaetselState,
-  (state: State) => state.selectedId
+  (state: RaetselState) => state.selectedId
 );
 
 export const getSelected = createSelector(
@@ -53,5 +39,5 @@ export const getSelected = createSelector(
 
 export const getPage = createSelector(
   getRaetselState,
-  (state: State) => state.page
+  (state: RaetselState) => state.page
 );
