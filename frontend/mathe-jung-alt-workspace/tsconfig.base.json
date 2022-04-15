@@ -24,8 +24,8 @@
       "@mathe-jung-alt-workspace/deskriptoren/domain": [
         "libs/deskriptoren/domain/src/index.ts"
       ],
-      "@mathe-jung-alt-workspace/deskriptoren/feature-deskriptoren-search": [
-        "libs/deskriptoren/feature-deskriptoren-search/src/index.ts"
+      "@mathe-jung-alt-workspace/deskriptoren/feature-search": [
+        "libs/deskriptoren/feature-search/src/index.ts"
       ],
       "@mathe-jung-alt-workspace/medien/domain": [
         "libs/medien/domain/src/index.ts"

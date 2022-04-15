@@ -6,7 +6,7 @@ import { RaetselFeatureSearchModule } from '@mathe-jung-alt-workspace/raetsel/fe
 import { MessageComponentModule } from "@mathe-jung-alt-workspace/shared/ui-messaging";
 import { MaterialModule } from "@mathe-jung-alt-workspace/shared/ui-components";
 import { DeskriptorenDomainModule } from "@mathe-jung-alt-workspace/deskriptoren/domain";
-import { DeskriptorenSearchModule } from "@mathe-jung-alt-workspace/deskriptoren/feature-deskriptoren-search";
+import { DeskriptorenSearchModule } from "@mathe-jung-alt-workspace/deskriptoren/feature-search";
 
 
 @NgModule({

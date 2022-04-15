@@ -1,5 +1,5 @@
 {
-  "name": "@mathe-jung-alt-workspace/deskriptoren/feature-deskriptoren-search",
+  "name": "@mathe-jung-alt-workspace/deskriptoren/feature-search",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^13.2.0",
