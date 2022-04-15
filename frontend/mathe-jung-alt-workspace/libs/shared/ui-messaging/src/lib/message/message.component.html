@@ -1,4 +1,4 @@
-<div *ngIf="messageStore.message$ | async as msg" (click)="close()">
+<div *ngIf="messageService.message$ | async as msg" (click)="close()">
 
     <div *ngIf="msg && msg.type === 'INFO'" class="cmn-message msg-info">
         <mat-icon class="cmn-message-icon">check_circle</mat-icon><span class="cmn-message-text">{{ msg.text }}</span>

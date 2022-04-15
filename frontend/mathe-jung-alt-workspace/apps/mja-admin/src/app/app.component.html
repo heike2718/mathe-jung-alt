@@ -1,14 +1,16 @@
 <div class="main">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <p>hierher kommt die Main-Navigation</p>
+    </mat-toolbar-row>
+  </mat-toolbar>
   <mat-drawer-container>
-    <mat-drawer-content>
-      <h1>Administration</h1>
+    <mat-drawer-content>   
 
+      <mja-loader></mja-loader>
       <mja-message></mja-message>
 
-      <mja-deskriptoren-search></mja-deskriptoren-search>
-
-      <mja-raetsel-search></mja-raetsel-search>
-
+      <router-outlet></router-outlet>
     </mat-drawer-content>
   </mat-drawer-container>
 </div>

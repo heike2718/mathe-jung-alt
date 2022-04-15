@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Subscription } from "rxjs";
 import { Message } from "./message";
 import { MessageService } from "./message.service";
-import { MessageStore } from "./message.store";
 
 
 @Component({
@@ -12,12 +10,10 @@ import { MessageStore } from "./message.store";
 })
 export class MessageComponent {
 
-  messages?: Message;
-
-  constructor(public messageStore: MessageStore) { }
+  constructor(public messageService: MessageService) { }
 
   close(): void {
-    this.messageStore.clear();
+    this.messageService.clear();
   }
 
 }

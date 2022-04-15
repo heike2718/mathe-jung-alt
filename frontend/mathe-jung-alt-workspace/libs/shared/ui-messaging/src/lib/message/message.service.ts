@@ -1,29 +1,40 @@
 import { Injectable } from "@angular/core";
-import { MessageStore } from "./message.store";
+import { BehaviorSubject, Observable } from "rxjs";
+import { Message } from "./message";
 
 
 @Injectable({ providedIn: 'root' })
 export class MessageService {
 
-    constructor(private messageStore: MessageStore) { }
+    #messageSubject$ = new BehaviorSubject<Message | undefined>(undefined);
+
+    public message$: Observable<Message | undefined> = this.#messageSubject$.asObservable();
+
+    constructor() { }
 
     public info(text: string) {
 
-        this.messageStore.add({text: text, type: 'INFO'});
+        this.add({text: text, type: 'INFO'});
     }
 
     public warn(text: string) {
 
-        this.messageStore.add({text: text, type: 'WARN'});
+        this.add({text: text, type: 'WARN'});
     }
 
     public error(text: string) {
 
-        this.messageStore.add({text: text, type: 'ERROR'});
+        this.add({text: text, type: 'ERROR'});
     }
 
     public clear(): void {
 
-        this.messageStore.clear();
+        this.#messageSubject$.next(undefined);
     }
+
+    private add(message: Message){
+        this.#messageSubject$.next(message);
+    }
+
+
 }
