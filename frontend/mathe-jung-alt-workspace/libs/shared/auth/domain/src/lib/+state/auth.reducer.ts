@@ -6,38 +6,36 @@ export const AUTH_FEATURE_KEY = 'auth';
 
 export interface AuthPartialState {
     readonly [AUTH_FEATURE_KEY]: AuthState;
-  }
+}
 
 export interface AuthState {
-    readonly session: Session | undefined;
-    readonly loggingOut: boolean;    
+    readonly session?: Session;
 };
 
 const initialState: AuthState = {
-   session: undefined,
-   loggingOut: false
+    session: undefined
 };
 
-const messagesReducer = createReducer (initialState, 
+const authReducer = createReducer(initialState,
 
     on(AuthActions.sessionCreated, (state, action) => {
-        return {...state, session: action.session};
+        return { ...state, session: action.session };
     }),
 
     on(AuthActions.sessionRestored, (state, action) => {
-        return {...state, session: action.session};
+        return { ...state, session: action.session };
     }),
 
     on(AuthActions.sessionCleared, (state, _action) => {
-        return {...state, session: undefined};
+        return { ...state, session: undefined };
     }),
 
     on(AuthActions.userLoggedOut, (state, _action) => {
-        return {...state, session: undefined};
-    }),    
+        return { ...state, session: undefined };
+    }),
 );
 
 export function reducer(state: AuthState | undefined, action: Action) {
-	return messagesReducer(state, action);
+    return authReducer(state, action);
 };
 

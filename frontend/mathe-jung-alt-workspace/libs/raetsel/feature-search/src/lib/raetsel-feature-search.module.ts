@@ -4,18 +4,29 @@ import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { RaetselSearchComponent } from './raetsel-search.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
+import { RouterModule } from '@angular/router';
+import { DeskriptorenSearchModule } from '@mathe-jung-alt-workspace/deskriptoren/feature-search';
+import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 
 
 
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule, 
+    HttpClientModule,
     RaetselDomainModule,
-    MaterialModule
+    MaterialModule,
+    DeskriptorenSearchModule,
+    RouterModule.forChild([
+      {
+        path: 'raetsel',
+        canActivate: [AuthGuard],
+        component: RaetselSearchComponent,
+      },
+    ]),
   ],
   declarations: [RaetselSearchComponent],
-  exports: [RaetselSearchComponent],
+  exports: [RaetselSearchComponent, RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RaetselFeatureSearchModule {}
+export class RaetselFeatureSearchModule { }

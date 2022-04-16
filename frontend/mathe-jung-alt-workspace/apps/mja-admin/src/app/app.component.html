@@ -1,15 +1,16 @@
 <div class="main">
   <mat-toolbar color="primary">
     <mat-toolbar-row>
-      <p>hierher kommt die Main-Navigation</p>
+      <mja-admin-header></mja-admin-header>
     </mat-toolbar-row>
   </mat-toolbar>
   <mat-drawer-container>
-    <mat-drawer-content>   
-
+    <mat-drawer *ngIf="authFacade.isAuthorized$ | async" mode="side" opened>
+      <mja-admin-sidemenu></mja-admin-sidemenu>
+    </mat-drawer>
+    <mat-drawer-content>
       <mja-loader></mja-loader>
       <mja-message></mja-message>
-
       <router-outlet></router-outlet>
     </mat-drawer-content>
   </mat-drawer-container>

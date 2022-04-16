@@ -1,0 +1,18 @@
+<a class="home" routerLink="/">
+    <h1>
+        Mja Admin
+    </h1>
+</a>
+<div class="security">
+    <ng-container *ngIf="authFacade.isLoggedOut$ | async">
+        <a (click)="login()" data-testid="btn-log-in" mat-raised-button>einloggen</a>
+    </ng-container>
+    <ng-container *ngIf="authFacade.isLoggedIn$ | async">
+        <ng-container *ngIf="authFacade.getUser$ | async as user">
+            <ng-container *ngIf="user !== undefined">
+                Moin, {{user.fullName}}
+            </ng-container>
+        </ng-container>
+        <a (click)="logout()" data-testid="btn-log-out" mat-raised-button>ausloggen</a>
+    </ng-container>
+</div>

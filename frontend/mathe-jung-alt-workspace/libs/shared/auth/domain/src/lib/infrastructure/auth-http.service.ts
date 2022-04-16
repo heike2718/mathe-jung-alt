@@ -26,8 +26,11 @@ export class AuthHttpService {
 
     public createFakeSession(): Observable<Session> {
 
+        const shortRunningSession = new Date().getMilliseconds() + 2000;
+
         const session: Session = {
             expiresAt: 7961434408,
+            // expiresAt: shortRunningSession,
             sessionId: 'sadgagudgqo',
             user: {
                 fullName: 'Ponder Stibbons',

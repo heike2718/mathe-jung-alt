@@ -22,7 +22,7 @@ export const sessionCreated = createAction(
 
 export const userLoggedIn = createAction(
     '[Auth] logged in',
-    props<{ session: Session, url: string }>()
+    props<{ session: Session }>()
 );
 
 export const clearOrRestoreSession = createAction(

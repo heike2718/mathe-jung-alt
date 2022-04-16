@@ -10,17 +10,17 @@ export interface AuthResult {
     state?: string;
     nonce?: string;
     idToken?: string;
-  }
+  };
   
   export interface User {
     readonly idReference: string;
     readonly rolle: Rolle;
     readonly fullName: string;
-  }
+  };
   
   export interface Session {
     readonly sessionId?: string;
     readonly expiresAt: number;
-    readonly user: User | null;
-  }
+    readonly user: User
+  };
   

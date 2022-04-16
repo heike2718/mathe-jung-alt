@@ -9,7 +9,7 @@ export const environment = {
     '/home/heike/git/mathe-jung-alt/frontend/mathe-jung-alt-ws/apps/mja-admin/src/assets',
   apiUrl: 'http://localhost:9210/mja-gateway/admin',
   profileUrl: 'http://localhost:80/profil-app',
-  storageKeyPrefix: 'mja_admin',
+  storageKeyPrefix: 'mja_adm_',
   version: '1.0.0',
   consoleLogActive: true,
   serverLogActive: false,

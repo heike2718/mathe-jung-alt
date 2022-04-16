@@ -1,14 +1,23 @@
 import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import * as AuthActions from '../+state/auth.actions';
+import * as AuthSelectors from '../+state/auth.selectors';
 import { AuthPartialState } from "../+state/auth.reducer";
-import { AuthResult } from "../entities/auth.model";
+
+import { AuthResult, User } from "../entities/auth.model";
+import { Observable } from "rxjs";
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthFacade {
+
+    public isLoggedIn$ = this.store.pipe(select(AuthSelectors.isLoggedIn));
+    public isLoggedOut$ = this.store.pipe(select(AuthSelectors.isLoggedOut));
+    public getUser$: Observable<User | undefined> = this.store.pipe(select(AuthSelectors.getUser));
+    public isAuthorized$ = this.store.pipe(select(AuthSelectors.isAuthorized));
+    public isSessionExpired$ = this.store.pipe(select(AuthSelectors.isSessionExpired));
 
     constructor(private store: Store<AuthPartialState>) { }
 
@@ -34,5 +43,4 @@ export class AuthFacade {
         // Dies triggert einen SideEffect (siehe auth.effects.ts)
         this.store.dispatch(AuthActions.createSession({ authResult: authResult }));
     }
-
 }

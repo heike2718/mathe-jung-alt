@@ -19,7 +19,7 @@ const materialModules = [
   MatSortModule,
   MatChipsModule,
   MatProgressSpinnerModule,
-  MatGridListModule
+  MatGridListModule  
 ];
 
 

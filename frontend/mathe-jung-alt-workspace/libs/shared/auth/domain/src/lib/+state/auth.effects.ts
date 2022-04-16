@@ -1,7 +1,7 @@
 
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
+import { isExpired, noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { noop, Observable, of } from 'rxjs';
@@ -24,7 +24,7 @@ export class AuthEffects {
         private safeNgrx: SafeNgrxService,
         private router: Router) {
 
-        this.#storagePrefix = this.#storagePrefix;
+        this.#storagePrefix = this.configuration.storagePrefix;
     }
 
     requestLoginRedirectUrl$ = createEffect(() =>
@@ -60,7 +60,7 @@ export class AuthEffects {
             ofType(AuthActions.createSession),
             this.safeNgrx.safeSwitchMap((action) =>
                 this.internalCreateSession(action.authResult).pipe(
-                    map((session: Session) => AuthActions.userLoggedIn({ session: session, url: this.configuration.loginSuccessUrl }))
+                    map((session: Session) => AuthActions.userLoggedIn({ session: session }))
                 ), 'Login fehlgeschlagen', noopAction()
             )
         )
@@ -70,11 +70,10 @@ export class AuthEffects {
         this.actions$.pipe(
             ofType(AuthActions.userLoggedIn),
             concatMap((action) =>
-                of({ session: action.session, url: action.url }).pipe(
-                    map(({ session, url }) => {
+                of({ session: action.session }).pipe(
+                    map(({ session }) => {
 
                         this.storeSessionInLocalStorage(session);
-                        this.router.navigateByUrl(url);
                         return AuthActions.sessionCreated({ session: session });
                     })
                 )
@@ -86,6 +85,7 @@ export class AuthEffects {
             ofType(AuthActions.logout),
             map(() => {
                 this.clearSession();
+                this.router.navigateByUrl('');
                 return AuthActions.userLoggedOut();
             })
         )
@@ -117,7 +117,7 @@ export class AuthEffects {
         const expiresAt = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
 
         // TODO: wenn abgelaufen
-        if (!expiresAt || this.isSessionExpired(JSON.parse(expiresAt))) {
+        if (!expiresAt || isExpired(JSON.parse(expiresAt))) {
             return of(undefined);
         }
 
@@ -128,13 +128,6 @@ export class AuthEffects {
             expiresAt: exp,
             user: user
         });
-    }
-
-    private isSessionExpired(expriesAt: number): boolean {
-
-        // expriesAt ist in Millisekunden seit 01.01.1970
-        const nowMillis: number = new Date().getMilliseconds();
-        return nowMillis > expriesAt;
     }
 
     private storeSessionInLocalStorage(session: Session): void {

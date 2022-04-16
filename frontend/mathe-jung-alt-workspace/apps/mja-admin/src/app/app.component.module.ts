@@ -7,7 +7,9 @@ import { LoadingIndicatorComponentModule, MessageComponentModule } from "@mathe-
 import { MaterialModule } from "@mathe-jung-alt-workspace/shared/ui-components";
 import { DeskriptorenDomainModule } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 import { DeskriptorenSearchModule } from "@mathe-jung-alt-workspace/deskriptoren/feature-search";
-import { environment } from '../environments/environment';
+import { HeaderComponentModule } from "./core/header/header.component";
+import { SidemenuComponentModule } from "./core/sidemenu/sidemenu.component";
+import { NotAuthorizedComponentModule } from "./core/not-authorized/not-authorized.component";
 
 
 @NgModule({
@@ -22,7 +24,10 @@ import { environment } from '../environments/environment';
         RaetselDomainModule,
         RaetselFeatureSearchModule,
         MessageComponentModule,
-        LoadingIndicatorComponentModule
+        LoadingIndicatorComponentModule,
+        HeaderComponentModule,
+        SidemenuComponentModule,
+        NotAuthorizedComponentModule
     ],
     exports: [
         AppComponent

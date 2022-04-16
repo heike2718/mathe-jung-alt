@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
 
   title = 'mja-admin';
 
-  constructor(private authFacade: AuthFacade) { }
+  constructor(public authFacade: AuthFacade) { }
 
   ngOnInit(): void {
 
