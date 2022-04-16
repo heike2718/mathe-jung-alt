@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MessageService } from "@mathe-jung-alt-workspace/shared/ui-messaging";
 import { TypedAction } from "@ngrx/store/src/models";
-import { catchError, concatMap, Observable, of, OperatorFunction, switchMap } from 'rxjs';
+import { catchError, concatMap, exhaustMap, mergeMap, Observable, of, OperatorFunction, switchMap } from 'rxjs';
 
 
 @Injectable({
@@ -35,6 +35,40 @@ export class SafeNgrxService {
         return (source$: Observable<S>): Observable<TypedAction<T | 'NOOP'>> =>
             source$.pipe(
                 switchMap((value) =>
+                    project(value).pipe(catchError((error) => {
+                        console.log('SafeNgrxService: error=' + error);
+                        this.messageService.error(errorMessage);
+                        return of(errorAction);
+                    }))
+                )
+            );
+    }
+
+    public safeExhaustMap<S, T extends string>(
+        project: (value: S) => Observable<TypedAction<T>>,
+        errorMessage: string,
+        errorAction: TypedAction<T>
+    ): OperatorFunction<S, TypedAction<T | 'NOOP'>> {
+        return (source$: Observable<S>): Observable<TypedAction<T | 'NOOP'>> =>
+            source$.pipe(
+                exhaustMap((value) =>
+                    project(value).pipe(catchError((error) => {
+                        console.log('SafeNgrxService: error=' + error);
+                        this.messageService.error(errorMessage);
+                        return of(errorAction);
+                    }))
+                )
+            );
+    }
+
+    public safeMergeMap<S, T extends string>(
+        project: (value: S) => Observable<TypedAction<T>>,
+        errorMessage: string,
+        errorAction: TypedAction<T>
+    ): OperatorFunction<S, TypedAction<T | 'NOOP'>> {
+        return (source$: Observable<S>): Observable<TypedAction<T | 'NOOP'>> =>
+            source$.pipe(
+                mergeMap((value) =>
                     project(value).pipe(catchError((error) => {
                         console.log('SafeNgrxService: error=' + error);
                         this.messageService.error(errorMessage);

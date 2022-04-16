@@ -13,7 +13,7 @@ export class RaetselEffects {
   findRaetsel$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.findRaetsel),
-      // switchMap, weil spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
+      // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
       this.safeNgrx.safeSwitchMap((action) =>
         this.raetselDataService.findRaetsel(action.filter).pipe(
           map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))

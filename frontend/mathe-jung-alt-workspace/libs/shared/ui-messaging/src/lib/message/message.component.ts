@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Message } from "./message";
 import { MessageService } from "./message.service";
 
 

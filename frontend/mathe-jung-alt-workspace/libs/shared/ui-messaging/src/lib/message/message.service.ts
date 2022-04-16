@@ -14,17 +14,17 @@ export class MessageService {
 
     public info(text: string) {
 
-        this.add({text: text, type: 'INFO'});
+        this.add({message: text, level: 'INFO'});
     }
 
     public warn(text: string) {
 
-        this.add({text: text, type: 'WARN'});
+        this.add({message: text, level: 'WARN'});
     }
 
     public error(text: string) {
 
-        this.add({text: text, type: 'ERROR'});
+        this.add({message: text, level: 'ERROR'});
     }
 
     public clear(): void {
@@ -35,6 +35,4 @@ export class MessageService {
     private add(message: Message){
         this.#messageSubject$.next(message);
     }
-
-
 }
