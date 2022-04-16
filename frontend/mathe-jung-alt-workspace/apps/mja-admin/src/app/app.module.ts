@@ -14,6 +14,7 @@ import {
 import { AppComponentModule } from './app.component.module';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
+import { SharedAuthDomainModule } from '@mathe-jung-alt-workspace/shared/auth/domain';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,14 @@ import { AppRoutingModule } from './app-routing.module';
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     NoopAnimationsModule,
+    SharedAuthDomainModule.forRoot({
+      baseUrl: environment.apiUrl,
+      loginSuccessUrl: '/home',
+      production: environment.production,
+      profileUrl: environment.profileUrl,
+      storagePrefix: environment.storageKeyPrefix,
+      withFakeLogin: environment.withFakeLogin  
+    })
   ],
   providers: [],
   bootstrap: [AppComponent],

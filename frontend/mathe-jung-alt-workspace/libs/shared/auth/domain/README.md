@@ -2,6 +2,12 @@
 
 einloggen, registrieren, ausloggen
 
+## Nach Aufruf der app oder einem Reload
+
+in app.component.ts.onInit() wird als erstes die Methode AuthFacade.clearOrRestoreSession() aufgerufen, um zu sehen, ob sie noch gültig ist.
+
+Dies triggert die gleichnamige action und die Arbeit wird durch den auth.effects.ts- Effect clearOrRestoreSession$ erledigt.
+
 ## Login flow
 
 __Falls der authprovider verfügbar ist:__

@@ -5,9 +5,9 @@ import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/ut
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { noop, Observable, of } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { concatMap, map, switchMap } from 'rxjs/operators';
 import { AuthConfigService, AuthConfiguration } from '../application/auth.configuration';
-import { STORAGE_KEY_USER, Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, AuthResult } from '../entities/auth.model';
+import { STORAGE_KEY_USER, Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, AuthResult, User } from '../entities/auth.model';
 import { AuthHttpService } from '../infrastructure/auth-http.service';
 import * as AuthActions from './auth.actions';
 
@@ -15,12 +15,17 @@ import * as AuthActions from './auth.actions';
 @Injectable()
 export class AuthEffects {
 
+    #storagePrefix!: string;
+
 
     constructor(private actions$: Actions,
         @Inject(AuthConfigService) private configuration: AuthConfiguration,
         private authHttpService: AuthHttpService,
         private safeNgrx: SafeNgrxService,
-        private router: Router) { }
+        private router: Router) {
+
+        this.#storagePrefix = this.#storagePrefix;
+    }
 
     requestLoginRedirectUrl$ = createEffect(() =>
         this.actions$.pipe(
@@ -76,6 +81,23 @@ export class AuthEffects {
             )
         ));
 
+    logout$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.logout),
+            map(() => {
+                this.clearSession();
+                return AuthActions.userLoggedOut();
+            })
+        )
+    );
+
+    clearOrRestoreSession$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.clearOrRestoreSession),
+            switchMap(() => this.checkSessionInLocalStorage()),
+            map((session: Session | undefined) => this.getClearOrRestoreResultAction(session))
+        ));
+
     private getClearOrRestoreResultAction(session?: Session): Action {
 
         if (session) {
@@ -84,14 +106,45 @@ export class AuthEffects {
         return AuthActions.sessionCleared();
     }
 
+    private checkSessionInLocalStorage(): Observable<Session | undefined> {
+
+        const u = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_USER);
+
+        if (!u) {
+            return of(undefined);
+        }
+
+        const expiresAt = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
+
+        // TODO: wenn abgelaufen
+        if (!expiresAt || this.isSessionExpired(JSON.parse(expiresAt))) {
+            return of(undefined);
+        }
+
+        const exp: number = JSON.parse(expiresAt);
+        const user: User = JSON.parse(u);
+
+        return of({
+            expiresAt: exp,
+            user: user
+        });
+    }
+
+    private isSessionExpired(expriesAt: number): boolean {
+
+        // expriesAt ist in Millisekunden seit 01.01.1970
+        const nowMillis: number = new Date().getMilliseconds();
+        return nowMillis > expriesAt;
+    }
+
     private storeSessionInLocalStorage(session: Session): void {
 
         const user = session.user;
-        localStorage.setItem(this.configuration.storagePrefix + STORAGE_KEY_USER, JSON.stringify(user));
+        localStorage.setItem(this.#storagePrefix + STORAGE_KEY_USER, JSON.stringify(user));
         if (session.sessionId) {
-            localStorage.setItem(this.configuration.storagePrefix + STORAGE_KEY_DEV_SESSION_ID, session.sessionId);
+            localStorage.setItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID, session.sessionId);
         }
-        localStorage.setItem(this.configuration.storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT, JSON.stringify(session.expiresAt));
+        localStorage.setItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT, JSON.stringify(session.expiresAt));
     }
 
     private internalCreateSession(authResult: AuthResult): Observable<Session> {
@@ -101,5 +154,11 @@ export class AuthEffects {
         }
 
         return this.authHttpService.createSession(authResult);
+    }
+
+    private clearSession(): void {
+        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
+        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
+        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_USER);
     }
 }

@@ -7,6 +7,7 @@ import { LoadingIndicatorComponentModule, MessageComponentModule } from "@mathe-
 import { MaterialModule } from "@mathe-jung-alt-workspace/shared/ui-components";
 import { DeskriptorenDomainModule } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 import { DeskriptorenSearchModule } from "@mathe-jung-alt-workspace/deskriptoren/feature-search";
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -27,4 +28,4 @@ import { DeskriptorenSearchModule } from "@mathe-jung-alt-workspace/deskriptoren
         AppComponent
     ]
 })
-export class AppComponentModule {}
+export class AppComponentModule { }

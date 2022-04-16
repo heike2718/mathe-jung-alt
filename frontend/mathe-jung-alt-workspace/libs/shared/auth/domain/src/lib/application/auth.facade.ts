@@ -14,15 +14,24 @@ export class AuthFacade {
 
 
     public requestLoginRedirectUrl(): void {
+        // Dies triggert einen SideEffect (siehe auth.effects.ts)
         this.store.dispatch(AuthActions.requestLoginUrl());
     }
 
+    public clearOrRestoreSession(): void {
+        // Dies triggert einen SideEffect (siehe auth.effects.ts)
+        this.store.dispatch(AuthActions.clearOrRestoreSession());
+    }
 
+    public logout(): void {
+        this.store.dispatch(AuthActions.logout());
+    }
 
     public createFakeSession(): void {
         const authResult: AuthResult = {
             expiresAt: 7961434408
         };
+        // Dies triggert einen SideEffect (siehe auth.effects.ts)
         this.store.dispatch(AuthActions.createSession({ authResult: authResult }));
     }
 
