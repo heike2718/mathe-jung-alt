@@ -6,10 +6,10 @@ import { RaetselFeatureSearchModule } from '@mathe-jung-alt-workspace/raetsel/fe
 import { LoadingIndicatorComponentModule, MessageComponentModule } from "@mathe-jung-alt-workspace/shared/ui-messaging";
 import { MaterialModule } from "@mathe-jung-alt-workspace/shared/ui-components";
 import { DeskriptorenDomainModule } from "@mathe-jung-alt-workspace/deskriptoren/domain";
-import { DeskriptorenSearchModule } from "@mathe-jung-alt-workspace/deskriptoren/feature-search";
 import { HeaderComponentModule } from "./core/header/header.component";
 import { SidemenuComponentModule } from "./core/sidemenu/sidemenu.component";
 import { NotAuthorizedComponentModule } from "./core/not-authorized/not-authorized.component";
+import { DashboardComponentModule } from "./dashboard/dashboard-component.module";
 
 
 @NgModule({
@@ -20,14 +20,14 @@ import { NotAuthorizedComponentModule } from "./core/not-authorized/not-authoriz
         MaterialModule,
         RouterModule,
         DeskriptorenDomainModule,
-        DeskriptorenSearchModule,
         RaetselDomainModule,
         RaetselFeatureSearchModule,
         MessageComponentModule,
         LoadingIndicatorComponentModule,
         HeaderComponentModule,
         SidemenuComponentModule,
-        NotAuthorizedComponentModule
+        NotAuthorizedComponentModule,
+        DashboardComponentModule
     ],
     exports: [
         AppComponent

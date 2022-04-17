@@ -2,14 +2,14 @@
 
 <div class="wrapper m4">
 
-  <mja-deskriptoren-search></mja-deskriptoren-search>
+  <p>Suche in Namen</p>
 
   <mat-input-container>
     <input matInput placeholder="suchen in Name" #input class="mb-2 p-5">
   </mat-input-container>
 
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8"
-    matSort matSortActive="schluessel" matSortDirection="asc" matSortDisableClear>
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="schluessel"
+    matSortDirection="asc" matSortDisableClear>
 
     <ng-container matColumnDef="schluessel">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> SCHLUESSEL </th>
@@ -17,8 +17,13 @@
     </ng-container>
 
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> NAME </th>
+      <th mat-header-cell *matHeaderCellDef> Name </th>
       <td mat-cell *matCellDef="let raetsel"> {{raetsel.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="deskriptoren">
+      <th mat-header-cell *matHeaderCellDef> Deskriptoren </th>
+      <td mat-cell *matCellDef="let raetsel"> {{raetsel.deskriptoren}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

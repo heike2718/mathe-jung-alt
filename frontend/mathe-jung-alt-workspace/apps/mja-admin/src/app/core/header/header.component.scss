@@ -4,10 +4,27 @@
     justify-content: space-between;
     align-items: center;
   }
-  
-  a.home {
+
+  .home {
     text-decoration: none;
     color: inherit;
+  
+    h1 {
+      display: flex;
+      align-items: center;
+  
+      img {
+        width: 4em;
+        height: auto;
+        padding-right: 1em;
+      }
+    }
+  }
+  
+  a.dashboard {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
   
     h1 {
       display: flex;

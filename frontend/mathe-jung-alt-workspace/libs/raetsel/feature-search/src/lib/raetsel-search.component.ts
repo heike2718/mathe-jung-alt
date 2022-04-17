@@ -16,7 +16,7 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('input') input!: ElementRef;
 
-  displayedColumns: string[] = ['schluessel', 'name'];
+  displayedColumns: string[] = ['schluessel', 'name', 'deskriptoren'];
   dataSource!: RaetselDataSource;
   anzahlRaetsel: number = 0;
 

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { isExpired, noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { noop, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { concatMap, map, switchMap } from 'rxjs/operators';
 import { AuthConfigService, AuthConfiguration } from '../application/auth.configuration';
 import { STORAGE_KEY_USER, Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, AuthResult, User } from '../entities/auth.model';
@@ -79,6 +79,16 @@ export class AuthEffects {
                 )
             )
         ));
+
+    sessionCreated$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.sessionCreated),
+            map(() => {
+                this.router.navigateByUrl('dashboard')
+                return noopAction();
+            })
+        )
+    );
 
     logout$ = createEffect(() =>
         this.actions$.pipe(

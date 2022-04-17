@@ -5,7 +5,6 @@ import { RaetselSearchComponent } from './raetsel-search.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 import { RouterModule } from '@angular/router';
-import { DeskriptorenSearchModule } from '@mathe-jung-alt-workspace/deskriptoren/feature-search';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 
 
@@ -16,7 +15,6 @@ import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
     HttpClientModule,
     RaetselDomainModule,
     MaterialModule,
-    DeskriptorenSearchModule,
     RouterModule.forChild([
       {
         path: 'raetsel',

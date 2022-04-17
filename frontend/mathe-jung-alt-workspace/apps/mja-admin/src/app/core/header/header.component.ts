@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
 }
 
 @NgModule({
-  imports: [CommonModule, MaterialModule],
+  imports: [CommonModule, MaterialModule, RouterModule],
   declarations: [HeaderComponent],
   exports: [HeaderComponent],
 })

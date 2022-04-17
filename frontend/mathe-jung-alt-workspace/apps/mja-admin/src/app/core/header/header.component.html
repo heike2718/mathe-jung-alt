@@ -1,4 +1,9 @@
-<a class="home" routerLink="/">
+<div *ngIf="authFacade.isLoggedOut$ | async" class="home">
+    <h1>
+        Mja Admin
+    </h1>
+</div>
+<a *ngIf="authFacade.isLoggedIn$ | async" class="dashboard" routerLink="/dashboard" title="Dashboard">
     <h1>
         Mja Admin
     </h1>

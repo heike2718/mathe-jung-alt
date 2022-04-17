@@ -11,10 +11,20 @@ const Routes = [
         component: HomeComponent,
         children: [
             {
+                path: 'dashboard',
+                loadChildren: () =>
+                    import('./dashboard/dashboard-component.module').then((m) => m.DashboardComponentModule),
+            },
+            {
                 path: 'raetsel',
                 loadChildren: () =>
                     import('@mathe-jung-alt-workspace/raetsel/feature-search').then((m) => m.RaetselFeatureSearchModule),
 
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                component: HomeComponent,
             },
         ]
     },
