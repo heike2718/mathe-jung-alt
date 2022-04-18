@@ -12,11 +12,11 @@ export interface SuchfilterPartialState {
 };
 
 export interface SuchfilterState {
-    readonly suchfilter: Suchfilter;
+    readonly filter: Suchfilter;
 }
 
 const initialState: SuchfilterState = {
-    suchfilter: initialSuchfilter
+    filter: initialSuchfilter
 };
 
 const suchfilterReducer = createReducer(
@@ -24,40 +24,19 @@ const suchfilterReducer = createReducer(
 
     on(SuchfilterActions.suchkontextChanged, (state, action) => ({
         ...state,
-        suchfilter: { ...state.suchfilter, kontext: action.kontext, suchstring: '', deskriptoren: [] },
+        filter: { ...state.filter, kontext: action.kontext, suchstring: '', deskriptoren: [] },
     })),
 
-    on(SuchfilterActions.suchstringChanged, (state, action) => ({
-        ...state,
-        suchfilter: { ...state.suchfilter, suchstring: action.suchstring },
-    })),
+    on(SuchfilterActions.suchstringChanged, (state, action) => {
 
-    on(SuchfilterActions.deskriptorAdded, (state, action) => {
-
-        const deskriptoren = [...state.suchfilter.deskriptoren, action.deskriptor];
-        return {
-            ...state,
-            suchfilter: { ...state.suchfilter, deskriptoren: deskriptoren }
-        };
+        const neuerFilter = {...state.filter, suchstring: action.suchstring};
+        return {...state, filter: neuerFilter};
     }),
 
-    on(SuchfilterActions.deskriptorRemoved, (state, action) => {
+    on(SuchfilterActions.deskriptorenChanged, (state, action) => {
 
-        const deskriptoren: Deskriptor[] = [];
-        const deskriptor: Deskriptor = action.deskriptor;
-
-        state.suchfilter.deskriptoren.forEach(
-            d => {
-                if (d.id !== deskriptor.id) {
-                    deskriptoren.push(d);
-                }
-            }
-        );
-
-        return {
-            ...state,
-            suchfilter: { ...state.suchfilter, deskriptoren: deskriptoren }
-        };
+        const neuerFilter = {...state.filter, deskriptoren: action.deskriptoren};
+        return {...state, filter: neuerFilter};
     }),
 );
 

@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, Output, ViewChild } from "@angular/core";
+import { Deskriptor, DeskriptorenSearchFacade } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 import { debounceTime, distinctUntilChanged, fromEvent, Subscription, tap } from "rxjs";
 
 
@@ -15,7 +16,11 @@ export class AdminSuchfilterComponent implements AfterViewInit, OnDestroy {
   @Output()
   private inputChanged: EventEmitter<string> = new EventEmitter<string>();
 
+  @Output()
+  private suchlisteDeskriptorenChanged: EventEmitter<Deskriptor[]> = new EventEmitter<Deskriptor[]>();
+
   private keySubscription: Subscription = new Subscription();
+  private deskriptorSuchlisteSubscription: Subscription = new Subscription();
 
   ngAfterViewInit(): void {
 
@@ -31,10 +36,15 @@ export class AdminSuchfilterComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.keySubscription.unsubscribe();
+    this.keySubscription.unsubscribe();
+    this.deskriptorSuchlisteSubscription.unsubscribe();
   }
 
-  private emitInputValue() {    
+  private emitInputValue() {
     this.inputChanged.emit(this.input.nativeElement.value);
+  }
+
+  public onDeskriptorenChanged($event: Deskriptor[]) {
+    this.suchlisteDeskriptorenChanged.emit($event);
   }
 }

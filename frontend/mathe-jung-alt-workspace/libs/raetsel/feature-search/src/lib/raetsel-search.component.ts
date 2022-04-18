@@ -6,6 +6,7 @@ import { tap } from 'rxjs/operators';
 import { merge, Subscription } from 'rxjs';
 import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
+import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 
 @Component({
   selector: 'mja-raetsel-search',
@@ -15,6 +16,8 @@ import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAdmin$ = this.authFacade.isAdmin$;
+  isSuchfilterReadyToGo$ = this.suchfilterFacade.isSuchfilterReadyToGo$;
+  suchfilter$ = this.suchfilterFacade.suchfilter$;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -30,16 +33,25 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnInit() {
     this.dataSource = new RaetselDataSource(this.raetselFacade);
     // this.raetselFacade.loadRaetsel();
+    this.suchfilterFacade.changeSuchkontext('RAETSEL');
 
     this.raetselSubscription = this.raetselFacade.raetselList$.subscribe(
       liste => this.anzahlRaetsel = liste.length
     );
   }
 
+  onDeskriptorenChanged($event: Deskriptor[]): void {
+
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    }
+    this.suchfilterFacade.changeDeskriptoren($event);
+  }
+
   onInputChanged($event: string) {
     if ($event.trim().length > 0) {
       this.paginator.pageIndex = 0;
-      this.findRaetsel($event);
+      this.suchfilterFacade.changeSuchtext($event);
     }
   }
 
@@ -62,7 +74,8 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private findRaetsel(value: string): void {
-    this.raetselFacade.findRaetsel(value);
+    this.suchfilterFacade.changeSuchtext(value);
+    // this.raetselFacade.findRaetsel(value);
   }
 
   private loadRaetselPage(): void {

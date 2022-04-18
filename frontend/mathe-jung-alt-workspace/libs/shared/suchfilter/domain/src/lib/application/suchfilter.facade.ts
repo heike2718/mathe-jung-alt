@@ -25,11 +25,7 @@ export class SuchfilterFacade {
         this.store.dispatch(SuchfilterActions.suchstringChanged({suchstring}));
     }
 
-    public addDeskriptor(deskriptor: Deskriptor): void {
-        this.store.dispatch(SuchfilterActions.deskriptorAdded({deskriptor}));
-    }
-
-    public removeDeskriptor(deskriptor: Deskriptor): void {
-        this.store.dispatch(SuchfilterActions.deskriptorRemoved({deskriptor}));
+    public changeDeskriptoren(deskriptoren: Deskriptor[]): void {
+        this.store.dispatch(SuchfilterActions.deskriptorenChanged({deskriptoren}));
     }
 }

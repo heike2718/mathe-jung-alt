@@ -9,31 +9,17 @@ import { filter, map, Observable, tap } from "rxjs";
 })
 export class AuthGuard implements CanActivate {
 
-    constructor(private router: Router, private authFacade: AuthFacade) {
-        console.log('AuthGuard init');
-    }
+    constructor(private router: Router, private authFacade: AuthFacade) { }
 
 
     canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> | boolean {
 
         return this.authFacade.isAuthorized$.pipe(
             tap((auth) => {
-                if (auth) {
-                    console.log('darf');
-                } else {
+                if (!auth) {
                     this.router.navigateByUrl('/forbidden')
                 }
             })
         );
-
-        // return this.authFacade.isAuthorized$.pipe(
-        //     tap((authorized) => {
-        //         if (!authorized) {
-        //             console.log('not authorized')
-        //             this.router.navigateByUrl('');
-        //         }
-        //     }),
-        //     filter((authorized) => authorized)
-        // )
     }
 }

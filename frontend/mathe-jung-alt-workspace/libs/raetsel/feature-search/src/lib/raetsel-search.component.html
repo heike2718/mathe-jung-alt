@@ -3,8 +3,17 @@
 <div class="wrapper m4">
 
   <ng-container *ngIf="isAdmin$ | async">
-    <mja-admin-suchfilter (inputChanged)="onInputChanged($event)"></mja-admin-suchfilter>
+    <mja-admin-suchfilter (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"
+      (inputChanged)="onInputChanged($event)">
+    </mja-admin-suchfilter>
   </ng-container>
+
+  <ng-container *ngIf="isSuchfilterReadyToGo$ | async">
+    <ng-container *ngIf="(suchfilter$ | async) as suchfilter">
+      <p>Lasset die Suche beginnen: {{suchfilter | json}}</p>
+    </ng-container>
+  </ng-container>
+
 
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="schluessel"
     matSortDirection="asc" matSortDisableClear>

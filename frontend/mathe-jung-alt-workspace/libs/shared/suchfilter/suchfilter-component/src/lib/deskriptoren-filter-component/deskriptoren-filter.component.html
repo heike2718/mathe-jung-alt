@@ -1,17 +1,19 @@
-<p>Deskriptoren</p>
-<mat-chip-list>
-  <div *ngFor="let deskriptor of restliste$ | async">
-    <mat-chip (click)="addToSuchliste(deskriptor)">{{deskriptor.name}}</mat-chip>
-  </div>
-</mat-chip-list>
+<div class="deskriptorfilter">
+  <p>Deskriptoren</p>
+  <mat-chip-list>
+    <div *ngFor="let deskriptor of restliste$ | async">
+      <mat-chip (click)="addToSuchliste(deskriptor)">{{deskriptor.name}}</mat-chip>
+    </div>
+  </mat-chip-list>
 
-<ng-container *ngIf="suchliste$ | async as suchliste">
-  <ng-container *ngIf="suchliste.length > 0">
-    <p>Suche mit Deskriptoren</p>
-    <mat-chip-list>
-      <div *ngFor="let deskriptor of suchliste">
-        <mat-chip selected (click)="removeFromSuchliste(deskriptor)">{{deskriptor.name}}</mat-chip>
-      </div>
-    </mat-chip-list>
+  <ng-container *ngIf="suchliste$ | async as suchliste">
+    <ng-container *ngIf="suchliste.length > 0">
+      <p>Suche mit Deskriptoren</p>
+      <mat-chip-list>
+        <div *ngFor="let deskriptor of suchliste">
+          <mat-chip selected (click)="removeFromSuchliste(deskriptor)">{{deskriptor.name}}</mat-chip>
+        </div>
+      </mat-chip-list>
+    </ng-container>
   </ng-container>
-</ng-container>
+</div>

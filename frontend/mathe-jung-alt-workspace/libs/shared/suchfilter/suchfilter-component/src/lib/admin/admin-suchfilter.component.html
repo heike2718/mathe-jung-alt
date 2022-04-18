@@ -1,4 +1,7 @@
-<mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Volltextsuche</mat-label>
-    <input matInput placeholder="Volltextsuche" #input class="mb-2 p-5">
+
+<mja-deskriptoren-filter (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"></mja-deskriptoren-filter>
+<mat-form-field class="formfield-full-width" appearance="fill">
+    <mat-label>Text</mat-label>
+    <input matInput placeholder="Text" #input class="mb-2 p-5">
 </mat-form-field>
+

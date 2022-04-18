@@ -5,12 +5,10 @@
 export const environment = {
   envName: 'DEV',
   production: false,
-  assetsUrl:
-    '/home/heike/git/mathe-jung-alt/frontend/mathe-jung-alt-ws/apps/mja-admin/src/assets',
   apiUrl: 'http://localhost:9210/mja-gateway/admin',
   profileUrl: 'http://localhost:80/profil-app',
   storageKeyPrefix: 'mja_adm_',
-  version: '1.0.0',
+  version: '0.0.1',
   consoleLogActive: true,
   serverLogActive: false,
   loglevel: 1,
