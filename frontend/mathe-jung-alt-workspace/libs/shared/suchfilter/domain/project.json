@@ -38,5 +38,5 @@
       }
     }
   },
-  "tags": ["domain:suchfilter", "type:domain-logic"]
+  "tags": ["domain:suchfilter", "type:domain-logic", "scope:shared"]
 }

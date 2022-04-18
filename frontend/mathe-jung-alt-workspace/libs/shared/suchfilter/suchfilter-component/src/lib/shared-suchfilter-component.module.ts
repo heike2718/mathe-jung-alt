@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { MaterialModule } from "@mathe-jung-alt-workspace/shared/ui-components";
 import { AdminSuchfilterComponent } from "./admin/admin-suchfilter.component";
-import { DeskriptorenSearchComponent } from "./feature-search/deskriptoren-search.component";
+import { DeskriptorenFilterComponent } from "./deskriptoren-filter-component/deskriptoren-filter.component";
 
 
 @NgModule({
@@ -12,11 +12,11 @@ import { DeskriptorenSearchComponent } from "./feature-search/deskriptoren-searc
     ],
     declarations: [
         AdminSuchfilterComponent,
-        DeskriptorenSearchComponent
+        DeskriptorenFilterComponent
     ],
     exports: [
         AdminSuchfilterComponent,
-        DeskriptorenSearchComponent
+        DeskriptorenFilterComponent
     ]
 })
-export class SharedFeatureSuchfilterComponentModule { }
+export class SharedSuchfilterComponentModule { }

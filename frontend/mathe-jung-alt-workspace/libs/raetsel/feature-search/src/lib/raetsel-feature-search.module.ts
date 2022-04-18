@@ -7,7 +7,7 @@ import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SharedSuchfilterDomainModule } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
-import { SharedFeatureSuchfilterComponentModule } from '@mathe-jung-alt-workspace/shared/suchfilter/feature-suchfilter-component';
+import { SharedSuchfilterComponentModule } from '@mathe-jung-alt-workspace/shared/suchfilter/suchfilter-component';
 
 
 @NgModule({
@@ -16,7 +16,7 @@ import { SharedFeatureSuchfilterComponentModule } from '@mathe-jung-alt-workspac
     HttpClientModule,
     RaetselDomainModule,
     SharedSuchfilterDomainModule,
-    SharedFeatureSuchfilterComponentModule,
+    SharedSuchfilterComponentModule,
     MaterialModule,
     RouterModule.forChild([
       {

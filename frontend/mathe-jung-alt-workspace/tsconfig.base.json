@@ -51,8 +51,8 @@
       "@mathe-jung-alt-workspace/shared/suchfilter/domain": [
         "libs/shared/suchfilter/domain/src/index.ts"
       ],
-      "@mathe-jung-alt-workspace/shared/suchfilter/feature-suchfilter-component": [
-        "libs/shared/suchfilter/feature-suchfilter-component/src/index.ts"
+      "@mathe-jung-alt-workspace/shared/suchfilter/suchfilter-component": [
+        "libs/shared/suchfilter/suchfilter-component/src/index.ts"
       ],
       "@mathe-jung-alt-workspace/shared/ui-components": [
         "libs/shared/ui-components/src/index.ts"

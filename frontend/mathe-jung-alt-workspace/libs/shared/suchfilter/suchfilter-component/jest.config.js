@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'feature-suchfilter-component',
+  displayName: 'suchfilter-component',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../../coverage/libs/shared/suchfilter/feature-suchfilter-component',
+  coverageDirectory: '../../../../coverage/libs/shared/suchfilter/suchfilter-component',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

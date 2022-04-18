@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Deskriptor, DeskriptorenSearchFacade } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 
 @Component({
-  selector: 'mja-deskriptoren-search',
-  templateUrl: './deskriptoren-search.component.html',
-  styleUrls: ['./deskriptoren-search.component.scss'],
+  selector: 'mja-deskriptoren-filter',
+  templateUrl: './deskriptoren-filter.component.html',
+  styleUrls: ['./deskriptoren-filter.component.scss'],
 })
-export class DeskriptorenSearchComponent implements OnInit {
+export class DeskriptorenFilterComponent implements OnInit {
 
   restliste$ = this.deskriptorenSearchFacade.restliste$;
   suchliste$ = this.deskriptorenSearchFacade.suchliste$;
