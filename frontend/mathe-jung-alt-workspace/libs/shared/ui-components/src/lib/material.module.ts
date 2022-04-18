@@ -8,7 +8,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatInputModule } from '@angular/material/input';
 
 const materialModules = [
   MatToolbarModule,
@@ -19,7 +20,8 @@ const materialModules = [
   MatSortModule,
   MatChipsModule,
   MatProgressSpinnerModule,
-  MatGridListModule  
+  MatGridListModule,
+  MatInputModule
 ];
 
 

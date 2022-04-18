@@ -12,6 +12,8 @@ import { environment } from '../../../environments/environment';
 })
 export class HeaderComponent implements OnInit {
 
+  titel = 'Mja Admin (' + environment.version + ')';
+
   constructor(public authFacade: AuthFacade) { }
 
   ngOnInit(): void { }

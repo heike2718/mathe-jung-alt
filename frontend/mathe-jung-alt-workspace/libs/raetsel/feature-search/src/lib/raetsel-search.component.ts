@@ -2,8 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { RaetselDataSource, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-import { fromEvent, merge, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { merge, Subscription } from 'rxjs';
 
 @Component({
   selector: 'mja-raetsel-search',
@@ -14,14 +14,12 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('input') input!: ElementRef;
 
   displayedColumns: string[] = ['schluessel', 'name', 'deskriptoren'];
   dataSource!: RaetselDataSource;
   anzahlRaetsel: number = 0;
 
   private raetselSubscription: Subscription = new Subscription();
-  private keySubscription: Subscription = new Subscription();
 
   constructor(public raetselFacade: RaetselFacade) { }
 
@@ -34,18 +32,14 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     );
   }
 
-  ngAfterViewInit(): void {
+  onInputChanged($event: string) {
+    if ($event.trim().length > 0) {
+      this.paginator.pageIndex = 0;
+      this.findRaetsel($event); 
+    }      
+  }
 
-    this.keySubscription = fromEvent(this.input.nativeElement, 'keyup')
-      .pipe(
-        debounceTime(150),
-        distinctUntilChanged(),
-        tap(() => {
-          this.paginator.pageIndex = 0;
-          this.findRaetsel();          
-        })
-      )
-      .subscribe();
+  ngAfterViewInit(): void {
 
     // reset the paginator after sorting
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
@@ -57,15 +51,14 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnDestroy(): void {
       this.raetselSubscription.unsubscribe();
-      this.keySubscription.unsubscribe();
   }
 
   onRowClicked(row: any): void {
     console.log('row clicked: ' + JSON.stringify(row));
   }
 
-  private findRaetsel(): void {
-    this.raetselFacade.findRaetsel(this.input.nativeElement.value);
+  private findRaetsel(value: string): void {
+    this.raetselFacade.findRaetsel(value);
   }
 
   private loadRaetselPage(): void {

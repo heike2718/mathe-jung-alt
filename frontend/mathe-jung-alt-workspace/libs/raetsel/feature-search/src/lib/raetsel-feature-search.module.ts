@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
+import { SharedUiComponentsModule } from 'libs/shared/ui-components/src/lib/shared-ui-components.module';
 
 
 
@@ -14,6 +15,7 @@ import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
     CommonModule,
     HttpClientModule,
     RaetselDomainModule,
+    SharedUiComponentsModule,
     MaterialModule,
     RouterModule.forChild([
       {

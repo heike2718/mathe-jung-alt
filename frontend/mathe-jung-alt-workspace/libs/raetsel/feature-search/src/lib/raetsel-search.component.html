@@ -1,12 +1,8 @@
-<h2>Rätselsuche</h2>
+<h2>Rätsel</h2>
 
 <div class="wrapper m4">
 
-  <p>Suche in Namen</p>
-
-  <mat-input-container>
-    <input matInput placeholder="suchen in Name" #input class="mb-2 p-5">
-  </mat-input-container>
+  <mja-admin-suchfilter (inputChanged)="onInputChanged($event)"></mja-admin-suchfilter>
 
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="schluessel"
     matSortDirection="asc" matSortDisableClear>

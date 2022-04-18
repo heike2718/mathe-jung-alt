@@ -1,11 +1,11 @@
 <div *ngIf="authFacade.isLoggedOut$ | async" class="home">
     <h1>
-        Mja Admin
+        {{titel}}
     </h1>
 </div>
 <a *ngIf="authFacade.isLoggedIn$ | async" class="dashboard" routerLink="/dashboard" title="Dashboard">
     <h1>
-        Mja Admin
+        {{titel}}
     </h1>
 </a>
 <div class="security">
