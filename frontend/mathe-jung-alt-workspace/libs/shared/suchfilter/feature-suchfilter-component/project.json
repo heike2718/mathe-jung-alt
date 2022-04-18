@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/suchfilter/feature-suchfilter-component",
+  "sourceRoot": "libs/shared/suchfilter/feature-suchfilter-component/src",
+  "prefix": "suchfilter",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/suchfilter/feature-suchfilter-component"],
+      "options": {
+        "project": "libs/shared/suchfilter/feature-suchfilter-component/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/suchfilter/feature-suchfilter-component/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/suchfilter/feature-suchfilter-component/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/suchfilter/feature-suchfilter-component"],
+      "options": {
+        "jestConfig": "libs/shared/suchfilter/feature-suchfilter-component/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/suchfilter/feature-suchfilter-component/src/**/*.ts",
+          "libs/shared/suchfilter/feature-suchfilter-component/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:suchfilter", "type:feature"]
+}
