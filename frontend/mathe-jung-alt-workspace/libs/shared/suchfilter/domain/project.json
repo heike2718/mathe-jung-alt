@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/suchfilter/domain",
+  "sourceRoot": "libs/shared/suchfilter/domain/src",
+  "prefix": "suchfilter",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/suchfilter/domain"],
+      "options": {
+        "project": "libs/shared/suchfilter/domain/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/suchfilter/domain/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/suchfilter/domain/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/suchfilter/domain"],
+      "options": {
+        "jestConfig": "libs/shared/suchfilter/domain/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/suchfilter/domain/src/**/*.ts",
+          "libs/shared/suchfilter/domain/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:suchfilter", "type:domain-logic"]
+}

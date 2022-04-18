@@ -48,6 +48,9 @@
       "@mathe-jung-alt-workspace/shared/auth/domain": [
         "libs/shared/auth/domain/src/index.ts"
       ],
+      "@mathe-jung-alt-workspace/shared/suchfilter/domain": [
+        "libs/shared/suchfilter/domain/src/index.ts"
+      ],
       "@mathe-jung-alt-workspace/shared/ui-components": [
         "libs/shared/ui-components/src/index.ts"
       ],

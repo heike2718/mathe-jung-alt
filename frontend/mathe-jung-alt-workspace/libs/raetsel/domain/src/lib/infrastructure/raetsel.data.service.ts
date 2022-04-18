@@ -152,7 +152,7 @@ export class RaetselDataService {
 
   findRaetsel(filter: string): Observable<Raetsel[]> {
 
-   if (filter && filter.trim().length > 0) {
+    if (filter && filter.trim().length > 0) {
       const filtered = this.#alleRaetsel.filter(raetsel => raetsel.name.toLocaleLowerCase().includes(filter.trim().toLocaleLowerCase()));
       return of(filtered);
     }

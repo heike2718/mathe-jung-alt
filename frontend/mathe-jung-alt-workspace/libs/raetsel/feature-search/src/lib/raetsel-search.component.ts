@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { tap } from 'rxjs/operators';
 import { merge, Subscription } from 'rxjs';
+import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 
 @Component({
   selector: 'mja-raetsel-search',
@@ -11,6 +13,8 @@ import { merge, Subscription } from 'rxjs';
   styleUrls: ['./raetsel-search.component.scss'],
 })
 export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  isAdmin$ = this.authFacade.isAdmin$;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -21,7 +25,7 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
   private raetselSubscription: Subscription = new Subscription();
 
-  constructor(public raetselFacade: RaetselFacade) { }
+  constructor(public raetselFacade: RaetselFacade, private suchfilterFacade: SuchfilterFacade, private authFacade: AuthFacade) { }
 
   ngOnInit() {
     this.dataSource = new RaetselDataSource(this.raetselFacade);
@@ -35,8 +39,8 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   onInputChanged($event: string) {
     if ($event.trim().length > 0) {
       this.paginator.pageIndex = 0;
-      this.findRaetsel($event); 
-    }      
+      this.findRaetsel($event);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -50,7 +54,7 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnDestroy(): void {
-      this.raetselSubscription.unsubscribe();
+    this.raetselSubscription.unsubscribe();
   }
 
   onRowClicked(row: any): void {

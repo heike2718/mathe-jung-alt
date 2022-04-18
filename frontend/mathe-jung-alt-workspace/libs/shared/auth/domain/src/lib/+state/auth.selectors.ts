@@ -1,5 +1,6 @@
 import { isExpired } from '@mathe-jung-alt-workspace/shared/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { User } from '../entities/auth.model';
 
 import {
     AUTH_FEATURE_KEY,
@@ -15,3 +16,4 @@ export const isAnonymousSession = createSelector(getAuthState, (state: AuthState
 
 export const isSessionExpired = createSelector(getAuthState, (state: AuthState) => !state.session || isExpired(state.session.expiresAt));
 export const isAuthorized = createSelector(isLoggedIn, isSessionExpired, ((loggedIn, isExpired) => loggedIn && !isExpired));
+export const isAdmin = createSelector(getUser, (user: User | undefined) => user !== undefined && user.rolle === 'ADMIN');

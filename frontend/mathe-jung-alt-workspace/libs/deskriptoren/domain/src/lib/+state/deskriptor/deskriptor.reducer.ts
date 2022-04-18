@@ -4,23 +4,23 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as DeskriptorActions from './deskriptor.actions';
 import { Deskriptor } from '../../entities/deskriptor';
 
-export const DESKRIPTOR_FEATURE_KEY = 'deskriptoren-deskriptor';
+export const DESKRIPTOR_FEATURE_KEY = 'deskriptoren';
 
-export interface State extends EntityState<Deskriptor> {
+export interface DeskriptorenState extends EntityState<Deskriptor> {
   selectedId?: string | number; // which Deskriptor record has been selected
   loaded: boolean; // has the Deskriptor list been loaded
   error?: string | null; // last known error (if any)
   suchliste: Deskriptor[];
 }
 
-export interface DeskriptorPartialState {
-  readonly [DESKRIPTOR_FEATURE_KEY]: State;
+export interface DeskriptorenPartialState {
+  readonly [DESKRIPTOR_FEATURE_KEY]: DeskriptorenState;
 }
 
 export const deskriptorAdapter: EntityAdapter<Deskriptor> =
   createEntityAdapter<Deskriptor>();
 
-export const initialState: State = deskriptorAdapter.getInitialState({
+const initialState: DeskriptorenState = deskriptorAdapter.getInitialState({
   // set initial required properties
   loaded: false,
   suchliste: []
@@ -65,6 +65,6 @@ const deskriptorReducer = createReducer(
   }),
 );
 
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: DeskriptorenState | undefined, action: Action) {
   return deskriptorReducer(state, action);
 }

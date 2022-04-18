@@ -7,6 +7,7 @@ import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SharedUiComponentsModule } from 'libs/shared/ui-components/src/lib/shared-ui-components.module';
+import { SharedSuchfilterDomainModule } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 
 
 
@@ -16,6 +17,7 @@ import { SharedUiComponentsModule } from 'libs/shared/ui-components/src/lib/shar
     HttpClientModule,
     RaetselDomainModule,
     SharedUiComponentsModule,
+    SharedSuchfilterDomainModule,
     MaterialModule,
     RouterModule.forChild([
       {

@@ -1,44 +1,40 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Deskriptor } from '../../entities/deskriptor';
-import { MjaEntity, MjaSetUtils } from '@mathe-jung-alt-workspace/shared/utils';
+import { MjaSetUtils } from '@mathe-jung-alt-workspace/shared/utils';
 import {
   DESKRIPTOR_FEATURE_KEY,
-  State,
-  DeskriptorPartialState,
+  DeskriptorenState,
   deskriptorAdapter,
 } from './deskriptor.reducer';
 
 // Lookup the 'Deskriptor' feature state managed by NgRx
-export const getDeskriptorState = createFeatureSelector<
-  DeskriptorPartialState,
-  State
->(DESKRIPTOR_FEATURE_KEY);
+const getDeskriptorState = createFeatureSelector<DeskriptorenState>(DESKRIPTOR_FEATURE_KEY);
 
 const { selectAll, selectEntities } = deskriptorAdapter.getSelectors();
 
 export const getDeskriptorLoaded = createSelector(
   getDeskriptorState,
-  (state: State) => state.loaded
+  (state: DeskriptorenState) => state.loaded
 );
 
 export const getDeskriptorError = createSelector(
   getDeskriptorState,
-  (state: State) => state.error
+  (state: DeskriptorenState) => state.error
 );
 
 export const getAllDeskriptor = createSelector(
   getDeskriptorState,
-  (state: State) => selectAll(state)
+  (state: DeskriptorenState) => selectAll(state)
 );
 
 export const getDeskriptorEntities = createSelector(
   getDeskriptorState,
-  (state: State) => selectEntities(state)
+  (state: DeskriptorenState) => selectEntities(state)
 );
 
 export const getSelectedId = createSelector(
   getDeskriptorState,
-  (state: State) => state.selectedId
+  (state: DeskriptorenState) => state.selectedId
 );
 
 export const getSelected = createSelector(
@@ -49,7 +45,7 @@ export const getSelected = createSelector(
 
 export const getSuchliste = createSelector(
   getDeskriptorState,
-  (state: State) => state.suchliste
+  (state: DeskriptorenState) => state.suchliste
 );
 
 export const getRestliste = createSelector(

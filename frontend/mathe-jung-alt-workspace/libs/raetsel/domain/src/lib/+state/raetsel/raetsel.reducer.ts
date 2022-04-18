@@ -4,7 +4,7 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as RaetselActions from './raetsel.actions';
 import { Raetsel } from '../../entities/raetsel';
 
-export const RAETSEL_FEATURE_KEY = 'raetsel-raetsel';
+export const RAETSEL_FEATURE_KEY = 'raetsel';
 
 export interface RaetselState extends EntityState<Raetsel> {
   selectedId?: string | number; // which Raetsel record has been selected

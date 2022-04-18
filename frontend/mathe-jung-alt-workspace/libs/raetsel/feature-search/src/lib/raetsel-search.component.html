@@ -2,7 +2,9 @@
 
 <div class="wrapper m4">
 
-  <mja-admin-suchfilter (inputChanged)="onInputChanged($event)"></mja-admin-suchfilter>
+  <ng-container *ngIf="isAdmin$ | async">
+    <mja-admin-suchfilter (inputChanged)="onInputChanged($event)"></mja-admin-suchfilter>
+  </ng-container>
 
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="schluessel"
     matSortDirection="asc" matSortDisableClear>

@@ -15,7 +15,7 @@ export class DeskriptorenSearchFacade {
   suchliste$ = this.store.pipe(select(DeskriptorSelectors.getSuchliste));
   restliste$ = this.store.pipe(select(DeskriptorSelectors.getRestliste));
 
-  constructor(private store: Store<fromDeskriptor.DeskriptorPartialState>) { }
+  constructor(private store: Store<fromDeskriptor.DeskriptorenPartialState>) { }
 
   load(): void {
     this.store.dispatch(loadDeskriptoren());

@@ -54,6 +54,13 @@
               {
                 "sourceTag": "domain:auth",
                 "onlyDependOnLibsWithTags": ["domain:auth", "domain:shared"]
+              },
+              {
+                "sourceTag": "domain:suchfilter",
+                "onlyDependOnLibsWithTags": [
+                  "domain:suchfilter",
+                  "domain:shared"
+                ]
               }
             ]
           }
