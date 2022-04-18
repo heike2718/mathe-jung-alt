@@ -15,7 +15,7 @@ export class RaetselEffects {
       ofType(RaetselActions.findRaetsel),
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.findRaetsel(action.filter).pipe(
+        this.raetselDataService.findRaetsel(action.suchfilter).pipe(
           map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))
         ), 'Ups, beim Suchen nach Rätseln ist etwas schiefgegangen', noopAction()
       )

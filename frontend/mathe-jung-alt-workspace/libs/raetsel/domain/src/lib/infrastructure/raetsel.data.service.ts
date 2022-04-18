@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Raetsel, RaetselDetails } from '../entities/raetsel';
+import { Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselDataService {
@@ -150,13 +151,13 @@ export class RaetselDataService {
     return of(this.#alleRaetsel);
   }
 
-  findRaetsel(filter: string): Observable<Raetsel[]> {
+  findRaetsel(suchfilter: Suchfilter): Observable<Raetsel[]> {
 
-    if (filter && filter.trim().length > 0) {
-      const filtered = this.#alleRaetsel.filter(raetsel => raetsel.name.toLocaleLowerCase().includes(filter.trim().toLocaleLowerCase()));
+    if (suchfilter.suchstring && suchfilter.suchstring.trim().length > 0) {
+      const filtered = this.#alleRaetsel.filter(raetsel => raetsel.name.toLocaleLowerCase().includes(suchfilter.suchstring.trim().toLocaleLowerCase()));
       return of(filtered);
     }
-    return of([]);
+    return of(this.#alleRaetsel);
   }
 
   loadPage(filter: string, sortDirection: string, pageIndex: number, pageSize: number): Observable<Raetsel[]> {

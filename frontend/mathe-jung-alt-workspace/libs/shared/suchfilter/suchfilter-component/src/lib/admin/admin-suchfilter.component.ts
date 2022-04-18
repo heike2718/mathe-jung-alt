@@ -20,7 +20,6 @@ export class AdminSuchfilterComponent implements AfterViewInit, OnDestroy {
   private suchlisteDeskriptorenChanged: EventEmitter<Deskriptor[]> = new EventEmitter<Deskriptor[]>();
 
   private keySubscription: Subscription = new Subscription();
-  private deskriptorSuchlisteSubscription: Subscription = new Subscription();
 
   ngAfterViewInit(): void {
 
@@ -37,7 +36,6 @@ export class AdminSuchfilterComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.keySubscription.unsubscribe();
-    this.deskriptorSuchlisteSubscription.unsubscribe();
   }
 
   private emitInputValue() {

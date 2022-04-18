@@ -46,6 +46,10 @@ const raetselReducer = createReducer(
   on(RaetselActions.pageSelected, (state, { raetsel }) => ({
     ...state, page: raetsel
   })),
+
+  on(RaetselActions.raetsellisteCleared, (state, _action) => {
+    return initialState;
+  }),
 );
 
 export function reducer(state: RaetselState | undefined, action: Action) {

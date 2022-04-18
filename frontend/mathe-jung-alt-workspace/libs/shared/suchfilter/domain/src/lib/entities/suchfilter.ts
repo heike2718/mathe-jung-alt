@@ -1,9 +1,9 @@
 import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 
-export type SUCHKONTEXT = 'BILDER' | 'MEDIEN' | 'QUELLEN' | 'RAETSEL' | 'NOOP';
+export type Suchkontext = 'BILDER' | 'MEDIEN' | 'QUELLEN' | 'RAETSEL' | 'NOOP';
 
 export interface Suchfilter {
-    readonly kontext: SUCHKONTEXT;
+    readonly kontext: Suchkontext;
     readonly suchstring: string;
     readonly deskriptoren: Deskriptor[];
 };
@@ -13,4 +13,9 @@ export const initialSuchfilter: Suchfilter = {
     suchstring: '',
     deskriptoren: []
 };
+
+export interface SuchfilterWithStatus {
+    readonly suchfilter: Suchfilter;
+    readonly nichtLeer: boolean;
+}
 

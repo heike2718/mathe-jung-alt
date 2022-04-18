@@ -3,8 +3,9 @@ import { select, Store } from "@ngrx/store";
 import { SuchfilterPartialState } from "../+state/suchfilter.reducer";
 import * as SuchfilterActions from '../+state/suchfilter.actions';
 import * as SuchfilterSelectors from '../+state/suchfilter.selectors';
-import { SUCHKONTEXT } from "../entities/suchfilter";
+import { SuchfilterWithStatus, Suchkontext } from "../entities/suchfilter";
 import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
+import { Observable } from "rxjs";
 
 
 @Injectable({
@@ -12,12 +13,11 @@ import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 })
 export class SuchfilterFacade {
 
-    public suchfilter$ = this.store.pipe(select(SuchfilterSelectors.getSuchfilter));
-    public isSuchfilterReadyToGo$ = this.store.pipe(select(SuchfilterSelectors.isSuchfilterReadyToGo));
+    public suchfilterWithStatus$: Observable<SuchfilterWithStatus> = this.store.pipe(select(SuchfilterSelectors.getSuchfilterAndReady));
 
     constructor(private store: Store<SuchfilterPartialState>) { }
 
-    public changeSuchkontext(kontext: SUCHKONTEXT): void {
+    public changeSuchkontext(kontext: Suchkontext): void {
         this.store.dispatch(SuchfilterActions.suchkontextChanged({kontext}));
     }
 

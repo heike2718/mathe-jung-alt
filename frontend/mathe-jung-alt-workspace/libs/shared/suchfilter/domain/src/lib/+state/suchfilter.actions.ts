@@ -1,10 +1,10 @@
 import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 import { createAction, props } from "@ngrx/store";
-import { SUCHKONTEXT } from "../entities/suchfilter";
+import { Suchkontext } from "../entities/suchfilter";
 
 export const suchkontextChanged = createAction(
   '[Suchfilter] kontext changed',
-  props<{ kontext: SUCHKONTEXT }>()
+  props<{ kontext: Suchkontext }>()
 );
 
 export const suchstringChanged = createAction(

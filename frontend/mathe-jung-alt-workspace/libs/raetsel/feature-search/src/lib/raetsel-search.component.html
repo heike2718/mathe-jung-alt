@@ -8,10 +8,12 @@
     </mja-admin-suchfilter>
   </ng-container>
 
-  <ng-container *ngIf="isSuchfilterReadyToGo$ | async">
-    <ng-container *ngIf="(suchfilter$ | async) as suchfilter">
-      <p>Lasset die Suche beginnen: {{suchfilter | json}}</p>
-    </ng-container>
+  <ng-container *ngIf="isOrdinaryUser$ | async">
+    <mja-deskriptoren-filter (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"></mja-deskriptoren-filter>
+  </ng-container>
+
+  <ng-container *ngIf="(suchfilterWithStatus$ | async) as suchfilterWithStatus">
+    <p>Lasset die Suche beginnen: {{suchfilterWithStatus | json}}</p>
   </ng-container>
 
 

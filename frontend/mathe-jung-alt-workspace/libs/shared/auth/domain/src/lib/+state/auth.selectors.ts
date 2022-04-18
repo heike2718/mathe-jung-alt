@@ -17,3 +17,4 @@ export const isAnonymousSession = createSelector(getAuthState, (state: AuthState
 export const isSessionExpired = createSelector(getAuthState, (state: AuthState) => !state.session || isExpired(state.session.expiresAt));
 export const isAuthorized = createSelector(isLoggedIn, isSessionExpired, ((loggedIn, isExpired) => loggedIn && !isExpired));
 export const isAdmin = createSelector(getUser, (user: User | undefined) => user !== undefined && user.rolle === 'ADMIN');
+export const isOrdinaryUser = createSelector(isLoggedIn, isAdmin, (isLoggedIn: boolean, isAdmin: boolean) => isLoggedIn && !isAdmin);

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
@@ -15,11 +16,15 @@ export class RaetselFacade {
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>) { }
 
-  findRaetsel(filter = ''): void {
-    this.store.dispatch(RaetselActions.findRaetsel({ filter }));
+  findRaetselWithFilter(suchfilter: Suchfilter): void {
+    this.store.dispatch(RaetselActions.findRaetsel({ suchfilter }));
   }
 
   slicePage(sortDirection = 'asc', pageIndex = 0, pageSize = 10): void {
     this.store.dispatch(RaetselActions.selectPage({ sortDirection, pageIndex, pageSize }))
+  }
+
+  clearTrefferliste(): void {
+    this.store.dispatch(RaetselActions.raetsellisteCleared());
   }
 }

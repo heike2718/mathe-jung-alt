@@ -15,3 +15,6 @@ export const isSuchfilterReadyToGo = createSelector(hasKontext, hasSuchstring, h
     (defined: boolean, hasSuchstring: boolean, hasDeskriptoren: boolean) =>
         defined && (hasDeskriptoren || hasSuchstring));
 
+export const getSuchfilterAndReady = createSelector(getSuchfilter, isSuchfilterReadyToGo, 
+    (suchfilter: Suchfilter, nichtLeer: boolean) => ({ suchfilter, nichtLeer }));
+

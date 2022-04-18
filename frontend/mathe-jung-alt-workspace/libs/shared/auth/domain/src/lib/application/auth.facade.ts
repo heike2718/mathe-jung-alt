@@ -19,6 +19,7 @@ export class AuthFacade {
     public isAuthorized$ = this.store.pipe(select(AuthSelectors.isAuthorized));
     public isSessionExpired$ = this.store.pipe(select(AuthSelectors.isSessionExpired));
     public isAdmin$ = this.store.pipe(select(AuthSelectors.isAdmin));
+    public isOrdinaryUser$ = this.store.pipe(select(AuthSelectors.isOrdinaryUser));
 
     constructor(private store: Store<AuthPartialState>) { }
 
