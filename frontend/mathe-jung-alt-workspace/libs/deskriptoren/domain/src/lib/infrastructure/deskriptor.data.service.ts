@@ -7,7 +7,7 @@ import { HttpConfiguration, HttpConfigurationService } from '@mathe-jung-alt-wor
 @Injectable({ providedIn: 'root' })
 export class DeskriptorDataService {
 
-  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/deskriptoren' : this.configuration.baseUrl + 'deskriptoren';
+  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/deskriptoren' : this.configuration.baseUrl + '/deskriptoren';
 
   constructor(private http: HttpClient, @Inject(HttpConfigurationService) private configuration: HttpConfiguration) { }
 
