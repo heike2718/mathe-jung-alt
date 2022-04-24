@@ -1,0 +1,18 @@
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (1, 'Mathematik',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (2, 'Minikänguru',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (3,'Inklusion',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (4,'Klasse 1',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (5,'Klasse 2',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (6, 'IKID',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (7, 'EINS',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (8, 'ZWEI',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (9, 'A',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (10, 'B',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (11, 'C',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (12, 'Serie',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (13, 'Zitat',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (14, 'Logik',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (15, 'Buch',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (16, 'Zeitschrift',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (17, 'Person',0);
+insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (18, 'Nachbau',1);
