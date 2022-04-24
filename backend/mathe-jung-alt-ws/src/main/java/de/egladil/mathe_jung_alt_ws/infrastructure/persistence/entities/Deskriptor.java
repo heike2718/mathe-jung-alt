@@ -21,7 +21,7 @@ public class Deskriptor extends PanacheEntity {
 	public String name;
 
 	@Column(name = "ADMIN")
-	public boolean adminOnly;
+	public boolean admin;
 
 	/**
 	 *
@@ -40,7 +40,6 @@ public class Deskriptor extends PanacheEntity {
 	public Deskriptor(final String name, final boolean adminOnly) {
 
 		this.name = name;
-		this.adminOnly = adminOnly;
+		this.admin = adminOnly;
 	}
-
 }

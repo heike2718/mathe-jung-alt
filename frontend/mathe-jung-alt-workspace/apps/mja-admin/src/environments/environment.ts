@@ -5,7 +5,7 @@
 export const environment = {
   envName: 'DEV',
   production: false,
-  apiUrl: 'http://localhost:9210/mja-gateway/admin',
+  apiUrl: 'http://localhost:9210',
   profileUrl: 'http://localhost:80/profil-app',
   storageKeyPrefix: 'mja_adm_',
   version: '0.0.1',

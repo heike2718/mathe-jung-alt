@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
+import { HttpConfiguration, HttpConfigurationService } from './http-utils/http.configuration';
 
 @NgModule({
   imports: [
@@ -15,4 +16,18 @@ import { StoreModule } from '@ngrx/store';
     // },
   ],
 })
-export class SharedUtilsModule {}
+export class SharedUtilsModule {
+
+  static forRoot(configuration: HttpConfiguration): ModuleWithProviders<SharedUtilsModule> {
+
+    return {
+      ngModule: SharedUtilsModule,
+      providers: [
+        {
+          provide: HttpConfigurationService,
+          useValue: configuration
+        }
+      ]
+    }
+  }
+}

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.test.junit.QuarkusTest;
 
 /**
- * AdminDeskriptorenResourceTest
+ * OpenDeskriptorenResourceTest
  */
 @QuarkusTest
 public class AdminDeskriptorenResourceTest {
