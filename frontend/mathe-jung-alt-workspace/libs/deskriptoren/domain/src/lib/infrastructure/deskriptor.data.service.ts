@@ -34,27 +34,27 @@ export class DeskriptorDataService {
       },
       {
         id: 5,
-        name: 'Stufe 1',
+        name: 'Vorschule',
       },
       {
         id: 6,
-        name: 'Stufe 2',
+        name: 'Klassen 1/2',
       },
       {
         id: 7,
-        name: 'Stufe 3',
+        name: 'Klassen 3/4',
       },
       {
         id: 8,
-        name: 'Stufe 4',
+        name: 'Klassen 5/6',
       },
       {
         id: 9,
-        name: 'Stufe 5',
+        name: 'Klassen 7/8',
       },
       {
         id: 10,
-        name: 'Stufe 6',
+        name: 'ab Klasse 9',
       },
     ]);
   }
