@@ -9,5 +9,3 @@ export { withErrorMessageContext } from './lib/http-utils/with-error-message-con
 
 export { noopAction } from './lib/ngrx-utils/noop.action';
 export { SafeNgrxService } from './lib/ngrx-utils/safe-ngrx.service';
-
-export * from './lib/http-utils/http.configuration';

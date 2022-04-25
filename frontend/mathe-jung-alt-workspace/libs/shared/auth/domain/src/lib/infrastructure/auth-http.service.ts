@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
+import { Configuration, SharedConfigService } from "@mathe-jung-alt-workspace/shared/configuration";
 import { ResponsePayload, Message } from "libs/shared/ui-messaging/src/lib/message/message";
 import { map, Observable, of } from "rxjs";
-import { AuthConfigService, AuthConfiguration } from "../application/auth.configuration";
 import { AuthResult, Session, STORAGE_KEY_DEV_SESSION_ID } from "../entities/auth.model";
 
 @Injectable({
@@ -12,7 +12,7 @@ export class AuthHttpService {
 
     #baseUrl = this.configuration.baseUrl + '/session';
 
-    constructor(@Inject(AuthConfigService) private configuration: AuthConfiguration, private http: HttpClient) { }
+    constructor(@Inject(SharedConfigService) private configuration: Configuration, private http: HttpClient) { }
 
 
     public getLoginRedirectUrl(): Observable<string> {

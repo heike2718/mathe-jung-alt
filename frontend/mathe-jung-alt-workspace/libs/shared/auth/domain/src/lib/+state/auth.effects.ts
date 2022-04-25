@@ -1,12 +1,12 @@
 
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
 import { isExpired, noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { concatMap, map, switchMap } from 'rxjs/operators';
-import { AuthConfigService, AuthConfiguration } from '../application/auth.configuration';
 import { STORAGE_KEY_USER, Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, AuthResult, User } from '../entities/auth.model';
 import { AuthHttpService } from '../infrastructure/auth-http.service';
 import * as AuthActions from './auth.actions';
@@ -19,7 +19,7 @@ export class AuthEffects {
 
 
     constructor(private actions$: Actions,
-        @Inject(AuthConfigService) private configuration: AuthConfiguration,
+        @Inject(SharedConfigService) private configuration: Configuration,
         private authHttpService: AuthHttpService,
         private safeNgrx: SafeNgrxService,
         private router: Router) {

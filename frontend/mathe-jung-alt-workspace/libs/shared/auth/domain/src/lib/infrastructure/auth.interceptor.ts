@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
+import { Configuration, SharedConfigService } from "@mathe-jung-alt-workspace/shared/configuration";
 import { Observable } from "rxjs";
-import { AuthConfigService, AuthConfiguration } from "../application/auth.configuration";
 import { STORAGE_KEY_DEV_SESSION_ID } from "../entities/auth.model";
 
 
@@ -10,7 +10,7 @@ import { STORAGE_KEY_DEV_SESSION_ID } from "../entities/auth.model";
 })
 export class AuthInterceptor implements HttpInterceptor {
 
-    constructor(@Inject(AuthConfigService) private config: AuthConfiguration) { }
+    constructor(@Inject(SharedConfigService) private config: Configuration) { }
 
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

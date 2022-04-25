@@ -1,12 +1,13 @@
 import { InjectionToken } from '@angular/core';
 
 
-export interface AuthConfiguration {
+export interface Configuration {
     readonly baseUrl: string;
     readonly storagePrefix: string;
     readonly production: boolean;
     readonly profileUrl: string;
     readonly withFakeLogin: boolean;
+    readonly admin: boolean;
 }
 
-export const AuthConfigService = new InjectionToken<AuthConfiguration>('AuthConfiguration');
+export const SharedConfigService = new InjectionToken<Configuration>('Configuration');
