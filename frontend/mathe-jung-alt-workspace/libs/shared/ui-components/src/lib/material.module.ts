@@ -10,6 +10,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
 
 const materialModules = [
   MatToolbarModule,
@@ -21,7 +22,8 @@ const materialModules = [
   MatChipsModule,
   MatProgressSpinnerModule,
   MatGridListModule,
-  MatInputModule
+  MatInputModule,
+  MatRadioModule
 ];
 
 
