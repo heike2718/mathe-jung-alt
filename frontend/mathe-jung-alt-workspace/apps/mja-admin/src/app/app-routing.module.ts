@@ -16,6 +16,12 @@ const Routes = [
                     import('./dashboard/dashboard-component.module').then((m) => m.DashboardComponentModule),
             },
             {
+                path: 'quellen',
+                loadChildren: () =>
+                    import('@mathe-jung-alt-workspace/quellen/feature-search').then((m) => m.QuellenFeatureSearchModule),
+
+            },
+            {
                 path: 'raetsel',
                 loadChildren: () =>
                     import('@mathe-jung-alt-workspace/raetsel/feature-search').then((m) => m.RaetselFeatureSearchModule),

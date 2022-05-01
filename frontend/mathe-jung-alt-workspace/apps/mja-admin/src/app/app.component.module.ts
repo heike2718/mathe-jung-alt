@@ -11,6 +11,7 @@ import { SidemenuComponentModule } from "./core/sidemenu/sidemenu.component";
 import { NotAuthorizedComponentModule } from "./core/not-authorized/not-authorized.component";
 import { DashboardComponentModule } from "./dashboard/dashboard-component.module";
 import { QuellenDomainModule } from "@mathe-jung-alt-workspace/quellen/domain";
+import { QuellenFeatureSearchModule } from "@mathe-jung-alt-workspace/quellen/feature-search";
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { QuellenDomainModule } from "@mathe-jung-alt-workspace/quellen/domain";
         SidemenuComponentModule,
         NotAuthorizedComponentModule,
         DashboardComponentModule,
-        QuellenDomainModule
+        QuellenDomainModule,
+        QuellenFeatureSearchModule
     ],
     exports: [
         AppComponent

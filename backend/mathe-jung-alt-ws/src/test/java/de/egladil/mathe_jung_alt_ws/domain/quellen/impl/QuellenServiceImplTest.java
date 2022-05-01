@@ -106,7 +106,7 @@ public class QuellenServiceImplTest {
 			verify(deskriptorenService).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 
 			assertEquals(2, quelle.getDeskriptoren().size());
-			assertEquals("q-uuid-1", quelle.getUuid());
+			assertEquals("q-uuid-1", quelle.getId());
 			assertNull(quelle.getMediumUuid());
 			assertEquals("Heike Winkelvoß", quelle.getName());
 			assertEquals(Quellenart.PERSON, quelle.getQuellenart());
@@ -194,7 +194,7 @@ public class QuellenServiceImplTest {
 			verify(deskriptorenService).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 
 			assertEquals(2, quelle.getDeskriptoren().size());
-			assertEquals("q-uuid-2", quelle.getUuid());
+			assertEquals("q-uuid-2", quelle.getId());
 			assertEquals("m-uuid-1", quelle.getMediumUuid());
 			assertEquals("alpha (3) 1978, S.13", quelle.getName());
 			assertEquals(Quellenart.ZEITSCHRIFT, quelle.getQuellenart());
@@ -246,7 +246,7 @@ public class QuellenServiceImplTest {
 			verify(deskriptorenService).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 
 			assertEquals(2, quelle.getDeskriptoren().size());
-			assertEquals("q-uuid-3", quelle.getUuid());
+			assertEquals("q-uuid-3", quelle.getId());
 			assertEquals("m-uuid-2", quelle.getMediumUuid());
 			assertEquals("2x3 und Spaß dabei, S.42", quelle.getName());
 			assertEquals(Quellenart.BUCH, quelle.getQuellenart());
@@ -304,7 +304,7 @@ public class QuellenServiceImplTest {
 			verify(deskriptorenService).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 
 			assertEquals(2, quelle.getDeskriptoren().size());
-			assertEquals("q-uuid-2", quelle.getUuid());
+			assertEquals("q-uuid-2", quelle.getId());
 			assertEquals("m-uuid-1", quelle.getMediumUuid());
 			assertEquals("alpha (3) 1978, S.13", quelle.getName());
 			assertEquals(Quellenart.ZEITSCHRIFT, quelle.getQuellenart());

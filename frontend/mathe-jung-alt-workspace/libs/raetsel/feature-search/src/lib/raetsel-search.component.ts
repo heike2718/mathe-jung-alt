@@ -2,11 +2,11 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { RaetselDataSource, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, filter, map, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, tap } from 'rxjs/operators';
 import { merge, Subscription } from 'rxjs';
 import { SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
-import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 
 @Component({
   selector: 'mja-raetsel-search',

@@ -16,11 +16,10 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
 
   #kontext: Suchkontext = 'QUELLEN';
   
+  #quellenSubscription: Subscription = new Subscription();
   #sucheReadySubscription: Subscription = new Subscription();
   #sucheClearedSubscription: Subscription = new Subscription();
 
-  isAdmin$ = this.authFacade.isAdmin$;
-  isOrdinaryUser$ = this.authFacade.isOrdinaryUser$;
   suchfilterWithStatus$ = this.suchfilterFacade.suchfilterWithStatus$;
   quelleList$ = this.quellenFacade.quellenList$;
 
@@ -38,6 +37,10 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
     this.dataSource = new QuellenDataSource(this.quellenFacade);
     this.suchfilterFacade.changeSuchkontext(this.#kontext);
 
+    this.#quellenSubscription = this.quellenFacade.quellenList$.subscribe(
+      liste => this.anzahlQuellen = liste.length
+    );
+
     this.#sucheReadySubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
       filter((sws) => sws.suchfilter.kontext === this.#kontext && sws.nichtLeer),
       map((sws) => sws.suchfilter),
@@ -53,6 +56,7 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     
+    this.#quellenSubscription.unsubscribe();
     this.#sucheReadySubscription.unsubscribe();
     this.#sucheClearedSubscription.unsubscribe();
   }
@@ -78,6 +82,10 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   onInputChanged($event: string) {
     this.paginator.pageIndex = 0;
     this.suchfilterFacade.changeSuchtext($event);
+  }
+
+  onRowClicked(row: any): void {
+    console.log('row clicked: ' + JSON.stringify(row));
   }
 
   private loadQuellenPage(): void {

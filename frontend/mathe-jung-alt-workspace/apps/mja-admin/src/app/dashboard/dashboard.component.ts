@@ -1,8 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, NgModule, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
-import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'mja-admin-dashboard',

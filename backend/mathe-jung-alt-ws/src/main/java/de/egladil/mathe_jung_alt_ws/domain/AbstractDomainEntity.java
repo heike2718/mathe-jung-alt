@@ -9,7 +9,7 @@ package de.egladil.mathe_jung_alt_ws.domain;
  */
 public abstract class AbstractDomainEntity {
 
-	private String uuid;
+	private String id;
 
 	/**
 	 *
@@ -21,19 +21,19 @@ public abstract class AbstractDomainEntity {
 	}
 
 	/**
-	 * @param uuid
+	 * @param id
 	 */
 	public AbstractDomainEntity(final String uuid) {
 
-		this.uuid = uuid;
+		this.id = uuid;
 	}
 
 	/**
-	 * @return the uuid
+	 * @return the id
 	 */
-	public String getUuid() {
+	public String getId() {
 
-		return uuid;
+		return id;
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public abstract class AbstractDomainEntity {
 
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -59,13 +59,13 @@ public abstract class AbstractDomainEntity {
 		}
 		AbstractDomainEntity other = (AbstractDomainEntity) obj;
 
-		if (uuid == null) {
+		if (id == null) {
 
-			if (other.uuid != null) {
+			if (other.id != null) {
 
 				return false;
 			}
-		} else if (!uuid.equals(other.uuid)) {
+		} else if (!id.equals(other.id)) {
 
 			return false;
 		}

@@ -10,11 +10,11 @@ export class QuellenDataSource implements DataSource<Quelle> {
     
     
     connect(collectionViewer: CollectionViewer): Observable<readonly Quelle[]> {
-        throw new Error("Method not implemented.");
+        return this.quellenFacade.page$;
     }
     
-    disconnect(collectionViewer: CollectionViewer): void {
-        throw new Error("Method not implemented.");
+    disconnect(_collectionViewer: CollectionViewer): void {
+        // hängt am Store muss also nicht finalized werden?
     }
 
 
