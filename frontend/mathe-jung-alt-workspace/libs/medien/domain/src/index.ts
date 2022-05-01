@@ -5,4 +5,4 @@ export * from './lib/infrastructure/medien.data.service';
 
 export * from './lib/+state/medien/medien.actions';
 
-export * from './lib/application/search.facade';
+export * from './lib/application/medien.facade';

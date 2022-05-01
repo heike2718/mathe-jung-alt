@@ -1,40 +1,33 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   QUELLE_FEATURE_KEY,
-  State,
+  QuellenState,
   QuellePartialState,
   quelleAdapter,
 } from './quelle.reducer';
 
 // Lookup the 'Quelle' feature state managed by NgRx
-export const getQuelleState = createFeatureSelector<QuellePartialState, State>(
-  QUELLE_FEATURE_KEY
-);
+export const getQuelleState = createFeatureSelector<QuellenState>(QUELLE_FEATURE_KEY);
 
 const { selectAll, selectEntities } = quelleAdapter.getSelectors();
 
 export const getQuelleLoaded = createSelector(
   getQuelleState,
-  (state: State) => state.loaded
+  (state: QuellenState) => state.loaded
 );
 
-export const getQuelleError = createSelector(
-  getQuelleState,
-  (state: State) => state.error
-);
-
-export const getAllQuelle = createSelector(getQuelleState, (state: State) =>
+export const getAllQuellen = createSelector(getQuelleState, (state: QuellenState) =>
   selectAll(state)
 );
 
 export const getQuelleEntities = createSelector(
   getQuelleState,
-  (state: State) => selectEntities(state)
+  (state: QuellenState) => selectEntities(state)
 );
 
 export const getSelectedId = createSelector(
   getQuelleState,
-  (state: State) => state.selectedId
+  (state: QuellenState) => state.selectedId
 );
 
 export const getSelected = createSelector(
@@ -42,3 +35,9 @@ export const getSelected = createSelector(
   getSelectedId,
   (entities, selectedId) => selectedId && entities[selectedId]
 );
+
+export const getPage = createSelector(
+  getQuelleState,
+  (state: QuellenState) => state.page
+);
+

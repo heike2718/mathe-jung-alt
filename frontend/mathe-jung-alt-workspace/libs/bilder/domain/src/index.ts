@@ -5,4 +5,4 @@ export * from './lib/infrastructure/bild.data.service';
 
 export * from './lib/+state/bild/bild.actions';
 
-export * from './lib/application/search.facade';
+export * from './lib/application/bilder.facade';

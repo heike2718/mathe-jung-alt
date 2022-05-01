@@ -1,13 +1,13 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   BILD_FEATURE_KEY,
-  State,
+  BilderState,
   BildPartialState,
   bildAdapter,
 } from './bild.reducer';
 
 // Lookup the 'Bild' feature state managed by NgRx
-export const getBildState = createFeatureSelector<BildPartialState, State>(
+export const getBildState = createFeatureSelector<BildPartialState, BilderState>(
   BILD_FEATURE_KEY
 );
 
@@ -15,25 +15,25 @@ const { selectAll, selectEntities } = bildAdapter.getSelectors();
 
 export const getBildLoaded = createSelector(
   getBildState,
-  (state: State) => state.loaded
+  (state: BilderState) => state.loaded
 );
 
 export const getBildError = createSelector(
   getBildState,
-  (state: State) => state.error
+  (state: BilderState) => state.error
 );
 
-export const getAllBild = createSelector(getBildState, (state: State) =>
+export const getAllBild = createSelector(getBildState, (state: BilderState) =>
   selectAll(state)
 );
 
-export const getBildEntities = createSelector(getBildState, (state: State) =>
+export const getBildEntities = createSelector(getBildState, (state: BilderState) =>
   selectEntities(state)
 );
 
 export const getSelectedId = createSelector(
   getBildState,
-  (state: State) => state.selectedId
+  (state: BilderState) => state.selectedId
 );
 
 export const getSelected = createSelector(

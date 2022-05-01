@@ -16,7 +16,7 @@ export class RaetselFacade {
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>) { }
 
-  findRaetselWithFilter(suchfilter: Suchfilter): void {
+  findRaetsel(suchfilter: Suchfilter): void {
     this.store.dispatch(RaetselActions.findRaetsel({ suchfilter }));
   }
 

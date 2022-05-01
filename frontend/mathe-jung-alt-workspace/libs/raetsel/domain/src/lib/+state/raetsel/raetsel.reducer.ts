@@ -20,18 +20,12 @@ export const raetselAdapter: EntityAdapter<Raetsel> =
   createEntityAdapter<Raetsel>();
 
 export const initialState: RaetselState = raetselAdapter.getInitialState({
-  // set initial required properties
   loaded: false,
   page: []
 });
 
 const raetselReducer = createReducer(
   initialState,
-
-  on(RaetselActions.findRaetsel, (state) => ({
-    ...state,
-    loaded: false
-  })),
 
   on(RaetselActions.findRaetselSuccess, (state, { raetsel }) =>
 
@@ -47,9 +41,12 @@ const raetselReducer = createReducer(
     ...state, page: raetsel
   })),
 
-  on(RaetselActions.raetsellisteCleared, (state, _action) => {
-    return initialState;
-  }),
+  on(RaetselActions.raetsellisteCleared, (state, _action) => ({
+    ...state,
+    selectedId: undefined,
+    loaded: false,
+    page: []
+  })),
 );
 
 export function reducer(state: RaetselState | undefined, action: Action) {

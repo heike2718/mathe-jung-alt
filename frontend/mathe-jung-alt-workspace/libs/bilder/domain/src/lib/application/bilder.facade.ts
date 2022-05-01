@@ -6,7 +6,8 @@ import * as fromBild from '../+state/bild/bild.reducer';
 import * as BildSelectors from '../+state/bild/bild.selectors';
 
 @Injectable({ providedIn: 'root' })
-export class SearchFacade {
+export class BilderFacade {
+  
   loaded$ = this.store.pipe(select(BildSelectors.getBildLoaded));
   bildList$ = this.store.pipe(select(BildSelectors.getAllBild));
   selectedBild$ = this.store.pipe(select(BildSelectors.getSelected));

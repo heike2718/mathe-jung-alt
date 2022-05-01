@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MedienDomainModule } from '@mathe-jung-alt-workspace/medien/domain';
-import { SearchComponent } from './search.component';
+import { MedienSearchComponent } from './medien-search.component';
 
 @NgModule({
   imports: [CommonModule, MedienDomainModule],
-  declarations: [SearchComponent],
-  exports: [SearchComponent],
+  declarations: [MedienSearchComponent],
+  exports: [MedienSearchComponent],
 })
 export class MedienFeatureSearchModule {}

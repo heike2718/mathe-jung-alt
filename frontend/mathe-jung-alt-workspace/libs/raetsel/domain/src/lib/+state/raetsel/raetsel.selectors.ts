@@ -1,6 +1,4 @@
-import { Renderer2 } from '@angular/core';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Raetsel } from '../../entities/raetsel';
 import {
   RAETSEL_FEATURE_KEY,
   RaetselState,

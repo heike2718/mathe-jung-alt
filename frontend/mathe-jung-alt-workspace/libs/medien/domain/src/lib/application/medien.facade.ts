@@ -6,7 +6,8 @@ import * as fromMedien from '../+state/medien/medien.reducer';
 import * as MedienSelectors from '../+state/medien/medien.selectors';
 
 @Injectable({ providedIn: 'root' })
-export class SearchFacade {
+export class MedienFacade {
+  
   loaded$ = this.store.pipe(select(MedienSelectors.getMedienLoaded));
   medienList$ = this.store.pipe(select(MedienSelectors.getAllMedien));
   selectedMedien$ = this.store.pipe(select(MedienSelectors.getSelected));

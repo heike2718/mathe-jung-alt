@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { catchError, map, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import * as RaetselActions from './raetsel.actions';
 import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { RaetselFacade } from '../../application/reaetsel.facade';
@@ -24,10 +23,12 @@ export class RaetselEffects {
   selectPage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.selectPage),
-      // switchMap, weil das Pagen einer früheren Page-Auswahl gecanceled wird, sobald eine neue Page ausgewählt wurde
+      // switchMap, damit das Pagen einer früheren Page-Auswahl gecanceled wird, sobald eine neue Page ausgewählt wurde
       switchMap((action) =>
         this.raetselFacade.raetselList$.pipe(
-          map((raetsel) => RaetselActions.pageSelected({ raetsel: raetsel.slice(action.pageIndex * action.pageSize, (action.pageIndex + 1) * action.pageSize) }))
+          map((raetsel) => RaetselActions.pageSelected({
+            raetsel: raetsel.slice(action.pageIndex * action.pageSize, (action.pageIndex + 1) * action.pageSize)
+          }))
         )
       )
     ));

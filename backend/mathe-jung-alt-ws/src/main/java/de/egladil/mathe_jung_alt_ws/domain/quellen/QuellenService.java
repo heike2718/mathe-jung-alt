@@ -6,6 +6,7 @@ package de.egladil.mathe_jung_alt_ws.domain.quellen;
 
 import java.util.List;
 
+import de.egladil.mathe_jung_alt_ws.domain.dto.Suchfilter;
 import de.egladil.mathe_jung_alt_ws.domain.semantik.DomainService;
 
 /**
@@ -15,10 +16,11 @@ import de.egladil.mathe_jung_alt_ws.domain.semantik.DomainService;
 public interface QuellenService {
 
 	/**
-	 * Sucht nach Quellen, bei denen der suchtring im Feld MEDIENT_TITEL oder PERSON vorkommt.
+	 * Sucht quellen mit dem gegebenen suchfilter.
 	 *
-	 * @param  suchstring
+	 * @param  suchfilter
+	 *                    Suchfilter
 	 * @return            List
 	 */
-	List<QuelleReadonly> sucheQuellen(String suchstring);
+	List<QuelleReadonly> sucheQuellen(Suchfilter suchfilter);
 }

@@ -4,22 +4,22 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as MedienActions from './medien.actions';
 import { Medium } from '../../entities/medien';
 
-export const MEDIEN_FEATURE_KEY = 'medien-medien';
+export const MEDIEN_FEATURE_KEY = 'medien';
 
-export interface State extends EntityState<Medium> {
+export interface MedienState extends EntityState<Medium> {
   selectedId?: string | number; // which Medien record has been selected
   loaded: boolean; // has the Medien list been loaded
   error?: string | null; // last known error (if any)
 }
 
 export interface MedienPartialState {
-  readonly [MEDIEN_FEATURE_KEY]: State;
+  readonly [MEDIEN_FEATURE_KEY]: MedienState;
 }
 
 export const medienAdapter: EntityAdapter<Medium> =
   createEntityAdapter<Medium>();
 
-export const initialState: State = medienAdapter.getInitialState({
+export const initialState: MedienState = medienAdapter.getInitialState({
   // set initial required properties
   loaded: false,
 });
@@ -40,6 +40,6 @@ const medienReducer = createReducer(
   }))
 );
 
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: MedienState | undefined, action: Action) {
   return medienReducer(state, action);
 }

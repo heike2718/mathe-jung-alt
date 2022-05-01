@@ -1,12 +1,10 @@
-import { Suchfilter as QuellenActions } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
 import { Quelle } from '../../entities/quelle';
 
-export const loadQuelle = createAction('[Quelle] Load Quelle');
-
-export const findQuelle = createAction(
-  '[Quelle] find quelle',
-  props<{suchfilter: QuellenActions}>()
+export const findQuellen = createAction(
+  '[Quelle] find quellen',
+  props<{suchfilter: Suchfilter}>()
 );
 
 export const quellenFound = createAction(
@@ -14,7 +12,12 @@ export const quellenFound = createAction(
   props<{ quellen: Quelle[] }>()
 );
 
-export const findQuellenFailure = createAction(
-  '[Quelle] Load Quelle Failure',
-  props<{ error: any }>()
+export const selectPage = createAction('[Quelle] select Page',
+  props<{ sortDirection: string, pageIndex: number, pageSize: number }>());
+
+export const pageSelected = createAction('[Quelle] page selected',
+  props<{ quellen: Quelle[] }>()
 );
+
+export const quellenlisteCleared = createAction('[Quelle] quellenliste cleared ');
+

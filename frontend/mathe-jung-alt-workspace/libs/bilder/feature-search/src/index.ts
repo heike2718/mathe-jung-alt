@@ -1,3 +1,3 @@
 export * from './lib/bilder-feature-search.module';
 
-export * from './lib/search.component';
+export * from './lib/bilder-search.component';

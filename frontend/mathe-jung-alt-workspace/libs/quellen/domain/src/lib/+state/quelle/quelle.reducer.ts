@@ -4,37 +4,50 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as QuellenActions from './quelle.actions';
 import { Quelle } from '../../entities/quelle';
 
-export const QUELLE_FEATURE_KEY = 'quellen-quelle';
+export const QUELLE_FEATURE_KEY = 'quellen';
 
-export interface State extends EntityState<Quelle> {
+export interface QuellenState extends EntityState<Quelle> {
   selectedId?: string | number; // which Quelle record has been selected
   loaded: boolean; // has the Quelle list been loaded
-  error?: string | null; // last known error (if any)
+  page: Quelle[];
 }
 
 export interface QuellePartialState {
-  readonly [QUELLE_FEATURE_KEY]: State;
+  readonly [QUELLE_FEATURE_KEY]: QuellenState;
 }
 
 export const quelleAdapter: EntityAdapter<Quelle> =
   createEntityAdapter<Quelle>();
 
-export const initialState: State = quelleAdapter.getInitialState({
-  // set initial required properties
+export const initialState: QuellenState = quelleAdapter.getInitialState({
   loaded: false,
+  page: []
 });
 
 const quelleReducer = createReducer(
   initialState,
+
+
   on(QuellenActions.quellenFound, (state, { quellen }) =>
-    quelleAdapter.upsertMany(quellen, { ...state, loaded: true })
+    quelleAdapter.setAll(quellen, {
+      ...state,
+      loaded: true,
+      page: quellen.slice(0, 5)
+    })
   ),
-  on(QuellenActions.findQuellenFailure, (state, { error }) => ({
+
+  on(QuellenActions.pageSelected, (state, { quellen }) => ({
+    ...state, page: quellen
+  })),
+
+  on(QuellenActions.quellenlisteCleared, (state, _action) => ({
     ...state,
-    error,
+    selectedId: undefined,
+    loaded: false,
+    page: []
   }))
 );
 
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: QuellenState | undefined, action: Action) {
   return quelleReducer(state, action);
 }

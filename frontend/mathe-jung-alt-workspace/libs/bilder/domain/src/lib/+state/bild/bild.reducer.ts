@@ -4,21 +4,21 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as BildActions from './bild.actions';
 import { Bild } from '../../entities/bild';
 
-export const BILD_FEATURE_KEY = 'bilder-bild';
+export const BILD_FEATURE_KEY = 'bilder';
 
-export interface State extends EntityState<Bild> {
+export interface BilderState extends EntityState<Bild> {
   selectedId?: string | number; // which Bild record has been selected
   loaded: boolean; // has the Bild list been loaded
   error?: string | null; // last known error (if any)
 }
 
 export interface BildPartialState {
-  readonly [BILD_FEATURE_KEY]: State;
+  readonly [BILD_FEATURE_KEY]: BilderState;
 }
 
 export const bildAdapter: EntityAdapter<Bild> = createEntityAdapter<Bild>();
 
-export const initialState: State = bildAdapter.getInitialState({
+export const initialState: BilderState = bildAdapter.getInitialState({
   // set initial required properties
   loaded: false,
 });
@@ -36,6 +36,6 @@ const bildReducer = createReducer(
   on(BildActions.loadBildFailure, (state, { error }) => ({ ...state, error }))
 );
 
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: BilderState | undefined, action: Action) {
   return bildReducer(state, action);
 }

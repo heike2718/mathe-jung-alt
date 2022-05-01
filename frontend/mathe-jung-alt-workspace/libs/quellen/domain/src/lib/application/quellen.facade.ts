@@ -10,12 +10,21 @@ import * as QuelleSelectors from '../+state/quelle/quelle.selectors';
 export class QuellenFacade {
 
   loaded$ = this.store.pipe(select(QuelleSelectors.getQuelleLoaded));
-  quelleList$ = this.store.pipe(select(QuelleSelectors.getAllQuelle));
+  quellenList$ = this.store.pipe(select(QuelleSelectors.getAllQuellen));
   selectedQuelle$ = this.store.pipe(select(QuelleSelectors.getSelected));
+  page$ = this.store.pipe(select(QuelleSelectors.getPage));
 
   constructor(private store: Store<fromQuelle.QuellePartialState>) {}
 
-  findQuelle(suchfilter: Suchfilter): void {
-    this.store.dispatch(QuellenActions.findQuelle({suchfilter}));
+  findQuellen(suchfilter: Suchfilter): void {
+    this.store.dispatch(QuellenActions.findQuellen({suchfilter}));
   }
+
+  slicePage(sortDirection = 'asc', pageIndex = 0, pageSize = 10): void {
+    this.store.dispatch(QuellenActions.selectPage({ sortDirection, pageIndex, pageSize }))
+  }
+
+  clearTrefferliste(): void {
+    this.store.dispatch(QuellenActions.quellenlisteCleared());
+  }  
 }
