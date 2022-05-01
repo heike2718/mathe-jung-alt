@@ -5,4 +5,4 @@ export * from './lib/infrastructure/quelle.data.service';
 
 export * from './lib/+state/quelle/quelle.actions';
 
-export * from './lib/application/search.facade';
+export * from './lib/application/quellen.facade';

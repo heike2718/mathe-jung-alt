@@ -1,0 +1,32 @@
+{
+	"folders": {},
+	"connections": {
+		"mariaDB-18079bbbff2-612269c30d528e52": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "mathe_jung_alt",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "172.21.0.2",
+				"port": "3306",
+				"database": "mathe_jung_alt",
+				"url": "jdbc:mariadb://172.21.0.2:3306/mathe_jung_alt",
+				"type": "dev",
+				"auth-model": "native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}

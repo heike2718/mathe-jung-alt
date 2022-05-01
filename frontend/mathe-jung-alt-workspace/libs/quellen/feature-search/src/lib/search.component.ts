@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchFacade } from '@mathe-jung-alt-workspace/quellen/domain';
+import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 
 @Component({
   selector: 'quellen-search',
@@ -9,7 +9,7 @@ import { SearchFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 export class SearchComponent implements OnInit {
   quelleList$ = this.searchFacade.quelleList$;
 
-  constructor(private searchFacade: SearchFacade) {}
+  constructor(private searchFacade: QuellenFacade) {}
 
   ngOnInit() {
     this.load();

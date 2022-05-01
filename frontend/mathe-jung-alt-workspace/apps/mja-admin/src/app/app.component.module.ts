@@ -10,6 +10,7 @@ import { HeaderComponentModule } from "./core/header/header.component";
 import { SidemenuComponentModule } from "./core/sidemenu/sidemenu.component";
 import { NotAuthorizedComponentModule } from "./core/not-authorized/not-authorized.component";
 import { DashboardComponentModule } from "./dashboard/dashboard-component.module";
+import { QuellenDomainModule } from "@mathe-jung-alt-workspace/quellen/domain";
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { DashboardComponentModule } from "./dashboard/dashboard-component.module
         HeaderComponentModule,
         SidemenuComponentModule,
         NotAuthorizedComponentModule,
-        DashboardComponentModule
+        DashboardComponentModule,
+        QuellenDomainModule
     ],
     exports: [
         AppComponent

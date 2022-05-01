@@ -1,7 +1,7 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
-import * as QuelleActions from './quelle.actions';
+import * as QuellenActions from './quelle.actions';
 import { Quelle } from '../../entities/quelle';
 
 export const QUELLE_FEATURE_KEY = 'quellen-quelle';
@@ -26,15 +26,10 @@ export const initialState: State = quelleAdapter.getInitialState({
 
 const quelleReducer = createReducer(
   initialState,
-  on(QuelleActions.loadQuelle, (state) => ({
-    ...state,
-    loaded: false,
-    error: null,
-  })),
-  on(QuelleActions.loadQuelleSuccess, (state, { quelle }) =>
-    quelleAdapter.upsertMany(quelle, { ...state, loaded: true })
+  on(QuellenActions.quellenFound, (state, { quellen }) =>
+    quelleAdapter.upsertMany(quellen, { ...state, loaded: true })
   ),
-  on(QuelleActions.loadQuelleFailure, (state, { error }) => ({
+  on(QuellenActions.findQuellenFailure, (state, { error }) => ({
     ...state,
     error,
   }))

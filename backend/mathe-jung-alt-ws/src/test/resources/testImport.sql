@@ -16,3 +16,5 @@ insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (15, 'Buch',0);
 insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (16, 'Zeitschrift',0);
 insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (17, 'Person',0);
 insert into DESKRIPTOREN (ID,NAME,ADMIN) VALUE (18, 'Nachbau',1);
+
+INSERT INTO VW_QUELLEN (UUID, SORTNR, ART, MEDIUM_UUID, MEDIUM_TITEL, SEITE, DESKRIPTOREN) VALUES ('8ef4d9b8', 1, 'BUCH', 'cd69615e', 'Johannes Lehmann: 2x3 Plus Spaß dabei', '43', '1,4,5,6,7,8,15');

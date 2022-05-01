@@ -1,5 +1,3 @@
-import { state } from '@angular/animations';
-import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { createReducer, on, Action } from '@ngrx/store';
 import { initialSuchfilter, Suchfilter } from '../entities/suchfilter';
 import * as SuchfilterActions from './suchfilter.actions';
