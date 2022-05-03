@@ -10,3 +10,25 @@ export interface Quelle {
   readonly mediumUuid?: string;
   readonly deskriptoren: Deskriptor[];
 };
+
+export function deskriptorenToString(deskriptoren: Deskriptor[]): string {
+
+  if (deskriptoren.length === 0) {
+    return '';
+  }
+
+  let result = '';
+
+  for (let index = 0; index < deskriptoren.length; index++) {
+
+    const deskriptor = deskriptoren[index];
+    if (index < deskriptoren.length -2) {
+      result += deskriptor.name + ",";
+    } else {
+      result += deskriptor.name;
+    }
+
+  }
+
+  return result;
+}

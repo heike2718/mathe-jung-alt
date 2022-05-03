@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
-import { QuellenDataSource, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
+import { deskriptorenToString, Quelle, QuellenDataSource, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { debounceTime, filter, map, merge, Subscription, tap } from 'rxjs';
@@ -69,6 +69,12 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
     merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => this.loadQuellenPage())
     ).subscribe();
+  }
+
+  deskriptorenToString(quelle: Quelle): string {
+
+    return deskriptorenToString(quelle.deskriptoren);
+
   }
 
   onDeskriptorenChanged($event: Deskriptor[]): void {
