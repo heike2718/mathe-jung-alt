@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { MessageService } from "@mathe-jung-alt-workspace/shared/ui-messaging";
+import { MessageService, Message } from "@mathe-jung-alt-workspace/shared/ui-messaging";
 import { TypedAction } from "@ngrx/store/src/models";
-import { catchError, concatMap, exhaustMap, map, mergeMap, Observable, of, OperatorFunction, switchMap, tap } from 'rxjs';
+import { catchError, concatMap, exhaustMap, mergeMap, Observable, of, OperatorFunction, switchMap, tap } from 'rxjs';
 import { ConstraintViolation } from "../http-utils/http.context";
 
 
@@ -82,26 +82,17 @@ export class SafeNgrxService {
 
     private handleError(error: any, errorMessage: string): void {
 
-        const httpErrorResponse = this.getHttpErrorResponse(error);
+        const httpErrorResponse: HttpErrorResponse | undefined = this.getHttpErrorResponse(error);
         if (!httpErrorResponse) {
             console.log('SafeNgrxService: error=' + JSON.stringify(error));
             this.messageService.error(errorMessage);
-        }
-
-        const status = httpErrorResponse?.status;
-
-        switch (status) {
-            case 400:
-                const cvs = this.extractConstraintViolations(error);
-                if (cvs) {
-                    this.messageService.error(cvs);
-                } else {
-                    this.messageService.error(errorMessage);
-                }
-                break;
-            default:
+        } else {
+            const message = this.extractServerErrorMessage(httpErrorResponse);
+            if (message) {
+                this.messageService.error(message);                
+            } else {
                 this.messageService.error(errorMessage);
-                break;
+            }
         }
     }
 
@@ -115,32 +106,36 @@ export class SafeNgrxService {
 
     }
 
-    private extractConstraintViolations(error: any): string | undefined {
 
-        if (error instanceof HttpErrorResponse) {
-            const errorResponse: HttpErrorResponse = <HttpErrorResponse>error;
 
-            if (errorResponse.status === 400) {
-                const error = errorResponse.error;
+    private extractServerErrorMessage(error: HttpErrorResponse): string | undefined {
 
-                if (error['violations']) {
+        const errorResponse: HttpErrorResponse = <HttpErrorResponse>error;
 
-                    const violations: ConstraintViolation[] = <ConstraintViolation[]>error['violations'];
+        if (errorResponse.status === 400) {
+            const error = errorResponse.error;
 
-                    let message = '';
-                    violations.forEach(v => {
-                        const index = v.field.indexOf('.');
-                        const field = v.field.substring(index + 1);
-                        message += field + ': ' + v.message;
-                    });
+            if (error['violations']) {
 
-                    return message;
-                }
+                const violations: ConstraintViolation[] = <ConstraintViolation[]>error['violations'];
+
+                let message = '';
+                violations.forEach(v => {
+                    const index = v.field.indexOf('.');
+                    const field = v.field.substring(index + 1);
+                    message += field + ': ' + v.message;
+                });
+
+                return message;
+            }
+        } else {
+            const payload: Message = errorResponse.error;
+
+            if (payload) {
+                return payload.message;
             }
         }
 
         return undefined;
-
-
     }
 }
