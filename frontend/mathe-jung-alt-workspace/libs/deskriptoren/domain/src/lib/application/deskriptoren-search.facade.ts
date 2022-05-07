@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 
-import { loadDeskriptoren, deskriptorAddedToSearchList, deskriptorRemovedFromSearchList } from '../+state/deskriptor/deskriptor.actions';
 import * as fromDeskriptor from '../+state/deskriptor/deskriptor.reducer';
+import * as DeskriptorActions from '../+state/deskriptor/deskriptor.actions'
 import * as DeskriptorSelectors from '../+state/deskriptor/deskriptor.selectors';
 import { Deskriptor } from '../entities/deskriptor';
 
@@ -17,17 +18,19 @@ export class DeskriptorenSearchFacade {
 
   constructor(private store: Store<fromDeskriptor.DeskriptorenPartialState>) { }
 
-  load(): void {
-    this.store.dispatch(loadDeskriptoren());
+  load(kontext: Suchkontext): void {
+    this.store.dispatch(DeskriptorActions.loadDeskriptoren({ kontext }));
+  }
+
+  setSuchkontext(suchkontext: Suchkontext): void {
+    this.store.dispatch(DeskriptorActions.setSuchkontext({ kontext: suchkontext }))
   }
 
   addToSearchlist(deskriptor: Deskriptor): void {
-
-    this.store.dispatch(deskriptorAddedToSearchList({deskriptor}));
-
+    this.store.dispatch(DeskriptorActions.deskriptorAddedToSearchList({ deskriptor }));
   }
 
   removeFromSearchlist(deskriptor: Deskriptor): void {
-    this.store.dispatch(deskriptorRemovedFromSearchList({deskriptor}));
+    this.store.dispatch(DeskriptorActions.deskriptorRemovedFromSearchList({ deskriptor }));
   }
 }

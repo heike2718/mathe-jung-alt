@@ -45,7 +45,7 @@ public class PersistenteQuelleReadonly {
 	@Column(name = "MEDIUM_UUID")
 	private String mediumUuid;
 
-	@Column(name = "MEDIUM_TITEL_BLA")
+	@Column(name = "MEDIUM_TITEL")
 	private String mediumTitel;
 
 	@Column(name = "JAHRGANG")

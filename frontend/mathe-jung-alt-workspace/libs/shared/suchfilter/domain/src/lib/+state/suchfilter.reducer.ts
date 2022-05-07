@@ -20,10 +20,10 @@ const initialState: SuchfilterState = {
 const suchfilterReducer = createReducer(
     initialState,
 
-    on(SuchfilterActions.suchkontextChanged, (state, action) => ({
-        ...state,
-        filter: { ...state.filter, kontext: action.kontext, suchstring: '', deskriptoren: [] },
-    })),
+    on(SuchfilterActions.suchkontextChanged, (state, action) => {
+        const neuerFilter = {...initialSuchfilter, kontext: action.kontext};
+        return {...state, filter: neuerFilter};
+    }),
 
     on(SuchfilterActions.suchstringChanged, (state, action) => {
 

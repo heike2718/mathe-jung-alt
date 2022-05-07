@@ -3,6 +3,8 @@ import { Component, NgModule, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
+import { Store } from '@ngrx/store';
+import { logoutAction } from '../../+state/app.actions';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -14,7 +16,7 @@ export class HeaderComponent implements OnInit {
 
   titel = 'Mja Admin (' + environment.version + ')';
 
-  constructor(public authFacade: AuthFacade) { }
+  constructor(public authFacade: AuthFacade, private store: Store) { }
 
   ngOnInit(): void { }
 
@@ -33,6 +35,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public logout(): void {
+    this.store.dispatch(logoutAction());
     this.authFacade.logout();
   }
 }

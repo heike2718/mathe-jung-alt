@@ -11,8 +11,8 @@ export class DeskriptorEffects {
   loadDeskriptor$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DeskriptorActions.loadDeskriptoren),
-      this.safeNgrx.safeSwitchMap(() =>
-        this.deskriptorDataService.load().pipe(
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.deskriptorDataService.load(action.kontext).pipe(
           map((deskriptor) =>
             DeskriptorActions.loadDeskriptorenSuccess({ deskriptor })
           )

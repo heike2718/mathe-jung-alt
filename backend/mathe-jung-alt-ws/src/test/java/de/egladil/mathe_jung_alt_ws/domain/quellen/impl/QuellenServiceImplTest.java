@@ -82,14 +82,14 @@ public class QuellenServiceImplTest {
 
 			{
 
-				Deskriptor deskriptor = new Deskriptor("Mathe", false);
+				Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
 				deskriptor.id = 1l;
 				deskriptoren.add(deskriptor);
 			}
 
 			{
 
-				Deskriptor deskriptor = new Deskriptor("Minikänguru", false);
+				Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
 				deskriptor.id = 3l;
 				deskriptoren.add(deskriptor);
 			}
@@ -170,14 +170,14 @@ public class QuellenServiceImplTest {
 
 			{
 
-				Deskriptor deskriptor = new Deskriptor("Mathe", false);
+				Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
 				deskriptor.id = 1l;
 				deskriptoren.add(deskriptor);
 			}
 
 			{
 
-				Deskriptor deskriptor = new Deskriptor("Minikänguru", false);
+				Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
 				deskriptor.id = 3l;
 				deskriptoren.add(deskriptor);
 			}
@@ -222,14 +222,14 @@ public class QuellenServiceImplTest {
 
 			{
 
-				Deskriptor deskriptor = new Deskriptor("Mathe", false);
+				Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
 				deskriptor.id = 1l;
 				deskriptoren.add(deskriptor);
 			}
 
 			{
 
-				Deskriptor deskriptor = new Deskriptor("Minikänguru", false);
+				Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
 				deskriptor.id = 3l;
 				deskriptoren.add(deskriptor);
 			}
@@ -280,14 +280,14 @@ public class QuellenServiceImplTest {
 
 			{
 
-				Deskriptor deskriptor = new Deskriptor("Mathe", false);
+				Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
 				deskriptor.id = 1l;
 				deskriptoren.add(deskriptor);
 			}
 
 			{
 
-				Deskriptor deskriptor = new Deskriptor("Minikänguru", false);
+				Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
 				deskriptor.id = 3l;
 				deskriptoren.add(deskriptor);
 			}

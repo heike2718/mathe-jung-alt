@@ -9,7 +9,6 @@ export const DESKRIPTOR_FEATURE_KEY = 'deskriptoren';
 export interface DeskriptorenState extends EntityState<Deskriptor> {
   selectedId?: string | number; // which Deskriptor record has been selected
   loaded: boolean; // has the Deskriptor list been loaded
-  error?: string | null; // last known error (if any)
   suchliste: Deskriptor[];
 }
 
@@ -31,18 +30,12 @@ const deskriptorReducer = createReducer(
 
   on(DeskriptorActions.loadDeskriptoren, (state) => ({
     ...state,
-    loaded: false,
-    error: null,
+    loaded: false
   })),
 
   on(DeskriptorActions.loadDeskriptorenSuccess, (state, { deskriptor }) =>
-    deskriptorAdapter.upsertMany(deskriptor, { ...state, loaded: true })
+    deskriptorAdapter.setAll(deskriptor, { ...state, loaded: true, auswahlliste:[], suchliste: [] })
   ),
-
-  on(DeskriptorActions.loadDeskriptorenFailure, (state, { error }) => ({
-    ...state,
-    error,
-  })),
 
   on(DeskriptorActions.deskriptorAddedToSearchList, (state, { deskriptor }) => {
     return {...state, suchliste: [...state.suchliste, deskriptor]};
@@ -62,7 +55,7 @@ const deskriptorReducer = createReducer(
 
     return {...state, suchliste: neueSuchliste};
 
-  }),
+  })
 );
 
 export function reducer(state: DeskriptorenState | undefined, action: Action) {

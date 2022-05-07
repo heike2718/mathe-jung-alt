@@ -80,6 +80,11 @@
 			<artifactId>quarkus-jdbc-mariadb</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-smallrye-openapi</artifactId>
+		</dependency>
+
 		<!-- END quarkus dependencies -->
 
 		<!-- START other open source dependencies -->

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { RaetselDataSource, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { Raetsel, RaetselDataSource, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { debounceTime, filter, map, tap } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { merge, Subscription } from 'rxjs';
 import { SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
+import { deskriptorenToString } from '@mathe-jung-alt-workspace/quellen/domain';
 
 @Component({
   selector: 'mja-raetsel-search',
@@ -86,6 +87,12 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
   onRowClicked(row: any): void {
     console.log('row clicked: ' + JSON.stringify(row));
+  }
+
+  deskriptorenToString(raetsel: Raetsel): string {
+
+    return deskriptorenToString(raetsel.deskriptoren);
+
   }
 
   private loadRaetselPage(): void {

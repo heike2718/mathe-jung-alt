@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mathe_jung_alt_ws.domain.semantik.DomainService;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
@@ -49,6 +50,37 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 		List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).collect(Collectors.toList());
 
 		return result;
+	}
+
+	@Override
+	public List<Deskriptor> filterByKontext(final DeskriptorSuchkontext kontext, final List<Deskriptor> deskriptoren) {
+
+		if (DeskriptorSuchkontext.BILDER == kontext || DeskriptorSuchkontext.NOOP == kontext) {
+
+			return deskriptoren;
+		}
+
+		return deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).collect(Collectors.toList());
+	}
+
+	@Override
+	public DeskriptorSuchkontext toDeskriptorSuchkontext(final String kontext) {
+
+		DeskriptorSuchkontext suchkontext = DeskriptorSuchkontext.NOOP;
+
+		if (kontext != null) {
+
+			try {
+
+				suchkontext = DeskriptorSuchkontext.valueOf(kontext.toUpperCase());
+			} catch (IllegalArgumentException e) {
+
+				LOGGER.warn("unbekannter Kontext {}: wird zu NOOP", kontext);
+
+			}
+		}
+
+		return suchkontext;
 	}
 
 }

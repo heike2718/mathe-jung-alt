@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from "@angular/core";
 import { Deskriptor, DeskriptorenSearchFacade } from "@mathe-jung-alt-workspace/deskriptoren/domain";
+import { Suchkontext } from "@mathe-jung-alt-workspace/shared/suchfilter/domain";
 import { debounceTime, distinctUntilChanged, fromEvent, Subscription, tap } from "rxjs";
 
 
@@ -10,6 +11,8 @@ import { debounceTime, distinctUntilChanged, fromEvent, Subscription, tap } from
 })
 export class AdminSuchfilterComponent implements AfterViewInit, OnDestroy {
 
+  @Input()
+  public kontext!: Suchkontext;
 
   @ViewChild('input') input!: ElementRef;
 

@@ -2,12 +2,13 @@
 
 <div class="wrapper m4">
 
-  <mja-admin-suchfilter (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"
+  <mja-admin-suchfilter [kontext]="'QUELLEN'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"
     (inputChanged)="onInputChanged($event)">
   </mja-admin-suchfilter>
 
   <ng-container *ngIf="(suchfilterWithStatus$ | async) as suchfilterWithStatus">
-    <p>Lasset die Suche beginnen: {{suchfilterWithStatus | json}}</p>
+    <p *ngIf="suchfilterWithStatus.suchfilter.suchstring.length > 0">Lasset die Suche beginnen: {{suchfilterWithStatus | json}}</p>
+    <p *ngIf="suchfilterWithStatus.suchfilter.suchstring.length === 0">Suche mit Text einschränken</p>
   </ng-container>
 
 

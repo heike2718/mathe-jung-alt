@@ -3,13 +3,13 @@
 <div class="wrapper m4">
 
   <ng-container *ngIf="isAdmin$ | async">
-    <mja-admin-suchfilter (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"
+    <mja-admin-suchfilter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"
       (inputChanged)="onInputChanged($event)">
     </mja-admin-suchfilter>
   </ng-container>
 
   <ng-container *ngIf="isOrdinaryUser$ | async">
-    <mja-deskriptoren-filter (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"></mja-deskriptoren-filter>
+    <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"></mja-deskriptoren-filter>
   </ng-container>
 
   <ng-container *ngIf="(suchfilterWithStatus$ | async) as suchfilterWithStatus">
@@ -32,7 +32,7 @@
 
     <ng-container matColumnDef="deskriptoren">
       <th mat-header-cell *matHeaderCellDef> Deskriptoren </th>
-      <td mat-cell *matCellDef="let raetsel"> {{raetsel.deskriptoren}} </td>
+      <td mat-cell *matCellDef="let raetsel"> {{deskriptorenToString(raetsel)}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

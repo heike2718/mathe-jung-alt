@@ -6,6 +6,7 @@ import {
   DeskriptorenState,
   deskriptorAdapter,
 } from './deskriptor.reducer';
+import { Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 
 // Lookup the 'Deskriptor' feature state managed by NgRx
 const getDeskriptorState = createFeatureSelector<DeskriptorenState>(DESKRIPTOR_FEATURE_KEY);
@@ -15,11 +16,6 @@ const { selectAll, selectEntities } = deskriptorAdapter.getSelectors();
 export const getDeskriptorLoaded = createSelector(
   getDeskriptorState,
   (state: DeskriptorenState) => state.loaded
-);
-
-export const getDeskriptorError = createSelector(
-  getDeskriptorState,
-  (state: DeskriptorenState) => state.error
 );
 
 export const getAllDeskriptor = createSelector(
@@ -61,6 +57,8 @@ export const getRestliste = createSelector(
 function getDifferenzmenge(alle: Deskriptor[], auszuschliessen: Deskriptor[]): Deskriptor[] {
 
   const setUtils: MjaSetUtils<Deskriptor> = new MjaSetUtils();
-  const result: Deskriptor[] = setUtils.getDifferenzmenge(setUtils.toMjaEntityArray(alle), setUtils.toMjaEntityArray(auszuschliessen));
+ const result: Deskriptor[] = setUtils.getDifferenzmenge(setUtils.toMjaEntityArray(alle), setUtils.toMjaEntityArray(auszuschliessen));
   return result;
 }
+
+

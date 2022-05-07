@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Raetsel, RaetselDetails } from '../entities/raetsel';
 import { Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselDataService {
@@ -12,124 +13,128 @@ export class RaetselDataService {
     id: 'uuid-1',
     schluessel: '00001',
     name: 'Spielsteine umschichten',
-    deskriptoren: ['Minikänguru', 'ZWEI-A', 'EINS-B'],
-  },
-  {
+    deskriptoren: [{'id':2,'name':"Minikänguru",'admin':false,'kontext':'RAETSEL'},
+    {"id":7,"name":"EINS","admin":false,"kontext":"RAETSEL"},
+    {"id":8,"name":"ZWEI","admin":false,"kontext":"RAETSEL"},
+    {"id":9,"name":"A","admin":false,"kontext":"RAETSEL"},
+    {"id":10,"name":"B","admin":false,"kontext":"RAETSEL"}],
+  },{
     id: 'uuid-2',
     schluessel: '00002',
     name: 'verschachteltes Polynom auflösen',
-    deskriptoren: ['Serie', 'ab Klasse 9']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-3',
     schluessel: '00003',
     name: 'Frühlingsbeet',
-    deskriptoren: ['Serie', 'Klassen 1/2']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-4',
     schluessel: '00004',
     name: 'Klassen und Fächer',
-    deskriptoren: ['Serie', 'Klassen 3/4']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":14,"name":"Klassen 3/4","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-5',
     schluessel: '00005',
     name: 'Rundreise',
-    deskriptoren: ['Serie', 'Klassen 1/2']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-6',
     schluessel: '00006',
     name: 'Kryptogramm mit Multiplikation',
-    deskriptoren: ['Serie', 'Klassen 3/4']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":14,"name":"Klassen 3/4","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-7',
     schluessel: '00007',
     name: 'Geheimcode',
-    deskriptoren: ['Serie', 'Klassen 5/6']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":15,"name":"Klassen 5/6","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-8',
     schluessel: '00008',
     name: 'Regenwetter',
-    deskriptoren: ['Serie', 'ab Klasse 9']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-9',
     schluessel: '00009',
     name: 'Primzahlsuche',
-    deskriptoren: ['Serie', 'ab Klasse 9']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL"}]
   }, {
     id: 'uuid-10',
     schluessel: '00010',
     name: 'Klassenfahrt',
-    deskriptoren: ['Serie', 'ab Klasse 9']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-11',
     schluessel: '00011',
     name: 'Spielgeräte zuordnen',
-    deskriptoren: ['Serie', 'Vorschule']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-12',
     schluessel: '00012',
     name: 'zerbrochene Fensterscheiben',
-    deskriptoren: ['Serie', 'Vorschule']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-13',
     schluessel: '00013',
     name: 'Adventsbasar',
-    deskriptoren: ['Serie', 'Klassen 3/4']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":14,"name":"Klassen 3/4","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-14',
     schluessel: '00014',
     name: 'Tiere und Beine',
-    deskriptoren: ['Serie', 'Klassen 1/2']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-15',
     schluessel: '00015',
     name: 'Hasenschule',
-    deskriptoren: ['Serie', 'Vorschule']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-16',
     schluessel: '00016',
     name: 'Wettlauf',
-    deskriptoren: ['Serie', 'Klassen 1/2']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-17',
     schluessel: '00017',
     name: 'Kongruente Dreiecke finden',
-    deskriptoren: ['Serie', 'Klassen 5/6']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":15,"name":"Klassen 5/6","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-18',
     schluessel: '00018',
     name: 'Labyrinth mit Kaninchen',
-    deskriptoren: ['Serie', 'Vorschule']
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-19',
     schluessel: '00019',
     name: 'Diophantische Gleichung',
-    deskriptoren: ['Serie', 'Klassen 7/8']
-  }];
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":16,"name":"Klassen 7/8","admin":false,"kontext":"RAETSEL"}]
+  }
+  ];
 
-  #deskriptoren: string[] = [];
+  #deskriptoren: Deskriptor[] = [];
 
   constructor(private http: HttpClient) {
 
     for (let i = 0; i < this.#alleRaetsel.length; i++) {
       const raetsel: Raetsel = this.#alleRaetsel[i];
 
-      const deskr: string[] = raetsel.deskriptoren;
+      const deskr: Deskriptor[] = raetsel.deskriptoren;
       for (let j = 0; j < deskr.length; j++) {
         const d = deskr[j];
         if (!this.#deskriptoren.includes(d)) {
@@ -209,7 +214,11 @@ export class RaetselDataService {
           ursprung: 'NACHBAU',
           primaerquelleId: '5ec5aed7',
           sekundaerquelleId: '60cfd0da',
-          deskriptoren: ['Minikänguru', 'ZWEI-A', 'EINS-B'],
+          deskriptoren: [{'id':2,'name':"Minikänguru",'admin':false,'kontext':'RAETSEL'},
+          {"id":7,"name":"EINS","admin":false,"kontext":"RAETSEL"},
+          {"id":8,"name":"ZWEI","admin":false,"kontext":"RAETSEL"},
+          {"id":9,"name":"A","admin":false,"kontext":"RAETSEL"},
+          {"id":10,"name":"B","admin":false,"kontext":"RAETSEL"}],
           antwortvorschlaege: [
             {
               buchstabe: 'A',
@@ -249,7 +258,7 @@ export class RaetselDataService {
       text: '\[ f(x) = \frac{1}{2} x^2 \]',
       ursprung: 'ZITAT',
       primaerquelleId: '0521545a',
-      deskriptoren: ['Serie', 'ab Klasse 9']
+      deskriptoren: [{'id':18,'name':'Serie','admin':false,'kontext':'RAETSEL'}, {'id':17,'name':'ab Klasse 9','admin':false,'kontext':'RAETSEL'}]
     })
   }
 }

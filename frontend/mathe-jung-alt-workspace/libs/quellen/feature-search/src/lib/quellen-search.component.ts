@@ -5,7 +5,7 @@ import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { deskriptorenToString, Quelle, QuellenDataSource, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
-import { debounceTime, filter, map, merge, Subscription, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, merge, Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'mja-quellen-search',
@@ -30,7 +30,9 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   dataSource!: QuellenDataSource;
   anzahlQuellen: number = 0;
 
-  constructor(private quellenFacade: QuellenFacade, private suchfilterFacade: SuchfilterFacade, private authFacade: AuthFacade) {}
+  constructor(private quellenFacade: QuellenFacade
+    , private suchfilterFacade: SuchfilterFacade
+    , private authFacade: AuthFacade) {}
 
   ngOnInit() {
 
@@ -44,7 +46,9 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
     this.#sucheReadySubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
       filter((sws) => sws.suchfilter.kontext === this.#kontext && sws.nichtLeer),
       map((sws) => sws.suchfilter),
+      filter(sws => sws.suchstring.length > 1),
       debounceTime(300),
+      distinctUntilChanged(),
       tap((suchfilter) => this.quellenFacade.findQuellen(suchfilter))
     ).subscribe();
 

@@ -21,4 +21,22 @@ public interface DeskriptorenService {
 	 */
 	List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds);
 
+	/**
+	 * Filtert die gegebenen Deskriptoren nach ihrem Kontext.
+	 *
+	 * @param  kontext
+	 * @param  deskriptoren
+	 * @return              List
+	 */
+	List<Deskriptor> filterByKontext(DeskriptorSuchkontext kontext, List<Deskriptor> deskriptoren);
+
+	/**
+	 * Mappt den kontext auf die Enum.
+	 *
+	 * @param  kontext
+	 *                 String
+	 * @return         NOOP, wenn null oder invalid
+	 */
+	DeskriptorSuchkontext toDeskriptorSuchkontext(String kontext);
+
 }

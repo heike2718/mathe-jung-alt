@@ -22,8 +22,8 @@ export function deskriptorenToString(deskriptoren: Deskriptor[]): string {
   for (let index = 0; index < deskriptoren.length; index++) {
 
     const deskriptor = deskriptoren[index];
-    if (index < deskriptoren.length -2) {
-      result += deskriptor.name + ",";
+    if (index < deskriptoren.length - 1) {
+      result += deskriptor.name + ", ";
     } else {
       result += deskriptor.name;
     }

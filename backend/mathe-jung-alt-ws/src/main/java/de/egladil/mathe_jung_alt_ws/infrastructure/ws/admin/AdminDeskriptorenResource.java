@@ -10,8 +10,11 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorSuchkontext;
+import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.impl.DeskriptorenRepository;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
 import io.quarkus.panache.common.Sort;
@@ -25,11 +28,16 @@ public class AdminDeskriptorenResource {
 	@Inject
 	DeskriptorenRepository deskriptorenRepository;
 
+	@Inject
+	DeskriptorenService deskriptorenService;
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Deskriptor> loadDeskriptoren() {
+	public List<Deskriptor> loadDeskriptoren(@QueryParam(value = "kontext") final String kontext) {
 
-		return deskriptorenRepository.listAll(Sort.by("name"));
+		DeskriptorSuchkontext suchkontext = deskriptorenService.toDeskriptorSuchkontext(kontext);
+		List<Deskriptor> trefferliste = deskriptorenRepository.listAll(Sort.by("name"));
+		return deskriptorenService.filterByKontext(suchkontext, trefferliste);
 	}
 
 }

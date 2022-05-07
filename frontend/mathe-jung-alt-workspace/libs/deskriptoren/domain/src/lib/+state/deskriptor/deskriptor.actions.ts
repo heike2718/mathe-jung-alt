@@ -1,17 +1,20 @@
+import { Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
 import { Deskriptor } from '../../entities/deskriptor';
 
-export const loadDeskriptoren = createAction('[Deskriptor] Load Deskriptor');
+export const loadDeskriptoren = createAction(
+  '[Deskriptor] Load Deskriptor',
+  props<{ kontext: Suchkontext }>());
 
 export const loadDeskriptorenSuccess = createAction(
   '[Deskriptor] Load Deskriptor Success',
   props<{ deskriptor: Deskriptor[] }>()
 );
 
-export const loadDeskriptorenFailure = createAction(
-  '[Deskriptor] Load Deskriptor Failure',
-  props<{ error: any }>()
-);
+export const setSuchkontext = createAction(
+  '[Deskriptor] set suchkontext',
+  props<{ kontext: Suchkontext }>()
+)
 
 export const deskriptorAddedToSearchList = createAction(
   '[Deskriptor] Deskriptor Added To Search List',

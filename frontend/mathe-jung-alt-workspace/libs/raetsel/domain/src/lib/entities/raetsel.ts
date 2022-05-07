@@ -1,3 +1,5 @@
+import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
+
 export type Raetselursprung = 'EIGENBAU' | 'NACHBAU' | 'ZITAT';
 
 export interface Antwortvorschlag {
@@ -16,7 +18,7 @@ export interface RaetselDetails {
   readonly primaerquelleId: string;
   readonly sekundaerquelleId?: string;
   readonly antwortvorschlaege?: Antwortvorschlag[];
-  readonly deskriptoren: string[];  
+  readonly deskriptoren: Deskriptor[];  
 };
 
 /** Minimalset an Attributen, die bei einer Suche geladen werden sollen */
@@ -24,5 +26,5 @@ export interface Raetsel {
   readonly id: string;
   readonly schluessel: string;
   readonly name: string;
-  readonly deskriptoren: string[];
+  readonly deskriptoren: Deskriptor[];
 };
