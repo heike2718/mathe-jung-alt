@@ -36,7 +36,7 @@ public class AdminDeskriptorenResource {
 	public List<Deskriptor> loadDeskriptoren(@QueryParam(value = "kontext") final String kontext) {
 
 		DeskriptorSuchkontext suchkontext = deskriptorenService.toDeskriptorSuchkontext(kontext);
-		List<Deskriptor> trefferliste = deskriptorenRepository.listAll(Sort.by("name"));
+		List<Deskriptor> trefferliste = deskriptorenRepository.listAll(Sort.descending("kategorie"));
 		return deskriptorenService.filterByKontext(suchkontext, trefferliste);
 	}
 

@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptorkategorie;
 
 /**
  * DeskriptorenServiceImplTest
@@ -234,56 +235,56 @@ public class DeskriptorenServiceImplTest {
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL", Deskriptorkategorie.THEMA);
 			deskriptor.id = 1l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Arithmetik", false, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Arithmetik", false, "RAETSEL", Deskriptorkategorie.THEMA);
 			deskriptor.id = 2l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Klasse 1", false, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Klasse 1", false, "RAETSEL", Deskriptorkategorie.STUFE);
 			deskriptor.id = 3l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL", Deskriptorkategorie.GRUPPE);
 			deskriptor.id = 4l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Zeitschrift", false, "MEDIEN,QUELLEN");
+			Deskriptor deskriptor = new Deskriptor("Zeitschrift", false, "MEDIEN,QUELLEN", Deskriptorkategorie.HERKUNFT);
 			deskriptor.id = 5l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Nachbau", true, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Nachbau", true, "RAETSEL", Deskriptorkategorie.HERKUNFT);
 			deskriptor.id = 6l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Person", true, "QUELLEN");
+			Deskriptor deskriptor = new Deskriptor("Person", true, "QUELLEN", Deskriptorkategorie.HERKUNFT);
 			deskriptor.id = 7l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Buch", false, "MEDIEN,QUELLEN");
+			Deskriptor deskriptor = new Deskriptor("Buch", false, "MEDIEN,QUELLEN", Deskriptorkategorie.HERKUNFT);
 			deskriptor.id = 8l;
 			alleDeskriptoren.add(deskriptor);
 		}

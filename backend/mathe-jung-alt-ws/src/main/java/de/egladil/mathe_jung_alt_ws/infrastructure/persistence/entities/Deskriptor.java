@@ -6,6 +6,8 @@ package de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
@@ -26,6 +28,10 @@ public class Deskriptor extends PanacheEntity {
 	@Column(name = "KONTEXT")
 	public String kontext;
 
+	@Column(name = "KATEGORIE")
+	@Enumerated(EnumType.STRING)
+	public Deskriptorkategorie kategorie;
+
 	/**
 	 *
 	 */
@@ -40,10 +46,11 @@ public class Deskriptor extends PanacheEntity {
 	 * @param adminOnly
 	 *                  boolean
 	 */
-	public Deskriptor(final String name, final boolean adminOnly, final String kontext) {
+	public Deskriptor(final String name, final boolean adminOnly, final String kontext, final Deskriptorkategorie kategorie) {
 
 		this.name = name;
 		this.admin = adminOnly;
 		this.kontext = kontext;
+		this.kategorie = kategorie;
 	}
 }

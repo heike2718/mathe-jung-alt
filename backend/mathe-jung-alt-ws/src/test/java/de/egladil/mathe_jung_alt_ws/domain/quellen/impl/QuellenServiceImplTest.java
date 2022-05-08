@@ -28,6 +28,7 @@ import de.egladil.mathe_jung_alt_ws.domain.quellen.QuelleReadonly;
 import de.egladil.mathe_jung_alt_ws.domain.quellen.QuellenRepository;
 import de.egladil.mathe_jung_alt_ws.domain.quellen.Quellenart;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptorkategorie;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 
 /**
@@ -78,21 +79,7 @@ public class QuellenServiceImplTest {
 			when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
 				.thenReturn(Collections.singletonList(persistenteQuelle));
 
-			List<Deskriptor> deskriptoren = new ArrayList<>();
-
-			{
-
-				Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
-				deskriptor.id = 1l;
-				deskriptoren.add(deskriptor);
-			}
-
-			{
-
-				Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
-				deskriptor.id = 3l;
-				deskriptoren.add(deskriptor);
-			}
+			List<Deskriptor> deskriptoren = getDeskriptorenForTest();
 
 			when(deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren())).thenReturn(deskriptoren);
 
@@ -166,21 +153,7 @@ public class QuellenServiceImplTest {
 			when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
 				.thenReturn(Collections.singletonList(persistenteQuelle));
 
-			List<Deskriptor> deskriptoren = new ArrayList<>();
-
-			{
-
-				Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
-				deskriptor.id = 1l;
-				deskriptoren.add(deskriptor);
-			}
-
-			{
-
-				Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
-				deskriptor.id = 3l;
-				deskriptoren.add(deskriptor);
-			}
+			List<Deskriptor> deskriptoren = getDeskriptorenForTest();
 
 			when(deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren())).thenReturn(deskriptoren);
 
@@ -218,21 +191,7 @@ public class QuellenServiceImplTest {
 			when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
 				.thenReturn(Collections.singletonList(persistenteQuelle));
 
-			List<Deskriptor> deskriptoren = new ArrayList<>();
-
-			{
-
-				Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
-				deskriptor.id = 1l;
-				deskriptoren.add(deskriptor);
-			}
-
-			{
-
-				Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
-				deskriptor.id = 3l;
-				deskriptoren.add(deskriptor);
-			}
+			List<Deskriptor> deskriptoren = getDeskriptorenForTest();
 
 			when(deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren())).thenReturn(deskriptoren);
 
@@ -276,21 +235,7 @@ public class QuellenServiceImplTest {
 			when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
 				.thenReturn(Collections.singletonList(persistenteQuelle));
 
-			List<Deskriptor> deskriptoren = new ArrayList<>();
-
-			{
-
-				Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
-				deskriptor.id = 1l;
-				deskriptoren.add(deskriptor);
-			}
-
-			{
-
-				Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
-				deskriptor.id = 3l;
-				deskriptoren.add(deskriptor);
-			}
+			List<Deskriptor> deskriptoren = getDeskriptorenForTest();
 
 			when(deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren())).thenReturn(deskriptoren);
 
@@ -338,5 +283,26 @@ public class QuellenServiceImplTest {
 			verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
 			verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 		}
+	}
+
+	private List<Deskriptor> getDeskriptorenForTest() {
+
+		List<Deskriptor> deskriptoren = new ArrayList<>();
+
+		{
+
+			Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL", Deskriptorkategorie.HERKUNFT);
+			deskriptor.id = 1l;
+			deskriptoren.add(deskriptor);
+		}
+
+		{
+
+			Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL", Deskriptorkategorie.HERKUNFT);
+			deskriptor.id = 3l;
+			deskriptoren.add(deskriptor);
+		}
+
+		return deskriptoren;
 	}
 }

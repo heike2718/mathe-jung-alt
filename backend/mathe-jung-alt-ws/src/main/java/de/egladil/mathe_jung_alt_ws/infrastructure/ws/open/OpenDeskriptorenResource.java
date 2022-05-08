@@ -35,7 +35,8 @@ public class OpenDeskriptorenResource {
 
 		Map<String, Object> params = HibernateParameterMapBuilder.builder().put("admin", Boolean.FALSE).build();
 
-		List<Deskriptor> trefferliste = Deskriptor.list("select d from Deskriptor d where d.admin = :admin", Sort.by("name"),
+		List<Deskriptor> trefferliste = Deskriptor.list("select d from Deskriptor d where d.admin = :admin",
+			Sort.descending("kategorie"),
 			params);
 
 		DeskriptorSuchkontext suchkontext = deskriptorenService.toDeskriptorSuchkontext(kontext);
