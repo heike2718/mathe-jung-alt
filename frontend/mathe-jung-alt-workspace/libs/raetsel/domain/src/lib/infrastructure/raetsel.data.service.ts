@@ -214,8 +214,7 @@ export class RaetselDataService {
           name: 'Spielsteine umschichten',
           text: 'Das Känguru schichtet Spielsteine um \par An welcher liegt nun Stein 5?',
           ursprung: 'NACHBAU',
-          primaerquelleId: '5ec5aed7',
-          sekundaerquelleId: '60cfd0da',
+          quelleId: '5ec5aed7',
           deskriptoren: [{'id':2,'name':"Minikänguru",'admin':false,'kontext':'RAETSEL', 'kategorie': 'GRUPPE' },
           {"id":7,"name":"EINS","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'},
           {"id":8,"name":"ZWEI","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'},
@@ -226,27 +225,27 @@ export class RaetselDataService {
             {
               buchstabe: 'A',
               text: '13',
-              loesung: false
+              korrekt: false
             },
             {
               buchstabe: 'B',
               text: '23',
-              loesung: false
+              korrekt: false
             },
             {
               buchstabe: 'C',
               text: '20',
-              loesung: false
+              korrekt: false
             },
             {
               buchstabe: 'D',
               text: '12',
-              loesung: true
+              korrekt: true
             },
             {
               buchstabe: 'E',
               text: '9',
-              loesung: false
+              korrekt: false
             }
 
           ],
@@ -260,7 +259,7 @@ export class RaetselDataService {
       name: 'verschachteltes Polynom auflösen',
       text: '\[ f(x) = \frac{1}{2} x^2 \]',
       ursprung: 'ZITAT',
-      primaerquelleId: '0521545a',
+      quelleId: '0521545a',
       deskriptoren: [{'id':18,'name':'Serie','admin':false,'kontext':'RAETSEL', 'kategorie': 'GRUPPE'}, 
       {'id':17,'name':'ab Klasse 9','admin':false,'kontext':'RAETSEL', 'kategorie': 'STUFE'}]
     })
