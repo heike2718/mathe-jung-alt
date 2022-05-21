@@ -18,4 +18,37 @@ public class Antwortvorschlag {
 
 	private boolean korrekt;
 
+	public String getBuchstabe() {
+
+		return buchstabe;
+	}
+
+	public Antwortvorschlag withBuchstabe(final String buchstabe) {
+
+		this.buchstabe = buchstabe;
+		return this;
+	}
+
+	public String getText() {
+
+		return text;
+	}
+
+	public Antwortvorschlag withText(final String text) {
+
+		this.text = text;
+		return this;
+	}
+
+	public boolean isKorrekt() {
+
+		return korrekt;
+	}
+
+	public Antwortvorschlag withKorrekt(final boolean korrekt) {
+
+		this.korrekt = korrekt;
+		return this;
+	}
+
 }

@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain.raetsel.dto;
 
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
+
 /**
  * EditRaetselPayload
  */
@@ -13,7 +15,7 @@ public class EditRaetselPayload {
 
 	private String idAendernderUser;
 
-	private RaetselPayloadDaten daten;
+	private Raetsel raetsel;
 
 	public boolean isLatexHistorisieren() {
 
@@ -35,14 +37,14 @@ public class EditRaetselPayload {
 		this.idAendernderUser = idAendernderUser;
 	}
 
-	public RaetselPayloadDaten getDaten() {
+	public Raetsel getRaetsel() {
 
-		return daten;
+		return raetsel;
 	}
 
-	public void setDaten(final RaetselPayloadDaten daten) {
+	public void setRaetsel(final Raetsel raetsel) {
 
-		this.daten = daten;
+		this.raetsel = raetsel;
 	}
 
 }

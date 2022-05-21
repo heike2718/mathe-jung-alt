@@ -6,6 +6,7 @@ package de.egladil.mathe_jung_alt_ws.domain.deskriptoren.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -24,7 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptorkategorie;
 
 /**
  * DeskriptorenServiceImplTest
@@ -235,60 +235,127 @@ public class DeskriptorenServiceImplTest {
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL", Deskriptorkategorie.THEMA);
+			Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
 			deskriptor.id = 1l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Arithmetik", false, "RAETSEL", Deskriptorkategorie.THEMA);
+			Deskriptor deskriptor = new Deskriptor("Arithmetik", false, "RAETSEL");
 			deskriptor.id = 2l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Klasse 1", false, "RAETSEL", Deskriptorkategorie.STUFE);
+			Deskriptor deskriptor = new Deskriptor("Klasse 1", false, "RAETSEL");
 			deskriptor.id = 3l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL", Deskriptorkategorie.GRUPPE);
+			Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
 			deskriptor.id = 4l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Zeitschrift", false, "MEDIEN,QUELLEN", Deskriptorkategorie.HERKUNFT);
+			Deskriptor deskriptor = new Deskriptor("Zeitschrift", false, "MEDIEN,QUELLEN");
 			deskriptor.id = 5l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Nachbau", true, "RAETSEL", Deskriptorkategorie.HERKUNFT);
+			Deskriptor deskriptor = new Deskriptor("Nachbau", true, "RAETSEL");
 			deskriptor.id = 6l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Person", true, "QUELLEN", Deskriptorkategorie.HERKUNFT);
+			Deskriptor deskriptor = new Deskriptor("Person", true, "QUELLEN");
 			deskriptor.id = 7l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Buch", false, "MEDIEN,QUELLEN", Deskriptorkategorie.HERKUNFT);
+			Deskriptor deskriptor = new Deskriptor("Buch", false, "MEDIEN,QUELLEN");
 			deskriptor.id = 8l;
 			alleDeskriptoren.add(deskriptor);
 		}
 		return alleDeskriptoren;
+	}
+
+	@Nested
+	class SerializationTests {
+
+		@Test
+		void should_serializeReturnNull_when_parameterNull() {
+
+			// Act
+			String result = service.serializeDeskriptoren(null);
+
+			// Assert
+			assertNull(result);
+
+		}
+
+		@Test
+		void should_serializeReturnNull_when_parameterEmptyArray() {
+
+			// Act
+			String result = service.serializeDeskriptoren(new ArrayList<>());
+
+			// Assert
+			assertNull(result);
+
+		}
+
+		@Test
+		void should_serializeOrderById() {
+
+			// Arrange
+			String expected = "2,5,7";
+
+			List<Deskriptor> deskriptoren = new ArrayList<>();
+
+			{
+
+				Deskriptor d = new Deskriptor();
+				d.id = 5L;
+				d.name = "Bla";
+				deskriptoren.add(d);
+			}
+
+			{
+
+				Deskriptor d = new Deskriptor();
+				d.id = 7L;
+				d.name = "Foo";
+				deskriptoren.add(d);
+			}
+
+			{
+
+				Deskriptor d = new Deskriptor();
+				d.id = 2L;
+				d.name = "Blubb";
+				deskriptoren.add(d);
+			}
+
+			// Act
+			String result = service.serializeDeskriptoren(deskriptoren);
+
+			// Assert
+			assertEquals(expected, result);
+
+		}
+
 	}
 
 }

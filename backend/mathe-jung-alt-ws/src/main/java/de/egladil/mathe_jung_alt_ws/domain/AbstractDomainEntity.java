@@ -4,10 +4,14 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * AbstractDomainEntity
  */
 public abstract class AbstractDomainEntity {
+
+	public static final String UUID_NEUE_ENTITY = "neu";
 
 	private String id;
 
@@ -31,6 +35,7 @@ public abstract class AbstractDomainEntity {
 	/**
 	 * @return the id
 	 */
+	@JsonProperty
 	public String getId() {
 
 		return id;
@@ -70,6 +75,11 @@ public abstract class AbstractDomainEntity {
 			return false;
 		}
 		return true;
+	}
+
+	public void setId(final String id) {
+
+		this.id = id;
 	}
 
 }

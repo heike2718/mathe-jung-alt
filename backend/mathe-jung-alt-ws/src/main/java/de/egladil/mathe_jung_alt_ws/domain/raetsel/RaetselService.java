@@ -5,7 +5,6 @@
 package de.egladil.mathe_jung_alt_ws.domain.raetsel;
 
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.EditRaetselPayload;
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.RaetselPayloadDaten;
 
 /**
  * RaetselService
@@ -19,8 +18,14 @@ public interface RaetselService {
 	 *                 EditRaetselPayload die Daten und Metainformationen
 	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	RaetselPayloadDaten raetselAnlegen(EditRaetselPayload payload);
+	Raetsel raetselAnlegen(EditRaetselPayload payload);
 
-	EditRaetselPayload getRaetselZuId(String id);
+	/**
+	 * Holt die Details des Rätsels zu der gegebenen id.
+	 *
+	 * @param  id
+	 * @return    RaetselPayloadDaten oder null.
+	 */
+	Raetsel getRaetselZuId(String id);
 
 }

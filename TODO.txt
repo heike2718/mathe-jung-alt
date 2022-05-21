@@ -1,1 +1,3 @@
-- AdminGuard testen
+/ AdminGuard testen
+- Hierarchische Deskriptoren in Suche verwenden: 1. nur Clusterdeskriptoren anzeigen, 2. Clusterdeskriptor auswählen => nur noch zugeordnete atomare Deskriptoren werden angezeigt
+  Dann muss man vielleicht raetselsuchcomponent mit Input() versehen, so dass die Navigation mit der Auswahl eines Clusters startet.

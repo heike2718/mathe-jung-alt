@@ -6,6 +6,7 @@ package de.egladil.mathe_jung_alt_ws.domain.deskriptoren.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,6 +82,20 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 		}
 
 		return suchkontext;
+	}
+
+	@Override
+	public String serializeDeskriptoren(final List<Deskriptor> deskriptoren) {
+
+		if (deskriptoren == null || deskriptoren.isEmpty()) {
+
+			return null;
+		}
+
+		List<Long> ids = deskriptoren.stream().map(d -> d.id).collect(Collectors.toList());
+		Collections.sort(ids);
+
+		return StringUtils.join(ids, ",");
 	}
 
 }

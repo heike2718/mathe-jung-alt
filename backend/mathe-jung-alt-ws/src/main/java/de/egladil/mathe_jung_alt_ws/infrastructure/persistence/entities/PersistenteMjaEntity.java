@@ -1,18 +1,14 @@
 // =====================================================
-// Project:mathe-jung-alt-ws
-// (c)HeikeWinkelvoß
+// Project: mathe-jung-alt-ws
+// (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities;
 
 /**
- * Deskriptorkategorie
+ * PersistenteMjaEntity
  */
-public enum Deskriptorkategorie {
+public interface PersistenteMjaEntity {
 
-	ART,
-	GRUPPE,
-	HERKUNFT,
-	STUFE,
-	THEMA;
+	String getImportierteUuid();
 
 }

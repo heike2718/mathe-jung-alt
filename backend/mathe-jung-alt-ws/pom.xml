@@ -9,6 +9,7 @@
 	<description>Webservice für "Mathe für jung und alt"- Anwendungen</description>
 
 	<properties>
+	    <hewi-commons.version>1.7.6</hewi-commons.version>
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 		<failsafe.useModulePath>false</failsafe.useModulePath>
 		<maven.compiler.release>11</maven.compiler.release>
@@ -33,6 +34,13 @@
 	</dependencyManagement>
 
 	<dependencies>
+
+	   <dependency>
+			<groupId>de.egladil.web</groupId>
+			<artifactId>commons-validation</artifactId>
+			<version>${hewi-commons.version}</version>
+		</dependency>
+
 
 		<!-- START quarkus dependencies -->
 		<dependency>
@@ -91,6 +99,11 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
 		</dependency>
 
 		<dependency>

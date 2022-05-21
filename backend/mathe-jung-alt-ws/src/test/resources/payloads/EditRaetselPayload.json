@@ -1,0 +1,72 @@
+{
+  "latexHistorisieren": false,
+  "idAendernderUser": "20721575-8c45-4201-a025-7a9fece1f2aa",
+  "raetsel": {
+    "id": "neu",
+    "schluessel": "02789",
+    "name": "2022 zählen",
+    "frage": "\\begin{center}{\\Large \\bf 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 0 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2}\\end{center}Wie oft steht hier 2022?",
+    "loesung": "alle 2022 umranden, dann zählen",
+    "kommentar": "Minikänguru 2022 Klasse 1",
+    "quelleId": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+    "antwortvorschlaege": [
+      {
+        "buchstabe": "A",
+        "text": "7 Mal",
+        "korrekt": false
+      },
+      {
+        "buchstabe": "B",
+        "text": "9 Mal",
+        "korrekt": false
+      },
+      {
+        "buchstabe": "C",
+        "text": "8 Mal",
+        "korrekt": true
+      },
+      {
+        "buchstabe": "D",
+        "text": "10 Mal",
+        "korrekt": false
+      },
+      {
+        "buchstabe": "E",
+        "text": "11 Mal",
+        "korrekt": false
+      }
+    ],
+    "deskriptoren": [
+      {
+        "id": 2,
+        "name": "Minikänguru",
+        "admin": true,
+        "kontext": "RAETSEL"
+      },
+      {
+        "id": 7,
+        "name": "EINS",
+        "admin": true,
+        "kontext": "RAETSEL"
+      },
+      {
+        "id": 4,
+        "name": "Klasse 1",
+        "admin": false,
+        "kontext": "RAETSEL"
+      },
+      {
+        "id": 9,
+        "name": "A",
+        "admin": true,
+        "kontext": "RAETSEL"
+      },
+      {
+        "id": 46,
+        "name": "A-1",
+        "admin": true,
+        "kontext": "RAETSEL"
+      }
+    ]
+  }
+}

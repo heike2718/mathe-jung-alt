@@ -229,5 +229,4 @@ public class PersistenteQuelleReadonly {
 
 		this.mediumUuid = mediumUuid;
 	}
-
 }

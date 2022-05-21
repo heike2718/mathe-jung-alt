@@ -28,7 +28,6 @@ import de.egladil.mathe_jung_alt_ws.domain.quellen.QuelleReadonly;
 import de.egladil.mathe_jung_alt_ws.domain.quellen.QuellenRepository;
 import de.egladil.mathe_jung_alt_ws.domain.quellen.Quellenart;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptorkategorie;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 
 /**
@@ -291,14 +290,14 @@ public class QuellenServiceImplTest {
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL", Deskriptorkategorie.HERKUNFT);
+			Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
 			deskriptor.id = 1l;
 			deskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL", Deskriptorkategorie.HERKUNFT);
+			Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
 			deskriptor.id = 3l;
 			deskriptoren.add(deskriptor);
 		}
