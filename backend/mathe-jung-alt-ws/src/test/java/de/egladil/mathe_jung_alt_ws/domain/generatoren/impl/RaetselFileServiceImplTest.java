@@ -2,7 +2,7 @@
 // Project: mathe-jung-alt-ws
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mathe_jung_alt_ws.domain.raetsel.impl;
+package de.egladil.mathe_jung_alt_ws.domain.generatoren.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.egladil.mathe_jung_alt_ws.domain.generatoren.impl.RaetselFileServiceImpl;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 
 /**
@@ -22,7 +24,7 @@ import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
  */
 public class RaetselFileServiceImplTest {
 
-	private static final String BASE_DIR = "/media/veracrypt1/knobelarchiv_2/latex/temp";
+	private static final String BASE_DIR = "/home/heike/test";
 
 	RaetselFileServiceImpl fileService;
 
@@ -51,7 +53,7 @@ public class RaetselFileServiceImplTest {
 			Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
 
 			// Act
-			String path = fileService.generateLaTeXDocumentOfRaetselFrage(raetsel);
+			String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF);
 
 			// Assert
 			assertEquals(expectedPath, path);

@@ -132,7 +132,10 @@ Testen des Images
 
 docker container run -it -v /home/heike/git/mathe-jung-alt/backend/testfiles:/doc -p 8080:8080 --name latex heike2718/docker-latex-client
 
-Im ocker-Volume liege eine fehlerfrei compilierbare Datei test1.tex.
+docker container run -it -v /media/veracrypt1/knobelarchiv_2/latex/temp:/doc -p 8080:8080 --name latex heike2718/docker-latex-client
+
+
+Im docker-Volume liegt eine fehlerfrei compilierbare Datei test1.tex.
 
 curl -X GET -i 'http://localhost:8080/latex2pdf?filename=test1'
 curl -X GET -i 'http://localhost:8080/latex2png?filename=test1'

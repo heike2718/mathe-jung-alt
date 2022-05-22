@@ -9,7 +9,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - /home/heike/git/mathe-jung-alt/backend/testfiles:/doc
+      - /home/heike/test:/doc
     environment:
       - TZ=Europe/Berlin
     restart: on-failure:3
