@@ -9,8 +9,9 @@ package de.egladil.mathe_jung_alt_ws.domain.raetsel;
  */
 public enum AnzeigeAntwortvorschlaegeTyp {
 
-	NOPE, // keine generierte, da in Aufgabe enthalten
+	NOOP, // keine generierte, da in Aufgabe enthalten
 	ANKREUZTABELLE, // zweizeilige Tabelle, Zeile 1 Antwortvorschläge, Zeile 2 leer
-	BUCHSTABEN; // zweizeilige Tabelle, Zeile 1 Buchstaben, Zeile 2 Antwortvorschäge
+	BUCHSTABEN, // zweizeilige Tabelle, Zeile 1 Buchstaben, Zeile 2 Antwortvorschäge
+	DESCRIPTION; // description-Umgebung
 
 }

@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselFileService;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 
@@ -31,19 +32,26 @@ import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 @ApplicationScoped
 public class RaetselFileServiceImpl implements RaetselFileService {
 
+	private static final String PLACEHOLDER_ANTWORTEN = "{antwortvorschlaege}";
+
+	private static final String PLACEHOLDER_CONTENT = "{content}";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselFileServiceImpl.class);
 
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
 
 	@Override
-	public String generateFrageLaTeX(final Raetsel raetsel, final Outputformat outputformat) {
+	public String generateFrageLaTeX(final Raetsel raetsel, final Outputformat outputformat, final AnzeigeAntwortvorschlaegeTyp anzeigeAntwortenTyp) {
 
 		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + ".tex";
 		File file = new File(path);
 
+		String antworten = AntwortvorschlagGeneratorStrategegy.create(anzeigeAntwortenTyp).generateLaTeXAntwortvorschlaege(raetsel);
+
 		String template = loadTemplatePdf();
-		template = template.replace("{content}", raetsel.getFrage());
+		template = template.replace(PLACEHOLDER_CONTENT, raetsel.getFrage());
+		template = template.replace(PLACEHOLDER_ANTWORTEN, antworten);
 
 		try (Reader reader = new StringReader(template); FileOutputStream fos = new FileOutputStream(file)) {
 
@@ -57,8 +65,8 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		} catch (IOException e) {
 
 			String message = "konnte kein LaTex-File generieren Raetsel: [schluessel=" + raetsel.getSchluessel()
-					+ ", uuid="
-					+ raetsel.getId() + "]";
+				+ ", uuid="
+				+ raetsel.getId() + "]";
 			LOGGER.error(message + ": " + e.getMessage(), e);
 			throw new MjaRuntimeException(message);
 
@@ -68,7 +76,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	String loadTemplatePdf() {
 
 		try (InputStream in = getClass().getResourceAsStream("/latex/template-pdf.tex");
-				StringWriter sw = new StringWriter()) {
+			StringWriter sw = new StringWriter()) {
 
 			IOUtils.copy(in, sw, Charset.forName("UTF-8"));
 

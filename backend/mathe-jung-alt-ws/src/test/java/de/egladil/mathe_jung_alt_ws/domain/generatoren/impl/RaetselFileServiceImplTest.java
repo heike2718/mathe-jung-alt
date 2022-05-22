@@ -15,7 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mathe_jung_alt_ws.domain.generatoren.impl.RaetselFileServiceImpl;
+import de.egladil.mathe_jung_alt_ws.domain.TestFileUtils;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 
@@ -36,7 +37,7 @@ public class RaetselFileServiceImplTest {
 	}
 
 	@Test
-	void should_generateLaTeXDocumentOfRaetselFrageWriteCompilableLaTeXFile() throws Exception {
+	void should_generateFrageLaTeX_WriteCompilableLaTeXFile() throws Exception {
 
 		// Arrange
 		String expectedPath = BASE_DIR + File.separator + "02789.tex";
@@ -53,7 +54,7 @@ public class RaetselFileServiceImplTest {
 			Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
 
 			// Act
-			String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF);
+			String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF, AnzeigeAntwortvorschlaegeTyp.NOOP);
 
 			// Assert
 			assertEquals(expectedPath, path);
@@ -61,5 +62,30 @@ public class RaetselFileServiceImplTest {
 			assertTrue(result.isFile());
 			assertTrue(result.canRead());
 		}
+	}
+
+	@Test
+	void should_generateFrageLaTeX_add_Antworten() throws Exception {
+
+		// Arrange
+		String expectedPath = BASE_DIR + File.separator + "02789.tex";
+
+		File file = new File(expectedPath);
+
+		if (file.exists() && file.isFile()) {
+
+			file.delete();
+		}
+
+		Raetsel raetsel = TestFileUtils.loadReaetsel();
+
+		// Act
+		String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF, AnzeigeAntwortvorschlaegeTyp.NOOP);
+
+		// Assert
+		assertEquals(expectedPath, path);
+		File result = new File(path);
+		assertTrue(result.isFile());
+		assertTrue(result.canRead());
 	}
 }

@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain.generatoren;
 
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 
@@ -21,6 +22,6 @@ public interface RaetselFileService {
 	 *                      Outputformat das gewünschte output-format.
 	 * @return              String Pfad des LaTeX-Files.
 	 */
-	String generateFrageLaTeX(Raetsel raetsel, Outputformat outputformat);
+	String generateFrageLaTeX(Raetsel raetsel, Outputformat outputformat, AnzeigeAntwortvorschlaegeTyp anzeigeAntwortvorschlaege);
 
 }

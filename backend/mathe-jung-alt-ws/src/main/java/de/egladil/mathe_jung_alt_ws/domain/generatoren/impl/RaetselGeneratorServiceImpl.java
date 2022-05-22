@@ -60,7 +60,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			throw new WebApplicationException(Response.status(404).build());
 		}
 
-		raetselFileService.generateFrageLaTeX(raetsel, outputformat);
+		raetselFileService.generateFrageLaTeX(raetsel, outputformat, anzeigeAntwortvorschlaege);
 
 		Response response = null;
 		LOGGER.info("vor Aufruf LaTeXRestClient");
@@ -70,7 +70,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			switch (outputformat) {
 
 				case PDF:
-					
+
 					response = laTeXClient.latex2PDF(raetsel.getSchluessel());
 					break;
 
