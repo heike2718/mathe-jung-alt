@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 
 @Component({
   selector: 'mja-reaetsel-details',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReaetselDetailsComponent implements OnInit {
 
-  constructor() { }
+  panelOpenState = false;
+
+  constructor(public raetselFacade: RaetselFacade) { }
 
   ngOnInit(): void {
   }

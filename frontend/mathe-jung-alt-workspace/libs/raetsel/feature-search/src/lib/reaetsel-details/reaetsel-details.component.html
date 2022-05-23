@@ -1,1 +1,66 @@
-<p>reaetsel-details works!</p>
+<div *ngIf="raetselFacade.raetselDetails$ | async as raetsel else keinRaetsel">
+
+    <h2>Rätsel {{raetsel.schluessel}}: Details</h2>
+
+    <mat-label mt-3>UUID</mat-label>
+    <div>{{raetsel.id}}</div>
+
+    <mat-label mt-3>Name</mat-label>
+    <div>{{raetsel.name}}</div>
+
+
+    <mat-label mt-3>Frage</mat-label>
+    <textarea disabled="true" mb-3>{{raetsel.frage}}</textarea>
+
+    <mat-label mt-3>Lösung</mat-label>
+    <textarea disabled="true" mb-3>{{raetsel.loesung}}</textarea>
+
+    <mat-label mt-3>Kommentar</mat-label>
+    <textarea disabled="true" mb-3>{{raetsel.kommentar}}</textarea>
+
+    <mat-label mt-3>Quelle-ID</mat-label>
+    <div>{{raetsel.quelleId}}</div>
+
+    <mat-accordion>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Antwortvorschläge
+                </mat-panel-title>
+                <mat-panel-description>
+                    Antwortvorschläge für das Rätel
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list>
+                <mat-list-item *ngFor="let antwortvorschlag of raetsel.antwortvorschlaege">
+                    <h3 matLine>{{antwortvorschlag.buchstabe}}</h3>
+                    <p matline>{{antwortvorschlag.text}}</p>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Deskriptoren
+                </mat-panel-title>
+                <mat-panel-description>
+                    Deskriptoren des Rätsels
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-chip-list>
+                <div *ngFor="let deskriptor of raetsel.deskriptoren">
+                    <mat-chip>{{deskriptor.name}}</mat-chip>
+                </div>
+            </mat-chip-list>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+
+</div>
+
+<ng-template #keinRaetsel>
+    <h2>Rätsel Details</h2>
+    <p>kein Rätsel ausgewählt</p>
+</ng-template>

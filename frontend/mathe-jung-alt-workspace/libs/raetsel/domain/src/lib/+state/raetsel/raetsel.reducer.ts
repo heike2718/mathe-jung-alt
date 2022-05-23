@@ -2,7 +2,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import * as RaetselActions from './raetsel.actions';
-import { Raetsel } from '../../entities/raetsel';
+import { Raetsel, RaetselDetails } from '../../entities/raetsel';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel';
 
@@ -10,6 +10,7 @@ export interface RaetselState extends EntityState<Raetsel> {
   selectedId?: string | number; // which Raetsel record has been selected
   loaded: boolean; // has the Raetsel list been loaded
   page: Raetsel[];
+  raetselDetails?: RaetselDetails;
 }
 
 export interface RaetselPartialState {
@@ -47,6 +48,11 @@ const raetselReducer = createReducer(
     loaded: false,
     page: []
   })),
+
+  on(RaetselActions.raetselDetailsLoaded, (state, action) => {
+
+    return { ...state, selectedId: action.raetselDetails.id, raetselDetails: action.raetselDetails };
+  })
 );
 
 export function reducer(state: RaetselState | undefined, action: Action) {

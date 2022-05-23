@@ -203,65 +203,75 @@ export class RaetselDataService {
     return this.#alleRaetsel.length;
   }
 
-  findById(uuid: string): Observable<RaetselDetails> {
-
-    if (uuid === '7c4962f0') {
-
-      return of(
-        {
-          id: '7c4962f0',
-          schluessel: '00001',
-          name: 'Spielsteine umschichten',
-          text: 'Das Känguru schichtet Spielsteine um \par An welcher liegt nun Stein 5?',
-          ursprung: 'NACHBAU',
-          quelleId: '5ec5aed7',
-          deskriptoren: [{'id':2,'name':"Minikänguru",'admin':false,'kontext':'RAETSEL' },
-          {"id":7,"name":"EINS","admin":false,"kontext":"RAETSEL"},
-          {"id":8,"name":"ZWEI","admin":false,"kontext":"RAETSEL"},
-          {"id":9,"name":"A","admin":false,"kontext":"RAETSEL"},
-          {"id":10,"name":"B","admin":false,"kontext":"RAETSEL"}
-          ],
-          antwortvorschlaege: [
-            {
-              buchstabe: 'A',
-              text: '13',
-              korrekt: false
-            },
-            {
-              buchstabe: 'B',
-              text: '23',
-              korrekt: false
-            },
-            {
-              buchstabe: 'C',
-              text: '20',
-              korrekt: false
-            },
-            {
-              buchstabe: 'D',
-              text: '12',
-              korrekt: true
-            },
-            {
-              buchstabe: 'E',
-              text: '9',
-              korrekt: false
-            }
-
-          ],
-        }
-      );
-    }
+  public findById(uuid: string): Observable<RaetselDetails> {
 
     return of({
-      id: '52d631a7',
-      schluessel: '00002',
-      name: 'verschachteltes Polynom auflösen',
-      text: '\[ f(x) = \frac{1}{2} x^2 \]',
-      ursprung: 'ZITAT',
-      quelleId: '0521545a',
-      deskriptoren: [{'id':18,'name':'Serie','admin':false,'kontext':'RAETSEL'}, 
-      {'id':17,'name':'ab Klasse 9','admin':false,'kontext':'RAETSEL'}]
+      "id": "7a94e100-85e9-4ffb-903b-06835851063b",
+      "schluessel": "02789",
+      "name": "2022 zählen",
+      "frage": "\\begin{center}{\\Large \\bf 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 0 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2}\\end{center}Wie oft steht hier 2022?",
+      "loesung": "alle 2022 umranden, dann zählen",
+      "kommentar": "Minikänguru 2022 Klasse 1",
+      "quelleId": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+      "antwortvorschlaege": [
+        {
+          "buchstabe": "A",
+          "text": "7 Mal",
+          "korrekt": false
+        },
+        {
+          "buchstabe": "B",
+          "text": "9 Mal",
+          "korrekt": false
+        },
+        {
+          "buchstabe": "C",
+          "text": "8 Mal",
+          "korrekt": true
+        },
+        {
+          "buchstabe": "D",
+          "text": "10 Mal",
+          "korrekt": false
+        },
+        {
+          "buchstabe": "E",
+          "text": "11 Mal",
+          "korrekt": false
+        }
+      ],
+      "deskriptoren": [
+        {
+          "id": 2,
+          "name": "Minikänguru",
+          "admin": true,
+          "kontext": "RAETSEL"
+        },
+        {
+          "id": 4,
+          "name": "Klasse 1",
+          "admin": false,
+          "kontext": "RAETSEL"
+        },
+        {
+          "id": 7,
+          "name": "EINS",
+          "admin": true,
+          "kontext": "RAETSEL"
+        },
+        {
+          "id": 9,
+          "name": "A",
+          "admin": true,
+          "kontext": "RAETSEL"
+        },
+        {
+          "id": 46,
+          "name": "A-1",
+          "admin": true,
+          "kontext": "RAETSEL"
+        }
+      ]
     })
   }
 }

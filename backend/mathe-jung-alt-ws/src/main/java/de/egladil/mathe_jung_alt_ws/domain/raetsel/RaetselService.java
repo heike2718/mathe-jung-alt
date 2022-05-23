@@ -24,7 +24,7 @@ public interface RaetselService {
 	 * Holt die Details des Rätsels zu der gegebenen id.
 	 *
 	 * @param  id
-	 * @return    RaetselPayloadDaten oder null.
+	 * @return    Raetsel oder null.
 	 */
 	Raetsel getRaetselZuId(String id);
 

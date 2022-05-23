@@ -1,6 +1,6 @@
 import { Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
-import { Raetsel } from '../../entities/raetsel';
+import { Raetsel, RaetselDetails } from '../../entities/raetsel';
 
 export const findRaetsel = createAction('[Raetsel] find Raetsel',
   props<{ suchfilter: Suchfilter }>());
@@ -19,4 +19,14 @@ export const pageSelected = createAction('[Raetsel] page selected',
 );
 
 export const raetsellisteCleared = createAction('[Raetsel] raetselliste cleared ');
+
+export const raetselSelected = createAction('[Raetsel] raetselliste raetsel selected',
+  props<{ raetsel: Raetsel }>()
+);
+
+export const raetselDetailsLoaded = createAction('[Raetsel] details loaded',
+  props<{ raetselDetails: RaetselDetails }>()
+);
+
+
 

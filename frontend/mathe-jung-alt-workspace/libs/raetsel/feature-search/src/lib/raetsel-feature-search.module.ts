@@ -9,6 +9,7 @@ import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SharedSuchfilterDomainModule } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { SharedSuchfilterComponentModule } from '@mathe-jung-alt-workspace/shared/suchfilter/suchfilter-component';
 import { ReaetselDetailsComponent } from './reaetsel-details/reaetsel-details.component';
+import { RaetselDetailsGuard } from './reaetsel-details/raetsel-details.guard';
 
 
 @NgModule({
@@ -24,6 +25,11 @@ import { ReaetselDetailsComponent } from './reaetsel-details/reaetsel-details.co
         path: 'raetsel',
         canActivate: [AuthGuard],
         component: RaetselSearchComponent,
+      },
+      {
+        path: 'raetsel/details',
+        canActivate: [AuthGuard, RaetselDetailsGuard],
+        component: ReaetselDetailsComponent,
       },
     ]),
   ],

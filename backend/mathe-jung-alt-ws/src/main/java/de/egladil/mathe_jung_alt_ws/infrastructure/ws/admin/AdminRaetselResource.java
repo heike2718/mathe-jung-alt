@@ -35,6 +35,21 @@ public class AdminRaetselResource {
 	@Inject
 	RaetselGeneratorService generatorService;
 
+	@GET
+	@Path("{raetselUuid}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response raetselDetailsLaden(@PathParam(value = "raetselUuid") final String raetselUuid) {
+
+		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
+
+		if (raetsel == null) {
+
+			return Response.status(404).build();
+		}
+
+		return Response.status(200).entity(raetsel).build();
+	}
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

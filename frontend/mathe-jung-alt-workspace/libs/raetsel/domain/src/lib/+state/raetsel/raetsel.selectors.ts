@@ -39,3 +39,8 @@ export const getPage = createSelector(
   getRaetselState,
   (state: RaetselState) => state.page
 );
+
+export const getRaetselDetails = createSelector(
+  getRaetselState,
+  (state: RaetselState) => state.raetselDetails
+);

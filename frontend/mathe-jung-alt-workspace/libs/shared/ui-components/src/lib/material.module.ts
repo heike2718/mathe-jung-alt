@@ -10,7 +10,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
-import {MatRadioModule} from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 
 const materialModules = [
   MatToolbarModule,
@@ -23,7 +25,9 @@ const materialModules = [
   MatProgressSpinnerModule,
   MatGridListModule,
   MatInputModule,
-  MatRadioModule
+  MatRadioModule,
+  MatExpansionModule,
+  CdkAccordionModule
 ];
 
 

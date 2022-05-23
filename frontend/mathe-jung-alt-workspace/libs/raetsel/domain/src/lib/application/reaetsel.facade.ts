@@ -5,6 +5,7 @@ import { select, Store } from '@ngrx/store';
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
 import * as RaetselSelectors from '../+state/raetsel/raetsel.selectors';
+import { Raetsel } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -13,6 +14,7 @@ export class RaetselFacade {
   raetselList$ = this.store.pipe(select(RaetselSelectors.getAllRaetsel));
   selectedRaetsel$ = this.store.pipe(select(RaetselSelectors.getSelected));
   page$ = this.store.pipe(select(RaetselSelectors.getPage));
+  raetselDetails$ = this.store.pipe(select(RaetselSelectors.getRaetselDetails));
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>) { }
 
@@ -27,4 +29,8 @@ export class RaetselFacade {
   clearTrefferliste(): void {
     this.store.dispatch(RaetselActions.raetsellisteCleared());
   }
+
+  selectRaetsel(raetsel: Raetsel): void {
+    this.store.dispatch(RaetselActions.raetselSelected({raetsel}));
+  }  
 }
