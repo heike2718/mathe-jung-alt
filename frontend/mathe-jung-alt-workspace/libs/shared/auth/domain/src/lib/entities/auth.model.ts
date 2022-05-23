@@ -15,7 +15,7 @@ export interface AuthResult {
   export interface User {
     readonly idReference: string;
     readonly rolle: Rolle;
-    readonly fullName: string;
+    readonly fullName: string
   };
   
   export interface Session {

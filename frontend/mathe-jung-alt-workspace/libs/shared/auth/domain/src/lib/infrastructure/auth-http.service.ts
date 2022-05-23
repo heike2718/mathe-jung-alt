@@ -33,7 +33,7 @@ export class AuthHttpService {
             // expiresAt: shortRunningSession,
             sessionId: 'sadgagudgqo',
             user: {
-                fullName: 'Ponder Stibbons',
+                fullName: 'Heike Winkelvoß',
                 idReference: 'bjasbfkkla',
                 rolle: 'ADMIN'
             }

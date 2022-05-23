@@ -46,4 +46,3 @@ export const logout = createAction(
 export const userLoggedOut = createAction(
     '[Auth] logged out'
 );
-

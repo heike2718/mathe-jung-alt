@@ -13,119 +13,119 @@ export class RaetselDataService {
     id: 'uuid-1',
     schluessel: '00001',
     name: 'Spielsteine umschichten',
-    deskriptoren: [{'id':2,'name':"Minikänguru",'admin':false,'kontext':'RAETSEL', 'kategorie': 'GRUPPE'},
-    {"id":7,"name":"EINS","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'},
-    {"id":8,"name":"ZWEI","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'},
-    {"id":9,"name":"A","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'},
-    {"id":10,"name":"B","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}],
+    deskriptoren: [{'id':2,'name':"Minikänguru",'admin':false,'kontext':'RAETSEL'},
+    {"id":7,"name":"EINS","admin":false,"kontext":"RAETSEL"},
+    {"id":8,"name":"ZWEI","admin":false,"kontext":"RAETSEL"},
+    {"id":9,"name":"A","admin":false,"kontext":"RAETSEL"},
+    {"id":10,"name":"B","admin":false,"kontext":"RAETSEL"}],
   },{
     id: 'uuid-2',
     schluessel: '00002',
     name: 'verschachteltes Polynom auflösen',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-3',
     schluessel: '00003',
     name: 'Frühlingsbeet',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-4',
     schluessel: '00004',
     name: 'Klassen und Fächer',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":14,"name":"Klassen 3/4","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":14,"name":"Klassen 3/4","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-5',
     schluessel: '00005',
     name: 'Rundreise',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-6',
     schluessel: '00006',
     name: 'Kryptogramm mit Multiplikation',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":14,"name":"Klassen 3/4","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":14,"name":"Klassen 3/4","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-7',
     schluessel: '00007',
     name: 'Geheimcode',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":15,"name":"Klassen 5/6","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":15,"name":"Klassen 5/6","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-8',
     schluessel: '00008',
     name: 'Regenwetter',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-9',
     schluessel: '00009',
     name: 'Primzahlsuche',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL"}]
   }, {
     id: 'uuid-10',
     schluessel: '00010',
     name: 'Klassenfahrt',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":17,"name":"ab Klasse 9","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-11',
     schluessel: '00011',
     name: 'Spielgeräte zuordnen',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-12',
     schluessel: '00012',
     name: 'zerbrochene Fensterscheiben',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-13',
     schluessel: '00013',
     name: 'Adventsbasar',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":14,"name":"Klassen 3/4","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":14,"name":"Klassen 3/4","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-14',
     schluessel: '00014',
     name: 'Tiere und Beine',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-15',
     schluessel: '00015',
     name: 'Hasenschule',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-16',
     schluessel: '00016',
     name: 'Wettlauf',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":13,"name":"Klassen 1/2","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-17',
     schluessel: '00017',
     name: 'Kongruente Dreiecke finden',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, {"id":15,"name":"Klassen 5/6","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, {"id":15,"name":"Klassen 5/6","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-18',
     schluessel: '00018',
     name: 'Labyrinth mit Kaninchen',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, 
-    {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, 
+    {"id":12,"name":"Vorschule","admin":false,"kontext":"RAETSEL"}]
   },
   {
     id: 'uuid-19',
     schluessel: '00019',
     name: 'Diophantische Gleichung',
-    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL", 'kategorie': 'GRUPPE'}, 
-    {"id":16,"name":"Klassen 7/8","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}]
+    deskriptoren: [{"id":18,"name":"Serie","admin":false,"kontext":"RAETSEL"}, 
+    {"id":16,"name":"Klassen 7/8","admin":false,"kontext":"RAETSEL"}]
   }
   ];
 
@@ -215,11 +215,11 @@ export class RaetselDataService {
           text: 'Das Känguru schichtet Spielsteine um \par An welcher liegt nun Stein 5?',
           ursprung: 'NACHBAU',
           quelleId: '5ec5aed7',
-          deskriptoren: [{'id':2,'name':"Minikänguru",'admin':false,'kontext':'RAETSEL', 'kategorie': 'GRUPPE' },
-          {"id":7,"name":"EINS","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'},
-          {"id":8,"name":"ZWEI","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'},
-          {"id":9,"name":"A","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'},
-          {"id":10,"name":"B","admin":false,"kontext":"RAETSEL", 'kategorie': 'STUFE'}
+          deskriptoren: [{'id':2,'name':"Minikänguru",'admin':false,'kontext':'RAETSEL' },
+          {"id":7,"name":"EINS","admin":false,"kontext":"RAETSEL"},
+          {"id":8,"name":"ZWEI","admin":false,"kontext":"RAETSEL"},
+          {"id":9,"name":"A","admin":false,"kontext":"RAETSEL"},
+          {"id":10,"name":"B","admin":false,"kontext":"RAETSEL"}
           ],
           antwortvorschlaege: [
             {
@@ -260,8 +260,8 @@ export class RaetselDataService {
       text: '\[ f(x) = \frac{1}{2} x^2 \]',
       ursprung: 'ZITAT',
       quelleId: '0521545a',
-      deskriptoren: [{'id':18,'name':'Serie','admin':false,'kontext':'RAETSEL', 'kategorie': 'GRUPPE'}, 
-      {'id':17,'name':'ab Klasse 9','admin':false,'kontext':'RAETSEL', 'kategorie': 'STUFE'}]
+      deskriptoren: [{'id':18,'name':'Serie','admin':false,'kontext':'RAETSEL'}, 
+      {'id':17,'name':'ab Klasse 9','admin':false,'kontext':'RAETSEL'}]
     })
   }
 }
