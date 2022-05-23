@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SharedSuchfilterDomainModule } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { SharedSuchfilterComponentModule } from '@mathe-jung-alt-workspace/shared/suchfilter/suchfilter-component';
+import { ReaetselDetailsComponent } from './reaetsel-details/reaetsel-details.component';
 
 
 @NgModule({
@@ -26,7 +27,7 @@ import { SharedSuchfilterComponentModule } from '@mathe-jung-alt-workspace/share
       },
     ]),
   ],
-  declarations: [RaetselSearchComponent],
+  declarations: [RaetselSearchComponent, ReaetselDetailsComponent],
   exports: [RaetselSearchComponent, RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
