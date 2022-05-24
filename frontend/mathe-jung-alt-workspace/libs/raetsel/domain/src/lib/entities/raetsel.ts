@@ -42,3 +42,17 @@ export interface Raetsel {
   readonly name: string;
   readonly deskriptoren: Deskriptor[];
 };
+
+export const initialRaetselDetails: RaetselDetails = {
+  id: 'neu',
+  schluessel: '',
+  name: '',
+  frage: '',
+  loesung: '',
+  kommentar: '',
+  quelleId: '',
+  antwortvorschlaege: [],
+  deskriptoren: [],
+  imageFrage: null,
+  imageLoesung: null
+};

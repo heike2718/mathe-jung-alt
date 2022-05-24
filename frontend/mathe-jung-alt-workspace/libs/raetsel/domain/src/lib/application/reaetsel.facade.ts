@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
 import * as RaetselSelectors from '../+state/raetsel/raetsel.selectors';
-import { Raetsel } from '../entities/raetsel';
+import { Raetsel, RaetselDetails } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -32,5 +32,9 @@ export class RaetselFacade {
 
   selectRaetsel(raetsel: Raetsel): void {
     this.store.dispatch(RaetselActions.raetselSelected({raetsel}));
-  }  
+  }
+
+  startEditRaetsel(raetselDetails: RaetselDetails): void {
+    this.store.dispatch(RaetselActions.startEditRaetsel({raetselDetails}));
+  }
 }

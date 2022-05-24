@@ -59,6 +59,13 @@
 
         <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
             <div fxFlex="0 1 calc(10%-20px)">
+                <button mat-raised-button color="accent" (click)="startEdit()">bearbeiten</button>
+            </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+
+            <div fxFlex="0 1 calc(10%-20px)">
                 <mat-label>UUID:</mat-label>
             </div>
             <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.id}}</div>
@@ -72,6 +79,8 @@
                 <mat-label>Quelle:</mat-label>
             </div>
             <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.quelleId}}</div>
+
+
         </div>
 
         <mat-accordion>

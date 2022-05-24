@@ -1,6 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { RaetselDetailsGuard, RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { RaetselSearchComponent } from './raetsel-search.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
@@ -9,7 +9,6 @@ import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SharedSuchfilterDomainModule } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { SharedSuchfilterComponentModule } from '@mathe-jung-alt-workspace/shared/suchfilter/suchfilter-component';
 import { ReaetselDetailsComponent } from './reaetsel-details/reaetsel-details.component';
-import { RaetselDetailsGuard } from './reaetsel-details/raetsel-details.guard';
 import { AntwortvorschlagComponent } from './reaetsel-details/antwortvorschlaege/antwortvorschlag.component';
 
 
@@ -38,4 +37,4 @@ import { AntwortvorschlagComponent } from './reaetsel-details/antwortvorschlaege
   exports: [RaetselSearchComponent, RouterModule, AntwortvorschlagComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class RaetselFeatureSearchModule { }
+export class RaetselSearchModule { }

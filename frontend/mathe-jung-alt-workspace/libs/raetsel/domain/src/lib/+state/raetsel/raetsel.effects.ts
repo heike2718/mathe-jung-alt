@@ -53,6 +53,13 @@ export class RaetselEffects {
       tap(() => this.router.navigateByUrl('raetsel/details')),
     ), { dispatch: false });
 
+
+  navigateToRaetselEditor$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.startEditRaetsel),
+      tap(() => this.router.navigateByUrl('raetseleditor')),
+    ), { dispatch: false });
+
   constructor(
     private actions$: Actions,
     private raetselDataService: RaetselDataService,

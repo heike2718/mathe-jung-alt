@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RaetselEditFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 
 @Component({
   selector: 'raetsel-raetsel-feature-edit',
@@ -7,7 +7,8 @@ import { RaetselEditFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
   styleUrls: ['./raetsel-edit.component.scss'],
 })
 export class RaetselEditComponent implements OnInit {
-  constructor(private raetselFeatureEditFacade: RaetselEditFacade) {}
+
+  constructor(public raetselFacade: RaetselFacade) { }
 
   ngOnInit() {}
 }

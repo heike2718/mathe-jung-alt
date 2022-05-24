@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { RouterModule } from '@angular/router';
 import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
-import { RaetselFeatureSearchModule } from '@mathe-jung-alt-workspace/raetsel/feature-search';
+import { RaetselSearchModule } from '@mathe-jung-alt-workspace/raetsel/feature-search';
 import { LoadingIndicatorComponentModule, MessageComponentModule } from "@mathe-jung-alt-workspace/shared/ui-messaging";
 import { MaterialModule } from "@mathe-jung-alt-workspace/shared/ui-components";
 import { DeskriptorenDomainModule } from "@mathe-jung-alt-workspace/deskriptoren/domain";
@@ -12,6 +12,7 @@ import { NotAuthorizedComponentModule } from "./core/not-authorized/not-authoriz
 import { DashboardComponentModule } from "./dashboard/dashboard-component.module";
 import { QuellenDomainModule } from "@mathe-jung-alt-workspace/quellen/domain";
 import { QuellenFeatureSearchModule } from "@mathe-jung-alt-workspace/quellen/feature-search";
+import { RaetselEditModule } from "@mathe-jung-alt-workspace/raetsel/feature-edit";
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { QuellenFeatureSearchModule } from "@mathe-jung-alt-workspace/quellen/fe
         RouterModule,
         DeskriptorenDomainModule,
         RaetselDomainModule,
-        RaetselFeatureSearchModule,
+        RaetselSearchModule,
+        RaetselEditModule,
         MessageComponentModule,
         LoadingIndicatorComponentModule,
         HeaderComponentModule,

@@ -1,19 +1,41 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { RaetselDetails, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
+import { Subscriber, Subscription } from 'rxjs';
 
 @Component({
   selector: 'mja-reaetsel-details',
   templateUrl: './reaetsel-details.component.html',
   styleUrls: ['./reaetsel-details.component.scss']
 })
-export class ReaetselDetailsComponent implements OnInit {
+export class ReaetselDetailsComponent implements OnInit, OnDestroy {
 
-  panelOpenState = false;
+  #raetselDetailsSubscription: Subscription = new Subscription();
+
+  #raetselDetails!: RaetselDetails;
 
   constructor(public raetselFacade: RaetselFacade, public authFacade: AuthFacade) { }
 
+
   ngOnInit(): void {
+
+    this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.subscribe(
+      details => {
+        if (details) {
+          this.#raetselDetails = details;
+        }
+      }
+    );
+
   }
 
+  ngOnDestroy(): void {
+    this.#raetselDetailsSubscription.unsubscribe();
+  }
+
+  startEdit(): void {
+    if (this.#raetselDetails) {
+      this.raetselFacade.startEditRaetsel(this.#raetselDetails);
+    }
+  }
 }

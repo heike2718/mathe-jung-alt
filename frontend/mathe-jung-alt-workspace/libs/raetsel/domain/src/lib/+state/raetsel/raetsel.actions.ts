@@ -11,20 +11,30 @@ export const findRaetselSuccess = createAction(
   props<{ raetsel: Raetsel[] }>()
 );
 
-export const selectPage = createAction('[Raetsel] select Page',
+export const selectPage = createAction(
+  '[Raetsel] select Page',
   props<{ sortDirection: string, pageIndex: number, pageSize: number }>());
 
-export const pageSelected = createAction('[Raetsel] page selected',
+export const pageSelected = createAction(
+  '[Raetsel] page selected',
   props<{ raetsel: Raetsel[] }>()
 );
 
-export const raetsellisteCleared = createAction('[Raetsel] raetselliste cleared ');
+export const raetsellisteCleared = createAction(
+  '[Raetsel] raetselliste cleared ');
 
-export const raetselSelected = createAction('[Raetsel] raetselliste raetsel selected',
+export const raetselSelected = createAction(
+  '[Raetsel] raetselliste raetsel selected',
   props<{ raetsel: Raetsel }>()
 );
 
-export const raetselDetailsLoaded = createAction('[Raetsel] details loaded',
+export const raetselDetailsLoaded = createAction(
+  '[Raetsel] details loaded',
+  props<{ raetselDetails: RaetselDetails }>()
+);
+
+export const startEditRaetsel = createAction(
+  '[Raetsel]  start edit',
   props<{ raetselDetails: RaetselDetails }>()
 );
 

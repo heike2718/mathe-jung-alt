@@ -24,7 +24,13 @@ const Routes = [
             {
                 path: 'raetsel',
                 loadChildren: () =>
-                    import('@mathe-jung-alt-workspace/raetsel/feature-search').then((m) => m.RaetselFeatureSearchModule),
+                    import('@mathe-jung-alt-workspace/raetsel/feature-search').then((m) => m.RaetselSearchModule),
+
+            },
+            {
+                path: 'raetseleditor',
+                loadChildren: () =>
+                    import('@mathe-jung-alt-workspace/raetsel/feature-edit').then((m) => m.RaetselEditModule),
 
             },
             {

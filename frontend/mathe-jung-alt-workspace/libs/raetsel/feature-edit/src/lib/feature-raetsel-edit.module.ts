@@ -1,11 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { RaetselDetailsGuard, RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { RaetselEditComponent } from './raetsel-edit.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
+import { RouterModule } from '@angular/router';
+import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 
 @NgModule({
-  imports: [CommonModule, RaetselDomainModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    RaetselDomainModule,
+    MaterialModule,
+    RouterModule.forChild([
+      {
+        path: 'raetseleditor',
+        canActivate: [AuthGuard, RaetselDetailsGuard],
+        component: RaetselEditComponent,
+      }
+    ]),
+  ],
   declarations: [RaetselEditComponent],
   exports: [RaetselEditComponent],
 })
-export class FeatureRaetselEditModule {}
+export class RaetselEditModule {}

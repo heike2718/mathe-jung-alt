@@ -1,1 +1,10 @@
-<h1>Rätsel bearbeiten</h1>
+<h2>Rätseleditor</h2>
+
+<div *ngIf="raetselFacade.raetselDetails$ | async as raetsel else keinRaetsel" fxLayout="column" fxLayoutGap="20px"
+    class="container">
+</div>
+
+<ng-template #keinRaetsel>
+    <h2>Rätsel Details</h2>
+    <p>kein Rätsel ausgewählt</p>
+</ng-template>
