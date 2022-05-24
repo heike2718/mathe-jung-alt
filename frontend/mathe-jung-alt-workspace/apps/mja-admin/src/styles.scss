@@ -79,6 +79,11 @@ mat-checkbox + mat-checkbox, mat-radio-button + mat-radio-button {
   text-align: center;
 }
 
+.bordered {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 5px;
+}
 
 h2 {
   font-weight: bold;
@@ -107,6 +112,10 @@ th.mat-sort-header-sorted {
 
 .mb-2 {
   margin-bottom: 2rem;
+}
+
+.m-1 {
+  margin: 1rem;
 }
 
 .p-5 {

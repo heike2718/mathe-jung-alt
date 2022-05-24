@@ -1,7 +1,6 @@
 <div *ngIf="raetselFacade.raetselDetails$ | async as raetsel else keinRaetsel" fxLayout="column" fxLayoutGap="20px"
     class="container">
 
-
     <h2>Rätsel {{raetsel.schluessel}}: Details</h2>
 
     <div fxLayout="row" fxLayoutAlign="space-between">
@@ -14,74 +13,106 @@
         </div>
     </div>
 
-    <div *ngIf="raetsel.imageFrage !== null" class="img-bordered bg-white">
+    <div *ngIf="raetsel.imageFrage !== null" class="bordered bg-white">
         <img src="data:image/png;base64,{{raetsel.imageFrage}}" />
     </div>
 
-    <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-        <div fxFlex="0 1 calc(10%-20px)">
-            <mat-label>UUID:</mat-label>
-        </div>
-        <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.id}}</div>
+    <div *ngIf="raetsel.imageLoesung !== null">
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Lösung (png)
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
 
-        <div fxFlex="0 1 calc(10%-20px)">
-            <mat-label>Name:</mat-label>
-        </div>
-        <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.name}}</div>
+                <div class="img-bordered bg-white">
+                    <img src="data:image/png;base64,{{raetsel.imageLoesung}}" />
+                </div>
+            </mat-expansion-panel>
 
-        <div fxFlex="0 1 calc(10%-20px)">
-            <mat-label>Quelle:</mat-label>
-        </div>
-        <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.quelleId}}</div>
+        </mat-accordion>
     </div>
 
-    <mat-accordion>
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Frage (LaTeX)
-                </mat-panel-title>
-            </mat-expansion-panel-header>
+    <div *ngIf="raetsel.antwortvorschlaege.length > 0">
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Antwortvorschläge
+                    </mat-panel-title>
 
-            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120" disabled="true">{{raetsel.frage}}</textarea>
-        </mat-expansion-panel>
+                </mat-expansion-panel-header>
 
-        <mat-expansion-panel *ngIf="raetsel.loesung">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Lösung (LaTeX)
-                </mat-panel-title>
-            </mat-expansion-panel-header>
+                <div fxLayout="column" fxLayoutGap="10px">
+                    <div *ngFor="let antwortvorschlag of raetsel.antwortvorschlaege">
+                        <mja-antwortvorschlag [antwortvorschlag]="antwortvorschlag"></mja-antwortvorschlag>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
 
-            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120" disabled="true">{{raetsel.loesung}}</textarea>
-        </mat-expansion-panel>
+    <ng-container *ngIf="authFacade.isAdmin$ | async">
 
-        <mat-expansion-panel *ngIf="raetsel.kommentar">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Kommentar
-                </mat-panel-title>
-            </mat-expansion-panel-header>
+        <h2>Metadaten und LaTeX</h2>
 
-            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120" disabled="true">{{raetsel.kommentar}}</textarea>
-        </mat-expansion-panel>
+        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+            <div fxFlex="0 1 calc(10%-20px)">
+                <mat-label>UUID:</mat-label>
+            </div>
+            <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.id}}</div>
 
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Antwortvorschläge
-                </mat-panel-title>
+            <div fxFlex="0 1 calc(10%-20px)">
+                <mat-label>Name:</mat-label>
+            </div>
+            <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.name}}</div>
 
-            </mat-expansion-panel-header>
+            <div fxFlex="0 1 calc(10%-20px)">
+                <mat-label>Quelle:</mat-label>
+            </div>
+            <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.quelleId}}</div>
+        </div>
 
-            <mat-list>
-                <mat-list-item *ngFor="let antwortvorschlag of raetsel.antwortvorschlaege">
-                    <h3 matLine>{{antwortvorschlag.buchstabe}}</h3>
-                    <p matline>{{antwortvorschlag.text}}</p>
-                </mat-list-item>
-            </mat-list>
-        </mat-expansion-panel>
-    </mat-accordion>
+        <mat-accordion>
+
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Frage (LaTeX)
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
+                    disabled="true">{{raetsel.frage}}</textarea>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel *ngIf="raetsel.loesung">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Lösung (LaTeX)
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
+                    disabled="true">{{raetsel.loesung}}</textarea>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel *ngIf="raetsel.kommentar">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Kommentar
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
+                    disabled="true">{{raetsel.kommentar}}</textarea>
+            </mat-expansion-panel>
+
+
+        </mat-accordion>
+    </ng-container>
 
 </div>
 

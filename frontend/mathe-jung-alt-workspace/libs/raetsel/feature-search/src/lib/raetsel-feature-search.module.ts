@@ -10,6 +10,7 @@ import { SharedSuchfilterDomainModule } from '@mathe-jung-alt-workspace/shared/s
 import { SharedSuchfilterComponentModule } from '@mathe-jung-alt-workspace/shared/suchfilter/suchfilter-component';
 import { ReaetselDetailsComponent } from './reaetsel-details/reaetsel-details.component';
 import { RaetselDetailsGuard } from './reaetsel-details/raetsel-details.guard';
+import { AntwortvorschlagComponent } from './reaetsel-details/antwortvorschlaege/antwortvorschlag.component';
 
 
 @NgModule({
@@ -33,8 +34,8 @@ import { RaetselDetailsGuard } from './reaetsel-details/raetsel-details.guard';
       },
     ]),
   ],
-  declarations: [RaetselSearchComponent, ReaetselDetailsComponent],
-  exports: [RaetselSearchComponent, RouterModule],
+  declarations: [RaetselSearchComponent, ReaetselDetailsComponent, AntwortvorschlagComponent],
+  exports: [RaetselSearchComponent, RouterModule, AntwortvorschlagComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class RaetselFeatureSearchModule { }
