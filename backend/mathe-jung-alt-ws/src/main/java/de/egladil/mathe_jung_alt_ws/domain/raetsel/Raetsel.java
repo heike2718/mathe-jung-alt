@@ -45,6 +45,12 @@ public class Raetsel extends AbstractDomainEntity {
 	@JsonProperty
 	private List<Deskriptor> deskriptoren;
 
+	@JsonProperty
+	private byte[] imageFrage;
+
+	@JsonProperty
+	private byte[] imageLoesung;
+
 	/**
 	 *
 	 */
@@ -183,6 +189,26 @@ public class Raetsel extends AbstractDomainEntity {
 
 		this.deskriptoren = deskriptoren;
 		return this;
+	}
+
+	public byte[] getImageFrage() {
+
+		return imageFrage;
+	}
+
+	public void setImageFrage(final byte[] imageFrage) {
+
+		this.imageFrage = imageFrage;
+	}
+
+	public byte[] getImageLoesung() {
+
+		return imageLoesung;
+	}
+
+	public void setImageLoesung(final byte[] imageLoesung) {
+
+		this.imageLoesung = imageLoesung;
 	}
 
 }

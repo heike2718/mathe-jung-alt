@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
+import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselFileService;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Antwortvorschlag;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselService;
@@ -30,6 +31,9 @@ public class RaetselServiceImpl implements RaetselService {
 
 	@Inject
 	DeskriptorenService deskriptorenService;
+
+	@Inject
+	RaetselFileService raetselFileService;
 
 	@Override
 	@Transactional
@@ -58,7 +62,11 @@ public class RaetselServiceImpl implements RaetselService {
 			return null;
 		}
 
-		return mapFromDB(raetsel);
+		Raetsel result = mapFromDB(raetsel);
+
+		byte[] imageFrage = raetselFileService.findImageFrage(result.getSchluessel());
+		result.setImageFrage(imageFrage);
+		return result;
 	}
 
 	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final EditRaetselPayload payload) {

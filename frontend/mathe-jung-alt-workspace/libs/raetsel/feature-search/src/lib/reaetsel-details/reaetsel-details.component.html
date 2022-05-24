@@ -1,35 +1,77 @@
-<div *ngIf="raetselFacade.raetselDetails$ | async as raetsel else keinRaetsel">
+<div *ngIf="raetselFacade.raetselDetails$ | async as raetsel else keinRaetsel" fxLayout="column" fxLayoutGap="20px"
+    class="container">
+
 
     <h2>Rätsel {{raetsel.schluessel}}: Details</h2>
 
-    <mat-label mt-3>UUID</mat-label>
-    <div>{{raetsel.id}}</div>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+        <div fxLayout="column">
+            <mat-chip-list>
+                <div *ngFor="let deskriptor of raetsel.deskriptoren">
+                    <mat-chip>{{deskriptor.name}}</mat-chip>
+                </div>
+            </mat-chip-list>
+        </div>
+    </div>
 
-    <mat-label mt-3>Name</mat-label>
-    <div>{{raetsel.name}}</div>
+    <div *ngIf="raetsel.imageFrage !== null" class="img-bordered bg-white">
+        <img src="data:image/png;base64,{{raetsel.imageFrage}}" />
+    </div>
 
+    <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+        <div fxFlex="0 1 calc(10%-20px)">
+            <mat-label>UUID:</mat-label>
+        </div>
+        <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.id}}</div>
 
-    <mat-label mt-3>Frage</mat-label>
-    <textarea disabled="true" mb-3>{{raetsel.frage}}</textarea>
+        <div fxFlex="0 1 calc(10%-20px)">
+            <mat-label>Name:</mat-label>
+        </div>
+        <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.name}}</div>
 
-    <mat-label mt-3>Lösung</mat-label>
-    <textarea disabled="true" mb-3>{{raetsel.loesung}}</textarea>
-
-    <mat-label mt-3>Kommentar</mat-label>
-    <textarea disabled="true" mb-3>{{raetsel.kommentar}}</textarea>
-
-    <mat-label mt-3>Quelle-ID</mat-label>
-    <div>{{raetsel.quelleId}}</div>
+        <div fxFlex="0 1 calc(10%-20px)">
+            <mat-label>Quelle:</mat-label>
+        </div>
+        <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.quelleId}}</div>
+    </div>
 
     <mat-accordion>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
+                    Frage (LaTeX)
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120" disabled="true">{{raetsel.frage}}</textarea>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="raetsel.loesung">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Lösung (LaTeX)
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120" disabled="true">{{raetsel.loesung}}</textarea>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="raetsel.kommentar">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Kommentar
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120" disabled="true">{{raetsel.kommentar}}</textarea>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
                     Antwortvorschläge
                 </mat-panel-title>
-                <mat-panel-description>
-                    Antwortvorschläge für das Rätel
-                </mat-panel-description>
+
             </mat-expansion-panel-header>
 
             <mat-list>
@@ -38,23 +80,6 @@
                     <p matline>{{antwortvorschlag.text}}</p>
                 </mat-list-item>
             </mat-list>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Deskriptoren
-                </mat-panel-title>
-                <mat-panel-description>
-                    Deskriptoren des Rätsels
-                </mat-panel-description>
-            </mat-expansion-panel-header>
-            <mat-chip-list>
-                <div *ngFor="let deskriptor of raetsel.deskriptoren">
-                    <mat-chip>{{deskriptor.name}}</mat-chip>
-                </div>
-            </mat-chip-list>
-
         </mat-expansion-panel>
     </mat-accordion>
 

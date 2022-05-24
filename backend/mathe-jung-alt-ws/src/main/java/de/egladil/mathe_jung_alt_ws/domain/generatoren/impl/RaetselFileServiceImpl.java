@@ -5,6 +5,7 @@
 package de.egladil.mathe_jung_alt_ws.domain.generatoren.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +42,9 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
 
+	@ConfigProperty(name = "images.base.dir")
+	String imagesBaseDir;
+
 	@Override
 	public String generateFrageLaTeX(final Raetsel raetsel, final Outputformat outputformat, final AnzeigeAntwortvorschlaegeTyp anzeigeAntwortenTyp) {
 
@@ -73,6 +77,29 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		}
 	}
 
+	@Override
+	public byte[] findImageFrage(final String schluessel) {
+
+		String path = imagesBaseDir + File.separator + schluessel + ".png";
+		File file = new File(path);
+
+		if (file.exists() && file.isFile()) {
+
+			try (FileInputStream in = new FileInputStream(file)) {
+
+				return in.readAllBytes();
+
+			} catch (IOException e) {
+
+				LOGGER.warn("konnte {}.png nicht laden - wird ignoriert: {}", schluessel, e.getMessage(), e);
+				return null;
+
+			}
+		}
+
+		return null;
+	}
+
 	String loadTemplatePdf() {
 
 		try (InputStream in = getClass().getResourceAsStream("/latex/template-pdf.tex");
@@ -94,6 +121,11 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	void setLatexBaseDir(final String latexBaseDir) {
 
 		this.latexBaseDir = latexBaseDir;
+	}
+
+	void setImagesBaseDir(final String imagesBaseDir) {
+
+		this.imagesBaseDir = imagesBaseDir;
 	}
 
 }

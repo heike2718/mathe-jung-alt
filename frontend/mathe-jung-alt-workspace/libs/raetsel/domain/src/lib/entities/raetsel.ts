@@ -30,7 +30,9 @@ export interface RaetselDetails {
   readonly kommentar?: string;
   readonly quelleId: string;
   readonly antwortvorschlaege: Antwortvorschlag[];
-  readonly deskriptoren: Deskriptor[];  
+  readonly deskriptoren: Deskriptor[];
+  readonly imageFrage: string | null;
+  readonly imageLoesung: string | null;  
 };
 
 /** Minimalset an Attributen, die bei einer Suche geladen werden sollen */

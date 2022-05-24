@@ -24,4 +24,12 @@ public interface RaetselFileService {
 	 */
 	String generateFrageLaTeX(Raetsel raetsel, Outputformat outputformat, AnzeigeAntwortvorschlaegeTyp anzeigeAntwortvorschlaege);
 
+	/**
+	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.
+	 *
+	 * @param  schluessel
+	 * @return
+	 */
+	byte[] findImageFrage(String schluessel);
+
 }
