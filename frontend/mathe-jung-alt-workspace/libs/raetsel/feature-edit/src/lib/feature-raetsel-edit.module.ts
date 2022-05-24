@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
     HttpClientModule,
     RaetselDomainModule,
     MaterialModule,
+    ReactiveFormsModule,
     RouterModule.forChild([
       {
         path: 'raetseleditor',

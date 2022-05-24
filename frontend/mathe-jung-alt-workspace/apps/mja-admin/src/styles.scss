@@ -71,10 +71,6 @@ mat-checkbox + mat-checkbox, mat-radio-button + mat-radio-button {
   margin: 10px;
 }
 
-.content-width {
-  width: 450px;
-}
-
 .centered {
   text-align: center;
 }
@@ -124,5 +120,10 @@ th.mat-sort-header-sorted {
 
 .p-10 {
   padding: 10px;
+}
+
+.hint {
+  font-size: small;
+  color: #484949f6;
 }
 

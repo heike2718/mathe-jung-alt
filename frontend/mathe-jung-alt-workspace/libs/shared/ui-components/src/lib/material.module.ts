@@ -14,6 +14,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import {MatIconModule} from '@angular/material/icon';
 
 const materialModules = [
   MatToolbarModule,
@@ -29,7 +32,10 @@ const materialModules = [
   MatRadioModule,
   MatExpansionModule,
   CdkAccordionModule,
-  FlexLayoutModule
+  FlexLayoutModule,
+  MatFormFieldModule,
+  MatSelectModule,
+  MatIconModule
 ];
 
 
