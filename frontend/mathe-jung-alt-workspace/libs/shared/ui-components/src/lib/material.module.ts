@@ -16,7 +16,8 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const materialModules = [
   MatToolbarModule,
@@ -35,7 +36,8 @@ const materialModules = [
   FlexLayoutModule,
   MatFormFieldModule,
   MatSelectModule,
-  MatIconModule
+  MatIconModule,
+  MatSlideToggleModule
 ];
 
 

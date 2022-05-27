@@ -1,4 +1,4 @@
-<h2>Rätseleditor</h2>
+<h1>Rätseleditor</h1>
 
 <div *ngIf="raetselFacade.raetselDetails$ | async as raetsel else keinRaetsel">
 
@@ -12,78 +12,19 @@
             <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.id}}</div>
         </div>
 
-        <form [formGroup]="form" novalidate fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+        <form [formGroup]="form" novalidate fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="flex-start">
 
-            <div class="mb-2">
-                <mat-form-field class="form-box" appearance="fill">
-                    <mat-label>Schlüssel</mat-label>
-                    <input matInput maxlength="5" inputmode="tel" placeholder="schluessel" formControlName="schluessel"
-                        #schluesselInput>
-                    <mat-hint>genau 5 Ziffern - verwendet als Dateiname für generierte Bilder</mat-hint>
-                    <mat-error *ngIf="myError('schluessel', 'required')">Schlüssel ist Pflicht</mat-error>
-                    <mat-error *ngIf="myError('schluessel', 'pattern')">genau 5 Ziffern - nach links mit 0 auffüllen
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-
-            <div class="mb-2">
-                <mat-form-field class="form-box" appearance="fill">
-                    <mat-label>Name</mat-label>
-                    <input matInput maxlength="100" inputmode="tel" placeholder="name" formControlName="name"
-                        #nameInput>
-                    <mat-hint>wird in der Trefferliste angezeigt</mat-hint>
-                    <mat-error *ngIf="myError('name', 'required')">Name ist Pflicht</mat-error>
-                    <mat-error *ngIf="myError('name', 'maxLength')">maximal 100 Zeichen</mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="mb-2">
-                <mat-form-field class="form-box" appearance="fill">
-                    <mat-label>Kommentar</mat-label>
-                    <input matInput maxlength="200" inputmode="tel" placeholder="Kommentar" formControlName="kommentar"
-                        #kommentarInput>
-                    <mat-hint>Kommentare sind in Volltextsuche eingebunden</mat-hint>
-                    <mat-error *ngIf="myError('kommentar', 'maxLength')">maximal 200 Zeichen</mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="mb-2">
-                <mat-form-field class="form-box" appearance="fill">
-                    <mat-label>ID der Quelle</mat-label>
-                    <input matInput maxlength="36" inputmode="tel" placeholder="Quelle" formControlName="quelleId"
-                        #quelleIdInput>
-                    <mat-hint>Falls nicht bekannt, dann schnell mal suchen</mat-hint>
-                    <mat-error *ngIf="myError('quelleId', 'required')">Quelle ist Pflicht</mat-error>
-                </mat-form-field>
-            </div>
-
-
-            <div class="mb-2">
-                <mat-form-field class="form-box" appearance="fill">
-                    <mat-label>Frage</mat-label>
-                    <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="10" placeholder="Frage"
-                        formControlName="frage" #frageInput></textarea>
-                    <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
-                    <mat-error *ngIf="myError('frage', 'required')">Frage ist Pflicht</mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="mb-2">
-                <mat-form-field class="form-box" appearance="fill">
-                    <mat-label>Lösung</mat-label>
-                    <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="10"
-                        placeholder="Lösung" formControlName="loesung" #loesungInput></textarea>
-                    <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
-                </mat-form-field>
-            </div>
+            <mja-raetsel-data-edit formControlName="raetselData"></mja-raetsel-data-edit>
+            <mja-antwortvorschlag-edit formControlName="antwortvorschlag"></mja-antwortvorschlag-edit>
 
         </form>
 
-        <button mat-raised-button color="primary" disabled="hasValidationErrors()" (click)="submit()">speichern</button>
+        <button mat-raised-button color="primary" (click)="submit()">speichern</button>
+        <!--
         <div *ngIf="hasValidationErrors()" class="hint">
             Tja, das kann so noch nicht gespeichert werden. Gibt noch Validierungsfehler.
         </div>
+        -->
 
     </div>
 

@@ -10,7 +10,7 @@ export interface RaetselState extends EntityState<Raetsel> {
   selectedId?: string | number; // which Raetsel record has been selected
   loaded: boolean; // has the Raetsel list been loaded
   page: Raetsel[];
-  raetselDetails?: RaetselDetails;
+  raetselDetails?: RaetselDetails; // details eines Raetsels, das in der Detailansicht oder im Editor angezeigt wird
 }
 
 export interface RaetselPartialState {

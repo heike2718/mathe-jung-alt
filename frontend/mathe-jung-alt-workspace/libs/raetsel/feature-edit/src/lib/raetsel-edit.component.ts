@@ -1,59 +1,70 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { initialRaetselDetails, RaetselDetails, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
+import {
+  FormBuilder, FormGroup
+} from '@angular/forms';
+import { Antwortvorschlag, initialRaetselDetails, RaetselDetails, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { Subscription } from 'rxjs';
+import { RaetselDataFormValues } from './raetsel-data-edit/raetsel-data-edit.component';
 
 @Component({
   selector: 'raetsel-raetsel-feature-edit',
   templateUrl: './raetsel-edit.component.html',
-  styleUrls: ['./raetsel-edit.component.scss'],
+  styleUrls: ['./raetsel-edit.component.scss']
 })
 export class RaetselEditComponent implements OnInit, OnDestroy {
 
-  #formChangesSubscription: Subscription = new Subscription();
+  // https://coryrylan.com/blog/building-reusable-forms-in-angular
   #raetsel: RaetselDetails = initialRaetselDetails;
+  #raetselSubscription: Subscription = new Subscription();
 
   form!: FormGroup;
 
-  constructor(public raetselFacade: RaetselFacade, private fb: FormBuilder) { }
+  constructor(public raetselFacade: RaetselFacade, private fb: FormBuilder) {
+    this.form = this.fb.group({
+      raetselData: [],
+      antwortvorschlag: [],
+    });   
+  }
+
+
 
   ngOnInit(): void {
 
-    this.form = this.fb.group({
+    this.#raetselSubscription = this.raetselFacade.raetselDetails$.subscribe(
+      raetsel => {
+        if (raetsel) {
+          this.#raetsel = raetsel;
+          this.initForm();
+        }
+      }
+    );
 
-      schluessel: [null, [Validators.required, Validators.pattern('^[0-9]{5}$')]],
-      name: [null, [Validators.required, Validators.maxLength(100)]],
-      quelleId: [null, [Validators.required]],
-      frage: [null, [Validators.required]],
-      loesung: [null],
-      kommentar: [null]
-    });
-
-    this.form.valueChanges.subscribe(val => {
-
-      this.#raetsel = { ...this.#raetsel, 
-        schluessel: val['schluessel'],
-        name: val['name'],
-        kommentar: val['kommentar'],  };
-    });
+     
   }
 
   ngOnDestroy(): void {
-    this.#formChangesSubscription.unsubscribe();
-  }
-
-  hasValidationErrors(): boolean {
-    return !this.form.valid;
+    this.#raetselSubscription.unsubscribe();
   }
 
   submit() {
-    console.log(JSON.stringify(this.#raetsel));
-    if (this.hasValidationErrors()) {
-      return;
-    }    
+    console.log(JSON.stringify(this.form.value));
+    // console.log(JSON.stringify(this.#raetsel));
   }
 
-  public myError = (controlName: string, errorName: string) => {
-    return this.form.controls[controlName].hasError(errorName);
+  private initForm() {
+
+    const raetselDataFormValue: RaetselDataFormValues = {
+      schluessel: this.#raetsel.schluessel,
+      name: this.#raetsel.name,
+      quelleId: this.#raetsel.quelleId,
+      frage: this.#raetsel.frage,
+      loesung: this.#raetsel.loesung,
+      kommentar: this.#raetsel.kommentar
+    };
+
+    this.form.controls.raetselData.setValue(raetselDataFormValue);
+
+    const antwortvorschlag: Antwortvorschlag = this.#raetsel.antwortvorschlaege[0];
+    this.form.controls.antwortvorschlag.setValue({ buchstabe: antwortvorschlag.buchstabe, text: antwortvorschlag.text, korrekt: antwortvorschlag.korrekt });
   }
 }
