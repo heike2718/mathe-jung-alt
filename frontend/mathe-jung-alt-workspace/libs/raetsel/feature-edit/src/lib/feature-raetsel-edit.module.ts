@@ -10,9 +10,6 @@ import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AntwortvorschlagEditComponent } from './antwortvorschlag-edit/antwortvorschlag-edit.component';
-import { RaetselDataEditComponent } from './raetsel-data-edit/raetsel-data-edit.component';
-import { AntwortvorschlagGroupEditComponent } from './antwortvorschlag-group-edit/antwortvorschlag-group-edit.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -29,11 +26,8 @@ import { AntwortvorschlagGroupEditComponent } from './antwortvorschlag-group-edi
     ]),
   ],
   declarations: [
-    RaetselEditComponent,
-    AntwortvorschlagEditComponent,
-    RaetselDataEditComponent,
-    AntwortvorschlagGroupEditComponent,
+    RaetselEditComponent
   ],
   exports: [RaetselEditComponent],
 })
-export class RaetselEditModule {}
+export class RaetselEditModule { }

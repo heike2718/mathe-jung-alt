@@ -52,8 +52,6 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
         }
       }
     );
-
-
   }
 
   ngOnDestroy(): void {

@@ -12,9 +12,10 @@
             <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.id}}</div>
         </div>
 
-        <form [formGroup]="form" novalidate fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+        <form [formGroup]="form" novalidate>
 
-            <div fxLayout="column wrap" fxLayoutGap="10px">
+            <!-- Rätsel: einfache Daten -->
+            <div fxLayout="column wrap" fxLayoutGap="10px" fxLayoutAlign="flex-start">
 
                 <div class="mb-2">
                     <mat-form-field class="form-box" appearance="fill">
@@ -96,19 +97,7 @@
             <div *ngFor="let antwortvorschlag of antwortvorschlaegeFormGroup; let i = index">
                 <h3>Antwortvorschlag {{getBuchstabe(i)}}</h3>
 
-                <div [formGroup]="antwortvorschlag" fxLayout="column wrap" fxLayoutGap="10px">
-
-                    <!--
-                    <div class="mb-2">
-                        <mat-form-field class="form-box" appearance="fill">
-                            <mat-label>Buchstabe</mat-label>
-                            <input matInput maxlength="1" placeholder="Buchstabe" formControlName="buchstabe"
-                                #buchstabeInput>
-                            <mat-hint>Buchstabe: A, B, C,...</mat-hint>
-                        </mat-form-field>
-                    </div>
-                    -->
-
+                <div [formGroup]="antwortvorschlag">
                      <div class="mb-2">
                         <mat-form-field class="form-box" appearance="fill">
                             <mat-label>Text</mat-label>
