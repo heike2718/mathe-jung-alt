@@ -1,0 +1,69 @@
+<h2>Rätseldaten</h2>
+
+<div [formGroup]="raetselDataForm" novalidate fxLayout="column wrap" fxLayoutGap="10px">
+
+    <div class="mb-2">
+        <mat-form-field class="form-box" appearance="fill">
+            <mat-label>Schlüssel</mat-label>
+            <input matInput maxlength="5" inputmode="tel" placeholder="schluessel" formControlName="schluessel"
+                #schluesselInput>
+            <mat-hint>genau 5 Ziffern - verwendet als Dateiname für generierte Bilder</mat-hint>
+            <mat-error *ngIf="raetselDataError('schluessel', 'required')">Schlüssel ist Pflicht</mat-error>
+            <mat-error *ngIf="raetselDataError('schluessel', 'pattern')">genau 5 Ziffern - nach links mit 0 auffüllen
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+
+    <div class="mb-2">
+        <mat-form-field class="form-box" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput maxlength="100" inputmode="tel" placeholder="name" formControlName="name"
+                #nameInput>
+            <mat-hint>wird in der Trefferliste angezeigt</mat-hint>
+            <mat-error *ngIf="raetselDataError('name', 'required')">Name ist Pflicht</mat-error>
+            <mat-error *ngIf="raetselDataError('name', 'maxLength')">maximal 100 Zeichen</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="mb-2">
+        <mat-form-field class="form-box" appearance="fill">
+            <mat-label>Kommentar</mat-label>
+            <input matInput maxlength="200" inputmode="tel" placeholder="Kommentar" formControlName="kommentar"
+                #kommentarInput>
+            <mat-hint>Kommentare sind in Volltextsuche eingebunden</mat-hint>
+            <mat-error *ngIf="raetselDataError('kommentar', 'maxLength')">maximal 200 Zeichen</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="mb-2">
+        <mat-form-field class="form-box" appearance="fill">
+            <mat-label>ID der Quelle</mat-label>
+            <input matInput maxlength="36" inputmode="tel" placeholder="Quelle" formControlName="quelleId"
+                #quelleIdInput>
+            <mat-hint>Falls nicht bekannt, dann schnell mal suchen</mat-hint>
+            <mat-error *ngIf="raetselDataError('quelleId', 'required')">Quelle ist Pflicht</mat-error>
+        </mat-form-field>
+    </div>
+
+
+    <div class="mb-2">
+        <mat-form-field class="form-box" appearance="fill">
+            <mat-label>Frage</mat-label>
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="10" placeholder="Frage"
+                formControlName="frage" #frageInput></textarea>
+            <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
+            <mat-error *ngIf="raetselDataError('frage', 'required')">Frage ist Pflicht</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="mb-2">
+        <mat-form-field class="form-box" appearance="fill">
+            <mat-label>Lösung</mat-label>
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="10"
+                placeholder="Lösung" formControlName="loesung" #loesungInput></textarea>
+            <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
+        </mat-form-field>
+    </div>
+
+</div>
