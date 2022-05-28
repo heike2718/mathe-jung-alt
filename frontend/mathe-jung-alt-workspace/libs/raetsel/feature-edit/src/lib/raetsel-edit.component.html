@@ -114,6 +114,8 @@
             </div>
         </form>
 
+        <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"></mja-deskriptoren-filter>
+
         <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="submit()">speichern</button>
         <!--
         <div *ngIf="hasValidationErrors()" class="hint">

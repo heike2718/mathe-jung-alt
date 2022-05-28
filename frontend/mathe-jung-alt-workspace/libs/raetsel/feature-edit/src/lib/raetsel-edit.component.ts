@@ -3,8 +3,9 @@ import {
   FormArray,
   FormBuilder, FormControl, FormGroup, Validators
 } from '@angular/forms';
+import { Deskriptor, DeskriptorenSearchFacade } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { Antwortvorschlag, initialRaetselDetails, Raetsel, RaetselDetails, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
-import { Subscription } from 'rxjs';
+import { combineLatest, filter, Subscription, takeLast, tap } from 'rxjs';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -22,13 +23,20 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   // https://stackblitz.com/edit/angular-10-dynamic-reactive-forms-example?file=src%2Fapp%2Fapp.component.html
   // https://jasonwatmore.com/post/2020/09/18/angular-10-dynamic-reactive-forms-example
   #raetsel: RaetselDetails = initialRaetselDetails;
-  #raetselSubscription: Subscription = new Subscription();
+
+  #selectedDeskriptoren: Deskriptor[] = [];
+
+
+  #raetselSubscription = new Subscription();
+  #deskriptorenLoadedSubscripion = new Subscription();
+  #combinedSubscription: Subscription = new Subscription();
+  #deskriptorenSubscription: Subscription = new Subscription();
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
   form!: FormGroup;
 
-  constructor(public raetselFacade: RaetselFacade, private fb: FormBuilder) {
+  constructor(public raetselFacade: RaetselFacade, private deskriptorenSearchFacade: DeskriptorenSearchFacade, private fb: FormBuilder) {
 
     this.form = this.fb.group({
       schluessel: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
@@ -52,10 +60,26 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
         }
       }
     );
+
+    this.#deskriptorenLoadedSubscripion = this.deskriptorenSearchFacade.loaded$.pipe(
+      filter(loaded => loaded)
+    ).subscribe(
+      () => {
+        if (this.#raetsel) {
+          this.#raetsel.deskriptoren.forEach(deskriptor => this.deskriptorenSearchFacade.addToSearchlist(deskriptor));
+        }
+      }
+    );
+
+    this.#deskriptorenSubscription = this.deskriptorenSearchFacade.suchliste$.subscribe(
+      suchliste => this.#selectedDeskriptoren = suchliste
+    );
   }
 
   ngOnDestroy(): void {
     this.#raetselSubscription.unsubscribe();
+    this.#deskriptorenLoadedSubscripion.unsubscribe();
+    this.#deskriptorenSubscription.unsubscribe();
   }
 
   submit() {
@@ -76,6 +100,8 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
       });
     }
 
+
+
     const raetsel: RaetselDetails = {
       ...this.#raetsel,
       schluessel: formValue['schluessel'].trim(),
@@ -84,6 +110,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
       frage: formValue['frage'].trim(),
       loesung: formValue['loesung'].trim() === '' ? null : formValue['loesung'].trim(),
       antwortvorschlaege: antwortvorschlaegeNeu,
+      deskriptoren: this.#selectedDeskriptoren,
       imageFrage: null,
       imageLoesung: null
     };
@@ -109,6 +136,11 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     this.addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
+  onDeskriptorenChanged($event: Deskriptor[]): void {
+
+
+  }
+
   raetselDataError = (controlName: string, errorName: string) => {
     return this.form.controls[controlName].hasError(errorName);
   }
@@ -132,7 +164,6 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
       avGroup.setValue({ text: av.text, korrekt: av.korrekt });
     }
-
   }
 
   private addOrRemoveAntowrtvorschlagFormParts(anz: number) {
