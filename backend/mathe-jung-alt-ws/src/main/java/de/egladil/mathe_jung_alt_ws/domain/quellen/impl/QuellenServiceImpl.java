@@ -84,6 +84,14 @@ public class QuellenServiceImpl implements QuellenService {
 		return result;
 	}
 
+	@Override
+	public Optional<QuelleReadonly> sucheQuelleMitId(final String id) {
+
+		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findById(id);
+
+		return optAusDB.isEmpty() ? Optional.empty() : Optional.of(mapFromDB(optAusDB.get()));
+	}
+
 	QuelleReadonly mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
 
 		List<Deskriptor> deskriptoren = deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
@@ -94,4 +102,5 @@ public class QuellenServiceImpl implements QuellenService {
 			.withSortNumber(persistenteQuelle.getSortNumber()).withQuellenart(persistenteQuelle.getQuellenart())
 			.withName(nameStrategie.getName(persistenteQuelle)).withMediumIdentifier(persistenteQuelle.getMediumUuid());
 	}
+
 }

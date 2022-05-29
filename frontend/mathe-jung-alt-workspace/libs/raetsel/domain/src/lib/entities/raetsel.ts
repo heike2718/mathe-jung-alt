@@ -43,6 +43,11 @@ export interface Raetsel {
   readonly deskriptoren: Deskriptor[];
 };
 
+export interface EditRaetselPayload {
+  readonly latexHistorisieren: boolean
+  readonly raetsel: RaetselDetails
+};
+
 export const initialRaetselDetails: RaetselDetails = {
   id: 'neu',
   schluessel: '',

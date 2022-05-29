@@ -11,6 +11,7 @@ export interface RaetselState extends EntityState<Raetsel> {
   loaded: boolean; // has the Raetsel list been loaded
   page: Raetsel[];
   raetselDetails?: RaetselDetails; // details eines Raetsels, das in der Detailansicht oder im Editor angezeigt wird
+  saveSuccessMessage?: string
 }
 
 export interface RaetselPartialState {
@@ -52,6 +53,24 @@ const raetselReducer = createReducer(
   on(RaetselActions.raetselDetailsLoaded, (state, action) => {
 
     return { ...state, selectedId: action.raetselDetails.id, raetselDetails: action.raetselDetails };
+  }),
+
+  on(RaetselActions.raetselSaved, (state, action) => {
+
+    const raetselDetails: RaetselDetails = action.raetselDetails;
+    const raetsel: Raetsel = {
+      id: raetselDetails.id,
+      name: raetselDetails.name,
+      schluessel: raetselDetails.schluessel,
+      deskriptoren: raetselDetails.deskriptoren
+    };
+
+    return raetselAdapter.upsertOne(raetsel, {
+      ...state,
+      loaded: true,
+      raetselDetails: raetselDetails,
+      saveSuccessMessage: action.successMessage
+    });
   })
 );
 

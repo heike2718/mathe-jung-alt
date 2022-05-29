@@ -13,11 +13,15 @@ export class QuellenFacade {
   quellenList$ = this.store.pipe(select(QuelleSelectors.getAllQuellen));
   selectedQuelle$ = this.store.pipe(select(QuelleSelectors.getSelected));
   page$ = this.store.pipe(select(QuelleSelectors.getPage));
-
-  constructor(private store: Store<fromQuelle.QuellePartialState>) {}
+  
+  constructor(private store: Store<fromQuelle.QuellePartialState>) { }
 
   findQuellen(suchfilter: Suchfilter): void {
-    this.store.dispatch(QuellenActions.findQuellen({suchfilter}));
+    this.store.dispatch(QuellenActions.findQuellen({ suchfilter }));
+  }
+
+  loadQuelle(uuid: string) {
+    this.store.dispatch(QuellenActions.findQuelle({ uuid }));
   }
 
   slicePage(sortDirection = 'asc', pageIndex = 0, pageSize = 10): void {
@@ -26,5 +30,5 @@ export class QuellenFacade {
 
   clearTrefferliste(): void {
     this.store.dispatch(QuellenActions.quellenlisteCleared());
-  }  
+  }
 }

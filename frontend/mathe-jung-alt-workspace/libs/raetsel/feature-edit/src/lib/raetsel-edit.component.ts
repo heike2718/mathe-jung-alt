@@ -4,8 +4,9 @@ import {
   FormBuilder, FormControl, FormGroup, Validators
 } from '@angular/forms';
 import { Deskriptor, DeskriptorenSearchFacade } from '@mathe-jung-alt-workspace/deskriptoren/domain';
-import { Antwortvorschlag, initialRaetselDetails, Raetsel, RaetselDetails, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
-import { combineLatest, filter, Subscription, takeLast, tap } from 'rxjs';
+import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
+import { Antwortvorschlag, EditRaetselPayload, initialRaetselDetails, Raetsel, RaetselDetails, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { filter, Subscription } from 'rxjs';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -29,14 +30,16 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   #raetselSubscription = new Subscription();
   #deskriptorenLoadedSubscripion = new Subscription();
-  #combinedSubscription: Subscription = new Subscription();
   #deskriptorenSubscription: Subscription = new Subscription();
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
   form!: FormGroup;
 
-  constructor(public raetselFacade: RaetselFacade, private deskriptorenSearchFacade: DeskriptorenSearchFacade, private fb: FormBuilder) {
+  constructor(public raetselFacade: RaetselFacade,
+    private deskriptorenSearchFacade: DeskriptorenSearchFacade,
+    public quellenFacade: QuellenFacade,
+    private fb: FormBuilder) {
 
     this.form = this.fb.group({
       schluessel: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
@@ -88,19 +91,12 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
     console.log(JSON.stringify(this.form.value));
 
-    const antwortvorschlaegeNeu: Antwortvorschlag[] = [];
+    const antwortvorschlaegeNeu: Antwortvorschlag[] = this.collectAntwortvorschlaege();
 
+    const frageNeu = formValue['frage'].trim();
+    const loesungNeu = formValue['loesung'].trim();
 
-    for (let i = 0; i < this.avFormArray.length; i++) {
-      const avFormValue = this.avFormArray.at(i).value as AntwortvorschlagFormValue;
-      antwortvorschlaegeNeu.push({
-        buchstabe: this.getBuchstabe(i),
-        text: avFormValue.text.trim(),
-        korrekt: avFormValue.korrekt
-      });
-    }
-
-
+    const latexHistorisieren = frageNeu !== this.#raetsel.frage || loesungNeu !== this.#raetsel.loesung;
 
     const raetsel: RaetselDetails = {
       ...this.#raetsel,
@@ -115,7 +111,12 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
       imageLoesung: null
     };
 
-    console.log(JSON.stringify(raetsel));
+    const editRaetselPayload: EditRaetselPayload = {
+      latexHistorisieren: latexHistorisieren,
+      raetsel: raetsel
+    };
+
+    this.raetselFacade.saveRaetsel(editRaetselPayload);
   }
 
 
@@ -136,13 +137,26 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     this.addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
-  onDeskriptorenChanged($event: Deskriptor[]): void {
-
-
+  onDeskriptorenChanged(_$event: Deskriptor[]): void {
+    // wird über die #deskriptorenSubscription bereits erledigt
   }
 
   raetselDataError = (controlName: string, errorName: string) => {
     return this.form.controls[controlName].hasError(errorName);
+  }
+
+  antwortvorschlaegeErrors() : boolean {
+    const antworten: Antwortvorschlag[] = this.collectAntwortvorschlaege();
+
+    let anzahlKorrekt = 0;
+    
+    antworten.forEach( a => { 
+      if (a.korrekt){
+        anzahlKorrekt++
+      }
+    });
+
+    return anzahlKorrekt !== 1;
   }
 
   private initForm() {
@@ -164,6 +178,21 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
       avGroup.setValue({ text: av.text, korrekt: av.korrekt });
     }
+  }
+
+  private collectAntwortvorschlaege(): Antwortvorschlag[] {
+    
+    const result: Antwortvorschlag[] = [];
+
+    for (let i = 0; i < this.avFormArray.length; i++) {
+      const avFormValue = this.avFormArray.at(i).value as AntwortvorschlagFormValue;
+      result.push({
+        buchstabe: this.getBuchstabe(i),
+        text: avFormValue.text.trim(),
+        korrekt: avFormValue.korrekt
+      });
+    }
+    return result;
   }
 
   private addOrRemoveAntowrtvorschlagFormParts(anz: number) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import * as QuelleActions from './quelle.actions';
 import { QuelleDataService } from '../../infrastructure/quelle.data.service';
 import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
@@ -22,6 +22,19 @@ export class QuelleEffects {
     )
   );
 
+  loadQuelle$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(QuelleActions.findQuelle),
+      this.safeNgrx.safeSwitchMap((action) =>        
+        this.quelleDataService.loadQuelle(action.uuid).pipe(
+          map((quelle) =>
+            QuelleActions.quelleFound({ quelle })
+          )
+        ), 'Ups, beim Laden der Quelle ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
+
   selectPage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(QuelleActions.selectPage),
@@ -35,12 +48,12 @@ export class QuelleEffects {
       )
     ));
 
-
-
   constructor(
     private actions$: Actions,
     private quellenFacade: QuellenFacade,
     private quelleDataService: QuelleDataService,
     private safeNgrx: SafeNgrxService
   ) { }
+
+  
 }

@@ -13,8 +13,6 @@ public class EditRaetselPayload {
 
 	private boolean latexHistorisieren;
 
-	private String idAendernderUser;
-
 	private Raetsel raetsel;
 
 	public boolean isLatexHistorisieren() {
@@ -25,16 +23,6 @@ public class EditRaetselPayload {
 	public void setLatexHistorisieren(final boolean latexHistorisieren) {
 
 		this.latexHistorisieren = latexHistorisieren;
-	}
-
-	public String getIdAendernderUser() {
-
-		return idAendernderUser;
-	}
-
-	public void setIdAendernderUser(final String idAendernderUser) {
-
-		this.idAendernderUser = idAendernderUser;
 	}
 
 	public Raetsel getRaetsel() {

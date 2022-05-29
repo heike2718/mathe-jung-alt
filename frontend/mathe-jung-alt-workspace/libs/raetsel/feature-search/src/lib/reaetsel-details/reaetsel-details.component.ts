@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 import { RaetselDetails, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { Subscriber, Subscription } from 'rxjs';
@@ -14,7 +15,7 @@ export class ReaetselDetailsComponent implements OnInit, OnDestroy {
 
   #raetselDetails!: RaetselDetails;
 
-  constructor(public raetselFacade: RaetselFacade, public authFacade: AuthFacade) { }
+  constructor(public raetselFacade: RaetselFacade, public authFacade: AuthFacade, private quellenFacade: QuellenFacade) { }
 
 
   ngOnInit(): void {
@@ -35,6 +36,7 @@ export class ReaetselDetailsComponent implements OnInit, OnDestroy {
 
   startEdit(): void {
     if (this.#raetselDetails) {
+      this.quellenFacade.loadQuelle(this.#raetselDetails.quelleId);
       this.raetselFacade.startEditRaetsel(this.#raetselDetails);
     }
   }

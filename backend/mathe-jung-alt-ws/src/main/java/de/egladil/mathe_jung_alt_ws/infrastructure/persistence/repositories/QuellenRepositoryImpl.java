@@ -1,6 +1,7 @@
 package de.egladil.mathe_jung_alt_ws.infrastructure.persistence.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -22,6 +23,14 @@ public class QuellenRepositoryImpl implements QuellenRepository {
 
 		return entityManager.createNamedQuery(PersistenteQuelleReadonly.FIND_LIKE_MEDIUM_PERSON, PersistenteQuelleReadonly.class)
 			.setParameter("suchstring", text).getResultList();
+	}
+
+	@Override
+	public Optional<PersistenteQuelleReadonly> findById(final String id) {
+
+		PersistenteQuelleReadonly result = entityManager.find(PersistenteQuelleReadonly.class, id);
+
+		return result == null ? Optional.empty() : Optional.of(result);
 	}
 
 }

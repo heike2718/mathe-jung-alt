@@ -21,6 +21,18 @@ export class RaetselEffects {
       )
     ));
 
+  saveRaetsel$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.startSaveRaetsel),
+      // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.raetselDataService.saveRaetsel(action.editRaetselPayload).pipe(
+          map((raetselDetails) => RaetselActions.raetselSaved({ raetselDetails, successMessage: 'Das Raetsel wurde erfolgreich gespeichert: uuid=' + raetselDetails.id }))
+        ), 'Ups, beim Speichern des Rätsels ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
+
   selectPage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.selectPage),

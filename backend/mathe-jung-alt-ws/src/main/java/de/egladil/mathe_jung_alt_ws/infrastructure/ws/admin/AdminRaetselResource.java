@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,7 +16,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.egladil.mathe_jung_alt_ws.domain.AbstractDomainEntity;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselGeneratorService;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
@@ -53,16 +53,26 @@ public class AdminRaetselResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response raetselSpeichern(final EditRaetselPayload payload) {
+	public Response raetselAnlegen(final EditRaetselPayload payload) {
 
-		if (AbstractDomainEntity.UUID_NEUE_ENTITY.equals(payload.getRaetsel().getId())) {
+		// TODO: aus der Session holen!!!
+		String uuidAendernderUser = "20721575-8c45-4201-a025-7a9fece1f2aa";
 
-			Raetsel raetsel = raetselService.raetselAnlegen(payload);
-			return Response.status(201).entity(raetsel).build();
+		Raetsel raetsel = raetselService.raetselAnlegen(payload, uuidAendernderUser);
+		return Response.status(201).entity(raetsel).build();
 
-		}
+	}
 
-		return Response.status(404).build();
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response raetselAendern(final EditRaetselPayload payload) {
+
+		// TODO: aus der Session holen!!!
+		String uuidAendernderUser = "20721575-8c45-4201-a025-7a9fece1f2aa";
+
+		Raetsel raetsel = raetselService.raetselAendern(payload, uuidAendernderUser);
+		return Response.status(201).entity(raetsel).build();
 
 	}
 

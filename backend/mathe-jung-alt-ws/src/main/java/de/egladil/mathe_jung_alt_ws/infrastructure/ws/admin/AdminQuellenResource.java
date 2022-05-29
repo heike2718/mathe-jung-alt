@@ -5,14 +5,18 @@
 package de.egladil.mathe_jung_alt_ws.infrastructure.ws.admin;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.egladil.mathe_jung_alt_ws.domain.dto.Suchfilter;
 import de.egladil.mathe_jung_alt_ws.domain.quellen.QuelleReadonly;
@@ -37,5 +41,20 @@ public class AdminQuellenResource {
 				message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma") final String deskriptoren) {
 
 		return quellenService.sucheQuellen(new Suchfilter(suchstring, deskriptoren));
+	}
+
+	@GET
+	@Path("{quelleId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public QuelleReadonly findQuelleById(@PathParam(value = "quelleId") final String quelleId) {
+
+		Optional<QuelleReadonly> result = this.quellenService.sucheQuelleMitId(quelleId);
+
+		if (result.isEmpty()) {
+
+			throw new WebApplicationException(Response.status(404).build());
+		}
+
+		return result.get();
 	}
 }

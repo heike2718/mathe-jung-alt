@@ -5,6 +5,7 @@
 package de.egladil.mathe_jung_alt_ws.domain.quellen;
 
 import java.util.List;
+import java.util.Optional;
 
 import de.egladil.mathe_jung_alt_ws.domain.dto.Suchfilter;
 import de.egladil.mathe_jung_alt_ws.domain.semantik.DomainService;
@@ -23,4 +24,13 @@ public interface QuellenService {
 	 * @return            List
 	 */
 	List<QuelleReadonly> sucheQuellen(Suchfilter suchfilter);
+
+	/**
+	 * Sucht die Quelle mit der gegebenen id.
+	 *
+	 * @param  id
+	 *            String
+	 * @return    Optional
+	 */
+	Optional<QuelleReadonly> sucheQuelleMitId(String id);
 }

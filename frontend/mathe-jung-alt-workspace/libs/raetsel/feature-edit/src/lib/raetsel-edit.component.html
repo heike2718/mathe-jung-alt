@@ -57,7 +57,7 @@
                         <mat-label>ID der Quelle</mat-label>
                         <input matInput maxlength="36" inputmode="tel" placeholder="Quelle" formControlName="quelleId"
                             #quelleIdInput>
-                        <mat-hint>Falls nicht bekannt, dann schnell mal suchen</mat-hint>
+                        <mat-hint *ngIf="quellenFacade.selectedQuelle$ | async as quelle">{{quelle.name}}</mat-hint>
                         <mat-error *ngIf="raetselDataError('quelleId', 'required')">Quelle ist Pflicht</mat-error>
                     </mat-form-field>
                 </div>
@@ -109,14 +109,14 @@
                     <div class="mb-2">
                         <mat-slide-toggle formControlName="korrekt" #korrektInput> korrekt (nein/ja)</mat-slide-toggle>
                     </div>
-
                 </div>
             </div>
+            <mat-error *ngIf="antwortvorschlaegeErrors()">Antwortvorschläge sind noch fehlerhaft: genau einer muss korrekt sein.</mat-error>
         </form>
 
         <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"></mja-deskriptoren-filter>
 
-        <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="submit()">speichern</button>
+        <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()" (click)="submit()">speichern</button>
         <!--
         <div *ngIf="hasValidationErrors()" class="hint">
             Tja, das kann so noch nicht gespeichert werden. Gibt noch Validierungsfehler.

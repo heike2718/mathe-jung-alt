@@ -44,3 +44,8 @@ export const getRaetselDetails = createSelector(
   getRaetselState,
   (state: RaetselState) => state.raetselDetails
 );
+
+export const getSaveSuccessMessage = createSelector(
+  getRaetselState,
+  (state: RaetselState) => state.saveSuccessMessage
+);

@@ -19,5 +19,15 @@ export const pageSelected = createAction('[Quelle] page selected',
   props<{ quellen: Quelle[] }>()
 );
 
+export const findQuelle = createAction(
+  '[Quelle] find by id',
+  props<{uuid: string}>()
+);
+
+export const quelleFound = createAction(
+  '[Quelle] found by id',
+  props<{quelle: Quelle}>()
+);
+
 export const quellenlisteCleared = createAction('[Quelle] quellenliste cleared ');
 

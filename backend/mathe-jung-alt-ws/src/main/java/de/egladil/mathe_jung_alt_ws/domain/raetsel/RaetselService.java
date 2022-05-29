@@ -15,10 +15,23 @@ public interface RaetselService {
 	 * Legt ein neues Rätsel an.
 	 *
 	 * @param  payload
-	 *                 EditRaetselPayload die Daten und Metainformationen
-	 * @return         RaetselPayloadDaten mit einer generierten UUID.
+	 *                             EditRaetselPayload die Daten und Metainformationen
+	 * @param  uuidAendernderUser:
+	 *                             String
+	 * @return                     RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	Raetsel raetselAnlegen(EditRaetselPayload payload);
+	Raetsel raetselAnlegen(EditRaetselPayload payload, String uuidAendernderUser);
+
+	/**
+	 * Ändert ein vorhandenes Raetsel
+	 *
+	 * @param  payload
+	 *                             EditRaetselPayload die Daten und Metainformationen
+	 * @param  uuidAendernderUser:
+	 *                             String
+	 * @return                     RaetselPayloadDaten mit einer generierten UUID.
+	 */
+	Raetsel raetselAendern(EditRaetselPayload payload, String uuidAendernderUser);
 
 	/**
 	 * Holt die Details des Rätsels zu der gegebenen id.

@@ -36,8 +36,21 @@ const quelleReducer = createReducer(
     })
   ),
 
+  on(QuellenActions.quelleFound, (state, { quelle }) => {
+    
+    const quellen: Quelle[] = [];
+    quellen.push(quelle);
+
+    return quelleAdapter.addOne(quelle, {
+      ...state,
+      selectedId: quelle.id,
+      loaded: false,
+      page: quellen.slice(0, 5)
+    })
+  }),
+
   on(QuellenActions.pageSelected, (state, { quellen }) => ({
-    ...state, page: quellen
+    ...state, page: quellen, selectedId: undefined, selectedQuelle: undefined
   })),
 
   on(QuellenActions.quellenlisteCleared, (state, _action) => ({

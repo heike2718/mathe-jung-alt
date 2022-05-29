@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { Raetsel, RaetselDetails } from '../entities/raetsel';
+import { EditRaetselPayload, Raetsel, RaetselDetails } from '../entities/raetsel';
 import { Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselDataService {
@@ -131,7 +132,10 @@ export class RaetselDataService {
 
   #deskriptoren: Deskriptor[] = [];
 
-  constructor(private http: HttpClient) {
+  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/raetsel' : this.configuration.baseUrl + '/raetsel';
+
+
+  constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) {
 
     for (let i = 0; i < this.#alleRaetsel.length; i++) {
       const raetsel: Raetsel = this.#alleRaetsel[i];
@@ -201,6 +205,17 @@ export class RaetselDataService {
 
   anzahlRaetsel(): number {
     return this.#alleRaetsel.length;
+  }
+
+  public saveRaetsel(editRaetselPayload: EditRaetselPayload): Observable<RaetselDetails> {
+
+    const headers = new HttpHeaders().set('Accept', 'application/json');
+
+    if ('neu' === editRaetselPayload.raetsel.id) {
+      return this.http.post<RaetselDetails>(this.#url, editRaetselPayload, { headers });
+    }
+   
+    return this.http.put<RaetselDetails>(this.#url, editRaetselPayload, { headers });
   }
 
   public findById(uuid: string): Observable<RaetselDetails> {
