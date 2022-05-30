@@ -4,8 +4,11 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain.raetsel.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -20,12 +23,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorenService;
+import de.egladil.mathe_jung_alt_ws.domain.dto.SortDirection;
+import de.egladil.mathe_jung_alt_ws.domain.dto.Suchfilter;
+import de.egladil.mathe_jung_alt_ws.domain.dto.SuchfilterVariante;
 import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselFileService;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Antwortvorschlag;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselDao;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselService;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.EditRaetselPayload;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import de.egladil.web.commons_validation.payload.MessagePayload;
@@ -43,6 +51,61 @@ public class RaetselServiceImpl implements RaetselService {
 
 	@Inject
 	RaetselFileService raetselFileService;
+
+	@Inject
+	RaetselDao raetselDao;
+
+	@Override
+	public long zaehleRaetselMitSuchfilter(final Suchfilter suchfilter) {
+
+		SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
+
+		switch (suchfilterVariante) {
+
+		case COMPLETE:
+			return raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds());
+
+		case DESKRIPTOREN:
+			return raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
+
+		case VOLLTEXT:
+			return raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
+
+		default:
+			break;
+		}
+
+		throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
+	}
+
+	@Override
+	public List<RaetselsucheTreffer> sucheRaetsel(final Suchfilter suchfilter, final int limit, final int offset, final SortDirection sortDirection) {
+
+		SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
+
+		List<PersistentesRaetsel> trefferliste = new ArrayList<>();
+
+		switch (suchfilterVariante) {
+
+		case COMPLETE:
+			trefferliste = raetselDao.sucheRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds(), limit,
+				offset, sortDirection);
+			break;
+
+		case DESKRIPTOREN:
+			trefferliste = raetselDao.sucheMitDeskriptoren(suchfilter.getDeskriptorenIds(), limit, offset, sortDirection);
+			break;
+
+		case VOLLTEXT:
+			trefferliste = raetselDao.sucheRaetselVolltext(suchfilter.getSuchstring(), limit, offset, sortDirection);
+			break;
+
+		default:
+			throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
+		}
+
+		return trefferliste.stream().map(pr -> mapToSucheTrefferFromDB(pr)).collect(Collectors.toList());
+	}
 
 	@Override
 	@Transactional
@@ -78,21 +141,20 @@ public class RaetselServiceImpl implements RaetselService {
 				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
-		mergeWithPayload(persistentesRaetsel, payload, uuidAendernderUser);
-		PersistentesRaetsel.persist(persistentesRaetsel);
-
 		if (payload.isLatexHistorisieren()) {
 
 			PersistentesRaetselHistorieItem neuesHistorieItem = new PersistentesRaetselHistorieItem();
-			neuesHistorieItem.anzahlAntworten = raetsel.getAntwortvorschlaege() == null ? 0
-				: raetsel.getAntwortvorschlaege().length;
-			neuesHistorieItem.frage = raetsel.getFrage();
-			neuesHistorieItem.loesung = raetsel.getLoesung();
+			neuesHistorieItem.frage = persistentesRaetsel.frage;
+			neuesHistorieItem.loesung = persistentesRaetsel.loesung;
 			neuesHistorieItem.geaendertAm = new Date();
 			neuesHistorieItem.geaendertDurch = uuidAendernderUser;
+			neuesHistorieItem.raetsel = persistentesRaetsel;
 
 			PersistentesRaetselHistorieItem.persist(neuesHistorieItem);
 		}
+
+		mergeWithPayload(persistentesRaetsel, payload, uuidAendernderUser);
+		PersistentesRaetsel.persist(persistentesRaetsel);
 
 		return getRaetselZuId(raetselId);
 	}
@@ -119,7 +181,7 @@ public class RaetselServiceImpl implements RaetselService {
 		Raetsel daten = payload.getRaetsel();
 		persistentesRaetsel.anzahlAntworten = daten.getAntwortvorschlaege() != null ? 0 : daten.getAntwortvorschlaege().length;
 		persistentesRaetsel.antwortvorschlaege = daten.antwortvorschlaegeAsJSON();
-		persistentesRaetsel.deskriptoren = deskriptorenService.serializeDeskriptoren(daten.getDeskriptoren());
+		persistentesRaetsel.deskriptoren = deskriptorenService.sortAndStringifyIdsDeskriptoren(daten.getDeskriptoren());
 		persistentesRaetsel.frage = daten.getFrage();
 		persistentesRaetsel.geaendertDurch = uuidAendernderUser;
 		persistentesRaetsel.kommentar = daten.getKommentar();
@@ -140,6 +202,18 @@ public class RaetselServiceImpl implements RaetselService {
 			.withQuelleId(raetselDB.quelle)
 			.withSchluessel(raetselDB.schluessel)
 			.withName(raetselDB.name);
+		return result;
+	}
+
+	RaetselsucheTreffer mapToSucheTrefferFromDB(final PersistentesRaetsel raetselDB) {
+
+		RaetselsucheTreffer result = new RaetselsucheTreffer()
+			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
+			.withId(raetselDB.uuid)
+			.withName(raetselDB.name)
+			.withKommentar(raetselDB.kommentar)
+			.withSchluessel(raetselDB.schluessel);
+
 		return result;
 	}
 

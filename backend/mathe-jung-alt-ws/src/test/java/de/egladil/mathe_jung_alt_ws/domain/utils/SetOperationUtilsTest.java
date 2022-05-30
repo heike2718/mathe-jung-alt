@@ -4,10 +4,13 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -15,89 +18,130 @@ import org.junit.jupiter.api.Test;
  */
 public class SetOperationUtilsTest {
 
-	@Test
-	void should_isLeftSubsetOfRightReturnTrue_when_echteTeilmenge() {
+	private SetOperationUtils setOperationUtils = new SetOperationUtils();
 
-		// Arrange
-		String idsSuchanfrage = "1,4,6";
-		String idsEntity = "1,2,3,4,5,6,7";
+	@Nested
+	class PrepareDeskriptorenTests {
 
-		Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
+		@Test
+		void should_prepareForDeskriptorenLikeSearchReturnNull_when_parameterNull() {
 
-		// Act
-		boolean subset = new SetOperationUtils().isLeftSubsetOfRight(sets);
+			assertNull(setOperationUtils.prepareForDeskriptorenLikeSearch(null));
 
-		// Assert
-		assertTrue(subset);
+		}
 
-	}
+		@Test
+		void should_prepareForDeskriptorenLikeSearchReturnNull_when_parameterBlank() {
 
-	@Test
-	void should_isLeftSubsetOfRightReturnTrue_when_linksLeer() {
+			assertNull(setOperationUtils.prepareForDeskriptorenLikeSearch(" "));
 
-		// Arrange
-		String idsSuchanfrage = "";
-		String idsEntity = "1,2,3,4,5,6,7";
+		}
 
-		Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
+		@Test
+		void should_prepareForDeskriptorenLikeSearchReturnSortetString_when_parameterNotNull() {
 
-		// Act
-		boolean subset = new SetOperationUtils().isLeftSubsetOfRight(sets);
+			// Arrange
+			String deskriptorenIDs = "43,7,9,3,15";
+			String expected = "%3%,%7%,%9%,%15%,%43%";
 
-		// Assert
-		assertTrue(subset);
+			// Act
+			String result = setOperationUtils.prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
-	}
+			// Assert
+			assertEquals(expected, result);
 
-	@Test
-	void should_isLeftSubsetOfRightReturnTrue_when_beideLeer() {
-
-		// Arrange
-		String idsSuchanfrage = "";
-		String idsEntity = "";
-
-		Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
-
-		// Act
-		boolean subset = new SetOperationUtils().isLeftSubsetOfRight(sets);
-
-		// Assert
-		assertTrue(subset);
+		}
 
 	}
 
-	@Test
-	void should_isLeftSubsetOfRightReturnFalse_when_rechtsLeer() {
+	@Nested
+	class SubsetTests {
 
-		// Arrange
-		String idsSuchanfrage = "1,2,3,4,5,6,7";
-		String idsEntity = "";
+		@Test
+		void should_isLeftSubsetOfRightReturnTrue_when_echteTeilmenge() {
 
-		Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
+			// Arrange
+			String idsSuchanfrage = "1,4,6";
+			String idsEntity = "1,2,3,4,5,6,7";
 
-		// Act
-		boolean subset = new SetOperationUtils().isLeftSubsetOfRight(sets);
+			Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
 
-		// Assert
-		assertFalse(subset);
+			// Act
+			boolean subset = setOperationUtils.isLeftSubsetOfRight(sets);
 
-	}
+			// Assert
+			assertTrue(subset);
 
-	@Test
-	void should_isLeftSubsetOfRightReturnFalse_when_einElementLinksNichtInRechts() {
+		}
 
-		// Arrange
-		String idsSuchanfrage = "1,3,5,9";
-		String idsEntity = "1,2,3,4,5,6,7";
+		@Test
+		void should_isLeftSubsetOfRightReturnTrue_when_linksLeer() {
 
-		Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
+			// Arrange
+			String idsSuchanfrage = "";
+			String idsEntity = "1,2,3,4,5,6,7";
 
-		// Act
-		boolean subset = new SetOperationUtils().isLeftSubsetOfRight(sets);
+			Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
 
-		// Assert
-		assertFalse(subset);
+			// Act
 
+			boolean subset = setOperationUtils.isLeftSubsetOfRight(sets);
+
+			// Assert
+			assertTrue(subset);
+
+		}
+
+		@Test
+		void should_isLeftSubsetOfRightReturnTrue_when_beideLeer() {
+
+			// Arrange
+			String idsSuchanfrage = "";
+			String idsEntity = "";
+
+			Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
+
+			// Act
+			boolean subset = setOperationUtils.isLeftSubsetOfRight(sets);
+
+			// Assert
+			assertTrue(subset);
+
+		}
+
+		@Test
+		void should_isLeftSubsetOfRightReturnFalse_when_rechtsLeer() {
+
+			// Arrange
+			String idsSuchanfrage = "1,2,3,4,5,6,7";
+			String idsEntity = "";
+
+			Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
+
+			// Act
+			boolean subset = setOperationUtils.isLeftSubsetOfRight(sets);
+
+			// Assert
+			assertFalse(subset);
+
+		}
+
+		@Test
+		void should_isLeftSubsetOfRightReturnFalse_when_einElementLinksNichtInRechts() {
+
+			// Arrange
+			String idsSuchanfrage = "1,3,5,9";
+			String idsEntity = "1,2,3,4,5,6,7";
+
+			Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
+
+			// Act
+			boolean subset = setOperationUtils.isLeftSubsetOfRight(sets);
+
+			// Assert
+			assertFalse(subset);
+
+		}
 	}
 
 }

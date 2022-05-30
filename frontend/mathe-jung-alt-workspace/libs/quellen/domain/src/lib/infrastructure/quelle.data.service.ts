@@ -9,7 +9,7 @@ import { Suchfilter, SuchfilterQueryParameterMapper } from '@mathe-jung-alt-work
 export class QuelleDataService {
 
 
-  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/quellen' : this.configuration.baseUrl + '/quellen';
+  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/quellen/v1' : this.configuration.baseUrl + '/quellen/v1';
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 

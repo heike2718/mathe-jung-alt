@@ -5,7 +5,9 @@
 package de.egladil.mathe_jung_alt_ws.domain.utils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -34,6 +36,30 @@ public class SetOperationUtils {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Verpackt die Deskriptoren in %% und gibt sie als kommaseparierten String zurück - für eine "deskriptoren like"- Suche.
+	 *
+	 * @param  deskriptorenIDs
+	 *                         String kommaseparierte IDs von Deskriptoren.
+	 * @return                 String
+	 */
+	public String prepareForDeskriptorenLikeSearch(final String deskriptorenIDs) {
+
+		if (StringUtils.isBlank(deskriptorenIDs)) {
+
+			return null;
+		}
+
+		String[] ids = StringUtils.split(deskriptorenIDs, ',');
+		List<Long> idsAsList = Arrays.stream(ids).map(id -> Long.valueOf(id)).collect(Collectors.toList());
+		Collections.sort(idsAsList);
+
+		List<String> wrappedIds = idsAsList.stream().map(id -> "%" + id + "%").collect(Collectors.toList());
+
+		return StringUtils.join(wrappedIds, ',');
+
 	}
 
 }

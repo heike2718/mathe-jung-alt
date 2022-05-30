@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { PageDefinition, Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
 import { select, Store } from '@ngrx/store';
 
@@ -12,10 +12,11 @@ import { EditRaetselPayload, Raetsel, RaetselDetails } from '../entities/raetsel
 export class RaetselFacade {
 
   loaded$ = this.store.pipe(select(RaetselSelectors.getRaetselLoaded));
-  raetselList$ = this.store.pipe(select(RaetselSelectors.getAllRaetsel));
+  // raetselList$ = this.store.pipe(select(RaetselSelectors.getAllRaetsel));
   selectedRaetsel$ = this.store.pipe(select(RaetselSelectors.getSelected));
   page$ = this.store.pipe(select(RaetselSelectors.getPage));
   raetselDetails$ = this.store.pipe(select(RaetselSelectors.getRaetselDetails));
+  paginationState$ = this.store.pipe(select(RaetselSelectors.getPaginationState));
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>, private messageService: MessageService) {
 
@@ -28,12 +29,19 @@ export class RaetselFacade {
     );
   }
 
-  findRaetsel(suchfilter: Suchfilter): void {
-    this.store.dispatch(RaetselActions.findRaetsel({ suchfilter }));
+  /*  Setzt die Suchkette mit serverseitiger Pagination in Gang. */
+  triggerSearch(pageDefinition: PageDefinition): void {
+    this.store.dispatch(RaetselActions.selectPage({pageDefinition}));
+    this.store.dispatch(RaetselActions.prepareSearch());
   }
 
-  slicePage(sortDirection = 'asc', pageIndex = 0, pageSize = 10): void {
-    this.store.dispatch(RaetselActions.selectPage({ sortDirection, pageIndex, pageSize }))
+  startSearch(anzahlTreffer: number): void {
+    this.store.dispatch(RaetselActions.raetselCounted({anzahl: anzahlTreffer}));
+    this.findRaetsel();
+  }
+
+  findRaetsel(): void {
+    this.store.dispatch(RaetselActions.findRaetsel());
   }
 
   clearTrefferliste(): void {

@@ -85,17 +85,24 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 	}
 
 	@Override
-	public String serializeDeskriptoren(final List<Deskriptor> deskriptoren) {
+	public String sortAndStringifyIdsDeskriptoren(final List<Deskriptor> deskriptoren) {
 
 		if (deskriptoren == null || deskriptoren.isEmpty()) {
 
 			return null;
 		}
 
+		List<Long> ids = getSortedIds(deskriptoren);
+
+		return StringUtils.join(ids, ",");
+	}
+
+	private List<Long> getSortedIds(final List<Deskriptor> deskriptoren) {
+
 		List<Long> ids = deskriptoren.stream().map(d -> d.id).collect(Collectors.toList());
 		Collections.sort(ids);
 
-		return StringUtils.join(ids, ",");
+		return ids;
 	}
 
 }

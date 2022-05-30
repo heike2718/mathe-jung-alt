@@ -22,12 +22,12 @@ public interface DeskriptorenService {
 	List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds);
 
 	/**
-	 * Alle Ids kommasepariert und sortiert.
+	 * Gibt alle Ids sortiert als kommaseparierten Sring zurück.
 	 *
 	 * @param  deskriptoren
 	 * @return              String oder null, wenn leere oder null-Liste
 	 */
-	String serializeDeskriptoren(List<Deskriptor> deskriptoren);
+	String sortAndStringifyIdsDeskriptoren(List<Deskriptor> deskriptoren);
 
 	/**
 	 * Filtert die gegebenen Deskriptoren nach ihrem Kontext.

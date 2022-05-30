@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain.dto;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Suchfilter
  */
@@ -31,6 +33,27 @@ public class Suchfilter {
 	public String getDeskriptorenIds() {
 
 		return deskriptorenIds;
+	}
+
+	public SuchfilterVariante suchfilterVariante() {
+
+		if (StringUtils.isAllBlank(suchstring, deskriptorenIds)) {
+
+			throw new IllegalArgumentException("suchstring oder deskriptorenIds erforderlich");
+		}
+
+		if (StringUtils.isNoneBlank(suchstring, deskriptorenIds)) {
+
+			return SuchfilterVariante.COMPLETE;
+		}
+
+		if (StringUtils.isNotBlank(suchstring)) {
+
+			return SuchfilterVariante.VOLLTEXT;
+		}
+
+		return SuchfilterVariante.DESKRIPTOREN;
+
 	}
 
 }

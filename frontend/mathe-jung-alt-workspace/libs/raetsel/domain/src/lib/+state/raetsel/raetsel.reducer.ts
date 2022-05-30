@@ -3,6 +3,7 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import * as RaetselActions from './raetsel.actions';
 import { Raetsel, RaetselDetails } from '../../entities/raetsel';
+import { initialPaginationState, PaginationState } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel';
 
@@ -11,7 +12,8 @@ export interface RaetselState extends EntityState<Raetsel> {
   loaded: boolean; // has the Raetsel list been loaded
   page: Raetsel[];
   raetselDetails?: RaetselDetails; // details eines Raetsels, das in der Detailansicht oder im Editor angezeigt wird
-  saveSuccessMessage?: string
+  saveSuccessMessage?: string,
+  paginationState: PaginationState
 }
 
 export interface RaetselPartialState {
@@ -23,31 +25,56 @@ export const raetselAdapter: EntityAdapter<Raetsel> =
 
 export const initialState: RaetselState = raetselAdapter.getInitialState({
   loaded: false,
-  page: []
+  anzahlTreffer: 0,
+  pageSize: 10,
+  pageIndex: 0,
+  sortDirection: 'asc',
+  page: [],
+  paginationState: initialPaginationState
 });
 
 const raetselReducer = createReducer(
   initialState,
+
+  on(RaetselActions.selectPage, (state, action) => {
+    return {
+      ...state,
+      paginationState: {
+        ...state.paginationState,
+        pageIndex: action.pageDefinition.pageIndex,
+        pageSize: action.pageDefinition.pageSize,
+        sortDirection: action.pageDefinition.sortDirection
+      }
+    }
+  }),
+
+  on(RaetselActions.raetselCounted, (state, action) => {
+    return {
+      ...state,
+      paginationState: {
+        ...state.paginationState,
+        anzahlTreffer: action.anzahl
+      }
+    };
+  }),
 
   on(RaetselActions.findRaetselSuccess, (state, { raetsel }) =>
 
     raetselAdapter.setAll(raetsel, {
       ...state,
       loaded: true,
-      page: raetsel.slice(0, 5)
+      page: raetsel
     })
 
   ),
 
-  on(RaetselActions.pageSelected, (state, { raetsel }) => ({
-    ...state, page: raetsel
-  })),
-
   on(RaetselActions.raetsellisteCleared, (state, _action) => ({
     ...state,
+    paginationState: initialPaginationState,
     selectedId: undefined,
     loaded: false,
-    page: []
+    page: [],
+    saveSuccessMessage: undefined
   })),
 
   on(RaetselActions.raetselDetailsLoaded, (state, action) => {

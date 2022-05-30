@@ -4,7 +4,10 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.infrastructure.ws.admin;
 
+import java.util.List;
+
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,17 +19,20 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.egladil.mathe_jung_alt_ws.domain.dto.SortDirection;
+import de.egladil.mathe_jung_alt_ws.domain.dto.Suchfilter;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselGeneratorService;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselService;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.EditRaetselPayload;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.RaetselsucheTreffer;
 
 /**
  * AdminRaetselResource
  */
-@Path("/admin/raetsel")
+@Path("/admin/raetsel/v1")
 public class AdminRaetselResource {
 
 	@Inject
@@ -34,6 +40,40 @@ public class AdminRaetselResource {
 
 	@Inject
 	RaetselGeneratorService generatorService;
+
+	@GET
+	@Path("size")
+	@Produces(MediaType.TEXT_PLAIN)
+	// @formatter:off
+	public long zaehleRatsel(@QueryParam(value = "suchstring") @Pattern(
+		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{4,30}$",
+		message = "ungültige Eingabe: mindestens 4 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
+		@QueryParam(value = "deskriptoren")
+			@Pattern(
+				regexp = "^[\\d\\,]{0,200}$",
+				message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma") final String deskriptoren) {
+	// @formatter:on
+
+		return raetselService.zaehleRaetselMitSuchfilter(new Suchfilter(suchstring, deskriptoren));
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	// @formatter:off
+	public List<RaetselsucheTreffer> sucheRaetsel(@QueryParam(value = "suchstring") @Pattern(
+		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{4,30}$",
+		message = "ungültige Eingabe: mindestens 4 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
+		@QueryParam(value = "deskriptoren")
+			@Pattern(
+				regexp = "^[\\d\\,]{0,200}$",
+				message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma") final String deskriptoren,
+		@QueryParam(value = "limit") final int limit,
+		@QueryParam(value = "offset") final int offset,
+		@QueryParam(value = "sortDirection") final SortDirection sortDirection) {
+		// @formatter:on
+
+		return raetselService.sucheRaetsel(new Suchfilter(suchstring, deskriptoren), limit, offset, sortDirection);
+	}
 
 	@GET
 	@Path("{raetselUuid}")

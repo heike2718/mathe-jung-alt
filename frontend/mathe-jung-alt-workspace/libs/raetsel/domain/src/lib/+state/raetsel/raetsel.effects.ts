@@ -1,21 +1,41 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import * as RaetselActions from './raetsel.actions';
 import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { RaetselFacade } from '../../application/reaetsel.facade';
 import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Router } from '@angular/router';
+import { SuchfilterFacade, SuchfilterWithStatus } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { noop } from 'rxjs';
 
 @Injectable()
 export class RaetselEffects {
 
+  prepareSearch$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.prepareSearch),
+      withLatestFrom(this.suchfilterFacade.suchfilterWithStatus$),
+      this.safeNgrx.safeSwitchMap(([_action, suchfilter]) =>
+        this.raetselDataService.countRaetsel(suchfilter.suchfilter).pipe(
+          tap((anzahl) => this.raetselFacade.startSearch(anzahl)),
+          map(() => noopAction())
+        ), 'Ups, beim Zählen der Rätsel ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
+
   findRaetsel$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.findRaetsel),
+      withLatestFrom(
+        this.suchfilterFacade.suchfilterWithStatus$,
+        this.raetselFacade.paginationState$
+      ),
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
-      this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.findRaetsel(action.suchfilter).pipe(
+      this.safeNgrx.safeSwitchMap(([_action, suchfilterWithStatus, paginationState]) =>
+        this.raetselDataService.loadPage(suchfilterWithStatus, 
+          { pageIndex: paginationState.pageIndex, pageSize: paginationState.pageSize, sortDirection: paginationState.sortDirection }).pipe(
           map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))
         ), 'Ups, beim Suchen nach Rätseln ist etwas schiefgegangen', noopAction()
       )
@@ -32,19 +52,6 @@ export class RaetselEffects {
       )
     )
   );
-
-  selectPage$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(RaetselActions.selectPage),
-      // switchMap, damit das Pagen einer früheren Page-Auswahl gecanceled wird, sobald eine neue Page ausgewählt wurde
-      switchMap((action) =>
-        this.raetselFacade.raetselList$.pipe(
-          map((raetsel) => RaetselActions.pageSelected({
-            raetsel: raetsel.slice(action.pageIndex * action.pageSize, (action.pageIndex + 1) * action.pageSize)
-          }))
-        )
-      )
-    ));
 
   selectRaetsel$ = createEffect(() =>
     this.actions$.pipe(
@@ -76,6 +83,7 @@ export class RaetselEffects {
     private actions$: Actions,
     private raetselDataService: RaetselDataService,
     private raetselFacade: RaetselFacade,
+    private suchfilterFacade: SuchfilterFacade,
     private safeNgrx: SafeNgrxService,
     private router: Router
   ) { }

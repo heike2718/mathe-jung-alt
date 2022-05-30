@@ -8,7 +8,7 @@ import { Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain'
 @Injectable({ providedIn: 'root' })
 export class DeskriptorDataService {
 
-  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/deskriptoren' : this.configuration.baseUrl + '/deskriptoren';
+  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/deskriptoren/v1' : this.configuration.baseUrl + '/deskriptoren/v1';
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 

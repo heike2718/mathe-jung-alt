@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -29,7 +31,19 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
  */
 @Entity
 @Table(name = "RAETSEL")
+@NamedQueries({
+	@NamedQuery(
+		name = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN",
+		query = "select r from PersistentesRaetsel r where r.deskriptoren like :deskriptoren order by r.schluessel"),
+	@NamedQuery(
+		name = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC",
+		query = "select r from PersistentesRaetsel r where r.deskriptoren like :deskriptoren order by r.schluessel desc")
+})
 public class PersistentesRaetsel extends PanacheEntityBase implements PersistenteMjaEntity {
+
+	public static final String FIND_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN";
+
+	public static final String FIND_WITH_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")

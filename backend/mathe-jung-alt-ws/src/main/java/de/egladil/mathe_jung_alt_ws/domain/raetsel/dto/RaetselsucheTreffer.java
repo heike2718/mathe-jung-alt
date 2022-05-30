@@ -5,6 +5,9 @@
 package de.egladil.mathe_jung_alt_ws.domain.raetsel.dto;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,6 +26,9 @@ public class RaetselsucheTreffer {
 
 	@JsonProperty
 	private String name;
+
+	@JsonProperty
+	private String kommentar;
 
 	@JsonProperty
 	private List<Deskriptor> deskriptoren;
@@ -68,6 +74,23 @@ public class RaetselsucheTreffer {
 	public RaetselsucheTreffer withDeskriptoren(final List<Deskriptor> deskriptoren) {
 
 		this.deskriptoren = deskriptoren;
+		return this;
+	}
+
+	public String deskriptorenIds() {
+
+		List<String> ids = deskriptoren.stream().map(d -> d.id + "").collect(Collectors.toList());
+		return StringUtils.join(ids, ',');
+	}
+
+	public String getKommentar() {
+
+		return kommentar;
+	}
+
+	public RaetselsucheTreffer withKommentar(final String kommentar) {
+
+		this.kommentar = kommentar;
 		return this;
 	}
 

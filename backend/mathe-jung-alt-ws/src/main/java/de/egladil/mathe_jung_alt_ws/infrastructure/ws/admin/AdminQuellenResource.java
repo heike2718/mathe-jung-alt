@@ -25,7 +25,7 @@ import de.egladil.mathe_jung_alt_ws.domain.quellen.QuellenService;
 /**
  * AdminQuellenResource
  */
-@Path("/admin/quellen")
+@Path("/admin/quellen/v1")
 public class AdminQuellenResource {
 
 	@Inject
@@ -33,7 +33,7 @@ public class AdminQuellenResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<QuelleReadonly> findeQuellen(@QueryParam(value = "suchstring") @Pattern(
+	public List<QuelleReadonly> sucheQuellen(@QueryParam(value = "suchstring") @Pattern(
 		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{1,30}$",
 		message = "ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring, @QueryParam(
 			value = "deskriptoren") @Pattern(

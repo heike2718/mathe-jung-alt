@@ -298,7 +298,7 @@ public class DeskriptorenServiceImplTest {
 		void should_serializeReturnNull_when_parameterNull() {
 
 			// Act
-			String result = service.serializeDeskriptoren(null);
+			String result = service.sortAndStringifyIdsDeskriptoren(null);
 
 			// Assert
 			assertNull(result);
@@ -309,7 +309,7 @@ public class DeskriptorenServiceImplTest {
 		void should_serializeReturnNull_when_parameterEmptyArray() {
 
 			// Act
-			String result = service.serializeDeskriptoren(new ArrayList<>());
+			String result = service.sortAndStringifyIdsDeskriptoren(new ArrayList<>());
 
 			// Assert
 			assertNull(result);
@@ -349,7 +349,7 @@ public class DeskriptorenServiceImplTest {
 			}
 
 			// Act
-			String result = service.serializeDeskriptoren(deskriptoren);
+			String result = service.sortAndStringifyIdsDeskriptoren(deskriptoren);
 
 			// Assert
 			assertEquals(expected, result);

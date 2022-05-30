@@ -15,13 +15,18 @@ export const getRaetselLoaded = createSelector(
   (state: RaetselState) => state.loaded
 );
 
-export const getAllRaetsel = createSelector(getRaetselState, (state: RaetselState) =>
-  selectAll(state)
-);
+// export const getAllRaetsel = createSelector(getRaetselState, (state: RaetselState) =>
+//   selectAll(state)
+// );
 
 export const getRaetselEntities = createSelector(
   getRaetselState,
   (state: RaetselState) => selectEntities(state)
+);
+
+export const getPaginationState = createSelector(
+  getRaetselState,
+  (state: RaetselState) => state.paginationState
 );
 
 export const getSelectedId = createSelector(

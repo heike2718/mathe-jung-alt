@@ -23,7 +23,7 @@ import io.quarkus.panache.common.Sort;
 /**
  * AdminDeskriptorenResource
  */
-@Path("/deskriptoren")
+@Path("/deskriptoren/v1")
 public class OpenDeskriptorenResource {
 
 	@Inject
