@@ -1,4 +1,5 @@
 export * from './lib/quellen-domain.module';
+export * from './lib/infrastructure/quelle-details.guard';
 
 export * from './lib/entities/quelle';
 export * from './lib/infrastructure/quellen.datasource';

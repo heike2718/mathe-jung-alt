@@ -7,7 +7,8 @@
   </mja-admin-suchfilter>
 
   <ng-container *ngIf="(suchfilterWithStatus$ | async) as suchfilterWithStatus">
-    <p *ngIf="suchfilterWithStatus.suchfilter.suchstring.length > 0">Lasset die Suche beginnen: {{suchfilterWithStatus | json}}</p>
+    <p *ngIf="suchfilterWithStatus.suchfilter.suchstring.length > 0">Lasset die Suche beginnen: {{suchfilterWithStatus |
+      json}}</p>
     <p *ngIf="suchfilterWithStatus.suchfilter.suchstring.length === 0">Suche mit Text einschränken</p>
   </ng-container>
 
@@ -36,4 +37,13 @@
   </table>
   <mat-paginator [length]="anzahlQuellen" [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
 
+  <div *ngIf="quellenFacade.selectedQuelle$ | async as quelle else keineQuelle">
+    <mja-quelle-details [quelle]="quelle"></mja-quelle-details>
+  </div>
+  
 </div>
+
+<ng-template #keineQuelle>
+  <h2>Quelle Details</h2>
+  <p>keine Quelle ausgewählt</p>
+</ng-template>

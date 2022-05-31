@@ -2,7 +2,6 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   QUELLE_FEATURE_KEY,
   QuellenState,
-  QuellePartialState,
   quelleAdapter,
 } from './quelle.reducer';
 

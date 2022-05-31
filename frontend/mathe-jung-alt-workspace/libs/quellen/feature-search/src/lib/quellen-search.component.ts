@@ -30,7 +30,7 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   dataSource!: QuellenDataSource;
   anzahlQuellen: number = 0;
 
-  constructor(private quellenFacade: QuellenFacade
+  constructor(public quellenFacade: QuellenFacade
     , private suchfilterFacade: SuchfilterFacade
     , private authFacade: AuthFacade) {}
 

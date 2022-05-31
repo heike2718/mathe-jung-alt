@@ -7,7 +7,7 @@ import { merge, Subscription } from 'rxjs';
 import { PaginationState, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
-import { deskriptorenToString } from '@mathe-jung-alt-workspace/quellen/domain';
+import { deskriptorenToString, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 
 @Component({
   selector: 'mja-raetsel-search',
@@ -30,13 +30,17 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  #columnDefinitionsPublic = ['schluessel','name','deskriptoren'];
-  #columnDefinitionsAdmin = ['schluessel','name','kommentar'];
+  #columnDefinitionsPublic = ['schluessel', 'name', 'deskriptoren'];
+  #columnDefinitionsAdmin = ['schluessel', 'name', 'kommentar'];
 
   dataSource!: RaetselDataSource;
   anzahlRaetsel: number = 0;
 
-  constructor(public raetselFacade: RaetselFacade, private suchfilterFacade: SuchfilterFacade, private authFacade: AuthFacade) { }
+  constructor(public raetselFacade: RaetselFacade,
+    private suchfilterFacade: SuchfilterFacade,
+    public quellenFacade: QuellenFacade,
+    private authFacade: AuthFacade
+  ) { }
 
   ngOnInit() {
     this.dataSource = new RaetselDataSource(this.raetselFacade);

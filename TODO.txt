@@ -1,3 +1,6 @@
-/ AdminGuard testen
-- Hierarchische Deskriptoren in Suche verwenden: 1. nur Clusterdeskriptoren anzeigen, 2. Clusterdeskriptor auswählen => nur noch zugeordnete atomare Deskriptoren werden angezeigt
-  Dann muss man vielleicht raetselsuchcomponent mit Input() versehen, so dass die Navigation mit der Auswahl eines Clusters startet.
+(/) AdminGuard testen
+(/) Quellensuche: table mouse hand, nach selected: details anzeigen
+(/) raetselsuche: neben neu-Button die aktuell gewählte Quelle anzeigen oder einen Hinweistext, dass nach neu zuerst eine Quelle ausgewäht werden muss
+(-) Kontext des Workkflows speichern: globaler status action context, z.B. wollte neues Rätsel anlegen, editiere Rätsel => nach Quellensuche anhand dieses Kontexts zurücknavigieren
+(-) wenn in räetselsuche zurück aus Edit-Kontext, dann Suchparameter und Trefferliste nicht leeren
+(-) wenn edit raetsel abbrechen, Suchparameter und Trefferliste nicht leeren

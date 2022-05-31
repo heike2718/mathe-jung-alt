@@ -47,10 +47,25 @@
   </table>
   <mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[10,20,50]" showFirstLastButtons></mat-paginator>
 
-  <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-    <div fxFlex="0 1 calc(10%-20px)">
-      <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
+  <div fxLayout="column m-1">
+    <div *ngIf="(quellenFacade.selectedQuelle$ | async) === undefined else selectedQuelle">
+      <div fxFlex="0 1 calc(10%-20px)">
+        <button mat-raised-button color="primary" [disabled]="true" (click)="neuesRaetsel()">neues Rätsel</button>
+      </div>
+      <div fxFlex="0 1 calc(90%-20px)" class="m-1">zuerst Quelle wählen, um neues Rätsel anzulegen</div>
     </div>
   </div>
 
+
 </div>
+
+<ng-template #selectedQuelle>
+  <div fxLayout="column m-1">
+    <div *ngIf="(quellenFacade.selectedQuelle$ | async) as quelle">
+      <div fxFlex="0 1 calc(10%-20px)">
+        <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
+      </div>
+      <div fxFlex="0 1 calc(90%-20px)" class="m-1">Quelle: {{quelle.name}}</div>
+    </div>
+  </div>
+</ng-template>

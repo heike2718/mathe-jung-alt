@@ -46,7 +46,7 @@ export class QuelleEffects {
           }))
         )
       )
-    ));
+    ));    
 
   constructor(
     private actions$: Actions,

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { RaetselFacade } from "@mathe-jung-alt-workspace/raetsel/domain";
-import { filter, map, Observable, tap } from "rxjs";
+import { map, Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class RaetselDetailsGuard implements CanActivate {
