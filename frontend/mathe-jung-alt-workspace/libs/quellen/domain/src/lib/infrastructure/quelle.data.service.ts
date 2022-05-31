@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Quelle } from '../entities/quelle';
 import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
-import { Suchfilter, SuchfilterQueryParameterMapper } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { QUERY_PARAM_DESKRIPTOREN, QUERY_PARAM_SUCHSTRING, Suchfilter, SuchfilterQueryParameterMapper } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 
 @Injectable({ providedIn: 'root' })
 export class QuelleDataService {
@@ -15,9 +15,20 @@ export class QuelleDataService {
 
   findQuellen(suchfilter: Suchfilter): Observable<Quelle[]> {
 
+    const mapper = new SuchfilterQueryParameterMapper(suchfilter);
+    
+    let params = new HttpParams();
+
+    if (suchfilter.suchstring && suchfilter.suchstring.trim().length > 0) {
+     params = params.set(QUERY_PARAM_SUCHSTRING, suchfilter.suchstring.trim());
+    }
+
+    if (suchfilter.deskriptoren.length > 0) {
+      params = params.set(QUERY_PARAM_DESKRIPTOREN, mapper.getDeskriptoren());
+    }
+
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    let url = this.#url + new SuchfilterQueryParameterMapper(suchfilter).apply();
-    return this.http.get<Quelle[]>(url, { headers });
+   return this.http.get<Quelle[]>(this.#url, { headers, params });
   }
 
   loadQuelle(id: string): Observable<Quelle> {

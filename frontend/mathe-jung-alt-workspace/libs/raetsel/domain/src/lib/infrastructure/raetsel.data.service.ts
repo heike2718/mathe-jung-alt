@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { EditRaetselPayload, Raetsel, RaetselDetails } from '../entities/raetsel';
-import { PageDefinition, Suchfilter, SuchfilterQueryParameterMapper, SuchfilterWithStatus } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { PageDefinition, QUERY_PARAM_DESKRIPTOREN, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_DIRECTION, QUERY_PARAM_SUCHSTRING, Suchfilter, SuchfilterQueryParameterMapper, SuchfilterWithStatus } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
 
 @Injectable({ providedIn: 'root' })
@@ -19,12 +19,22 @@ export class RaetselDataService {
       return of(0);
     }
 
-    const queryParams = new SuchfilterQueryParameterMapper(suchfilter).apply();
+    const mapper = new SuchfilterQueryParameterMapper(suchfilter);
+    
+    let params = new HttpParams();
+
+    if (suchfilter.suchstring && suchfilter.suchstring.trim().length > 0) {
+     params = params.set(QUERY_PARAM_SUCHSTRING, suchfilter.suchstring.trim());
+    }
+
+    if (suchfilter.deskriptoren.length > 0) {
+      params = params.set(QUERY_PARAM_DESKRIPTOREN, mapper.getDeskriptoren());
+    }
 
     const headers = new HttpHeaders().set('Accept', 'text/plain');
-    const url = this.#url + '/size' + queryParams;
+    const url = this.#url + '/size';
 
-    return this.http.get<number>(url, { headers });
+    return this.http.get<number>(url, { headers, params });
   }
 
   loadPage(suchfilterWithStatus: SuchfilterWithStatus, pageDefinition: PageDefinition): Observable<Raetsel[]> {
@@ -36,13 +46,20 @@ export class RaetselDataService {
     const suchfilter: Suchfilter = suchfilterWithStatus.suchfilter;
     const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
-    const params = new HttpParams()
-    .set('suchstring', suchfilter.suchstring)
-    .set('deskriptoren', new SuchfilterQueryParameterMapper(suchfilter).getDeskriptoren())
-    .set('limit', pageDefinition.pageSize)
-    .set('offset', offset)
-    .set('sortDirection', pageDefinition.sortDirection);
+    let params = new HttpParams()
+    .set(QUERY_PARAM_LIMIT, pageDefinition.pageSize)
+    .set(QUERY_PARAM_OFFSET, offset)
+    .set(QUERY_PARAM_SORT_DIRECTION, pageDefinition.sortDirection);
 
+    const mapper = new SuchfilterQueryParameterMapper(suchfilter);
+    
+    if (suchfilter.suchstring && suchfilter.suchstring.trim().length > 0) {
+      params = params.set(QUERY_PARAM_SUCHSTRING, suchfilter.suchstring.trim());
+     }
+ 
+     if (suchfilter.deskriptoren.length > 0) {
+       params = params.set(QUERY_PARAM_DESKRIPTOREN, mapper.getDeskriptoren());
+     }
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
     return this.http.get<Raetsel[]>(this.#url, {headers, params});
