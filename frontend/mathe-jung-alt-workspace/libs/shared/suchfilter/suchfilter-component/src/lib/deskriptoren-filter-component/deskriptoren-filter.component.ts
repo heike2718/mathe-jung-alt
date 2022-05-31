@@ -30,7 +30,7 @@ export class DeskriptorenFilterComponent implements OnInit, AfterViewInit, OnDes
 
     this.deskriptorenSearchFacade.load(this.kontext);
 
-    this.suchlisteSubscription = this.deskriptorenSearchFacade.suchliste$.pipe(
+    this.suchlisteSubscription = this.suchliste$.pipe(
       tap((liste: Deskriptor[]) => this.suchlisteDeskriptorenChanged.emit(liste))
     ).subscribe();
   }

@@ -19,7 +19,7 @@ export class QuellenFacade {
   constructor(private store: Store<fromQuelle.QuellePartialState>, private router: Router) { }
 
   navigateToQuellensuche(): void {
-    this.router.navigateByUrl('/quellen');
+    this.router.navigateByUrl('quellen');
   }
 
   selectQuelle(quelle: Quelle): void {

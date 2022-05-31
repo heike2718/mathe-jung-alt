@@ -87,6 +87,10 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     this.suchfilterFacade.changeSuchtext($event);
   }
 
+  quelleWaehlen(): void {
+    this.quellenFacade.navigateToQuellensuche();
+  }
+
   ngAfterViewInit(): void {
 
     // reset the paginator after sorting

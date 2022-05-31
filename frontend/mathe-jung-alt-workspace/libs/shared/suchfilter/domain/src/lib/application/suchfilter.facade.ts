@@ -14,6 +14,7 @@ import { Observable } from "rxjs";
 export class SuchfilterFacade {
 
     public suchfilterWithStatus$: Observable<SuchfilterWithStatus> = this.store.pipe(select(SuchfilterSelectors.getSuchfilterAndReady));
+    public suchkontext$ = this.store.pipe(select(SuchfilterSelectors.getSuchfilterKontext));
 
     constructor(private store: Store<SuchfilterPartialState>) { }
 
