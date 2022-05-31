@@ -34,10 +34,10 @@ export class RaetselEffects {
       ),
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
       this.safeNgrx.safeSwitchMap(([_action, suchfilterWithStatus, paginationState]) =>
-        this.raetselDataService.loadPage(suchfilterWithStatus, 
+        this.raetselDataService.loadPage(suchfilterWithStatus,
           { pageIndex: paginationState.pageIndex, pageSize: paginationState.pageSize, sortDirection: paginationState.sortDirection }).pipe(
-          map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))
-        ), 'Ups, beim Suchen nach Rätseln ist etwas schiefgegangen', noopAction()
+            map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))
+          ), 'Ups, beim Suchen nach Rätseln ist etwas schiefgegangen', noopAction()
       )
     ));
 
@@ -66,10 +66,16 @@ export class RaetselEffects {
     )
   );
 
-  navigateToDetailsAfterDetailsLoaded$ = createEffect(() =>
+  navigateAfterDetailsLoaded$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.raetselDetailsLoaded),
-      tap(() => this.router.navigateByUrl('raetsel/details')),
+      tap((action) => {
+        if (action.raetselDetails.id === 'neu') {
+          this.router.navigateByUrl('raetseleditor')
+        } else {
+          this.router.navigateByUrl('raetsel/details')
+        }
+      }),
     ), { dispatch: false });
 
 
@@ -78,6 +84,12 @@ export class RaetselEffects {
       ofType(RaetselActions.startEditRaetsel),
       tap(() => this.router.navigateByUrl('raetseleditor')),
     ), { dispatch: false });
+
+  navigateToRaetselSuche$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(RaetselActions.cancelEdit),
+    tap(() => this.router.navigateByUrl('raetsel')),
+  ), { dispatch: false });
 
   constructor(
     private actions$: Actions,

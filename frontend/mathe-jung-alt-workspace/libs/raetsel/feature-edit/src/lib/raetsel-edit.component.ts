@@ -27,12 +27,13 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   #selectedDeskriptoren: Deskriptor[] = [];
 
-
   #raetselSubscription = new Subscription();
   #deskriptorenLoadedSubscripion = new Subscription();
   #deskriptorenSubscription: Subscription = new Subscription();
+  #selectedQuelleSubscription: Subscription = new Subscription();
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
+
 
   form!: FormGroup;
 
@@ -77,46 +78,38 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     this.#deskriptorenSubscription = this.deskriptorenSearchFacade.suchliste$.subscribe(
       suchliste => this.#selectedDeskriptoren = suchliste
     );
+
+    this.#selectedQuelleSubscription = this.quellenFacade.selectedQuelle$.subscribe(
+      quelle => {
+        if (quelle) {
+          const raetsel: RaetselDetails = {...this.readFormValues(), quelleId: quelle.id};
+          this.raetselFacade.cacheRaetselDetails(raetsel);
+        }
+      }
+    )
   }
 
   ngOnDestroy(): void {
     this.#raetselSubscription.unsubscribe();
     this.#deskriptorenLoadedSubscripion.unsubscribe();
     this.#deskriptorenSubscription.unsubscribe();
+    this.#selectedQuelleSubscription.unsubscribe();
   }
 
   submit() {
 
-    const formValue = this.form.value;
-
-    console.log(JSON.stringify(this.form.value));
-
-    const antwortvorschlaegeNeu: Antwortvorschlag[] = this.collectAntwortvorschlaege();
-
-    const frageNeu = formValue['frage'].trim();
-    const loesungNeu = formValue['loesung'].trim();
-
-    const latexHistorisieren = frageNeu !== this.#raetsel.frage || loesungNeu !== this.#raetsel.loesung;
-
-    const raetsel: RaetselDetails = {
-      ...this.#raetsel,
-      schluessel: formValue['schluessel'].trim(),
-      name: formValue['name'].trim(),
-      kommentar: formValue['kommentar'].trim() === '' ? null : formValue['kommentar'],
-      frage: formValue['frage'].trim(),
-      loesung: formValue['loesung'].trim() === '' ? null : formValue['loesung'].trim(),
-      antwortvorschlaege: antwortvorschlaegeNeu,
-      deskriptoren: this.#selectedDeskriptoren,
-      imageFrage: null,
-      imageLoesung: null
-    };
-
+    const raetsel: RaetselDetails = this.readFormValues();
+    const latexHistorisieren = this.#raetsel.id !== 'neu' && (raetsel.frage !== this.#raetsel.frage || raetsel.loesung !== this.#raetsel.loesung);
     const editRaetselPayload: EditRaetselPayload = {
       latexHistorisieren: latexHistorisieren,
       raetsel: raetsel
     };
 
     this.raetselFacade.saveRaetsel(editRaetselPayload);
+  }
+
+  cancelEdit() {
+    this.raetselFacade.cancelEditRaetsel();
   }
 
 
@@ -141,17 +134,27 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     // wird über die #deskriptorenSubscription bereits erledigt
   }
 
+  quelleSuchen(): void {
+    const raetsel: RaetselDetails = this.readFormValues();
+    this.raetselFacade.cacheRaetselDetails(raetsel);
+    this.quellenFacade.navigateToQuellensuche();
+  }
+
   raetselDataError = (controlName: string, errorName: string) => {
     return this.form.controls[controlName].hasError(errorName);
   }
 
-  antwortvorschlaegeErrors() : boolean {
+  antwortvorschlaegeErrors(): boolean {
     const antworten: Antwortvorschlag[] = this.collectAntwortvorschlaege();
 
+    if (antworten.length === 0) {
+      return false;
+    }
+
     let anzahlKorrekt = 0;
-    
-    antworten.forEach( a => { 
-      if (a.korrekt){
+
+    antworten.forEach(a => {
+      if (a.korrekt) {
         anzahlKorrekt++
       }
     });
@@ -181,7 +184,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   }
 
   private collectAntwortvorschlaege(): Antwortvorschlag[] {
-    
+
     const result: Antwortvorschlag[] = [];
 
     for (let i = 0; i < this.avFormArray.length; i++) {
@@ -212,6 +215,34 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  private readFormValues(): RaetselDetails {
+    const formValue = this.form.value;
+
+    console.log(JSON.stringify(this.form.value));
+
+    const antwortvorschlaegeNeu: Antwortvorschlag[] = this.collectAntwortvorschlaege();
+
+    const frageNeu = formValue['frage'].trim();
+    const loesungNeu = formValue['loesung'].trim();
+
+    const latexHistorisieren = frageNeu !== this.#raetsel.frage || loesungNeu !== this.#raetsel.loesung;
+
+    const raetsel: RaetselDetails = {
+      ...this.#raetsel,
+      schluessel: formValue['schluessel'].trim(),
+      name: formValue['name'] !== null ? formValue['name'].trim() : '',
+      kommentar: formValue['kommentar'] !== null ? formValue['kommentar'].trim() : null,
+      frage: formValue['frage'] !== null ? formValue['frage'].trim() : '',
+      loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
+      antwortvorschlaege: antwortvorschlaegeNeu,
+      deskriptoren: this.#selectedDeskriptoren,
+      imageFrage: null,
+      imageLoesung: null
+    };
+
+    return raetsel;
+  }
+
 
   getBuchstabe(index: number): string {
     switch (index) {
@@ -225,29 +256,5 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     }
 
     return '';
-  }
-
-  private getIndex(buchstabe: string): number {
-
-    if ('A' === buchstabe) {
-      return 0;
-    }
-    if ('B' === buchstabe) {
-      return 1;
-    }
-    if ('C' === buchstabe) {
-      return 2;
-    }
-    if ('D' === buchstabe) {
-      return 3;
-    }
-    if ('E' === buchstabe) {
-      return 4;
-    }
-    if ('F' === buchstabe) {
-      return 5;
-    }
-
-    return -1;
   }
 }

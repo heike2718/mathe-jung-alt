@@ -95,7 +95,9 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   }
 
   onRowClicked(row: any): void {
-    console.log('row clicked: ' + JSON.stringify(row));
+
+    const quelle: Quelle = <Quelle>row;
+    this.quellenFacade.selectQuelle(quelle);
   }
 
   private loadQuellenPage(): void {

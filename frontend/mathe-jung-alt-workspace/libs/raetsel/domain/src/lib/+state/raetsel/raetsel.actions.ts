@@ -47,9 +47,18 @@ export const raetselDetailsLoaded = createAction(
   props<{ raetselDetails: RaetselDetails }>()
 );
 
+export const cacheRaetselDetails = createAction(
+  '[Raetsel] cache details',
+  props<{ raetselDetails: RaetselDetails }>()
+);
+
 export const startEditRaetsel = createAction(
   '[Raetsel]  start edit',
   props<{ raetselDetails: RaetselDetails }>()
+);
+
+export const cancelEdit = createAction(
+  '[Raetsel] cancel edit'
 );
 
 export const startSaveRaetsel = createAction(

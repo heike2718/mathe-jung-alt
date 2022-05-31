@@ -37,7 +37,7 @@ const quelleReducer = createReducer(
   ),
 
   on(QuellenActions.quelleFound, (state, { quelle }) => {
-    
+
     const quellen: Quelle[] = [];
     quellen.push(quelle);
 
@@ -47,6 +47,10 @@ const quelleReducer = createReducer(
       loaded: false,
       page: quellen.slice(0, 5)
     })
+  }),
+
+  on(QuellenActions.quelleSelected, (state, { quelle }) => {
+    return { ...state, selectedId: quelle.id };
   }),
 
   on(QuellenActions.pageSelected, (state, { quellen }) => ({

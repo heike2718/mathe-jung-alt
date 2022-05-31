@@ -9,7 +9,8 @@
   </ng-container>
 
   <ng-container *ngIf="isOrdinaryUser">
-    <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"></mja-deskriptoren-filter>
+    <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)">
+    </mja-deskriptoren-filter>
   </ng-container>
 
   <ng-container *ngIf="(suchfilterWithStatus$ | async) as suchfilterWithStatus">
@@ -45,5 +46,11 @@
 
   </table>
   <mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[10,20,50]" showFirstLastButtons></mat-paginator>
+
+  <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+    <div fxFlex="0 1 calc(10%-20px)">
+      <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
+    </div>
+  </div>
 
 </div>

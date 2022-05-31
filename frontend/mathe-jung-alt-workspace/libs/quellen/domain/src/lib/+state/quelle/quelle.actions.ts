@@ -12,6 +12,11 @@ export const quellenFound = createAction(
   props<{ quellen: Quelle[] }>()
 );
 
+export const quelleSelected = createAction(
+  '[Quelle] selected',
+  props<{quelle: Quelle}>()
+);
+
 export const selectPage = createAction('[Quelle] select Page',
   props<{ sortDirection: string, pageIndex: number, pageSize: number }>());
 

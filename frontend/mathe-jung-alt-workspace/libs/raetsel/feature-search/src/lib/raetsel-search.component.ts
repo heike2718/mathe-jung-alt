@@ -116,7 +116,9 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-
+  neuesRaetsel(): void {
+    this.raetselFacade.startCreateRaetsel();
+  }
 
   private triggerSuche(): void {
     this.raetselFacade.triggerSearch({

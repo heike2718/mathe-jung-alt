@@ -82,6 +82,16 @@ const raetselReducer = createReducer(
     return { ...state, selectedId: action.raetselDetails.id, raetselDetails: action.raetselDetails };
   }),
 
+  on(RaetselActions.cacheRaetselDetails, (state, action) => {
+
+    return { ...state, selectedId: action.raetselDetails.id, raetselDetails: action.raetselDetails };
+  }),
+
+  on(RaetselActions.cancelEdit, (state, _action) =>{
+
+    return {...state, raetselDetails: undefined};
+  }),
+
   on(RaetselActions.raetselSaved, (state, action) => {
 
     const raetselDetails: RaetselDetails = action.raetselDetails;
