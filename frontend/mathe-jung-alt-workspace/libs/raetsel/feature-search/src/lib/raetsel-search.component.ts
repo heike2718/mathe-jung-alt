@@ -21,15 +21,18 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   #sucheReadySubscription: Subscription = new Subscription();
   #sucheClearedSubscription: Subscription = new Subscription();
   #paginationStateSubscription: Subscription = new Subscription();
+  #userRoleSubscription: Subscription = new Subscription();
 
-  isAdmin$ = this.authFacade.isAdmin$;
-  isOrdinaryUser$ = this.authFacade.isOrdinaryUser$;
+  isAdmin = false;
+  isOrdinaryUser = false;
   suchfilterWithStatus$ = this.suchfilterFacade.suchfilterWithStatus$;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns: string[] = ['schluessel', 'name', 'deskriptoren'];
+  #columnDefinitionsPublic = ['schluessel','name','deskriptoren'];
+  #columnDefinitionsAdmin = ['schluessel','name','kommentar'];
+
   dataSource!: RaetselDataSource;
   anzahlRaetsel: number = 0;
 
@@ -53,6 +56,18 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
       filter((sws) => sws.suchfilter.kontext === this.#kontext && !sws.nichtLeer),
       tap(() => this.raetselFacade.clearTrefferliste())
     ).subscribe();
+
+    this.#userRoleSubscription = this.authFacade.getUser$.subscribe(
+      user => {
+        if (user) {
+          if (user.rolle === 'ADMIN') {
+            this.isAdmin = true;
+          } else {
+            this.isOrdinaryUser = true;
+          }
+        }
+      }
+    );
   }
 
   onDeskriptorenChanged($event: Deskriptor[]): void {
@@ -82,6 +97,11 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     this.#sucheReadySubscription.unsubscribe();
     this.#sucheClearedSubscription.unsubscribe();
     this.#paginationStateSubscription.unsubscribe();
+    this.#userRoleSubscription.unsubscribe();
+  }
+
+  getDisplayedColumns(): string[] {
+    return this.isAdmin ? this.#columnDefinitionsAdmin : this.#columnDefinitionsPublic;
   }
 
   onRowClicked(row: any): void {
@@ -96,10 +116,13 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
+
+
   private triggerSuche(): void {
-    this.raetselFacade.triggerSearch({ 
+    this.raetselFacade.triggerSearch({
       pageIndex: this.paginator.pageIndex,
       pageSize: this.paginator.pageSize,
-      sortDirection: this.sort.direction });
+      sortDirection: this.sort.direction
+    });
   }
 }
