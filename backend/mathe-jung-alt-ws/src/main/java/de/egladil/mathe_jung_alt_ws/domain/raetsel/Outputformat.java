@@ -13,14 +13,17 @@ public enum Outputformat {
 
 		@Override
 		public String getFilenameExtension() {
+
 			return ".pdf";
 		}
 
 	},
-	PNG{
+
+	PNG {
 
 		@Override
 		public String getFilenameExtension() {
+
 			return ".png";
 		}
 

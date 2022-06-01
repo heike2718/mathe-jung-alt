@@ -52,6 +52,21 @@ public class SetOperationUtilsTest {
 
 		}
 
+		@Test
+		void should_prepareForDeskriptorenLikeSearchReturnSortetStringWithoutDuplicates_when_parameterNotNullContainsDuplicates() {
+
+			// Arrange
+			String deskriptorenIDs = "43,3,7,9,3,15";
+			String expected = "%3%,%7%,%9%,%15%,%43%";
+
+			// Act
+			String result = setOperationUtils.prepareForDeskriptorenLikeSearch(deskriptorenIDs);
+
+			// Assert
+			assertEquals(expected, result);
+
+		}
+
 	}
 
 	@Nested
@@ -62,6 +77,23 @@ public class SetOperationUtilsTest {
 
 			// Arrange
 			String idsSuchanfrage = "1,4,6";
+			String idsEntity = "1,2,3,4,5,6,7";
+
+			Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);
+
+			// Act
+			boolean subset = setOperationUtils.isLeftSubsetOfRight(sets);
+
+			// Assert
+			assertTrue(subset);
+
+		}
+
+		@Test
+		void should_isLeftSubsetOfRightReturnTrue_when_echteTeilmengeZusammengedampftAufMenge() {
+
+			// Arrange
+			String idsSuchanfrage = "1,1,4,4,6";
 			String idsEntity = "1,2,3,4,5,6,7";
 
 			Pair<String, String> sets = Pair.of(idsSuchanfrage, idsEntity);

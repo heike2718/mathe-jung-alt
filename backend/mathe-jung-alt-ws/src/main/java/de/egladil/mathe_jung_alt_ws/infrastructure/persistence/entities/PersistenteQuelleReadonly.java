@@ -23,11 +23,16 @@ import de.egladil.mathe_jung_alt_ws.domain.quellen.Quellenart;
 @NamedQueries({
 	@NamedQuery(
 		name = "PersistenteQuelleReadonly.FIND_LIKE_MEDIUM_PERSON",
-		query = "select q from PersistenteQuelleReadonly q where q.mediumTitel like :suchstring or q.person like :suchstring order by q.sortNumber")
+		query = "select q from PersistenteQuelleReadonly q where q.mediumTitel like :suchstring or q.person like :suchstring order by q.sortNumber"),
+	@NamedQuery(
+		name = "PersistenteQuelleReadonly.FIND_QUELLE_BY_FLAG_HW",
+		query = "select q from PersistenteQuelleReadonly q where q.hw = :hw")
 })
 public class PersistenteQuelleReadonly {
 
 	public static final String FIND_LIKE_MEDIUM_PERSON = "PersistenteQuelleReadonly.FIND_LIKE_MEDIUM_PERSON";
+
+	public static final String FIND_QUELLE_BY_FLAG_HW = "PersistenteQuelleReadonly.FIND_QUELLE_BY_FLAG_HW";
 
 	@Id
 	private String uuid;
@@ -56,6 +61,9 @@ public class PersistenteQuelleReadonly {
 
 	@Column(name = "SEITE")
 	private String seite;
+
+	@Column(name = "HW")
+	private boolean hw;
 
 	@Column(name = "DESKRIPTOREN")
 	private String deskriptoren;

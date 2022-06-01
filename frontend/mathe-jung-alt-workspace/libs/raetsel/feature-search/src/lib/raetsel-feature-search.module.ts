@@ -1,6 +1,9 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RaetselDetailsGuard, RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
+import {
+  RaetselDetailsGuard,
+  RaetselDomainModule,
+} from '@mathe-jung-alt-workspace/raetsel/domain';
 import { RaetselSearchComponent } from './raetsel-search.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
@@ -10,11 +13,13 @@ import { SharedSuchfilterDomainModule } from '@mathe-jung-alt-workspace/shared/s
 import { SharedSuchfilterComponentModule } from '@mathe-jung-alt-workspace/shared/suchfilter/suchfilter-component';
 import { ReaetselDetailsComponent } from './reaetsel-details/reaetsel-details.component';
 import { AntwortvorschlagComponent } from './reaetsel-details/antwortvorschlaege/antwortvorschlag.component';
-
+import { PrintRaetselDialogComponent } from './print-raetsel-dialog/print-raetsel-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     HttpClientModule,
     RaetselDomainModule,
     SharedSuchfilterDomainModule,
@@ -33,8 +38,13 @@ import { AntwortvorschlagComponent } from './reaetsel-details/antwortvorschlaege
       },
     ]),
   ],
-  declarations: [RaetselSearchComponent, ReaetselDetailsComponent, AntwortvorschlagComponent],
+  declarations: [
+    RaetselSearchComponent,
+    ReaetselDetailsComponent,
+    AntwortvorschlagComponent,
+    PrintRaetselDialogComponent,
+  ],
   exports: [RaetselSearchComponent, RouterModule, AntwortvorschlagComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class RaetselSearchModule { }
+export class RaetselSearchModule {}

@@ -44,6 +44,7 @@ export interface SuchfilterWithStatus {
 
 export const QUERY_PARAM_SUCHSTRING = 'suchstring';
 export const QUERY_PARAM_DESKRIPTOREN = 'deskriptoren';
+export const QUERY_PARAM_TYPE_DESKRIPTOREN = 'typeDeskriptoren';
 export const QUERY_PARAM_LIMIT = 'limit';
 export const QUERY_PARAM_OFFSET = 'offset';
 export const QUERY_PARAM_SORT_DIRECTION = 'sortDirection';

@@ -9,7 +9,7 @@
 	<description>Webservice für "Mathe für jung und alt"- Anwendungen</description>
 
 	<properties>
-	    <hewi-commons.version>1.7.6</hewi-commons.version>
+		<hewi-commons.version>1.7.6</hewi-commons.version>
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 		<failsafe.useModulePath>false</failsafe.useModulePath>
 		<maven.compiler.release>11</maven.compiler.release>
@@ -17,7 +17,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-		<quarkus.platform.version>2.8.3.Final</quarkus.platform.version>
+		<quarkus.platform.version>2.9.1.Final</quarkus.platform.version>
 		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
 	</properties>
 
@@ -35,7 +35,7 @@
 
 	<dependencies>
 
-	   <dependency>
+		<dependency>
 			<groupId>de.egladil.web</groupId>
 			<artifactId>commons-validation</artifactId>
 			<version>${hewi-commons.version}</version>
@@ -133,6 +133,17 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>mariadb</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-test-h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+    		<groupId>io.quarkus</groupId>
+    		<artifactId>quarkus-jdbc-h2</artifactId>
 		</dependency>
 
 		<dependency>

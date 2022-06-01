@@ -5,13 +5,13 @@
 package de.egladil.mathe_jung_alt_ws.domain.raetsel;
 
 /**
- * AnzeigeAntwortvorschlaegeTyp
+ * AnzeigeAntwortvorschlaegeTyp ANZEIGE_ANTWORTVORSCHLAEGE_TYP
  */
 public enum AnzeigeAntwortvorschlaegeTyp {
 
-	NOOP, // keine generierte, da in Aufgabe enthalten
+	NOOP, // keine generierte, da in Aufgabe enthalten oder nicht multiple choice
 	ANKREUZTABELLE, // zweizeilige Tabelle, Zeile 1 Antwortvorschläge, Zeile 2 leer
 	BUCHSTABEN, // zweizeilige Tabelle, Zeile 1 Buchstaben, Zeile 2 Antwortvorschäge
-	DESCRIPTION; // description-Umgebung
+	DESCRIPTION; // wie BUCHSTABEN, aber in \begin{description}...\end{description}
 
 }

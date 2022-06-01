@@ -4,9 +4,11 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +55,8 @@ public class SetOperationUtils {
 		}
 
 		String[] ids = StringUtils.split(deskriptorenIDs, ',');
-		List<Long> idsAsList = Arrays.stream(ids).map(id -> Long.valueOf(id)).collect(Collectors.toList());
+		Set<Long> idsAsSet = Arrays.stream(ids).map(id -> Long.valueOf(id)).collect(Collectors.toSet());
+		List<Long> idsAsList = new ArrayList<>(idsAsSet);
 		Collections.sort(idsAsList);
 
 		List<String> wrappedIds = idsAsList.stream().map(id -> "%" + id + "%").collect(Collectors.toList());

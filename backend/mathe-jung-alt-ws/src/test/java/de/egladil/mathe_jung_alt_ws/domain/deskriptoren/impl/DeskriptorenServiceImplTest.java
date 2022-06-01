@@ -97,7 +97,7 @@ public class DeskriptorenServiceImplTest {
 	class FilterTests {
 
 		@Test
-		void should_filterReturnAll_when_KontextNoop() {
+		void should_filterReturnNone_when_KontextNoop() {
 
 			// Arrange
 			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.NOOP;
@@ -107,12 +107,12 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren);
 
 			// Assert
-			assertEquals(8, result.size());
+			assertEquals(0, result.size());
 			verify(repository, never()).listAll();
 		}
 
 		@Test
-		void should_filterReturnAll_when_KontextBilder() {
+		void should_filterReturnNone_when_KontextBilder() {
 
 			// Arrange
 			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.BILDER;
@@ -122,7 +122,7 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren);
 
 			// Assert
-			assertEquals(8, result.size());
+			assertEquals(0, result.size());
 			verify(repository, never()).listAll();
 		}
 

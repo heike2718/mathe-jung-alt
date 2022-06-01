@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mathe_jung_alt_ws.domain.dto.Suchfilter;
+import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
 import de.egladil.mathe_jung_alt_ws.domain.quellen.QuelleReadonly;
 import de.egladil.mathe_jung_alt_ws.domain.quellen.QuellenRepository;
 import de.egladil.mathe_jung_alt_ws.domain.quellen.QuellenService;
@@ -82,6 +83,23 @@ public class QuellenServiceImpl implements QuellenService {
 		List<QuelleReadonly> result = trefferlisteMitDeskriptoren.stream().map(pq -> mapFromDB(pq)).collect(Collectors.toList());
 
 		return result;
+	}
+
+	@Override
+	public Optional<QuelleReadonly> sucheQuelleMitPerson(final String name) {
+
+		Optional<Deskriptor> optPerson = deskriptorenService.findByName("PERSON");
+
+		if (optPerson.isEmpty()) {
+
+			throw new MjaRuntimeException("Datenbankfehler: es gibt keinen Deskriptor mit Name 'PERSON' mehr");
+		}
+
+		Suchfilter suchfilter = new Suchfilter(name, optPerson.get().id.toString());
+
+		List<QuelleReadonly> trefferliste = this.sucheQuellen(suchfilter);
+
+		return trefferliste.isEmpty() ? Optional.empty() : Optional.of(trefferliste.get(0));
 	}
 
 	@Override

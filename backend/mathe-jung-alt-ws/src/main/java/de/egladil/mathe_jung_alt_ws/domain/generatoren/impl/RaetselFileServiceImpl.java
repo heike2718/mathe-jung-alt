@@ -62,7 +62,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 			IOUtils.copy(reader, fos, Charset.forName("UTF-8"));
 			fos.flush();
 
-			LOGGER.info("latex file generated: " + path);
+			LOGGER.debug("latex file generated: " + path);
 
 			return path;
 

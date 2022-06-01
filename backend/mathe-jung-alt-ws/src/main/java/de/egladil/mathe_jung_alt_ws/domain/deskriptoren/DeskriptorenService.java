@@ -5,6 +5,7 @@
 package de.egladil.mathe_jung_alt_ws.domain.deskriptoren;
 
 import java.util.List;
+import java.util.Optional;
 
 import de.egladil.mathe_jung_alt_ws.domain.semantik.DomainService;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
@@ -22,7 +23,7 @@ public interface DeskriptorenService {
 	List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds);
 
 	/**
-	 * Gibt alle Ids sortiert als kommaseparierten Sring zurück.
+	 * Gibt alle Ids sortiert als kommaseparierten String zurück. Dubletten werden zuvor entfernt.
 	 *
 	 * @param  deskriptoren
 	 * @return              String oder null, wenn leere oder null-Liste
@@ -33,18 +34,29 @@ public interface DeskriptorenService {
 	 * Filtert die gegebenen Deskriptoren nach ihrem Kontext.
 	 *
 	 * @param  kontext
+	 *                      DeskriptorSuchkontext
 	 * @param  deskriptoren
-	 * @return              List
+	 * @return              List leer bei NOOP
 	 */
 	List<Deskriptor> filterByKontext(DeskriptorSuchkontext kontext, List<Deskriptor> deskriptoren);
 
 	/**
-	 * Mappt den kontext auf die Enum.
+	 * Sucht den Deskriptor anhand seines Namens.
 	 *
-	 * @param  kontext
-	 *                 String
-	 * @return         NOOP, wenn null oder invalid
+	 * @param  name
+	 *              String
+	 * @return      Optional
 	 */
-	DeskriptorSuchkontext toDeskriptorSuchkontext(String kontext);
+	Optional<Deskriptor> findByName(String name);
+
+	/**
+	 * Wandelt die kommaeparierten Namen von Deskriptoren in deren kommaseparierte IDs um.<br>
+	 * <br>
+	 * <strong>Achtung: </strong> Nicht vorhandenen Namen werden ignoriert.
+	 *
+	 * @param  deskriptorenNames
+	 * @return                   String kommaseparierte IDs
+	 */
+	String transformToDeskriptorenOrdinal(String deskriptorenNames);
 
 }

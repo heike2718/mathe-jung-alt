@@ -35,8 +35,6 @@ import io.quarkus.panache.common.Parameters;
 @Table(name = "QUELLEN")
 public class PersistenteQuelle extends PanacheEntityBase implements PersistenteMjaEntity {
 
-	private static final String ICH = "Heike Winkelvoß";
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
 	@GenericGenerator(
@@ -69,6 +67,9 @@ public class PersistenteQuelle extends PanacheEntityBase implements PersistenteM
 	@Column(name = "PERSON")
 	public String person;
 
+	@Column(name = "HW")
+	public boolean hw;
+
 	@Column(name = "DESKRIPTOREN")
 	public String deskriptoren;
 
@@ -88,9 +89,9 @@ public class PersistenteQuelle extends PanacheEntityBase implements PersistenteM
 
 	public static PersistenteQuelle getDefaultQuelle() {
 
-		Parameters params = Parameters.with("person", ICH);
+		Parameters params = Parameters.with("hw", true);
 
-		return (PersistenteQuelle) PersistenteQuelle.find("person = :person", params);
+		return (PersistenteQuelle) PersistenteQuelle.find("hw = :hw", params);
 	}
 
 	public void setImportierteUuid(final String importierteUuid) {

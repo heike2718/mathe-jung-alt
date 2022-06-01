@@ -1,4 +1,6 @@
 #Maven
+.dbeaver/
+dbeaver-bak/
 target/
 pom.xml.tag
 pom.xml.releaseBackup

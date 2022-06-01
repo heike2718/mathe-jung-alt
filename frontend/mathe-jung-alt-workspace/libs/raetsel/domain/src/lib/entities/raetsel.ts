@@ -1,5 +1,11 @@
 import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
-import { Suchfilter } from "@mathe-jung-alt-workspace/shared/suchfilter/domain";
+
+export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';
+export type LATEX_ANZEIGE_ANTWORTVORSCHLAEGE_TYP = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
+
+export const anzeigeAntwortvorschlaegeSelectInput = [
+  '--', 'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
+];
 
 export interface Antwortvorschlag {
   readonly buchstabe: string;
@@ -18,7 +24,7 @@ export interface RaetselDetails {
   readonly antwortvorschlaege: Antwortvorschlag[];
   readonly deskriptoren: Deskriptor[];
   readonly imageFrage: string | null;
-  readonly imageLoesung: string | null;  
+  readonly imageLoesung: string | null;
 };
 
 /** Minimalset an Attributen, die bei einer Suche geladen werden sollen */

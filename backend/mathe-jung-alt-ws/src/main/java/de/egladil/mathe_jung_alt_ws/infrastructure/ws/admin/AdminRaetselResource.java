@@ -4,11 +4,15 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.infrastructure.ws.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.persistence.EnumType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -19,6 +23,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
+
+import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mathe_jung_alt_ws.domain.dto.SortDirection;
 import de.egladil.mathe_jung_alt_ws.domain.dto.Suchfilter;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselGeneratorService;
@@ -41,38 +48,69 @@ public class AdminRaetselResource {
 	@Inject
 	RaetselGeneratorService generatorService;
 
+	@Inject
+	DeskriptorenService deskriptorenService;
+
 	@GET
 	@Path("size")
 	@Produces(MediaType.TEXT_PLAIN)
 	// @formatter:off
-	public long zaehleRatsel(@QueryParam(value = "suchstring") @Pattern(
-		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{4,30}$",
-		message = "ungültige Eingabe: mindestens 4 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
-		@QueryParam(value = "deskriptoren")
-			@Pattern(
-				regexp = "^[\\d\\,]{0,200}$",
-				message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma") final String deskriptoren) {
+	public long zaehleRatsel(
+		@QueryParam(value = "suchstring") @Pattern(
+		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{1,30}$",
+		message = "ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
+		@QueryParam(value = "deskriptoren") @Pattern(
+				regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
+				message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
+		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren) {
 	// @formatter:on
 
-		return raetselService.zaehleRaetselMitSuchfilter(new Suchfilter(suchstring, deskriptoren));
+		String deskriptorenOrdinal = deskriptoren;
+
+		if (EnumType.STRING == typeDeskriptoren) {
+
+			deskriptorenOrdinal = deskriptorenService.transformToDeskriptorenOrdinal(deskriptoren);
+
+		}
+
+		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
+
+			return Long.valueOf(0);
+		}
+
+		return raetselService.zaehleRaetselMitSuchfilter(new Suchfilter(suchstring, deskriptorenOrdinal));
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	// @formatter:off
-	public List<RaetselsucheTreffer> sucheRaetsel(@QueryParam(value = "suchstring") @Pattern(
+	public List<RaetselsucheTreffer> sucheRaetsel(
+		@QueryParam(value = "suchstring") @Pattern(
 		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{4,30}$",
 		message = "ungültige Eingabe: mindestens 4 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
-		@QueryParam(value = "deskriptoren")
-			@Pattern(
-				regexp = "^[\\d\\,]{0,200}$",
-				message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma") final String deskriptoren,
-		@QueryParam(value = "limit") final int limit,
-		@QueryParam(value = "offset") final int offset,
-		@QueryParam(value = "sortDirection") final SortDirection sortDirection) {
+		@QueryParam(value = "deskriptoren") @Pattern(
+			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
+			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
+		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren,
+		@QueryParam(value = "limit") @DefaultValue("10") final int limit,
+		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
+		@QueryParam(value = "sortDirection")  @DefaultValue("asc") final SortDirection sortDirection) {
 		// @formatter:on
 
-		return raetselService.sucheRaetsel(new Suchfilter(suchstring, deskriptoren), limit, offset, sortDirection);
+		String deskriptorenOrdinal = deskriptoren;
+
+		if (EnumType.STRING == typeDeskriptoren) {
+
+			deskriptorenOrdinal = deskriptorenService.transformToDeskriptorenOrdinal(deskriptoren);
+		}
+
+		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
+
+			return new ArrayList<>();
+		}
+
+		return raetselService.sucheRaetsel(new Suchfilter(suchstring, deskriptorenOrdinal), limit, offset,
+			sortDirection);
 	}
 
 	@GET

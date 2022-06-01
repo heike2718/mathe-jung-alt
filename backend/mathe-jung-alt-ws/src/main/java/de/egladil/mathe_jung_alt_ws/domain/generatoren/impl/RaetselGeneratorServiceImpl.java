@@ -48,44 +48,45 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public String produceOutputReaetsel(final Outputformat outputformat, final String raetselUuid,
-			final AnzeigeAntwortvorschlaegeTyp anzeigeAntwortvorschlaege) {
+	public String produceOutputReaetsel(final Outputformat outputformat, final String raetselUuid, final AnzeigeAntwortvorschlaegeTyp anzeigeAntwortvorschlaege) {
 
-		LOGGER.info("start generate output");
+		LOGGER.debug("start generate output");
 
 		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
 
 		if (raetsel == null) {
 
-			throw new WebApplicationException(Response.status(404).build());
+			throw new WebApplicationException(
+				Response.status(404).entity(Message.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
 		raetselFileService.generateFrageLaTeX(raetsel, outputformat, anzeigeAntwortvorschlaege);
 
 		Response response = null;
-		LOGGER.info("vor Aufruf LaTeXRestClient");
+		LOGGER.debug("vor Aufruf LaTeXRestClient");
 
 		try {
 
 			switch (outputformat) {
 
-				case PDF:
+			case PDF:
 
-					response = laTeXClient.latex2PDF(raetsel.getSchluessel());
-					break;
+				response = laTeXClient.latex2PDF(raetsel.getSchluessel());
+				break;
 
-				case PNG:
-					response = laTeXClient.latex2PNG(raetsel.getSchluessel());
-					break;
+			case PNG:
+				response = laTeXClient.latex2PNG(raetsel.getSchluessel());
+				break;
 
-				default:
-					throw new IllegalArgumentException("unbekanntes outputformat " + outputformat);
+			default:
+				throw new IllegalArgumentException("unbekanntes outputformat " + outputformat);
 			}
 
-			LOGGER.info("nach Aufruf LaTeXRestClient");
+			LOGGER.debug("nach Aufruf LaTeXRestClient");
 			Message message = response.readEntity(Message.class);
 
 			if (message.isOk()) {
+
 				String filename = raetsel.getSchluessel() + outputformat.getFilenameExtension();
 				return output2Url(filename);
 			}
@@ -96,8 +97,8 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 		} catch (Exception e) {
 
 			String msg = "Beim generieren des Outputs " + outputformat + " zu Raetsel [schluessel="
-					+ raetsel.getSchluessel()
-					+ ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: " + e.getMessage();
+				+ raetsel.getSchluessel()
+				+ ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: " + e.getMessage();
 			LOGGER.error(msg, e);
 			throw new MjaRuntimeException(msg, e);
 
@@ -105,7 +106,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 	}
 
-	String output2Url(String filename) {
+	String output2Url(final String filename) {
 
 		return "file://" + latexBaseDir + File.separator + filename;
 	}

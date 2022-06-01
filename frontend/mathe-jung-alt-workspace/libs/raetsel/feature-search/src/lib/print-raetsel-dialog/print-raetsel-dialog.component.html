@@ -1,0 +1,32 @@
+<div class="container">
+    <h1 mat-dialog-title>{{data.titel}}</h1>
+    <div fxLayout="column wrap" fxLayoutGap="10px" fxLayoutAlign="flex-start">
+        <div mat-dialog-content>
+            <p>Wie sollen die Antwortvorschläge generiert werden?</p>
+            <mat-form-field class="form-box" appearance="fill">
+                <select matNativeControl name="antowrtvorschlaegeTyp" id="antowrtvorschlaegeTyp" (change)="onOptionSelected($event)">
+                    <option selected="" value=""></option>
+                    <option [ngValue]="c" *ngFor="let c of data.anzeigeAntwortvorschlaegeInput">
+                        {{c}}
+                    </option>
+                </select>
+            </mat-form-field>
+            <!--
+        <mat-form-field>
+            <input matInput [(ngModel)]="data.selectedAnzeigeAntwortvorschlaege">
+        </mat-form-field>
+    -->
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+            <div mat-dialog-actions>
+                <div fxFlex="0 1 calc(10%-20px)">
+                    <button mat-button (click)="onNoClick()">doch nicht</button>
+                </div>
+                <div fxFlex="0 1 calc(90%-20px)" class="mb-1">
+                    <button mat-button [mat-dialog-close]="data.selectedAnzeigeAntwortvorschlaege"
+                        cdkFocusInitial>generieren</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

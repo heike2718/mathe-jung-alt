@@ -32,4 +32,11 @@ public interface QuellenRepository {
 	 */
 	Optional<PersistenteQuelleReadonly> findById(String id);
 
+	/**
+	 * Die default-Quelle bin ich.
+	 *
+	 * @return Optional
+	 */
+	Optional<PersistenteQuelleReadonly> getDefaultQuelle();
+
 }

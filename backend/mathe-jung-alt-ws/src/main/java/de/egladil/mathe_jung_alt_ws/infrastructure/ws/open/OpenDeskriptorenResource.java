@@ -31,7 +31,7 @@ public class OpenDeskriptorenResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Deskriptor> loadDeskriptoren(@QueryParam(value = "kontext") final String kontext) {
+	public List<Deskriptor> loadDeskriptoren(@QueryParam(value = "kontext") final DeskriptorSuchkontext suchkontext) {
 
 		Map<String, Object> params = HibernateParameterMapBuilder.builder().put("admin", Boolean.FALSE).build();
 
@@ -39,7 +39,6 @@ public class OpenDeskriptorenResource {
 			Sort.ascending("name"),
 			params);
 
-		DeskriptorSuchkontext suchkontext = deskriptorenService.toDeskriptorSuchkontext(kontext);
 		return deskriptorenService.filterByKontext(suchkontext, trefferliste);
 	}
 }

@@ -7,7 +7,10 @@ package de.egladil.mathe_jung_alt_ws.domain.deskriptoren.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -54,34 +57,51 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 	}
 
 	@Override
+	public String transformToDeskriptorenOrdinal(final String deskriptorenNames) {
+
+		List<Deskriptor> alleDeskriptoren = deskriptorenRepository.listAll();
+
+		List<String> namen = Arrays.asList(StringUtils.split(deskriptorenNames, ','));
+
+		// schmeißen die Duplikate raus
+		Set<String> namenAlsSet = namen.stream().collect(Collectors.toSet());
+		namen = new ArrayList<>(namenAlsSet);
+
+		List<Long> filteredIDs = new ArrayList<>();
+
+		namen.forEach(name -> {
+
+			Optional<Deskriptor> optDeskriptor = alleDeskriptoren.stream().filter(d -> name.equalsIgnoreCase(d.name.toLowerCase()))
+				.findFirst();
+
+			if (optDeskriptor.isPresent()) {
+
+				filteredIDs.add(optDeskriptor.get().id);
+			}
+		});
+
+		Collections.sort(filteredIDs);
+
+		return StringUtils.join(filteredIDs, ',');
+	}
+
+	@Override
 	public List<Deskriptor> filterByKontext(final DeskriptorSuchkontext kontext, final List<Deskriptor> deskriptoren) {
 
-		if (DeskriptorSuchkontext.BILDER == kontext || DeskriptorSuchkontext.NOOP == kontext) {
+		if (DeskriptorSuchkontext.NOOP == kontext) {
 
-			return deskriptoren;
+			return new ArrayList<>();
 		}
 
 		return deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).collect(Collectors.toList());
 	}
 
 	@Override
-	public DeskriptorSuchkontext toDeskriptorSuchkontext(final String kontext) {
+	public Optional<Deskriptor> findByName(final String name) {
 
-		DeskriptorSuchkontext suchkontext = DeskriptorSuchkontext.NOOP;
+		List<Deskriptor> alleDeskriptoren = deskriptorenRepository.listAll();
 
-		if (kontext != null) {
-
-			try {
-
-				suchkontext = DeskriptorSuchkontext.valueOf(kontext.toUpperCase());
-			} catch (IllegalArgumentException e) {
-
-				LOGGER.warn("unbekannter Kontext {}: wird zu NOOP", kontext);
-
-			}
-		}
-
-		return suchkontext;
+		return alleDeskriptoren.stream().filter(d -> d.name.equalsIgnoreCase(name)).findFirst();
 	}
 
 	@Override
@@ -97,9 +117,19 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 		return StringUtils.join(ids, ",");
 	}
 
+	private List<Long> removeDuplicates(final List<Long> ids) {
+
+		Set<Long> set = new HashSet<>();
+		set.addAll(ids);
+
+		return set.stream().collect(Collectors.toList());
+
+	}
+
 	private List<Long> getSortedIds(final List<Deskriptor> deskriptoren) {
 
 		List<Long> ids = deskriptoren.stream().map(d -> d.id).collect(Collectors.toList());
+		ids = removeDuplicates(ids);
 		Collections.sort(ids);
 
 		return ids;
