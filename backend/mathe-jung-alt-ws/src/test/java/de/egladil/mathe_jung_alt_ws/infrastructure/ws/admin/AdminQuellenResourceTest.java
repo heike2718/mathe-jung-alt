@@ -20,10 +20,9 @@ public class AdminQuellenResourceTest {
 	@Test
 	void testSucheOhneDeskriptorenMitTreffer() {
 
-		String expected = "[{\"uuid\":\"8ef4d9b8\",\"quellenart\":\"BUCH\",\"sortNumber\":1,\"name\":\"Johannes Lehmann: 2x3 Plus Spaß dabei, S.43\",\"mediumUuid\":\"cd69615e\",\"deskriptoren\":[{\"id\":1,\"name\":\"Mathematik\",\"admin\":false},{\"id\":4,\"name\":\"Klasse 1\",\"admin\":false},{\"id\":5,\"name\":\"Klasse 2\",\"admin\":false},{\"id\":6,\"name\":\"IKID\",\"admin\":false},{\"id\":7,\"name\":\"EINS\",\"admin\":false},{\"id\":8,\"name\":\"ZWEI\",\"admin\":false},{\"id\":15,\"name\":\"Buch\",\"admin\":false}]}]";
-
+		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":40,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
 		given()
-			.when().get("/admin/quellen/v1?suchstring=2x3")
+			.when().get("/admin/quellen/v1?suchstring=Heike")
 			.then()
 			.statusCode(200)
 			.body(is(expected));
@@ -33,10 +32,10 @@ public class AdminQuellenResourceTest {
 	@Test
 	void testSucheMitDeskriptorenMitTreffer() {
 
-		String expected = "[{\"uuid\":\"8ef4d9b8\",\"quellenart\":\"BUCH\",\"sortNumber\":1,\"name\":\"Johannes Lehmann: 2x3 Plus Spaß dabei, S.43\",\"mediumUuid\":\"cd69615e\",\"deskriptoren\":[{\"id\":1,\"name\":\"Mathematik\",\"admin\":false},{\"id\":4,\"name\":\"Klasse 1\",\"admin\":false},{\"id\":5,\"name\":\"Klasse 2\",\"admin\":false},{\"id\":6,\"name\":\"IKID\",\"admin\":false},{\"id\":7,\"name\":\"EINS\",\"admin\":false},{\"id\":8,\"name\":\"ZWEI\",\"admin\":false},{\"id\":15,\"name\":\"Buch\",\"admin\":false}]}]";
+		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":40,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
 
 		given()
-			.when().get("/admin/quellen/v1?suchstring=2x3&deskriptoren=5,7")
+			.when().get("/admin/quellen/v1?suchstring=Heike&deskriptoren=40")
 			.then()
 			.statusCode(200)
 			.body(is(expected));
@@ -59,7 +58,8 @@ public class AdminQuellenResourceTest {
 	@Test
 	void testSucheMitInvalidSuchstring() {
 
-		String expected = "{\"title\":\"Constraint Violation\",\"status\":400,\"violations\":[{\"field\":\"findeQuellen.suchstring\",\"message\":\"ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,\"}]}";
+		String expected = "{\"title\":\"Constraint Violation\",\"status\":400,\"violations\":[{\"field\":\"sucheQuellen.suchstring\",\"message\":\"ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,\"}]}";
+
 		given()
 			.when().get("/admin/quellen/v1?deskriptoren=5,7&suchstring=<böse>")
 			.then()
@@ -71,8 +71,7 @@ public class AdminQuellenResourceTest {
 	@Test
 	void testSucheMitInvalidDeskriptoren() {
 
-		String expected = "{\"title\":\"Constraint Violation\",\"status\":400,\"violations\":[{\"field\":\"findeQuellen.deskriptoren\",\"message\":\"ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma\"}]}";
-
+		String expected = "{\"title\":\"Constraint Violation\",\"status\":400,\"violations\":[{\"field\":\"sucheQuellen.deskriptoren\",\"message\":\"ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma\"}]}";
 		given()
 			.when().get("/admin/quellen/v1?deskriptoren=5,A,8&suchstring=2x3")
 			.then()

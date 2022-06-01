@@ -9,9 +9,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
+import io.quarkus.test.junit.QuarkusTest;
+
 /**
  * SuchfilterTest
  */
+@QuarkusTest
 public class SuchfilterTest {
 
 	@Test

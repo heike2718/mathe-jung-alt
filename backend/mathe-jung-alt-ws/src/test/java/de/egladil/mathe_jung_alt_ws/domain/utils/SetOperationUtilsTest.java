@@ -13,9 +13,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import io.quarkus.test.junit.QuarkusTest;
+
 /**
  * SetOperationUtilsTest
  */
+@QuarkusTest
 public class SetOperationUtilsTest {
 
 	private SetOperationUtils setOperationUtils = new SetOperationUtils();

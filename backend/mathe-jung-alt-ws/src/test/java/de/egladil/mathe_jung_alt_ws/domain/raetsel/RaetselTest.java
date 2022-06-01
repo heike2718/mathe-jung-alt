@@ -17,10 +17,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
+import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * RaetselTest
  */
+@QuarkusTest
 public class RaetselTest {
 
 	@Nested

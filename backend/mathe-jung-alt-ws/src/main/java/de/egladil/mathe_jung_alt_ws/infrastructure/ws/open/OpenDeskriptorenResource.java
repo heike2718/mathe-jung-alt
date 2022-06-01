@@ -12,10 +12,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorenService;
+import de.egladil.mathe_jung_alt_ws.domain.dto.Message;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.utils.HibernateParameterMapBuilder;
 import io.quarkus.panache.common.Sort;
@@ -33,12 +36,19 @@ public class OpenDeskriptorenResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Deskriptor> loadDeskriptoren(@QueryParam(value = "kontext") final DeskriptorSuchkontext suchkontext) {
 
-		Map<String, Object> params = HibernateParameterMapBuilder.builder().put("admin", Boolean.FALSE).build();
+		if (suchkontext.freigegebenFuerAlle()) {
 
-		List<Deskriptor> trefferliste = Deskriptor.list("select d from Deskriptor d where d.admin = :admin",
-			Sort.ascending("name"),
-			params);
+			Map<String, Object> params = HibernateParameterMapBuilder.builder().put("admin", Boolean.FALSE).build();
 
-		return deskriptorenService.filterByKontext(suchkontext, trefferliste);
+			List<Deskriptor> trefferliste = Deskriptor.list("select d from Deskriptor d where d.admin = :admin",
+				Sort.ascending("name"),
+				params);
+
+			return deskriptorenService.filterByKontext(suchkontext, trefferliste);
+		}
+
+		List<DeskriptorSuchkontext> freigegebene = DeskriptorSuchkontext.getFreigegebe();
+		throw new WebApplicationException(
+			Response.status(400).entity(Message.error("Unerlaubter kontext: nur " + freigegebene + " erlaubt.")).build());
 	}
 }

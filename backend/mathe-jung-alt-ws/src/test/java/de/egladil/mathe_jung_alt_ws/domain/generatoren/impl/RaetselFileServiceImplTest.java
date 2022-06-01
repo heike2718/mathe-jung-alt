@@ -19,10 +19,12 @@ import de.egladil.mathe_jung_alt_ws.domain.TestFileUtils;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
+import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * RaetselFileServiceImplTest
  */
+@QuarkusTest
 public class RaetselFileServiceImplTest {
 
 	private static final String BASE_DIR = "/home/heike/test";

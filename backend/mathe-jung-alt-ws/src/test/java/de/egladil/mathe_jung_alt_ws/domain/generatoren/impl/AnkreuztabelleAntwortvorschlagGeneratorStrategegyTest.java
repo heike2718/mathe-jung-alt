@@ -12,10 +12,12 @@ import org.junit.jupiter.api.Test;
 import de.egladil.mathe_jung_alt_ws.domain.TestFileUtils;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Antwortvorschlag;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
+import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * AnkreuztabelleAntwortvorschlagGeneratorStrategegyTest
  */
+@QuarkusTest
 public class AnkreuztabelleAntwortvorschlagGeneratorStrategegyTest {
 
 	private AnkreuztabelleAntwortvorschlagGeneratorStrategegy strategy = new AnkreuztabelleAntwortvorschlagGeneratorStrategegy();

@@ -16,26 +16,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 
 /**
  * DeskriptorenServiceImplTest
  */
-@ExtendWith(MockitoExtension.class)
+@QuarkusTest
 public class DeskriptorenServiceImplTest {
 
-	@Mock
+	@InjectMock
 	DeskriptorenRepository repository;
 
-	@InjectMocks
+	@Inject
 	DeskriptorenServiceImpl service;
 
 	@Nested

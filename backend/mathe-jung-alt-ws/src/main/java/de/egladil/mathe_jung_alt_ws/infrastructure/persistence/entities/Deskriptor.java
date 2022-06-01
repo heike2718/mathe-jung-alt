@@ -6,16 +6,23 @@ package de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 /**
  * Deskriptor
  */
 @Entity
 @Table(name = "DESKRIPTOREN")
-public class Deskriptor extends PanacheEntity {
+public class Deskriptor extends PanacheEntityBase {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Long id;
 
 	@Column(name = "NAME")
 	public String name;

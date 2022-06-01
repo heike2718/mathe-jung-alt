@@ -19,10 +19,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Antwortvorschlag;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
+import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * EditRaetselPayloadTest
  */
+@QuarkusTest
 public class EditRaetselPayloadTest {
 
 	@Nested
