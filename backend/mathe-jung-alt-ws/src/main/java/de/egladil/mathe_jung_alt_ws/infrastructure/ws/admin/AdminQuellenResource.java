@@ -53,7 +53,7 @@ public class AdminQuellenResource {
 	@Path("admin")
 	public QuelleReadonly findQuelleByPerson(@QueryParam(value = "person") final String person) {
 
-		Optional<QuelleReadonly> result = this.quellenService.sucheQuelleMitPerson(person);
+		Optional<QuelleReadonly> result = this.quellenService.sucheAdministrator(person);
 
 		if (result.isEmpty()) {
 

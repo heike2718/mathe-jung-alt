@@ -62,6 +62,9 @@ public class RaetselDaoImpl implements RaetselDao {
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND DESKRIPTOREN LIKE :deskriptoren";
 
+		// System.out.println(stmt);
+		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
+
 		@SuppressWarnings("unchecked")
 		List<BigInteger> trefferliste = entityManager.createNativeQuery(stmt)
 			.setParameter("suchstring", suchstring)
@@ -81,6 +84,9 @@ public class RaetselDaoImpl implements RaetselDao {
 			? "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) ORDER BY SCHLUESSEL desc"
 			: "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) ORDER BY SCHLUESSEL";
 
+		// System.out.println(stmt);
+		// System.out.println("[suchstring=" + suchstring + "]");
+
 		return entityManager.createNativeQuery(stmt, PersistentesRaetsel.class)
 			.setParameter("suchstring", suchstring)
 			.setFirstResult(offset)
@@ -91,13 +97,15 @@ public class RaetselDaoImpl implements RaetselDao {
 	@Override
 	public List<PersistentesRaetsel> sucheMitDeskriptoren(final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection) {
 
-		String suchstring = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
+		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
+
+		// System.out.println("[deskriptoren=" + wrappedDeskriptoren + "]");
 
 		String queryId = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC
 			: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN;
 
 		return entityManager.createNamedQuery(queryId, PersistentesRaetsel.class)
-			.setParameter("deskriptoren", suchstring)
+			.setParameter("deskriptoren", wrappedDeskriptoren)
 			.setFirstResult(offset)
 			.setMaxResults(limit)
 			.getResultList();
@@ -112,6 +120,9 @@ public class RaetselDaoImpl implements RaetselDao {
 		String stmt = sortDirection == SortDirection.desc
 			? "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND DESKRIPTOREN LIKE :deskriptoren ORDER BY SCHLUESSEL desc"
 			: "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND DESKRIPTOREN LIKE :deskriptoren ORDER BY SCHLUESSEL";
+
+		// System.out.println(stmt);
+		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
 
 		return entityManager.createNativeQuery(stmt, PersistentesRaetsel.class)
 			.setParameter("suchstring", suchstring)

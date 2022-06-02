@@ -59,12 +59,15 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 	public String uuid;
 
 	@Column
+	@NotNull
 	public String schluessel;
 
 	@Column
+	@NotNull
 	public String name;
 
 	@Column
+	@NotNull
 	public String quelle;
 
 	@Column
@@ -74,13 +77,16 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 	public String kommentar;
 
 	@Column
+	@NotNull
 	public boolean adaptiert;
 
 	@Column
 	@Enumerated(EnumType.STRING)
+	@NotNull
 	public DomainEntityStatus status;
 
 	@Column
+	@NotNull
 	public String frage;
 
 	@Column
@@ -90,6 +96,7 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 	public String antwortvorschlaege;
 
 	@Column(name = "GEAENDERT_DURCH")
+	@NotNull
 	public String geaendertDurch;
 
 	@Column(name = "GEAENDERT_AM")

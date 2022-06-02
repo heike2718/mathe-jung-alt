@@ -25,12 +25,17 @@ import de.egladil.mathe_jung_alt_ws.domain.quellen.Quellenart;
 		name = "PersistenteQuelleReadonly.FIND_LIKE_MEDIUM_PERSON",
 		query = "select q from PersistenteQuelleReadonly q where q.mediumTitel like :suchstring or q.person like :suchstring order by q.sortNumber"),
 	@NamedQuery(
+		name = "PersistenteQuelleReadonly.FIND_WITH_PERSON_EQUALS",
+		query = "select q from PersistenteQuelleReadonly q where q.person = :suchstring"),
+	@NamedQuery(
 		name = "PersistenteQuelleReadonly.FIND_QUELLE_BY_FLAG_HW",
 		query = "select q from PersistenteQuelleReadonly q where q.hw = :hw")
 })
 public class PersistenteQuelleReadonly {
 
 	public static final String FIND_LIKE_MEDIUM_PERSON = "PersistenteQuelleReadonly.FIND_LIKE_MEDIUM_PERSON";
+
+	public static final String FIND_WITH_PERSON_EQUALS = "PersistenteQuelleReadonly.FIND_WITH_PERSON_EQUALS";
 
 	public static final String FIND_QUELLE_BY_FLAG_HW = "PersistenteQuelleReadonly.FIND_QUELLE_BY_FLAG_HW";
 

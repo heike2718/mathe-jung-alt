@@ -4,4 +4,8 @@
 (-) Kontext des Workkflows speichern: globaler status action context, z.B. wollte neues Rätsel anlegen, editiere Rätsel => nach Quellensuche anhand dieses Kontexts zurücknavigieren
 (-) wenn in räetselsuche zurück aus Edit-Kontext, dann Suchparameter und Trefferliste nicht leeren
 (-) wenn edit raetsel abbrechen, Suchparameter und Trefferliste nicht leeren
-(-) geaendert_am wird beim Ändern der deskriptoren nicht aktualisiert
+(-) geaendert_am wird beim Ändern der deskriptoren nicht aktualisiert (bin aber nicht sicher)
+(-) Rätsel: status muss ins EditRaetselPayload
+(-) Rätsel: adaptiert muss ins EditRaetselPayload (evtl.)
+(-) Nach dem Einloggen sich selbst als Quelle ziehen
+(-) Rätsel editieren: die Deskriptoren der Suche sind dann doppelt vorhanden. Brauchen eine klarere Abgrenzung zwischen Suchfilter, Deskriptoren-Control und Kontext

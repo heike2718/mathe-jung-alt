@@ -41,5 +41,5 @@ public interface QuellenService {
 	 *              String muss vollständig sein
 	 * @return      Optional
 	 */
-	Optional<QuelleReadonly> sucheQuelleMitPerson(String name);
+	Optional<QuelleReadonly> sucheAdministrator(String name);
 }

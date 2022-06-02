@@ -31,6 +31,21 @@ public class QuellenRepositoryImpl implements QuellenRepository {
 	}
 
 	@Override
+	public Optional<PersistenteQuelleReadonly> findQuelleWithPersonEqual(final String name) {
+
+		List<PersistenteQuelleReadonly> trefferliste = entityManager
+			.createNamedQuery(PersistenteQuelleReadonly.FIND_WITH_PERSON_EQUALS, PersistenteQuelleReadonly.class)
+			.setParameter("suchstring", name).getResultList();
+
+		if (trefferliste.size() > 1) {
+
+			LOGGER.warn("Es gibt mehr als eine Quelle mit person={} - es wird die erste zurückgegeben", name);
+		}
+
+		return trefferliste.isEmpty() ? Optional.empty() : Optional.of(trefferliste.get(0));
+	}
+
+	@Override
 	public Optional<PersistenteQuelleReadonly> findById(final String id) {
 
 		PersistenteQuelleReadonly result = entityManager.find(PersistenteQuelleReadonly.class, id);

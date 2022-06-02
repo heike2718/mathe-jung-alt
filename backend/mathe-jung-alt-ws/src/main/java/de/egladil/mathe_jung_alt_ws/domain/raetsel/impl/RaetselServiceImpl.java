@@ -190,9 +190,10 @@ public class RaetselServiceImpl implements RaetselService {
 		persistentesRaetsel.quelle = daten.getQuelleId();
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
-		persistentesRaetsel.status = daten.getStatus();
+		// persistentesRaetsel.status = daten.getStatus();
 
 		// FIXME: adaptiert muss noch vom frontend kommen
+
 		persistentesRaetsel.adaptiert = false;
 	}
 
