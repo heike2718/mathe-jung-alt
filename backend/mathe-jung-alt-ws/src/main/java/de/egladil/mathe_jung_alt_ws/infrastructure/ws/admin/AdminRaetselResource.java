@@ -65,13 +65,7 @@ public class AdminRaetselResource {
 		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren) {
 	// @formatter:on
 
-		String deskriptorenOrdinal = deskriptoren;
-
-		if (EnumType.STRING == typeDeskriptoren) {
-
-			deskriptorenOrdinal = deskriptorenService.transformToDeskriptorenOrdinal(deskriptoren);
-
-		}
+		String deskriptorenOrdinal = checkAndTransformDeskriptoren(deskriptoren, typeDeskriptoren);
 
 		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
 
@@ -97,12 +91,7 @@ public class AdminRaetselResource {
 		@QueryParam(value = "sortDirection")  @DefaultValue("asc") final SortDirection sortDirection) {
 		// @formatter:on
 
-		String deskriptorenOrdinal = deskriptoren;
-
-		if (EnumType.STRING == typeDeskriptoren) {
-
-			deskriptorenOrdinal = deskriptorenService.transformToDeskriptorenOrdinal(deskriptoren);
-		}
+		String deskriptorenOrdinal = checkAndTransformDeskriptoren(deskriptoren, typeDeskriptoren);
 
 		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
 
@@ -150,7 +139,7 @@ public class AdminRaetselResource {
 		String uuidAendernderUser = "20721575-8c45-4201-a025-7a9fece1f2aa";
 
 		Raetsel raetsel = raetselService.raetselAendern(payload, uuidAendernderUser);
-		return Response.status(201).entity(raetsel).build();
+		return Response.status(200).entity(raetsel).build();
 
 	}
 
@@ -164,6 +153,23 @@ public class AdminRaetselResource {
 		String url = generatorService.produceOutputReaetsel(outputformat, raetselUuid, anzeigeAntwortvorschlaege);
 
 		return Response.ok(url).build();
+	}
+
+	/**
+	 * @param  deskriptoren
+	 * @param  typeDeskriptoren
+	 * @return
+	 */
+	String checkAndTransformDeskriptoren(final String deskriptoren, final EnumType typeDeskriptoren) {
+
+		String deskriptorenOrdinal = deskriptoren;
+
+		if (StringUtils.isNotBlank(deskriptoren) && EnumType.STRING == typeDeskriptoren) {
+
+			deskriptorenOrdinal = deskriptorenService.transformToDeskriptorenOrdinal(deskriptoren);
+
+		}
+		return deskriptorenOrdinal;
 	}
 
 }

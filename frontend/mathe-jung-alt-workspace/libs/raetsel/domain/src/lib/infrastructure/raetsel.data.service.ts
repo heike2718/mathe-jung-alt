@@ -71,6 +71,8 @@ export class RaetselDataService {
 
   public saveRaetsel(editRaetselPayload: EditRaetselPayload): Observable<RaetselDetails> {
 
+    console.log(JSON.stringify(editRaetselPayload));
+
     const headers = new HttpHeaders().set('Accept', 'application/json');
 
     if ('neu' === editRaetselPayload.raetsel.id) {

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mathe_jung_alt_ws.domain.TestFileUtils;
+import de.egladil.mathe_jung_alt_ws.TestFileUtils;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;

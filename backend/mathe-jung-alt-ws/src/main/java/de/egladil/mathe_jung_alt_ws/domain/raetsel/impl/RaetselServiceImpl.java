@@ -30,6 +30,7 @@ import de.egladil.mathe_jung_alt_ws.domain.dto.SuchfilterVariante;
 import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselFileService;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Antwortvorschlag;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.DomainEntityStatus;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselDao;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselService;
@@ -114,6 +115,7 @@ public class RaetselServiceImpl implements RaetselService {
 		PersistentesRaetsel neuesRaetsel = new PersistentesRaetsel();
 		String uuid = UUID.randomUUID().toString();
 		neuesRaetsel.setImportierteUuid(uuid);
+		neuesRaetsel.status = DomainEntityStatus.ERFASST;
 		mergeWithPayload(neuesRaetsel, payload, uuidAendernderUser);
 
 		PersistentesRaetsel.persist(neuesRaetsel);
@@ -179,7 +181,6 @@ public class RaetselServiceImpl implements RaetselService {
 	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final EditRaetselPayload payload, final String uuidAendernderUser) {
 
 		Raetsel daten = payload.getRaetsel();
-		persistentesRaetsel.anzahlAntworten = daten.getAntwortvorschlaege() != null ? 0 : daten.getAntwortvorschlaege().length;
 		persistentesRaetsel.antwortvorschlaege = daten.antwortvorschlaegeAsJSON();
 		persistentesRaetsel.deskriptoren = deskriptorenService.sortAndStringifyIdsDeskriptoren(daten.getDeskriptoren());
 		persistentesRaetsel.frage = daten.getFrage();
@@ -189,6 +190,10 @@ public class RaetselServiceImpl implements RaetselService {
 		persistentesRaetsel.quelle = daten.getQuelleId();
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
+		persistentesRaetsel.status = daten.getStatus();
+
+		// FIXME: adaptiert muss noch vom frontend kommen
+		persistentesRaetsel.adaptiert = false;
 	}
 
 	Raetsel mapFromDB(final PersistentesRaetsel raetselDB) {
@@ -201,6 +206,7 @@ public class RaetselServiceImpl implements RaetselService {
 			.withLoesung(raetselDB.loesung)
 			.withQuelleId(raetselDB.quelle)
 			.withSchluessel(raetselDB.schluessel)
+			.withStatus(raetselDB.status)
 			.withName(raetselDB.name);
 		return result;
 	}

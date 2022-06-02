@@ -37,6 +37,9 @@ public class Raetsel extends AbstractDomainEntity {
 	private String kommentar;
 
 	@JsonProperty
+	private DomainEntityStatus status;
+
+	@JsonProperty
 	private String quelleId;
 
 	@JsonProperty
@@ -209,6 +212,17 @@ public class Raetsel extends AbstractDomainEntity {
 	public void setImageLoesung(final byte[] imageLoesung) {
 
 		this.imageLoesung = imageLoesung;
+	}
+
+	public DomainEntityStatus getStatus() {
+
+		return status;
+	}
+
+	public Raetsel withStatus(final DomainEntityStatus status) {
+
+		this.status = status;
+		return this;
 	}
 
 }

@@ -6,6 +6,7 @@ package de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,7 +31,7 @@ public class PersistentesRaetselHistorieItem extends PanacheEntityBase {
 	@Column(name = "ID")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH })
 	public PersistentesRaetsel raetsel;
 
 	@Column

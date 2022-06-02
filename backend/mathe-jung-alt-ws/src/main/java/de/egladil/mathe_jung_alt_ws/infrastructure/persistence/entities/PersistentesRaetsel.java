@@ -8,6 +8,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +25,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.DomainEntityStatus;
 import de.egladil.web.commons_validation.annotations.UuidString;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
@@ -71,6 +74,13 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 	public String kommentar;
 
 	@Column
+	public boolean adaptiert;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	public DomainEntityStatus status;
+
+	@Column
 	public String frage;
 
 	@Column
@@ -78,9 +88,6 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 
 	@Column
 	public String antwortvorschlaege;
-
-	@Column(name = "ANZAHL_ANTWORTEN")
-	public int anzahlAntworten;
 
 	@Column(name = "GEAENDERT_DURCH")
 	public String geaendertDurch;
