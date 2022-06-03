@@ -1,9 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { RaetselDetails, RaetselFacade, LATEX_ANZEIGE_ANTWORTVORSCHLAEGE_TYP, LATEX_OUTPUTFORMAT, anzeigeAntwortvorschlaegeSelectInput } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { RaetselDetails, RaetselFacade, LATEX_OUTPUTFORMAT, anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { DialogData } from '../print-raetsel-dialog.data';
 import { PrintRaetselDialogComponent } from '../print-raetsel-dialog/print-raetsel-dialog.component';
 
 @Component({
@@ -16,8 +17,6 @@ export class ReaetselDetailsComponent implements OnInit, OnDestroy {
   #raetselDetailsSubscription: Subscription = new Subscription();
 
   #raetselDetails!: RaetselDetails;
-
-  #printAntwortvorschlaegeTyp: string | undefined;
 
   constructor(public raetselFacade: RaetselFacade, public authFacade: AuthFacade, private quellenFacade: QuellenFacade, public dialog: MatDialog) { }
 
@@ -46,23 +45,40 @@ export class ReaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   openPrintPNGDialog(): void {
+    this.openPrintDialog('PNG');
+  }
 
-    const outputformat: LATEX_OUTPUTFORMAT = 'PNG';
+  openPrintPDFDialog(): void {
+    this.openPrintDialog('PDF');
+  }
+
+  private openPrintDialog(outputformat: LATEX_OUTPUTFORMAT): void {
+
+    const dialogData: DialogData = {
+      titel: outputformat + ' generieren',
+      layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
+      selectedLayoutAntwortvorschlaege: undefined
+    }
 
     const dialogRef = this.dialog.open(PrintRaetselDialogComponent, {
-      width: '450px',
-      data: {
-        title: outputformat + ' generieren',
-        anzeigeAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
-        selectedAnzeigeAntwortvorschlaege: '--'
-      }
+      height: '300px',
+      width: '700px',
+      data: dialogData
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.#printAntwortvorschlaegeTyp = result;
 
-      console.log(this.#printAntwortvorschlaegeTyp);
+      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
+
+        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        switch(dialogData.selectedLayoutAntwortvorschlaege) {
+          case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
+          case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
+          case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
+        }
+
+        this.raetselFacade.generateRaetsel(this.#raetselDetails.id, outputformat, layout);
+      }
     });
-
   }
 }

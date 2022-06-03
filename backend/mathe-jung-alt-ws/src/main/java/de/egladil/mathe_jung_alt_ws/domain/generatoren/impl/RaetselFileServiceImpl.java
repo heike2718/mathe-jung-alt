@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselFileService;
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 
@@ -46,12 +46,13 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	String imagesBaseDir;
 
 	@Override
-	public String generateFrageLaTeX(final Raetsel raetsel, final Outputformat outputformat, final AnzeigeAntwortvorschlaegeTyp anzeigeAntwortenTyp) {
+	public String generateFrageLaTeX(final Raetsel raetsel, final Outputformat outputformat, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + ".tex";
 		File file = new File(path);
 
-		String antworten = AntwortvorschlagGeneratorStrategegy.create(anzeigeAntwortenTyp).generateLaTeXAntwortvorschlaege(raetsel);
+		String antworten = AntwortvorschlagGeneratorStrategegy.create(layoutAntwortvorschlaege)
+			.generateLaTeXAntwortvorschlaege(raetsel);
 
 		String template = loadTemplatePdf();
 		template = template.replace(PLACEHOLDER_CONTENT, raetsel.getFrage());

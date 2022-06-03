@@ -5,9 +5,9 @@
 package de.egladil.mathe_jung_alt_ws.domain.raetsel;
 
 /**
- * AnzeigeAntwortvorschlaegeTyp ANZEIGE_ANTWORTVORSCHLAEGE_TYP
+ * LayoutAntwortvorschlaege ANZEIGE_ANTWORTVORSCHLAEGE_TYP
  */
-public enum AnzeigeAntwortvorschlaegeTyp {
+public enum LayoutAntwortvorschlaege {
 
 	NOOP, // keine generierte, da in Aufgabe enthalten oder nicht multiple choice
 	ANKREUZTABELLE, // zweizeilige Tabelle, Zeile 1 Antwortvorschläge, Zeile 2 leer

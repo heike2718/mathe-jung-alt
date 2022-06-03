@@ -1,11 +1,11 @@
 import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 
 export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';
-export type LATEX_ANZEIGE_ANTWORTVORSCHLAEGE_TYP = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
+export type LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
 export type STATUS = 'ERFASST' | 'FREIGEGEBEN';
 
-export const anzeigeAntwortvorschlaegeSelectInput = [
-  '--', 'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
+export const anzeigeAntwortvorschlaegeSelectInput: string[] = [
+  'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
 ];
 
 export interface Antwortvorschlag {
@@ -37,6 +37,14 @@ export interface Raetsel {
   readonly status: STATUS;
   readonly kommentar?: string;
   readonly deskriptoren: Deskriptor[];
+};
+
+export interface GeneratedImages {
+  readonly outputFormat: LATEX_OUTPUTFORMAT,
+  readonly imageFrage: string | null;
+  readonly imageLoesung: string | null;
+  readonly urlFrage?: string;
+  readonly urlLoesung?: string;
 };
 
 export interface EditRaetselPayload {

@@ -4,8 +4,9 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain.generatoren;
 
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.GeneratedImages;
 
 /**
  * RaetselGeneratorService
@@ -17,10 +18,10 @@ public interface RaetselGeneratorService {
 	 *
 	 * @param  outputformat
 	 * @param  raetselUuid
-	 * @param  anzeigeAntwortvorschlaege
+	 * @param  layoutAntwortvorschlaege
 	 *                                   AnzeigeAntwortvorschlaegeTyp
 	 * @return
 	 */
-	String produceOutputReaetsel(Outputformat outputformat, String raetselUuid, AnzeigeAntwortvorschlaegeTyp anzeigeAntwortvorschlaege);
+	GeneratedImages produceOutputReaetsel(Outputformat outputformat, String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 }

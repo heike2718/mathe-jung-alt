@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mathe_jung_alt_ws.TestFileUtils;
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 import io.quarkus.test.junit.QuarkusTest;
@@ -56,7 +56,7 @@ public class RaetselFileServiceImplTest {
 			Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
 
 			// Act
-			String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF, AnzeigeAntwortvorschlaegeTyp.NOOP);
+			String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF, LayoutAntwortvorschlaege.NOOP);
 
 			// Assert
 			assertEquals(expectedPath, path);
@@ -82,7 +82,7 @@ public class RaetselFileServiceImplTest {
 		Raetsel raetsel = TestFileUtils.loadReaetsel();
 
 		// Act
-		String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF, AnzeigeAntwortvorschlaegeTyp.NOOP);
+		String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF, LayoutAntwortvorschlaege.NOOP);
 
 		// Assert
 		assertEquals(expectedPath, path);

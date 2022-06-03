@@ -9,7 +9,7 @@ import { filter, tap } from 'rxjs';
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
 import * as RaetselSelectors from '../+state/raetsel/raetsel.selectors';
-import { EditRaetselPayload, initialRaetselDetails, Raetsel, RaetselDetails } from '../entities/raetsel';
+import { EditRaetselPayload, initialRaetselDetails, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -93,6 +93,10 @@ export class RaetselFacade {
 
   startEditRaetsel(raetselDetails: RaetselDetails): void {
     this.store.dispatch(RaetselActions.startEditRaetsel({ raetselDetails }));
+  }
+
+  generateRaetsel(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+    this.store.dispatch(RaetselActions.generateOutput({ raetselId, outputFormat, layoutAntwortvorschlaege }));
   }
 
   cacheRaetselDetails(raetselDetails: RaetselDetails): void {

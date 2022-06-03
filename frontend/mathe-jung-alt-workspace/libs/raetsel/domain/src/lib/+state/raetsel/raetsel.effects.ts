@@ -66,6 +66,19 @@ export class RaetselEffects {
     )
   );
 
+  generateImages$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.generateOutput),
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.raetselDataService.generateRaetsel(action.raetselId, action.outputFormat, action.layoutAntwortvorschlaege).pipe(
+          map((images) =>
+            RaetselActions.outputGenerated({images})
+          )
+        ), 'Ups, beim Generieren des Rätsels ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
+
   navigateAfterDetailsLoaded$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.raetselDetailsLoaded),
@@ -86,10 +99,10 @@ export class RaetselEffects {
     ), { dispatch: false });
 
   navigateToRaetselSuche$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(RaetselActions.cancelEdit),
-    tap(() => this.router.navigateByUrl('raetsel')),
-  ), { dispatch: false });
+    this.actions$.pipe(
+      ofType(RaetselActions.cancelEdit),
+      tap(() => this.router.navigateByUrl('raetsel')),
+    ), { dispatch: false });
 
   constructor(
     private actions$: Actions,

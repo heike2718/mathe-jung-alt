@@ -87,9 +87,18 @@ const raetselReducer = createReducer(
     return { ...state, selectedId: action.raetselDetails.id, raetselDetails: action.raetselDetails };
   }),
 
-  on(RaetselActions.cancelEdit, (state, _action) =>{
+  on(RaetselActions.cancelEdit, (state, _action) => {
 
-    return {...state, raetselDetails: undefined};
+    return { ...state, raetselDetails: undefined };
+  }),
+
+  on(RaetselActions.outputGenerated, (state, action) => {
+
+    if (state.raetselDetails ) {
+      return {...state, raetselDetails: {...state.raetselDetails, imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung} };
+    }
+
+    return { ...state };
   }),
 
   on(RaetselActions.raetselSaved, (state, action) => {
@@ -109,7 +118,9 @@ const raetselReducer = createReducer(
       raetselDetails: raetselDetails,
       saveSuccessMessage: action.successMessage
     });
-  })
+  }),
+
+
 );
 
 export function reducer(state: RaetselState | undefined, action: Action) {

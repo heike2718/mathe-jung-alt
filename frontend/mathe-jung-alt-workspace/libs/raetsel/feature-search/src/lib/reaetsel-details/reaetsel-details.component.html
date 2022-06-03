@@ -58,11 +58,15 @@
         <h2>Metadaten und LaTeX</h2>
 
         <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-            <div fxFlex="0 1 calc(10%-20px)">
+
+            <div fxFlex="0 1 calc(25%-20px)">
                 <button mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button>
             </div>
-            <div fxFlex="0 1 calc(90%-20px)" class="mb-1">
+            <div fxFlex="0 1 calc(25%-20px)" class="mb-1">
                 <button mat-raised-button color="primary" (click)="openPrintPNGDialog()">PNG generieren</button>
+            </div>
+            <div fxFlex="0 1 calc(50%-20px)" class="mb-1">
+                <button mat-raised-button color="primary" (click)="openPrintPDFDialog()">PDF generieren</button>
             </div>
         </div>
 

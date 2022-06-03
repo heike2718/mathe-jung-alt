@@ -29,11 +29,12 @@ import de.egladil.mathe_jung_alt_ws.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mathe_jung_alt_ws.domain.dto.SortDirection;
 import de.egladil.mathe_jung_alt_ws.domain.dto.Suchfilter;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselGeneratorService;
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselService;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.EditRaetselPayload;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.GeneratedImages;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.RaetselsucheTreffer;
 
 /**
@@ -145,14 +146,15 @@ public class AdminRaetselResource {
 
 	@GET
 	@Path("{outputformat}/{raetselUuid}")
-	public Response raetselGenerieren(@PathParam(
+	@Produces(MediaType.APPLICATION_JSON)
+	public GeneratedImages raetselGenerieren(@PathParam(
 		value = "outputformat") final Outputformat outputformat, @PathParam(
 			value = "raetselUuid") final String raetselUuid, @QueryParam(
-				value = "antworttyp") final AnzeigeAntwortvorschlaegeTyp anzeigeAntwortvorschlaege) {
+				value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		String url = generatorService.produceOutputReaetsel(outputformat, raetselUuid, anzeigeAntwortvorschlaege);
+		GeneratedImages result = generatorService.produceOutputReaetsel(outputformat, raetselUuid, layoutAntwortvorschlaege);
 
-		return Response.ok(url).build();
+		return result;
 	}
 
 	/**

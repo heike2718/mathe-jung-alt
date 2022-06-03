@@ -4,7 +4,7 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain.generatoren;
 
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 
@@ -17,12 +17,14 @@ public interface RaetselFileService {
 	 * Schreibt die Frage des gegebenen Raetsels in ein LaTeX-File im Filesystem und gibt den Pfad des File zurück.
 	 *
 	 * @param  raetsel
-	 *                      Raetsel die UUID des Raetsels
+	 *                                  Raetsel die UUID des Raetsels
 	 * @param  outputformat
-	 *                      Outputformat das gewünschte output-format.
-	 * @return              String Pfad des LaTeX-Files.
+	 *                                  Outputformat das gewünschte output-format.
+	 * @param  layoutAntwortvorschlaege
+	 *                                  LayoutAntwortvorschlaege
+	 * @return                          String Pfad des LaTeX-Files.
 	 */
-	String generateFrageLaTeX(Raetsel raetsel, Outputformat outputformat, AnzeigeAntwortvorschlaegeTyp anzeigeAntwortvorschlaege);
+	String generateFrageLaTeX(Raetsel raetsel, Outputformat outputformat, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 	/**
 	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.

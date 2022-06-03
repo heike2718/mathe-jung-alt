@@ -4,7 +4,7 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.domain.generatoren.impl;
 
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 
 public interface AntwortvorschlagGeneratorStrategegy {
@@ -20,9 +20,9 @@ public interface AntwortvorschlagGeneratorStrategegy {
 	 */
 	String generateLaTeXAntwortvorschlaege(Raetsel raetsel);
 
-	public static AntwortvorschlagGeneratorStrategegy create(final AnzeigeAntwortvorschlaegeTyp typ) {
+	public static AntwortvorschlagGeneratorStrategegy create(final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		switch (typ) {
+		switch (layoutAntwortvorschlaege) {
 
 		case NOOP:
 
@@ -38,7 +38,7 @@ public interface AntwortvorschlagGeneratorStrategegy {
 			return new DescriptionAntwortvorschlagGeneratorStrategegy();
 
 		default:
-			throw new IllegalArgumentException("unbekannter Antwortanzegetyp " + typ);
+			throw new IllegalArgumentException("unbekannter Antwortanzegetyp " + layoutAntwortvorschlaege);
 		}
 	}
 

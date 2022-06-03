@@ -20,10 +20,11 @@ import de.egladil.mathe_jung_alt_ws.domain.dto.Message;
 import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselFileService;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselGeneratorService;
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.AnzeigeAntwortvorschlaegeTyp;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselService;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.GeneratedImages;
 import de.egladil.mathe_jung_alt_ws.infrastructure.restclient.LaTeXRestClient;
 
 /**
@@ -48,7 +49,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public String produceOutputReaetsel(final Outputformat outputformat, final String raetselUuid, final AnzeigeAntwortvorschlaegeTyp anzeigeAntwortvorschlaege) {
+	public GeneratedImages produceOutputReaetsel(final Outputformat outputformat, final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
@@ -60,7 +61,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				Response.status(404).entity(Message.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
-		raetselFileService.generateFrageLaTeX(raetsel, outputformat, anzeigeAntwortvorschlaege);
+		raetselFileService.generateFrageLaTeX(raetsel, outputformat, layoutAntwortvorschlaege);
 
 		Response response = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");
@@ -88,7 +89,15 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			if (message.isOk()) {
 
 				String filename = raetsel.getSchluessel() + outputformat.getFilenameExtension();
-				return output2Url(filename);
+
+				byte[] imageFrage = this.raetselFileService.findImageFrage(raetsel.getSchluessel());
+
+				GeneratedImages result = new GeneratedImages();
+				result.setImageFrage(imageFrage);
+				result.setUrlFrage(output2Url(filename));
+				result.setOutputFormat(outputformat);
+
+				return result;
 			}
 
 			LOGGER.error("Mist: generieren hat nicht geklappt: " + message.getMessage());
@@ -96,7 +105,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 		} catch (Exception e) {
 
-			String msg = "Beim generieren des Outputs " + outputformat + " zu Raetsel [schluessel="
+			String msg = "Beim Generieren des Outputs " + outputformat + " zu Raetsel [schluessel="
 				+ raetsel.getSchluessel()
 				+ ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: " + e.getMessage();
 			LOGGER.error(msg, e);

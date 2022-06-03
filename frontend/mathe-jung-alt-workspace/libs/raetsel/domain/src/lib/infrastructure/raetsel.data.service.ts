@@ -1,9 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { EditRaetselPayload, Raetsel, RaetselDetails } from '../entities/raetsel';
-import { PageDefinition, QUERY_PARAM_DESKRIPTOREN, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_DIRECTION, QUERY_PARAM_SUCHSTRING, QUERY_PARAM_TYPE_DESKRIPTOREN, Suchfilter, SuchfilterQueryParameterMapper, SuchfilterWithStatus } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Inject, Injectable } from '@angular/core';
 import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
+import { PageDefinition, QUERY_PARAM_DESKRIPTOREN, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_DIRECTION, QUERY_PARAM_SUCHSTRING, QUERY_PARAM_TYPE_DESKRIPTOREN, Suchfilter, SuchfilterQueryParameterMapper, SuchfilterWithStatus } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Message } from '@mathe-jung-alt-workspace/shared/ui-messaging';
+import { Observable, of } from 'rxjs';
+import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselDataService {
@@ -87,6 +88,16 @@ export class RaetselDataService {
     const url = this.#url + '/' + uuid;
     const headers = new HttpHeaders().set('Accept', 'application/json');
     return this.http.get<RaetselDetails>(url, { headers: headers });
+  }
+
+  public generateRaetsel(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
+
+     const url = this.#url + '/' + outputFormat + '/' + raetselId;
+
+     const headers = new HttpHeaders().set('Accept', 'application/json');
+     const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+
+     return this.http.get<GeneratedImages>(url, { headers: headers, params: params });    
   }
 }
 

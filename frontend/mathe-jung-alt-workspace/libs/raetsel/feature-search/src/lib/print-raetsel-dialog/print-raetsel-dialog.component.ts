@@ -10,6 +10,8 @@ import { DialogData } from '../print-raetsel-dialog.data';
 })
 export class PrintRaetselDialogComponent implements OnInit {
 
+  selectedOption: string | undefined;
+
   constructor(public dialogRef: MatDialogRef<PrintRaetselDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
@@ -17,10 +19,6 @@ export class PrintRaetselDialogComponent implements OnInit {
 
   onOptionSelected($event: any): void {
     const value = $event as string;
-    this.data.selectedAnzeigeAntwortvorschlaege = value;
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
+    this.data.selectedLayoutAntwortvorschlaege = value;
   }
 }
