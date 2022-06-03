@@ -48,15 +48,26 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	void testFindRaetselMitDeskriptorenUndSuchstring() {
+	void testFindRaetselMitDeskriptorenUndSuchstring() throws Exception {
 
-		String expected = "[{\"id\":\"7a94e100-85e9-4ffb-903b-06835851063b\",\"schluessel\":\"02789\",\"name\":\"2022 zählen\",\"kommentar\":\"Minikänguru 2022 Klasse 1\",\"deskriptoren\":[{\"id\":1,\"name\":\"Mathematik\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":2,\"name\":\"Minikänguru\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":4,\"name\":\"Klasse 1\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":7,\"name\":\"EINS\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":9,\"name\":\"A\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":12,\"name\":\"Vorschule\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":13,\"name\":\"Klassen 1/2\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":29,\"name\":\"Multiple Choice\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":41,\"name\":\"Grundschule\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":46,\"name\":\"A-1\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":78,\"name\":\"2022\",\"admin\":true,\"kontext\":\"RAETSEL\"}]}]";
-
-		given()
-			.when().get("?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING")
+		Response response = given()
+			.when().get("?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING");
+		response
 			.then()
-			.statusCode(200)
-			.body(is(expected));
+			.statusCode(200);
+
+		String responsePayload = response.asString();
+		System.out.println(responsePayload);
+
+		RaetselsucheTreffer[] alleRaetsel = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
+		assertEquals(1, alleRaetsel.length);
+
+		{
+
+			RaetselsucheTreffer raetsel = alleRaetsel[0];
+			assertEquals("7a94e100-85e9-4ffb-903b-06835851063b", raetsel.getId());
+			assertEquals("02789", raetsel.getSchluessel());
+		}
 	}
 
 	@Test
@@ -90,19 +101,36 @@ public class AdminRaetselResourceTest {
 			assertEquals("7a94e100-85e9-4ffb-903b-06835851063b", raetsel.getId());
 			assertEquals("02789", raetsel.getSchluessel());
 		}
-
-		assertEquals(200, response.getStatusCode());
 	}
 
 	@Test
-	void testFindRaetselMitSuchstring() {
+	void testFindRaetselMitSuchstring() throws Exception {
 
-		String expected = "[{\"id\":\"f3b70e16-c431-42b7-b919-751de708d9d7\",\"schluessel\":\"02777\",\"name\":\"Domino mit Waggons\",\"kommentar\":\"Minikänguru 2022 EINS ZWEI\",\"deskriptoren\":[{\"id\":1,\"name\":\"Mathematik\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":2,\"name\":\"Minikänguru\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":4,\"name\":\"Klasse 1\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":5,\"name\":\"Klasse 2\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":7,\"name\":\"EINS\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":8,\"name\":\"ZWEI\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":9,\"name\":\"A\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":12,\"name\":\"Vorschule\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":13,\"name\":\"Klassen 1/2\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":29,\"name\":\"Multiple Choice\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":41,\"name\":\"Grundschule\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":47,\"name\":\"A-2\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":48,\"name\":\"A-3\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":78,\"name\":\"2022\",\"admin\":true,\"kontext\":\"RAETSEL\"}]},{\"id\":\"7a94e100-85e9-4ffb-903b-06835851063b\",\"schluessel\":\"02789\",\"name\":\"2022 zählen\",\"kommentar\":\"Minikänguru 2022 Klasse 1\",\"deskriptoren\":[{\"id\":1,\"name\":\"Mathematik\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":2,\"name\":\"Minikänguru\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":4,\"name\":\"Klasse 1\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":7,\"name\":\"EINS\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":9,\"name\":\"A\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":12,\"name\":\"Vorschule\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":13,\"name\":\"Klassen 1/2\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":29,\"name\":\"Multiple Choice\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":41,\"name\":\"Grundschule\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":46,\"name\":\"A-1\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":78,\"name\":\"2022\",\"admin\":true,\"kontext\":\"RAETSEL\"}]}]";
-		given()
-			.when().get("?suchstring=zählen&typeDeskriptoren=ORDINAL")
+		Response response = given()
+			.when().get("?suchstring=zählen&typeDeskriptoren=ORDINAL");
+		response
 			.then()
-			.statusCode(200)
-			.body(is(expected));
+			.statusCode(200);
+
+		String responsePayload = response.asString();
+		System.out.println(responsePayload);
+
+		RaetselsucheTreffer[] alleRaetsel = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
+		assertEquals(2, alleRaetsel.length);
+
+		{
+
+			RaetselsucheTreffer raetsel = alleRaetsel[0];
+			assertEquals("f3b70e16-c431-42b7-b919-751de708d9d7", raetsel.getId());
+			assertEquals("02777", raetsel.getSchluessel());
+		}
+
+		{
+
+			RaetselsucheTreffer raetsel = alleRaetsel[1];
+			assertEquals("7a94e100-85e9-4ffb-903b-06835851063b", raetsel.getId());
+			assertEquals("02789", raetsel.getSchluessel());
+		}
 	}
 
 	@Test

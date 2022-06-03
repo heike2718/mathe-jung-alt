@@ -98,6 +98,7 @@ const raetselReducer = createReducer(
     const raetsel: Raetsel = {
       id: raetselDetails.id,
       name: raetselDetails.name,
+      status: raetselDetails.status,
       schluessel: raetselDetails.schluessel,
       deskriptoren: raetselDetails.deskriptoren
     };

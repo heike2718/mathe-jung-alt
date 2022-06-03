@@ -1,1 +1,18 @@
-<p>dashboard works!</p>
+<h2>Persönliche Startseite von <span id="dashboard.userName" *ngIf="authFacade.getUser$ | async as user">{{user.fullName}}</span></h2>
+
+<div class="wrapper m4">
+
+    <div id="dashboard.sectionQuelleGefunden" *ngIf="quellenFacade.selectedQuelle$ | async as quelle">
+        <p>Ihre Quelle als Autor:in wurde bereits geladen. Sie
+            können also mit dem Erfassen von Rätseln sofort loslegen. <span class="material-icons">mood</span></p>
+    </div>
+
+    <div id="dashboard.sectionKeineQuelleGefunden" *ngIf="(quellenFacade.selectedQuelle$ | async) === undefined">
+        <p>Leider gibt es noch keine Quelle für Sie als
+            Autor:in. <span class="material-icons">sentiment_dissatisfied</span>
+            Wenn Sie also eigene Rätsel erfassen möchten, legen Sie bitte eine Quelle für sich an.</p>
+        <p> Die Quelle muss Ihren vollen
+            Benutzernamen haben, damit sie beim Einloggen gefunden wird.</p>
+    </div>
+
+</div>

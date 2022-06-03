@@ -20,12 +20,12 @@ import io.quarkus.test.junit.TestProfile;
 import io.restassured.response.Response;
 
 /**
- * AdminQuellenResourceTest
+ * AdminQuellenResourceContainerizedTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(AdminQuellenResource.class)
 @TestProfile(ContainerDatabaseTestProfile.class)
-public class AdminQuellenResourceTest {
+public class AdminQuellenResourceContainerizedTest {
 
 	@Test
 	void testSucheOhneDeskriptorenMitTreffer() {
@@ -111,7 +111,7 @@ public class AdminQuellenResourceTest {
 	@Test
 	void testFindQuelleByPersonOhneTrefferWegenEqualsSuche() throws Exception {
 
-		String expected = "{\"level\":\"ERROR\",\"message\":\"Diese Quelle gibt es noch nicht: bitte zuerst anlegen\"}";
+		String expected = "{\"level\":\"WARN\",\"message\":\"Es gibt noch keine Quelle für Sie als Autor:in. Bitte legen Sie eine an.\"}";
 
 		given()
 			.when().get("admin?person=Ponder")
@@ -124,7 +124,7 @@ public class AdminQuellenResourceTest {
 	@Test
 	void testFindQuelleByPersonOhneTrefferKomplettAnders() throws Exception {
 
-		String expected = "{\"level\":\"ERROR\",\"message\":\"Diese Quelle gibt es noch nicht: bitte zuerst anlegen\"}";
+		String expected = "{\"level\":\"WARN\",\"message\":\"Es gibt noch keine Quelle für Sie als Autor:in. Bitte legen Sie eine an.\"}";
 
 		given()
 			.when().get("admin?person=Heike")

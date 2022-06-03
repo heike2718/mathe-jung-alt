@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.DomainEntityStatus;
 import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Deskriptor;
 
 /**
@@ -29,6 +30,9 @@ public class RaetselsucheTreffer {
 
 	@JsonProperty
 	private String kommentar;
+
+	@JsonProperty
+	private DomainEntityStatus status;
 
 	@JsonProperty
 	private List<Deskriptor> deskriptoren;
@@ -91,6 +95,17 @@ public class RaetselsucheTreffer {
 	public RaetselsucheTreffer withKommentar(final String kommentar) {
 
 		this.kommentar = kommentar;
+		return this;
+	}
+
+	public DomainEntityStatus getStatus() {
+
+		return status;
+	}
+
+	public RaetselsucheTreffer withStatus(final DomainEntityStatus status) {
+
+		this.status = status;
 		return this;
 	}
 

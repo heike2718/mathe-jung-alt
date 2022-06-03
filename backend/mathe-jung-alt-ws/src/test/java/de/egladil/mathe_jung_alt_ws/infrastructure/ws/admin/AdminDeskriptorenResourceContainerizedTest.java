@@ -15,7 +15,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
 /**
- * OpenDeskriptorenResourceTest
+ * OpenDeskriptorenResourceContainerizedTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(AdminDeskriptorenResource.class)

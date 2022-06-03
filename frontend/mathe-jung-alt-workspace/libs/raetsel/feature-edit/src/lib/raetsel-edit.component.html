@@ -69,6 +69,16 @@
 
                 <div class="mb-2">
                     <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Status</mat-label>
+                        <select matNativeControl formControlName="status"
+                            #statusInput>
+                            <option *ngFor="let status of selectStatusInput" [value]="status">{{status}}</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Frage</mat-label>
                         <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="10"
                             placeholder="Frage" formControlName="frage" #frageInput></textarea>

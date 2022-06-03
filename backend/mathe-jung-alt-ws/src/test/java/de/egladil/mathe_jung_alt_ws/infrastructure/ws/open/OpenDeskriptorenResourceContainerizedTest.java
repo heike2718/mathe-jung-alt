@@ -15,12 +15,12 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
 /**
- * OpenDeskriptorenResourceTest
+ * OpenDeskriptorenResourceContainerizedTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(OpenDeskriptorenResource.class)
 @TestProfile(ContainerDatabaseTestProfile.class)
-public class OpenDeskriptorenResourceTest {
+public class OpenDeskriptorenResourceContainerizedTest {
 
 	@Test
 	public void testLoadDeskriptorenEndpointWithKontextRAETSEL() {

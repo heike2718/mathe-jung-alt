@@ -42,6 +42,8 @@ const materialModules = [
   MatDialogModule
 ];
 
+// https://fonts.google.com/icons?selected=Material+Icons
+
 
 @NgModule({
   imports: [

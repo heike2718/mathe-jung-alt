@@ -30,7 +30,6 @@ import de.egladil.mathe_jung_alt_ws.domain.dto.SuchfilterVariante;
 import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselFileService;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Antwortvorschlag;
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.DomainEntityStatus;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselDao;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselService;
@@ -115,8 +114,7 @@ public class RaetselServiceImpl implements RaetselService {
 		PersistentesRaetsel neuesRaetsel = new PersistentesRaetsel();
 		String uuid = UUID.randomUUID().toString();
 		neuesRaetsel.setImportierteUuid(uuid);
-		neuesRaetsel.status = DomainEntityStatus.ERFASST;
-		mergeWithPayload(neuesRaetsel, payload, uuidAendernderUser);
+		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), uuidAendernderUser);
 
 		PersistentesRaetsel.persist(neuesRaetsel);
 
@@ -155,7 +153,7 @@ public class RaetselServiceImpl implements RaetselService {
 			PersistentesRaetselHistorieItem.persist(neuesHistorieItem);
 		}
 
-		mergeWithPayload(persistentesRaetsel, payload, uuidAendernderUser);
+		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), uuidAendernderUser);
 		PersistentesRaetsel.persist(persistentesRaetsel);
 
 		return getRaetselZuId(raetselId);
@@ -178,9 +176,8 @@ public class RaetselServiceImpl implements RaetselService {
 		return result;
 	}
 
-	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final EditRaetselPayload payload, final String uuidAendernderUser) {
+	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final Raetsel daten, final String uuidAendernderUser) {
 
-		Raetsel daten = payload.getRaetsel();
 		persistentesRaetsel.antwortvorschlaege = daten.antwortvorschlaegeAsJSON();
 		persistentesRaetsel.deskriptoren = deskriptorenService.sortAndStringifyIdsDeskriptoren(daten.getDeskriptoren());
 		persistentesRaetsel.frage = daten.getFrage();
@@ -190,11 +187,7 @@ public class RaetselServiceImpl implements RaetselService {
 		persistentesRaetsel.quelle = daten.getQuelleId();
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
-		// persistentesRaetsel.status = daten.getStatus();
-
-		// FIXME: adaptiert muss noch vom frontend kommen
-
-		persistentesRaetsel.adaptiert = false;
+		persistentesRaetsel.status = daten.getStatus();
 	}
 
 	Raetsel mapFromDB(final PersistentesRaetsel raetselDB) {
@@ -218,6 +211,7 @@ public class RaetselServiceImpl implements RaetselService {
 			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
 			.withId(raetselDB.uuid)
 			.withName(raetselDB.name)
+			.withStatus(raetselDB.status)
 			.withKommentar(raetselDB.kommentar)
 			.withSchluessel(raetselDB.schluessel);
 

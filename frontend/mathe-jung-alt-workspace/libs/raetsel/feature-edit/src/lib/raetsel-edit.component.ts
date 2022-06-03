@@ -5,7 +5,7 @@ import {
 } from '@angular/forms';
 import { Deskriptor, DeskriptorenSearchFacade } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { Antwortvorschlag, EditRaetselPayload, initialRaetselDetails, Raetsel, RaetselDetails, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { Antwortvorschlag, EditRaetselPayload, initialRaetselDetails, Raetsel, RaetselDetails, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { filter, Subscription } from 'rxjs';
 
 interface AntwortvorschlagFormValue {
@@ -34,6 +34,8 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
+  selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
+
 
   form!: FormGroup;
 
@@ -46,6 +48,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
       schluessel: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
       name: ['', [Validators.required, Validators.maxLength(100)]],
       quelleId: ['', [Validators.required]],
+      status: ['ERFASST', [Validators.required]],
       frage: ['', [Validators.required]],
       loesung: [''],
       kommentar: [''],
@@ -124,9 +127,9 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   get avFormArray() { return this.form.controls.antwortvorschlaege as FormArray; }
   get antwortvorschlaegeFormGroup() { return this.avFormArray.controls as FormGroup[]; }
 
-  onChangeAnzahlAntwortvorschlaege(e: any) {
+  onChangeAnzahlAntwortvorschlaege($event: any) {
 
-    const anz = parseInt(e.target.value);
+    const anz = parseInt($event.target.value);
     this.addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
@@ -218,19 +221,13 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   private readFormValues(): RaetselDetails {
     const formValue = this.form.value;
 
-    console.log(JSON.stringify(this.form.value));
-
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.collectAntwortvorschlaege();
-
-    const frageNeu = formValue['frage'].trim();
-    const loesungNeu = formValue['loesung'].trim();
-
-    const latexHistorisieren = frageNeu !== this.#raetsel.frage || loesungNeu !== this.#raetsel.loesung;
 
     const raetsel: RaetselDetails = {
       ...this.#raetsel,
       schluessel: formValue['schluessel'].trim(),
       name: formValue['name'] !== null ? formValue['name'].trim() : '',
+      status: formValue['status'],
       kommentar: formValue['kommentar'] !== null ? formValue['kommentar'].trim() : null,
       frage: formValue['frage'] !== null ? formValue['frage'].trim() : '',
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,

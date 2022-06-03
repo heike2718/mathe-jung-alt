@@ -2,6 +2,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
+import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
 import { isExpired, noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
@@ -21,6 +22,7 @@ export class AuthEffects {
     constructor(private actions$: Actions,
         @Inject(SharedConfigService) private configuration: Configuration,
         private authHttpService: AuthHttpService,
+        private messageService: MessageService,
         private safeNgrx: SafeNgrxService,
         private router: Router) {
 
@@ -159,9 +161,10 @@ export class AuthEffects {
         return this.authHttpService.createSession(authResult);
     }
 
-    private clearSession(): void {
+    private clearSession(): void {        
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_USER);
+        this.messageService.clear();
     }
 }

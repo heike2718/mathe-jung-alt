@@ -58,7 +58,7 @@ public class AdminQuellenResource {
 		if (result.isEmpty()) {
 
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND)
-				.entity(Message.error("Diese Quelle gibt es noch nicht: bitte zuerst anlegen")).build());
+				.entity(Message.warn("Es gibt noch keine Quelle für Sie als Autor:in. Bitte legen Sie eine an.")).build());
 		}
 
 		return result.get();

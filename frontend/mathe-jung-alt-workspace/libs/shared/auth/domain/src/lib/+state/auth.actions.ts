@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { AuthResult, Session, User } from '../entities/auth.model';
+import { AuthResult, Session } from '../entities/auth.model';
 
 export const requestLoginUrl = createAction(
     '[AuthFacade] request login url'

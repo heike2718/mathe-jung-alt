@@ -2,6 +2,7 @@ import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 
 export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';
 export type LATEX_ANZEIGE_ANTWORTVORSCHLAEGE_TYP = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
+export type STATUS = 'ERFASST' | 'FREIGEGEBEN';
 
 export const anzeigeAntwortvorschlaegeSelectInput = [
   '--', 'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
@@ -17,6 +18,7 @@ export interface RaetselDetails {
   readonly id: string;
   readonly schluessel: string;
   readonly name: string;
+  readonly status: STATUS;
   readonly frage: string;
   readonly loesung?: string;
   readonly kommentar?: string;
@@ -32,6 +34,7 @@ export interface Raetsel {
   readonly id: string;
   readonly schluessel: string;
   readonly name: string;
+  readonly status: STATUS;
   readonly kommentar?: string;
   readonly deskriptoren: Deskriptor[];
 };
@@ -45,6 +48,7 @@ export const initialRaetselDetails: RaetselDetails = {
   id: 'neu',
   schluessel: '',
   name: '',
+  status: 'ERFASST',
   frage: '',
   loesung: '',
   kommentar: '',

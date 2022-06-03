@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { Quelle } from '../entities/quelle';
 import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
 import { QUERY_PARAM_DESKRIPTOREN, QUERY_PARAM_SUCHSTRING, QUERY_PARAM_TYPE_DESKRIPTOREN, Suchfilter, SuchfilterQueryParameterMapper } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { User } from 'libs/shared/auth/domain/src/lib/entities/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class QuelleDataService {
@@ -31,6 +32,22 @@ export class QuelleDataService {
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
     return this.http.get<Quelle[]>(this.#url, { headers, params });
+  }
+
+  loadQuelleAdmin(user: User | undefined): Observable<Quelle | undefined> {
+
+    if (user && user.rolle === 'ADMIN') {
+
+      const headers = new HttpHeaders().set('Accept', 'application/json');
+      const url = this.#url + '/admin';
+
+      let params = new HttpParams()
+        .set('person', user.fullName);
+
+      return this.http.get<Quelle>(url, { headers, params });
+    }
+
+    return of(undefined);
   }
 
   loadQuelle(id: string): Observable<Quelle> {
