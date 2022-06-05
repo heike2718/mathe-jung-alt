@@ -1,4 +1,4 @@
-import { PageDefinition, Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { PageDefinition } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
 import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselEditorContent } from '../../entities/raetsel';
 
@@ -66,12 +66,12 @@ export const generateOutput = createAction(
   props<{ raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>()
 );
 
-export const outputGenerated = createAction (
+export const outputGenerated = createAction(
   '[Raetsel] output generated',
-  props<{images: GeneratedImages}>()
+  props<{ images: GeneratedImages }>()
 );
 
-export const cancelEdit = createAction (
+export const cancelEdit = createAction(
   '[Raetsel] cancel edit'
 );
 

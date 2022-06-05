@@ -62,7 +62,7 @@ export class RaetselFacade {
 
   
 
-  /*  Setzt die Suchkette mit serverseitiger Pagination in Gang. */
+  /*  Setzt die Suchkette mit serverseitiger Pagination in Gang. Hierzu wird ein select count mit dem Suchfilter abgesetzt */
   triggerSearch(pageDefinition: PageDefinition): void {
     this.store.dispatch(RaetselActions.selectPage({ pageDefinition }));
     this.store.dispatch(RaetselActions.prepareSearch());
@@ -122,7 +122,7 @@ export class RaetselFacade {
     this.store.dispatch(RaetselActions.editRaetsel({ raetselEditorContent: content }));
   }
 
-  generateRaetsel(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+  generiereRaetselOutput(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
     this.store.dispatch(RaetselActions.generateOutput({ raetselId, outputFormat, layoutAntwortvorschlaege }));
   }
 

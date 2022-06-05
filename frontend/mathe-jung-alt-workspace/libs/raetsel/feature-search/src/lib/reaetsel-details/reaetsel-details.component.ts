@@ -81,7 +81,7 @@ export class ReaetselDetailsComponent implements OnInit, OnDestroy {
           case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
         }
 
-        this.raetselFacade.generateRaetsel(this.#raetselDetails.id, outputformat, layout);
+        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, layout);
       }
     });
   }

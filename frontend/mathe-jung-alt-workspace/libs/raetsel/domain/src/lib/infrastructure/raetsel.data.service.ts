@@ -90,7 +90,7 @@ export class RaetselDataService {
     return this.http.get<RaetselDetails>(url, { headers: headers });
   }
 
-  public generateRaetsel(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
+  public generiereRaetselOutput(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
 
      const url = this.#url + '/' + outputFormat + '/' + raetselId;
 

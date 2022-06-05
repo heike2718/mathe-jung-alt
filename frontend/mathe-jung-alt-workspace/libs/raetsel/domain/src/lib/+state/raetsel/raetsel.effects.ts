@@ -65,11 +65,11 @@ export class RaetselEffects {
     )
   );
 
-  generateImages$ = createEffect(() =>
+  generiereRaetselOutput$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.generateOutput),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.generateRaetsel(action.raetselId, action.outputFormat, action.layoutAntwortvorschlaege).pipe(
+        this.raetselDataService.generiereRaetselOutput(action.raetselId, action.outputFormat, action.layoutAntwortvorschlaege).pipe(
           map((images) =>
             RaetselActions.outputGenerated({ images })
           )
