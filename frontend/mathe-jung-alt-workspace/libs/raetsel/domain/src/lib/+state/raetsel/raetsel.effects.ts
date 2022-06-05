@@ -14,9 +14,9 @@ export class RaetselEffects {
   prepareSearch$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.prepareSearch),
-      withLatestFrom(this.suchfilterFacade.suchfilterWithStatus$),
+      withLatestFrom(this.suchfilterFacade.selectedSuchfilter$),
       this.safeNgrx.safeSwitchMap(([_action, suchfilter]) =>
-        this.raetselDataService.countRaetsel(suchfilter.suchfilter).pipe(
+        this.raetselDataService.countRaetsel(suchfilter).pipe(
           tap((anzahl) => this.raetselFacade.startSearch(anzahl)),
           map(() => noopAction())
         ), 'Ups, beim Zählen der Rätsel ist etwas schiefgegangen', noopAction()
@@ -28,12 +28,12 @@ export class RaetselEffects {
     this.actions$.pipe(
       ofType(RaetselActions.findRaetsel),
       withLatestFrom(
-        this.suchfilterFacade.suchfilterWithStatus$,
+        this.suchfilterFacade.selectedSuchfilter$,
         this.raetselFacade.paginationState$
       ),
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
-      this.safeNgrx.safeSwitchMap(([_action, suchfilterWithStatus, paginationState]) =>
-        this.raetselDataService.loadPage(suchfilterWithStatus,
+      this.safeNgrx.safeSwitchMap(([_action, suchfilter, paginationState]) =>
+        this.raetselDataService.loadPage(suchfilter,
           { pageIndex: paginationState.pageIndex, pageSize: paginationState.pageSize, sortDirection: paginationState.sortDirection }).pipe(
             map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))
           ), 'Ups, beim Suchen nach Rätseln ist etwas schiefgegangen', noopAction()
@@ -81,12 +81,7 @@ export class RaetselEffects {
   navigateToRaetselDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.raetselDetailsLoaded),
-      tap((action) => {
-        // if (action.raetselDetails.id === 'neu') {
-        //   this.router.navigateByUrl('raetseleditor')
-        // } else {
-        //   this.router.navigateByUrl('raetsel/details')
-        // }
+      tap(() => {        
         this.router.navigateByUrl('raetsel/details');
       }),
     ), { dispatch: false });

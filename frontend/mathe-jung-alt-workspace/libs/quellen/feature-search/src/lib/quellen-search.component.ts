@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { deskriptorenToString, Quelle, QuellenDataSource, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Suchfilter, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { debounceTime, distinctUntilChanged, filter, map, merge, Subscription, tap } from 'rxjs';
 
 @Component({
@@ -19,8 +19,10 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   #sucheReadySubscription: Subscription = new Subscription();
   #sucheClearedSubscription: Subscription = new Subscription();
   #deskriptorenLoadedSubscription: Subscription = new Subscription();
+  #canStartSucheSubscription: Subscription = new Subscription();
+  #suchfilterSubscription: Subscription = new Subscription();
 
-  suchfilterWithStatus$ = this.suchfilterFacade.suchfilterWithStatus$;
+  suchfilter: Suchfilter | undefined;
   quelleList$ = this.quellenFacade.quellenList$;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -31,7 +33,7 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   anzahlQuellen: number = 0;
 
   constructor(public quellenFacade: QuellenFacade
-    , private suchfilterFacade: SuchfilterFacade) {}
+    , public suchfilterFacade: SuchfilterFacade) {}
 
   ngOnInit() {
 
@@ -49,19 +51,34 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
       liste => this.anzahlQuellen = liste.length
     );
 
-    this.#sucheReadySubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
-      filter((sws) => sws.suchfilter.kontext === this.#kontext && sws.nichtLeer),
-      map((sws) => sws.suchfilter),
-      filter(sws => sws.suchstring.length > 1),
+    this.#suchfilterSubscription = this.suchfilterFacade.selectedSuchfilter$.subscribe(
+      (selectedSuchfilter) => {
+        if (selectedSuchfilter) {
+          this.suchfilter = selectedSuchfilter
+        }
+      }
+    );
+
+    this.#canStartSucheSubscription = this.suchfilterFacade.canStartSuche$.pipe(
+      filter((ready) => ready),
       debounceTime(300),
       distinctUntilChanged(),
-      tap((suchfilter) => this.quellenFacade.findQuellen(suchfilter))
+      tap(() => this.triggerSuche())
     ).subscribe();
 
-    this.#sucheClearedSubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
-      filter((sws) => sws.suchfilter.kontext === this.#kontext &&  !sws.nichtLeer),
-      tap(() => this.quellenFacade.clearTrefferliste())
-    ).subscribe();
+    // this.#sucheReadySubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
+    //   filter((sws) => sws.suchfilter.kontext === this.#kontext && sws.nichtLeer),
+    //   map((sws) => sws.suchfilter),
+    //   filter(sws => sws.suchstring.length > 1),
+    //   debounceTime(300),
+    //   distinctUntilChanged(),
+    //   tap((suchfilter) => this.quellenFacade.findQuellen(suchfilter))
+    // ).subscribe();
+
+    // this.#sucheClearedSubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
+    //   filter((sws) => sws.suchfilter.kontext === this.#kontext &&  !sws.nichtLeer),
+    //   tap(() => this.quellenFacade.clearTrefferliste())
+    // ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -70,6 +87,8 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
     this.#sucheReadySubscription.unsubscribe();
     this.#sucheClearedSubscription.unsubscribe();
     this.#deskriptorenLoadedSubscription.unsubscribe();
+    this.#canStartSucheSubscription.unsubscribe();
+    this.#suchfilterSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -93,7 +112,7 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
     if (this.paginator) {
       this.paginator.pageIndex = 0;
     }
-    this.suchfilterFacade.changeDeskriptoren($event);
+    // this.suchfilterFacade.changeDeskriptoren($event);
   }
 
   onInputChanged($event: string) {
@@ -109,5 +128,12 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
 
   private loadQuellenPage(): void {
     this.quellenFacade.slicePage(this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+  }
+
+  private triggerSuche(): void {
+
+    if (this.suchfilter) {
+      this.quellenFacade.findQuellen(this.suchfilter);
+    }
   }
 }

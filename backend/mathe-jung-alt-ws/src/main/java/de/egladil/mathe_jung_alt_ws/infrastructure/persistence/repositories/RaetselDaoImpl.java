@@ -44,7 +44,7 @@ public class RaetselDaoImpl implements RaetselDao {
 	public long zaehleMitDeskriptoren(final String deskriptorenIDs) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
-		String stmt = "SELECT count(*) FROM RAETSEL r WHERE DESKRIPTOREN LIKE :deskriptoren";
+		String stmt = "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
 
 		@SuppressWarnings("unchecked")
 		List<BigInteger> trefferliste = entityManager.createNativeQuery(stmt)
@@ -60,7 +60,7 @@ public class RaetselDaoImpl implements RaetselDao {
 	public long zaehleRaetselComplete(final String suchstring, final String deskriptorenIDs) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
-		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND DESKRIPTOREN LIKE :deskriptoren";
+		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
 
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
@@ -118,8 +118,8 @@ public class RaetselDaoImpl implements RaetselDao {
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
 		String stmt = sortDirection == SortDirection.desc
-			? "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND DESKRIPTOREN LIKE :deskriptoren ORDER BY SCHLUESSEL desc"
-			: "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND DESKRIPTOREN LIKE :deskriptoren ORDER BY SCHLUESSEL";
+			? "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL desc"
+			: "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL";
 
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");

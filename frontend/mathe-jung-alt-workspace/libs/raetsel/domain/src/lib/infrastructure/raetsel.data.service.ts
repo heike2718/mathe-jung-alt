@@ -15,7 +15,12 @@ export class RaetselDataService {
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 
-  countRaetsel(suchfilter: Suchfilter): Observable<number> {
+  countRaetsel(suchfilter: Suchfilter | undefined): Observable<number> {
+
+    if (suchfilter === undefined) {
+      return of(0);
+    }
+
     if (suchfilter.deskriptoren.length === 0 && (suchfilter.suchstring === undefined || suchfilter.suchstring.trim().length === 0)) {
       return of(0);
     }
@@ -40,13 +45,12 @@ export class RaetselDataService {
     return this.http.get<number>(url, { headers, params });
   }
 
-  loadPage(suchfilterWithStatus: SuchfilterWithStatus, pageDefinition: PageDefinition): Observable<Raetsel[]> {
+  loadPage(suchfilter: Suchfilter | undefined, pageDefinition: PageDefinition): Observable<Raetsel[]> {
 
-    if (!suchfilterWithStatus.nichtLeer) {
+    if (suchfilter === undefined) {
       return of([]);
     }
-
-    const suchfilter: Suchfilter = suchfilterWithStatus.suchfilter;
+    
     const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
     let params = new HttpParams()

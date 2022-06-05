@@ -34,7 +34,7 @@ public class AdminRaetselResourceTest {
 			.when().get("size?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING")
 			.then()
 			.statusCode(200)
-			.body(is("1"));
+			.body(is("2"));
 	}
 
 	@Test
@@ -44,7 +44,27 @@ public class AdminRaetselResourceTest {
 			.when().get("size?suchstring=Minikänguru&typeDeskriptoren=STRING")
 			.then()
 			.statusCode(200)
-			.body(is("3"));
+			.body(is("13"));
+	}
+
+	@Test
+	void testZaehleRaetselMitGenauEinemDeskriptorTypString() {
+
+		given()
+			.when().get("size?deskriptoren=EINS&typeDeskriptoren=STRING")
+			.then()
+			.statusCode(200)
+			.body(is("9"));
+	}
+
+	@Test
+	void testZaehleRaetselMitGenauEinemDeskriptorTypOrdinal() {
+
+		given()
+			.when().get("size?deskriptoren=8&typeDeskriptoren=ORDINAL")
+			.then()
+			.statusCode(200)
+			.body(is("6"));
 	}
 
 	@Test
@@ -60,7 +80,7 @@ public class AdminRaetselResourceTest {
 		System.out.println(responsePayload);
 
 		RaetselsucheTreffer[] alleRaetsel = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
-		assertEquals(1, alleRaetsel.length);
+		assertEquals(2, alleRaetsel.length);
 
 		{
 
@@ -86,7 +106,7 @@ public class AdminRaetselResourceTest {
 		System.out.println(responsePayload);
 
 		RaetselsucheTreffer[] alleRaetsel = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
-		assertEquals(2, alleRaetsel.length);
+		assertEquals(3, alleRaetsel.length);
 
 		{
 
@@ -116,20 +136,42 @@ public class AdminRaetselResourceTest {
 		System.out.println(responsePayload);
 
 		RaetselsucheTreffer[] alleRaetsel = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
-		assertEquals(2, alleRaetsel.length);
+
+		assertEquals(5, alleRaetsel.length);
 
 		{
 
 			RaetselsucheTreffer raetsel = alleRaetsel[0];
+			assertEquals("57d53a52-9609-46b2-bbfb-7e3d9e1983b5", raetsel.getId());
+			assertEquals("02596", raetsel.getSchluessel());
+		}
+
+		{
+
+			RaetselsucheTreffer raetsel = alleRaetsel[1];
 			assertEquals("f3b70e16-c431-42b7-b919-751de708d9d7", raetsel.getId());
 			assertEquals("02777", raetsel.getSchluessel());
 		}
 
 		{
 
-			RaetselsucheTreffer raetsel = alleRaetsel[1];
+			RaetselsucheTreffer raetsel = alleRaetsel[2];
 			assertEquals("7a94e100-85e9-4ffb-903b-06835851063b", raetsel.getId());
 			assertEquals("02789", raetsel.getSchluessel());
+		}
+
+		{
+
+			RaetselsucheTreffer raetsel = alleRaetsel[3];
+			assertEquals("a18315fc-ed01-45c3-bf2d-078dd1fa47f4", raetsel.getId());
+			assertEquals("02791", raetsel.getSchluessel());
+		}
+
+		{
+
+			RaetselsucheTreffer raetsel = alleRaetsel[3];
+			assertEquals("024f4ca4-3235-48a4-9c88-e77990ea059c", raetsel.getId());
+			assertEquals("02816", raetsel.getSchluessel());
 		}
 	}
 

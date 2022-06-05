@@ -45,7 +45,7 @@ public class SetOperationUtilsTest {
 
 			// Arrange
 			String deskriptorenIDs = "43,7,9,3,15";
-			String expected = "%3%,%7%,%9%,%15%,%43%";
+			String expected = "%,3,%,7,%,9,%,15,%,43,%";
 
 			// Act
 			String result = setOperationUtils.prepareForDeskriptorenLikeSearch(deskriptorenIDs);
@@ -60,7 +60,7 @@ public class SetOperationUtilsTest {
 
 			// Arrange
 			String deskriptorenIDs = "43,3,7,9,3,15";
-			String expected = "%3%,%7%,%9%,%15%,%43%";
+			String expected = "%,3,%,7,%,9,%,15,%,43,%";
 
 			// Act
 			String result = setOperationUtils.prepareForDeskriptorenLikeSearch(deskriptorenIDs);

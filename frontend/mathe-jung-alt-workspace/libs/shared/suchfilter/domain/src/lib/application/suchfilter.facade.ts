@@ -3,7 +3,7 @@ import { select, Store } from "@ngrx/store";
 import { SuchfilterPartialState } from "../+state/suchfilter.reducer";
 import * as SuchfilterActions from '../+state/suchfilter.actions';
 import * as SuchfilterSelectors from '../+state/suchfilter.selectors';
-import { SuchfilterWithStatus, Suchkontext } from "../entities/suchfilter";
+import { Suchfilter, SuchfilterWithStatus, Suchkontext } from "../entities/suchfilter";
 import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 import { Observable, pipe } from "rxjs";
 
@@ -14,12 +14,14 @@ import { Observable, pipe } from "rxjs";
 export class SuchfilterFacade {
 
     public allDeskriptoren$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getAllDeskriptoren));
-    public suchfilterWithStatus$: Observable<SuchfilterWithStatus> = this.store.pipe(select(SuchfilterSelectors.getSuchfilterAndReady));
-    public suchkontext$ = this.store.pipe(select(SuchfilterSelectors.getSuchfilterKontext));
+    // public suchfilterWithStatus$: Observable<SuchfilterWithStatus> = this.store.pipe(select(SuchfilterSelectors.getSuchfilterAndReady));
+    // public suchkontext$ = this.store.pipe(select(SuchfilterSelectors.getSelectedKontext));
     public suchliste$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getSuchliste));
     public restliste$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getRestliste));
     public deskriptorenLoaded$: Observable<boolean> = this.store.pipe(select(SuchfilterSelectors.getDeskriptorenLoaded));
-    public filteredDeskriptoren$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getFilteredDeskriptoren));
+    public selectedSuchfilter$: Observable<Suchfilter | undefined> = this.store.pipe(select(SuchfilterSelectors.getSelectedSuchfilter));
+    public canStartSuche$: Observable<boolean> = this.store.pipe(select(SuchfilterSelectors.isSuchfilterReadyToGo));
+    // public filteredDeskriptoren$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getFilteredDeskriptoren));
 
     #deskriptorenLoaded = false;
 
@@ -45,6 +47,11 @@ export class SuchfilterFacade {
 
     }
 
+    // PENDING
+    public resetSuchfilter(kontext: Suchkontext): void {
+
+    }
+
     public changeSuchkontext(kontext: Suchkontext): void {
         this.store.dispatch(SuchfilterActions.suchkontextChanged({ kontext }));
     }
@@ -53,9 +60,9 @@ export class SuchfilterFacade {
         this.store.dispatch(SuchfilterActions.suchstringChanged({ suchstring }));
     }
 
-    public changeDeskriptoren(deskriptoren: Deskriptor[]): void {
-        this.store.dispatch(SuchfilterActions.deskriptorenChanged({ deskriptoren }));
-    }
+    // public changeDeskriptoren(deskriptoren: Deskriptor[]): void {
+    //     this.store.dispatch(SuchfilterActions.deskriptorenChanged({ deskriptoren }));
+    // }
 
     public addToSearchlist(deskriptor: Deskriptor): void {
         this.store.dispatch(SuchfilterActions.deskriptorAddedToSearchList({ deskriptor }));

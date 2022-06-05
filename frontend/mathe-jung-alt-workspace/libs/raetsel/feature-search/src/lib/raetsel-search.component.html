@@ -13,9 +13,9 @@
     </mja-deskriptoren-filter>
   </ng-container>
 
-  <ng-container *ngIf="(suchfilterWithStatus$ | async) as suchfilterWithStatus">
-    <p *ngIf="suchfilterWithStatus.nichtLeer">Lasset die Suche beginnen: {{suchfilterWithStatus | json}}</p>
-    <p *ngIf="!suchfilterWithStatus.nichtLeer">bitte Suchkriterien wählen</p>
+  <ng-container *ngIf="(suchfilterFacade.canStartSuche$ | async) as ready">
+    <p *ngIf="ready">Lasset die Suche beginnen: {{suchfilter | json}}</p>
+    <p *ngIf="!ready">bitte Suchkriterien wählen</p>
   </ng-container>
 
 

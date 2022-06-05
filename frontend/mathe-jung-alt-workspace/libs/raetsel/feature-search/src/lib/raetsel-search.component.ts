@@ -2,9 +2,9 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { Raetsel, RaetselDataSource, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, filter, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { combineLatest, merge, Subscription } from 'rxjs';
-import { PaginationState, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { PaginationState, Suchfilter, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { deskriptorenToString, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
@@ -18,15 +18,16 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
   #kontext: Suchkontext = 'RAETSEL';
 
-  #sucheReadySubscription: Subscription = new Subscription();
   #sucheClearedSubscription: Subscription = new Subscription();
   #paginationStateSubscription: Subscription = new Subscription();
   #userRoleSubscription: Subscription = new Subscription();
   #deskriptorenLoadedSubscription: Subscription = new Subscription();
+  #canStartSucheSubscription: Subscription = new Subscription();
+  #suchfilterSubscription: Subscription = new Subscription();
 
   isAdmin = false;
   isOrdinaryUser = false;
-  suchfilterWithStatus$ = this.suchfilterFacade.suchfilterWithStatus$;
+  suchfilter: Suchfilter | undefined;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -38,7 +39,7 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   anzahlRaetsel: number = 0;
 
   constructor(public raetselFacade: RaetselFacade,
-    private suchfilterFacade: SuchfilterFacade,
+    public suchfilterFacade: SuchfilterFacade,
     public quellenFacade: QuellenFacade,
     private authFacade: AuthFacade
   ) { }
@@ -56,18 +57,27 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
     this.#paginationStateSubscription = this.raetselFacade.paginationState$.subscribe(
       (state: PaginationState) => this.anzahlRaetsel = state.anzahlTreffer
-    )
+    );
 
-    this.#sucheReadySubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
-      filter((sws) => sws.suchfilter.kontext === this.#kontext && sws.nichtLeer),
+    this.#suchfilterSubscription = this.suchfilterFacade.selectedSuchfilter$.subscribe(
+      (selectedSuchfilter) => {
+        if (selectedSuchfilter) {
+          this.suchfilter = selectedSuchfilter;
+        }
+      }
+    );
+
+    this.#canStartSucheSubscription = this.suchfilterFacade.canStartSuche$.pipe(
+      filter((ready) => ready),
       debounceTime(300),
+      // distinctUntilChanged(),
       tap(() => this.triggerSuche())
     ).subscribe();
 
-    this.#sucheClearedSubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
-      filter((sws) => sws.suchfilter.kontext === this.#kontext && !sws.nichtLeer),
-      tap(() => this.raetselFacade.clearTrefferliste())
-    ).subscribe();
+    // this.#sucheClearedSubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
+    //   filter((sws) => sws.suchfilter.kontext === this.#kontext && !sws.nichtLeer),
+    //   tap(() => this.raetselFacade.clearTrefferliste())
+    // ).subscribe();
 
     this.#userRoleSubscription = this.authFacade.getUser$.subscribe(
       user => {
@@ -87,7 +97,8 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.paginator) {
       this.paginator.pageIndex = 0;
     }
-    this.suchfilterFacade.changeDeskriptoren($event);
+    // this.suchfilterFacade.changeDeskriptoren($event);
+    this.triggerSuche();
   }
 
   onInputChanged($event: string) {
@@ -110,11 +121,12 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnDestroy(): void {
-    this.#sucheReadySubscription.unsubscribe();
+    this.#suchfilterSubscription.unsubscribe();
     this.#sucheClearedSubscription.unsubscribe();
     this.#paginationStateSubscription.unsubscribe();
     this.#userRoleSubscription.unsubscribe();
     this.#deskriptorenLoadedSubscription.unsubscribe();
+    this.#canStartSucheSubscription.unsubscribe();
   }
 
   getDisplayedColumns(): string[] {
