@@ -44,7 +44,7 @@ export class ReaetselDetailsComponent implements OnInit, OnDestroy {
   startEdit(): void {
     if (this.#raetselDetails) {
       this.quellenFacade.loadQuelle(this.#raetselDetails.quelleId);
-      this.raetselFacade.startEditRaetsel(this.#raetselDetails);
+      this.raetselFacade.editRaetsel(this.#raetselDetails);
     }
   }
 

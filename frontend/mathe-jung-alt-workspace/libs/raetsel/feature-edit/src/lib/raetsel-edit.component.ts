@@ -3,12 +3,11 @@ import {
   FormArray,
   FormBuilder, FormGroup, Validators
 } from '@angular/forms';
-import { Deskriptor, DeskriptorenSearchFacade, getDifferenzmenge } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { Antwortvorschlag, EditRaetselPayload, initialRaetselDetails, RaetselDetails, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
-import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Antwortvorschlag, EditRaetselPayload, RaetselDetails, RaetselEditorContent, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { SelectableItem } from 'libs/shared/ui-components/src/lib/select-items/select-items.model';
-import { combineLatest, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -25,22 +24,19 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   // https://coryrylan.com/blog/building-reusable-forms-in-angular
   // https://stackblitz.com/edit/angular-10-dynamic-reactive-forms-example?file=src%2Fapp%2Fapp.component.html
   // https://jasonwatmore.com/post/2020/09/18/angular-10-dynamic-reactive-forms-example
-  #raetsel: RaetselDetails = initialRaetselDetails;
-
+  // #raetsel: RaetselDetails = initialRaetselDetails;
+  raetselEditorContent!: RaetselEditorContent;
   #selectedDeskriptoren: Deskriptor[] = [];
 
-  #raetselAndDeskriptorenCombinedSubscription: Subscription = new Subscription();
+  #raetselSubscription: Subscription = new Subscription();
   #selectedQuelleSubscription: Subscription = new Subscription();
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
   selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
 
-  selectableDeskriptoren: SelectableItem[] = [];
-
   form!: FormGroup;
 
   constructor(public raetselFacade: RaetselFacade,
-    private suchfilterFacade: SuchfilterFacade,
     public quellenFacade: QuellenFacade,
     private fb: FormBuilder) {
 
@@ -59,15 +55,11 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.#raetselAndDeskriptorenCombinedSubscription = combineLatest([
-      this.suchfilterFacade.filteredDeskriptoren$,
-      this.raetselFacade.raetselDetails$,
-    ]
-    ).subscribe(([deskriptoren, raetsel]) => {
+    this.#raetselSubscription = this.raetselFacade.editorContent$.subscribe((raetsel) => {
       if (raetsel) {
-        this.#raetsel = raetsel;
+        this.raetselEditorContent = raetsel;
+        this.#selectedDeskriptoren = this.raetselEditorContent.raetsel.deskriptoren;
         this.initForm();
-        this.initSelectableItems(raetsel, deskriptoren)
       }
     });
 
@@ -78,18 +70,21 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
           this.raetselFacade.cacheRaetselDetails(raetsel);
         }
       }
-    )
+    );
   }
 
   ngOnDestroy(): void {
-    this.#raetselAndDeskriptorenCombinedSubscription.unsubscribe();
+    this.#raetselSubscription.unsubscribe();
     this.#selectedQuelleSubscription.unsubscribe();
   }
 
   submit() {
 
     const raetsel: RaetselDetails = this.readFormValues();
-    const latexHistorisieren = this.#raetsel.id !== 'neu' && (raetsel.frage !== this.#raetsel.frage || raetsel.loesung !== this.#raetsel.loesung);
+
+    const latexHistorisieren = this.raetselEditorContent.raetsel.id !== 'neu' &&
+      (raetsel.frage !== this.raetselEditorContent.raetsel.frage || raetsel.loesung !== this.raetselEditorContent.raetsel.loesung);
+
     const editRaetselPayload: EditRaetselPayload = {
       latexHistorisieren: latexHistorisieren,
       raetsel: raetsel
@@ -125,9 +120,8 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     this.#selectedDeskriptoren = [];
 
     $items.forEach(item => {
-      this.#selectedDeskriptoren.push({id: item.id, name: item.name, admin: true, kontext: 'RAETSEL'});
+      this.#selectedDeskriptoren.push({ id: item.id, name: item.name, admin: true, kontext: 'RAETSEL' });
     });
-
   }
 
   quelleSuchen(): void {
@@ -160,42 +154,25 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   private initForm() {
 
-    this.form.controls.schluessel.setValue(this.#raetsel.schluessel);
-    this.form.controls.name.setValue(this.#raetsel.name);
-    this.form.controls.quelleId.setValue(this.#raetsel.quelleId);
-    this.form.controls.frage.setValue(this.#raetsel.frage);
-    this.form.controls.loesung.setValue(this.#raetsel.loesung);
-    this.form.controls.kommentar.setValue(this.#raetsel.kommentar);
-    this.form.controls.anzahlAntwortvorschlaege.setValue(this.#raetsel.antwortvorschlaege.length + '');
+    const raetsel = this.raetselEditorContent.raetsel;
 
-    this.addOrRemoveAntowrtvorschlagFormParts(this.#raetsel.antwortvorschlaege.length);
+    this.form.controls.schluessel.setValue(raetsel.schluessel);
+    this.form.controls.name.setValue(raetsel.name);
+    this.form.controls.quelleId.setValue(raetsel.quelleId);
+    this.form.controls.frage.setValue(raetsel.frage);
+    this.form.controls.loesung.setValue(raetsel.loesung);
+    this.form.controls.kommentar.setValue(raetsel.kommentar);
+    this.form.controls.anzahlAntwortvorschlaege.setValue(raetsel.antwortvorschlaege.length + '');
 
-    for (let i = 0; i < this.#raetsel.antwortvorschlaege.length; i++) {
+    this.addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
+
+    for (let i = 0; i < raetsel.antwortvorschlaege.length; i++) {
 
       const avGroup = this.avFormArray.at(i);
-      const av: Antwortvorschlag = this.#raetsel.antwortvorschlaege[i];
+      const av: Antwortvorschlag = raetsel.antwortvorschlaege[i];
 
       avGroup.setValue({ text: av.text, korrekt: av.korrekt });
     }
-  }
-
-  private initSelectableItems(raetselDetails: RaetselDetails, deskriptoren: Deskriptor[]): void {
-
-    if (this.selectableDeskriptoren.length === deskriptoren.length) {
-      return;
-    }
-
-    this.selectableDeskriptoren = [];
-
-    const vorrat: Deskriptor[] = getDifferenzmenge(deskriptoren, raetselDetails.deskriptoren);
-
-    raetselDetails.deskriptoren.forEach(deskriptor => {
-      this.selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: true });
-    });
-
-    vorrat.forEach(deskriptor => {
-      this.selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: false });
-    });    
   }
 
   private collectAntwortvorschlaege(): Antwortvorschlag[] {
@@ -236,7 +213,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.collectAntwortvorschlaege();
 
     const raetsel: RaetselDetails = {
-      ...this.#raetsel,
+      ...this.raetselEditorContent.raetsel,
       schluessel: formValue['schluessel'].trim(),
       name: formValue['name'] !== null ? formValue['name'].trim() : '',
       status: formValue['status'],
@@ -261,7 +238,6 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
       case 3: return 'D';
       case 4: return 'E';
       case 5: return 'F';
-
     }
 
     return '';

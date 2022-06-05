@@ -13,6 +13,7 @@ import { Observable, pipe } from "rxjs";
 })
 export class SuchfilterFacade {
 
+    public allDeskriptoren$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getAllDeskriptoren));
     public suchfilterWithStatus$: Observable<SuchfilterWithStatus> = this.store.pipe(select(SuchfilterSelectors.getSuchfilterAndReady));
     public suchkontext$ = this.store.pipe(select(SuchfilterSelectors.getSuchfilterKontext));
     public suchliste$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getSuchliste));

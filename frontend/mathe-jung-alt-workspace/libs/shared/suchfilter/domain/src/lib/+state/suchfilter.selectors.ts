@@ -5,6 +5,7 @@ import { SuchfilterState, SUCHFILTER_FEATURE_KEY } from './suchfilter.reducer';
 const getSuchfilterState = createFeatureSelector<SuchfilterState>(SUCHFILTER_FEATURE_KEY);
 
 export const getDeskriptorenLoaded = createSelector(getSuchfilterState, (state: SuchfilterState) => state.deskriptorenLoaded);
+export const getAllDeskriptoren = createSelector(getSuchfilterState, (state: SuchfilterState) => state.deskriptoren);
 export const getSuchfilterKontext = createSelector(getSuchfilterState, (state: SuchfilterState) => state.kontext);
 
 export const getFilteredDeskriptoren = createSelector(getSuchfilterState, (state: SuchfilterState) => state.filteredDeskriptoren);

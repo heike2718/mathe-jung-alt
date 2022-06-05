@@ -1,4 +1,7 @@
 import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
+import { Quelle } from "@mathe-jung-alt-workspace/quellen/domain";
+import { Suchkontext } from "@mathe-jung-alt-workspace/shared/suchfilter/domain";
+import { SelectableItem } from "libs/shared/ui-components/src/lib/select-items/select-items.model";
 
 export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';
 export type LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
@@ -48,8 +51,15 @@ export interface GeneratedImages {
 };
 
 export interface EditRaetselPayload {
-  readonly latexHistorisieren: boolean
-  readonly raetsel: RaetselDetails
+  readonly latexHistorisieren: boolean;
+  readonly raetsel: RaetselDetails;
+};
+
+export interface RaetselEditorContent {
+  readonly kontext: Suchkontext;
+  readonly raetsel: RaetselDetails;
+  readonly quelleId?: string;
+  readonly selectableDeskriptoren: SelectableItem[];
 };
 
 export const initialRaetselDetails: RaetselDetails = {

@@ -54,3 +54,8 @@ export const getSaveSuccessMessage = createSelector(
   getRaetselState,
   (state: RaetselState) => state.saveSuccessMessage
 );
+
+export const getEditorContent = createSelector(
+  getRaetselState,
+  (state: RaetselState) => state.raetselEditorContent
+);

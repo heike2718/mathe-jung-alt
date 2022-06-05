@@ -2,7 +2,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import * as RaetselActions from './raetsel.actions';
-import { Raetsel, RaetselDetails } from '../../entities/raetsel';
+import { Raetsel, RaetselDetails, RaetselEditorContent } from '../../entities/raetsel';
 import { initialPaginationState, PaginationState } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel';
@@ -13,7 +13,8 @@ export interface RaetselState extends EntityState<Raetsel> {
   page: Raetsel[];
   raetselDetails?: RaetselDetails; // details eines Raetsels, das in der Detailansicht oder im Editor angezeigt wird
   saveSuccessMessage?: string,
-  paginationState: PaginationState
+  paginationState: PaginationState;
+  raetselEditorContent?: RaetselEditorContent;
 }
 
 export interface RaetselPartialState {
@@ -82,6 +83,10 @@ const raetselReducer = createReducer(
     return { ...state, selectedId: action.raetselDetails.id, raetselDetails: action.raetselDetails };
   }),
 
+  on(RaetselActions.editRaetsel, (state, action) => {
+    return {...state, raetselEditorContent: action.raetselEditorContent, raetselDetails: action.raetselEditorContent.raetsel}
+  }),
+
   on(RaetselActions.cacheRaetselDetails, (state, action) => {
 
     return { ...state, selectedId: action.raetselDetails.id, raetselDetails: action.raetselDetails };
@@ -89,7 +94,7 @@ const raetselReducer = createReducer(
 
   on(RaetselActions.cancelEdit, (state, _action) => {
 
-    return { ...state, raetselDetails: undefined };
+    return { ...state, raetselDetails: undefined, raetselEditorContent: undefined };
   }),
 
   on(RaetselActions.outputGenerated, (state, action) => {

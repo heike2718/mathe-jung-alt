@@ -134,7 +134,7 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   neuesRaetsel(): void {
-    this.raetselFacade.startCreateRaetsel();
+    this.raetselFacade.createAndEditRaetsel();
   }
 
   private triggerSuche(): void {
@@ -145,7 +145,5 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 }
-function combine(arg0: (import("rxjs").Observable<import("@mathe-jung-alt-workspace/shared/suchfilter/domain").SuchfilterWithStatus> | import("rxjs").Observable<boolean> | import("rxjs").Observable<Deskriptor[]>)[]): Subscription {
-  throw new Error('Function not implemented.');
-}
+
 

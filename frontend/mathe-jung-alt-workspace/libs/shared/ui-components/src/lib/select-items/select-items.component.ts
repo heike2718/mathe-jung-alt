@@ -16,7 +16,7 @@ export class SelectItemsComponent implements OnInit {
   #model: SelectableItemsComponentModel = { vorrat: [], auswahl: [] };
 
   @Input()
-  itemList: SelectableItem[] = [];
+  itemList!: SelectableItem[];
 
   @Output()
   selectedItemsChanged: EventEmitter<SelectableItem[]> = new EventEmitter<SelectableItem[]>();
@@ -27,10 +27,19 @@ export class SelectItemsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
+    console.log(JSON.stringify(this.itemList));
+
     const vorrat = this.itemList.filter(item => !item.selected);
     const auswahl = this.itemList.filter(item => item.selected);
 
-    this.#model = {vorrat, auswahl};
+    console.log('Anzahl vorrat: ' + vorrat.length + ", Anzahl auswahl: " + auswahl.length);
+
+    this.#model = {...this.#model, vorrat: vorrat, auswahl: auswahl};
+
+
+    console.log(JSON.stringify(this.#model));
+
     this.#modelSubject.next(this.#model);
   }
 

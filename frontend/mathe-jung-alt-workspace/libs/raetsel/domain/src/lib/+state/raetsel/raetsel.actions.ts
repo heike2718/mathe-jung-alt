@@ -1,6 +1,6 @@
 import { PageDefinition, Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
-import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails } from '../../entities/raetsel';
+import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselEditorContent } from '../../entities/raetsel';
 
 export const prepareSearch = createAction(
   '[Raetsel] prepareSearch'
@@ -47,14 +47,18 @@ export const raetselDetailsLoaded = createAction(
   props<{ raetselDetails: RaetselDetails }>()
 );
 
+export const showRaetselDetails = createAction(
+  '[Raetsel] show details'
+);
+
 export const cacheRaetselDetails = createAction(
   '[Raetsel] cache details',
   props<{ raetselDetails: RaetselDetails }>()
 );
 
-export const startEditRaetsel = createAction(
-  '[Raetsel]  start edit',
-  props<{ raetselDetails: RaetselDetails }>()
+export const editRaetsel = createAction(
+  '[Raetsel]  edit',
+  props<{ raetselEditorContent: RaetselEditorContent }>()
 );
 
 export const generateOutput = createAction(

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { map, tap, withLatestFrom } from 'rxjs/operators';
 import * as RaetselActions from './raetsel.actions';
 import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { RaetselFacade } from '../../application/reaetsel.facade';
 import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Router } from '@angular/router';
-import { SuchfilterFacade, SuchfilterWithStatus } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
-import { noop } from 'rxjs';
+import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 
 @Injectable()
 export class RaetselEffects {
@@ -72,30 +71,32 @@ export class RaetselEffects {
       this.safeNgrx.safeSwitchMap((action) =>
         this.raetselDataService.generateRaetsel(action.raetselId, action.outputFormat, action.layoutAntwortvorschlaege).pipe(
           map((images) =>
-            RaetselActions.outputGenerated({images})
+            RaetselActions.outputGenerated({ images })
           )
         ), 'Ups, beim Generieren des Rätsels ist etwas schiefgegangen', noopAction()
       )
     )
   );
 
-  navigateAfterDetailsLoaded$ = createEffect(() =>
+  navigateToRaetselDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.raetselDetailsLoaded),
       tap((action) => {
-        if (action.raetselDetails.id === 'neu') {
-          this.router.navigateByUrl('raetseleditor')
-        } else {
-          this.router.navigateByUrl('raetsel/details')
-        }
+        // if (action.raetselDetails.id === 'neu') {
+        //   this.router.navigateByUrl('raetseleditor')
+        // } else {
+        //   this.router.navigateByUrl('raetsel/details')
+        // }
+        this.router.navigateByUrl('raetsel/details');
       }),
     ), { dispatch: false });
 
-
   navigateToRaetselEditor$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(RaetselActions.startEditRaetsel),
-      tap(() => this.router.navigateByUrl('raetseleditor')),
+      ofType(RaetselActions.editRaetsel),
+      tap((_action) => {
+        this.router.navigateByUrl('raetseleditor');
+      }),
     ), { dispatch: false });
 
   navigateToRaetselSuche$ = createEffect(() =>

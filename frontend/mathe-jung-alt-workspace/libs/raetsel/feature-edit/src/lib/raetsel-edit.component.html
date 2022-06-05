@@ -1,6 +1,6 @@
 <h1>Rätseleditor</h1>
 
-<div *ngIf="raetselFacade.raetselDetails$ | async as raetsel else keinRaetsel">
+<div *ngIf="raetselFacade.editorContent$| async as raetsel else keinRaetsel">
 
     <div class="container">
 
@@ -9,7 +9,7 @@
             <div fxFlex="0 1 calc(10%-20px)">
                 <mat-label>ID:</mat-label>
             </div>
-            <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.id}}</div>
+            <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.raetsel.id}}</div>
         </div>
 
         <form [formGroup]="form" novalidate>
@@ -132,11 +132,7 @@
       
 
         <h3>Deskriptoren</h3>
-        <mja-select-items [itemList]="selectableDeskriptoren" (selectedItemsChanged)="onSelectableItemsChanged($event)"></mja-select-items>
-        <!--
-        <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)">
-        </mja-deskriptoren-filter>
--->
+        <mja-select-items [itemList]="raetsel.selectableDeskriptoren" (selectedItemsChanged)="onSelectableItemsChanged($event)"></mja-select-items>
 
         <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
 
