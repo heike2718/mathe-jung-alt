@@ -86,11 +86,11 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 	}
 
 	@Override
-	public List<Deskriptor> filterByKontext(final DeskriptorSuchkontext kontext, final List<Deskriptor> deskriptoren) {
+	public List<Deskriptor> filterByKontext(final DeskriptorSuchkontext kontext, final List<Deskriptor> deskriptoren, final boolean admin) {
 
 		if (DeskriptorSuchkontext.NOOP == kontext) {
 
-			return new ArrayList<>();
+			return admin ? deskriptoren : new ArrayList<>();
 		}
 
 		return deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).collect(Collectors.toList());

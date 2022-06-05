@@ -10,13 +10,13 @@ import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SharedSuchfilterComponentModule } from '@mathe-jung-alt-workspace/shared/suchfilter/suchfilter-component';
+import { SharedUiComponentsModule } from 'libs/shared/ui-components/src/lib/shared-ui-components.module';
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
     RaetselDomainModule,
-    SharedSuchfilterComponentModule,
+    SharedUiComponentsModule,
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild([

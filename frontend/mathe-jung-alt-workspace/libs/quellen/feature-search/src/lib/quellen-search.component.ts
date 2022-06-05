@@ -3,7 +3,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { deskriptorenToString, Quelle, QuellenDataSource, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { debounceTime, distinctUntilChanged, filter, map, merge, Subscription, tap } from 'rxjs';
 
@@ -19,6 +18,7 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   #quellenSubscription: Subscription = new Subscription();
   #sucheReadySubscription: Subscription = new Subscription();
   #sucheClearedSubscription: Subscription = new Subscription();
+  #deskriptorenLoadedSubscription: Subscription = new Subscription();
 
   suchfilterWithStatus$ = this.suchfilterFacade.suchfilterWithStatus$;
   quelleList$ = this.quellenFacade.quellenList$;
@@ -31,13 +31,19 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   anzahlQuellen: number = 0;
 
   constructor(public quellenFacade: QuellenFacade
-    , private suchfilterFacade: SuchfilterFacade
-    , private authFacade: AuthFacade) {}
+    , private suchfilterFacade: SuchfilterFacade) {}
 
   ngOnInit() {
 
     this.dataSource = new QuellenDataSource(this.quellenFacade);
-    this.suchfilterFacade.changeSuchkontext(this.#kontext);
+    
+    this.#deskriptorenLoadedSubscription = this.suchfilterFacade.deskriptorenLoaded$.subscribe(
+      (loaded => {
+        if (loaded) {
+          this.suchfilterFacade.changeSuchkontext(this.#kontext);
+        }
+      })
+    );
 
     this.#quellenSubscription = this.quellenFacade.quellenList$.subscribe(
       liste => this.anzahlQuellen = liste.length
@@ -63,6 +69,7 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
     this.#quellenSubscription.unsubscribe();
     this.#sucheReadySubscription.unsubscribe();
     this.#sucheClearedSubscription.unsubscribe();
+    this.#deskriptorenLoadedSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {

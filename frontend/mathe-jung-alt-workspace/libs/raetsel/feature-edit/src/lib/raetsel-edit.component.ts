@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormArray,
-  FormBuilder, FormControl, FormGroup, Validators
+  FormBuilder, FormGroup, Validators
 } from '@angular/forms';
-import { Deskriptor, DeskriptorenSearchFacade } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { Deskriptor, DeskriptorenSearchFacade, getDifferenzmenge } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { Antwortvorschlag, EditRaetselPayload, initialRaetselDetails, Raetsel, RaetselDetails, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
-import { filter, Subscription } from 'rxjs';
+import { Antwortvorschlag, EditRaetselPayload, initialRaetselDetails, RaetselDetails, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { SelectableItem } from 'libs/shared/ui-components/src/lib/select-items/select-items.model';
+import { combineLatest, Subscription } from 'rxjs';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -27,20 +29,18 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   #selectedDeskriptoren: Deskriptor[] = [];
 
-  #raetselSubscription = new Subscription();
-  #deskriptorenLoadedSubscripion = new Subscription();
-  #deskriptorenSubscription: Subscription = new Subscription();
+  #raetselAndDeskriptorenCombinedSubscription: Subscription = new Subscription();
   #selectedQuelleSubscription: Subscription = new Subscription();
-
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
   selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
 
+  selectableDeskriptoren: SelectableItem[] = [];
 
   form!: FormGroup;
 
   constructor(public raetselFacade: RaetselFacade,
-    private deskriptorenSearchFacade: DeskriptorenSearchFacade,
+    private suchfilterFacade: SuchfilterFacade,
     public quellenFacade: QuellenFacade,
     private fb: FormBuilder) {
 
@@ -59,33 +59,22 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.#raetselSubscription = this.raetselFacade.raetselDetails$.subscribe(
-      raetsel => {
-        if (raetsel) {
-          this.#raetsel = raetsel;
-          this.initForm();
-        }
+    this.#raetselAndDeskriptorenCombinedSubscription = combineLatest([
+      this.suchfilterFacade.filteredDeskriptoren$,
+      this.raetselFacade.raetselDetails$,
+    ]
+    ).subscribe(([deskriptoren, raetsel]) => {
+      if (raetsel) {
+        this.#raetsel = raetsel;
+        this.initForm();
+        this.initSelectableItems(raetsel, deskriptoren)
       }
-    );
-
-    this.#deskriptorenLoadedSubscripion = this.deskriptorenSearchFacade.loaded$.pipe(
-      filter(loaded => loaded)
-    ).subscribe(
-      () => {
-        if (this.#raetsel) {
-          this.#raetsel.deskriptoren.forEach(deskriptor => this.deskriptorenSearchFacade.addToSearchlist(deskriptor));
-        }
-      }
-    );
-
-    this.#deskriptorenSubscription = this.deskriptorenSearchFacade.suchliste$.subscribe(
-      suchliste => this.#selectedDeskriptoren = suchliste
-    );
+    });
 
     this.#selectedQuelleSubscription = this.quellenFacade.selectedQuelle$.subscribe(
       quelle => {
         if (quelle) {
-          const raetsel: RaetselDetails = {...this.readFormValues(), quelleId: quelle.id};
+          const raetsel: RaetselDetails = { ...this.readFormValues(), quelleId: quelle.id };
           this.raetselFacade.cacheRaetselDetails(raetsel);
         }
       }
@@ -93,9 +82,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.#raetselSubscription.unsubscribe();
-    this.#deskriptorenLoadedSubscripion.unsubscribe();
-    this.#deskriptorenSubscription.unsubscribe();
+    this.#raetselAndDeskriptorenCombinedSubscription.unsubscribe();
     this.#selectedQuelleSubscription.unsubscribe();
   }
 
@@ -133,8 +120,14 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     this.addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
-  onDeskriptorenChanged(_$event: Deskriptor[]): void {
-    // wird über die #deskriptorenSubscription bereits erledigt
+  onSelectableItemsChanged($items: SelectableItem[]) {
+
+    this.#selectedDeskriptoren = [];
+
+    $items.forEach(item => {
+      this.#selectedDeskriptoren.push({id: item.id, name: item.name, admin: true, kontext: 'RAETSEL'});
+    });
+
   }
 
   quelleSuchen(): void {
@@ -184,6 +177,25 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
       avGroup.setValue({ text: av.text, korrekt: av.korrekt });
     }
+  }
+
+  private initSelectableItems(raetselDetails: RaetselDetails, deskriptoren: Deskriptor[]): void {
+
+    if (this.selectableDeskriptoren.length === deskriptoren.length) {
+      return;
+    }
+
+    this.selectableDeskriptoren = [];
+
+    const vorrat: Deskriptor[] = getDifferenzmenge(deskriptoren, raetselDetails.deskriptoren);
+
+    raetselDetails.deskriptoren.forEach(deskriptor => {
+      this.selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: true });
+    });
+
+    vorrat.forEach(deskriptor => {
+      this.selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: false });
+    });    
   }
 
   private collectAntwortvorschlaege(): Antwortvorschlag[] {

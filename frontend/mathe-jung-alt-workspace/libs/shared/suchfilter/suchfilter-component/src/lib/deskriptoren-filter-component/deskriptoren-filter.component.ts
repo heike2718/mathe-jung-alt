@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Deskriptor, DeskriptorenSearchFacade } from '@mathe-jung-alt-workspace/deskriptoren/domain';
-import { Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Subscription, tap } from 'rxjs';
 
 @Component({
@@ -16,34 +16,34 @@ export class DeskriptorenFilterComponent implements OnInit, AfterViewInit, OnDes
   @Input()
   public kontext!: Suchkontext;
 
-  restliste$ = this.deskriptorenSearchFacade.restliste$;
-  suchliste$ = this.deskriptorenSearchFacade.suchliste$;
+  restliste$ = this.suchfilterFacade.restliste$;
+  suchliste$ = this.suchfilterFacade.suchliste$;
 
-  private suchlisteSubscription: Subscription = new Subscription();
+  #suchlisteSubscription: Subscription = new Subscription();
 
-  constructor(private deskriptorenSearchFacade: DeskriptorenSearchFacade) { }
+  constructor(private suchfilterFacade: SuchfilterFacade) { }
 
   ngOnInit() {
   }
 
   ngAfterViewInit(): void {
 
-    this.deskriptorenSearchFacade.load(this.kontext);
+    this.suchfilterFacade.loadDeskriptoren();
 
-    this.suchlisteSubscription = this.suchliste$.pipe(
+    this.#suchlisteSubscription = this.suchliste$.pipe(
       tap((liste: Deskriptor[]) => this.suchlisteDeskriptorenChanged.emit(liste))
     ).subscribe();
   }
 
   ngOnDestroy(): void {
-    this.suchlisteSubscription.unsubscribe();
+    this.#suchlisteSubscription.unsubscribe();
   }
 
   addToSuchliste(deskriptor: Deskriptor): void {
-    this.deskriptorenSearchFacade.addToSearchlist(deskriptor);
+    this.suchfilterFacade.addToSearchlist(deskriptor);
   }
 
   removeFromSuchliste(deskriptor: Deskriptor): void {
-    this.deskriptorenSearchFacade.removeFromSearchlist(deskriptor);
+    this.suchfilterFacade.removeFromSearchlist(deskriptor);
   }
 }

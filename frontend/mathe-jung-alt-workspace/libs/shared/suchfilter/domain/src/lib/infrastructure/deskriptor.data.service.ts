@@ -1,9 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { Deskriptor } from '../entities/deskriptor';
+import { Observable } from 'rxjs';
 import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
-import { Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 
 @Injectable({ providedIn: 'root' })
 export class DeskriptorDataService {
@@ -12,13 +11,11 @@ export class DeskriptorDataService {
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 
-  load(kontext: Suchkontext): Observable<Deskriptor[]> {
+  load(): Observable<Deskriptor[]> {
 
-    // const params = new HttpParams().set('param', 'value');
-
-    const urlWithQuery = this.#url + '?kontext=' + kontext;
+    const params = new HttpParams().set('kontext', this.configuration.admin ? 'NOOP' : 'RAETSEL');
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    return this.http.get<Deskriptor[]>(urlWithQuery, { headers });
+    return this.http.get<Deskriptor[]>(this.#url, { headers, params });
   }
 }

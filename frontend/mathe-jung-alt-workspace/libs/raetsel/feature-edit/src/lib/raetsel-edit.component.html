@@ -129,16 +129,22 @@
                 korrekt sein.</mat-error>
         </form>
 
+      
+
+        <h3>Deskriptoren</h3>
+        <mja-select-items [itemList]="selectableDeskriptoren" (selectedItemsChanged)="onSelectableItemsChanged($event)"></mja-select-items>
+        <!--
         <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)">
         </mja-deskriptoren-filter>
+-->
 
         <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
 
-            <div fxFlex="0 1 calc(10%-20px)">
+            <div fxFlex="0 1 calc(20%-20px)">
                 <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
                 (click)="submit()">speichern</button>
             </div>
-            <div fxFlex="0 1 calc(90%-20px)" class="mb-1">
+            <div fxFlex="0 1 calc(80%-20px)" class="mb-1">
                 <button mat-raised-button color="primary" (click)="cancelEdit()">abbrechen</button>
             </div>
         </div>

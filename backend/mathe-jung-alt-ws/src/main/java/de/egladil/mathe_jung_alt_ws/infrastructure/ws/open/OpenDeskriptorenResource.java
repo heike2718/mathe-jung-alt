@@ -44,7 +44,7 @@ public class OpenDeskriptorenResource {
 				Sort.ascending("name"),
 				params);
 
-			return deskriptorenService.filterByKontext(suchkontext, trefferliste);
+			return deskriptorenService.filterByKontext(suchkontext, trefferliste, false);
 		}
 
 		List<DeskriptorSuchkontext> freigegebene = DeskriptorSuchkontext.getFreigegebe();

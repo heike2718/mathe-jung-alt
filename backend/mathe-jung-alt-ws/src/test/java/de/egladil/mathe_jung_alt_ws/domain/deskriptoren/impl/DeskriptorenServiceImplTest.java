@@ -97,17 +97,32 @@ public class DeskriptorenServiceImplTest {
 	class FilterTests {
 
 		@Test
-		void should_filterReturnNone_when_KontextNoop() {
+		void should_filterReturnNone_when_KontextNoopOrdinary() {
 
 			// Arrange
 			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.NOOP;
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren);
+			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren, false);
 
 			// Assert
 			assertEquals(0, result.size());
+			verify(repository, never()).listAll();
+		}
+
+		@Test
+		void should_filterReturnNone_when_KontextNoopAdmin() {
+
+			// Arrange
+			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.NOOP;
+			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
+
+			// Act
+			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren, true);
+
+			// Assert
+			assertEquals(8, result.size());
 			verify(repository, never()).listAll();
 		}
 
@@ -119,7 +134,7 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren);
+			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren, true);
 
 			// Assert
 			assertEquals(0, result.size());
@@ -134,7 +149,7 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren);
+			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren, true);
 
 			// Assert
 			assertEquals(3, deskriptoren.size());
@@ -170,7 +185,7 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren);
+			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren, true);
 
 			// Assert
 			assertEquals(2, deskriptoren.size());
@@ -199,7 +214,7 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren);
+			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren, true);
 
 			// Assert
 			assertEquals(5, deskriptoren.size());

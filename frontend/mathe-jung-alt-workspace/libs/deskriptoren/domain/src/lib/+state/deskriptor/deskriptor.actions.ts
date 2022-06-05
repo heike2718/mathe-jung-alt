@@ -10,18 +10,3 @@ export const loadDeskriptorenSuccess = createAction(
   '[Deskriptor] Load Deskriptor Success',
   props<{ deskriptor: Deskriptor[] }>()
 );
-
-export const setSuchkontext = createAction(
-  '[Deskriptor] set suchkontext',
-  props<{ kontext: Suchkontext }>()
-)
-
-export const deskriptorAddedToSearchList = createAction(
-  '[Deskriptor] Deskriptor Added To Search List',
-  props<{deskriptor: Deskriptor}>()
-);
-
-export const deskriptorRemovedFromSearchList = createAction(
-  '[Deskriptor] Deskriptor Removed From Search List',
-  props<{deskriptor: Deskriptor}>()
-);

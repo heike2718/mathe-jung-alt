@@ -36,9 +36,9 @@ public interface DeskriptorenService {
 	 * @param  kontext
 	 *                      DeskriptorSuchkontext
 	 * @param  deskriptoren
-	 * @return              List leer bei NOOP
+	 * @return              List: leer bei NOOP und nicht admin, alle bei NOOP und admin
 	 */
-	List<Deskriptor> filterByKontext(DeskriptorSuchkontext kontext, List<Deskriptor> deskriptoren);
+	List<Deskriptor> filterByKontext(DeskriptorSuchkontext kontext, List<Deskriptor> deskriptoren, boolean admin);
 
 	/**
 	 * Sucht den Deskriptor anhand seines Namens.

@@ -1,5 +1,6 @@
+import { Deskriptor, filterByKontext } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { createReducer, on, Action } from '@ngrx/store';
-import { initialSuchfilter, Suchfilter } from '../entities/suchfilter';
+import { Suchkontext } from '../entities/suchfilter';
 import * as SuchfilterActions from './suchfilter.actions';
 
 
@@ -10,34 +11,64 @@ export interface SuchfilterPartialState {
 };
 
 export interface SuchfilterState {
-    readonly filter: Suchfilter;
+    readonly kontext: Suchkontext;
+    readonly deskriptoren: Deskriptor[];
+    readonly suchstring: string;
+    readonly filteredDeskriptoren: Deskriptor[],
+    readonly suchliste: Deskriptor[];
+    readonly deskriptorenLoaded: boolean;
 }
 
 const initialState: SuchfilterState = {
-    filter: initialSuchfilter
+    kontext: 'NOOP',
+    deskriptoren: [],
+    suchstring: '',
+    filteredDeskriptoren: [],
+    suchliste: [],
+    deskriptorenLoaded: false
 };
 
 const suchfilterReducer = createReducer(
     initialState,
 
+    on(SuchfilterActions.loadDeskriptorenSuccess, (state, action) => {
+        return {...state, deskriptoren: action.deskriptoren, deskriptorenLoaded: true}
+    }),
+
     on(SuchfilterActions.suchkontextChanged, (state, action) => {
-        const neuerFilter = {...initialSuchfilter, kontext: action.kontext};
-        return {...state, filter: neuerFilter};
+
+        let filteredDeskriptorenNeu: Deskriptor[] = filterByKontext(action.kontext, state.deskriptoren);
+       
+        return {...state, kontext: action.kontext, filteredDeskriptoren: filteredDeskriptorenNeu, suchliste: [], suchstring: ''};
     }),
 
     on(SuchfilterActions.suchstringChanged, (state, action) => {
 
-        const neuerFilter = {...state.filter, suchstring: action.suchstring};
-        return {...state, filter: neuerFilter};
+        return {...state, suchstring: action.suchstring};
     }),
 
     on(SuchfilterActions.deskriptorenChanged, (state, action) => {
 
-        const neuerFilter = {...state.filter, deskriptoren: action.deskriptoren};
-        return {...state, filter: neuerFilter};
+        return { ...state, suchliste: action.deskriptoren };
+    }), 
+
+    on(SuchfilterActions.deskriptorAddedToSearchList, (state, action) => {
+
+        const filtederDeskriptorenNeu = state.filteredDeskriptoren.filter(d => d.id !== action.deskriptor.id);
+        return {...state, filteredDeskriptoren: filtederDeskriptorenNeu, suchliste: [...state.suchliste, action.deskriptor]}
+
     }),
+
+    on (SuchfilterActions.deskriptorRemovedFromSearchList, (state, action) => {
+        const suchlisteNeu = state.suchliste.filter(d => d.id !== action.deskriptor.id);
+        return {...state, filteredDeskriptoren: [...state.filteredDeskriptoren, action.deskriptor], suchliste: suchlisteNeu};
+    }),
+
+    on(SuchfilterActions.reset, (_state, _action) => {
+        return initialState;
+    })
 );
 
 export function reducer(state: SuchfilterState | undefined, action: Action) {
     return suchfilterReducer(state, action);
-}
+};

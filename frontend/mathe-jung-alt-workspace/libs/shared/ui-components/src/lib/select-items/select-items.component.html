@@ -1,0 +1,18 @@
+
+<div *ngIf="model$ | async as model else keinItemvorrat" class="mb-2">
+    <mat-chip-list>
+        <div *ngFor="let item of model.vorrat">
+            <mat-chip (click)="addToAuswahl(item)">{{item.name}}</mat-chip>
+        </div>
+    </mat-chip-list>
+    <h4>ausgewählt:</h4>
+    <mat-chip-list>
+        <div *ngFor="let item of model.auswahl">
+            <mat-chip (click)="removeFromAuswahl(item)">{{item.name}}</mat-chip>
+        </div>
+    </mat-chip-list>
+</div>
+
+<ng-template #keinItemvorrat>
+    <p>Es ist keine Itemliste zum Auswählen vorhanden.</p>
+</ng-template>

@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Raetsel, RaetselDataSource, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, filter, map, tap } from 'rxjs/operators';
-import { merge, Subscription } from 'rxjs';
+import { debounceTime, filter, tap } from 'rxjs/operators';
+import { combineLatest, merge, Subscription } from 'rxjs';
 import { PaginationState, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
@@ -22,6 +22,7 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   #sucheClearedSubscription: Subscription = new Subscription();
   #paginationStateSubscription: Subscription = new Subscription();
   #userRoleSubscription: Subscription = new Subscription();
+  #deskriptorenLoadedSubscription: Subscription = new Subscription();
 
   isAdmin = false;
   isOrdinaryUser = false;
@@ -44,7 +45,14 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnInit() {
     this.dataSource = new RaetselDataSource(this.raetselFacade);
-    this.suchfilterFacade.changeSuchkontext(this.#kontext);
+
+    this.#deskriptorenLoadedSubscription = this.suchfilterFacade.deskriptorenLoaded$.subscribe(
+      (loaded => {
+        if (loaded) {
+          this.suchfilterFacade.changeSuchkontext(this.#kontext);
+        }
+      })
+    );
 
     this.#paginationStateSubscription = this.raetselFacade.paginationState$.subscribe(
       (state: PaginationState) => this.anzahlRaetsel = state.anzahlTreffer
@@ -106,6 +114,7 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     this.#sucheClearedSubscription.unsubscribe();
     this.#paginationStateSubscription.unsubscribe();
     this.#userRoleSubscription.unsubscribe();
+    this.#deskriptorenLoadedSubscription.unsubscribe();
   }
 
   getDisplayedColumns(): string[] {
@@ -136,3 +145,7 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 }
+function combine(arg0: (import("rxjs").Observable<import("@mathe-jung-alt-workspace/shared/suchfilter/domain").SuchfilterWithStatus> | import("rxjs").Observable<boolean> | import("rxjs").Observable<Deskriptor[]>)[]): Subscription {
+  throw new Error('Function not implemented.');
+}
+

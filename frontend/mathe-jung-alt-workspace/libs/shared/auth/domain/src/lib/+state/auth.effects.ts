@@ -2,13 +2,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
+import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
 import { isExpired, noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { concatMap, map, switchMap } from 'rxjs/operators';
-import { STORAGE_KEY_USER, Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, AuthResult, User } from '../entities/auth.model';
+import { concatMap, map, switchMap, tap } from 'rxjs/operators';
+import { AuthResult, Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, STORAGE_KEY_USER, User } from '../entities/auth.model';
 import { AuthHttpService } from '../infrastructure/auth-http.service';
 import * as AuthActions from './auth.actions';
 
@@ -21,6 +22,7 @@ export class AuthEffects {
 
     constructor(private actions$: Actions,
         @Inject(SharedConfigService) private configuration: Configuration,
+        private suchfilterFacade: SuchfilterFacade,
         private authHttpService: AuthHttpService,
         private messageService: MessageService,
         private safeNgrx: SafeNgrxService,
@@ -62,6 +64,7 @@ export class AuthEffects {
             ofType(AuthActions.createSession),
             this.safeNgrx.safeSwitchMap((action) =>
                 this.internalCreateSession(action.authResult).pipe(
+                    tap(() => this.suchfilterFacade.loadDeskriptoren()),
                     map((session: Session) => AuthActions.userLoggedIn({ session: session }))
                 ), 'Login fehlgeschlagen', noopAction()
             )
@@ -87,6 +90,18 @@ export class AuthEffects {
             ofType(AuthActions.sessionCreated),
             map(() => {
                 this.router.navigateByUrl('dashboard')
+                return noopAction();
+            })
+        )
+    );
+
+    sessionRestored$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.sessionRestored),
+            map((action) => {
+                if (action.session) {
+                    this.suchfilterFacade.loadDeskriptoren();
+                }
                 return noopAction();
             })
         )
@@ -161,10 +176,11 @@ export class AuthEffects {
         return this.authHttpService.createSession(authResult);
     }
 
-    private clearSession(): void {        
+    private clearSession(): void {
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_USER);
         this.messageService.clear();
+        this.suchfilterFacade.clearAll();
     }
 }
