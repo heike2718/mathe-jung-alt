@@ -169,7 +169,7 @@ public class AdminRaetselResourceTest {
 
 		{
 
-			RaetselsucheTreffer raetsel = alleRaetsel[3];
+			RaetselsucheTreffer raetsel = alleRaetsel[4];
 			assertEquals("024f4ca4-3235-48a4-9c88-e77990ea059c", raetsel.getId());
 			assertEquals("02816", raetsel.getSchluessel());
 		}

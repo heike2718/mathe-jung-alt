@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mathe_jung_alt_ws.profiles.ContainerDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -38,22 +39,27 @@ public class AdminRaetselResourceContainerizedTest {
 	void testZaehleRaetselMitDeskriptoren() {
 
 		given()
-			.when().get("size?deskriptoren=Minikänguru,A-1&typeDeskriptoren=STRING")
+			.when().get("size?deskriptoren=Minikänguru,A&typeDeskriptoren=STRING")
 			.then()
 			.statusCode(200)
-			.body(is("2"));
+			.body(is("1"));
 	}
 
 	@Test
-	void testFindRaetselMitDeskriptoren() {
+	void testFindRaetselMitDeskriptoren() throws Exception {
 
 		String expected = "[{\"id\":\"7a94e100-85e9-4ffb-903b-06835851063b\",\"schluessel\":\"02789\",\"name\":\"2022 zählen\",\"kommentar\":\"Minikänguru 2022 Klasse 1\",\"status\":\"ERFASST\",\"deskriptoren\":[{\"id\":1,\"name\":\"Mathematik\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":2,\"name\":\"Minikänguru\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":4,\"name\":\"Klasse 1\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":7,\"name\":\"EINS\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":9,\"name\":\"A\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":29,\"name\":\"Multiple Choice\",\"admin\":false,\"kontext\":\"RAETSEL\"}]}]";
+		Response response = given()
+			.when().get("?deskriptoren=Minikänguru,A&typeDeskriptoren=STRING");
 
-		given()
-			.when().get("?deskriptoren=Minikänguru,A-1&typeDeskriptoren=STRING")
-			.then()
-			.statusCode(200)
-			.body(is(expected));
+		String responsePayload = response.asString();
+		System.out.println(responsePayload);
+
+		RaetselsucheTreffer[] treffer = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
+
+		assertEquals(200, response.getStatusCode());
+		assertEquals(1, treffer.length);
+		assertEquals(expected, responsePayload);
 	}
 
 	@Test
