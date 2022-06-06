@@ -59,3 +59,8 @@ export const getEditorContent = createSelector(
   getRaetselState,
   (state: RaetselState) => state.raetselEditorContent
 );
+
+export const generatingOutput = createSelector (
+  getRaetselState,
+  (state:RaetselState) => state.generatingOutput
+);

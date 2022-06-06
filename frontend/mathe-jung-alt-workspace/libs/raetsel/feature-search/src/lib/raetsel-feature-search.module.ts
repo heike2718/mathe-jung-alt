@@ -6,7 +6,7 @@ import {
 } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { RaetselSearchComponent } from './raetsel-search.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MaterialModule } from '@mathe-jung-alt-workspace/shared/ui-components';
+import { MaterialModule, SharedUiMessagingModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SharedSuchfilterDomainModule } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
@@ -24,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     RaetselDomainModule,
     SharedSuchfilterDomainModule,
     SharedSuchfilterComponentModule,
+    SharedUiMessagingModule,
     MaterialModule,
     RouterModule.forChild([
       {

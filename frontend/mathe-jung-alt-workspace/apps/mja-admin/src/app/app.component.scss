@@ -5,14 +5,14 @@ div.main {
   flex-direction: column;
   justify-content: stretch;
 
-mat-toolbar {
+  mat-toolbar {
     mat-toolbar-row {
       display: flex;
       justify-content: space-between;
     }
-}
+  }
 
-mat-drawer-container {
+  mat-drawer-container {
     flex: 1 1 auto;
     min-height: 25em;
 

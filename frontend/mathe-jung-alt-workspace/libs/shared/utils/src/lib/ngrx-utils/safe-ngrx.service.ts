@@ -83,9 +83,10 @@ export class SafeNgrxService {
     private handleError(error: any, errorMessage: string): void {
 
         const httpErrorResponse: HttpErrorResponse | undefined = this.getHttpErrorResponse(error);
-        if (!httpErrorResponse) {
-            console.log('SafeNgrxService: error=' + JSON.stringify(error));
+        if (httpErrorResponse === undefined) {
+            console.log('SafeNgrxService: error=' + error);
             this.messageService.error(errorMessage);
+            // this.messageService.error(error);
         } else {
             const message = this.extractServerErrorMessage(httpErrorResponse);
             if (message) {
@@ -130,7 +131,7 @@ export class SafeNgrxService {
                     message += field + ': ' + v.message;
                 });
 
-                return {level: 'ERROR', message: message};
+                return { level: 'ERROR', message: message };
             }
         } else {
             const payload: Message = errorResponse.error;

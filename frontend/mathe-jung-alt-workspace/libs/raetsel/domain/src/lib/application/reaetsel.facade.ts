@@ -22,6 +22,7 @@ export class RaetselFacade {
   raetselDetails$ = this.store.pipe(select(RaetselSelectors.getRaetselDetails));
   paginationState$ = this.store.pipe(select(RaetselSelectors.getPaginationState));
   editorContent$: Observable<RaetselEditorContent | undefined> = this.store.pipe(select(RaetselSelectors.getEditorContent));
+  generatingOutput$: Observable<boolean> = this.store.pipe(select(RaetselSelectors.generatingOutput));
 
   #selectedQuelleId: string | undefined;
   #raetselDeskriptoren: Deskriptor[] = [];

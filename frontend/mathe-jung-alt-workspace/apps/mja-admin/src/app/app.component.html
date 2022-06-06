@@ -8,8 +8,7 @@
     <mat-drawer *ngIf="authFacade.isAuthorized$ | async" mode="side" opened>
       <mja-admin-sidemenu></mja-admin-sidemenu>
     </mat-drawer>
-    <mat-drawer-content>
-      <mja-loader></mja-loader>
+    <mat-drawer-content>      
       <mja-message></mja-message>
       <router-outlet></router-outlet>
     </mat-drawer-content>

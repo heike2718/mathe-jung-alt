@@ -53,6 +53,11 @@
         </mat-accordion>
     </div>
 
+
+    <div *ngIf="raetselFacade.generatingOutput$ | async" class="loader">
+        <mat-progress-spinner mode="indeterminate" diameter='40' strokeWidth='5'></mat-progress-spinner>
+    </div>
+
     <ng-container *ngIf="authFacade.isAdmin$ | async">
 
         <h2>Metadaten und LaTeX</h2>
@@ -141,3 +146,4 @@
     <h2>Rätsel Details</h2>
     <p>kein Rätsel ausgewählt</p>
 </ng-template>
+

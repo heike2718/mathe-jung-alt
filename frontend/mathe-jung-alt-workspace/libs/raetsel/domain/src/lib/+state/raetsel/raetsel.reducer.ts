@@ -15,6 +15,7 @@ export interface RaetselState extends EntityState<Raetsel> {
   saveSuccessMessage?: string,
   paginationState: PaginationState;
   raetselEditorContent?: RaetselEditorContent;
+  generatingOutput: boolean;
 }
 
 export interface RaetselPartialState {
@@ -31,7 +32,8 @@ export const initialState: RaetselState = raetselAdapter.getInitialState({
   pageIndex: 0,
   sortDirection: 'asc',
   page: [],
-  paginationState: initialPaginationState
+  paginationState: initialPaginationState,
+  generatingOutput: false
 });
 
 const raetselReducer = createReducer(
@@ -97,10 +99,14 @@ const raetselReducer = createReducer(
     return { ...state, raetselDetails: undefined, raetselEditorContent: undefined };
   }),
 
+  on (RaetselActions.generateOutput, (state, _action) => {
+    return {...state, generatingOutput: true}
+  }),
+
   on(RaetselActions.outputGenerated, (state, action) => {
 
     if (state.raetselDetails ) {
-      return {...state, raetselDetails: {...state.raetselDetails, imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung} };
+      return {...state, raetselDetails: {...state.raetselDetails, imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung}, generatingOutput: false };
     }
 
     return { ...state };

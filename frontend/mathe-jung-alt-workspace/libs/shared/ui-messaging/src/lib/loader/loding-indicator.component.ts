@@ -6,7 +6,7 @@ import { LoadingService } from "./loading.service";
     selector: 'mja-loader',
     template: `<mat-progress-spinner
       *ngIf="(loadingService.loading$ | async) === true"
-      mode="indeterminate"
+      mode="indeterminate" diameter='40' strokeWidth='5'
     ></mat-progress-spinner>`,
 })
 export class LodingIndicatorComponent {
