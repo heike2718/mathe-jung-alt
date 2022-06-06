@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Deskriptor, filterByKontext, getDifferenzmenge } from '@mathe-jung-alt-workspace/deskriptoren/domain';
-import { Quelle, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { PageDefinition, Suchfilter, SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
-import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
+import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
+import { PageDefinition, SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 import { SelectableItem } from 'libs/shared/ui-components/src/lib/select-items/select-items.model';
 import { combineLatest, filter, Observable, tap } from 'rxjs';
@@ -28,18 +27,9 @@ export class RaetselFacade {
   #raetselDeskriptoren: Deskriptor[] = [];
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>,
-    private messageService: MessageService,
     private quellenFacade: QuellenFacade,
     private suchfilterFacade: SuchfilterFacade,
     private router: Router) {
-
-    this.store.pipe(select(RaetselSelectors.getSaveSuccessMessage)).subscribe(
-      (message) => {
-        if (message) {
-          this.messageService.info(message);
-        }
-      }
-    );
 
     this.quellenFacade.selectedQuelle$.subscribe(
       quelle => {

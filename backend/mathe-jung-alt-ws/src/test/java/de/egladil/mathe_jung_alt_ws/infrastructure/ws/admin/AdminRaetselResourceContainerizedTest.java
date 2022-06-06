@@ -87,6 +87,8 @@ public class AdminRaetselResourceContainerizedTest {
 
 			String responsePayload = response.asString();
 
+			System.out.println("=> " + responsePayload);
+
 			Raetsel raetsel = new ObjectMapper().readValue(responsePayload, Raetsel.class);
 			System.out.println(raetsel.getId());
 			assertNotNull(raetsel.getId());
@@ -128,6 +130,7 @@ public class AdminRaetselResourceContainerizedTest {
 
 			assertEquals(200, response.getStatusCode());
 
+			System.out.println("=> " + responsePayload);
 		}
 
 	}

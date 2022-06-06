@@ -7,6 +7,7 @@ import { RaetselFacade } from '../../application/reaetsel.facade';
 import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Router } from '@angular/router';
 import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
 
 @Injectable()
 export class RaetselEffects {
@@ -52,6 +53,15 @@ export class RaetselEffects {
     )
   );
 
+  showSaveSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.raetselSaved),
+      tap((action) => {
+        this.messageService.info(action.successMessage);
+      }),
+    ), { dispatch: false });
+
+
   selectRaetsel$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.raetselSelected),
@@ -81,7 +91,7 @@ export class RaetselEffects {
   navigateToRaetselDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.raetselDetailsLoaded),
-      tap(() => {        
+      tap(() => {
         this.router.navigateByUrl('raetsel/details');
       }),
     ), { dispatch: false });
@@ -106,6 +116,7 @@ export class RaetselEffects {
     private raetselFacade: RaetselFacade,
     private suchfilterFacade: SuchfilterFacade,
     private safeNgrx: SafeNgrxService,
+    private messageService: MessageService,
     private router: Router
   ) { }
 }

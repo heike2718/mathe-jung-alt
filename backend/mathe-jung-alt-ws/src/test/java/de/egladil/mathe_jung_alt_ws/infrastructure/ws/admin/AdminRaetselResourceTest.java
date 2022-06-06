@@ -44,7 +44,7 @@ public class AdminRaetselResourceTest {
 			.when().get("size?suchstring=Minikänguru&typeDeskriptoren=STRING")
 			.then()
 			.statusCode(200)
-			.body(is("13"));
+			.body(is("15"));
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class AdminRaetselResourceTest {
 			.when().get("size?deskriptoren=EINS&typeDeskriptoren=STRING")
 			.then()
 			.statusCode(200)
-			.body(is("9"));
+			.body(is("11"));
 	}
 
 	@Test
@@ -64,7 +64,7 @@ public class AdminRaetselResourceTest {
 			.when().get("size?deskriptoren=8&typeDeskriptoren=ORDINAL")
 			.then()
 			.statusCode(200)
-			.body(is("6"));
+			.body(is("7"));
 	}
 
 	@Test
