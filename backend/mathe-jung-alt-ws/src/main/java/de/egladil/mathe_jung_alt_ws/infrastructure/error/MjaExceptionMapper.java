@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mathe_jung_alt_ws.infrastructure.error;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mathe_jung_alt_ws.domain.dto.Message;
+import de.egladil.mathe_jung_alt_ws.domain.error.LaTeXCompileException;
 import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
 
 /**
@@ -29,6 +31,15 @@ public class MjaExceptionMapper implements ExceptionMapper<Throwable> {
 
 	@Override
 	public Response toResponse(final Throwable exception) {
+
+		if (exception instanceof LaTeXCompileException) {
+
+			LaTeXCompileException ex = (LaTeXCompileException) exception;
+			return Response.status(500)
+				.entity(Message.error(MessageFormat.format(applicationMessages.getString("latex.error"), ex.getNameFile())))
+				.build();
+
+		}
 
 		if (exception instanceof MjaRuntimeException) {
 

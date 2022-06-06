@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mathe_jung_alt_ws.domain.dto.Message;
+import de.egladil.mathe_jung_alt_ws.domain.error.LaTeXCompileException;
 import de.egladil.mathe_jung_alt_ws.domain.error.MjaRuntimeException;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselFileService;
 import de.egladil.mathe_jung_alt_ws.domain.generatoren.RaetselGeneratorService;
@@ -109,9 +110,10 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			LOGGER.debug("nach Aufruf LaTeXRestClient");
 			Message message = responseFrage.readEntity(Message.class);
 
-			if (message.isOk()) {
+			String filename = raetsel.getSchluessel() + outputformat.getFilenameExtension();
+			String filenameLoesung = raetsel.getSchluessel() + "_l" + outputformat.getFilenameExtension();
 
-				String filename = raetsel.getSchluessel() + outputformat.getFilenameExtension();
+			if (message.isOk()) {
 
 				byte[] imageFrage = this.raetselFileService.findImageFrage(raetsel.getSchluessel());
 
@@ -126,11 +128,16 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 					if (message.isOk()) {
 
-						String filenameLoesug = raetsel.getSchluessel() + "_l" + outputformat.getFilenameExtension();
 						byte[] imageLoesung = this.raetselFileService.findImageLoesung(raetsel.getSchluessel());
 
 						result.setImageLoesung(imageLoesung);
-						result.setUrlLoesung(output2Url(filenameLoesug));
+						result.setUrlLoesung(output2Url(filenameLoesung));
+					} else {
+
+						LOGGER.error("Mist: generieren der Lösung hat nicht geklappt: " + message.getMessage());
+						throw new LaTeXCompileException(
+							"Beim Generieren der Lösung ist etwas schiefgegangen: " + message.getMessage())
+								.withNameFile(filenameLoesung);
 					}
 
 				}
@@ -139,9 +146,13 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 			}
 
-			LOGGER.error("Mist: generieren hat nicht geklappt: " + message.getMessage());
-			throw new MjaRuntimeException(message.getMessage());
+			LOGGER.error("Mist: generieren der Frage hat nicht geklappt: " + message.getMessage());
+			throw new LaTeXCompileException("Beim Generieren der Frage ist etwas schiefgegangen: " + message.getMessage())
+				.withNameFile(filename);
 
+		} catch (LaTeXCompileException e) {
+
+			throw e;
 		} catch (Exception e) {
 
 			String msg = "Beim Generieren des Outputs " + outputformat + " zu Raetsel [schluessel="

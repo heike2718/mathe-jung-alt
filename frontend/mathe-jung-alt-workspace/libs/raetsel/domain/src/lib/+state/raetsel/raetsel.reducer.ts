@@ -4,6 +4,7 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as RaetselActions from './raetsel.actions';
 import { Raetsel, RaetselDetails, RaetselEditorContent } from '../../entities/raetsel';
 import { initialPaginationState, PaginationState } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { noopAction } from '@mathe-jung-alt-workspace/shared/utils';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel';
 
@@ -110,6 +111,10 @@ const raetselReducer = createReducer(
     }
 
     return { ...state };
+  }),
+
+  on(noopAction, (state, _action) => {
+    return {...state, generatingOutput: false};
   }),
 
   on(RaetselActions.raetselSaved, (state, action) => {

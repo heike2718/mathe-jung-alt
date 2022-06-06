@@ -71,6 +71,10 @@ export const outputGenerated = createAction(
   props<{ images: GeneratedImages }>()
 );
 
+export const generateOutputError = createAction(
+  '[Raetsel] generate error'
+);
+
 export const cancelEdit = createAction(
   '[Raetsel] cancel edit'
 );
