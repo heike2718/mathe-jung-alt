@@ -11,13 +11,14 @@ import java.io.File;
 import java.io.InputStream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mathe_jung_alt_ws.TestFileUtils;
+import de.egladil.mathe_jung_alt_ws.domain.raetsel.Antwortvorschlag;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -38,25 +39,54 @@ public class RaetselFileServiceImplTest {
 		fileService.setLatexBaseDir(BASE_DIR);
 	}
 
-	@Test
-	void should_generateFrageLaTeX_WriteCompilableLaTeXFile() throws Exception {
+	@Nested
+	class GenerateFrageLaTeXTests {
 
-		// Arrange
-		String expectedPath = BASE_DIR + File.separator + "02789.tex";
+		@Test
+		void should_generateFrageLaTeX_WriteCompilableLaTeXFile() throws Exception {
 
-		File file = new File(expectedPath);
+			// Arrange
+			String expectedPath = BASE_DIR + File.separator + "generator-test.tex";
 
-		if (file.exists() && file.isFile()) {
+			File file = new File(expectedPath);
 
-			file.delete();
+			if (file.exists() && file.isFile()) {
+
+				file.delete();
+			}
+
+			try (InputStream in = getClass().getResourceAsStream("/payloads/Raetsel.json")) {
+
+				Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
+
+				// Act
+				String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.NOOP);
+
+				// Assert
+				assertEquals(expectedPath, path);
+				File result = new File(path);
+				assertTrue(result.isFile());
+				assertTrue(result.canRead());
+			}
 		}
 
-		try (InputStream in = getClass().getResourceAsStream("/payloads/Raetsel.json")) {
+		@Test
+		void should_generateFrageLaTeX_add_Antworten() throws Exception {
 
-			Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
+			// Arrange
+			String expectedPath = BASE_DIR + File.separator + "generator-test.tex";
+
+			File file = new File(expectedPath);
+
+			if (file.exists() && file.isFile()) {
+
+				file.delete();
+			}
+
+			Raetsel raetsel = TestFileUtils.loadReaetsel();
 
 			// Act
-			String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF, LayoutAntwortvorschlaege.NOOP);
+			String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.BUCHSTABEN);
 
 			// Assert
 			assertEquals(expectedPath, path);
@@ -66,28 +96,147 @@ public class RaetselFileServiceImplTest {
 		}
 	}
 
-	@Test
-	void should_generateFrageLaTeX_add_Antworten() throws Exception {
+	@Nested
+	class GenerateLoesungLaTeXTests {
 
-		// Arrange
-		String expectedPath = BASE_DIR + File.separator + "02789.tex";
+		@Test
+		void should_generateLoesungLaTeX_WriteCompilableLaTeXFile() throws Exception {
 
-		File file = new File(expectedPath);
+			// Arrange
+			String expectedPath = BASE_DIR + File.separator + "generator-test_l.tex";
 
-		if (file.exists() && file.isFile()) {
+			File file = new File(expectedPath);
 
-			file.delete();
+			if (file.exists() && file.isFile()) {
+
+				file.delete();
+			}
+
+			try (InputStream in = getClass().getResourceAsStream("/payloads/Raetsel.json")) {
+
+				Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
+
+				// Act
+				String path = fileService.generateLoesungLaTeX(raetsel);
+
+				// Assert
+				assertEquals(expectedPath, path);
+				File result = new File(path);
+				assertTrue(result.isFile());
+				assertTrue(result.canRead());
+			}
 		}
 
-		Raetsel raetsel = TestFileUtils.loadReaetsel();
+	}
 
-		// Act
-		String path = fileService.generateFrageLaTeX(raetsel, Outputformat.PDF, LayoutAntwortvorschlaege.NOOP);
+	@Nested
+	class TextLoesungsbuchstabenTests {
 
-		// Assert
-		assertEquals(expectedPath, path);
-		File result = new File(path);
-		assertTrue(result.isFile());
-		assertTrue(result.canRead());
+		@Test
+		void should_getTextLoesungsbuchstabeReturnBlank_when_antwortvorschlaegeNull() {
+
+			// Arrange
+			String expected = "";
+
+			// Act
+			String result = fileService.getTextLoesungsbuchstabe(null);
+
+			// Assert
+			assertEquals(expected, result);
+		}
+
+		@Test
+		void should_getTextLoesungsbuchstabeReturnBlank_when_antwortvorschlaegeLeer() {
+
+			// Arrange
+			String expected = "";
+
+			// Act
+			String result = fileService.getTextLoesungsbuchstabe(new Antwortvorschlag[0]);
+
+			// Assert
+			assertEquals(expected, result);
+		}
+
+		@Test
+		void should_getTextLoesungsbuchstabeReturnBlank_when_keinerKorrekt() {
+
+			// Arrange
+			String expected = "";
+
+			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[1];
+			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("X");
+
+			// Act
+			String result = fileService.getTextLoesungsbuchstabe(antwortvorschlaege);
+
+			// Assert
+			assertEquals(expected, result);
+		}
+
+		@Test
+		void should_getTextLoesungsbuchstabeReturnLoesungsbuchstabeUndText_when_textDifferent() {
+
+			// Arrange
+			String expected = "{\\bf Lösung ist X (42)}\\par \\vspace{1ex}";
+
+			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[1];
+			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("X").withKorrekt(true).withText("42");
+
+			// Act
+			String result = fileService.getTextLoesungsbuchstabe(antwortvorschlaege);
+
+			// Assert
+			assertEquals(expected, result);
+		}
+
+		@Test
+		void should_getTextLoesungsbuchstabeReturnNurLoesungsbuchstabe_when_textEquals() {
+
+			// Arrange
+			String expected = "{\\bf Lösung ist X}\\par \\vspace{1ex}";
+
+			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[1];
+			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("X").withKorrekt(true).withText("X");
+
+			// Act
+			String result = fileService.getTextLoesungsbuchstabe(antwortvorschlaege);
+
+			// Assert
+			assertEquals(expected, result);
+		}
+
+		@Test
+		void should_getTextLoesungsbuchstabeReturnNurLoesungsbuchstabe_when_textNull() {
+
+			// Arrange
+			String expected = "{\\bf Lösung ist X}\\par \\vspace{1ex}";
+
+			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[1];
+			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("X").withKorrekt(true).withText(null);
+
+			// Act
+			String result = fileService.getTextLoesungsbuchstabe(antwortvorschlaege);
+
+			// Assert
+			assertEquals(expected, result);
+		}
+
+		@Test
+		void should_getTextLoesungsbuchstabeReturnNurLoesungsbuchstabe_when_textBlank() {
+
+			// Arrange
+			String expected = "{\\bf Lösung ist X}\\par \\vspace{1ex}";
+
+			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[1];
+			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("X").withKorrekt(true).withText("  ");
+
+			// Act
+			String result = fileService.getTextLoesungsbuchstabe(antwortvorschlaege);
+
+			// Assert
+			assertEquals(expected, result);
+		}
+
 	}
 }

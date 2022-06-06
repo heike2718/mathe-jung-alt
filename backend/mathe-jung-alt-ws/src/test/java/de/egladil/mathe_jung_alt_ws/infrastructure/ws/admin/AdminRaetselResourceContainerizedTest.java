@@ -132,4 +132,29 @@ public class AdminRaetselResourceContainerizedTest {
 
 	}
 
+	@Test
+	void testRaetselDetailsLadenFound() throws Exception {
+
+		Response response = given()
+			.when().get("/cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866");
+
+		String responsePayload = response.asString();
+		System.out.println(responsePayload);
+
+		Raetsel treffer = new ObjectMapper().readValue(responsePayload, Raetsel.class);
+		assertEquals("02622", treffer.getSchluessel());
+
+		assertEquals(200, response.getStatusCode());
+
+	}
+
+	@Test
+	void testRaetselDetailsLadenNotFound() throws Exception {
+
+		given()
+			.when().get("/existiert-nicht")
+			.then()
+			.statusCode(404)
+			.body(is(""));
+	}
 }

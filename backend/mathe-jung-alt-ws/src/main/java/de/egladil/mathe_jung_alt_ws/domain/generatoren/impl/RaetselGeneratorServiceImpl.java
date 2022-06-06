@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
@@ -61,22 +62,44 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				Response.status(404).entity(Message.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
-		raetselFileService.generateFrageLaTeX(raetsel, outputformat, layoutAntwortvorschlaege);
+		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege);
 
-		Response response = null;
+		boolean generateLoesung = StringUtils.isNotBlank(raetsel.getLoesung());
+
+		if (generateLoesung) {
+
+			raetselFileService.generateLoesungLaTeX(raetsel);
+		}
+
+		Response responseFrage = null;
+		Response responseLoesung = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");
 
 		try {
 
 			switch (outputformat) {
 
-			case PDF:
+			case PDF: {
 
-				response = laTeXClient.latex2PDF(raetsel.getSchluessel());
+				responseFrage = laTeXClient.latex2PDF(raetsel.getSchluessel());
+
+				if (generateLoesung) {
+
+					responseLoesung = laTeXClient.latex2PDF(raetsel.getSchluessel() + "_l");
+				}
+			}
+
 				break;
 
-			case PNG:
-				response = laTeXClient.latex2PNG(raetsel.getSchluessel());
+			case PNG: {
+
+				responseFrage = laTeXClient.latex2PNG(raetsel.getSchluessel());
+
+				if (generateLoesung) {
+
+					responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + "_l");
+				}
+			}
 				break;
 
 			default:
@@ -84,7 +107,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			}
 
 			LOGGER.debug("nach Aufruf LaTeXRestClient");
-			Message message = response.readEntity(Message.class);
+			Message message = responseFrage.readEntity(Message.class);
 
 			if (message.isOk()) {
 
@@ -93,11 +116,27 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				byte[] imageFrage = this.raetselFileService.findImageFrage(raetsel.getSchluessel());
 
 				GeneratedImages result = new GeneratedImages();
+				result.setOutputFormat(outputformat);
 				result.setImageFrage(imageFrage);
 				result.setUrlFrage(output2Url(filename));
-				result.setOutputFormat(outputformat);
+
+				if (responseLoesung != null) {
+
+					message = responseLoesung.readEntity(Message.class);
+
+					if (message.isOk()) {
+
+						String filenameLoesug = raetsel.getSchluessel() + "_l" + outputformat.getFilenameExtension();
+						byte[] imageLoesung = this.raetselFileService.findImageLoesung(raetsel.getSchluessel());
+
+						result.setImageLoesung(imageLoesung);
+						result.setUrlLoesung(output2Url(filenameLoesug));
+					}
+
+				}
 
 				return result;
+
 			}
 
 			LOGGER.error("Mist: generieren hat nicht geklappt: " + message.getMessage());

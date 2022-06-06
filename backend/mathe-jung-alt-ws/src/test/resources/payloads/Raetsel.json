@@ -1,6 +1,6 @@
 {
   "id": "neu",
-  "schluessel": "02789",
+  "schluessel": "generator-test",
   "name": "2022 zählen",
   "frage": "\\begin{center}{\\Large \\bf 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 0 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2}\\end{center}Wie oft steht hier 2022?",
   "loesung": "alle 2022 umranden, dann zählen",

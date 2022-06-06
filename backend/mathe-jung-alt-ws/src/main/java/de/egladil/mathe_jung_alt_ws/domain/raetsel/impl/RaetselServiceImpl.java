@@ -173,6 +173,10 @@ public class RaetselServiceImpl implements RaetselService {
 
 		byte[] imageFrage = raetselFileService.findImageFrage(result.getSchluessel());
 		result.setImageFrage(imageFrage);
+
+		byte[] imageLoesung = raetselFileService.findImageLoesung(result.getSchluessel());
+		result.setImageLoesung(imageLoesung);
+
 		return result;
 	}
 

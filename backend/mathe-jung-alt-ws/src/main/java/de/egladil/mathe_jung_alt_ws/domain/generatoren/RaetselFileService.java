@@ -5,7 +5,6 @@
 package de.egladil.mathe_jung_alt_ws.domain.generatoren;
 
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mathe_jung_alt_ws.domain.raetsel.Outputformat;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 
 /**
@@ -14,17 +13,25 @@ import de.egladil.mathe_jung_alt_ws.domain.raetsel.Raetsel;
 public interface RaetselFileService {
 
 	/**
-	 * Schreibt die Frage des gegebenen Raetsels in ein LaTeX-File im Filesystem und gibt den Pfad des File zurück.
+	 * Schreibt die Frage des gegebenen Raetsels in ein LaTeX-File im Filesystem und gibt den Pfad des File zurück. Der Name des
+	 * Files ist der Schlüssel des Raetsels.
 	 *
 	 * @param  raetsel
-	 *                                  Raetsel die UUID des Raetsels
-	 * @param  outputformat
-	 *                                  Outputformat das gewünschte output-format.
+	 *                                  Raetsel
 	 * @param  layoutAntwortvorschlaege
 	 *                                  LayoutAntwortvorschlaege
 	 * @return                          String Pfad des LaTeX-Files.
 	 */
-	String generateFrageLaTeX(Raetsel raetsel, Outputformat outputformat, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	String generateFrageLaTeX(Raetsel raetsel, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+
+	/**
+	 * Schreibt die Lösung des gegebenen Raetsels in ein LaTeX-File im Filesystem und gibt den Pfad des Files zurück. Der Name des
+	 * Files ist der Schlüssel des Raetsels mit angehängtem _l.
+	 *
+	 * @param  raetsel
+	 * @return         String Pfad des LaTeX-Files.
+	 */
+	String generateLoesungLaTeX(Raetsel raetsel);
 
 	/**
 	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.
@@ -33,5 +40,13 @@ public interface RaetselFileService {
 	 * @return
 	 */
 	byte[] findImageFrage(String schluessel);
+
+	/**
+	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.
+	 *
+	 * @param  schluessel
+	 * @return
+	 */
+	byte[] findImageLoesung(String schluessel);
 
 }
