@@ -21,11 +21,6 @@ export const suchstringChanged = createAction(
   props<{ suchstring: string }>()
 );
 
-// export const deskriptorenChanged = createAction(
-//   '[Suchfilter] deskriptoren changed',
-//   props<{deskriptoren: Deskriptor[]}>()
-// );
-
 export const deskriptorAddedToSearchList = createAction(
   '[Suchfilter] Deskriptor added to search list',
   props<{deskriptor: Deskriptor}>()

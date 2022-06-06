@@ -60,8 +60,6 @@ export class RaetselFacade {
     });
   }
 
-  
-
   /*  Setzt die Suchkette mit serverseitiger Pagination in Gang. Hierzu wird ein select count mit dem Suchfilter abgesetzt */
   triggerSearch(pageDefinition: PageDefinition): void {
     this.store.dispatch(RaetselActions.selectPage({ pageDefinition }));
@@ -87,7 +85,7 @@ export class RaetselFacade {
 
   createAndEditRaetsel(): void {
     let raetselDetails: RaetselDetails;
-    if (this.#selectedQuelleId) {      
+    if (this.#selectedQuelleId) {
       raetselDetails = { ...initialRaetselDetails, quelleId: this.#selectedQuelleId };
       this.editRaetsel(raetselDetails);
     } else {
@@ -110,7 +108,7 @@ export class RaetselFacade {
 
     vorrat.forEach(deskriptor => {
       selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: false });
-    });    
+    });
 
     const content: RaetselEditorContent = {
       raetsel: raetselDetails,

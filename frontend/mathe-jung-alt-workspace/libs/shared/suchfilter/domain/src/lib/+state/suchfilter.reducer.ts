@@ -35,8 +35,13 @@ const suchfilterReducer = createReducer(
 
     on(SuchfilterActions.suchkontextChanged, (state, action) => {
 
-        let filteredDeskriptorenNeu: Deskriptor[] = filterByKontext(action.kontext, state.deskriptoren);
-        return { ...state, kontext: action.kontext, filteredDeskriptoren: filteredDeskriptorenNeu, suchliste: [], suchstring: '' };
+        const selectedSuchfilterUIModel = findSuchfilterUIModelWithKontext(state.kontext, state.suchfilterUIModels);
+
+        if (!selectedSuchfilterUIModel || selectedSuchfilterUIModel.suchfilter.kontext === action.kontext) {
+            return {...state};
+        }
+
+        return { ...state, kontext: action.kontext };
     }),
 
     on(SuchfilterActions.suchstringChanged, (state, action) => {
@@ -64,11 +69,6 @@ const suchfilterReducer = createReducer(
 
         return { ...state, suchfilterUIModels: newUiModels };
     }),
-
-    // on(SuchfilterActions.deskriptorenChanged, (state, action) => {
-
-    //     return { ...state, suchliste: action.deskriptoren };
-    // }),
 
     on(SuchfilterActions.deskriptorAddedToSearchList, (state, action) => {
 

@@ -14,14 +14,11 @@ import { Observable, pipe } from "rxjs";
 export class SuchfilterFacade {
 
     public allDeskriptoren$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getAllDeskriptoren));
-    // public suchfilterWithStatus$: Observable<SuchfilterWithStatus> = this.store.pipe(select(SuchfilterSelectors.getSuchfilterAndReady));
-    // public suchkontext$ = this.store.pipe(select(SuchfilterSelectors.getSelectedKontext));
     public suchliste$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getSuchliste));
     public restliste$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getRestliste));
     public deskriptorenLoaded$: Observable<boolean> = this.store.pipe(select(SuchfilterSelectors.getDeskriptorenLoaded));
     public selectedSuchfilter$: Observable<Suchfilter | undefined> = this.store.pipe(select(SuchfilterSelectors.getSelectedSuchfilter));
     public canStartSuche$: Observable<boolean> = this.store.pipe(select(SuchfilterSelectors.isSuchfilterReadyToGo));
-    // public filteredDeskriptoren$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getFilteredDeskriptoren));
 
     #deskriptorenLoaded = false;
 
@@ -59,10 +56,6 @@ export class SuchfilterFacade {
     public changeSuchtext(suchstring: string): void {
         this.store.dispatch(SuchfilterActions.suchstringChanged({ suchstring }));
     }
-
-    // public changeDeskriptoren(deskriptoren: Deskriptor[]): void {
-    //     this.store.dispatch(SuchfilterActions.deskriptorenChanged({ deskriptoren }));
-    // }
 
     public addToSearchlist(deskriptor: Deskriptor): void {
         this.store.dispatch(SuchfilterActions.deskriptorAddedToSearchList({ deskriptor }));
