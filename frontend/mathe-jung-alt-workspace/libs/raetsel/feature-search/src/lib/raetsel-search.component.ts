@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { combineLatest, merge, Subscription } from 'rxjs';
-import { PaginationState, Suchfilter, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { PageDefinition, PaginationState, Suchfilter, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { deskriptorenToString, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
@@ -71,13 +71,12 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
       filter((ready) => ready),
       debounceTime(300),
       // distinctUntilChanged(),
-      tap(() => this.triggerSuche())
+      tap(() => {
+        if (this.paginator && this.sort) {
+          this.triggerSuche();
+        }
+      })
     ).subscribe();
-
-    // this.#sucheClearedSubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
-    //   filter((sws) => sws.suchfilter.kontext === this.#kontext && !sws.nichtLeer),
-    //   tap(() => this.raetselFacade.clearTrefferliste())
-    // ).subscribe();
 
     this.#userRoleSubscription = this.authFacade.getUser$.subscribe(
       user => {
@@ -92,12 +91,11 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     );
   }
 
-  onDeskriptorenChanged($event: Deskriptor[]): void {
+  onDeskriptorenChanged(_$event: Deskriptor[]): void {
 
     if (this.paginator) {
       this.paginator.pageIndex = 0;
     }
-    // this.suchfilterFacade.changeDeskriptoren($event);
     this.triggerSuche();
   }
 
@@ -150,11 +148,14 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private triggerSuche(): void {
-    this.raetselFacade.triggerSearch({
-      pageIndex: this.paginator.pageIndex,
-      pageSize: this.paginator.pageSize,
-      sortDirection: this.sort.direction
-    });
+
+    const pageDefinition: PageDefinition = {
+      pageIndex: this.paginator ?  this.paginator.pageIndex : 0,
+      pageSize: this.paginator ? this.paginator.pageSize : 10,
+      sortDirection: this.sort ? this.sort.direction : 'asc'
+    }
+
+    this.raetselFacade.triggerSearch(pageDefinition);
   }
 }
 

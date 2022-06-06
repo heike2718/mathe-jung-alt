@@ -63,22 +63,12 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
       filter((ready) => ready),
       debounceTime(300),
       distinctUntilChanged(),
-      tap(() => this.triggerSuche())
+      tap(() => {
+        if (this.paginator && this.sort) {
+          this.triggerSuche();
+        }
+      })
     ).subscribe();
-
-    // this.#sucheReadySubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
-    //   filter((sws) => sws.suchfilter.kontext === this.#kontext && sws.nichtLeer),
-    //   map((sws) => sws.suchfilter),
-    //   filter(sws => sws.suchstring.length > 1),
-    //   debounceTime(300),
-    //   distinctUntilChanged(),
-    //   tap((suchfilter) => this.quellenFacade.findQuellen(suchfilter))
-    // ).subscribe();
-
-    // this.#sucheClearedSubscription = this.suchfilterFacade.suchfilterWithStatus$.pipe(
-    //   filter((sws) => sws.suchfilter.kontext === this.#kontext &&  !sws.nichtLeer),
-    //   tap(() => this.quellenFacade.clearTrefferliste())
-    // ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -102,17 +92,14 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   }
 
   deskriptorenToString(quelle: Quelle): string {
-
     return deskriptorenToString(quelle.deskriptoren);
-
   }
 
-  onDeskriptorenChanged($event: Deskriptor[]): void {
+  onDeskriptorenChanged(_$event: Deskriptor[]): void {
 
     if (this.paginator) {
       this.paginator.pageIndex = 0;
     }
-    // this.suchfilterFacade.changeDeskriptoren($event);
   }
 
   onInputChanged($event: string) {

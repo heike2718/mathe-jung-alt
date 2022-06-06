@@ -13,25 +13,9 @@ export class QuelleDetailsComponent implements OnInit, OnDestroy {
   @Input()
   quelle!: Quelle
 
-  #selectedQuelleSubscription: Subscription = new Subscription();
+  constructor(public authFacade: AuthFacade) { }
 
-  constructor(private quellenFacade: QuellenFacade, public authFacade: AuthFacade) { }
+  ngOnInit(): void { }
 
-  ngOnInit(): void {
-
-    this.#selectedQuelleSubscription = this.quellenFacade.selectedQuelle$.subscribe(
-      quelle => {
-        if(quelle) {
-          console.log(JSON.stringify(quelle));
-        } else {
-          console.log('keine Quelle ausgewählt');
-        }
-      }
-    );
-
-   }
-
-  ngOnDestroy(): void {
-    this.#selectedQuelleSubscription.unsubscribe();      
-  }
+  ngOnDestroy(): void { }
 }
