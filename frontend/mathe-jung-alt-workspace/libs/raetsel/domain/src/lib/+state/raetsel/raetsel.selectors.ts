@@ -43,7 +43,7 @@ export const getPage = createSelector(
 
 export const getRaetselDetails = createSelector(
   getRaetselState,
-  (state: RaetselState) => state.raetselEditorContent.raetsel
+  (state: RaetselState) => state.raetselDetailsContent.raetsel
 );
 
 export const getSaveSuccessMessage = createSelector(
@@ -51,9 +51,9 @@ export const getSaveSuccessMessage = createSelector(
   (state: RaetselState) => state.saveSuccessMessage
 );
 
-export const getEditorContent = createSelector(
+export const getDetailsContent = createSelector(
   getRaetselState,
-  (state: RaetselState) => state.raetselEditorContent
+  (state: RaetselState) => state.raetselDetailsContent
 );
 
 export const generatingOutput = createSelector (

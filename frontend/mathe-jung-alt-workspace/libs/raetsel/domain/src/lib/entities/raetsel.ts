@@ -55,7 +55,8 @@ export interface EditRaetselPayload {
   readonly raetsel: RaetselDetails;
 };
 
-export interface RaetselEditorContent {
+// RaetselDetailsContent
+export interface RaetselDetailsContent {
   readonly kontext: Suchkontext;
   readonly raetsel: RaetselDetails;
   readonly quelleId?: string;
@@ -77,7 +78,7 @@ export const initialRaetselDetails: RaetselDetails = {
   imageLoesung: null
 };
 
-export const initialRaetselEditorContent: RaetselEditorContent = {
+export const initialRaetselDetailsContent: RaetselDetailsContent = {
   kontext: "RAETSEL",
   raetsel: initialRaetselDetails,
   selectableDeskriptoren: []

@@ -2,7 +2,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import * as RaetselActions from './raetsel.actions';
-import { initialRaetselDetails, initialRaetselEditorContent, Raetsel, RaetselDetails, RaetselEditorContent } from '../../entities/raetsel';
+import { initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
 import { initialPaginationState, PaginationState } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { noopAction } from '@mathe-jung-alt-workspace/shared/utils';
 
@@ -15,7 +15,7 @@ export interface RaetselState extends EntityState<Raetsel> {
   // raetselDetails?: RaetselDetails; // details eines Raetsels, das in der Detailansicht oder im Editor angezeigt wird
   saveSuccessMessage?: string,
   paginationState: PaginationState;
-  raetselEditorContent: RaetselEditorContent;
+  raetselDetailsContent: RaetselDetailsContent;
   generatingOutput: boolean;
 }
 
@@ -34,7 +34,7 @@ export const initialState: RaetselState = raetselAdapter.getInitialState({
   sortDirection: 'asc',
   page: [],
   paginationState: initialPaginationState,
-  raetselEditorContent: initialRaetselEditorContent,
+  raetselDetailsContent: initialRaetselDetailsContent,
   generatingOutput: false
 });
 
@@ -84,20 +84,16 @@ const raetselReducer = createReducer(
 
   on(RaetselActions.raetselDetailsLoaded, (state, action) => {
 
-    if (state.raetselEditorContent) {
-
-      return { ...state, selectedId: action.raetselDetails.id, raetselEditorContent: { ...state.raetselEditorContent, raetsel: action.raetselDetails } };
-    }
-    return { ...state };
+    return { ...state, selectedId: action.raetselDetails.id, raetselDetailsContent: { ...state.raetselDetailsContent, raetsel: action.raetselDetails } };
   }),
 
   on(RaetselActions.editRaetsel, (state, action) => {
-    return { ...state, raetselEditorContent: action.raetselEditorContent }
+    return { ...state, raetselDetailsContent: action.raetselDetailsContent }
   }),
 
   on(RaetselActions.cancelEdit, (state, _action) => {
 
-    return { ...state, raetselEditorContent: initialRaetselEditorContent };
+    return { ...state, raetselDetailsContent: initialRaetselDetailsContent };
   }),
 
   on(RaetselActions.generateOutput, (state, _action) => {
@@ -106,10 +102,10 @@ const raetselReducer = createReducer(
 
   on(RaetselActions.outputGenerated, (state, action) => {
 
-    if (state.raetselEditorContent && state.raetselEditorContent.raetsel) {
-      const neueDetails: RaetselDetails = { ...state.raetselEditorContent.raetsel, imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung };
-      const neuerEditorContent = { ...state.raetselEditorContent, raetsel: neueDetails };
-      return { ...state, raetselEditorContent: neuerEditorContent, generatingOutput: false };
+    if (state.raetselDetailsContent && state.raetselDetailsContent.raetsel) {
+      const neueDetails: RaetselDetails = { ...state.raetselDetailsContent.raetsel, imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung };
+      const neuerContent = { ...state.raetselDetailsContent, raetsel: neueDetails };
+      return { ...state, raetselDetailsContent: neuerContent, generatingOutput: false };
     }
 
     return { ...state };
@@ -133,7 +129,7 @@ const raetselReducer = createReducer(
     return raetselAdapter.upsertOne(raetsel, {
       ...state,
       loaded: true,
-      raetselEditorContent: {...state.raetselEditorContent, raetsel: raetselDetails},
+      raetselDetailsContent: {...state.raetselDetailsContent, raetsel: raetselDetails},
       saveSuccessMessage: action.successMessage
     });
   }),

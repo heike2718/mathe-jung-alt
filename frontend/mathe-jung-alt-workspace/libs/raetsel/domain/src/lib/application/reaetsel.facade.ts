@@ -10,7 +10,7 @@ import { combineLatest, filter, Observable, tap } from 'rxjs';
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
 import * as RaetselSelectors from '../+state/raetsel/raetsel.selectors';
-import { EditRaetselPayload, initialRaetselDetails, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselEditorContent } from '../entities/raetsel';
+import { EditRaetselPayload, initialRaetselDetails, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselDetailsContent } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -20,7 +20,7 @@ export class RaetselFacade {
   page$ = this.store.pipe(select(RaetselSelectors.getPage));
   raetselDetails$ = this.store.pipe(select(RaetselSelectors.getRaetselDetails));
   paginationState$ = this.store.pipe(select(RaetselSelectors.getPaginationState));
-  editorContent$: Observable<RaetselEditorContent | undefined> = this.store.pipe(select(RaetselSelectors.getEditorContent));
+  editorContent$: Observable<RaetselDetailsContent | undefined> = this.store.pipe(select(RaetselSelectors.getDetailsContent));
   generatingOutput$: Observable<boolean> = this.store.pipe(select(RaetselSelectors.generatingOutput));
 
   #selectedQuelleId: string | undefined;
@@ -101,14 +101,14 @@ export class RaetselFacade {
       selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: false });
     });
 
-    const content: RaetselEditorContent = {
+    const content: RaetselDetailsContent = {
       raetsel: raetselDetails,
       quelleId: this.#selectedQuelleId,
       kontext: 'RAETSEL',
       selectableDeskriptoren: selectableDeskriptoren
     };
 
-    this.store.dispatch(RaetselActions.editRaetsel({ raetselEditorContent: content }));
+    this.store.dispatch(RaetselActions.editRaetsel({ raetselDetailsContent: content }));
   }
 
   generiereRaetselOutput(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {

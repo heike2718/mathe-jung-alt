@@ -5,7 +5,7 @@ import {
 } from '@angular/forms';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { Antwortvorschlag, EditRaetselPayload, RaetselDetails, RaetselEditorContent, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { Antwortvorschlag, EditRaetselPayload, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { SelectableItem } from 'libs/shared/ui-components/src/lib/select-items/select-items.model';
 import { Subscription } from 'rxjs';
 
@@ -25,7 +25,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   // https://stackblitz.com/edit/angular-10-dynamic-reactive-forms-example?file=src%2Fapp%2Fapp.component.html
   // https://jasonwatmore.com/post/2020/09/18/angular-10-dynamic-reactive-forms-example
   // #raetsel: RaetselDetails = initialRaetselDetails;
-  raetselEditorContent!: RaetselEditorContent;
+  raetselDetailsContent!: RaetselDetailsContent;
   #selectedDeskriptoren: Deskriptor[] = [];
 
   #raetselSubscription: Subscription = new Subscription();
@@ -57,8 +57,8 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
     this.#raetselSubscription = this.raetselFacade.editorContent$.subscribe((raetsel) => {
       if (raetsel) {
-        this.raetselEditorContent = raetsel;
-        this.#selectedDeskriptoren = this.raetselEditorContent.raetsel.deskriptoren;
+        this.raetselDetailsContent = raetsel;
+        this.#selectedDeskriptoren = this.raetselDetailsContent.raetsel.deskriptoren;
         this.initForm();
       }
     });
@@ -82,8 +82,8 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
     const raetsel: RaetselDetails = this.readFormValues();
 
-    const latexHistorisieren = this.raetselEditorContent.raetsel.id !== 'neu' &&
-      (raetsel.frage !== this.raetselEditorContent.raetsel.frage || raetsel.loesung !== this.raetselEditorContent.raetsel.loesung);
+    const latexHistorisieren = this.raetselDetailsContent.raetsel.id !== 'neu' &&
+      (raetsel.frage !== this.raetselDetailsContent.raetsel.frage || raetsel.loesung !== this.raetselDetailsContent.raetsel.loesung);
 
     const editRaetselPayload: EditRaetselPayload = {
       latexHistorisieren: latexHistorisieren,
@@ -94,8 +94,8 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
-    if (this.raetselEditorContent) {
-      this.raetselFacade.selectRaetsel(this.raetselEditorContent.raetsel);
+    if (this.raetselDetailsContent) {
+      this.raetselFacade.selectRaetsel(this.raetselDetailsContent.raetsel);
     } else {
       this.raetselFacade.cancelEditRaetsel();
     }
@@ -157,7 +157,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   private initForm() {
 
-    const raetsel = this.raetselEditorContent.raetsel;
+    const raetsel = this.raetselDetailsContent.raetsel;
 
     this.form.controls.schluessel.setValue(raetsel.schluessel);
     this.form.controls.name.setValue(raetsel.name);
@@ -216,7 +216,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.collectAntwortvorschlaege();
 
     const raetsel: RaetselDetails = {
-      ...this.raetselEditorContent.raetsel,
+      ...this.raetselDetailsContent.raetsel,
       schluessel: formValue['schluessel'].trim(),
       name: formValue['name'] !== null ? formValue['name'].trim() : '',
       status: formValue['status'],
