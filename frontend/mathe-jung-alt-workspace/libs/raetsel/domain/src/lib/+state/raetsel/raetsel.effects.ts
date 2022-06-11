@@ -88,7 +88,7 @@ export class RaetselEffects {
     )
   );
 
-  navigateToRaetselDetails$ = createEffect(() =>
+  showDetailsAfterLoaded$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.raetselDetailsLoaded),
       tap(() => {
@@ -104,10 +104,16 @@ export class RaetselEffects {
       }),
     ), { dispatch: false });
 
-  navigateToRaetselSuche$ = createEffect(() =>
+  cancelEdit$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.cancelEdit),
       tap(() => this.router.navigateByUrl('raetsel')),
+    ), { dispatch: false });
+
+  showDetails$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.showRaetselDetails),
+      tap(() => this.router.navigateByUrl('raetsel/details')),
     ), { dispatch: false });
 
   constructor(

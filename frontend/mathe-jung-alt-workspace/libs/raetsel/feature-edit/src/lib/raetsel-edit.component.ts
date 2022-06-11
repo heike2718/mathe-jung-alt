@@ -94,9 +94,12 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
-    this.raetselFacade.cancelEditRaetsel();
+    if (this.raetselEditorContent) {
+      this.raetselFacade.selectRaetsel(this.raetselEditorContent.raetsel);
+    } else {
+      this.raetselFacade.cancelEditRaetsel();
+    }
   }
-
 
   isFormValid(): boolean {
     if (this.form.valid) {

@@ -84,6 +84,10 @@ export class RaetselFacade {
     }
   }
 
+  showDetails(): void {
+    this.store.dispatch(RaetselActions.showRaetselDetails());
+  }
+
   cancelEditRaetsel(): void {
     this.store.dispatch(RaetselActions.cancelEdit());
   }

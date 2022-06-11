@@ -141,4 +141,4 @@ const raetselReducer = createReducer(
 
 export function reducer(state: RaetselState | undefined, action: Action) {
   return raetselReducer(state, action);
-}
+};
