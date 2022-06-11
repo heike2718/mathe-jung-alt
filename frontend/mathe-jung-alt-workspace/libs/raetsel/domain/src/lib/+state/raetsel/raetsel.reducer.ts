@@ -70,7 +70,7 @@ const raetselReducer = createReducer(
       page: raetsel
     })
 
-  ),
+  ), 
 
   on(RaetselActions.raetsellisteCleared, (state, _action) => ({
     ...state,

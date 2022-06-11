@@ -2,10 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 import { RaetselDetails, RaetselFacade, LATEX_OUTPUTFORMAT, anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mathe-jung-alt-workspace/raetsel/ui-raetsel';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { Subscription } from 'rxjs';
-import { PrintRaetselDialogData } from '../print-raetsel-dialog.data';
-import { PrintRaetselDialogComponent } from '../print-raetsel-dialog/print-raetsel-dialog.component';
 
 @Component({
   selector: 'mja-reaetsel-details',

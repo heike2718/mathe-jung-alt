@@ -9,5 +9,5 @@
     "types": []
   },
   "exclude": ["src/test-setup.ts", "**/*.spec.ts", "**/*.test.ts"],
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "../ui-raetsel/src/lib/print-raetsel-dialog/print-raetsel-dialog.data.ts"]
 }

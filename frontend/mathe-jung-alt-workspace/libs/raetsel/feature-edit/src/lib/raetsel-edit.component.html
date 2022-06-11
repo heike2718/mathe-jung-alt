@@ -77,10 +77,11 @@
                     </mat-form-field>
                 </div>
 
-                <div *ngIf="raetselFacade.raetselDetails$ | async as raetselDetails">
-                    <ng-component *ngIf="raetselDetails.imageFrage">
-                        <mja-raetsel-images [raetsel]="raetselDetails"></mja-raetsel-images>
-                    </ng-component>
+                <div *ngIf="raetsel.raetsel.imageFrage">
+                    <mja-raetsel-images [raetsel]="raetsel.raetsel"></mja-raetsel-images>
+                    <div *ngIf="!raetsel.raetsel.imageFrage">
+                        <p>noch keine Images generiert</p>
+                    </div>
                 </div>
 
                 <div class="mb-2">
@@ -140,6 +141,10 @@
         <h3>Deskriptoren</h3>
         <mja-select-items [itemList]="raetsel.selectableDeskriptoren"
             (selectedItemsChanged)="onSelectableItemsChanged($event)"></mja-select-items>
+
+        <div *ngIf="raetselFacade.generatingOutput$ | async" class="loader">
+            <mat-progress-spinner mode="indeterminate" diameter='40' strokeWidth='5'></mat-progress-spinner>
+        </div>
 
         <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
 

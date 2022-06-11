@@ -8,16 +8,12 @@ import {
 // Lookup the 'Raetsel' feature state managed by NgRx
 export const getRaetselState = createFeatureSelector<RaetselState>(RAETSEL_FEATURE_KEY);
 
-const { selectAll, selectEntities } = raetselAdapter.getSelectors();
+const { selectEntities } = raetselAdapter.getSelectors();
 
 export const getRaetselLoaded = createSelector(
   getRaetselState,
   (state: RaetselState) => state.loaded
 );
-
-// export const getAllRaetsel = createSelector(getRaetselState, (state: RaetselState) =>
-//   selectAll(state)
-// );
 
 export const getRaetselEntities = createSelector(
   getRaetselState,

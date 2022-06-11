@@ -13,7 +13,6 @@ import { SharedSuchfilterDomainModule } from '@mathe-jung-alt-workspace/shared/s
 import { SharedSuchfilterComponentModule } from '@mathe-jung-alt-workspace/shared/suchfilter/suchfilter-component';
 import { ReaetselDetailsComponent } from './reaetsel-details/reaetsel-details.component';
 import { AntwortvorschlagComponent } from './reaetsel-details/antwortvorschlaege/antwortvorschlag.component';
-import { PrintRaetselDialogComponent } from './print-raetsel-dialog/print-raetsel-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { RaetselUiModule } from '@mathe-jung-alt-workspace/raetsel/ui-raetsel';
 
@@ -44,8 +43,7 @@ import { RaetselUiModule } from '@mathe-jung-alt-workspace/raetsel/ui-raetsel';
   declarations: [
     RaetselSearchComponent,
     ReaetselDetailsComponent,
-    AntwortvorschlagComponent,
-    PrintRaetselDialogComponent,
+    AntwortvorschlagComponent
   ],
   exports: [RaetselSearchComponent, RouterModule, AntwortvorschlagComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
