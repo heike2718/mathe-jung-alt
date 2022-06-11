@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Deskriptor, filterByKontext, getDifferenzmenge } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { PageDefinition, SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { PageDefinition, Suchfilter, SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 import { SelectableItem } from 'libs/shared/ui-components/src/lib/select-items/select-items.model';
 import { combineLatest, filter, Observable, tap } from 'rxjs';
@@ -52,18 +52,14 @@ export class RaetselFacade {
   }
 
   /*  Setzt die Suchkette mit serverseitiger Pagination in Gang. Hierzu wird ein select count mit dem Suchfilter abgesetzt */
-  triggerSearch(pageDefinition: PageDefinition): void {
+  triggerSearch(suchfilter: Suchfilter, pageDefinition: PageDefinition): void {
     this.store.dispatch(RaetselActions.selectPage({ pageDefinition }));
-    this.store.dispatch(RaetselActions.prepareSearch());
+    this.store.dispatch(RaetselActions.prepareSearch({suchfilter, pageDefinition}));
   }
 
-  startSearch(anzahlTreffer: number): void {
+  startSearch(anzahlTreffer: number, suchfilter: Suchfilter, pageDefinition: PageDefinition): void {
     this.store.dispatch(RaetselActions.raetselCounted({ anzahl: anzahlTreffer }));
-    this.findRaetsel();
-  }
-
-  findRaetsel(): void {
-    this.store.dispatch(RaetselActions.findRaetsel());
+    this.#findRaetsel(suchfilter, pageDefinition);
   }
 
   clearTrefferliste(): void {
@@ -125,5 +121,12 @@ export class RaetselFacade {
 
   saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
     this.store.dispatch(RaetselActions.startSaveRaetsel({ editRaetselPayload }));
+  }
+
+  // ###################################################################
+
+
+  #findRaetsel(suchfilter: Suchfilter, pageDefinition: PageDefinition): void {
+    this.store.dispatch(RaetselActions.findRaetsel({suchfilter, pageDefinition}));
   }
 }

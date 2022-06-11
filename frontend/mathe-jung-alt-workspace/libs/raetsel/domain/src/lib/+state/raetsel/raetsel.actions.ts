@@ -1,9 +1,10 @@
-import { PageDefinition } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { PageDefinition, Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
 import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselEditorContent } from '../../entities/raetsel';
 
 export const prepareSearch = createAction(
-  '[Raetsel] prepareSearch'
+  '[Raetsel] prepareSearch',
+  props<{suchfilter: Suchfilter, pageDefinition: PageDefinition}>()
 );
 
 export const selectPage = createAction(
@@ -21,7 +22,8 @@ export const raetselCounted = createAction(
 );
 
 export const findRaetsel = createAction(
-  '[Raetsel] find Raetsel'
+  '[Raetsel] find Raetsel',
+  props<{suchfilter: Suchfilter, pageDefinition: PageDefinition}>()
 );
 
 export const findRaetselSuccess = createAction(

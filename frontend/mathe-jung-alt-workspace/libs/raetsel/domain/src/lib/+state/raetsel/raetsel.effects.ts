@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { map, tap, withLatestFrom } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import * as RaetselActions from './raetsel.actions';
 import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { RaetselFacade } from '../../application/reaetsel.facade';
@@ -15,10 +15,9 @@ export class RaetselEffects {
   prepareSearch$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.prepareSearch),
-      withLatestFrom(this.suchfilterFacade.selectedSuchfilter$),
-      this.safeNgrx.safeSwitchMap(([_action, suchfilter]) =>
-        this.raetselDataService.countRaetsel(suchfilter).pipe(
-          tap((anzahl) => this.raetselFacade.startSearch(anzahl)),
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.raetselDataService.countRaetsel(action.suchfilter).pipe(
+          tap((anzahl) => this.raetselFacade.startSearch(anzahl, action.suchfilter, action.pageDefinition)),
           map(() => noopAction())
         ), 'Ups, beim Zählen der Rätsel ist etwas schiefgegangen', noopAction()
       )
@@ -28,14 +27,10 @@ export class RaetselEffects {
   findRaetsel$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.findRaetsel),
-      withLatestFrom(
-        this.suchfilterFacade.selectedSuchfilter$,
-        this.raetselFacade.paginationState$
-      ),
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
-      this.safeNgrx.safeSwitchMap(([_action, suchfilter, paginationState]) =>
-        this.raetselDataService.loadPage(suchfilter,
-          { pageIndex: paginationState.pageIndex, pageSize: paginationState.pageSize, sortDirection: paginationState.sortDirection }).pipe(
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.raetselDataService.loadPage(action.suchfilter,
+          { pageIndex: action.pageDefinition.pageIndex, pageSize: action.pageDefinition.pageSize, sortDirection: action.pageDefinition.sortDirection }).pipe(
             map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))
           ), 'Ups, beim Suchen nach Rätseln ist etwas schiefgegangen', noopAction()
       )

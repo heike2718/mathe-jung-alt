@@ -2,8 +2,8 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { Raetsel, RaetselDataSource, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
-import { combineLatest, merge, Subscription } from 'rxjs';
+import { debounceTime, filter, tap } from 'rxjs/operators';
+import { merge, Subscription } from 'rxjs';
 import { PageDefinition, PaginationState, Suchfilter, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
@@ -72,8 +72,8 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
       debounceTime(300),
       // distinctUntilChanged(),
       tap(() => {
-        if (this.paginator && this.sort) {
-          this.triggerSuche();
+        if (this.paginator && this.sort && this.suchfilter) {
+          this.#triggerSuche(this.suchfilter);
         }
       })
     ).subscribe();
@@ -96,7 +96,9 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.paginator) {
       this.paginator.pageIndex = 0;
     }
-    this.triggerSuche();
+    if (this.suchfilter !== undefined) {
+      this.#triggerSuche(this.suchfilter);
+    }
   }
 
   onInputChanged($event: string) {
@@ -114,7 +116,11 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     merge(this.sort.sortChange, this.paginator.page).pipe(
-      tap(() => this.triggerSuche())
+      tap(() => {
+        if (this.suchfilter !== undefined) {
+          this.#triggerSuche(this.suchfilter);
+        }
+      })
     ).subscribe();
   }
 
@@ -147,15 +153,15 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     this.raetselFacade.createAndEditRaetsel();
   }
 
-  private triggerSuche(): void {
+  #triggerSuche(suchfilter: Suchfilter): void {
 
     const pageDefinition: PageDefinition = {
-      pageIndex: this.paginator ?  this.paginator.pageIndex : 0,
+      pageIndex: this.paginator ? this.paginator.pageIndex : 0,
       pageSize: this.paginator ? this.paginator.pageSize : 10,
       sortDirection: this.sort ? this.sort.direction : 'asc'
     }
 
-    this.raetselFacade.triggerSearch(pageDefinition);
+    this.raetselFacade.triggerSearch(suchfilter, pageDefinition);
   }
 }
 

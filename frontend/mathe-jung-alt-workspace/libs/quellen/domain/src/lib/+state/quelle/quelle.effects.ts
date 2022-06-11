@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import * as QuelleActions from './quelle.actions';
 import { QuelleDataService } from '../../infrastructure/quelle.data.service';
 import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { QuellenFacade } from '../../application/quellen.facade';
 import * as AuthActions from '@mathe-jung-alt-workspace/shared/auth/domain';
-import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { Quelle } from '@mathe-jung-alt-workspace/quellen/domain';
 
 @Injectable()
@@ -54,9 +53,8 @@ export class QuelleEffects {
   loadQuelleAfterAdminLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.sessionCreated),
-      withLatestFrom(this.authFacade.getUser$),
-      this.safeNgrx.safeSwitchMap(([_action, user]) =>
-        this.quelleDataService.loadQuelleAdmin(user).pipe(
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.quelleDataService.loadQuelleAdmin(action.session.user).pipe(
           map((quelle: Quelle | undefined) =>
             quelle ? QuelleActions.quelleFound({ quelle }) : noopAction()
           )
@@ -68,9 +66,8 @@ export class QuelleEffects {
   loadQuelleSessionRestored$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.sessionRestored),
-      withLatestFrom(this.authFacade.getUser$),
-      this.safeNgrx.safeSwitchMap(([_action, user]) =>
-        this.quelleDataService.loadQuelleAdmin(user).pipe(
+     this.safeNgrx.safeSwitchMap((action) =>
+        this.quelleDataService.loadQuelleAdmin(action.session.user).pipe(
           map((quelle: Quelle | undefined) =>
             quelle ? QuelleActions.quelleFound({ quelle }) : noopAction()
           )
@@ -81,7 +78,6 @@ export class QuelleEffects {
 
   constructor(
     private actions$: Actions,
-    private authFacade: AuthFacade,
     private quellenFacade: QuellenFacade,
     private quelleDataService: QuelleDataService,
     private safeNgrx: SafeNgrxService

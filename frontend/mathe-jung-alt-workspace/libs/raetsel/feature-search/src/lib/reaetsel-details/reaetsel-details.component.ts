@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 import { RaetselDetails, RaetselFacade, LATEX_OUTPUTFORMAT, anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
-import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Subscription } from 'rxjs';
 import { DialogData } from '../print-raetsel-dialog.data';
 import { PrintRaetselDialogComponent } from '../print-raetsel-dialog/print-raetsel-dialog.component';
