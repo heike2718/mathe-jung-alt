@@ -33,7 +33,7 @@ import { RaetselEditModule } from "@mathe-jung-alt-workspace/raetsel/feature-edi
         NotAuthorizedComponentModule,
         DashboardComponentModule,
         QuellenDomainModule,
-        QuellenFeatureSearchModule
+        QuellenFeatureSearchModule,
     ],
     exports: [
         AppComponent

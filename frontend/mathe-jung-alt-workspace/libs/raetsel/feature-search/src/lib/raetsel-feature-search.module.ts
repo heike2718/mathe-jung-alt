@@ -15,6 +15,7 @@ import { ReaetselDetailsComponent } from './reaetsel-details/reaetsel-details.co
 import { AntwortvorschlagComponent } from './reaetsel-details/antwortvorschlaege/antwortvorschlag.component';
 import { PrintRaetselDialogComponent } from './print-raetsel-dialog/print-raetsel-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { RaetselUiModule } from '@mathe-jung-alt-workspace/raetsel/ui-raetsel';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     HttpClientModule,
     RaetselDomainModule,
+    RaetselUiModule,
     SharedSuchfilterDomainModule,
     SharedSuchfilterComponentModule,
     SharedUiMessagingModule,

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogData } from '../print-raetsel-dialog.data';
+import { PrintRaetselDialogData } from '../print-raetsel-dialog.data';
 
 
 @Component({
@@ -8,12 +8,13 @@ import { DialogData } from '../print-raetsel-dialog.data';
   templateUrl: './print-raetsel-dialog.component.html',
   styleUrls: ['./print-raetsel-dialog.component.scss'],
 })
+
 export class PrintRaetselDialogComponent implements OnInit {
 
   selectedOption: string | undefined;
 
   constructor(public dialogRef: MatDialogRef<PrintRaetselDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data: PrintRaetselDialogData) { }
 
   ngOnInit(): void { }
 

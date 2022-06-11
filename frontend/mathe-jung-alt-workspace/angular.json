@@ -13,6 +13,7 @@
     "raetsel-domain": "libs/raetsel/domain",
     "raetsel-feature-edit": "libs/raetsel/feature-edit",
     "raetsel-feature-search": "libs/raetsel/feature-search",
+    "raetsel-ui-raetsel": "libs/raetsel/ui-raetsel",
     "shared-auth-domain": "libs/shared/auth/domain",
     "shared-configuration": "libs/shared/configuration",
     "shared-suchfilter-domain": "libs/shared/suchfilter/domain",

@@ -48,6 +48,9 @@
       "@mathe-jung-alt-workspace/raetsel/feature-search": [
         "libs/raetsel/feature-search/src/index.ts"
       ],
+      "@mathe-jung-alt-workspace/raetsel/ui-raetsel": [
+        "libs/raetsel/ui-raetsel/src/index.ts"
+      ],
       "@mathe-jung-alt-workspace/shared/auth/domain": [
         "libs/shared/auth/domain/src/index.ts"
       ],
