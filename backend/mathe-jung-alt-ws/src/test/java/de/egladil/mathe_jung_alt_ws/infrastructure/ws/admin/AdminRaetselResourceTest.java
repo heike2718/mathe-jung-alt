@@ -210,4 +210,19 @@ public class AdminRaetselResourceTest {
 
 	}
 
+	@Test
+	void testFindWithSchluessel() throws Exception {
+
+		Response response = given().when().get("?suchstring=02790&typeDeskriptoren=ORDINAL");
+
+		String responsePayload = response.asString();
+		System.out.println(responsePayload);
+		RaetselsucheTreffer[] alleRaetsel = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
+
+		assertEquals(1, alleRaetsel.length);
+
+		RaetselsucheTreffer treffer = alleRaetsel[0];
+		assertEquals("02790", treffer.getSchluessel());
+
+	}
 }

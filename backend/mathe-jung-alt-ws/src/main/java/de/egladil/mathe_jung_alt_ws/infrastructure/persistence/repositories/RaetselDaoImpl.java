@@ -33,7 +33,7 @@ public class RaetselDaoImpl implements RaetselDao {
 	@Override
 	public long zaehleRaetselVolltext(final String suchstring) {
 
-		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring)";
+		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring)";
 
 		@SuppressWarnings("unchecked")
 		List<BigInteger> trefferliste = entityManager.createNativeQuery(stmt)
@@ -65,7 +65,7 @@ public class RaetselDaoImpl implements RaetselDao {
 	public long zaehleRaetselComplete(final String suchstring, final String deskriptorenIDs) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
-		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
+		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
 
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
@@ -86,8 +86,8 @@ public class RaetselDaoImpl implements RaetselDao {
 	public List<PersistentesRaetsel> sucheRaetselVolltext(final String suchstring, final int limit, final int offset, final SortDirection sortDirection) {
 
 		String stmt = sortDirection == SortDirection.desc
-			? "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) ORDER BY SCHLUESSEL desc"
-			: "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) ORDER BY SCHLUESSEL";
+			? "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) ORDER BY SCHLUESSEL desc"
+			: "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) ORDER BY SCHLUESSEL";
 
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + "]");
@@ -123,8 +123,8 @@ public class RaetselDaoImpl implements RaetselDao {
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
 		String stmt = sortDirection == SortDirection.desc
-			? "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL desc"
-			: "select * from RAETSEL WHERE MATCH(NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL";
+			? "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL desc"
+			: "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL";
 
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
