@@ -22,24 +22,18 @@ public interface AntwortvorschlagGeneratorStrategegy {
 
 	public static AntwortvorschlagGeneratorStrategegy create(final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
+		AntwortvorschlagGeneratorStrategegy result = null;
+
 		switch (layoutAntwortvorschlaege) {
 
-		case NOOP:
-
-			return new NoopAntwortvorschlagGeneratorStrategegy();
-
-		case ANKREUZTABELLE:
-			return new AnkreuztabelleAntwortvorschlagGeneratorStrategegy();
-
-		case BUCHSTABEN:
-			return new BuchstabenAntwortvorschlagGeneratorStrategegy();
-
-		case DESCRIPTION:
-			return new DescriptionAntwortvorschlagGeneratorStrategegy();
-
-		default:
-			throw new IllegalArgumentException("unbekannter Antwortanzegetyp " + layoutAntwortvorschlaege);
+		case NOOP -> result = new NoopAntwortvorschlagGeneratorStrategegy();
+		case ANKREUZTABELLE -> result = new AnkreuztabelleAntwortvorschlagGeneratorStrategegy();
+		case BUCHSTABEN -> result = new BuchstabenAntwortvorschlagGeneratorStrategegy();
+		case DESCRIPTION -> result = new DescriptionAntwortvorschlagGeneratorStrategegy();
+		default -> throw new IllegalArgumentException("unbekannter Antwortanzegetyp " + layoutAntwortvorschlaege);
 		}
+
+		return result;
 	}
 
 }

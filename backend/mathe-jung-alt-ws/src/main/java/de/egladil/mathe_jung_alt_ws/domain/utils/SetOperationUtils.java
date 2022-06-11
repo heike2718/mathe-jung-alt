@@ -59,7 +59,7 @@ public class SetOperationUtils {
 		List<Long> idsAsList = new ArrayList<>(idsAsSet);
 		Collections.sort(idsAsList);
 
-		List<String> wrappedIds = idsAsList.stream().map(id -> "," + id + ",").collect(Collectors.toList());
+		List<String> wrappedIds = idsAsList.stream().map(id -> "," + id + ",").toList();
 
 		String result = StringUtils.join(wrappedIds, '%');
 		return "%" + result + "%";

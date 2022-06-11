@@ -47,11 +47,11 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 		}
 
 		String[] tokens = StringUtils.split(deskriptorenIds, ',');
-		List<Long> ids = Arrays.stream(tokens).map(t -> Long.valueOf(t)).collect(Collectors.toList());
+		List<Long> ids = Arrays.stream(tokens).map(t -> Long.valueOf(t)).toList();
 
 		List<Deskriptor> alleDeskriptoren = deskriptorenRepository.listAll();
 
-		List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).collect(Collectors.toList());
+		List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).toList();
 
 		return result;
 	}
@@ -93,7 +93,7 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 			return admin ? deskriptoren : new ArrayList<>();
 		}
 
-		return deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).collect(Collectors.toList());
+		return deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).toList();
 	}
 
 	@Override

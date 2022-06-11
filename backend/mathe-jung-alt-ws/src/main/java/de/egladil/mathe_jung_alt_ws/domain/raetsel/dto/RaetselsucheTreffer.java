@@ -5,7 +5,6 @@
 package de.egladil.mathe_jung_alt_ws.domain.raetsel.dto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -83,7 +82,7 @@ public class RaetselsucheTreffer {
 
 	public String deskriptorenIds() {
 
-		List<String> ids = deskriptoren.stream().map(d -> d.id + "").collect(Collectors.toList());
+		List<String> ids = deskriptoren.stream().map(d -> d.id + "").toList();
 		return StringUtils.join(ids, ',');
 	}
 

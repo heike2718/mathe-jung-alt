@@ -7,7 +7,6 @@ package de.egladil.mathe_jung_alt_ws.domain.quellen.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -79,7 +78,7 @@ public class QuellenServiceImpl implements QuellenService {
 			trefferlisteMitDeskriptoren.addAll(trefferliste);
 		}
 
-		List<QuelleReadonly> result = trefferlisteMitDeskriptoren.stream().map(pq -> mapFromDB(pq)).collect(Collectors.toList());
+		List<QuelleReadonly> result = trefferlisteMitDeskriptoren.stream().map(pq -> mapFromDB(pq)).toList();
 
 		return result;
 	}

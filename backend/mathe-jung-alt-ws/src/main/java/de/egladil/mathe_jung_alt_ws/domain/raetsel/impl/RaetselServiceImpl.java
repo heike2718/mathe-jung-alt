@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -60,22 +59,18 @@ public class RaetselServiceImpl implements RaetselService {
 
 		SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
 
+		long result = 0;
+
 		switch (suchfilterVariante) {
 
-		case COMPLETE:
-			return raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds());
-
-		case DESKRIPTOREN:
-			return raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
-
-		case VOLLTEXT:
-			return raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
-
-		default:
-			break;
+		case COMPLETE -> result = raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds());
+		case DESKRIPTOREN -> result = raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
+		case VOLLTEXT -> result = raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
+		default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
 		}
 
-		throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
+		return result;
+
 	}
 
 	@Override
@@ -87,24 +82,17 @@ public class RaetselServiceImpl implements RaetselService {
 
 		switch (suchfilterVariante) {
 
-		case COMPLETE:
-			trefferliste = raetselDao.sucheRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds(), limit,
-				offset, sortDirection);
-			break;
+		case COMPLETE -> trefferliste = raetselDao.sucheRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds(),
+			limit,
+			offset, sortDirection);
+		case DESKRIPTOREN -> trefferliste = raetselDao.sucheMitDeskriptoren(suchfilter.getDeskriptorenIds(), limit, offset,
+			sortDirection);
+		case VOLLTEXT -> trefferliste = raetselDao.sucheRaetselVolltext(suchfilter.getSuchstring(), limit, offset, sortDirection);
 
-		case DESKRIPTOREN:
-			trefferliste = raetselDao.sucheMitDeskriptoren(suchfilter.getDeskriptorenIds(), limit, offset, sortDirection);
-			break;
-
-		case VOLLTEXT:
-			trefferliste = raetselDao.sucheRaetselVolltext(suchfilter.getSuchstring(), limit, offset, sortDirection);
-			break;
-
-		default:
-			throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
+		default -> new IllegalArgumentException("Unexpected value: " + suchfilterVariante);
 		}
 
-		return trefferliste.stream().map(pr -> mapToSucheTrefferFromDB(pr)).collect(Collectors.toList());
+		return trefferliste.stream().map(pr -> mapToSucheTrefferFromDB(pr)).toList();
 	}
 
 	@Override

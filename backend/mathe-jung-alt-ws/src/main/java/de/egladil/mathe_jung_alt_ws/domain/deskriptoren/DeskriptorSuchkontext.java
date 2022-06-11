@@ -6,7 +6,6 @@ package de.egladil.mathe_jung_alt_ws.domain.deskriptoren;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * DeskriptorSuchkontext
@@ -42,7 +41,7 @@ public enum DeskriptorSuchkontext {
 
 	public static List<DeskriptorSuchkontext> getFreigegebe() {
 
-		return Arrays.stream(DeskriptorSuchkontext.values()).filter((ds -> ds.freigegebenFuerAlle())).collect(Collectors.toList());
+		return Arrays.stream(DeskriptorSuchkontext.values()).filter((ds -> ds.freigegebenFuerAlle())).toList();
 
 	}
 

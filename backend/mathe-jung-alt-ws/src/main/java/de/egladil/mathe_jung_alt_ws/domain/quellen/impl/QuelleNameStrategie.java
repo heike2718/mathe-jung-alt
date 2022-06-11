@@ -22,20 +22,17 @@ public interface QuelleNameStrategie {
 
 	static QuelleNameStrategie getStrategie(final Quellenart quellenart) {
 
+		QuelleNameStrategie result = null;
+
 		switch (quellenart) {
 
-		case PERSON:
-			return new PersonquelleNameStrategie();
-
-		case BUCH:
-			return new BuchquelleNameStrategie();
-
-		case ZEITSCHRIFT:
-			return new ZeitschriftquelleNameStrategie();
-
-		default:
-			throw new IllegalArgumentException("unbekannte Quellenart " + quellenart);
+		case PERSON -> result = new PersonquelleNameStrategie();
+		case BUCH -> result = new BuchquelleNameStrategie();
+		case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
+		default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
 		}
+
+		return result;
 	}
 
 }

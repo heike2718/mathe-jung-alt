@@ -80,7 +80,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 			switch (outputformat) {
 
-			case PDF: {
+			case PDF -> {
 
 				responseFrage = laTeXClient.latex2PDF(raetsel.getSchluessel());
 
@@ -89,10 +89,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 					responseLoesung = laTeXClient.latex2PDF(raetsel.getSchluessel() + "_l");
 				}
 			}
-
-				break;
-
-			case PNG: {
+			case PNG -> {
 
 				responseFrage = laTeXClient.latex2PNG(raetsel.getSchluessel());
 
@@ -101,10 +98,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 					responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + "_l");
 				}
 			}
-				break;
-
-			default:
-				throw new IllegalArgumentException("unbekanntes outputformat " + outputformat);
+			default -> throw new IllegalArgumentException("unbekanntes outputformat " + outputformat);
 			}
 
 			LOGGER.debug("nach Aufruf LaTeXRestClient");
