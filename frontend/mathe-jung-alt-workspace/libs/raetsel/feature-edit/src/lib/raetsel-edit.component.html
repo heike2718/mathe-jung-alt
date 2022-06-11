@@ -58,7 +58,8 @@
                             <mat-label>ID der Quelle</mat-label>
                             <input matInput maxlength="36" inputmode="tel" placeholder="Quelle"
                                 formControlName="quelleId" #quelleIdInput>
-                            <mat-hint *ngIf="quellenFacade.selectedQuelle$ | async as quelle">{{quelle.name}} ({{quelle.quellenart}})</mat-hint>
+                            <mat-hint *ngIf="quellenFacade.selectedQuelle$ | async as quelle">{{quelle.name}}
+                                ({{quelle.quellenart}})</mat-hint>
                             <mat-error *ngIf="raetselDataError('quelleId', 'required')">Quelle ist Pflicht</mat-error>
                         </mat-form-field>
                     </div>
@@ -70,11 +71,16 @@
                 <div class="mb-2">
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Status</mat-label>
-                        <select matNativeControl formControlName="status"
-                            #statusInput>
+                        <select matNativeControl formControlName="status" #statusInput>
                             <option *ngFor="let status of selectStatusInput" [value]="status">{{status}}</option>
                         </select>
                     </mat-form-field>
+                </div>
+
+                <div *ngIf="raetselFacade.raetselDetails$ | async as raetselDetails">
+                    <ng-component *ngIf="raetselDetails.imageFrage">
+                        <mja-raetsel-images [raetsel]="raetselDetails"></mja-raetsel-images>
+                    </ng-component>
                 </div>
 
                 <div class="mb-2">
@@ -129,16 +135,17 @@
                 korrekt sein.</mat-error>
         </form>
 
-      
+
 
         <h3>Deskriptoren</h3>
-        <mja-select-items [itemList]="raetsel.selectableDeskriptoren" (selectedItemsChanged)="onSelectableItemsChanged($event)"></mja-select-items>
+        <mja-select-items [itemList]="raetsel.selectableDeskriptoren"
+            (selectedItemsChanged)="onSelectableItemsChanged($event)"></mja-select-items>
 
         <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
 
             <div fxFlex="0 1 calc(20%-20px)">
                 <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
-                (click)="submit()">speichern</button>
+                    (click)="submit()">speichern</button>
             </div>
             <div fxFlex="0 1 calc(80%-20px)" class="mb-1">
                 <button mat-raised-button color="primary" (click)="cancelEdit()">abbrechen</button>
@@ -146,7 +153,8 @@
         </div>
 
         <div *ngIf="!form.valid || antwortvorschlaegeErrors()" class="hint-red">
-            Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende Pflichtangaben und so.
+            Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
+            Pflichtangaben und so.
         </div>
 
     </div>

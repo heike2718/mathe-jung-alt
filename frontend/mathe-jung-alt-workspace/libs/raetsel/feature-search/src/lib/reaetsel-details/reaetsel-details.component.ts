@@ -4,7 +4,7 @@ import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 import { RaetselDetails, RaetselFacade, LATEX_OUTPUTFORMAT, anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { Subscription } from 'rxjs';
-import { DialogData } from '../print-raetsel-dialog.data';
+import { PrintRaetselDialogData } from '../print-raetsel-dialog.data';
 import { PrintRaetselDialogComponent } from '../print-raetsel-dialog/print-raetsel-dialog.component';
 
 @Component({
@@ -57,7 +57,7 @@ export class ReaetselDetailsComponent implements OnInit, OnDestroy {
 
   private openPrintDialog(outputformat: LATEX_OUTPUTFORMAT): void {
 
-    const dialogData: DialogData = {
+    const dialogData: PrintRaetselDialogData = {
       titel: outputformat + ' generieren',
       layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
       selectedLayoutAntwortvorschlaege: undefined

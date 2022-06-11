@@ -11,11 +11,13 @@ import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedUiComponentsModule } from 'libs/shared/ui-components/src/lib/shared-ui-components.module';
+import { RaetselUiModule } from '@mathe-jung-alt-workspace/raetsel/ui-raetsel';
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
     RaetselDomainModule,
+    RaetselUiModule,
     SharedUiComponentsModule,
     MaterialModule,
     ReactiveFormsModule,
