@@ -67,7 +67,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
       quelle => {
         if (quelle) {
           const raetsel: RaetselDetails = { ...this.readFormValues(), quelleId: quelle.id };
-          this.raetselFacade.cacheRaetselDetails(raetsel);
+          // this.raetselFacade.cacheRaetselDetails(raetsel);
         }
       }
     );
@@ -129,7 +129,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   quelleSuchen(): void {
     const raetsel: RaetselDetails = this.readFormValues();
-    this.raetselFacade.cacheRaetselDetails(raetsel);
+    // this.raetselFacade.cacheRaetselDetails(raetsel);
     this.quellenFacade.navigateToQuellensuche();
   }
 

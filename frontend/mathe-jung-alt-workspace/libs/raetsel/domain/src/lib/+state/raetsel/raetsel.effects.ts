@@ -6,7 +6,6 @@ import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { RaetselFacade } from '../../application/reaetsel.facade';
 import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Router } from '@angular/router';
-import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
 
 @Injectable()
@@ -115,7 +114,6 @@ export class RaetselEffects {
     private actions$: Actions,
     private raetselDataService: RaetselDataService,
     private raetselFacade: RaetselFacade,
-    private suchfilterFacade: SuchfilterFacade,
     private safeNgrx: SafeNgrxService,
     private messageService: MessageService,
     private router: Router

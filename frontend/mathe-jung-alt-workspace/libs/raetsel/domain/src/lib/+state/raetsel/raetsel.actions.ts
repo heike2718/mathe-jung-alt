@@ -53,10 +53,10 @@ export const showRaetselDetails = createAction(
   '[Raetsel] show details'
 );
 
-export const cacheRaetselDetails = createAction(
-  '[Raetsel] cache details',
-  props<{ raetselDetails: RaetselDetails }>()
-);
+// export const cacheRaetselDetails = createAction(
+//   '[Raetsel] cache details',
+//   props<{ raetselDetails: RaetselDetails }>()
+// );
 
 export const editRaetsel = createAction(
   '[Raetsel]  edit',

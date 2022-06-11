@@ -76,3 +76,10 @@ export const initialRaetselDetails: RaetselDetails = {
   imageFrage: null,
   imageLoesung: null
 };
+
+export const initialRaetselEditorContent: RaetselEditorContent = {
+  kontext: "RAETSEL",
+  raetsel: initialRaetselDetails,
+  selectableDeskriptoren: []
+};
+

@@ -115,8 +115,8 @@ export class RaetselFacade {
     this.store.dispatch(RaetselActions.generateOutput({ raetselId, outputFormat, layoutAntwortvorschlaege }));
   }
 
-  cacheRaetselDetails(raetselDetails: RaetselDetails): void {
-    this.store.dispatch(RaetselActions.cacheRaetselDetails({ raetselDetails }));
+  #cacheRaetselDetails(raetselDetails: RaetselDetails): void {
+    // this.store.dispatch(RaetselActions.cacheRaetselDetails({ raetselDetails }));
   }
 
   saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
