@@ -44,7 +44,7 @@ public class AdminRaetselResourceTest {
 			.when().get("size?suchstring=Minikänguru&typeDeskriptoren=STRING")
 			.then()
 			.statusCode(200)
-			.body(is("15"));
+			.body(is("16"));
 	}
 
 	@Test
@@ -137,7 +137,7 @@ public class AdminRaetselResourceTest {
 
 		RaetselsucheTreffer[] alleRaetsel = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
 
-		assertEquals(5, alleRaetsel.length);
+		assertEquals(6, alleRaetsel.length);
 
 		{
 
@@ -163,13 +163,20 @@ public class AdminRaetselResourceTest {
 		{
 
 			RaetselsucheTreffer raetsel = alleRaetsel[3];
+			assertEquals("1267285d-f781-42e1-b0e6-7b46ef2e85b2", raetsel.getId());
+			assertEquals("02790", raetsel.getSchluessel());
+		}
+
+		{
+
+			RaetselsucheTreffer raetsel = alleRaetsel[4];
 			assertEquals("a18315fc-ed01-45c3-bf2d-078dd1fa47f4", raetsel.getId());
 			assertEquals("02791", raetsel.getSchluessel());
 		}
 
 		{
 
-			RaetselsucheTreffer raetsel = alleRaetsel[4];
+			RaetselsucheTreffer raetsel = alleRaetsel[5];
 			assertEquals("024f4ca4-3235-48a4-9c88-e77990ea059c", raetsel.getId());
 			assertEquals("02816", raetsel.getSchluessel());
 		}
@@ -185,6 +192,22 @@ public class AdminRaetselResourceTest {
 			.then()
 			.statusCode(200)
 			.body(is(expected));
+	}
+
+	@Test
+	void testFindFromMinikaenguruWithCoordinates() throws Exception {
+
+		Response response = given().when().get("?deskriptoren=2,6,47,78&typeDeskriptoren=ORDINAL");
+
+		String responsePayload = response.asString();
+		System.out.println(responsePayload);
+		RaetselsucheTreffer[] alleRaetsel = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
+
+		assertEquals(1, alleRaetsel.length);
+
+		RaetselsucheTreffer treffer = alleRaetsel[0];
+		assertEquals("02790", treffer.getSchluessel());
+
 	}
 
 }

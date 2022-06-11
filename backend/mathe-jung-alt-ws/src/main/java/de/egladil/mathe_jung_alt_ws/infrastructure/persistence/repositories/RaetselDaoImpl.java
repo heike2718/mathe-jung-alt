@@ -11,6 +11,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.egladil.mathe_jung_alt_ws.domain.dto.SortDirection;
 import de.egladil.mathe_jung_alt_ws.domain.raetsel.RaetselDao;
 import de.egladil.mathe_jung_alt_ws.domain.utils.SetOperationUtils;
@@ -21,6 +24,8 @@ import de.egladil.mathe_jung_alt_ws.infrastructure.persistence.entities.Persiste
  */
 @ApplicationScoped
 public class RaetselDaoImpl implements RaetselDao {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselDaoImpl.class);
 
 	@Inject
 	EntityManager entityManager;
@@ -99,7 +104,7 @@ public class RaetselDaoImpl implements RaetselDao {
 
 		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
-		// System.out.println("[deskriptoren=" + wrappedDeskriptoren + "]");
+		LOGGER.info("[deskriptoren=" + wrappedDeskriptoren + "]");
 
 		String queryId = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC
 			: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN;
