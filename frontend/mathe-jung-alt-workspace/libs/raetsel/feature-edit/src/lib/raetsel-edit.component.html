@@ -152,12 +152,16 @@
                 <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
                     (click)="submit()">speichern</button>
             </div>
-            <div fxFlex="0 1 calc(80%-20px)" class="mb-1">
+            <div fxFlex="0 1 calc(20%-20px)">
+                <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
+                    (click)="openPrintPNGDialog()">PNG generieren</button>
+            </div>
+            <div fxFlex="0 1 calc(20%-20px)">
                 <button mat-raised-button color="primary" (click)="cancelEdit()">abbrechen</button>
             </div>
         </div>
 
-        <div *ngIf="!form.valid || antwortvorschlaegeErrors()" class="hint-red">
+        <div *ngIf="!form.valid || antwortvorschlaegeErrors()" class="hint-red mt-1">
             Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
             Pflichtangaben und so.
         </div>

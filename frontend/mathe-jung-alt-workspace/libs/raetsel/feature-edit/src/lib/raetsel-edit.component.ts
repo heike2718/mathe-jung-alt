@@ -3,9 +3,11 @@ import {
   FormArray,
   FormBuilder, FormGroup, Validators
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { Antwortvorschlag, EditRaetselPayload, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayload, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
+import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mathe-jung-alt-workspace/raetsel/ui-raetsel';
 import { SelectableItem } from 'libs/shared/ui-components/src/lib/select-items/select-items.model';
 import { Subscription } from 'rxjs';
 
@@ -38,7 +40,8 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
 
   constructor(public raetselFacade: RaetselFacade,
     public quellenFacade: QuellenFacade,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    public dialog: MatDialog) {
 
     this.form = this.fb.group({
       schluessel: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
@@ -94,7 +97,7 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
-    if (this.raetselDetailsContent) {
+    if (this.raetselDetailsContent && this.raetselDetailsContent.raetsel.id !== 'neu') {
       this.raetselFacade.selectRaetsel(this.raetselDetailsContent.raetsel);
     } else {
       this.raetselFacade.cancelEditRaetsel();
@@ -153,6 +156,35 @@ export class RaetselEditComponent implements OnInit, OnDestroy {
     });
 
     return anzahlKorrekt !== 1;
+  }
+
+  openPrintPNGDialog(): void {
+    const dialogData: PrintRaetselDialogData = {
+      titel: 'PNG generieren',
+      layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
+      selectedLayoutAntwortvorschlaege: undefined
+    }
+
+    const dialogRef = this.dialog.open(PrintRaetselDialogComponent, {
+      height: '300px',
+      width: '700px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
+
+        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        switch(dialogData.selectedLayoutAntwortvorschlaege) {
+          case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
+          case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
+          case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
+        }
+
+        this.raetselFacade.generiereRaetselOutput(this.raetselDetailsContent.raetsel.id, 'PNG', layout);
+      }
+    });
   }
 
   private initForm() {
