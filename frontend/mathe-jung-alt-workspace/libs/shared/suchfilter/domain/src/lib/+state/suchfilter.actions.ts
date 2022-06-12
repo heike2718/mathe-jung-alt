@@ -36,6 +36,11 @@ export const markUnchanged = createAction(
   props<{ kontext: Suchkontext }>()
 );
 
+export const resetKontext = createAction(
+  '[Suchfilter] reset kontext',
+  props<{ kontext: Suchkontext }>()
+);
+
 export const reset = createAction(
   '[Suchfilter] reset all'
 );

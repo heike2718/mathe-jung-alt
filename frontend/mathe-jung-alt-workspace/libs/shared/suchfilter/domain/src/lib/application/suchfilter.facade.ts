@@ -44,9 +44,8 @@ export class SuchfilterFacade {
 
     }
 
-    // PENDING
     public resetSuchfilter(kontext: Suchkontext): void {
-
+        this.store.dispatch(SuchfilterActions.resetKontext({kontext}));
     }
 
     public sucheFinished(kontext: Suchkontext): void {

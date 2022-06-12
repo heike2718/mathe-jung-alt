@@ -1,6 +1,6 @@
 import { Deskriptor, filterByKontext } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { createReducer, on, Action } from '@ngrx/store';
-import { createInitialSuchfilterUIModels, findSuchfilterUIModelWithKontext, initialSuchfilter, SuchfilterUIModel, Suchkontext } from '../entities/suchfilter';
+import { createInitialSuchfilterUIModels, findSuchfilterUIModelWithKontext, initialSuchfilter, Suchfilter, SuchfilterUIModel, Suchkontext } from '../entities/suchfilter';
 import * as SuchfilterActions from './suchfilter.actions';
 
 
@@ -38,15 +38,15 @@ const suchfilterReducer = createReducer(
         const selectedSuchfilterUIModel = findSuchfilterUIModelWithKontext(state.kontext, state.suchfilterUIModels);
 
         if (!selectedSuchfilterUIModel || selectedSuchfilterUIModel.suchfilter.kontext === action.kontext) {
-            return {...state};
+            return { ...state };
         }
 
         const neueUIModels: SuchfilterUIModel[] = [];
         state.suchfilterUIModels.forEach(m => {
             if (action.kontext === m.suchfilter.kontext) {
-                neueUIModels.push({...m, changed: false});
+                neueUIModels.push({ ...m, changed: false });
             } else {
-                neueUIModels.push({...m});
+                neueUIModels.push({ ...m });
             }
         })
 
@@ -66,14 +66,14 @@ const suchfilterReducer = createReducer(
         const neuerSuchfilter = {
             ...selectedSuchfilterUIModel.suchfilter,
             suchstring: action.suchstring,
-            
+
         };
 
-        state.suchfilterUIModels.forEach( f => {
+        state.suchfilterUIModels.forEach(f => {
             if (f.suchfilter.kontext === neuerSuchfilter.kontext) {
-                newUiModels.push({...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter, changed: true});
+                newUiModels.push({ ...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter, changed: true });
             } else {
-                newUiModels.push({...f});
+                newUiModels.push({ ...f });
             }
         });
 
@@ -94,11 +94,11 @@ const suchfilterReducer = createReducer(
             deskriptoren: [...selectedSuchfilterUIModel.suchfilter.deskriptoren, action.deskriptor]
         };
 
-        state.suchfilterUIModels.forEach( f => {
+        state.suchfilterUIModels.forEach(f => {
             if (f.suchfilter.kontext === neuerSuchfilter.kontext) {
-                newUiModels.push({...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter, changed: true});
+                newUiModels.push({ ...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter, changed: true });
             } else {
-                newUiModels.push({...f});
+                newUiModels.push({ ...f });
             }
         });
 
@@ -120,11 +120,11 @@ const suchfilterReducer = createReducer(
             deskriptoren: suchlisteNeu
         };
 
-        state.suchfilterUIModels.forEach( f => {
+        state.suchfilterUIModels.forEach(f => {
             if (f.suchfilter.kontext === neuerSuchfilter.kontext) {
-                newUiModels.push({...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter, changed: true});
+                newUiModels.push({ ...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter, changed: true });
             } else {
-                newUiModels.push({...f});
+                newUiModels.push({ ...f });
             }
         });
 
@@ -140,17 +140,35 @@ const suchfilterReducer = createReducer(
         }
 
         const newUiModels: SuchfilterUIModel[] = [];
-        state.suchfilterUIModels.forEach( f => {
+        state.suchfilterUIModels.forEach(f => {
             if (f.suchfilter.kontext === action.kontext) {
-                newUiModels.push({...selectedSuchfilterUIModel, changed: false});
+                newUiModels.push({ ...selectedSuchfilterUIModel, changed: false });
             } else {
-                newUiModels.push({...f});
+                newUiModels.push({ ...f });
             }
         });
 
         return { ...state, suchfilterUIModels: newUiModels };
+    }),
 
-        return {...state};
+    on(SuchfilterActions.resetKontext, (state, action) => {
+
+        const selectedSuchfilterUIModel = findSuchfilterUIModelWithKontext(state.kontext, state.suchfilterUIModels);
+        const neuerSuchfilter: Suchfilter = {
+            kontext: action.kontext,
+            suchstring: '',
+            deskriptoren: []
+        };
+
+        const newUiModels: SuchfilterUIModel[] = [];
+        state.suchfilterUIModels.forEach(f => {
+            if (f.suchfilter.kontext === action.kontext) {
+                newUiModels.push({ ...selectedSuchfilterUIModel, filteredDeskriptoren: [], suchfilter: neuerSuchfilter, changed: false });
+            } else {
+                newUiModels.push({ ...f });
+            }
+        });
+        return { ...state, suchfilterUIModels: newUiModels };
     }),
 
     on(SuchfilterActions.reset, (_state, _action) => {

@@ -106,6 +106,11 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     this.suchfilterFacade.changeSuchtext($event);
   }
 
+  neueSuche(): void {
+    this.raetselFacade.clearTrefferliste();
+    this.suchfilterFacade.resetSuchfilter(this.#kontext);
+  }
+
   quelleWaehlen(): void {
     this.quellenFacade.navigateToQuellensuche();
   }
