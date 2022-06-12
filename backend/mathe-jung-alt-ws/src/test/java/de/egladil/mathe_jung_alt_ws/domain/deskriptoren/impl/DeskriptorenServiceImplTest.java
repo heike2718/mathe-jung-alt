@@ -45,7 +45,7 @@ public class DeskriptorenServiceImplTest {
 		void should_mapToDeskriptorenReturnDeskriptoren() {
 
 			// Arrange
-			String deskriptorenIds = "1,4,5";
+			String deskriptorenIds = ",1,,4,,5,";
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			when(repository.listAll()).thenReturn(alleDeskriptoren);
@@ -241,6 +241,73 @@ public class DeskriptorenServiceImplTest {
 		}
 	}
 
+	@Nested
+	class SerializationTests {
+
+		@Test
+		void should_sortAndStringifyIdsDeskriptorenReturnNull_when_parameterNull() {
+
+			// Act
+			String result = service.sortAndStringifyIdsDeskriptoren(null);
+
+			// Assert
+			assertNull(result);
+
+		}
+
+		@Test
+		void should_serializeReturnNull_when_parameterEmptyArray() {
+
+			// Act
+			String result = service.sortAndStringifyIdsDeskriptoren(new ArrayList<>());
+
+			// Assert
+			assertNull(result);
+
+		}
+
+		@Test
+		void should_sortAndStringifyIdsDeskriptorenOrderById() {
+
+			// Arrange
+			String expected = ",2,,5,,7,";
+
+			List<Deskriptor> deskriptoren = new ArrayList<>();
+
+			{
+
+				Deskriptor d = new Deskriptor();
+				d.id = 5L;
+				d.name = "Bla";
+				deskriptoren.add(d);
+			}
+
+			{
+
+				Deskriptor d = new Deskriptor();
+				d.id = 7L;
+				d.name = "Foo";
+				deskriptoren.add(d);
+			}
+
+			{
+
+				Deskriptor d = new Deskriptor();
+				d.id = 2L;
+				d.name = "Blubb";
+				deskriptoren.add(d);
+			}
+
+			// Act
+			String result = service.sortAndStringifyIdsDeskriptoren(deskriptoren);
+
+			// Assert
+			assertEquals(expected, result);
+
+		}
+
+	}
+
 	/**
 	 * @return
 	 */
@@ -304,73 +371,6 @@ public class DeskriptorenServiceImplTest {
 			alleDeskriptoren.add(deskriptor);
 		}
 		return alleDeskriptoren;
-	}
-
-	@Nested
-	class SerializationTests {
-
-		@Test
-		void should_serializeReturnNull_when_parameterNull() {
-
-			// Act
-			String result = service.sortAndStringifyIdsDeskriptoren(null);
-
-			// Assert
-			assertNull(result);
-
-		}
-
-		@Test
-		void should_serializeReturnNull_when_parameterEmptyArray() {
-
-			// Act
-			String result = service.sortAndStringifyIdsDeskriptoren(new ArrayList<>());
-
-			// Assert
-			assertNull(result);
-
-		}
-
-		@Test
-		void should_serializeOrderById() {
-
-			// Arrange
-			String expected = "2,5,7";
-
-			List<Deskriptor> deskriptoren = new ArrayList<>();
-
-			{
-
-				Deskriptor d = new Deskriptor();
-				d.id = 5L;
-				d.name = "Bla";
-				deskriptoren.add(d);
-			}
-
-			{
-
-				Deskriptor d = new Deskriptor();
-				d.id = 7L;
-				d.name = "Foo";
-				deskriptoren.add(d);
-			}
-
-			{
-
-				Deskriptor d = new Deskriptor();
-				d.id = 2L;
-				d.name = "Blubb";
-				deskriptoren.add(d);
-			}
-
-			// Act
-			String result = service.sortAndStringifyIdsDeskriptoren(deskriptoren);
-
-			// Assert
-			assertEquals(expected, result);
-
-		}
-
 	}
 
 }

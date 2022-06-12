@@ -127,6 +127,6 @@ export class RaetselFacade {
 
 
   #findRaetsel(suchfilter: Suchfilter, pageDefinition: PageDefinition): void {
-    this.store.dispatch(RaetselActions.findRaetsel({suchfilter, pageDefinition}));
+    this.store.dispatch(RaetselActions.findRaetsel({suchfilter, pageDefinition, kontext: 'RAETSEL'}));
   }
 }

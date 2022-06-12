@@ -31,6 +31,11 @@ export const deskriptorRemovedFromSearchList = createAction(
   props<{deskriptor: Deskriptor}>()
 );
 
+export const markUnchanged = createAction(
+  '[Suchfilter] unchanged',
+  props<{ kontext: Suchkontext }>()
+);
+
 export const reset = createAction(
   '[Suchfilter] reset all'
 );

@@ -114,7 +114,7 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 
 		List<Long> ids = getSortedIds(deskriptoren);
 
-		return StringUtils.join(ids, ",");
+		return "," + StringUtils.join(ids, ",,") + ",";
 	}
 
 	private List<Long> removeDuplicates(final List<Long> ids) {

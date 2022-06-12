@@ -7,6 +7,7 @@ import { RaetselFacade } from '../../application/reaetsel.facade';
 import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Router } from '@angular/router';
 import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
+import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 
 @Injectable()
 export class RaetselEffects {
@@ -30,6 +31,7 @@ export class RaetselEffects {
       this.safeNgrx.safeSwitchMap((action) =>
         this.raetselDataService.loadPage(action.suchfilter,
           { pageIndex: action.pageDefinition.pageIndex, pageSize: action.pageDefinition.pageSize, sortDirection: action.pageDefinition.sortDirection }).pipe(
+            tap(() => this.suchfilterFacade.sucheFinished(action.kontext)),
             map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))
           ), 'Ups, beim Suchen nach Rätseln ist etwas schiefgegangen', noopAction()
       )
@@ -114,6 +116,7 @@ export class RaetselEffects {
     private actions$: Actions,
     private raetselDataService: RaetselDataService,
     private raetselFacade: RaetselFacade,
+    private suchfilterFacade: SuchfilterFacade,
     private safeNgrx: SafeNgrxService,
     private messageService: MessageService,
     private router: Router

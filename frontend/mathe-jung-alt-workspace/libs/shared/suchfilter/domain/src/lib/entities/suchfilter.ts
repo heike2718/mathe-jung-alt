@@ -26,6 +26,7 @@ export interface Suchfilter {
 export interface SuchfilterUIModel {
     readonly suchfilter: Suchfilter;
     readonly filteredDeskriptoren: Deskriptor[]; // das sind die zum Kontext passenden Deskriptoren
+    readonly changed: boolean;
 };
 
 export interface SuchfilterUndStatus {
@@ -97,7 +98,7 @@ export function findSuchfilterUIModelWithKontext(kontext: Suchkontext, uiModels:
 export function createInitialSuchfilterUIModels(deskriptoren: Deskriptor[]): SuchfilterUIModel[] {
 
     const result: SuchfilterUIModel[] = [];
-    result.push({ suchfilter: initialSuchfilter, filteredDeskriptoren: [] });
+    result.push({ suchfilter: initialSuchfilter, filteredDeskriptoren: [], changed: false });
 
     {
        const kontext: Suchkontext = 'BILDER';
@@ -108,7 +109,8 @@ export function createInitialSuchfilterUIModels(deskriptoren: Deskriptor[]): Suc
        };
        const model: SuchfilterUIModel = {
          suchfilter: suchfilter,
-         filteredDeskriptoren:  filterByKontext(kontext, deskriptoren)
+         filteredDeskriptoren:  filterByKontext(kontext, deskriptoren),
+         changed: false
        };
        result.push(model);
     }
@@ -122,7 +124,8 @@ export function createInitialSuchfilterUIModels(deskriptoren: Deskriptor[]): Suc
         };
         const model: SuchfilterUIModel = {
           suchfilter: suchfilter,
-          filteredDeskriptoren:  filterByKontext(kontext, deskriptoren)
+          filteredDeskriptoren:  filterByKontext(kontext, deskriptoren),
+          changed: false
         };
         result.push(model);
      }
@@ -136,7 +139,8 @@ export function createInitialSuchfilterUIModels(deskriptoren: Deskriptor[]): Suc
         };
         const model: SuchfilterUIModel = {
           suchfilter: suchfilter,
-          filteredDeskriptoren:  filterByKontext(kontext, deskriptoren)
+          filteredDeskriptoren:  filterByKontext(kontext, deskriptoren),
+          changed: false
         };
         result.push(model);
      }
@@ -150,7 +154,8 @@ export function createInitialSuchfilterUIModels(deskriptoren: Deskriptor[]): Suc
         };
         const model: SuchfilterUIModel = {
           suchfilter: suchfilter,
-          filteredDeskriptoren:  filterByKontext(kontext, deskriptoren)
+          filteredDeskriptoren:  filterByKontext(kontext, deskriptoren),
+          changed: false
         };
         result.push(model);
      }

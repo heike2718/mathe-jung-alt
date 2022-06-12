@@ -49,6 +49,10 @@ export class SuchfilterFacade {
 
     }
 
+    public sucheFinished(kontext: Suchkontext): void {
+        this.store.dispatch(SuchfilterActions.markUnchanged({kontext}));
+    }
+
     public changeSuchkontext(kontext: Suchkontext): void {
         this.store.dispatch(SuchfilterActions.suchkontextChanged({ kontext }));
     }

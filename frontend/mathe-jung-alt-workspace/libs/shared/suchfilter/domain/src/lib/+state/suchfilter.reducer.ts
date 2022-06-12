@@ -1,6 +1,6 @@
 import { Deskriptor, filterByKontext } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { createReducer, on, Action } from '@ngrx/store';
-import { createInitialSuchfilterUIModels, findSuchfilterUIModelWithKontext, initialSuchfilter, Suchfilter, SuchfilterUIModel, Suchkontext } from '../entities/suchfilter';
+import { createInitialSuchfilterUIModels, findSuchfilterUIModelWithKontext, initialSuchfilter, SuchfilterUIModel, Suchkontext } from '../entities/suchfilter';
 import * as SuchfilterActions from './suchfilter.actions';
 
 
@@ -21,7 +21,7 @@ const initialState: SuchfilterState = {
     kontext: 'NOOP',
     deskriptoren: [],
     deskriptorenLoaded: false,
-    suchfilterUIModels: [{ suchfilter: initialSuchfilter, filteredDeskriptoren: [] }]
+    suchfilterUIModels: [{ suchfilter: initialSuchfilter, filteredDeskriptoren: [], changed: false }]
 };
 
 const suchfilterReducer = createReducer(
@@ -41,7 +41,16 @@ const suchfilterReducer = createReducer(
             return {...state};
         }
 
-        return { ...state, kontext: action.kontext };
+        const neueUIModels: SuchfilterUIModel[] = [];
+        state.suchfilterUIModels.forEach(m => {
+            if (action.kontext === m.suchfilter.kontext) {
+                neueUIModels.push({...m, changed: false});
+            } else {
+                neueUIModels.push({...m});
+            }
+        })
+
+        return { ...state, kontext: action.kontext, suchfilterUIModels: neueUIModels };
     }),
 
     on(SuchfilterActions.suchstringChanged, (state, action) => {
@@ -56,12 +65,13 @@ const suchfilterReducer = createReducer(
         const newUiModels: SuchfilterUIModel[] = [];
         const neuerSuchfilter = {
             ...selectedSuchfilterUIModel.suchfilter,
-            suchstring: action.suchstring
+            suchstring: action.suchstring,
+            
         };
 
         state.suchfilterUIModels.forEach( f => {
             if (f.suchfilter.kontext === neuerSuchfilter.kontext) {
-                newUiModels.push({...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter});
+                newUiModels.push({...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter, changed: true});
             } else {
                 newUiModels.push({...f});
             }
@@ -86,7 +96,7 @@ const suchfilterReducer = createReducer(
 
         state.suchfilterUIModels.forEach( f => {
             if (f.suchfilter.kontext === neuerSuchfilter.kontext) {
-                newUiModels.push({...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter});
+                newUiModels.push({...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter, changed: true});
             } else {
                 newUiModels.push({...f});
             }
@@ -112,13 +122,35 @@ const suchfilterReducer = createReducer(
 
         state.suchfilterUIModels.forEach( f => {
             if (f.suchfilter.kontext === neuerSuchfilter.kontext) {
-                newUiModels.push({...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter});
+                newUiModels.push({...selectedSuchfilterUIModel, suchfilter: neuerSuchfilter, changed: true});
             } else {
                 newUiModels.push({...f});
             }
         });
 
         return { ...state, suchfilterUIModels: newUiModels };
+    }),
+
+    on(SuchfilterActions.markUnchanged, (state, action) => {
+
+        const selectedSuchfilterUIModel = findSuchfilterUIModelWithKontext(state.kontext, state.suchfilterUIModels);
+
+        if (!selectedSuchfilterUIModel) {
+            return { ...state };
+        }
+
+        const newUiModels: SuchfilterUIModel[] = [];
+        state.suchfilterUIModels.forEach( f => {
+            if (f.suchfilter.kontext === action.kontext) {
+                newUiModels.push({...selectedSuchfilterUIModel, changed: false});
+            } else {
+                newUiModels.push({...f});
+            }
+        });
+
+        return { ...state, suchfilterUIModels: newUiModels };
+
+        return {...state};
     }),
 
     on(SuchfilterActions.reset, (_state, _action) => {

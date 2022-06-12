@@ -18,13 +18,16 @@ export const getSuchliste = createSelector(getSelectedSuchfilter, (suchfilter?: 
 // // Worte mit weniger als 4 Zeichen sind nicht Teil des Volltextindex. Daher erst fertig, wenn mindestens 4 Zeichen
 const hasSuchstring = createSelector(getSelectedSuchfilter, (suchfilter?: Suchfilter) => suchfilter ? suchfilter.suchstring.trim().length > 3 : false);
 const hasDeskriptoren = createSelector(getSuchliste, (suchliste: Deskriptor[]) => suchliste.length > 0);
+const suchfilterChanged = createSelector(getSelectedSuchfilterUIModel, (model?: SuchfilterUIModel) => model ? model.changed : false);
 
 export const isSuchfilterReadyToGo = createSelector(
     getSelectedSuchfilter,
     hasSuchstring,
     hasDeskriptoren,
-    (suchfilter: Suchfilter | undefined, hasSuchstring: boolean, hasDeskriptoren: boolean) =>
-        suchfilter !== undefined && suchfilter.kontext !== 'NOOP' && (hasDeskriptoren || hasSuchstring));
+    suchfilterChanged,
+    (suchfilter: Suchfilter | undefined, hasSuchstring: boolean, hasDeskriptoren: boolean, changed: boolean) =>
+        suchfilter !== undefined && suchfilter.kontext !== 'NOOP' && changed && (hasDeskriptoren || hasSuchstring));
+
 
 export const getRestliste = createSelector(
     getFilteredDeskriptoren,

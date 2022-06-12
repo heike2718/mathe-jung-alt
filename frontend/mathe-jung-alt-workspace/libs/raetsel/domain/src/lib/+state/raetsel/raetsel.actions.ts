@@ -1,4 +1,4 @@
-import { PageDefinition, Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { PageDefinition, Suchfilter, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
 import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
 
@@ -23,7 +23,7 @@ export const raetselCounted = createAction(
 
 export const findRaetsel = createAction(
   '[Raetsel] find Raetsel',
-  props<{suchfilter: Suchfilter, pageDefinition: PageDefinition}>()
+  props<{suchfilter: Suchfilter, pageDefinition: PageDefinition, kontext: Suchkontext}>()
 );
 
 export const findRaetselSuccess = createAction(

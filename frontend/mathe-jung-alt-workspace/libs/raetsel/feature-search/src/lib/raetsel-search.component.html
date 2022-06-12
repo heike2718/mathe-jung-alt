@@ -13,11 +13,7 @@
     </mja-deskriptoren-filter>
   </ng-container>
 
-  <ng-container *ngIf="(suchfilterFacade.canStartSuche$ | async) as ready">
-    <p *ngIf="ready">Lasset die Suche beginnen: {{suchfilter | json}}</p>
-    <p *ngIf="!ready">bitte Suchkriterien wählen</p>
-  </ng-container>
-
+  <p *ngIf="suchfilter">Suchkriterien: {{suchfilter | json}}</p>
 
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="schluessel"
     matSortDirection="asc" matSortDisableClear>
