@@ -42,7 +42,6 @@
 			<version>${hewi-commons.version}</version>
 		</dependency>
 
-
 		<!-- START quarkus dependencies -->
 		<dependency>
 			<groupId>io.quarkus</groupId>
@@ -149,15 +148,15 @@
 		</dependency>
 
 		<dependency>
-    		<groupId>io.quarkus</groupId>
-    		<artifactId>quarkus-junit5-mockito</artifactId>
-    		<scope>test</scope>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-junit5-mockito</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-  			<groupId>io.quarkus</groupId>
-  			<artifactId>quarkus-jacoco</artifactId>
-  			<scope>test</scope>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-jacoco</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<!-- END Test scoped dependencies -->
 
