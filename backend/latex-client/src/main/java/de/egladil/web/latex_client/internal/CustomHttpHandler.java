@@ -4,13 +4,6 @@
 // =====================================================
 package de.egladil.web.latex_client.internal;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,84 +99,6 @@ public class CustomHttpHandler implements HttpHandler {
 
 		return new ProcessExecutionService().performCommand(cmd, fileName);
 	}
-
-
-	// private int performCommand(final LaTeXCommand cmd, final String fileName) {
-
-	// 	List<String> cmdList = new ArrayList<String>();
-	// 	cmdList.add("sh");
-	// 	cmdList.add(cmd.getShellScript());
-	// 	cmdList.add(fileName);
-
-	// 	ProcessBuilder processBuilder = new ProcessBuilder();
-	// 	processBuilder.redirectErrorStream(true);
-	// 	processBuilder.command(cmdList);
-	// 	processBuilder.inheritIO();
-
-	// 	Process process = null;
-
-	// 	try {
-
-	// 		process = processBuilder.start();
-	// 		LOGGER.debug("process started");
-	// 	} catch (IOException e) {
-
-	// 		LOGGER.error(e.getMessage(), e);
-	// 		return -1;
-	// 	}
-
-	// 	try {
-
-	// 		final boolean exited = process.waitFor(20, TimeUnit.SECONDS);
-
-	// 		if (!exited) {
-
-	// 			LOGGER.error("process did not finish within 10 seconds");
-	// 		}
-	// 	} catch (final InterruptedException e) {
-
-	// 		int exitCode = process.exitValue();
-	// 		LOGGER.info(cmd.getShellScript() + " exited with exitCode code " + exitCode);
-
-	// 		LOGGER.error(e.getMessage(), e);
-
-	// 		return -2;
-	// 	}
-
-	// 	try {
-
-	// 		BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-	// 		String line;
-	// 		StringBuffer sb = new StringBuffer();
-
-	// 		while ((line = br.readLine()) != null) {
-
-	// 			sb.append(line);
-	// 		}
-
-	// 		LOGGER.debug("process-output:");
-	// 		LOGGER.debug(sb.toString());
-	// 		LOGGER.debug("---");
-
-	// 		int exitCode = process.exitValue();
-	// 		LOGGER.info(cmd.getShellScript() + " exited with exitCode code " + exitCode);
-
-	// 		if (exitCode != 0) {
-
-	// 			LOGGER.error("Fehler bei {}: {} ", cmd.getShellScript(), sb.toString());
-	// 			return exitCode;
-	// 		}
-
-	// 		return 0;
-	// 	} catch (Exception e) {
-
-	// 		LOGGER.error(e.getMessage(), e);
-
-	// 		return -3;
-	// 	}
-
-	// }
 
 	private String getUsage() {
 
