@@ -7,7 +7,7 @@ import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 @Injectable({ providedIn: 'root' })
 export class DeskriptorDataService {
 
-  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/deskriptoren/v1' : this.configuration.baseUrl + '/deskriptoren/v1';
+  #url = this.configuration.baseUrl + '/deskriptoren/v1';
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 

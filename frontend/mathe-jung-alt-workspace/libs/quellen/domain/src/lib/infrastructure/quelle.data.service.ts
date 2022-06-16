@@ -10,7 +10,7 @@ import { User } from 'libs/shared/auth/domain/src/lib/entities/auth.model';
 export class QuelleDataService {
 
 
-  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/quellen/v1' : this.configuration.baseUrl + '/quellen/v1';
+  #url = this.configuration.baseUrl + '/quellen/v1';
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 

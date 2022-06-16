@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
 import { PageDefinition, QUERY_PARAM_DESKRIPTOREN, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_DIRECTION, QUERY_PARAM_SUCHSTRING, QUERY_PARAM_TYPE_DESKRIPTOREN, Suchfilter, SuchfilterQueryParameterMapper, SuchfilterWithStatus } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
-import { Message } from '@mathe-jung-alt-workspace/shared/ui-messaging';
 import { Observable, of } from 'rxjs';
 import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails } from '../entities/raetsel';
 
@@ -10,7 +9,7 @@ import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, L
 export class RaetselDataService {
 
 
-  #url = this.configuration.admin ? this.configuration.baseUrl + '/admin/raetsel/v1' : this.configuration.baseUrl + '/raetsel/v1';
+  #url = this.configuration.baseUrl + '/raetsel/v1';
 
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
@@ -104,5 +103,3 @@ export class RaetselDataService {
      return this.http.get<GeneratedImages>(url, { headers: headers, params: params });    
   }
 }
-
-
