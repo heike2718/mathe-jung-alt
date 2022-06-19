@@ -22,7 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
-import de.egladil.mja_admin_api.domain.dto.MessagePayload;
 import de.egladil.mja_admin_api.domain.dto.SortDirection;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.dto.SuchfilterVariante;
@@ -36,6 +35,7 @@ import de.egladil.mja_admin_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
+import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
  * RaetselServiceImpl

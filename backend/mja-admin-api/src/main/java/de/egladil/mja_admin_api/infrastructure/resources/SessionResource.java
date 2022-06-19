@@ -18,10 +18,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.egladil.mja_admin_api.infrastructure.auth.dto.AuthResult;
-import de.egladil.mja_admin_api.infrastructure.auth.login.LoginLogoutService;
-import de.egladil.mja_admin_api.infrastructure.auth.login.LoginUrlService;
-import de.egladil.mja_admin_api.infrastructure.auth.session.SessionUtils;
+import de.egladil.web.mja_auth.dto.AuthResult;
+import de.egladil.web.mja_auth.login.LoginLogoutService;
+import de.egladil.web.mja_auth.login.LoginUrlService;
+import de.egladil.web.mja_auth.session.SessionUtils;
 
 /**
  * SessionResource
@@ -52,7 +52,7 @@ public class SessionResource {
 	@PermitAll
 	public Response login(final AuthResult authResult) {
 
-		return loginLogoutService.login(authResult);
+		return loginLogoutService.login(authResult, true);
 	}
 
 	@DELETE

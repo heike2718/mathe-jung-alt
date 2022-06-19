@@ -82,6 +82,4 @@ export class QuelleEffects {
     private quelleDataService: QuelleDataService,
     private safeNgrx: SafeNgrxService
   ) { }
-
-
 }

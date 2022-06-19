@@ -22,8 +22,6 @@ export class QuellenFacade {
     this.router.navigateByUrl('quellen');
   }
 
-
-
   selectQuelle(quelle: Quelle): void {
     this.store.dispatch(QuellenActions.quelleSelected({quelle}));
   }

@@ -20,10 +20,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import de.egladil.mja_admin_api.domain.dto.MessagePayload;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.quellen.QuelleReadonly;
 import de.egladil.mja_admin_api.domain.quellen.QuellenService;
+import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
  * QuellenResource

@@ -37,6 +37,12 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>de.egladil.web</groupId>
+			<artifactId>mja-auth</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
 		<!-- START quarkus dependencies -->
 		<dependency>
 			<groupId>io.quarkus</groupId>

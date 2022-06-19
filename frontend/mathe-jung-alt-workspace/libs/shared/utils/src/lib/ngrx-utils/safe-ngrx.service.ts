@@ -82,6 +82,8 @@ export class SafeNgrxService {
 
     private handleError(error: any, errorMessage: string): void {
 
+        window.location.hash = '';
+
         const httpErrorResponse: HttpErrorResponse | undefined = this.getHttpErrorResponse(error);
         if (httpErrorResponse === undefined) {
             console.log('SafeNgrxService: error=' + error);

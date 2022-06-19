@@ -78,15 +78,8 @@ export class AuthEffects {
                 of({ session: action.session }).pipe(
                     tap(() => window.location.hash = ''),
                     map(({ session }) => {
-                        if (!session) {
-                            console.log('session is undefined :(');
-                            return noopAction();
-                        }
-                        else {
-                            console.log(JSON.stringify(session));
-                            this.storeSessionInLocalStorage(session);
-                            return AuthActions.sessionCreated({ session: session });
-                        }
+                        this.storeSessionInLocalStorage(session);
+                        return AuthActions.sessionCreated({ session: session });
                     })
                 )
             )

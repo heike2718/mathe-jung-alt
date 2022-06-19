@@ -15,9 +15,9 @@ import javax.ws.rs.ext.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_admin_api.domain.dto.MessagePayload;
 import de.egladil.mja_admin_api.domain.error.LaTeXCompileException;
 import de.egladil.mja_admin_api.domain.error.MjaRuntimeException;
+import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
  * MjaExceptionMapper

@@ -17,7 +17,6 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_admin_api.domain.dto.MessagePayload;
 import de.egladil.mja_admin_api.domain.error.LaTeXCompileException;
 import de.egladil.mja_admin_api.domain.error.MjaRuntimeException;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselFileService;
@@ -28,6 +27,7 @@ import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
 import de.egladil.mja_admin_api.domain.raetsel.RaetselService;
 import de.egladil.mja_admin_api.domain.raetsel.dto.GeneratedImages;
 import de.egladil.mja_admin_api.infrastructure.restclient.LaTeXRestClient;
+import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
  * RaetselGeneratorServiceImpl

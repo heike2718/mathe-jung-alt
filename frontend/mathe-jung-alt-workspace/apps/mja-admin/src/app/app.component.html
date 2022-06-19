@@ -5,7 +5,7 @@
     </mat-toolbar-row>
   </mat-toolbar>
   <mat-drawer-container>
-    <mat-drawer *ngIf="authFacade.isAuthorized$ | async" mode="side" opened>
+    <mat-drawer *ngIf="authFacade.isAdmin$ | async" mode="side" opened>
       <mja-admin-sidemenu></mja-admin-sidemenu>
     </mat-drawer>
     <mat-drawer-content>      
