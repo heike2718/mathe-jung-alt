@@ -6,7 +6,6 @@ export interface Configuration {
     readonly storagePrefix: string;
     readonly production: boolean;
     readonly profileUrl: string;
-    readonly withFakeLogin: boolean;
     readonly admin: boolean;
 }
 

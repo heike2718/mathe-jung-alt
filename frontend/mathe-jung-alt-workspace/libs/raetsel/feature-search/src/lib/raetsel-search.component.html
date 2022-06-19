@@ -8,7 +8,7 @@
     </mja-admin-suchfilter>
   </ng-container>
 
-  <ng-container *ngIf="isOrdinaryUser">
+  <ng-container *ngIf="!isAdmin">
     <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)">
     </mja-deskriptoren-filter>
   </ng-container>

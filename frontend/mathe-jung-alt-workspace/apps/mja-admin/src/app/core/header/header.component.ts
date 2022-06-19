@@ -21,17 +21,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void { }
 
   public login(): void {
-
-    if (!environment.production && environment.withFakeLogin) {
-
-      this.authFacade.createFakeSession();
-
-    } else {
-
-      this.authFacade.requestLoginRedirectUrl();
-
-    }
-
+    this.authFacade.requestLoginRedirectUrl();
   }
 
   public logout(): void {

@@ -53,7 +53,7 @@ public class QuellenResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("admin")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "DEFAULT" })
 	public QuelleReadonly findQuelleByPerson(@QueryParam(value = "person") final String person) {
 
 		Optional<QuelleReadonly> result = this.quellenService.sucheAdministrator(person);

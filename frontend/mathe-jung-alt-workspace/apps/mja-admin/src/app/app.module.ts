@@ -39,7 +39,6 @@ import { SharedUiMessagingModule } from '@mathe-jung-alt-workspace/shared/ui-com
       production: environment.production,
       profileUrl: environment.profileUrl,
       storagePrefix: environment.storageKeyPrefix,
-      withFakeLogin: environment.withFakeLogin,
       admin: true
     }),
     SharedAuthDomainModule.forRoot(),

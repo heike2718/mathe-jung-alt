@@ -11,8 +11,7 @@ export const environment = {
   version: '0.0.1',
   consoleLogActive: true,
   serverLogActive: false,
-  loglevel: 1,
-  withFakeLogin: true
+  loglevel: 1
 };
 
 /*

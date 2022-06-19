@@ -6,6 +6,7 @@ package de.egladil.mja_admin_api.infrastructure.auth.session;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -37,11 +38,19 @@ public class Session {
 			throw new IllegalArgumentException("user null");
 		}
 
-		Session session = createAnonymous(sessionId);
+		Session session = new Session();
+		session.sessionId = sessionId;
 		session.user = user;
 		return session;
 	}
 
+	@Override
+	public String toString() {
+
+		return "Session [sessionId=" + sessionId + ", expiresAt=" + expiresAt + ", user=" + user + "]";
+	}
+
+	@JsonIgnore
 	public boolean isAnonym() {
 
 		return user == null;

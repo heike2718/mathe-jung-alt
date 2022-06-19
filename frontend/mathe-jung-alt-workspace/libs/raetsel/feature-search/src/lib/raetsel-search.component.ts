@@ -20,13 +20,13 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
 
   #sucheClearedSubscription: Subscription = new Subscription();
   #paginationStateSubscription: Subscription = new Subscription();
-  #userRoleSubscription: Subscription = new Subscription();
+  #userAdminSubscription: Subscription = new Subscription();
   #deskriptorenLoadedSubscription: Subscription = new Subscription();
   #canStartSucheSubscription: Subscription = new Subscription();
   #suchfilterSubscription: Subscription = new Subscription();
 
   isAdmin = false;
-  isOrdinaryUser = false;
+  // isOrdinaryUser = false;
   suchfilter: Suchfilter | undefined;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -78,16 +78,10 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
       })
     ).subscribe();
 
-    this.#userRoleSubscription = this.authFacade.getUser$.subscribe(
-      user => {
-        if (user) {
-          if (user.rolle === 'ADMIN') {
-            this.isAdmin = true;
-          } else {
-            this.isOrdinaryUser = true;
-          }
-        }
-      }
+    this.#userAdminSubscription = this.authFacade.isAdmin$.subscribe(
+
+      admin => this.isAdmin = admin
+
     );
   }
 
@@ -133,7 +127,7 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
     this.#suchfilterSubscription.unsubscribe();
     this.#sucheClearedSubscription.unsubscribe();
     this.#paginationStateSubscription.unsubscribe();
-    this.#userRoleSubscription.unsubscribe();
+    this.#userAdminSubscription.unsubscribe();
     this.#deskriptorenLoadedSubscription.unsubscribe();
     this.#canStartSucheSubscription.unsubscribe();
   }

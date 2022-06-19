@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_admin_api.domain.dto.MessagePayload;
-import de.egladil.mja_admin_api.domain.dto.ResponsePayload;
 import de.egladil.mja_admin_api.infrastructure.auth.clientauth.ClientAccessTokenService;
 import de.egladil.mja_admin_api.infrastructure.auth.login.LoginUrlService;
 
@@ -50,6 +49,6 @@ public class LoginUrlServiceImpl implements LoginUrlService {
 
 		LOGGER.debug(redirectUrl);
 
-		return Response.ok(ResponsePayload.messageOnly(MessagePayload.info(redirectUrl))).build();
+		return Response.ok(MessagePayload.info(redirectUrl)).build();
 	}
 }

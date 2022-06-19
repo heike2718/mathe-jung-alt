@@ -58,16 +58,16 @@ public class SessionService {
 			byte[] sessionIdBase64 = Base64.getEncoder().encode(generateSessionId().getBytes());
 			String sessionId = new String(sessionIdBase64);
 
-			String userIdReference = this.generateRandomString() + "_" + uuid.substring(0, 8);
-			AuthenticatedUser authenticatedUser = new AuthenticatedUser(uuid, jwtReader.getGroups(), fullName,
-				userIdReference);
+			String userIdReference = uuid.substring(0, 8) + "_" + this.generateRandomString();
+			AuthenticatedUser authenticatedUser = new AuthenticatedUser(userIdReference, jwtReader.getGroups(), fullName,
+				uuid);
 
 			Session session = Session.create(sessionId, authenticatedUser);
 			session.setExpiresAt(SessionUtils.getExpiresAt(SESSION_IDLE_TIMEOUT_MINUTES));
 
 			sessions.put(sessionId, session);
 
-			LOGGER.info("User " + uuid + " eingeloggt");
+			LOGGER.info("User eingeloggt. " + session.toString());
 
 			return session;
 		} catch (TokenExpiredException e) {

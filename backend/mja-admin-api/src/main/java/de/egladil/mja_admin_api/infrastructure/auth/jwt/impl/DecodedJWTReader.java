@@ -4,11 +4,9 @@
 // =====================================================
 package de.egladil.mja_admin_api.infrastructure.auth.jwt.impl;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.microprofile.jwt.Claims;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 /**
@@ -31,9 +29,10 @@ public class DecodedJWTReader {
 		return decodedJWT.getClaim(Claims.full_name.name()).asString();
 	}
 
-	public Set<String> getGroups() {
+	public String[] getGroups() {
 
-		return new HashSet<>(decodedJWT.getClaim(Claims.groups.name()).asList(String.class));
+		Claim groups = decodedJWT.getClaim(Claims.groups.name());
+		return groups.asList(String.class).toArray(new String[0]);
 	}
 
 }

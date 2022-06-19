@@ -29,7 +29,7 @@ const authReducer = createReducer(initialState,
     on(AuthActions.sessionCleared, (state, _action) => {
         return { ...state, session: undefined };
     }),
-
+    
     on(AuthActions.userLoggedOut, (state, _action) => {
         return { ...state, session: undefined };
     }),

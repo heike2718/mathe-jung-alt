@@ -5,7 +5,7 @@
 package de.egladil.mja_admin_api.infrastructure.auth.session;
 
 import java.security.Principal;
-import java.util.Set;
+import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,15 +33,22 @@ public class AuthenticatedUser implements Principal {
 	 * @param fullName
 	 * @param uuid
 	 */
-	public AuthenticatedUser(final String idReference, final Set<String> roles, final String fullName, final String uuid) {
+	public AuthenticatedUser(final String idReference, final String[] roles, final String fullName, final String uuid) {
 
 		this.idReference = idReference;
-		this.roles = (String[]) roles.stream().toArray();
+		this.roles = roles;
 		this.fullName = fullName;
 		this.uuid = uuid;
 	}
 
 	@Override
+	public String toString() {
+
+		return "AuthenticatedUser [fullName=" + fullName + ", roles=" + Arrays.toString(roles) + ", uuid=" + uuid + "]";
+	}
+
+	@Override
+	@JsonIgnore
 	public String getName() {
 
 		return this.uuid;

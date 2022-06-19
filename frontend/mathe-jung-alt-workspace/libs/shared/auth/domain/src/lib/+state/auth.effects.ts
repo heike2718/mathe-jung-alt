@@ -63,8 +63,8 @@ export class AuthEffects {
         this.actions$.pipe(
             ofType(AuthActions.createSession),
             this.safeNgrx.safeSwitchMap((action) =>
-                this.internalCreateSession(action.authResult).pipe(
-                    tap(() => this.suchfilterFacade.loadDeskriptoren()),
+                this.authHttpService.createSession(action.authResult).pipe(
+                    tap(() => console.log(JSON.stringify(action.authResult))),
                     map((session: Session) => AuthActions.userLoggedIn({ session: session }))
                 ), 'Login fehlgeschlagen', noopAction()
             )
@@ -76,10 +76,17 @@ export class AuthEffects {
             ofType(AuthActions.userLoggedIn),
             concatMap((action) =>
                 of({ session: action.session }).pipe(
+                    tap(() => window.location.hash = ''),
                     map(({ session }) => {
-
-                        this.storeSessionInLocalStorage(session);
-                        return AuthActions.sessionCreated({ session: session });
+                        if (!session) {
+                            console.log('session is undefined :(');
+                            return noopAction();
+                        }
+                        else {
+                            console.log(JSON.stringify(session));
+                            this.storeSessionInLocalStorage(session);
+                            return AuthActions.sessionCreated({ session: session });
+                        }
                     })
                 )
             )
@@ -88,6 +95,7 @@ export class AuthEffects {
     sessionCreated$ = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthActions.sessionCreated),
+            tap(() => this.suchfilterFacade.loadDeskriptoren()),
             map(() => {
                 this.router.navigateByUrl('dashboard')
                 return noopAction();
@@ -165,15 +173,6 @@ export class AuthEffects {
             localStorage.setItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID, session.sessionId);
         }
         localStorage.setItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT, JSON.stringify(session.expiresAt));
-    }
-
-    private internalCreateSession(authResult: AuthResult): Observable<Session> {
-
-        if (this.configuration.withFakeLogin) {
-            return this.authHttpService.createFakeSession();
-        }
-
-        return this.authHttpService.createSession(authResult);
     }
 
     private clearSession(): void {

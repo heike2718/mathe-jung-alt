@@ -54,13 +54,13 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 		if ("OPTIONS".equals(method)) {
 
-			LOGGER.info("keine Auth bei OPTIONS");
+			LOGGER.debug("keine Auth bei OPTIONS");
 
 			return;
 		}
 
 		String path = requestContext.getUriInfo().getPath();
-		LOGGER.info("entering InitSecurityContextFilter: path={}", path);
+		LOGGER.debug("entering InitSecurityContextFilter: path={}", path);
 
 		String sessionId = SessionUtils.getSessionId(requestContext, configService.getStage());
 

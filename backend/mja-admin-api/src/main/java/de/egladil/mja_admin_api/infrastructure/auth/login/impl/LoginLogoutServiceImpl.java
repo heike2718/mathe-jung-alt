@@ -34,9 +34,6 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginLogoutServiceImpl.class);
 
-	@ConfigProperty(name = "stage")
-	String stage;
-
 	@ConfigProperty(name = "client-id")
 	String clientId;
 
@@ -73,7 +70,7 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 		NewCookie sessionCookie = SessionUtils.createSessionCookie(session.getSessionId());
 
-		if (this.stage.equals(configService.getStage())) {
+		if (!MjaAdminApiApplication.STAGE_DEV.equals(configService.getStage())) {
 
 			session.clearSessionId();
 		}
@@ -96,9 +93,9 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 		this.sessionService.invalidateSession(sessionId);
 
-		if (!this.stage.equals(MjaAdminApiApplication.STAGE_DEV)) {
+		if (!MjaAdminApiApplication.STAGE_DEV.equals(configService.getStage())) {
 
-			LOGGER.warn("stage={}" + this.stage);
+			LOGGER.warn("stage={}" + configService.getStage());
 			return Response.status(401)
 				.entity(MessagePayload.error("böse böse. Dieser Request wurde geloggt!"))
 				.cookie(SessionUtils.createSessionInvalidatedCookie()).build();

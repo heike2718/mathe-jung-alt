@@ -29,6 +29,35 @@ export class AuthFacade {
         this.store.dispatch(AuthActions.requestLoginUrl());
     }
 
+    public parseHash(hash: string): AuthResult {
+
+        hash = hash.replace(/^#?\/?/, '');
+
+		const result: AuthResult = {
+			expiresAt: 0,
+			nonce: undefined,
+			state: undefined,
+			idToken: undefined
+		};
+
+		if (hash.length > 0) {
+
+			const tokens = hash.split('&');
+			tokens.forEach(
+				(token) => {
+					const keyVal = token.split('=');
+					switch (keyVal[0]) {
+						case 'expiresAt': result.expiresAt = JSON.parse(keyVal[1]); break;
+						case 'nonce': result.nonce = keyVal[1]; break;
+						case 'state': result.state = keyVal[1]; break;
+						case 'idToken': result.idToken = keyVal[1]; break;
+					}
+				}
+			);
+		}
+		return result;
+    }
+
     public clearOrRestoreSession(): void {
         // Dies triggert einen SideEffect (siehe auth.effects.ts)
         this.store.dispatch(AuthActions.clearOrRestoreSession());
@@ -36,6 +65,10 @@ export class AuthFacade {
 
     public logout(): void {
         this.store.dispatch(AuthActions.logout());
+    }
+
+    public createSession(authResult: AuthResult): void {
+        this.store.dispatch(AuthActions.createSession({authResult}));
     }
 
     public createFakeSession(): void {

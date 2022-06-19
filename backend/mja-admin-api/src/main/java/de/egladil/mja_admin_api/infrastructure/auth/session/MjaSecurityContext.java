@@ -44,6 +44,8 @@ public class MjaSecurityContext implements SecurityContext {
 	@Override
 	public boolean isUserInRole(final String role) {
 
+		LOGGER.info("role={}", role);
+
 		if (session == null || session.isAnonym()) {
 
 			LOGGER.warn("session ist anonym");

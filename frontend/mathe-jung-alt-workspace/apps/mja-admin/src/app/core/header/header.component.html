@@ -15,7 +15,7 @@
     <ng-container *ngIf="authFacade.isLoggedIn$ | async">
         <ng-container *ngIf="authFacade.getUser$ | async as user">
             <ng-container *ngIf="user !== undefined">
-                Moin, {{user.fullName}} <span *ngIf="user.rolle === 'ADMIN'">(ADMIN)</span>
+                Moin, {{user.fullName}} <span *ngIf="authFacade.isAdmin$ | async">(ADMIN)</span>
             </ng-container>
         </ng-container>
         <a (click)="logout()" data-testid="btn-log-out" mat-raised-button>ausloggen</a>

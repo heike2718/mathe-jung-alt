@@ -19,37 +19,15 @@ export class AuthHttpService {
 
         const url = this.#baseUrl + '/authurls/login';
 
-        return this.http.get<ResponsePayload>(url).pipe(
-            map(rp => rp.message.message)
+        return this.http.get<Message>(url).pipe(
+            map(message => message.message)
         );
     }
-
-    public createFakeSession(): Observable<Session> {
-
-        const shortRunningSession = new Date().getMilliseconds() + 2000;
-
-        const session: Session = {
-            expiresAt: 7961434408,
-            // expiresAt: shortRunningSession,
-            sessionId: 'sadgagudgqo',
-            user: {
-                fullName: 'Heike Winkelvoß',
-                idReference: 'bjasbfkkla',
-                rolle: 'ADMIN'
-            }
-        };
-
-        return of(session);
-    }
-
 
     public createSession(authResult: AuthResult): Observable<Session> {
 
         const url = this.#baseUrl + '/login';
-
-        return this.http.post<ResponsePayload>(url, authResult).pipe(
-            map(rp => rp.data as Session)
-        );
+        return this.http.post<Session>(url, authResult);
     }
 
     public logout(): Observable<Message> {
@@ -61,8 +39,6 @@ export class AuthHttpService {
             url = this.#baseUrl + '/dev/logout/' + devSessionId;
         }
 
-        return this.http.delete<ResponsePayload>(url).pipe(
-            map(rp => rp.message)
-        );
+        return this.http.delete<Message>(url);
     }
 }
