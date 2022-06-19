@@ -59,15 +59,9 @@ public class SessionService {
 
 			final DecodedJWTReader jwtReader = new DecodedJWTReader(decodedJWT);
 
-			String uuid = decodedJWT.getSubject();
-
-			String fullName = jwtReader.getFullName();
-
-			byte[] sessionIdBase64 = Base64.getEncoder().encode(generateSessionId().getBytes());
-			String sessionId = new String(sessionIdBase64);
-
-			String userIdReference = uuid.substring(0, 8) + "_" + this.generateRandomString();
 			String[] groups = jwtReader.getGroups();
+
+			String uuid = decodedJWT.getSubject();
 
 			if (needsToBeAdmin) {
 
@@ -75,9 +69,17 @@ public class SessionService {
 
 				if (optAdmin.isEmpty()) {
 
-					return Session.createAnonymous(sessionId);
+					LOGGER.warn("User mit Rollen {} ist kein ADMIN => verboten. UUID={}", groups, uuid);
+					return Session.createAnonymous("anonym");
 				}
 			}
+
+			String fullName = jwtReader.getFullName();
+
+			byte[] sessionIdBase64 = Base64.getEncoder().encode(generateSessionId().getBytes());
+			String sessionId = new String(sessionIdBase64);
+
+			String userIdReference = uuid.substring(0, 8) + "_" + this.generateRandomString();
 
 			AuthenticatedUser authenticatedUser = new AuthenticatedUser(userIdReference, groups, fullName,
 				uuid);

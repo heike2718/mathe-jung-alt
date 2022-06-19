@@ -32,7 +32,7 @@ public class DecodedJWTReader {
 	public String[] getGroups() {
 
 		Claim groups = decodedJWT.getClaim(Claims.groups.name());
-		return groups.asList(String.class).toArray(new String[0]);
+		return !groups.isNull() ? groups.asList(String.class).toArray(new String[0]) : new String[0];
 	}
 
 }
