@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Message
+ * MessagePayload
  */
-public class Message {
+public class MessagePayload {
 
 	@JsonProperty
 	private String level;
@@ -20,16 +20,16 @@ public class Message {
 	private String message;
 
 	/**
-	 * Erzeugt eine Instanz von Message
+	 * Erzeugt eine Instanz von MessagePayload
 	 */
-	public Message() {
+	public MessagePayload() {
 
 	}
 
 	/**
-	 * Erzeugt eine Instanz von Message
+	 * Erzeugt eine Instanz von MessagePayload
 	 */
-	private Message(final String level, final String message) {
+	private MessagePayload(final String level, final String message) {
 
 		super();
 		this.level = level;
@@ -39,7 +39,7 @@ public class Message {
 	@Override
 	public String toString() {
 
-		return "Message [level=" + level + ", message=" + message + "]";
+		return "MessagePayload [level=" + level + ", message=" + message + "]";
 	}
 
 	public String getLevel() {
@@ -73,24 +73,24 @@ public class Message {
 	 *
 	 * @return
 	 */
-	public static Message ok() {
+	public static MessagePayload ok() {
 
 		return info("ok");
 	}
 
-	public static Message info(final String message) {
+	public static MessagePayload info(final String message) {
 
-		return new Message("INFO", message);
+		return new MessagePayload("INFO", message);
 	}
 
-	public static Message warn(final String message) {
+	public static MessagePayload warn(final String message) {
 
-		return new Message("WARN", message);
+		return new MessagePayload("WARN", message);
 	}
 
-	public static Message error(final String message) {
+	public static MessagePayload error(final String message) {
 
-		return new Message("ERROR", message);
+		return new MessagePayload("ERROR", message);
 	}
 
 }

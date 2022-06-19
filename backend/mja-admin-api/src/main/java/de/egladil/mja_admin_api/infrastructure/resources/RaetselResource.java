@@ -7,6 +7,7 @@ package de.egladil.mja_admin_api.infrastructure.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.EnumType;
 import javax.validation.constraints.NotNull;
@@ -55,6 +56,7 @@ public class RaetselResource {
 	@GET
 	@Path("size")
 	@Produces(MediaType.TEXT_PLAIN)
+	@RolesAllowed("ADMIN")
 	// @formatter:off
 	public long zaehleRatsel(
 		@QueryParam(value = "suchstring") @Pattern(
@@ -78,6 +80,7 @@ public class RaetselResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
 	// @formatter:off
 	public List<RaetselsucheTreffer> sucheRaetsel(
 		@QueryParam(value = "suchstring") @Pattern(
@@ -106,6 +109,7 @@ public class RaetselResource {
 	@GET
 	@Path("{raetselUuid}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
 	public Response raetselDetailsLaden(@PathParam(value = "raetselUuid") final String raetselUuid) {
 
 		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
@@ -121,6 +125,7 @@ public class RaetselResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
 	public Response raetselAnlegen(final EditRaetselPayload payload) {
 
 		// TODO: aus der Session holen!!!
@@ -134,6 +139,7 @@ public class RaetselResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
 	public Response raetselAendern(final EditRaetselPayload payload) {
 
 		// TODO: aus der Session holen!!!
@@ -147,6 +153,7 @@ public class RaetselResource {
 	@GET
 	@Path("{outputformat}/{raetselUuid}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
 	public GeneratedImages raetselGenerieren(@PathParam(
 		value = "outputformat") final Outputformat outputformat, @PathParam(
 			value = "raetselUuid") final String raetselUuid, @QueryParam(

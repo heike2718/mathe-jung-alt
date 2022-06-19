@@ -18,6 +18,7 @@
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
 		<quarkus.platform.version>2.9.1.Final</quarkus.platform.version>
+		<jjwt.version>0.11.5</jjwt.version>
 		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
 		<dependency-check.version>7.1.0</dependency-check.version>
 	</properties>
@@ -35,12 +36,6 @@
 	</dependencyManagement>
 
 	<dependencies>
-
-		<dependency>
-			<groupId>de.egladil.web</groupId>
-			<artifactId>commons-validation</artifactId>
-			<version>${hewi-commons.version}</version>
-		</dependency>
 
 		<!-- START quarkus dependencies -->
 		<dependency>
@@ -114,6 +109,23 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.17.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
 		</dependency>
 
 		<dependency>

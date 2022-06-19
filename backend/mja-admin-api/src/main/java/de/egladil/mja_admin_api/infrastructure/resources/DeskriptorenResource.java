@@ -6,6 +6,7 @@ package de.egladil.mja_admin_api.infrastructure.resources;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.GET;
@@ -34,6 +35,7 @@ public class DeskriptorenResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
 	public List<Deskriptor> loadDeskriptoren(@QueryParam(value = "kontext") final DeskriptorSuchkontext suchkontext) {
 
 		List<Deskriptor> trefferliste = deskriptorenRepository.listAll(Sort.ascending("name"));
@@ -43,6 +45,7 @@ public class DeskriptorenResource {
 	@GET
 	@Path("ids")
 	@Produces(MediaType.TEXT_PLAIN)
+	@RolesAllowed("ADMIN")
 	public String transformDeskriptorenStringToOrdinal(@QueryParam(value = "deskriptoren") @Pattern(
 		regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 		message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren) {

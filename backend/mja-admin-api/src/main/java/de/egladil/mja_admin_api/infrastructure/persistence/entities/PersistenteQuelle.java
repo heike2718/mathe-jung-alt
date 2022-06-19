@@ -24,7 +24,6 @@ import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.egladil.mja_admin_api.domain.quellen.Quellenart;
-import de.egladil.web.commons_validation.annotations.UuidString;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.panache.common.Parameters;
 
@@ -39,7 +38,6 @@ public class PersistenteQuelle extends PanacheEntityBase implements PersistenteM
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
 	@GenericGenerator(
 		name = "uuid_generator", strategy = "de.egladil.mja_admin_api.infrastructure.persistence.entities.UuidGenerator")
-	@UuidString
 	@NotNull
 	@Size(min = 1, max = 40)
 	@Column(name = "UUID")

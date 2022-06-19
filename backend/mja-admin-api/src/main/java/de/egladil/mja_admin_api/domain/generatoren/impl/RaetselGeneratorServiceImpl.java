@@ -17,7 +17,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_admin_api.domain.dto.Message;
+import de.egladil.mja_admin_api.domain.dto.MessagePayload;
 import de.egladil.mja_admin_api.domain.error.LaTeXCompileException;
 import de.egladil.mja_admin_api.domain.error.MjaRuntimeException;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselFileService;
@@ -60,7 +60,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 		if (raetsel == null) {
 
 			throw new WebApplicationException(
-				Response.status(404).entity(Message.error("Es gibt kein Raetsel mit dieser UUID")).build());
+				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
 		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege);
@@ -102,7 +102,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			}
 
 			LOGGER.debug("nach Aufruf LaTeXRestClient");
-			Message message = responseFrage.readEntity(Message.class);
+			MessagePayload message = responseFrage.readEntity(MessagePayload.class);
 
 			String filename = raetsel.getSchluessel() + outputformat.getFilenameExtension();
 			String filenameLoesung = raetsel.getSchluessel() + "_l" + outputformat.getFilenameExtension();
@@ -118,7 +118,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 				if (responseLoesung != null) {
 
-					message = responseLoesung.readEntity(Message.class);
+					message = responseLoesung.readEntity(MessagePayload.class);
 
 					if (message.isOk()) {
 

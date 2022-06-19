@@ -26,7 +26,6 @@ import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.egladil.mja_admin_api.domain.raetsel.DomainEntityStatus;
-import de.egladil.web.commons_validation.annotations.UuidString;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 /**
@@ -52,7 +51,6 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
 	@GenericGenerator(
 		name = "uuid_generator", strategy = "de.egladil.mja_admin_api.infrastructure.persistence.entities.UuidGenerator")
-	@UuidString
 	@NotNull
 	@Size(min = 1, max = 40)
 	@Column(name = "UUID")

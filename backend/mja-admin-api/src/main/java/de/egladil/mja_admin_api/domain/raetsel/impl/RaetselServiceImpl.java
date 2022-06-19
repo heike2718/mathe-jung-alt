@@ -22,7 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
-import de.egladil.mja_admin_api.domain.dto.Message;
+import de.egladil.mja_admin_api.domain.dto.MessagePayload;
 import de.egladil.mja_admin_api.domain.dto.SortDirection;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.dto.SuchfilterVariante;
@@ -126,7 +126,7 @@ public class RaetselServiceImpl implements RaetselService {
 				uuidAendernderUser);
 
 			throw new WebApplicationException(
-				Response.status(404).entity(Message.error("Es gibt kein Raetsel mit dieser UUID")).build());
+				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
 		if (payload.isLatexHistorisieren()) {

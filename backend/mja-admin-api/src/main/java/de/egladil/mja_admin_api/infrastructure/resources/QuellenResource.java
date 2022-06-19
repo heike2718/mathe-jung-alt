@@ -7,6 +7,7 @@ package de.egladil.mja_admin_api.infrastructure.resources;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.GET;
@@ -19,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import de.egladil.mja_admin_api.domain.dto.Message;
+import de.egladil.mja_admin_api.domain.dto.MessagePayload;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.quellen.QuelleReadonly;
 import de.egladil.mja_admin_api.domain.quellen.QuellenService;
@@ -35,6 +36,7 @@ public class QuellenResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
 	// @formatter:off
 	public List<QuelleReadonly> sucheQuellen(
 		@QueryParam(value = "suchstring") @Pattern(
@@ -51,6 +53,7 @@ public class QuellenResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("admin")
+	@RolesAllowed("ADMIN")
 	public QuelleReadonly findQuelleByPerson(@QueryParam(value = "person") final String person) {
 
 		Optional<QuelleReadonly> result = this.quellenService.sucheAdministrator(person);
@@ -58,7 +61,7 @@ public class QuellenResource {
 		if (result.isEmpty()) {
 
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND)
-				.entity(Message.warn("Es gibt noch keine Quelle für Sie als Autor:in. Bitte legen Sie eine an.")).build());
+				.entity(MessagePayload.warn("Es gibt noch keine Quelle für Sie als Autor:in. Bitte legen Sie eine an.")).build());
 		}
 
 		return result.get();
@@ -67,6 +70,7 @@ public class QuellenResource {
 	@GET
 	@Path("{quelleId}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
 	public QuelleReadonly findQuelleById(@PathParam(value = "quelleId") final String quelleId) {
 
 		Optional<QuelleReadonly> result = this.quellenService.sucheQuelleMitId(quelleId);
@@ -74,7 +78,7 @@ public class QuellenResource {
 		if (result.isEmpty()) {
 
 			throw new WebApplicationException(
-				Response.status(Status.NOT_FOUND).entity(Message.error("Es gibt keine Quelle mit dieser UUID")).build());
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Es gibt keine Quelle mit dieser UUID")).build());
 		}
 
 		return result.get();

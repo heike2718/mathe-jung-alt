@@ -15,7 +15,7 @@ import javax.ws.rs.ext.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_admin_api.domain.dto.Message;
+import de.egladil.mja_admin_api.domain.dto.MessagePayload;
 import de.egladil.mja_admin_api.domain.error.LaTeXCompileException;
 import de.egladil.mja_admin_api.domain.error.MjaRuntimeException;
 
@@ -36,7 +36,7 @@ public class MjaExceptionMapper implements ExceptionMapper<Throwable> {
 
 			LaTeXCompileException ex = (LaTeXCompileException) exception;
 			return Response.status(500)
-				.entity(Message.error(MessageFormat.format(applicationMessages.getString("latex.error"), ex.getNameFile())))
+				.entity(MessagePayload.error(MessageFormat.format(applicationMessages.getString("latex.error"), ex.getNameFile())))
 				.build();
 
 		}
@@ -49,7 +49,7 @@ public class MjaExceptionMapper implements ExceptionMapper<Throwable> {
 			LOGGER.error(exception.getMessage(), exception);
 		}
 
-		return Response.status(500).entity(Message.error(applicationMessages.getString("general.internalServerError")))
+		return Response.status(500).entity(MessagePayload.error(applicationMessages.getString("general.internalServerError")))
 			.build();
 	}
 
