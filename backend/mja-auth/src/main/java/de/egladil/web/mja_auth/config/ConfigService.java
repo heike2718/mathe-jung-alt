@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-auth
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.web.mja_auth.config;
