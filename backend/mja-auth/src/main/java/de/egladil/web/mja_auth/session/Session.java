@@ -14,6 +14,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Session {
 
+	public static final String CSRF_HEADER_NAME = "X-XSRF-TOKEN";
+
 	@JsonProperty
 	private String sessionId;
 
@@ -29,19 +31,6 @@ public class Session {
 		session.sessionId = sessionId;
 		return session;
 
-	}
-
-	public static Session create(final String sessionId, final AuthenticatedUser user) {
-
-		if (user == null) {
-
-			throw new IllegalArgumentException("user null");
-		}
-
-		Session session = new Session();
-		session.sessionId = sessionId;
-		session.user = user;
-		return session;
 	}
 
 	@Override
@@ -60,7 +49,7 @@ public class Session {
 	 * In Prod, wo Cookies funktionieren, muss die sessionId im Response-Payload entfernt werden können, da sie über ein Cookie
 	 * übertragen wird.
 	 */
-	public void clearSessionId() {
+	public void clearSessionIdInProd() {
 
 		this.sessionId = null;
 	}
@@ -125,4 +114,28 @@ public class Session {
 		return user;
 	}
 
+	public Session withUser(final AuthenticatedUser user) {
+
+		if (user == null) {
+
+			throw new IllegalArgumentException("user null");
+		}
+
+		this.user = user;
+		return this;
+	}
+
+	/**
+	 * @param  csrfToken
+	 * @return           Session
+	 */
+	public Session withCsrfToken(final String csrfToken) {
+
+		if (this.user != null) {
+
+			this.user.withCsrfToken(csrfToken);
+		}
+
+		return this;
+	}
 }

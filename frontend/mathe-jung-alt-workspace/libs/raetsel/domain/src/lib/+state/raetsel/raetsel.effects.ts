@@ -8,6 +8,7 @@ import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/ut
 import { Router } from '@angular/router';
 import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
 import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { AuthHttpService } from 'libs/shared/auth/domain/src/lib/infrastructure/auth-http.service';
 
 @Injectable()
 export class RaetselEffects {
@@ -37,12 +38,24 @@ export class RaetselEffects {
       )
     ));
 
-  saveRaetsel$ = createEffect(() =>
+  getCsrfToken$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.startSaveRaetsel),
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.saveRaetsel(action.editRaetselPayload).pipe(
+        this.authService.getCsrfToken().pipe(
+          map((token) => RaetselActions.saveRaetsel({editRaetselPayload: action.editRaetselPayload, csrfToken: token}))
+        ), 'Ups, beim Speichern des Rätsels ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
+
+  saveRaetsel$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.saveRaetsel),
+      // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.raetselDataService.saveRaetsel(action.editRaetselPayload, action.csrfToken).pipe(
           map((raetselDetails) => RaetselActions.raetselSaved({ raetselDetails, successMessage: 'Das Raetsel wurde erfolgreich gespeichert: uuid=' + raetselDetails.id }))
         ), 'Ups, beim Speichern des Rätsels ist etwas schiefgegangen', noopAction()
       )
@@ -114,6 +127,7 @@ export class RaetselEffects {
 
   constructor(
     private actions$: Actions,
+    private authService: AuthHttpService,
     private raetselDataService: RaetselDataService,
     private raetselFacade: RaetselFacade,
     private suchfilterFacade: SuchfilterFacade,

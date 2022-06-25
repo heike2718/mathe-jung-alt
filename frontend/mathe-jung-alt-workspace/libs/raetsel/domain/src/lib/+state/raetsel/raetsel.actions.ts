@@ -53,11 +53,6 @@ export const showRaetselDetails = createAction(
   '[Raetsel] show details'
 );
 
-// export const cacheRaetselDetails = createAction(
-//   '[Raetsel] cache details',
-//   props<{ raetselDetails: RaetselDetails }>()
-// );
-
 export const editRaetsel = createAction(
   '[Raetsel]  edit',
   props<{ raetselDetailsContent: RaetselDetailsContent }>()
@@ -84,6 +79,11 @@ export const cancelEdit = createAction(
 export const startSaveRaetsel = createAction(
   '[Raetsel] start save',
   props<{ editRaetselPayload: EditRaetselPayload }>()
+);
+
+export const saveRaetsel = createAction(
+  '[Raetsel] save raetsel',
+  props<{ editRaetselPayload: EditRaetselPayload, csrfToken: string | null }>()
 );
 
 export const raetselSaved = createAction(

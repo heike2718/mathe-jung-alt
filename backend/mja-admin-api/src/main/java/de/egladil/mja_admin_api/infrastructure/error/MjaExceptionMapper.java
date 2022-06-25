@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_admin_api.domain.error.LaTeXCompileException;
 import de.egladil.mja_admin_api.domain.error.MjaRuntimeException;
 import de.egladil.web.mja_auth.dto.MessagePayload;
+import de.egladil.web.mja_auth.exception.AuthException;
 
 /**
  * MjaExceptionMapper
@@ -39,6 +41,12 @@ public class MjaExceptionMapper implements ExceptionMapper<Throwable> {
 				.entity(MessagePayload.error(MessageFormat.format(applicationMessages.getString("latex.error"), ex.getNameFile())))
 				.build();
 
+		}
+
+		if (exception instanceof AuthException) {
+
+			LOGGER.warn("CSRF: " + exception.getMessage());
+			return Response.status(Status.FORBIDDEN).build();
 		}
 
 		if (exception instanceof MjaRuntimeException) {

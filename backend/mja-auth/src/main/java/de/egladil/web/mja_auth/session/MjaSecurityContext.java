@@ -74,5 +74,4 @@ public class MjaSecurityContext implements SecurityContext {
 
 		return "Bearer";
 	}
-
 }

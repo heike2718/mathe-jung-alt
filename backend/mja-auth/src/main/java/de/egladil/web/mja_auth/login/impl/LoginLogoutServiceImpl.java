@@ -69,7 +69,7 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 		if (session.isAnonym()) {
 
-			session.clearSessionId();
+			session.clearSessionIdInProd();
 			return Response.status(Status.FORBIDDEN)
 				.entity(MessagePayload.error("Sie haben leider keine Berechtigung, sich in die Administration einzuloggen."))
 				.build();
@@ -79,7 +79,7 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 		if (!ConfigService.STAGE_DEV.equals(configService.getStage())) {
 
-			session.clearSessionId();
+			session.clearSessionIdInProd();
 		}
 
 		return Response.ok(session).cookie(sessionCookie).build();

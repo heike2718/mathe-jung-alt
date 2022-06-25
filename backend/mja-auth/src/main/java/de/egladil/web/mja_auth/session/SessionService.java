@@ -4,9 +4,6 @@
 // =====================================================
 package de.egladil.web.mja_auth.session;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,10 +24,10 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import de.egladil.web.mja_auth.exception.AuthException;
-import de.egladil.web.mja_auth.exception.MjaAuthRuntimeException;
 import de.egladil.web.mja_auth.exception.SessionExpiredException;
 import de.egladil.web.mja_auth.jwt.JWTService;
 import de.egladil.web.mja_auth.jwt.impl.DecodedJWTReader;
+import de.egladil.web.mja_auth.util.SecUtils;
 
 @ApplicationScoped
 public class SessionService {
@@ -70,24 +67,21 @@ public class SessionService {
 				if (optAdmin.isEmpty()) {
 
 					LOGGER.warn("User mit Rollen {} ist kein ADMIN => verboten. UUID={}", groups, uuid);
-					return Session.createAnonymous("anonym");
+					return this.internalCreateAnonymousSession();
 				}
 			}
 
 			String fullName = jwtReader.getFullName();
 
-			byte[] sessionIdBase64 = Base64.getEncoder().encode(generateSessionId().getBytes());
-			String sessionId = new String(sessionIdBase64);
-
-			String userIdReference = uuid.substring(0, 8) + "_" + this.generateRandomString();
+			String userIdReference = uuid.substring(0, 8) + "_" + SecUtils.generateRandomString();
 
 			AuthenticatedUser authenticatedUser = new AuthenticatedUser(userIdReference, groups, fullName,
-				uuid);
+				uuid).withCsrfToken(SecUtils.generateRandomString());
 
-			Session session = Session.create(sessionId, authenticatedUser);
+			Session session = this.internalCreateAnonymousSession().withUser(authenticatedUser);
 			session.setExpiresAt(SessionUtils.getExpiresAt(SESSION_IDLE_TIMEOUT_MINUTES));
 
-			sessions.put(sessionId, session);
+			sessions.put(session.getSessionId(), session);
 
 			LOGGER.info("User eingeloggt. " + session.toString());
 
@@ -150,30 +144,22 @@ public class SessionService {
 
 	private String generateSessionId() {
 
-		String result = generateRandomString();
+		String result = SecUtils.generateRandomString();
 
 		while (this.sessions.get(result) != null) {
 
-			result = generateRandomString();
+			result = SecUtils.generateRandomString();
 		}
 
 		return result;
 
 	}
 
-	/**
-	 * @return
-	 */
-	private String generateRandomString() {
+	private Session internalCreateAnonymousSession() {
 
-		try {
+		byte[] sessionIdBase64 = Base64.getEncoder().encode(generateSessionId().getBytes());
+		String sessionId = new String(sessionIdBase64);
 
-			SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
-			return new String(Base64.getEncoder().encode(new String("" + sr.nextLong()).getBytes()));
-		} catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-
-			LOGGER.error(e.getMessage(), e);
-			throw new MjaAuthRuntimeException(e.getMessage(), e);
-		}
+		return Session.createAnonymous(sessionId);
 	}
 }

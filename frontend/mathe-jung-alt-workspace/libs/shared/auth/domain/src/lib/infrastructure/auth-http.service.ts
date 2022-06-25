@@ -1,8 +1,8 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Configuration, SharedConfigService } from "@mathe-jung-alt-workspace/shared/configuration";
-import { ResponsePayload, Message } from "libs/shared/ui-messaging/src/lib/message/message";
-import { map, Observable, of } from "rxjs";
+import { Message } from "libs/shared/ui-messaging/src/lib/message/message";
+import { map, Observable, of, tap } from "rxjs";
 import { AuthResult, Session, STORAGE_KEY_DEV_SESSION_ID } from "../entities/auth.model";
 
 @Injectable({
@@ -10,12 +10,24 @@ import { AuthResult, Session, STORAGE_KEY_DEV_SESSION_ID } from "../entities/aut
 })
 export class AuthHttpService {
 
+    #csrfHeaderName = 'X-XSRF-TOKEN';
+
     #baseUrl = this.configuration.baseUrl + '/session';
 
     constructor(@Inject(SharedConfigService) private configuration: Configuration, private http: HttpClient) { }
 
+    getCsrfToken(): Observable<string | null> {
 
-    public getLoginRedirectUrl(): Observable<string> {
+        const url = this.configuration.baseUrl + '/csrftoken/v1';
+
+        return this.http.get(url, { observe: 'response' }).pipe(
+            tap((res: HttpResponse<any>) => console.log('csrf-token=' + res.headers.get(this.#csrfHeaderName))),
+            map((res: HttpResponse<any>) => res.headers.get(this.#csrfHeaderName))
+        );
+    }
+
+
+    getLoginRedirectUrl(): Observable<string> {
 
         const url = this.#baseUrl + '/authurls/login';
 
@@ -24,13 +36,13 @@ export class AuthHttpService {
         );
     }
 
-    public createSession(authResult: AuthResult): Observable<Session> {
+    createSession(authResult: AuthResult): Observable<Session> {
 
         const url = this.#baseUrl + '/login';
         return this.http.post<Session>(url, authResult);
     }
 
-    public logout(): Observable<Message> {
+    logout(): Observable<Message> {
 
         const devSessionId = localStorage.getItem(this.configuration.storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
         let url = this.#baseUrl + '/logout';
@@ -41,4 +53,14 @@ export class AuthHttpService {
 
         return this.http.delete<Message>(url);
     }
+
+    #inspectHeaders(response: any): void {
+
+        if (response instanceof HttpResponse) {
+            const httpHeaders = response.headers;
+            console.log(httpHeaders.keys);
+        }
+    }
+
+
 }

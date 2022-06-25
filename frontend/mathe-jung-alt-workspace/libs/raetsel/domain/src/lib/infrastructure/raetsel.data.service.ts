@@ -10,6 +10,7 @@ export class RaetselDataService {
 
 
   #url = this.configuration.baseUrl + '/raetsel/v1';
+  #csrfHeaderName = 'X-XSRF-TOKEN';
 
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
@@ -73,11 +74,14 @@ export class RaetselDataService {
     return this.http.get<Raetsel[]>(this.#url, { headers, params });
   }
 
-  public saveRaetsel(editRaetselPayload: EditRaetselPayload): Observable<RaetselDetails> {
+  public saveRaetsel(editRaetselPayload: EditRaetselPayload, csrfToken: string | null): Observable<RaetselDetails> {
 
     // console.log(JSON.stringify(editRaetselPayload));
 
-    const headers = new HttpHeaders().set('Accept', 'application/json');
+    let headers = new HttpHeaders().set('Accept', 'application/json');
+    if (csrfToken !== null) {
+      headers = headers.set(this.#csrfHeaderName, csrfToken);
+    }
 
     if ('neu' === editRaetselPayload.raetsel.id) {
       return this.http.post<RaetselDetails>(this.#url, editRaetselPayload, { headers });

@@ -24,6 +24,9 @@ public class AuthenticatedUser implements Principal {
 	@JsonProperty
 	private final String fullName;
 
+	@JsonProperty
+	private String csrfToken;
+
 	@JsonIgnore
 	private final String uuid;
 
@@ -44,7 +47,8 @@ public class AuthenticatedUser implements Principal {
 	@Override
 	public String toString() {
 
-		return "AuthenticatedUser [fullName=" + fullName + ", roles=" + Arrays.toString(roles) + ", uuid=" + uuid + "]";
+		return "AuthenticatedUser [fullName=" + fullName + ", roles=" + Arrays.toString(roles) + ", uuid=" + uuid + ", csrfToken="
+			+ csrfToken + "]";
 	}
 
 	@Override
@@ -84,6 +88,24 @@ public class AuthenticatedUser implements Principal {
 	public String[] getRoles() {
 
 		return roles;
+	}
+
+	/**
+	 * @return the csrfToken
+	 */
+	public String getCsrfToken() {
+
+		return csrfToken;
+	}
+
+	/**
+	 * @param csrfToken
+	 *                  the csrfToken to set
+	 */
+	public AuthenticatedUser withCsrfToken(final String csrfToken) {
+
+		this.csrfToken = csrfToken;
+		return this;
 	}
 
 }

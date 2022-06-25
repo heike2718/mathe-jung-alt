@@ -15,14 +15,17 @@ import javax.validation.constraints.Pattern;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,12 +40,18 @@ import de.egladil.mja_admin_api.domain.raetsel.RaetselService;
 import de.egladil.mja_admin_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_admin_api.domain.raetsel.dto.GeneratedImages;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
+import de.egladil.mja_admin_api.infrastructure.validation.CsrfTokenValidator;
+import de.egladil.web.mja_auth.session.AuthenticatedUser;
+import de.egladil.web.mja_auth.session.Session;
 
 /**
  * RaetselResource
  */
 @Path("/raetsel/v1")
 public class RaetselResource {
+
+	@Context
+	SecurityContext securityContext;
 
 	@Inject
 	RaetselService raetselService;
@@ -52,6 +61,8 @@ public class RaetselResource {
 
 	@Inject
 	DeskriptorenService deskriptorenService;
+
+	private final CsrfTokenValidator csrfTokenValidator = new CsrfTokenValidator();
 
 	@GET
 	@Path("size")
@@ -126,12 +137,11 @@ public class RaetselResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
-	public Response raetselAnlegen(final EditRaetselPayload payload) {
+	public Response raetselAnlegen(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
-		// TODO: aus der Session holen!!!
-		String uuidAendernderUser = "20721575-8c45-4201-a025-7a9fece1f2aa";
-
-		Raetsel raetsel = raetselService.raetselAnlegen(payload, uuidAendernderUser);
+		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
+		this.csrfTokenValidator.checkCsrfToken(csrfHeader, userPrincipal.getCsrfToken());
+		Raetsel raetsel = raetselService.raetselAnlegen(payload, userPrincipal.getName());
 		return Response.status(201).entity(raetsel).build();
 
 	}
@@ -140,12 +150,11 @@ public class RaetselResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
-	public Response raetselAendern(final EditRaetselPayload payload) {
+	public Response raetselAendern(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
-		// TODO: aus der Session holen!!!
-		String uuidAendernderUser = "20721575-8c45-4201-a025-7a9fece1f2aa";
-
-		Raetsel raetsel = raetselService.raetselAendern(payload, uuidAendernderUser);
+		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
+		this.csrfTokenValidator.checkCsrfToken(csrfHeader, userPrincipal.getCsrfToken());
+		Raetsel raetsel = raetselService.raetselAendern(payload, userPrincipal.getName());
 		return Response.status(200).entity(raetsel).build();
 
 	}
