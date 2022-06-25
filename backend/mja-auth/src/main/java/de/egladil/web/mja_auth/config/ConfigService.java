@@ -27,8 +27,17 @@ public class ConfigService {
 	@ConfigProperty(name = "stage")
 	String stage;
 
-	@ConfigProperty(name = "allowedOrigin", defaultValue = "https://mathe-jung-alt.de")
+	@ConfigProperty(name = "allowedOrigin")
 	String allowedOrigin;
+
+	@ConfigProperty(name = "allowedMethods")
+	String allowedMethods;
+
+	@ConfigProperty(name = "allowedHeaders")
+	String allowedHeaders;
+
+	@ConfigProperty(name = "exposedHeaders")
+	String exposedHeaders;
 
 	/**
 	 * @return the blockOnMissingOriginReferer
@@ -60,6 +69,30 @@ public class ConfigService {
 	public String getAllowedOrigin() {
 
 		return allowedOrigin;
+	}
+
+	/**
+	 * @return the allowedMethods
+	 */
+	public String getAllowedMethods() {
+
+		return allowedMethods;
+	}
+
+	/**
+	 * @return the allowedHeaders
+	 */
+	public String getAllowedHeaders() {
+
+		return allowedHeaders;
+	}
+
+	/**
+	 * @return the exposedHeaders
+	 */
+	public String getExposedHeaders() {
+
+		return exposedHeaders;
 	}
 
 }
