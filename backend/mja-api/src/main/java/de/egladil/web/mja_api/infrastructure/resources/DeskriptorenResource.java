@@ -23,7 +23,7 @@ public class DeskriptorenResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({ "ADMIN", "PRIVAT", "LEHRER", "DEFAULT" })
+	@RolesAllowed({ "ADMIN", "PRIVAT", "LEHRER", "STANDARD" })
 	public List<Deskriptor> loadDeskriptoren() {
 
 		List<Deskriptor> trefferliste = Deskriptor.listAll();
