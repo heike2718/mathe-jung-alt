@@ -13,6 +13,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import de.egladil.web.mja_auth.session.AuthenticatedUser;
 import de.egladil.web.mja_auth.session.Session;
+import de.egladil.web.mja_auth.util.SecUtils;
 
 /**
  * CsrfTokenResource
@@ -28,7 +29,10 @@ public class CsrfTokenResource {
 	public Response getCsrfToken() {
 
 		AuthenticatedUser user = (AuthenticatedUser) securityContext.getUserPrincipal();
-		return Response.ok().header(Session.CSRF_HEADER_NAME, user.getCsrfToken()).build();
+
+		String csrfToken = user == null ? "anonymous-" + SecUtils.generateRandomString() : user.getCsrfToken();
+
+		return Response.ok().header(Session.CSRF_HEADER_NAME, csrfToken).build();
 	}
 
 }

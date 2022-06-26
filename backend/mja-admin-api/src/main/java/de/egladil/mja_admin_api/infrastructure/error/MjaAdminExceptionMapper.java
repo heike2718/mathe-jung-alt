@@ -16,18 +16,18 @@ import javax.ws.rs.ext.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_admin_api.domain.error.LaTeXCompileException;
-import de.egladil.mja_admin_api.domain.error.MjaRuntimeException;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.exception.AuthException;
+import de.egladil.web.mja_shared.exceptions.LaTeXCompileException;
+import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
 
 /**
- * MjaExceptionMapper
+ * MjaAdminExceptionMapper
  */
 @Provider
-public class MjaExceptionMapper implements ExceptionMapper<Throwable> {
+public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MjaExceptionMapper.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MjaAdminExceptionMapper.class);
 
 	private final ResourceBundle applicationMessages = ResourceBundle.getBundle("ApplicationMessages", Locale.GERMAN);
 
