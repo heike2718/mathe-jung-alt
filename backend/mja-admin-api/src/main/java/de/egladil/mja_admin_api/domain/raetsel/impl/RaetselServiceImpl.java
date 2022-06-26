@@ -25,7 +25,6 @@ import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_admin_api.domain.dto.SortDirection;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.dto.SuchfilterVariante;
-import de.egladil.mja_admin_api.domain.error.MjaRuntimeException;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_admin_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
@@ -36,6 +35,7 @@ import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import de.egladil.web.mja_auth.dto.MessagePayload;
+import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
 
 /**
  * RaetselServiceImpl

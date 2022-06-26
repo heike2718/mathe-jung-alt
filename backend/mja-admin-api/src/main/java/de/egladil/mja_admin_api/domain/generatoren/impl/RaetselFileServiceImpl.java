@@ -21,11 +21,11 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_admin_api.domain.error.MjaRuntimeException;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_admin_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_admin_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
+import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
 
 /**
  * RaetselFileServiceImpl

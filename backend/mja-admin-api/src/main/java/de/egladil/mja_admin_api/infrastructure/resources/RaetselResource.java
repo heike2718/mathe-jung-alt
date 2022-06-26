@@ -28,6 +28,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_admin_api.domain.dto.SortDirection;
@@ -49,6 +52,11 @@ import de.egladil.web.mja_auth.session.Session;
  */
 @Path("/raetsel/v1")
 public class RaetselResource {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselResource.class);
+
+	@ConfigProperty(name = "authorization.enabled")
+	boolean authorizationEnabled;
 
 	@Context
 	SecurityContext securityContext;
@@ -106,6 +114,8 @@ public class RaetselResource {
 		@QueryParam(value = "sortDirection")  @DefaultValue("asc") final SortDirection sortDirection) {
 		// @formatter:on
 
+		LOGGER.info("authorizationEnabled=" + this.authorizationEnabled);
+
 		String deskriptorenOrdinal = checkAndTransformDeskriptoren(deskriptoren, typeDeskriptoren);
 
 		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
@@ -140,8 +150,11 @@ public class RaetselResource {
 	public Response raetselAnlegen(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		this.csrfTokenValidator.checkCsrfToken(csrfHeader, userPrincipal.getCsrfToken());
-		Raetsel raetsel = raetselService.raetselAnlegen(payload, userPrincipal.getName());
+		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
+		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
+		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
+
+		Raetsel raetsel = raetselService.raetselAnlegen(payload, userUuid);
 		return Response.status(201).entity(raetsel).build();
 
 	}
@@ -153,10 +166,12 @@ public class RaetselResource {
 	public Response raetselAendern(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		this.csrfTokenValidator.checkCsrfToken(csrfHeader, userPrincipal.getCsrfToken());
-		Raetsel raetsel = raetselService.raetselAendern(payload, userPrincipal.getName());
-		return Response.status(200).entity(raetsel).build();
+		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
+		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
+		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
 
+		Raetsel raetsel = raetselService.raetselAendern(payload, userUuid);
+		return Response.status(200).entity(raetsel).build();
 	}
 
 	@GET
