@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-shared
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.web.mja_shared.semantik;

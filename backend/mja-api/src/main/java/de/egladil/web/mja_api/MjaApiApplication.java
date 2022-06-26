@@ -1,8 +1,8 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_admin_api;
+package de.egladil.web.mja_api;
 
 import javax.ws.rs.core.Application;
 
@@ -12,11 +12,11 @@ import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.eclipse.microprofile.openapi.annotations.info.License;
 
 /**
- * MjaAdminApiApplication
+ * MjaApiApplication
  */
 @OpenAPIDefinition(
 	info = @Info(
-		title = "Mathe-Jung-Alt - Admin-API",
+		title = "Mathe-Jung-Alt - API",
 		version = "1.0.0",
 		contact = @Contact(
 			name = "Mathe für jung und alt",
@@ -25,7 +25,8 @@ import org.eclipse.microprofile.openapi.annotations.info.License;
 		license = @License(
 			name = "Apache 2.0",
 			url = "https://www.apache.org/licenses/LICENSE-2.0.html")))
-public class MjaAdminApiApplication extends Application {
+public class MjaApiApplication extends Application {
 
 	// absichtlich leer
+
 }

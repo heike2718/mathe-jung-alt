@@ -2,7 +2,7 @@
 // Project: mja-admin-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_admin_api.infrastructure.resources;
+package de.egladil.web.mja_api.infrastructure.resources;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.mja_admin_api.profiles.ContainerDatabaseTestProfile;
+import de.egladil.web.mja_api.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.web.mja_api.profiles.ContainerDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -30,20 +30,21 @@ public class DeskriptorenResourceContainerizedTest {
 	public void testLoadDeskriptorenEndpoint() throws Exception {
 
 		Response response = given()
-			.when().get("?kontext=RAETSEL");
+			.when().get();
 
 		String responsePayload = response.asString();
 		System.out.println(responsePayload);
 
 		Deskriptor[] deskriptoren = new ObjectMapper().readValue(responsePayload, Deskriptor[].class);
 
-		assertEquals(15, deskriptoren.length);
+		assertEquals(7, deskriptoren.length);
 
 		response
 			.then()
 			.statusCode(200);
 
 		int anzahlAdmin = 0;
+		int anzahlRAETSEL = 0;
 
 		for (Deskriptor d : deskriptoren) {
 
@@ -51,10 +52,53 @@ public class DeskriptorenResourceContainerizedTest {
 
 				anzahlAdmin++;
 			}
+
+			if (d.kontext.equals("RAETSEL")) {
+
+				anzahlRAETSEL++;
+			}
 		}
 
-		assertEquals(8, anzahlAdmin);
+		assertEquals(0, anzahlAdmin);
+		assertEquals(7, anzahlRAETSEL);
 
 	}
 
+	@Test
+	public void testLoadDeskriptorenEndpoint_ignoresQueryParameter() throws Exception {
+
+		Response response = given()
+			.when().get("?kontext=NOOP");
+
+		String responsePayload = response.asString();
+		System.out.println(responsePayload);
+
+		Deskriptor[] deskriptoren = new ObjectMapper().readValue(responsePayload, Deskriptor[].class);
+
+		assertEquals(7, deskriptoren.length);
+
+		response
+			.then()
+			.statusCode(200);
+
+		int anzahlAdmin = 0;
+		int anzahlRAETSEL = 0;
+
+		for (Deskriptor d : deskriptoren) {
+
+			if (d.admin) {
+
+				anzahlAdmin++;
+			}
+
+			if (d.kontext.equals("RAETSEL")) {
+
+				anzahlRAETSEL++;
+			}
+		}
+
+		assertEquals(0, anzahlAdmin);
+		assertEquals(7, anzahlRAETSEL);
+
+	}
 }

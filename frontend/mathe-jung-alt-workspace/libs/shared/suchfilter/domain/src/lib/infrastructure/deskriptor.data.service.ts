@@ -13,9 +13,13 @@ export class DeskriptorDataService {
 
   load(): Observable<Deskriptor[]> {
 
-    const params = new HttpParams().set('kontext', this.configuration.admin ? 'NOOP' : 'RAETSEL');
-
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    return this.http.get<Deskriptor[]>(this.#url, { headers, params });
+
+    if (this.configuration.admin) {
+      const params = new HttpParams().set('kontext', 'NOOP');
+      return this.http.get<Deskriptor[]>(this.#url, { headers, params });
+    }
+
+    return this.http.get<Deskriptor[]>(this.#url, { headers });
   }
 }

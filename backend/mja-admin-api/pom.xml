@@ -165,6 +165,7 @@
 		<!-- END Test scoped dependencies -->
 
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>

@@ -21,10 +21,10 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_admin_api.domain.deskriptoren.impl.DeskriptorenRepository;
 import de.egladil.mja_admin_api.domain.deskriptoren.impl.DeskriptorenServiceImpl;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.web.mja_shared.domain.deskriptoren.DeskriptorSuchkontext;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 
@@ -99,29 +99,14 @@ public class DeskriptorenServiceImplTest {
 	class FilterTests {
 
 		@Test
-		void should_filterReturnNone_when_KontextNoopOrdinary() {
+		void should_filterReturnAll_when_KontextNoop() {
 
 			// Arrange
 			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.NOOP;
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren, false);
-
-			// Assert
-			assertEquals(0, result.size());
-			verify(repository, never()).listAll();
-		}
-
-		@Test
-		void should_filterReturnNone_when_KontextNoopAdmin() {
-
-			// Arrange
-			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.NOOP;
-			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
-
-			// Act
-			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren, true);
+			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren);
 
 			// Assert
 			assertEquals(8, result.size());
@@ -136,7 +121,7 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren, true);
+			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren);
 
 			// Assert
 			assertEquals(0, result.size());
@@ -151,7 +136,7 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren, true);
+			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren);
 
 			// Assert
 			assertEquals(3, deskriptoren.size());
@@ -187,7 +172,7 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren, true);
+			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren);
 
 			// Assert
 			assertEquals(2, deskriptoren.size());
@@ -216,7 +201,7 @@ public class DeskriptorenServiceImplTest {
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
 
 			// Act
-			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren, true);
+			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren);
 
 			// Assert
 			assertEquals(5, deskriptoren.size());

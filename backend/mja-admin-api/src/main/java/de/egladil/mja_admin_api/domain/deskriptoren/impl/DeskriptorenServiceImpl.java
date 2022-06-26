@@ -20,10 +20,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_admin_api.domain.semantik.DomainService;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.web.mja_shared.domain.deskriptoren.DeskriptorSuchkontext;
 
 /**
  * DeskriptorenServiceImpl
@@ -86,11 +86,11 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 	}
 
 	@Override
-	public List<Deskriptor> filterByKontext(final DeskriptorSuchkontext kontext, final List<Deskriptor> deskriptoren, final boolean admin) {
+	public List<Deskriptor> filterByKontext(final DeskriptorSuchkontext kontext, final List<Deskriptor> deskriptoren) {
 
 		if (DeskriptorSuchkontext.NOOP == kontext) {
 
-			return admin ? deskriptoren : new ArrayList<>();
+			return deskriptoren;
 		}
 
 		return deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).toList();

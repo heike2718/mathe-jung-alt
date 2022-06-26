@@ -1,8 +1,8 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_admin_api.infrastructure.error;
+package de.egladil.web.mja_api.infrastructure.error;
 
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +20,11 @@ import de.egladil.web.mja_auth.exception.AuthException;
 import de.egladil.web.mja_shared.exceptions.LaTeXCompileException;
 
 /**
- * MjaAdminExceptionMapper
+ * MjaApiExceptionMapper
  */
-@Provider
-public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
+public class MjaApiExceptionMapper implements ExceptionMapper<Throwable> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MjaAdminExceptionMapper.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MjaApiExceptionMapper.class);
 
 	private final ResourceBundle applicationMessages = ResourceBundle.getBundle("ApplicationMessages", Locale.GERMAN);
 

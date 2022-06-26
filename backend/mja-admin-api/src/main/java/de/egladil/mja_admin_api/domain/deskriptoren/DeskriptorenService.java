@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import de.egladil.mja_admin_api.domain.semantik.DomainService;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.web.mja_shared.domain.deskriptoren.DeskriptorSuchkontext;
 
 /**
  * DeskriptorenService
@@ -38,7 +39,7 @@ public interface DeskriptorenService {
 	 * @param  deskriptoren
 	 * @return              List: leer bei NOOP und nicht admin, alle bei NOOP und admin
 	 */
-	List<Deskriptor> filterByKontext(DeskriptorSuchkontext kontext, List<Deskriptor> deskriptoren, boolean admin);
+	List<Deskriptor> filterByKontext(DeskriptorSuchkontext kontext, List<Deskriptor> deskriptoren);
 
 	/**
 	 * Sucht den Deskriptor anhand seines Namens.
