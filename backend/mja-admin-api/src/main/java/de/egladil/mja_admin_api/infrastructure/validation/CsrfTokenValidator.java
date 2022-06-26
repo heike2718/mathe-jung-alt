@@ -20,9 +20,20 @@ public class CsrfTokenValidator {
 	 * Prüft das CSRF-Token.
 	 *
 	 * @param headerValue
+	 *                    String das token aus dem Header
 	 * @param token
+	 *                    String das aus der Session
+	 * @param enabled
+	 *                    boolean
 	 */
-	public void checkCsrfToken(final String headerValue, final String token) throws AuthException {
+	public void checkCsrfToken(final String headerValue, final String token, final boolean enabled) throws AuthException {
+
+		if (!enabled) {
+
+			LOGGER.warn("authorization is diadabled: check property authorization.enabled");
+
+			return;
+		}
 
 		if (headerValue == null || !headerValue.equals(token)) {
 
