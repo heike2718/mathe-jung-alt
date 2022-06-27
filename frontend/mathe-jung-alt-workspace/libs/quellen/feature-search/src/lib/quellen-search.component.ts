@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { Deskriptor, DeskriptorenSearchFacade, Suchkontext } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { deskriptorenToString, Quelle, QuellenDataSource, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { Suchfilter, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Suchfilter, SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { debounceTime, distinctUntilChanged, filter, map, merge, Subscription, tap } from 'rxjs';
 
 @Component({
@@ -32,14 +32,15 @@ export class QuellenSearchComponent implements OnInit, OnDestroy {
   dataSource!: QuellenDataSource;
   anzahlQuellen: number = 0;
 
-  constructor(public quellenFacade: QuellenFacade
-    , public suchfilterFacade: SuchfilterFacade) {}
+  constructor(public quellenFacade: QuellenFacade,
+    public suchfilterFacade: SuchfilterFacade,
+    private deskriptorenSearchFacade: DeskriptorenSearchFacade) {}
 
   ngOnInit() {
 
     this.dataSource = new QuellenDataSource(this.quellenFacade);
     
-    this.#deskriptorenLoadedSubscription = this.suchfilterFacade.deskriptorenLoaded$.subscribe(
+    this.#deskriptorenLoadedSubscription = this.deskriptorenSearchFacade.loaded$.subscribe(
       (loaded => {
         if (loaded) {
           this.suchfilterFacade.changeSuchkontext(this.#kontext);

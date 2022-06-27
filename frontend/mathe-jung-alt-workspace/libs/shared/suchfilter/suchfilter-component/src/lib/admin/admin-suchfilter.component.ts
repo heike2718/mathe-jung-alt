@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from "@angular/core";
-import { Deskriptor, DeskriptorenSearchFacade } from "@mathe-jung-alt-workspace/deskriptoren/domain";
-import { Suchkontext } from "@mathe-jung-alt-workspace/shared/suchfilter/domain";
+import { Deskriptor, Suchkontext } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 import { debounceTime, distinctUntilChanged, fromEvent, Subscription, tap } from "rxjs";
 
 

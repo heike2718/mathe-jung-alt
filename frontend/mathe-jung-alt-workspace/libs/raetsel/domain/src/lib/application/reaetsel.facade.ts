@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Deskriptor, filterByKontext, getDifferenzmenge } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { Deskriptor, DeskriptorenSearchFacade, filterByKontext, getDifferenzmenge } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 import { PageDefinition, Suchfilter, SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 import { SelectableItem } from 'libs/shared/ui-components/src/lib/select-items/select-items.model';
-import { combineLatest, filter, Observable, tap } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
@@ -28,7 +28,7 @@ export class RaetselFacade {
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>,
     private quellenFacade: QuellenFacade,
-    private suchfilterFacade: SuchfilterFacade,
+    private deskriptorenSearchFacade: DeskriptorenSearchFacade,
     private router: Router) {
 
     this.quellenFacade.selectedQuelle$.subscribe(
@@ -42,8 +42,8 @@ export class RaetselFacade {
     );
 
     combineLatest([
-      this.suchfilterFacade.deskriptorenLoaded$,
-      this.suchfilterFacade.allDeskriptoren$,
+      this.deskriptorenSearchFacade.loaded$,
+      this.deskriptorenSearchFacade.deskriptorList$,
     ]).subscribe(([deskriptorenLoaded, allDeskriptoren]) => {
       if (deskriptorenLoaded) {
         this.#raetselDeskriptoren = filterByKontext('RAETSEL', allDeskriptoren);

@@ -1,6 +1,4 @@
-import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
-import { Quelle } from "@mathe-jung-alt-workspace/quellen/domain";
-import { Suchkontext } from "@mathe-jung-alt-workspace/shared/suchfilter/domain";
+import { Deskriptor, Suchkontext } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 import { SelectableItem } from "libs/shared/ui-components/src/lib/select-items/select-items.model";
 
 export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';

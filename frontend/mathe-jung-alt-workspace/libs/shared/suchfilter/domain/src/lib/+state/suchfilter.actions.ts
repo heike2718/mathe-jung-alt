@@ -1,15 +1,6 @@
-import { Deskriptor } from "@mathe-jung-alt-workspace/deskriptoren/domain";
+import { Deskriptor, Suchkontext } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 import { createAction, props } from "@ngrx/store";
-import { Suchkontext } from "../entities/suchfilter";
 
-export const loadDeskriptoren = createAction(
-  '[Suchfilter] load Deskriptoren'
-);
-
-export const loadDeskriptorenSuccess = createAction(
-  '[Suchfilter] Deskriptoren loaded',
-  props<{ deskriptoren: Deskriptor[] }>()
-);
 
 export const suchkontextChanged = createAction(
   '[Suchfilter] kontext changed',

@@ -1,6 +1,6 @@
-import { Deskriptor, filterByKontext } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { Suchkontext } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { createReducer, on, Action } from '@ngrx/store';
-import { createInitialSuchfilterUIModels, findSuchfilterUIModelWithKontext, initialSuchfilter, Suchfilter, SuchfilterUIModel, Suchkontext } from '../entities/suchfilter';
+import { findSuchfilterUIModelWithKontext, initialSuchfilter, Suchfilter, SuchfilterUIModel } from '../entities/suchfilter';
 import * as SuchfilterActions from './suchfilter.actions';
 
 
@@ -12,26 +12,16 @@ export interface SuchfilterPartialState {
 
 export interface SuchfilterState {
     readonly kontext: Suchkontext;
-    readonly deskriptoren: Deskriptor[];
-    readonly deskriptorenLoaded: boolean;
     readonly suchfilterUIModels: SuchfilterUIModel[];
 }
 
 const initialState: SuchfilterState = {
     kontext: 'NOOP',
-    deskriptoren: [],
-    deskriptorenLoaded: false,
     suchfilterUIModels: [{ suchfilter: initialSuchfilter, filteredDeskriptoren: [], changed: false }]
 };
 
 const suchfilterReducer = createReducer(
-    initialState,
-
-    on(SuchfilterActions.loadDeskriptorenSuccess, (state, action) => {
-
-        const uiModel = createInitialSuchfilterUIModels(action.deskriptoren);
-        return { ...state, deskriptoren: action.deskriptoren, deskriptorenLoaded: true, suchfilterUIModels: uiModel };
-    }),
+    initialState,    
 
     on(SuchfilterActions.suchkontextChanged, (state, action) => {
 

@@ -2,10 +2,10 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { Raetsel, RaetselDataSource, RaetselFacade } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { debounceTime, filter, tap } from 'rxjs/operators';
 import { merge, Subscription } from 'rxjs';
-import { PageDefinition, PaginationState, Suchfilter, SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
-import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { PageDefinition, PaginationState, Suchfilter, SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Deskriptor, DeskriptorenSearchFacade, Suchkontext } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { AuthFacade } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { deskriptorenToString, QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 
@@ -41,13 +41,14 @@ export class RaetselSearchComponent implements OnInit, AfterViewInit, OnDestroy 
   constructor(public raetselFacade: RaetselFacade,
     public suchfilterFacade: SuchfilterFacade,
     public quellenFacade: QuellenFacade,
+    private deskriptorenSearchFacade: DeskriptorenSearchFacade,
     private authFacade: AuthFacade
   ) { }
 
   ngOnInit() {
     this.dataSource = new RaetselDataSource(this.raetselFacade);
 
-    this.#deskriptorenLoadedSubscription = this.suchfilterFacade.deskriptorenLoaded$.subscribe(
+    this.#deskriptorenLoadedSubscription = this.deskriptorenSearchFacade.loaded$.subscribe(
       (loaded => {
         if (loaded) {
           this.suchfilterFacade.changeSuchkontext(this.#kontext);

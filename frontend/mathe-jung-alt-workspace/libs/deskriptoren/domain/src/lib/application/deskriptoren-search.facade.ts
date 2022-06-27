@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 
 import * as fromDeskriptor from '../+state/deskriptor/deskriptor.reducer';
 import * as DeskriptorActions from '../+state/deskriptor/deskriptor.actions'
 import * as DeskriptorSelectors from '../+state/deskriptor/deskriptor.selectors';
-import { Observable } from 'rxjs';
-import { Deskriptor } from '../entities/deskriptor';
 
 @Injectable({ providedIn: 'root' })
 export class DeskriptorenSearchFacade {
@@ -17,7 +14,7 @@ export class DeskriptorenSearchFacade {
 
   constructor(private store: Store<fromDeskriptor.DeskriptorenPartialState>) { }
 
-  load(kontext: Suchkontext): void {
-    this.store.dispatch(DeskriptorActions.loadDeskriptoren({ kontext }));
+  load(): void {
+    this.store.dispatch(DeskriptorActions.loadDeskriptoren());
   }
 }

@@ -3,7 +3,7 @@ import { createEffect, Actions, ofType } from '@ngrx/effects';
 import * as DeskriptorActions from './deskriptor.actions';
 import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { map } from 'rxjs';
-import { DeskriptorDataService } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { DeskriptorDataService } from '../../infrastructure/deskriptor.data.service';
 
 @Injectable()
 export class DeskriptorEffects {

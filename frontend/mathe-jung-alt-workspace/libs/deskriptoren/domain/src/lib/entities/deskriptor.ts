@@ -1,5 +1,6 @@
-import { Suchkontext } from "@mathe-jung-alt-workspace/shared/suchfilter/domain";
 import { MjaElementWithId, MjaSetUtils } from "@mathe-jung-alt-workspace/shared/utils";
+
+export type Suchkontext = 'BILDER' | 'MEDIEN' | 'QUELLEN' | 'RAETSEL' | 'NOOP';
 
 export interface Deskriptor extends MjaElementWithId {
   name: string;

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
-import { SuchfilterFacade, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Deskriptor, DeskriptorenSearchFacade, Suchkontext } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { Subscription, tap } from 'rxjs';
 
 @Component({
@@ -21,14 +21,14 @@ export class DeskriptorenFilterComponent implements OnInit, AfterViewInit, OnDes
 
   #suchlisteSubscription: Subscription = new Subscription();
 
-  constructor(private suchfilterFacade: SuchfilterFacade) { }
+  constructor(private suchfilterFacade: SuchfilterFacade, private deskriptorenSearchFacade: DeskriptorenSearchFacade) { }
 
   ngOnInit() {
   }
 
   ngAfterViewInit(): void {
 
-    this.suchfilterFacade.loadDeskriptoren();
+    this.deskriptorenSearchFacade.load();
 
     this.#suchlisteSubscription = this.suchliste$.pipe(
       tap((liste: Deskriptor[]) => this.suchlisteDeskriptorenChanged.emit(liste))

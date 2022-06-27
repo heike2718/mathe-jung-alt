@@ -7,7 +7,7 @@ import { Deskriptor } from '../../entities/deskriptor';
 export const DESKRIPTOR_FEATURE_KEY = 'deskriptoren';
 
 export interface DeskriptorenState extends EntityState<Deskriptor> {
-  selectedId?: string | number; // which Deskriptor record has been selected
+  selectedId?: string | number; // which Deskriptor record has been selected  
   loaded: boolean; // has the Deskriptor list been loaded
 }
 
@@ -25,11 +25,6 @@ const initialState: DeskriptorenState = deskriptorAdapter.getInitialState({
 
 const deskriptorReducer = createReducer(
   initialState,
-
-  on(DeskriptorActions.loadDeskriptoren, (state) => ({
-    ...state,
-    loaded: false
-  })),
 
   on(DeskriptorActions.loadDeskriptorenSuccess, (state, { deskriptor }) =>
     deskriptorAdapter.setAll(deskriptor, { ...state, loaded: true, auswahlliste:[], suchliste: [] })

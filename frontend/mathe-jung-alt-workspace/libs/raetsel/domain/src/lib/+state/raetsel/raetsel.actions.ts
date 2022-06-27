@@ -1,4 +1,5 @@
-import { PageDefinition, Suchfilter, Suchkontext } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { Suchkontext } from '@mathe-jung-alt-workspace/deskriptoren/domain';
+import { PageDefinition, Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
 import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
 

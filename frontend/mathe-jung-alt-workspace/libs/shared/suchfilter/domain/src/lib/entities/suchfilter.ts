@@ -1,6 +1,4 @@
-import { Deskriptor, filterByKontext } from "@mathe-jung-alt-workspace/deskriptoren/domain";
-
-export type Suchkontext = 'BILDER' | 'MEDIEN' | 'QUELLEN' | 'RAETSEL' | 'NOOP';
+import { Deskriptor, filterByKontext, Suchkontext } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 
 export const QUERY_PARAM_SUCHSTRING = 'suchstring';
 export const QUERY_PARAM_DESKRIPTOREN = 'deskriptoren';

@@ -5,10 +5,6 @@ import { SuchfilterState, SUCHFILTER_FEATURE_KEY } from './suchfilter.reducer';
 
 const getSuchfilterState = createFeatureSelector<SuchfilterState>(SUCHFILTER_FEATURE_KEY);
 
-export const getDeskriptorenLoaded = createSelector(getSuchfilterState, (state: SuchfilterState) => state.deskriptorenLoaded);
-
-export const getAllDeskriptoren = createSelector(getSuchfilterState, (state: SuchfilterState) => state.deskriptoren);
-
 export const getSelectedSuchfilterUIModel = createSelector(getSuchfilterState, (state: SuchfilterState) => findSuchfilterUIModelWithKontext(state.kontext, state.suchfilterUIModels));
 export const getSelectedSuchfilter = createSelector(getSelectedSuchfilterUIModel, (model?: SuchfilterUIModel) => model ? model.suchfilter : undefined);
 

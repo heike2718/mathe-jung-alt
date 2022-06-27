@@ -1,6 +1,7 @@
 
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { DeskriptorenSearchFacade } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { Configuration, SharedConfigService } from '@mathe-jung-alt-workspace/shared/configuration';
 import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
@@ -9,7 +10,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { concatMap, map, switchMap, tap } from 'rxjs/operators';
-import { AuthResult, Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, STORAGE_KEY_USER, User } from '../entities/auth.model';
+import { Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, STORAGE_KEY_USER, User } from '../entities/auth.model';
 import { AuthHttpService } from '../infrastructure/auth-http.service';
 import * as AuthActions from './auth.actions';
 
@@ -23,6 +24,7 @@ export class AuthEffects {
     constructor(private actions$: Actions,
         @Inject(SharedConfigService) private configuration: Configuration,
         private suchfilterFacade: SuchfilterFacade,
+        private deskriptorenSearchFacade: DeskriptorenSearchFacade,
         private authHttpService: AuthHttpService,
         private messageService: MessageService,
         private safeNgrx: SafeNgrxService,
@@ -88,7 +90,7 @@ export class AuthEffects {
     sessionCreated$ = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthActions.sessionCreated),
-            tap(() => this.suchfilterFacade.loadDeskriptoren()),
+            tap(() => this.deskriptorenSearchFacade.load()),
             map(() => {
                 this.router.navigateByUrl('dashboard')
                 return noopAction();
@@ -101,7 +103,7 @@ export class AuthEffects {
             ofType(AuthActions.sessionRestored),
             map((action) => {
                 if (action.session) {
-                    this.suchfilterFacade.loadDeskriptoren();
+                    this.deskriptorenSearchFacade.load();
                 }
                 return noopAction();
             })
