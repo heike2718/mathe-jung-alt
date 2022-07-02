@@ -1,1 +1,144 @@
 /* You can add global styles to this file, and also import other style files */
+@use "@material/chips/styles";
+
+@import "~@angular/material/theming";
+
+@include mat-core();
+
+$palette: (
+  50: #d7e6f4,
+  100: #afcee9,
+  200: #88b5dd,
+  300: #609dd2,
+  400: #3884c7,
+  500: #2d6a9f,
+  600: #275d8b,
+  700: #224f77,
+  800: #1c4263,
+  900: #163550,
+  A100: #cfd8dc,
+  A200: #b0bec5,
+  A400: #78909c,
+  A700: #455a64,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000
+  ),
+);
+
+$main-color: mat-color($palette, 500);
+
+/*
+
+*/
+
+$mja-admin-primary: mat-palette($palette);
+$mja-admin-accent: mat-palette($palette, A200, A100, A400);
+$mja-admin-theme: mat-light-theme(
+    $mja-admin-primary,
+    $mja-admin-accent
+);
+
+@include angular-material-theme($mja-admin-theme);
+
+body {
+  margin: 0;
+  /* font-family: Roboto, "Helvetica Neue", sans-serif; */
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.0rem;
+}
+
+a, .link {
+  color: #2d6a9f;
+}
+
+mat-checkbox + mat-checkbox, mat-radio-button + mat-radio-button {
+  margin-left: 1.5em;
+}
+
+.container {
+  margin: 10px;
+}
+
+.centered {
+  text-align: center;
+}
+
+.bordered {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.mr-1 {
+  margin-right: 1rem;
+}
+
+.mr-2 {
+  margin-right: 2rem;
+}
+
+.m-1 {
+  margin: 1rem;
+}
+
+.p-5 {
+  padding: 5px;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.hint {
+  font-size: small;
+  color: #484949f6;
+}
+
+.hint-red {
+  font-size: small;
+  color: red;
+}
+
+

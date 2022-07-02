@@ -1,4 +1,19 @@
 <div class="main">
-    <mja-message></mja-message>
-    <router-outlet></router-outlet>
-</div>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <mja-admin-header></mja-admin-header>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <mat-drawer-container>
+        <!--
+      <mat-drawer *ngIf="authFacade.isAdmin$ | async" mode="side" opened>
+        <mja-admin-sidemenu></mja-admin-sidemenu>
+      </mat-drawer>
+      -->
+      <mat-drawer-content>      
+        <mja-message></mja-message>
+        <router-outlet></router-outlet>
+      </mat-drawer-content>
+    </mat-drawer-container>
+  </div>
+  

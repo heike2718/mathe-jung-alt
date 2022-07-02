@@ -3,7 +3,9 @@
   "projects": {
     "mja-admin": "apps/mja-admin",
     "mja-admin-e2e": "apps/mja-admin-e2e",
+    "shared-auth-domain": "libs/shared/auth/domain",
     "shared-ui-components": "libs/shared/ui-components",
+    "shared-util-configuration": "libs/shared/util-configuration",
     "shared-util-mja": "libs/shared/util-mja"
   }
 }

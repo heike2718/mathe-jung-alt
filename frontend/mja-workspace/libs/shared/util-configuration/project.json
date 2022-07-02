@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/util-configuration",
+  "sourceRoot": "libs/shared/util-configuration/src",
+  "prefix": "configuration",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/util-configuration"],
+      "options": {
+        "project": "libs/shared/util-configuration/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/util-configuration/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/util-configuration/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/util-configuration"],
+      "options": {
+        "jestConfig": "libs/shared/util-configuration/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/util-configuration/src/**/*.ts",
+          "libs/shared/util-configuration/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:shared", "type:util"]
+}
