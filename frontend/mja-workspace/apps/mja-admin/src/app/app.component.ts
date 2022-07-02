@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from '@mja-workspace/shared/util-mja';
 
 @Component({
   selector: 'mja-admin-root',
@@ -9,10 +8,10 @@ import { MessageService } from '@mja-workspace/shared/util-mja';
 export class AppComponent implements OnInit {
   title = 'mja-admin';
 
-  constructor( private messageService: MessageService){}
+  constructor() { }
 
   ngOnInit() {
-    this.messageService.info('Ja hallo dann auch vom neuen Workspace.')
+    
   }
 
 
