@@ -3,10 +3,11 @@
         {{titel}}
     </h1>
 </div>
+
 <a *ngIf="authFacade.isLoggedIn$ | async" class="dashboard" routerLink="/dashboard" title="Dashboard">
     <h1>
         {{titel}}
-    </h1>
+    </h1>    
 </a>
 <div class="security">
     <ng-container *ngIf="authFacade.isLoggedOut$ | async">
@@ -14,7 +15,7 @@
     </ng-container>
     <ng-container *ngIf="authFacade.isLoggedIn$ | async">
         <ng-container *ngIf="authFacade.getUser$ | async as user">
-            <ng-container *ngIf="user !== undefined">
+            <ng-container *ngIf="largeDevice && user !== undefined">
                 Moin, {{user.fullName}} <span *ngIf="authFacade.isAdmin$ | async">(ADMIN)</span>
             </ng-container>
         </ng-container>

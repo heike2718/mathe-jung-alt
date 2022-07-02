@@ -7,8 +7,16 @@ import { AuthFacade } from '@mja-workspace/shared/auth/domain';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  
+
+  menuOpen = false;
+
   constructor(public authFacade: AuthFacade) { }
 
   ngOnInit(): void { }
+
+  onMenuStateChanged($event: any): void {
+
+    this.menuOpen = $event;
+
+  }
 }

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { AuthFacade, AuthResult } from '@mja-workspace/shared/auth/domain';
 
 @Component({
@@ -6,10 +8,13 @@ import { AuthFacade, AuthResult } from '@mja-workspace/shared/auth/domain';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'mja-admin';
 
-  constructor(public authFacade: AuthFacade) { }
+  @ViewChild(MatSidenav)
+  sidenav!: MatSidenav;
+
+  constructor(public authFacade: AuthFacade, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
 
@@ -29,8 +34,21 @@ export class AppComponent implements OnInit {
         window.location.hash = '';
       }
     }
-    
+
   }
 
+  ngAfterViewInit() {
 
+    setTimeout(() => {
+      this.breakpointObserver.observe(['(max-width: 800px)']).subscribe((res) => {
+        if (res.matches) {
+          this.sidenav.mode = 'over';
+          this.sidenav.close();
+        } else {
+          this.sidenav.mode = 'side';
+          this.sidenav.open();
+        }
+      });
+    }, 1);
+  }
 }

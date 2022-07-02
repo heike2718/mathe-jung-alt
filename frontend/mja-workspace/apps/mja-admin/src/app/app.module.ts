@@ -15,6 +15,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedConfigurationModule } from '@mja-workspace/shared/util-configuration';
 import { HeaderComponent } from './header/header.component';
 import { SharedAuthDomainModule } from '@mja-workspace/shared/auth/domain';
+import { MatSidenav } from '@angular/material/sidenav';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { NavigationComponent } from './navigation/navigation.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,7 @@ import { SharedAuthDomainModule } from '@mja-workspace/shared/auth/domain';
     NotAuthorizedComponent,
     HomeComponent,
     HeaderComponent,
+    NavigationComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { AfterViewInit, Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { environment } from '../../environments/environment';
 
@@ -7,19 +8,31 @@ import { environment } from '../../environments/environment';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, AfterViewInit {
 
   titel = 'Mja Admin (' + environment.version + ')';
 
-  constructor(public authFacade: AuthFacade) { }
+  largeDevice = true;
+
+  constructor(public authFacade: AuthFacade, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void { }
 
-  public login(): void {
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.breakpointObserver.observe(['(max-width: 800px)']).subscribe((res) => {
+        if (res.matches) {
+         this.largeDevice = false;
+        }
+      });
+    }, 1);
+  }
+
+  login(): void {
     this.authFacade.requestLoginRedirectUrl();
   }
 
-  public logout(): void {
+  logout(): void {
     this.authFacade.logout();
   }
 }
