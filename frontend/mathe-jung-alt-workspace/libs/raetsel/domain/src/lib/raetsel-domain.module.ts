@@ -8,6 +8,7 @@ import { EffectsModule } from '@ngrx/effects';
 @NgModule({
   imports: [
     CommonModule,
+    // SharedUtilMjaModule,
     StoreModule.forFeature(
       fromRaetsel.RAETSEL_FEATURE_KEY,
       fromRaetsel.reducer

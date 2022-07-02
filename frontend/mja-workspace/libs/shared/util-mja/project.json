@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/util-mja",
+  "sourceRoot": "libs/shared/util-mja/src",
+  "prefix": "mja",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/util-mja"],
+      "options": {
+        "project": "libs/shared/util-mja/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/util-mja/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/util-mja/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/util-mja"],
+      "options": {
+        "jestConfig": "libs/shared/util-mja/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/util-mja/src/**/*.ts",
+          "libs/shared/util-mja/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:shared", "type:util"]
+}

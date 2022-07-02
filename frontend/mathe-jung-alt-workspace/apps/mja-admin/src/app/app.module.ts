@@ -15,17 +15,13 @@ import { AppComponentModule } from './app.component.module';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedAuthDomainModule } from '@mathe-jung-alt-workspace/shared/auth/domain';
-import { SharedUtilsModule } from '@mathe-jung-alt-workspace/shared/utils';
 import { SharedConfigurationModule } from '@mathe-jung-alt-workspace/shared/configuration';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LoadingInterceptor } from '@mathe-jung-alt-workspace/shared/ui-messaging';
-import { SharedUiMessagingModule } from '@mathe-jung-alt-workspace/shared/ui-components';
 
 
 @NgModule({
   declarations: [HomeComponent],
   imports: [
-    AppComponentModule,
+    // AppComponentModule,
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -33,7 +29,6 @@ import { SharedUiMessagingModule } from '@mathe-jung-alt-workspace/shared/ui-com
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     // NoopAnimationsModule, // dies verhindert das spinnen des loading indicators
-    SharedUiMessagingModule,    
     SharedConfigurationModule.forRoot({
       baseUrl: environment.apiUrl,
       production: environment.production,
@@ -42,7 +37,6 @@ import { SharedUiMessagingModule } from '@mathe-jung-alt-workspace/shared/ui-com
       admin: true
     }),
     SharedAuthDomainModule.forRoot(),
-    SharedUtilsModule,
   ],
   providers: [
     // I0014: besser nicht den LoadingInterceptor verwenden, sondern den Service gezielt einsetzen.

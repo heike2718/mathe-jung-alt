@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Configuration, SharedConfigService } from "@mathe-jung-alt-workspace/shared/configuration";
-import { Message } from "libs/shared/ui-messaging/src/lib/message/message";
+import { Message } from "@mathe-jung-alt-workspace/shared/util-mja";
 import { map, Observable, of, tap } from "rxjs";
 import { AuthResult, Session, STORAGE_KEY_DEV_SESSION_ID } from "../entities/auth.model";
 

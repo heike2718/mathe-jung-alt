@@ -3,7 +3,7 @@ import { AppComponent } from "./app.component";
 import { RouterModule } from '@angular/router';
 import { RaetselDomainModule } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { RaetselSearchModule } from '@mathe-jung-alt-workspace/raetsel/feature-search';
-import { LoadingIndicatorComponentModule, MessageComponentModule } from "@mathe-jung-alt-workspace/shared/ui-messaging";
+import { MessageComponentModule } from "@mathe-jung-alt-workspace/shared/ui-components";
 import { MaterialModule } from "@mathe-jung-alt-workspace/shared/ui-components";
 import { DeskriptorenDomainModule } from "@mathe-jung-alt-workspace/deskriptoren/domain";
 import { HeaderComponentModule } from "./core/header/header.component";
@@ -13,6 +13,7 @@ import { DashboardComponentModule } from "./dashboard/dashboard-component.module
 import { QuellenDomainModule } from "@mathe-jung-alt-workspace/quellen/domain";
 import { QuellenFeatureSearchModule } from "@mathe-jung-alt-workspace/quellen/feature-search";
 import { RaetselEditModule } from "@mathe-jung-alt-workspace/raetsel/feature-edit";
+import { SharedUtilMjaModule } from "@mathe-jung-alt-workspace/shared/util-mja";
 
 
 @NgModule({
@@ -22,12 +23,12 @@ import { RaetselEditModule } from "@mathe-jung-alt-workspace/raetsel/feature-edi
     imports: [
         MaterialModule,
         RouterModule,
-        DeskriptorenDomainModule,
-        RaetselDomainModule,
-        RaetselSearchModule,
-        RaetselEditModule,
+        // DeskriptorenDomainModule,
+        // RaetselDomainModule,
+        // RaetselSearchModule,
+        // RaetselEditModule,
+        SharedUtilMjaModule,
         MessageComponentModule,
-        LoadingIndicatorComponentModule,
         HeaderComponentModule,
         SidemenuComponentModule,
         NotAuthorizedComponentModule,

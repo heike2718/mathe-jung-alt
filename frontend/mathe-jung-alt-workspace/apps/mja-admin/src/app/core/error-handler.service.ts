@@ -1,5 +1,5 @@
 import { ErrorHandler, Injectable, Injector } from "@angular/core";
-import { MessageService } from "@mathe-jung-alt-workspace/shared/ui-messaging";
+import { MessageService } from "@mathe-jung-alt-workspace/shared/util-mja";
 
 
 @Injectable({

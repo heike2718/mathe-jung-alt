@@ -1,4 +1,4 @@
-import { MjaElementWithId, MjaSetUtils } from "@mathe-jung-alt-workspace/shared/utils";
+import { MjaElementWithId, MjaSetUtils } from "@mathe-jung-alt-workspace/shared/util-mja";
 
 export type Suchkontext = 'BILDER' | 'MEDIEN' | 'QUELLEN' | 'RAETSEL' | 'NOOP';
 

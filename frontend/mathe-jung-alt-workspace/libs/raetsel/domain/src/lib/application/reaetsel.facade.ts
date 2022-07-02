@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Deskriptor, DeskriptorenSearchFacade, filterByKontext, getDifferenzmenge } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
-import { PageDefinition, Suchfilter, SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { PageDefinition, Suchfilter } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
+import { SelectableItem } from '@mathe-jung-alt-workspace/shared/util-mja';
 import { select, Store } from '@ngrx/store';
-import { SelectableItem } from 'libs/shared/ui-components/src/lib/select-items/select-items.model';
 import { combineLatest, Observable } from 'rxjs';
 
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';

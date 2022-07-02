@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { SelectableItem } from '@mathe-jung-alt-workspace/shared/util-mja';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SelectableItem, SelectableItemsComponentModel } from './select-items.model';
+import { SelectableItemsComponentModel } from './select-items.model';
 
 @Component({
   selector: 'mja-select-items',

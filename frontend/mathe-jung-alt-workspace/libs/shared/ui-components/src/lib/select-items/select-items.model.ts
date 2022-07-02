@@ -1,11 +1,4 @@
-
-
-export interface SelectableItem {
-    readonly id: string | number;
-    readonly name: string;
-    readonly selected: boolean;
-};
-
+import { SelectableItem } from "@mathe-jung-alt-workspace/shared/util-mja";
 
 export interface SelectableItemsComponentModel {
     readonly vorrat: SelectableItem[];

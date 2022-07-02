@@ -4,11 +4,10 @@ import { map, tap } from 'rxjs/operators';
 import * as RaetselActions from './raetsel.actions';
 import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { RaetselFacade } from '../../application/reaetsel.facade';
-import { noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/utils';
 import { Router } from '@angular/router';
-import { MessageService } from '@mathe-jung-alt-workspace/shared/ui-messaging';
 import { SuchfilterFacade } from '@mathe-jung-alt-workspace/shared/suchfilter/domain';
 import { AuthHttpService } from 'libs/shared/auth/domain/src/lib/infrastructure/auth-http.service';
+import { MessageService, noopAction, SafeNgrxService } from '@mathe-jung-alt-workspace/shared/util-mja';
 
 @Injectable()
 export class RaetselEffects {

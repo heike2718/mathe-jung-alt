@@ -1,5 +1,5 @@
 import { Deskriptor, Suchkontext } from "@mathe-jung-alt-workspace/deskriptoren/domain";
-import { SelectableItem } from "libs/shared/ui-components/src/lib/select-items/select-items.model";
+import { SelectableItem } from "@mathe-jung-alt-workspace/shared/util-mja";
 
 export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';
 export type LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';

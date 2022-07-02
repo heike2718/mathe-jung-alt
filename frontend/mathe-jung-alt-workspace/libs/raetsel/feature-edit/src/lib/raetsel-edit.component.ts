@@ -8,7 +8,7 @@ import { Deskriptor } from '@mathe-jung-alt-workspace/deskriptoren/domain';
 import { QuellenFacade } from '@mathe-jung-alt-workspace/quellen/domain';
 import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayload, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mathe-jung-alt-workspace/raetsel/domain';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mathe-jung-alt-workspace/raetsel/ui-raetsel';
-import { SelectableItem } from 'libs/shared/ui-components/src/lib/select-items/select-items.model';
+import { SelectableItem } from '@mathe-jung-alt-workspace/shared/util-mja';
 import { Subscription } from 'rxjs';
 
 interface AntwortvorschlagFormValue {

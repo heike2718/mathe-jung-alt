@@ -1,0 +1,25 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@mja-workspace/shared/ui-components": [
+        "libs/shared/ui-components/src/index.ts"
+      ],
+      "@mja-workspace/shared/util-mja": ["libs/shared/util-mja/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

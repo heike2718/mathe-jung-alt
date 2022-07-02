@@ -18,6 +18,6 @@
     "shared-configuration": "libs/shared/configuration",
     "shared-suchfilter-domain": "libs/shared/suchfilter/domain",
     "shared-ui-components": "libs/shared/ui-components",
-    "shared-ui-messaging": "libs/shared/ui-messaging"
+    "shared-util-mja": "libs/shared/util-mja"
   }
 }
