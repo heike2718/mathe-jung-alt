@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { Deskriptor } from "../entities/suchfilter";
 
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class DeskriptorDataService {
 
 

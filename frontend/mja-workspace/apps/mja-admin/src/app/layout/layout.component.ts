@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { environment } from '../../environments/environment';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+
 
 @Component({
   selector: 'mja-admin-layout',

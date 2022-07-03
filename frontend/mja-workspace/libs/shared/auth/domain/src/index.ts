@@ -7,3 +7,5 @@ export * from './lib/infrastructure/auth.guard';
 export * from './lib/infrastructure/admin.guard';
 
 export * from './lib/+state/auth.actions';
+
+export * from './lib/infrastructure/auth-http.service';

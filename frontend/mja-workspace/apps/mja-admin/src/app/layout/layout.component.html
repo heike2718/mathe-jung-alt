@@ -23,26 +23,36 @@
     </mat-toolbar-row>
 </mat-toolbar>
 
+<mja-message></mja-message>
+
 <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #drawer class="sidenav" [attr.role]="isHandset ? 'dialog' : 'navigation'"
         [mode]="isHandset ? 'over' : 'side'" [opened]="isMenuOpen">
 
+        <ul>
+            <li>
+                <a data-testid="btn-home" mat-raised-button routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Startseite</a>
+            </li>
+            <li>
+                <a *ngIf="authFacade.isLoggedIn$ | async" data-testid="btn-raetsel" mat-raised-button routerLink="/raetsel" routerLinkActive="active" ariaCurrentWhenActive="page">Rätsel</a>
+            </li>
+        </ul>
+
+        <!--
         <mat-nav-list>
-            <a [routerLink]="['/home']" mat-list-item href="#" routerLinkActive="active">
-                <mat-icon routerLinkActive="active-icon">home</mat-icon><span class="ml-2"> Welcome </span>
-            </a>
-            <a [routerLink]="['/profile']" mat-list-item href="#" routerLinkActive="active">
-                <mat-icon routerLinkActive="active-icon">settings</mat-icon><span class="ml-2"> Profile Settings</span>
+            <a [routerLink]="['/raetsel']" mat-list-item href="#" routerLinkActive="active">
+                <mat-icon routerLinkActive="active-icon">home</mat-icon><span class="ml-2"> Startseite </span>
+            </a>            
+            <a *ngIf="authFacade.isLoggedIn$ | async" [routerLink]="['/raetsel']" mat-list-item href="#" routerLinkActive="active">
+                <mat-icon routerLinkActive="active-icon">settings</mat-icon><span class="ml-2"> Rätsel</span>
             </a>
         </mat-nav-list>
-
+        -->
     </mat-sidenav>
 
     <mat-sidenav-content [ngStyle]="{ 'margin-left.px': contentMargin }">
         <div class="main">
             <router-outlet #outlet="outlet"></router-outlet>
         </div>
-
-
     </mat-sidenav-content>
 </mat-sidenav-container>

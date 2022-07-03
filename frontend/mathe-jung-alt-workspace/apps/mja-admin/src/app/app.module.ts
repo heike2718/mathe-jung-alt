@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -16,6 +16,7 @@ import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedAuthDomainModule } from '@mathe-jung-alt-workspace/shared/auth/domain';
 import { SharedConfigurationModule } from '@mathe-jung-alt-workspace/shared/configuration';
+import { ErrorHandlerService } from './core/error-handler.service';
 
 
 @NgModule({
@@ -45,6 +46,8 @@ import { SharedConfigurationModule } from '@mathe-jung-alt-workspace/shared/conf
     //   multi: true,
     //   useClass: LoadingInterceptor,
     // },
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
+    { provide: LOCALE_ID, useValue: "de-DE" },
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

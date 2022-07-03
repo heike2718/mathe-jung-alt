@@ -15,6 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@mja-workspace/raetsel/domain": ["libs/raetsel/domain/src/index.ts"],
+      "@mja-workspace/raetsel/feature-search": [
+        "libs/raetsel/feature-search/src/index.ts"
+      ],
       "@mja-workspace/shared/auth/domain": [
         "libs/shared/auth/domain/src/index.ts"
       ],

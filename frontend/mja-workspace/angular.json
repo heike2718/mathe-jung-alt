@@ -3,6 +3,8 @@
   "projects": {
     "mja-admin": "apps/mja-admin",
     "mja-admin-e2e": "apps/mja-admin-e2e",
+    "raetsel-domain": "libs/raetsel/domain",
+    "raetsel-feature-search": "libs/raetsel/feature-search",
     "shared-auth-domain": "libs/shared/auth/domain",
     "shared-ui-components": "libs/shared/ui-components",
     "shared-util-configuration": "libs/shared/util-configuration",

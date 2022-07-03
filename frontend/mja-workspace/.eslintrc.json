@@ -44,7 +44,15 @@
               },
               {
                 "sourceTag": "type:ui",
-                "onlyDependOnLibsWithTags": ["type:configuration", "type:util", "domain:shared"]
+                "onlyDependOnLibsWithTags": [
+                  "type:configuration",
+                  "type:util",
+                  "domain:shared"
+                ]
+              },
+              {
+                "sourceTag": "domain:raetsel",
+                "onlyDependOnLibsWithTags": ["domain:raetsel", "domain:shared"]
               }
             ]
           }

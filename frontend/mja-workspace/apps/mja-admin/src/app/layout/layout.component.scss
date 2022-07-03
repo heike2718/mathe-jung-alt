@@ -4,7 +4,7 @@
 }
 
 .sidenav-container {
-    height: 92%;
+    height: 100%;
     position: relative;
 }
 
@@ -108,3 +108,12 @@
     color: white;
 }
 
+ul {
+    padding: 0;
+    text-align: center;
+
+    li {
+        list-style-type: none;
+        padding: 1em;
+    }
+}

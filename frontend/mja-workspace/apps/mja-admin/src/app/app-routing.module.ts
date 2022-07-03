@@ -1,53 +1,60 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthGuard } from '@mja-workspace/shared/auth/domain';
 import { HomeComponent } from './home/home.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 
-const Routes = [
+const _routes = [
     { path: 'forbidden', component: NotAuthorizedComponent },
     {
         path: '',
         pathMatch: 'full',
         component: HomeComponent,
         children: [
-            // {
-            //     path: 'dashboard',
-            //     loadChildren: () =>
-            //         import('./dashboard/dashboard-component.module').then((m) => m.DashboardComponentModule),
-            // },
-            // {
-            //     path: 'quellen',
-            //     loadChildren: () =>
-            //         import('@mathe-jung-alt-workspace/quellen/feature-search').then((m) => m.QuellenFeatureSearchModule),
+            {
+                path: 'raetsel',
+                canActivate: [AuthGuard],
+                // loadChildren: () =>
+                //     import('@mja-workspace/raetsel/feature-search').then((m) => m.RaetselFeatureSearchModule),
+                component: NotAuthorizedComponent
 
-            // },
-            // {
-            //     path: 'raetsel',
-            //     loadChildren: () =>
-            //         import('@mathe-jung-alt-workspace/raetsel/feature-search').then((m) => m.RaetselSearchModule),
-
-            // },
-            // {
-            //     path: 'raetseleditor',
-            //     loadChildren: () =>
-            //         import('@mathe-jung-alt-workspace/raetsel/feature-edit').then((m) => m.RaetselEditModule),
-
-            // },
-            // {
-            //     path: '',
-            //     pathMatch: 'full',
-            //     component: HomeComponent,
-            // },
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                component: HomeComponent,
+            },
         ]
     },
-    { path: '**', component: HomeComponent },
+    { path: '**', component: NotFoundComponent },
+];
+
+const routes = [
+    { path: 'forbidden', component: NotAuthorizedComponent },
+    {
+        path: 'raetsel',
+        loadChildren: () =>
+            import('@mja-workspace/raetsel/feature-search').then((m) => m.RaetselFeatureSearchModule),
+
+    },
+    {
+        path: '',
+        pathMatch: 'full',
+        component: HomeComponent,
+    },
+    { path: '**', component: NotFoundComponent },
 ];
 
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(Routes)
+        RouterModule.forRoot(
+            routes,
+            // { enableTracing: false, useHash: true, relativeLinkResolution: 'legacy' }
+            { enableTracing: false, useHash: false }
+        )
     ],
     exports: [
         RouterModule

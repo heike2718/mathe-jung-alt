@@ -23,6 +23,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import {MatListModule} from '@angular/material/list';
 
+
 const materialModules = [
   MatToolbarModule,
   MatSidenavModule,
@@ -45,9 +46,10 @@ const materialModules = [
   MatDialogModule,
   MatDividerModule,
   MatMenuModule,
-  MatListModule
+  MatListModule,
 
 ];
+
 
 // https://fonts.google.com/icons?selected=Material+Icons
 

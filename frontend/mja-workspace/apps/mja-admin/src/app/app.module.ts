@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedUiComponentsModule } from '@mja-workspace/shared/ui-components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { AppComponent } from './app.component';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -16,6 +15,11 @@ import { SharedConfigurationModule } from '@mja-workspace/shared/util-configurat
 import { SharedAuthDomainModule } from '@mja-workspace/shared/auth/domain';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutComponent } from './layout/layout.component';
+import { RaetselFeatureSearchModule } from '@mja-workspace/raetsel/feature-search';
+import { SuchfilterDomainModule } from '@mja-workspace/suchfilter/domain';
+import { ErrorHandlerService } from './error-handler.service';
+import { RouterModule } from '@angular/router';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -24,13 +28,17 @@ import { LayoutComponent } from './layout/layout.component';
     HomeComponent,
     NavigationComponent,
     LayoutComponent,
+    NotFoundComponent,
   ],
   imports: [
-    AppRoutingModule,
+    RouterModule,
+    AppRoutingModule,   
     BrowserModule,
     BrowserAnimationsModule,
     SharedAuthDomainModule,
     SharedUiComponentsModule,
+    SuchfilterDomainModule,
+    RaetselFeatureSearchModule,
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
@@ -43,7 +51,11 @@ import { LayoutComponent } from './layout/layout.component';
       admin: true,
     }),
   ],
-  providers: [],
+  providers: [
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
+    { provide: LOCALE_ID, useValue: 'de-DE' },
+    // { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
