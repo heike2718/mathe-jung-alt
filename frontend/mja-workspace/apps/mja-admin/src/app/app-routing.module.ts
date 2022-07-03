@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AuthGuard } from '@mja-workspace/shared/auth/domain';
 import { HomeComponent } from './home/home.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -15,11 +14,8 @@ const _routes = [
         children: [
             {
                 path: 'raetsel',
-                canActivate: [AuthGuard],
-                // loadChildren: () =>
-                //     import('@mja-workspace/raetsel/feature-search').then((m) => m.RaetselFeatureSearchModule),
-                component: NotAuthorizedComponent
-
+                loadChildren: () =>
+                    import('@mja-workspace/raetsel/feature-search').then((m) => m.RaetselFeatureSearchModule)
             },
             {
                 path: '',

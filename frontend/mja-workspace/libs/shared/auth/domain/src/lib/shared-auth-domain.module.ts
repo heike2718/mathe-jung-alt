@@ -8,6 +8,7 @@ import * as fromAuth from './+state/auth.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './+state/auth.effects';
 import { AuthInterceptor } from './infrastructure/auth.interceptor';
+import { AuthGuard } from './infrastructure/auth.guard';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { AuthInterceptor } from './infrastructure/auth.interceptor';
     ),
     EffectsModule.forFeature([AuthEffects]),
   ],
+  
 })
 export class SharedAuthDomainModule {
 
@@ -29,6 +31,7 @@ export class SharedAuthDomainModule {
     return {
       ngModule: SharedAuthDomainModule,
       providers: [
+        AuthGuard,
         {
           provide: HTTP_INTERCEPTORS,
           useClass: AuthInterceptor,
