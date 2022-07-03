@@ -11,8 +11,8 @@ import { AuthFacade, AuthResult } from '@mja-workspace/shared/auth/domain';
 export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
   title = 'mja-admin';
 
-  @ViewChild(MatSidenav)
-  sidenav!: MatSidenav;
+  // @ViewChild(MatSidenav)
+  // sidenav!: MatSidenav;
 
   constructor(public authFacade: AuthFacade, private breakpointObserver: BreakpointObserver) { }
 
@@ -39,20 +39,20 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   ngAfterViewInit() {
 
-    setTimeout(() => {
-      this.breakpointObserver.observe(['(max-width: 800px)']).subscribe((res) => {
-        if (res.matches) {
-          this.sidenav.mode = 'over';
-          this.sidenav.close();
-        } else {
-          this.sidenav.mode = 'side';
-          this.sidenav.open();
-        }
-      });
-    }, 1);
+    // setTimeout(() => {
+    //   this.breakpointObserver.observe(['(max-width: 800px)']).subscribe((res) => {
+    //     if (res.matches) {
+    //       this.sidenav.mode = 'over';
+    //       this.sidenav.close();
+    //     } else {
+    //       this.sidenav.mode = 'side';
+    //       this.sidenav.open();
+    //     }
+    //   });
+    // }, 1);
   }
 
   ngAfterViewChecked(): void {
-      console.log('AppComponent=>AfterViewChecked');
+      // console.log('AppComponent=>AfterViewChecked');
   }
 }

@@ -20,6 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
+import {MatListModule} from '@angular/material/list';
 
 const materialModules = [
   MatToolbarModule,
@@ -41,7 +43,10 @@ const materialModules = [
   MatIconModule,
   MatSlideToggleModule,
   MatDialogModule,
-  MatDividerModule
+  MatDividerModule,
+  MatMenuModule,
+  MatListModule
+
 ];
 
 // https://fonts.google.com/icons?selected=Material+Icons

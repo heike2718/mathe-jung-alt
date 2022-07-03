@@ -13,19 +13,17 @@ import { NotAuthorizedComponent } from './not-authorized/not-authorized.componen
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedConfigurationModule } from '@mja-workspace/shared/util-configuration';
-import { HeaderComponent } from './header/header.component';
 import { SharedAuthDomainModule } from '@mja-workspace/shared/auth/domain';
-import { MatSidenav } from '@angular/material/sidenav';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { NavigationComponent } from './navigation/navigation.component';
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotAuthorizedComponent,
     HomeComponent,
-    HeaderComponent,
     NavigationComponent,
+    LayoutComponent,
   ],
   imports: [
     AppRoutingModule,

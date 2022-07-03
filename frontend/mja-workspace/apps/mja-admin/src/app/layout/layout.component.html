@@ -1,0 +1,48 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+
+        <button mat-icon-button (click)="drawer.toggle();">
+            <mat-icon routerLinkActive="active-icon">menu</mat-icon>
+        </button>
+        <span>{{title}}</span>
+
+        <span class="toolbar-spacer"></span>
+
+        <ng-container *ngIf="authFacade.isLoggedOut$ | async">
+            <a (click)="login()" data-testid="btn-log-in" mat-raised-button>einloggen</a>
+        </ng-container>
+        <ng-container *ngIf="authFacade.isLoggedIn$ | async">
+            <ng-container *ngIf="authFacade.getUser$ | async as user">
+                <div *ngIf="isHandset === false && user !== undefined" class="mr-1">
+                    Moin, {{user.fullName}} <span *ngIf="authFacade.isAdmin$ | async">(ADMIN)</span>
+                </div>
+            </ng-container>
+            <a (click)="logout()" data-testid="btn-log-out" mat-raised-button>ausloggen</a>
+        </ng-container>
+
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav" [attr.role]="isHandset ? 'dialog' : 'navigation'"
+        [mode]="isHandset ? 'over' : 'side'" [opened]="isMenuOpen">
+
+        <mat-nav-list>
+            <a [routerLink]="['/home']" mat-list-item href="#" routerLinkActive="active">
+                <mat-icon routerLinkActive="active-icon">home</mat-icon><span class="ml-2"> Welcome </span>
+            </a>
+            <a [routerLink]="['/profile']" mat-list-item href="#" routerLinkActive="active">
+                <mat-icon routerLinkActive="active-icon">settings</mat-icon><span class="ml-2"> Profile Settings</span>
+            </a>
+        </mat-nav-list>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content [ngStyle]="{ 'margin-left.px': contentMargin }">
+        <div class="main">
+            <router-outlet #outlet="outlet"></router-outlet>
+        </div>
+
+
+    </mat-sidenav-content>
+</mat-sidenav-container>
