@@ -17,8 +17,34 @@
                 "onlyDependOnLibsWithTags": ["*"]
               },
               {
+                "sourceTag": "type:util",
+                "onlyDependOnLibsWithTags": ["type:configuration"]
+              },
+              {
                 "sourceTag": "domain:auth",
-                "onlyDependOnLibsWithTags": ["domain:auth", "domain:shared"]
+                "onlyDependOnLibsWithTags": [
+                  "domain:auth",
+                  "type:util",
+                  "type:configuration"
+                ]
+              },
+              {
+                "sourceTag": "domain:deskriptoren",
+                "onlyDependOnLibsWithTags": [
+                  "domain:deskriptoren",
+                  "domain:shared"
+                ]
+              },
+              {
+                "sourceTag": "domain:suchfilter",
+                "onlyDependOnLibsWithTags": [
+                  "domain:suchfilter",
+                  "domain:shared"
+                ]
+              },
+              {
+                "sourceTag": "type:ui",
+                "onlyDependOnLibsWithTags": ["type:configuration", "type:util", "domain:shared"]
               }
             ]
           }

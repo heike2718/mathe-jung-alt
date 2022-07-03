@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { AuthFacade, AuthResult } from '@mja-workspace/shared/auth/domain';
 
@@ -8,7 +8,7 @@ import { AuthFacade, AuthResult } from '@mja-workspace/shared/auth/domain';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
   title = 'mja-admin';
 
   @ViewChild(MatSidenav)
@@ -50,5 +50,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
       });
     }, 1);
+  }
+
+  ngAfterViewChecked(): void {
+      console.log('AppComponent=>AfterViewChecked');
   }
 }

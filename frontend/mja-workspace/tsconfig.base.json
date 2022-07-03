@@ -24,7 +24,10 @@
       "@mja-workspace/shared/util-configuration": [
         "libs/shared/util-configuration/src/index.ts"
       ],
-      "@mja-workspace/shared/util-mja": ["libs/shared/util-mja/src/index.ts"]
+      "@mja-workspace/shared/util-mja": ["libs/shared/util-mja/src/index.ts"],
+      "@mja-workspace/suchfilter/domain": [
+        "libs/suchfilter/domain/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

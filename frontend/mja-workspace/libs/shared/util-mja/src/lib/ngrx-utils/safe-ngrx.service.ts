@@ -118,6 +118,10 @@ export class SafeNgrxService {
 
     private extractServerErrorMessage(error: HttpErrorResponse): Message | undefined {
 
+        if (error.status === 0) {
+            return { level: 'ERROR', message: 'Der Server ist nicht erreichbar.' };
+        }
+
         const errorResponse: HttpErrorResponse = <HttpErrorResponse>error;
 
         if (errorResponse.status === 400) {
