@@ -4,29 +4,6 @@ import { HomeComponent } from './home/home.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
-
-const _routes = [
-    { path: 'forbidden', component: NotAuthorizedComponent },
-    {
-        path: '',
-        pathMatch: 'full',
-        component: HomeComponent,
-        children: [
-            {
-                path: 'raetsel',
-                loadChildren: () =>
-                    import('@mja-workspace/raetsel/feature-search').then((m) => m.RaetselFeatureSearchModule)
-            },
-            {
-                path: '',
-                pathMatch: 'full',
-                component: HomeComponent,
-            },
-        ]
-    },
-    { path: '**', component: NotFoundComponent },
-];
-
 const routes = [
     { path: 'forbidden', component: NotAuthorizedComponent },
     {

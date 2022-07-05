@@ -17,8 +17,14 @@ import { AuthGuard } from '@mja-workspace/shared/auth/domain';
     MaterialModule,
     RouterModule.forChild([
       {
-        path: 'raetsel',
-        // canActivate: [AuthGuard],
+        path: 'uebersicht',
+        canActivate: [AuthGuard],
+        component: SearchComponent,
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        canActivate: [AuthGuard],
         component: SearchComponent,
       }
     ]),

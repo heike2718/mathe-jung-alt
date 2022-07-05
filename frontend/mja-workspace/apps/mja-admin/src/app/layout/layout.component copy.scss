@@ -1,0 +1,109 @@
+.main {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.sidenav-container {
+    height: 92%;
+    position: relative;
+}
+
+.sidenav-content {
+    width: 100%;
+}
+
+.sidenav {
+    width: 200px;
+}
+
+.sidenav .mat-toolbar {
+    background: #fff;
+    color: #fff;
+}
+
+.mat-toolbar.mat-primary {
+    //background: #eee;  // Change the color of the navigation bar
+    //color: #000;  // Change the font color of the navigation bar
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+
+.is-active {
+    background-color: #2D6B9F;
+    color: #fff;
+}
+
+
+.is-active:hover {
+    background-color: #2D6B9F;
+}
+
+.is-active:focus {
+    background-color: #2D6B9F;
+    color: #fff;
+}
+
+.logo {
+    margin-right: 10px;
+    font-size: 18px;
+    width: 100%;
+    font-weight: bolder;
+    text-align: center;
+
+}
+
+.toolbar-icon {
+    padding: 0 0px;
+}
+
+.sidenavContainer {
+    height: 100%;
+}
+
+.toolbar-spacer {
+    flex: 1 1 auto;
+}
+
+.top-nav {
+    height: 64px;
+    position: fixed;
+    top: 0px;
+}
+
+.fixed-toolbar {
+    position: sticky;
+    z-index: 5;
+    top: 0;
+    width: 100%;
+}
+
+.inner-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.nav-link {
+    cursor: pointer;
+}
+
+.navbar-light .navbar-nav .nav-link.active {
+    background: #2D6B9F;
+    color: white;
+}
+
+
+.active {
+    background-color: #2D6B9F;
+    color: white;
+}
+
+.active:active {
+    background-color: #2D6B9F;
+}
+
+.active-icon {
+    color: white;
+}
