@@ -13,7 +13,7 @@ mat-sidenav {
     border-right: none;
     // background: #2D6B9F;
     background-color: #5A82AF;
-    color: black;
+    // color: white;
     border-radius: 4px;
     padding: 8px;
     text-align: center;
@@ -29,7 +29,7 @@ mat-sidenav {
     justify-content: center;
     // align-items: center;
 
-    font-size: 1.5rem;
+    font-size: 1rem;
     // color: lightgray;
 }
 
@@ -104,6 +104,3 @@ mat-divider {
     left: 0;
 }
 
-.nav-link {
-    cursor: pointer;
-}
