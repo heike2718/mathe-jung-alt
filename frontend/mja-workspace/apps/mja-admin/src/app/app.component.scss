@@ -1,3 +1,11 @@
+.main {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+}
+
 mat-toolbar {
     background: #2D6B9F;
     color: white;
@@ -30,8 +38,6 @@ mat-sidenav {
 mat-sidenav-container {
     height: calc(100vh - 65px);
 }
-
-
 
 /* smartphones, Android phones, landscape iPhone */
 @media only screen and (max-device-width: 800px) {

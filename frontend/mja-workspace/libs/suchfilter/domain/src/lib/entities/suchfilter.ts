@@ -185,6 +185,28 @@ export function getDifferenzmenge(alle: Deskriptor[], auszuschliessen: Deskripto
     const setUtils: MjaSetUtils<Deskriptor> = new MjaSetUtils();
     const result: Deskriptor[] = setUtils.getDifferenzmenge(setUtils.toMjaEntityArray(alle), setUtils.toMjaEntityArray(auszuschliessen));
     return result;
+};
+
+export function deskriptorenToString(deskriptoren: Deskriptor[]): string {
+
+    if (deskriptoren.length === 0) {
+      return '';
+    }
+  
+    let result = '';
+  
+    for (let index = 0; index < deskriptoren.length; index++) {
+  
+      const deskriptor = deskriptoren[index];
+      if (index < deskriptoren.length - 1) {
+        result += deskriptor.name + ", ";
+      } else {
+        result += deskriptor.name;
+      }
+  
+    }
+  
+    return result;
   };
 
 

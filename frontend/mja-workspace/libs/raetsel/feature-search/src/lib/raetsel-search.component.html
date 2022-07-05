@@ -1,0 +1,85 @@
+<h1>Rätsel</h1>
+
+<div class="wrapper m4">
+
+    <ng-container *ngIf="isAdmin">
+        <mja-admin-suchfilter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"
+            (inputChanged)="onInputChanged($event)">
+        </mja-admin-suchfilter>
+    </ng-container>
+
+    <ng-container *ngIf="!isAdmin">
+        <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)">
+        </mja-deskriptoren-filter>
+    </ng-container>
+
+    <p *ngIf="suchfilter">Suchkriterien: {{suchfilter | json}}</p>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="schluessel"
+        matSortDirection="asc" matSortDisableClear>
+
+        <ng-container matColumnDef="schluessel">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> SCHLUESSEL </th>
+            <td mat-cell *matCellDef="let raetsel">
+                <span *ngIf="raetsel.status === 'ERFASST'">
+                    <mat-icon>block</mat-icon>
+                </span>
+                <span *ngIf="raetsel.status === 'FREIGEGEBEN'">
+                    <mat-icon>check_circle_outline</mat-icon>
+                </span>
+                {{raetsel.schluessel}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let raetsel"> {{raetsel.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="deskriptoren">
+            <th mat-header-cell *matHeaderCellDef> Deskriptoren </th>
+            <td mat-cell *matCellDef="let raetsel"> {{deskriptorenToString(raetsel)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="kommentar">
+            <th mat-header-cell *matHeaderCellDef> Kommentar </th>
+            <td mat-cell *matCellDef="let raetsel"> {{raetsel.kommentar}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+        <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();" (click)="onRowClicked(row)"></tr>
+
+    </table>
+    <mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[10,20,50]" showFirstLastButtons></mat-paginator>
+
+    <!--
+    <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+      <div fxFlex="0 1 calc(20%-20px)">
+        <button mat-raised-button color="primary" (click)="neueSuche()">neue Suche</button>
+      </div>
+      <ng-component *ngIf="(quellenFacade.selectedQuelle$ | async) === undefined else selectedQuelle">
+        <div fxFlex="0 1 calc(20%-20px)">
+          <button mat-raised-button color="primary" [disabled]="true" (click)="neuesRaetsel()">neues Rätsel</button>
+        </div>
+        <div fxFlex="0 1 calc(80%-20px)">
+          Quelle: zuerst <button mat-raised-button color="primary" (click)="quelleWaehlen()">Quelle wählen</button> dann
+          neues Rätsel anlegen
+        </div>
+      </ng-component>
+    </div>
+  -->
+
+</div>
+
+<!--
+  <ng-template #selectedQuelle>
+    <div fxLayout="column m-1">
+      <div *ngIf="(quellenFacade.selectedQuelle$ | async) as quelle">
+        <div fxFlex="0 1 calc(20%-20px)">
+          <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
+        </div>
+        <div fxFlex="0 1 calc(80%-20px)" class="m-1">Quelle: {{quelle.name}}</div>
+      </div>
+    </div>
+  </ng-template>
+  -->

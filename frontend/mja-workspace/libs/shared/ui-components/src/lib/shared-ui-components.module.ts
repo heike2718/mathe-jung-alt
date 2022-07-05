@@ -13,6 +13,11 @@ import { AdminSuchfilterComponent } from './admin-suchfilter/admin-suchfilter.co
     DeskriptorenFilterComponent,
     AdminSuchfilterComponent
   ],
-  exports: [MessageComponent, FormsModule, MaterialModule, SharedUtilMjaModule],
+  exports: [MessageComponent,
+    DeskriptorenFilterComponent,
+    AdminSuchfilterComponent,
+    FormsModule,
+    MaterialModule,
+    SharedUtilMjaModule],
 })
 export class SharedUiComponentsModule {}

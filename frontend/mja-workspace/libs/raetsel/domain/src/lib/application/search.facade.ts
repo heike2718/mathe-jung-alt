@@ -21,6 +21,12 @@ export class SearchFacade {
     this.#findRaetsel(suchfilter, pageDefinition);
   }
 
+  /*  Setzt die Suchkette mit serverseitiger Pagination in Gang. Hierzu wird ein select count mit dem Suchfilter abgesetzt */
+  triggerSearch(suchfilter: Suchfilter, pageDefinition: PageDefinition): void {
+    this.store.dispatch(RaetselActions.selectPage({ pageDefinition }));
+    this.store.dispatch(RaetselActions.prepareSearch({suchfilter, pageDefinition}));
+  }
+
 // ///// private methods //////
 
   #findRaetsel(suchfilter: Suchfilter, pageDefinition: PageDefinition): void {

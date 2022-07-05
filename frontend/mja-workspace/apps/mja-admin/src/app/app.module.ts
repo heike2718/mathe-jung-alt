@@ -37,7 +37,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     BrowserAnimationsModule,
     SharedAuthDomainModule,
     SharedUiComponentsModule,
-    // SuchfilterDomainModule,
+    SuchfilterDomainModule,
     RaetselFeatureSearchModule,
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers, { metaReducers }),

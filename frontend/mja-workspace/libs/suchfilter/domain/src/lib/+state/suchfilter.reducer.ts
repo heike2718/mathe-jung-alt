@@ -1,5 +1,5 @@
 import { createReducer, on, Action } from '@ngrx/store';
-import { Deskriptor, findSuchfilterUIModelWithKontext, initialSuchfilter, Suchfilter, SuchfilterUIModel, Suchkontext } from '../entities/suchfilter';
+import { Deskriptor, findSuchfilterUIModelWithKontext, initialSuchfilter, Suchfilter, SuchfilterUIModel, Suchkontext, createInitialSuchfilterUIModels } from '../entities/suchfilter';
 import * as SuchfilterActions from './suchfilter.actions';
 
 
@@ -26,7 +26,7 @@ const initialState: SuchfilterState = {
 const suchfilterReducer = createReducer(
     initialState,
     
-    on(SuchfilterActions.loadDeskriptorenSuccess, (state, action) => ({...state, deskriptoren: action.deskriptoren, loaded: true})),
+    on(SuchfilterActions.loadDeskriptorenSuccess, (state, action) => ({...state, deskriptoren: action.deskriptoren, loaded: true, suchfilterUIModels: createInitialSuchfilterUIModels(action.deskriptoren)})),
 
     on(SuchfilterActions.suchkontextChanged, (state, action) => {
 
