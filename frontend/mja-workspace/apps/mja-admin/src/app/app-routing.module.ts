@@ -7,6 +7,12 @@ import { NotFoundComponent } from './not-found/not-found.component';
 const routes = [
     { path: 'forbidden', component: NotAuthorizedComponent },
     {
+        path: 'quellen',
+        loadChildren: () =>
+            import('@mja-workspace/quellen/feature-search').then((m) => m.QuellenFeatureSearchModule),
+
+    },
+    {
         path: 'raetsel',
         loadChildren: () =>
             import('@mja-workspace/raetsel/feature-search').then((m) => m.RaetselFeatureSearchModule),

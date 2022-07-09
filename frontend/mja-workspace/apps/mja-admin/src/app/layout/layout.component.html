@@ -33,6 +33,9 @@
             <a [routerLink]="['/']" mat-list-item href="#" routerLinkActive="active">
                 <mat-icon routerLinkActive="active-icon">home</mat-icon><span class="ml-2"> Startseite </span>
             </a>            
+            <a *ngIf="authFacade.isAdmin$| async" [routerLink]="['/quellen/uebersicht']" mat-list-item href="#" routerLinkActive="active">
+                <mat-icon routerLinkActive="active-icon">settings</mat-icon><span class="ml-2"> Quellen</span>
+            </a>
             <a *ngIf="authFacade.isLoggedIn$ | async" [routerLink]="['/raetsel/uebersicht']" mat-list-item href="#" routerLinkActive="active">
                 <mat-icon routerLinkActive="active-icon">settings</mat-icon><span class="ml-2"> Rätsel</span>
             </a>

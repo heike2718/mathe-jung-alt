@@ -3,6 +3,8 @@
   "projects": {
     "mja-admin": "apps/mja-admin",
     "mja-admin-e2e": "apps/mja-admin-e2e",
+    "quellen-domain": "libs/quellen/domain",
+    "quellen-feature-search": "libs/quellen/feature-search",
     "raetsel-domain": "libs/raetsel/domain",
     "raetsel-feature-search": "libs/raetsel/feature-search",
     "shared-auth-domain": "libs/shared/auth/domain",

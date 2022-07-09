@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Raetsel, RaetselDataSource, SearchFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
-import { Deskriptor, deskriptorenToString, PageDefinition, PaginationState, Suchfilter, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
+import { deskriptorenToString, PageDefinition, PaginationState, Suchfilter, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { filter, Subscription, debounceTime, tap } from 'rxjs';
 
 

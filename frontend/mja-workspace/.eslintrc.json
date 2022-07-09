@@ -53,6 +53,10 @@
               {
                 "sourceTag": "domain:raetsel",
                 "onlyDependOnLibsWithTags": ["domain:raetsel", "domain:shared"]
+              },
+              {
+                "sourceTag": "domain:quellen",
+                "onlyDependOnLibsWithTags": ["domain:quellen", "domain:shared"]
               }
             ]
           }

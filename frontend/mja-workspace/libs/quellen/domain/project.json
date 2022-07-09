@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/quellen/domain",
+  "sourceRoot": "libs/quellen/domain/src",
+  "prefix": "quellen",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/quellen/domain"],
+      "options": {
+        "project": "libs/quellen/domain/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/quellen/domain/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/quellen/domain/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/quellen/domain"],
+      "options": {
+        "jestConfig": "libs/quellen/domain/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/quellen/domain/src/**/*.ts",
+          "libs/quellen/domain/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:quellen", "type:domain-logic"]
+}

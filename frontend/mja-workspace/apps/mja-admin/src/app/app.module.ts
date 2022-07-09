@@ -20,6 +20,8 @@ import { SuchfilterDomainModule } from '@mja-workspace/suchfilter/domain';
 import { ErrorHandlerService } from './error-handler.service';
 import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { QuellenDomainModule } from '@mja-workspace/quellen/domain';
+import { QuellenFeatureSearchModule } from '@mja-workspace/quellen/feature-search';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     SharedAuthDomainModule,
     SharedUiComponentsModule,
     SuchfilterDomainModule,
+    QuellenDomainModule,
+    QuellenFeatureSearchModule,
     RaetselFeatureSearchModule,
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers, { metaReducers }),
