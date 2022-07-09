@@ -5,6 +5,7 @@ import { select, Store } from '@ngrx/store';
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
 import * as RaetselSelectors from '../+state/raetsel/raetsel.selectors';
+import { Raetsel } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class SearchFacade {
@@ -25,6 +26,10 @@ export class SearchFacade {
   triggerSearch(suchfilter: Suchfilter, pageDefinition: PageDefinition): void {
     this.store.dispatch(RaetselActions.selectPage({ pageDefinition }));
     this.store.dispatch(RaetselActions.prepareSearch({suchfilter, pageDefinition}));
+  }
+
+  selectRaetsel(raetsel: Raetsel): void {
+    this.store.dispatch(RaetselActions.raetselSelected({ raetsel }));
   }
 
 // ///// private methods //////

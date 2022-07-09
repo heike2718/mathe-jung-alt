@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, filter, merge, Subscription, tap } 
   templateUrl: './quellen-search.component.html',
   styleUrls: ['./quellen-search.component.scss'],
 })
-export class QuellenSearchComponent implements OnInit, OnDestroy, AfterViewInit {
+export class QuellenSearchComponent implements OnInit, OnDestroy, AfterViewInit  {
 
   #kontext: Suchkontext = 'QUELLEN';
   

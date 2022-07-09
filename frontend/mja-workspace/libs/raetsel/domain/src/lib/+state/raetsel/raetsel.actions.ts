@@ -1,6 +1,6 @@
 import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
-import { Raetsel } from '../../entities/raetsel';
+import { Raetsel, RaetselDetails } from '../../entities/raetsel';
 
 export const prepareSearch = createAction(
   '[Raetsel] prepareSearch',
@@ -34,6 +34,20 @@ export const findRaetselSuccess = createAction(
 export const pageSelected = createAction(
   '[Raetsel] page selected',
   props<{ raetsel: Raetsel[] }>()
+);
+
+export const raetselSelected = createAction(
+  '[Raetsel] raetselliste raetsel selected',
+  props<{ raetsel: Raetsel }>()
+);
+
+export const raetselDetailsLoaded = createAction(
+  '[Raetsel] details loaded',
+  props<{ raetselDetails: RaetselDetails }>()
+);
+
+export const showRaetselDetails = createAction(
+  '[Raetsel] show details'
 );
 
 export const raetsellisteCleared = createAction(

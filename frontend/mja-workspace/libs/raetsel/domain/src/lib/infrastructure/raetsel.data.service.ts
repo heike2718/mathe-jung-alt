@@ -12,7 +12,7 @@ import { Suchfilter,
   SuchfilterQueryParameterMapper,
   PageDefinition
 } from '@mja-workspace/suchfilter/domain';
-import { Raetsel } from '../entities/raetsel';
+import { Raetsel, RaetselDetails } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselDataService {
@@ -79,5 +79,12 @@ export class RaetselDataService {
     
     const headers = new HttpHeaders().set('Accept', 'application/json');
     return this.http.get<Raetsel[]>(this.#url, { headers, params });
+  }
+
+  public findById(uuid: string): Observable<RaetselDetails> {
+
+    const url = this.#url + '/' + uuid;
+    const headers = new HttpHeaders().set('Accept', 'application/json');
+    return this.http.get<RaetselDetails>(url, { headers: headers });
   }
 }

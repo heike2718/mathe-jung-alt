@@ -8,6 +8,13 @@ export const anzeigeAntwortvorschlaegeSelectInput: string[] = [
   'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
 ];
 
+export interface Antwortvorschlag {
+  readonly buchstabe: string;
+  readonly text?: string;
+  readonly korrekt: boolean;
+};
+
+
 /** Minimalset an Attributen, die bei einer Suche geladen werden sollen */
 export interface Raetsel {
   readonly id: string;
@@ -16,4 +23,19 @@ export interface Raetsel {
   readonly status: STATUS;
   readonly kommentar?: string;
   readonly deskriptoren: Deskriptor[];
+};
+
+export interface RaetselDetails {
+  readonly id: string;
+  readonly schluessel: string;
+  readonly name: string;
+  readonly status: STATUS;
+  readonly frage: string;
+  readonly loesung?: string;
+  readonly kommentar?: string;
+  readonly quelleId: string;
+  readonly antwortvorschlaege: Antwortvorschlag[];
+  readonly deskriptoren: Deskriptor[];
+  readonly imageFrage: string | null;
+  readonly imageLoesung: string | null;
 };

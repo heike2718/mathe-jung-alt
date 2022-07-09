@@ -37,6 +37,27 @@ export class RaetselEffects {
       )
     ));
 
+  selectRaetsel$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.raetselSelected),
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.raetselDataService.findById(action.raetsel.id).pipe(
+          map((raetselDetails) =>
+            RaetselActions.raetselDetailsLoaded({ raetselDetails })
+          )
+        ), 'Ups, beim Laden der Details ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
+
+  showDetailsAfterLoaded$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.raetselDetailsLoaded),
+      tap(() => {
+        this.router.navigateByUrl('raetsel/details');
+      }),
+    ), { dispatch: false });
+
 
 
   constructor(
