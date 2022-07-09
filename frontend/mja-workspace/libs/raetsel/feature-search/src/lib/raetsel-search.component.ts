@@ -61,15 +61,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
     this.#paginationStateSubscription = this.searchFacade.paginationState$.subscribe(
       (state: PaginationState) => this.anzahlRaetsel = state.anzahlTreffer
-    );
-
-    this.#suchfilterSubscription = this.suchfilterFacade.selectedSuchfilter$.subscribe(
-      (selectedSuchfilter) => {
-        if (selectedSuchfilter) {
-          this.suchfilter = selectedSuchfilter;
-        }
-      }
-    );
+    );    
 
     this.#canStartSucheSubscription = this.suchfilterFacade.canStartSuche$.pipe(
       filter((ready) => ready),
@@ -87,6 +79,16 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       admin => this.isAdmin = admin
 
     );
+
+    this.#suchfilterSubscription = this.suchfilterFacade.selectedSuchfilter$.subscribe(
+      (selectedSuchfilter) => {
+        if (selectedSuchfilter) {
+          this.suchfilter = selectedSuchfilter;
+          // this.#triggerSuche(this.suchfilter);
+        }
+      }
+    );
+    
   }
 
   ngAfterViewInit(): void {
@@ -97,18 +99,20 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
       // this.#initPaginator();
       // hier den init-Kram oder
-    }, 0);
+    }, 0);   
+
+    // oder explizit nochmal changeDetection triggern
+    this.#initPaginator();    
 
     this.#paginatorSubscription = merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => {
         if (this.suchfilter !== undefined) {
+          console.log(JSON.stringify(this.suchfilter));
           this.#triggerSuche(this.suchfilter);
         }
       })
     ).subscribe();
 
-    // oder explizit nochmal changeDetection triggern
-    this.#initPaginator();
     this.changeDetector.detectChanges();
 
 

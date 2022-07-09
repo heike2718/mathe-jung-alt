@@ -16,7 +16,7 @@ export interface RaetselState extends EntityState<Raetsel> {
   paginationState: PaginationState;
   raetselDetailsContent: RaetselDetailsContent;
   generatingOutput: boolean;
-}
+} 
 
 export interface RaetselPartialState {
   readonly [RAETSEL_FEATURE_KEY]: RaetselState;
@@ -27,10 +27,6 @@ export const raetselAdapter: EntityAdapter<Raetsel> =
 
 export const initialState: RaetselState = raetselAdapter.getInitialState({
   loaded: false,
-  anzahlTreffer: 0,
-  pageSize: 10,
-  pageIndex: 0,
-  sortDirection: 'asc',
   page: [],
   paginationState: initialPaginationState,
   raetselDetailsContent: initialRaetselDetailsContent,
