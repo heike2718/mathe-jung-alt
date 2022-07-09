@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Quelle, QuellenDataSource, QuellenFacade } from '@mja-workspace/quellen/domain';
@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, filter, merge, Subscription, tap } 
   templateUrl: './quellen-search.component.html',
   styleUrls: ['./quellen-search.component.scss'],
 })
-export class QuellenSearchComponent implements OnInit, OnDestroy {
+export class QuellenSearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   #kontext: Suchkontext = 'QUELLEN';
   

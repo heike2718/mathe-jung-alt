@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Raetsel, RaetselDataSource, SearchFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { deskriptorenToString, PageDefinition, PaginationState, Suchfilter, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
-import { filter, Subscription, debounceTime, tap } from 'rxjs';
+import { filter, Subscription, debounceTime, tap, merge } from 'rxjs';
 
 
 @Component({
@@ -12,7 +12,7 @@ import { filter, Subscription, debounceTime, tap } from 'rxjs';
   templateUrl: './raetsel-search.component.html',
   styleUrls: ['./raetsel-search.component.scss'],
 })
-export class RaetselSearchComponent implements OnInit, OnDestroy {
+export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   #kontext: Suchkontext = 'RAETSEL';
 
   #sucheClearedSubscription: Subscription = new Subscription();
@@ -83,6 +83,20 @@ export class RaetselSearchComponent implements OnInit, OnDestroy {
       admin => this.isAdmin = admin
 
     );
+  }
+
+  ngAfterViewInit(): void {
+
+    // reset the paginator after sorting
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page).pipe(
+      tap(() => {
+        if (this.suchfilter !== undefined) {
+          this.#triggerSuche(this.suchfilter);
+        }
+      })
+    ).subscribe();
   }
 
   ngOnDestroy(): void {
