@@ -2,7 +2,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import * as RaetselActions from './raetsel.actions';
-import { Raetsel } from '../../entities/raetsel';
+import { initialRaetselDetailsContent, Raetsel, RaetselDetailsContent } from '../../entities/raetsel';
 import { PaginationState, initialPaginationState } from '@mja-workspace/suchfilter/domain';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel-raetsel';
@@ -14,7 +14,7 @@ export interface RaetselState extends EntityState<Raetsel> {
   // raetselDetails?: RaetselDetails; // details eines Raetsels, das in der Detailansicht oder im Editor angezeigt wird
   saveSuccessMessage?: string,
   paginationState: PaginationState;
-  // raetselDetailsContent: RaetselDetailsContent;
+  raetselDetailsContent: RaetselDetailsContent;
   generatingOutput: boolean;
 }
 
@@ -33,7 +33,7 @@ export const initialState: RaetselState = raetselAdapter.getInitialState({
   sortDirection: 'asc',
   page: [],
   paginationState: initialPaginationState,
-  // raetselDetailsContent: initialRaetselDetailsContent,
+  raetselDetailsContent: initialRaetselDetailsContent,
   generatingOutput: false
 });
 
@@ -71,6 +71,11 @@ const raetselReducer = createReducer(
     })
 
   ),
+
+  on(RaetselActions.raetselDetailsLoaded, (state, action) => {
+
+    return { ...state, selectedId: action.raetselDetails.id, raetselDetailsContent: { ...state.raetselDetailsContent, raetsel: action.raetselDetails } };
+  }),
 
   on(RaetselActions.raetsellisteCleared, (state, _action) => ({
     ...state,

@@ -9,6 +9,8 @@ import { MaterialModule } from '@mja-workspace/shared/ui-components';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '@mja-workspace/shared/auth/domain';
 import { RaetselDetailsComponent } from './raetsel-details/raetsel-details.component';
+import { AntwortvorschlagComponent } from './antwortvorschlag/antwortvorschlag.component';
+import { SharedUiRaetselModule } from '@mja-workspace/shared/ui-raetsel';
 
 @NgModule({
   imports: [
@@ -17,6 +19,7 @@ import { RaetselDetailsComponent } from './raetsel-details/raetsel-details.compo
     RaetselDomainModule,
     SuchfilterDomainModule,
     SharedUiComponentsModule,
+    SharedUiRaetselModule,
     MaterialModule,
     RouterModule.forChild([
       {
@@ -37,7 +40,11 @@ import { RaetselDetailsComponent } from './raetsel-details/raetsel-details.compo
       },
     ]),
   ],
-  declarations: [RaetselSearchComponent, RaetselDetailsComponent],
+  declarations: [
+    RaetselSearchComponent,
+    RaetselDetailsComponent,
+    AntwortvorschlagComponent,
+  ],
   exports: [RaetselSearchComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

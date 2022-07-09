@@ -8,12 +8,13 @@ import * as RaetselSelectors from '../+state/raetsel/raetsel.selectors';
 import { Raetsel } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
-export class SearchFacade {
+export class RaetselSearchFacade {
 
   loaded$ = this.store.pipe(select(RaetselSelectors.getRaetselLoaded));
   selectedRaetsel$ = this.store.pipe(select(RaetselSelectors.getSelected));
   page$ = this.store.pipe(select(RaetselSelectors.getPage));
   paginationState$ = this.store.pipe(select(RaetselSelectors.getPaginationState));
+  raetselDetails$ = this.store.pipe(select(RaetselSelectors.getRaetselDetails));
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>) {}
 

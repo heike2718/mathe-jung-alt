@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui-raetsel",
+  "sourceRoot": "libs/shared/ui-raetsel/src",
+  "prefix": "raetsel",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui-raetsel"],
+      "options": {
+        "project": "libs/shared/ui-raetsel/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui-raetsel/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui-raetsel/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui-raetsel"],
+      "options": {
+        "jestConfig": "libs/shared/ui-raetsel/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui-raetsel/src/**/*.ts",
+          "libs/shared/ui-raetsel/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:shared", "type:ui"]
+}

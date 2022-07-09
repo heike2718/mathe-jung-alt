@@ -6,4 +6,4 @@ export * from './lib/infrastructure/raetsel.datasource';
 
 export * from './lib/+state/raetsel/raetsel.actions';
 
-export * from './lib/application/search.facade';
+export * from './lib/application/raetsel-search.facade';

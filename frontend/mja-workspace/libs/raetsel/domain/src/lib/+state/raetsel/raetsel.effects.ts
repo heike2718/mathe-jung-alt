@@ -6,7 +6,7 @@ import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { MessageService, SafeNgrxService, noopAction } from '@mja-workspace/shared/util-mja';
 import { Router } from '@angular/router';
 import { SuchfilterFacade } from '@mja-workspace/suchfilter/domain';
-import { SearchFacade } from '../../application/search.facade';
+import { RaetselSearchFacade } from '../../application/raetsel-search.facade';
 import { AuthHttpService } from '@mja-workspace/shared/auth/domain';
 
 @Injectable()
@@ -64,7 +64,7 @@ export class RaetselEffects {
     private actions$: Actions,
     private authService: AuthHttpService,
     private raetselDataService: RaetselDataService,
-    private raetselFacade: SearchFacade,
+    private raetselFacade: RaetselSearchFacade,
     private suchfilterFacade: SuchfilterFacade,
     private safeNgrx: SafeNgrxService,
     private messageService: MessageService,

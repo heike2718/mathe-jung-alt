@@ -1,13 +1,13 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs';
-import { SearchFacade } from '../application/search.facade';
+import { RaetselSearchFacade } from '../application/raetsel-search.facade';
 import { Raetsel } from '../entities/raetsel';
 
 
 export class RaetselDataSource implements DataSource<Raetsel> {
 
 
-    constructor(private raetselFacade: SearchFacade) { }
+    constructor(private raetselFacade: RaetselSearchFacade) { }
 
     connect(_collectionViewer: CollectionViewer): Observable<readonly Raetsel[]> {
        return this.raetselFacade.page$;

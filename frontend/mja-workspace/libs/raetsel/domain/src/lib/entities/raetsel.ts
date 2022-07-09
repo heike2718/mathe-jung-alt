@@ -1,4 +1,5 @@
-import { Deskriptor } from "@mja-workspace/suchfilter/domain";
+import { SelectableItem } from "@mja-workspace/shared/util-mja";
+import { Deskriptor, Suchkontext } from "@mja-workspace/suchfilter/domain";
 
 export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';
 export type LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
@@ -39,3 +40,32 @@ export interface RaetselDetails {
   readonly imageFrage: string | null;
   readonly imageLoesung: string | null;
 };
+
+export interface RaetselDetailsContent {
+  readonly kontext: Suchkontext;
+  readonly raetsel: RaetselDetails;
+  readonly quelleId?: string;
+  readonly selectableDeskriptoren: SelectableItem[];
+};
+
+export const initialRaetselDetails: RaetselDetails = {
+  id: 'neu',
+  schluessel: '',
+  name: '',
+  status: 'ERFASST',
+  frage: '',
+  loesung: '',
+  kommentar: '',
+  quelleId: '',
+  antwortvorschlaege: [],
+  deskriptoren: [],
+  imageFrage: null,
+  imageLoesung: null
+};
+
+export const initialRaetselDetailsContent: RaetselDetailsContent = {
+  kontext: "RAETSEL",
+  raetsel: initialRaetselDetails,
+  selectableDeskriptoren: []
+};
+

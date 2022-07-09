@@ -9,6 +9,7 @@
     "raetsel-feature-search": "libs/raetsel/feature-search",
     "shared-auth-domain": "libs/shared/auth/domain",
     "shared-ui-components": "libs/shared/ui-components",
+    "shared-ui-raetsel": "libs/shared/ui-raetsel",
     "shared-util-configuration": "libs/shared/util-configuration",
     "shared-util-mja": "libs/shared/util-mja",
     "suchfilter-domain": "libs/suchfilter/domain"
