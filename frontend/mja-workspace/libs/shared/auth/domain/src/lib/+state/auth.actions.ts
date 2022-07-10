@@ -38,6 +38,8 @@ export const sessionRestored = createAction(
     props<{ session: Session }>()
 );
 
+export const clearStoreAction = createAction('[App] logout');
+
 
 export const logout = createAction(
     '[Auth] log out'

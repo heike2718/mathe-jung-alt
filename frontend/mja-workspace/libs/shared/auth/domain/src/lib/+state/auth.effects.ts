@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Configuration, SharedConfigService } from '@mja-workspace/shared/util-configuration';
 import { MessageService, SafeNgrxService, noopAction, isExpired } from '@mja-workspace/shared/util-mja';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, STORAGE_KEY_USER, User } from '../entities/auth.model';
@@ -20,8 +20,7 @@ export class AuthEffects {
 
     constructor(private actions$: Actions,
         @Inject(SharedConfigService) private configuration: Configuration,
-        // private suchfilterFacade: SuchfilterFacade,
-        // private deskriptorenSearchFacade: DeskriptorenSearchFacade,
+        private globalStore: Store,
         private authHttpService: AuthHttpService,
         private messageService: MessageService,
         private safeNgrx: SafeNgrxService,
@@ -172,6 +171,7 @@ export class AuthEffects {
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_USER);
         this.messageService.clear();
+        this.globalStore.dispatch(AuthActions.clearStoreAction())
         // this.suchfilterFacade.clearAll();
     }
 }
