@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
+import de.egladil.mja_admin_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_admin_api.domain.quellen.QuelleReadonly;
 import de.egladil.mja_admin_api.domain.quellen.QuellenRepository;
 import de.egladil.mja_admin_api.domain.quellen.QuellenService;
@@ -44,13 +45,19 @@ public class QuellenServiceImpl implements QuellenService {
 	@Override
 	public List<QuelleReadonly> sucheQuellen(final Suchfilter suchfilter) {
 
-		if (StringUtils.isBlank(suchfilter.getSuchstring())) {
+		SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
 
-			LOGGER.warn("suchstring blank => return an empty list");
-			return new ArrayList<>();
+		List<PersistenteQuelleReadonly> trefferliste = new ArrayList<>();
+
+		if (suchfilterVariante == SuchfilterVariante.DESKRIPTOREN) {
+
+			trefferliste = quellenRepository.findWithDeskriptoren(suchfilter.getDeskriptorenIds());
+			List<QuelleReadonly> result = trefferliste.stream().map(pq -> mapFromDB(pq)).toList();
+			return result;
+
 		}
 
-		List<PersistenteQuelleReadonly> trefferliste = quellenRepository.findQuellenLikeMediumOrPerson(suchfilter.getSuchstring());
+		trefferliste = quellenRepository.findQuellenLikeMediumOrPerson(suchfilter.getSuchstring());
 
 		if (trefferliste == null || trefferliste.isEmpty()) {
 

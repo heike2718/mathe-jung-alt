@@ -26,6 +26,12 @@ public interface QuellenRepository {
 	List<PersistenteQuelleReadonly> findQuellenLikeMediumOrPerson(String suchstring);
 
 	/**
+	 * @param  deskriptorenIDs
+	 * @return
+	 */
+	List<PersistenteQuelleReadonly> findWithDeskriptoren(String deskriptorenIDs);
+
+	/**
 	 * Exakte Suche nach person.
 	 *
 	 * @param  name

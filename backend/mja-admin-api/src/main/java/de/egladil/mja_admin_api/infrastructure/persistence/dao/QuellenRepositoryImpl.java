@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_admin_api.domain.quellen.QuellenRepository;
+import de.egladil.mja_admin_api.domain.utils.SetOperationUtils;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 
 @ApplicationScoped
@@ -43,6 +44,20 @@ public class QuellenRepositoryImpl implements QuellenRepository {
 		}
 
 		return trefferliste.isEmpty() ? Optional.empty() : Optional.of(trefferliste.get(0));
+	}
+
+	@Override
+	public List<PersistenteQuelleReadonly> findWithDeskriptoren(final String deskriptorenIDs) {
+
+		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
+
+		LOGGER.info("[deskriptoren=" + wrappedDeskriptoren + "]");
+
+		String queryId = PersistenteQuelleReadonly.FIND_WITH_DESKRIPTOREN;
+
+		return entityManager.createNamedQuery(queryId, PersistenteQuelleReadonly.class)
+			.setParameter("deskriptoren", wrappedDeskriptoren)
+			.getResultList();
 	}
 
 	@Override

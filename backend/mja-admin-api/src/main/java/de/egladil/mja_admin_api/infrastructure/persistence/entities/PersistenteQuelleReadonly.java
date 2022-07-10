@@ -29,7 +29,11 @@ import de.egladil.mja_admin_api.domain.quellen.Quellenart;
 		query = "select q from PersistenteQuelleReadonly q where q.person = :suchstring"),
 	@NamedQuery(
 		name = "PersistenteQuelleReadonly.FIND_QUELLE_BY_FLAG_HW",
-		query = "select q from PersistenteQuelleReadonly q where q.hw = :hw")
+		query = "select q from PersistenteQuelleReadonly q where q.hw = :hw"),
+	@NamedQuery(
+		name = "PersistenteQuelleReadonly.FIND_WITH_DESKRIPTOREN",
+		query = "select q from PersistenteQuelleReadonly q where CONCAT(CONCAT(',', q.deskriptoren),',') like :deskriptoren order by q.sortNumber")
+
 })
 public class PersistenteQuelleReadonly {
 
@@ -38,6 +42,8 @@ public class PersistenteQuelleReadonly {
 	public static final String FIND_WITH_PERSON_EQUALS = "PersistenteQuelleReadonly.FIND_WITH_PERSON_EQUALS";
 
 	public static final String FIND_QUELLE_BY_FLAG_HW = "PersistenteQuelleReadonly.FIND_QUELLE_BY_FLAG_HW";
+
+	public static final String FIND_WITH_DESKRIPTOREN = "PersistenteQuelleReadonly.FIND_WITH_DESKRIPTOREN";
 
 	@Id
 	private String uuid;
