@@ -49,16 +49,14 @@ export interface PaginationState {
     anzahlTreffer: number;
     pageSize: number,
     pageIndex: number,
-    sortDirection: string,
-    suchfilter: Suchfilter
+    sortDirection: string
 };
 
 export const initialPaginationState: PaginationState = {
     anzahlTreffer: 0,
     pageSize: 10,
     pageIndex: 0,
-    sortDirection: 'asc',
-    suchfilter: initialSuchfilter
+    sortDirection: 'asc'
 };
 
 export interface SuchfilterWithStatus {
@@ -190,23 +188,33 @@ export function getDifferenzmenge(alle: Deskriptor[], auszuschliessen: Deskripto
 export function deskriptorenToString(deskriptoren: Deskriptor[]): string {
 
     if (deskriptoren.length === 0) {
-      return '';
+        return '';
     }
-  
+
     let result = '';
-  
+
     for (let index = 0; index < deskriptoren.length; index++) {
-  
-      const deskriptor = deskriptoren[index];
-      if (index < deskriptoren.length - 1) {
-        result += deskriptor.name + ", ";
-      } else {
-        result += deskriptor.name;
-      }
-  
+
+        const deskriptor = deskriptoren[index];
+        if (index < deskriptoren.length - 1) {
+            result += deskriptor.name + ", ";
+        } else {
+            result += deskriptor.name;
+        }
+
     }
-  
+
     return result;
-  };
+};
+
+export function suchkriterienVorhanden(suchfilter: Suchfilter | undefined): boolean {
+
+    if (!suchfilter || suchfilter.kontext === 'NOOP') {
+        return false;
+    }
+
+    // Worte mit weniger als 4 Zeichen sind nicht Teil des Volltextindex. Daher erst fertig, wenn mindestens 4 Zeichen
+    return suchfilter.suchstring.trim().length > 3 || suchfilter.deskriptoren.length > 0;
+}
 
 

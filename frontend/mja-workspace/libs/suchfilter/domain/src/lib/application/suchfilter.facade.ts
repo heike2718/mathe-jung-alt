@@ -3,7 +3,7 @@ import { select, Store } from "@ngrx/store";
 import { SuchfilterPartialState } from "../+state/suchfilter.reducer";
 import * as SuchfilterActions from '../+state/suchfilter.actions';
 import * as SuchfilterSelectors from '../+state/suchfilter.selectors';
-import { Deskriptor, Suchfilter, Suchkontext } from "../entities/suchfilter";
+import { Deskriptor, Suchfilter, SuchfilterUIModel, Suchkontext } from "../entities/suchfilter";
 import { Observable } from "rxjs";
 
 
@@ -31,6 +31,11 @@ export class SuchfilterFacade {
         this.store.dispatch(SuchfilterActions.loadDeskriptoren());
     }
 
+    public setSuchfilter(suchfilter: Suchfilter): void {
+        this.store.dispatch(SuchfilterActions.setSuchfilter({ suchfilter }));
+    }
+
+
     public resetSuchfilter(kontext: Suchkontext): void {
         this.store.dispatch(SuchfilterActions.resetKontext({ kontext }));
     }
@@ -39,9 +44,9 @@ export class SuchfilterFacade {
         this.store.dispatch(SuchfilterActions.markUnchanged({ kontext }));
     }
 
-    public changeSuchkontext(kontext: Suchkontext): void {
-        this.store.dispatch(SuchfilterActions.suchkontextChanged({ kontext }));
-    }
+    // public changeSuchkontext(kontext: Suchkontext): void {
+    //     this.store.dispatch(SuchfilterActions.suchkontextChanged({ kontext }));
+    // }
 
     public changeSuchtext(suchstring: string): void {
         this.store.dispatch(SuchfilterActions.suchstringChanged({ suchstring }));

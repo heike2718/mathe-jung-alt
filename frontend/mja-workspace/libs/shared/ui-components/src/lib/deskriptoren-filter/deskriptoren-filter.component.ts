@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Deskriptor, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
+import { Deskriptor, Suchfilter, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { Subscription, tap } from 'rxjs';
 
 @Component({
@@ -9,22 +9,29 @@ import { Subscription, tap } from 'rxjs';
 })
 export class DeskriptorenFilterComponent implements OnInit, OnDestroy {
 
+  @Input()
+  public suchfilter!: Suchfilter;
+
   @Output()
   private suchlisteDeskriptorenChanged: EventEmitter<Deskriptor[]> = new EventEmitter<Deskriptor[]>();
-
-  @Input()
-  public kontext!: Suchkontext;
 
   restliste$ = this.suchfilterFacade.restliste$;
   suchliste$ = this.suchfilterFacade.suchliste$;
 
   #suchlisteSubscription: Subscription = new Subscription();
+  #deskriptorenLoadedSubscription: Subscription = new Subscription();
 
   constructor(private suchfilterFacade: SuchfilterFacade) { }
 
   ngOnInit(): void {
 
-    this.suchfilterFacade.loadDeskriptoren();
+    this.#deskriptorenLoadedSubscription = this.suchfilterFacade.deskriptorenLoaded$.subscribe(
+      (loaded) => {
+        if (loaded) {
+          this.suchfilterFacade.setSuchfilter(this.suchfilter);
+        }
+      }
+    );
 
     this.#suchlisteSubscription = this.suchliste$.pipe(
       tap((liste: Deskriptor[]) => this.suchlisteDeskriptorenChanged.emit(liste))
@@ -33,6 +40,7 @@ export class DeskriptorenFilterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
       this.#suchlisteSubscription.unsubscribe();
+      this.#deskriptorenLoadedSubscription.unsubscribe();
   }
 
   addToSuchliste(deskriptor: Deskriptor): void {

@@ -16,7 +16,7 @@ export interface RaetselState extends EntityState<Raetsel> {
   paginationState: PaginationState;
   raetselDetailsContent: RaetselDetailsContent;
   generatingOutput: boolean;
-} 
+}
 
 export interface RaetselPartialState {
   readonly [RAETSEL_FEATURE_KEY]: RaetselState;
@@ -35,7 +35,7 @@ export const initialState: RaetselState = raetselAdapter.getInitialState({
 
 const raetselReducer = createReducer(
   initialState,
-  
+
   on(RaetselActions.selectPage, (state, action) => {
     return {
       ...state,
@@ -81,7 +81,7 @@ const raetselReducer = createReducer(
     page: [],
     saveSuccessMessage: undefined
   })),
-  
+
 );
 
 export function reducer(state: RaetselState | undefined, action: Action) {

@@ -1,5 +1,5 @@
-import { Component, ElementRef, Input, Output, ViewChild, EventEmitter, OnDestroy, AfterViewInit } from '@angular/core';
-import { Deskriptor, Suchkontext } from '@mja-workspace/suchfilter/domain';
+import { Component, ElementRef, Input, Output, ViewChild, EventEmitter, OnDestroy, AfterViewInit, OnInit } from '@angular/core';
+import { Deskriptor, Suchfilter, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { debounceTime, distinctUntilChanged, fromEvent, Subscription, tap } from "rxjs";
 
 @Component({
@@ -9,8 +9,11 @@ import { debounceTime, distinctUntilChanged, fromEvent, Subscription, tap } from
 })
 export class AdminSuchfilterComponent implements AfterViewInit, OnDestroy {
 
+  // @Input()
+  // public kontext!: Suchkontext;
+
   @Input()
-  public kontext!: Suchkontext;
+  public suchfilter!: Suchfilter;
 
   @ViewChild('input') input!: ElementRef;
 
@@ -22,7 +25,7 @@ export class AdminSuchfilterComponent implements AfterViewInit, OnDestroy {
 
   #keySubscription: Subscription = new Subscription();
 
-  constructor() { }
+  constructor() { }  
 
   ngAfterViewInit(): void {
     this.#keySubscription = fromEvent(this.input.nativeElement, 'keyup')

@@ -3,8 +3,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Raetsel, RaetselDataSource, RaetselSearchFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
-import { deskriptorenToString, PageDefinition, PaginationState, Suchfilter, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
-import { filter, Subscription, debounceTime, tap, merge } from 'rxjs';
+import { deskriptorenToString, PageDefinition, Suchfilter, SuchfilterFacade, Suchkontext, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
+import { filter, Subscription, debounceTime, tap, merge, distinctUntilChanged } from 'rxjs';
 
 
 @Component({
@@ -17,17 +17,17 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   #kontext: Suchkontext = 'RAETSEL';
 
   #sucheClearedSubscription: Subscription = new Subscription();
-  #paginationStateSubscription: Subscription = new Subscription();
   #userAdminSubscription: Subscription = new Subscription();
-  #deskriptorenLoadedSubscription: Subscription = new Subscription();
   #canStartSucheSubscription: Subscription = new Subscription();
   #suchfilterSubscription: Subscription = new Subscription();
   #sortChangedSubscription: Subscription = new Subscription();
   #paginatorSubscription: Subscription = new Subscription();
+  #paginationStateSubscription: Subscription = new Subscription();
+
 
   isAdmin = false;
 
-  suchfilter: Suchfilter | undefined;
+  suchfilter!: Suchfilter;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -50,26 +50,20 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   ngOnInit() {
 
     this.dataSource = new RaetselDataSource(this.searchFacade);
-
-    this.#deskriptorenLoadedSubscription = this.suchfilterFacade.deskriptorenLoaded$.subscribe(
-      (loaded => {
-        if (loaded) {
-          this.suchfilterFacade.changeSuchkontext(this.#kontext);
-        }
-      })
-    );
+    this.searchFacade.checkOrLoadDeskriptoren();
+    this.suchfilterFacade.setSuchfilter(this.searchFacade.lastSuchfilter);
 
     this.#paginationStateSubscription = this.searchFacade.paginationState$.subscribe(
-      (state: PaginationState) => this.anzahlRaetsel = state.anzahlTreffer
-    );    
+      (state) => this.anzahlRaetsel = state.anzahlTreffer
+    );
 
     this.#canStartSucheSubscription = this.suchfilterFacade.canStartSuche$.pipe(
-      filter((ready) => ready),
+      filter((ready) => ready === true),
       debounceTime(300),
-      // distinctUntilChanged(),
+      distinctUntilChanged(),
       tap(() => {
         if (this.paginator && this.sort && this.suchfilter) {
-          this.#triggerSuche(this.suchfilter);
+          this.#triggerSuche();
         }
       })
     ).subscribe();
@@ -84,11 +78,10 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       (selectedSuchfilter) => {
         if (selectedSuchfilter) {
           this.suchfilter = selectedSuchfilter;
-          // this.#triggerSuche(this.suchfilter);
         }
       }
     );
-    
+
   }
 
   ngAfterViewInit(): void {
@@ -99,34 +92,31 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
       // this.#initPaginator();
       // hier den init-Kram oder
-    }, 0);   
+    }, 0);
 
     // oder explizit nochmal changeDetection triggern
-    this.#initPaginator();    
+    this.#initPaginator();
 
     this.#paginatorSubscription = merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => {
         if (this.suchfilter !== undefined) {
           console.log(JSON.stringify(this.suchfilter));
-          this.#triggerSuche(this.suchfilter);
+          this.#triggerSuche();
         }
       })
     ).subscribe();
 
     this.changeDetector.detectChanges();
-
-
   }
 
   ngOnDestroy(): void {
     this.#suchfilterSubscription.unsubscribe();
     this.#sucheClearedSubscription.unsubscribe();
-    this.#paginationStateSubscription.unsubscribe();
     this.#userAdminSubscription.unsubscribe();
-    this.#deskriptorenLoadedSubscription.unsubscribe();
     this.#canStartSucheSubscription.unsubscribe();
     this.#sortChangedSubscription.unsubscribe();
     this.#paginatorSubscription.unsubscribe();
+    this.#paginationStateSubscription.unsubscribe();
   }
 
   getDisplayedColumns(): string[] {
@@ -139,7 +129,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       this.paginator.pageIndex = 0;
     }
     if (this.suchfilter !== undefined) {
-      this.#triggerSuche(this.suchfilter);
+      this.#triggerSuche();
     }
   }
 
@@ -166,7 +156,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
 
-  #triggerSuche(suchfilter: Suchfilter): void {
+  #triggerSuche(): void {
 
     const pageDefinition: PageDefinition = {
       pageIndex: this.paginator ? this.paginator.pageIndex : 0,
@@ -174,7 +164,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       sortDirection: this.sort ? this.sort.direction : 'asc'
     }
 
-    this.searchFacade.triggerSearch(suchfilter, pageDefinition);
+    this.searchFacade.triggerSearch(this.suchfilter, pageDefinition);
   }
 
   #initPaginator(): void {

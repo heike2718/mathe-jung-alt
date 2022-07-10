@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Deskriptor, findSuchfilterUIModelWithKontext, getDifferenzmenge, Suchfilter, SuchfilterUIModel } from '../entities/suchfilter';
+import { Deskriptor, findSuchfilterUIModelWithKontext, getDifferenzmenge, Suchfilter, SuchfilterUIModel, suchkriterienVorhanden } from '../entities/suchfilter';
 import { SuchfilterState, SUCHFILTER_FEATURE_KEY } from './suchfilter.reducer';
 
 const getSuchfilterState = createFeatureSelector<SuchfilterState>(SUCHFILTER_FEATURE_KEY);
@@ -14,18 +14,13 @@ export const getSelectedSuchfilter = createSelector(getSelectedSuchfilterUIModel
 export const getFilteredDeskriptoren = createSelector(getSelectedSuchfilterUIModel, (model?: SuchfilterUIModel) => model? model.filteredDeskriptoren : []);
 export const getSuchliste = createSelector(getSelectedSuchfilter, (suchfilter?: Suchfilter) => suchfilter ? suchfilter.deskriptoren : []);
 
-// // Worte mit weniger als 4 Zeichen sind nicht Teil des Volltextindex. Daher erst fertig, wenn mindestens 4 Zeichen
-const hasSuchstring = createSelector(getSelectedSuchfilter, (suchfilter?: Suchfilter) => suchfilter ? suchfilter.suchstring.trim().length > 3 : false);
-const hasDeskriptoren = createSelector(getSuchliste, (suchliste: Deskriptor[]) => suchliste.length > 0);
 const suchfilterChanged = createSelector(getSelectedSuchfilterUIModel, (model?: SuchfilterUIModel) => model ? model.changed : false);
 
 export const isSuchfilterReadyToGo = createSelector(
     getSelectedSuchfilter,
-    hasSuchstring,
-    hasDeskriptoren,
     suchfilterChanged,
-    (suchfilter: Suchfilter | undefined, hasSuchstring: boolean, hasDeskriptoren: boolean, changed: boolean) =>
-        suchfilter !== undefined && suchfilter.kontext !== 'NOOP' && changed && (hasDeskriptoren || hasSuchstring));
+    (suchfilter: Suchfilter | undefined, changed: boolean) =>
+        changed && suchkriterienVorhanden(suchfilter));
 
 
 export const getRestliste = createSelector(

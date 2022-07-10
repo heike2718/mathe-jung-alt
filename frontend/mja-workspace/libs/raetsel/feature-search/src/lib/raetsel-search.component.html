@@ -3,13 +3,13 @@
 <div class="wrapper m4">
 
     <ng-container *ngIf="isAdmin">
-        <mja-admin-suchfilter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"
+        <mja-admin-suchfilter [suchfilter]="suchfilter"(suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"
             (inputChanged)="onInputChanged($event)">
         </mja-admin-suchfilter>
     </ng-container>
 
     <ng-container *ngIf="!isAdmin">
-        <mja-deskriptoren-filter [kontext]="'RAETSEL'" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)">
+        <mja-deskriptoren-filter [suchfilter]="suchfilter" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)">
         </mja-deskriptoren-filter>
     </ng-container>
 

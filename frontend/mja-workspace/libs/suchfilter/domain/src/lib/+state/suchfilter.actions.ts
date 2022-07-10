@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Deskriptor, Suchkontext } from "../entities/suchfilter";
+import { Deskriptor, Suchfilter, SuchfilterUIModel, Suchkontext } from "../entities/suchfilter";
 
 export const loadDeskriptoren = createAction(
   '[Suchfilter] load Deskriptoren');
@@ -9,10 +9,15 @@ export const loadDeskriptorenSuccess = createAction(
   props<{ deskriptoren: Deskriptor[] }>()
 );
 
-export const suchkontextChanged = createAction(
-  '[Suchfilter] kontext changed',
-  props<{ kontext: Suchkontext }>()
+export const setSuchfilter = createAction(
+  '[Suchfilter] setSuchfilter',
+  props<{suchfilter: Suchfilter}>()
 );
+
+// export const suchkontextChanged = createAction(
+//   '[Suchfilter] kontext changed',
+//   props<{ kontext: Suchkontext }>()
+// );
 
 export const suchstringChanged = createAction(
   '[Suchfilter] suchtring changed',

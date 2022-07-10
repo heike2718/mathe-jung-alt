@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Suchfilter } from '@mja-workspace/suchfilter/domain';
+import { Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
+import { tap } from 'rxjs';
 
 import * as QuellenActions from '../+state/quelle/quelle.actions';
 import * as fromQuelle from '../+state/quelle/quelle.reducer';
@@ -9,16 +10,45 @@ import { Quelle } from '../entities/quelle';
 
 @Injectable({ providedIn: 'root' })
 export class QuellenFacade {
-  
+
   loaded$ = this.store.pipe(select(QuelleSelectors.getQuelleLoaded));
   quellenList$ = this.store.pipe(select(QuelleSelectors.getAllQuellen));
   selectedQuelle$ = this.store.pipe(select(QuelleSelectors.getSelected));
   page$ = this.store.pipe(select(QuelleSelectors.getPage));
 
-  constructor(private store: Store<fromQuelle.QuellePartialState>) { }
+  public lastSuchfilter: Suchfilter = {
+    kontext: 'QUELLEN',
+    deskriptoren: [],
+    suchstring: ''
+  };
+
+  #deskriptorenLoaded = false;
+
+  constructor(private store: Store<fromQuelle.QuellePartialState>, private suchfilterFacade: SuchfilterFacade) {
+
+    this.suchfilterFacade.deskriptorenLoaded$.pipe(
+      tap((loaded) => this.#deskriptorenLoaded = loaded)
+    ).subscribe();
+
+    this.suchfilterFacade.selectedSuchfilter$.pipe(tap((suchfilter: Suchfilter | undefined) => {
+      if (suchfilter && suchfilter.kontext === 'QUELLEN') {
+        this.lastSuchfilter = suchfilter
+      }
+    })).subscribe();
+
+  }
+
+  checkOrLoadDeskriptoren(): void {
+    if (!this.#deskriptorenLoaded) {
+      this.suchfilterFacade.loadDeskriptoren();
+    }
+  }
 
   findQuellen(suchfilter: Suchfilter): void {
-    this.store.dispatch(QuellenActions.findQuellen({ suchfilter }));
+
+    if (suchkriterienVorhanden(suchfilter)) {
+      this.store.dispatch(QuellenActions.findQuellen({ suchfilter }));
+    }
   }
 
   slicePage(sortDirection = 'asc', pageIndex = 0, pageSize = 10): void {
@@ -26,6 +56,6 @@ export class QuellenFacade {
   }
 
   selectQuelle(quelle: Quelle): void {
-    this.store.dispatch(QuellenActions.quelleSelected({quelle}));
+    this.store.dispatch(QuellenActions.quelleSelected({ quelle }));
   }
 }

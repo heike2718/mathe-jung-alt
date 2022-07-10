@@ -2,6 +2,11 @@ import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilt
 import { createAction, props } from '@ngrx/store';
 import { Raetsel, RaetselDetails } from '../../entities/raetsel';
 
+export const setSuchfilter = createAction(
+  '[Raetsel] setSuchfilter',
+  props<{ suchfilter: Suchfilter}>()
+)
+
 export const prepareSearch = createAction(
   '[Raetsel] prepareSearch',
   props<{ suchfilter: Suchfilter, pageDefinition: PageDefinition }>()
