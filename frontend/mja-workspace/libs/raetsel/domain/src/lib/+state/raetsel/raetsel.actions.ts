@@ -1,6 +1,6 @@
 import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
-import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, GeneratedImages } from '../../entities/raetsel';
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, GeneratedImages, RaetselDetailsContent, EditRaetselPayload } from '../../entities/raetsel';
 
 export const setSuchfilter = createAction(
   '[Raetsel] setSuchfilter',
@@ -57,6 +57,32 @@ export const showRaetselDetails = createAction(
 
 export const raetsellisteCleared = createAction(
   '[Raetsel] raetselliste cleared '
+);
+
+export const editRaetsel = createAction(
+  '[Raetsel]  edit',
+  props<{ raetselDetailsContent: RaetselDetailsContent }>()
+);
+
+
+
+export const cancelEdit = createAction(
+  '[Raetsel] cancel edit'
+);
+
+export const startSaveRaetsel = createAction(
+  '[Raetsel] start save',
+  props<{ editRaetselPayload: EditRaetselPayload }>()
+);
+
+export const saveRaetsel = createAction(
+  '[Raetsel] save raetsel',
+  props<{ editRaetselPayload: EditRaetselPayload, csrfToken: string | null }>()
+);
+
+export const raetselSaved = createAction(
+  '[Raetsel] raetsel saved',
+  props<{ raetselDetails: RaetselDetails, successMessage: string }>()
 );
 
 export const generateOutput = createAction(

@@ -6,6 +6,7 @@
     "quellen-domain": "libs/quellen/domain",
     "quellen-feature-search": "libs/quellen/feature-search",
     "raetsel-domain": "libs/raetsel/domain",
+    "raetsel-feature-edit": "libs/raetsel/feature-edit",
     "raetsel-feature-search": "libs/raetsel/feature-search",
     "shared-auth-domain": "libs/shared/auth/domain",
     "shared-ui-components": "libs/shared/ui-components",

@@ -19,6 +19,12 @@ const routes = [
 
     },
     {
+        path: 'raetseleditor',
+        loadChildren: () =>
+            import('@mja-workspace/raetsel/feature-edit').then((m) => m.RaetselFeatureEditModule),
+
+    },
+    {
         path: '',
         pathMatch: 'full',
         component: HomeComponent,

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
-import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselSearchFacade } from '@mja-workspace/raetsel/domain';
+import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
 import { Subscription } from 'rxjs';
@@ -19,7 +19,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   #raetselDetails!: RaetselDetails;
 
 
-  constructor(public raetselFacade: RaetselSearchFacade,
+  constructor(public raetselFacade: RaetselFacade,
     public authFacade: AuthFacade,
     public quellenFacade: QuellenFacade,
     private router: Router,
@@ -39,6 +39,13 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.#raetselDetailsSubscription.unsubscribe();
+  }
+
+  startEdit(): void {
+    if (this.#raetselDetails) {
+      this.quellenFacade.loadQuelle(this.#raetselDetails.quelleId);
+      this.raetselFacade.editRaetsel(this.#raetselDetails);
+    }
   }
 
   openPrintPNGDialog(): void {
@@ -83,5 +90,5 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  startEdit(): void {}
+  
 }

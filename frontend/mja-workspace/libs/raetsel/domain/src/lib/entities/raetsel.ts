@@ -48,6 +48,11 @@ export interface RaetselDetailsContent {
   readonly selectableDeskriptoren: SelectableItem[];
 };
 
+export interface EditRaetselPayload {
+  readonly latexHistorisieren: boolean;
+  readonly raetsel: RaetselDetails;
+};
+
 export interface GeneratedImages {
   readonly outputFormat: LATEX_OUTPUTFORMAT,
   readonly imageFrage: string | null;

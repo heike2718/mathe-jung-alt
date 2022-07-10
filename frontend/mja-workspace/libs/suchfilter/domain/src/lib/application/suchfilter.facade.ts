@@ -22,9 +22,7 @@ export class SuchfilterFacade {
     constructor(private store: Store<SuchfilterPartialState>) { }
 
     public clearAll(): void {
-
         this.store.dispatch(SuchfilterActions.reset());
-
     }
 
     public loadDeskriptoren(): void {
@@ -43,10 +41,6 @@ export class SuchfilterFacade {
     public sucheFinished(kontext: Suchkontext): void {
         this.store.dispatch(SuchfilterActions.markUnchanged({ kontext }));
     }
-
-    // public changeSuchkontext(kontext: Suchkontext): void {
-    //     this.store.dispatch(SuchfilterActions.suchkontextChanged({ kontext }));
-    // }
 
     public changeSuchtext(suchstring: string): void {
         this.store.dispatch(SuchfilterActions.suchstringChanged({ suchstring }));

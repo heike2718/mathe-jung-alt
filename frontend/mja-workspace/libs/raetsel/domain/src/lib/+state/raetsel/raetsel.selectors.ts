@@ -56,3 +56,8 @@ export const isGeneratingOutput = createSelector(
   getRaetselState,
   state => state.generatingOutput
 );
+
+export const getDetailsContent = createSelector(
+  getRaetselState,
+  (state: RaetselState) => state.raetselDetailsContent
+);

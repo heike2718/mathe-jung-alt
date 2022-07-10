@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 import { tap } from 'rxjs';
@@ -26,7 +27,7 @@ export class QuellenFacade {
 
   #deskriptorenLoaded = false;
 
-  constructor(private store: Store<fromQuelle.QuellePartialState>, private suchfilterFacade: SuchfilterFacade) {
+  constructor(private store: Store<fromQuelle.QuellePartialState>, private suchfilterFacade: SuchfilterFacade, private router: Router) {
 
     this.suchfilterFacade.deskriptorenLoaded$.pipe(
       tap((loaded) => this.#deskriptorenLoaded = loaded)
@@ -65,5 +66,9 @@ export class QuellenFacade {
 
   selectQuelle(quelle: Quelle): void {
     this.store.dispatch(QuellenActions.quelleSelected({ quelle }));
+  }
+
+  navigateToQuellensuche(): void {
+    this.router.navigateByUrl('quellen');
   }
 }

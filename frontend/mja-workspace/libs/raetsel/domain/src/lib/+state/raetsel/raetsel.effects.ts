@@ -6,7 +6,7 @@ import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { MessageService, SafeNgrxService, noopAction } from '@mja-workspace/shared/util-mja';
 import { Router } from '@angular/router';
 import { SuchfilterFacade } from '@mja-workspace/suchfilter/domain';
-import { RaetselSearchFacade } from '../../application/raetsel.facade';
+import { RaetselFacade } from '../../application/raetsel.facade';
 import { AuthHttpService } from '@mja-workspace/shared/auth/domain';
 
 @Injectable()
@@ -58,6 +58,53 @@ export class RaetselEffects {
       }),
     ), { dispatch: false });
 
+  navigateToRaetselEditor$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.editRaetsel),
+      tap((_action) => {
+        this.router.navigateByUrl('raetseleditor');
+      }),
+    ), { dispatch: false });
+
+    saveRaetsel$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.saveRaetsel),
+      // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.raetselDataService.saveRaetsel(action.editRaetselPayload, action.csrfToken).pipe(
+          map((raetselDetails) => RaetselActions.raetselSaved({ raetselDetails, successMessage: 'Das Raetsel wurde erfolgreich gespeichert: uuid=' + raetselDetails.id }))
+        ), 'Ups, beim Speichern des Rätsels ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
+
+  getCsrfToken$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.startSaveRaetsel),
+      // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.authService.getCsrfToken().pipe(
+          map((token) => RaetselActions.saveRaetsel({editRaetselPayload: action.editRaetselPayload, csrfToken: token}))
+        ), 'Ups, beim Speichern des Rätsels ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
+
+  showSaveSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.raetselSaved),
+      tap((action) => {
+        this.messageService.info(action.successMessage);
+      }),
+    ), { dispatch: false });
+
+
+  cancelEdit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.cancelEdit),
+      tap(() => this.router.navigateByUrl('raetsel/uebersicht')),
+    ), { dispatch: false });
+
   generiereRaetselOutput$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.generateOutput),
@@ -80,7 +127,7 @@ export class RaetselEffects {
     private actions$: Actions,
     private authService: AuthHttpService,
     private raetselDataService: RaetselDataService,
-    private raetselFacade: RaetselSearchFacade,
+    private raetselFacade: RaetselFacade,
     private suchfilterFacade: SuchfilterFacade,
     private safeNgrx: SafeNgrxService,
     private messageService: MessageService,

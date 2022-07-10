@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Raetsel, RaetselDataSource, RaetselSearchFacade } from '@mja-workspace/raetsel/domain';
+import { QuellenFacade } from '@mja-workspace/quellen/domain';
+import { Raetsel, RaetselDataSource, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { deskriptorenToString, PageDefinition, Suchfilter, SuchfilterFacade, Suchkontext, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
 import { filter, Subscription, debounceTime, tap, merge, distinctUntilChanged } from 'rxjs';
@@ -38,7 +39,8 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   dataSource!: RaetselDataSource;
   anzahlRaetsel: number = 0;
 
-  constructor(public searchFacade: RaetselSearchFacade,
+  constructor(public raetselFacade: RaetselFacade,
+    public quellenFacade: QuellenFacade,
     private suchfilterFacade: SuchfilterFacade,
     private authFacade: AuthFacade,
     private changeDetector: ChangeDetectorRef
@@ -49,11 +51,11 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngOnInit() {
 
-    this.dataSource = new RaetselDataSource(this.searchFacade);
-    this.searchFacade.checkOrLoadDeskriptoren();
-    this.suchfilterFacade.setSuchfilter(this.searchFacade.lastSuchfilter);
+    this.dataSource = new RaetselDataSource(this.raetselFacade);
+    this.raetselFacade.checkOrLoadDeskriptoren();
+    this.suchfilterFacade.setSuchfilter(this.raetselFacade.lastSuchfilter);
 
-    this.#paginationStateSubscription = this.searchFacade.paginationState$.subscribe(
+    this.#paginationStateSubscription = this.raetselFacade.paginationState$.subscribe(
       (state) => this.anzahlRaetsel = state.anzahlTreffer
     );
 
@@ -141,7 +143,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   onRowClicked(row: any): void {
 
     const raetsel: Raetsel = <Raetsel>row;
-    this.searchFacade.selectRaetsel(raetsel);
+    this.raetselFacade.selectRaetsel(raetsel);
   }
 
   deskriptorenToString(raetsel: Raetsel): string {
@@ -150,9 +152,17 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   }
 
+  neueSuche(): void {
+    this.raetselFacade.clearTrefferliste();
+    this.suchfilterFacade.resetSuchfilter(this.#kontext);
+  }
+
   neuesRaetsel(): void {
-    // this.searchFacade.createAndEditRaetsel();
-    console.log('trigger navigation');
+    this.raetselFacade.createAndEditRaetsel();
+  }
+
+  quelleWaehlen(): void {
+    this.quellenFacade.navigateToQuellensuche();
   }
 
 
@@ -164,7 +174,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       sortDirection: this.sort ? this.sort.direction : 'asc'
     }
 
-    this.searchFacade.triggerSearch(this.suchfilter, pageDefinition);
+    this.raetselFacade.triggerSearch(this.suchfilter, pageDefinition);
   }
 
   #initPaginator(): void {

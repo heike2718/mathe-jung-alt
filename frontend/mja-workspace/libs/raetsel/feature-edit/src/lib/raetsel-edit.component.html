@@ -1,0 +1,181 @@
+<h1>Rätseleditor</h1>
+
+<div *ngIf="raetselFacade.editorContent$| async as raetsel else keinRaetsel">
+
+    <div class="container">
+
+        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+
+            <div fxFlex="0 1 calc(10%-20px)">
+                <mat-label>ID:</mat-label>
+            </div>
+            <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.raetsel.id}}</div>
+        </div>
+
+        <form [formGroup]="form" novalidate>
+
+            <!-- Rätsel: einfache Daten -->
+            <div fxLayout="column wrap" fxLayoutGap="10px" fxLayoutAlign="flex-start">
+
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Schlüssel</mat-label>
+                        <input matInput maxlength="5" inputmode="tel" placeholder="schluessel"
+                            formControlName="schluessel" #schluesselInput>
+                        <mat-hint>genau 5 Ziffern - verwendet als Dateiname für generierte Bilder</mat-hint>
+                        <mat-error *ngIf="raetselDataError('schluessel', 'required')">Schlüssel ist Pflicht</mat-error>
+                        <mat-error *ngIf="raetselDataError('schluessel', 'pattern')">genau 5 Ziffern - nach links mit 0
+                            auffüllen
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Name</mat-label>
+                        <input matInput maxlength="100" inputmode="tel" placeholder="name" formControlName="name"
+                            #nameInput>
+                        <mat-hint>wird in der Trefferliste angezeigt</mat-hint>
+                        <mat-error *ngIf="raetselDataError('name', 'required')">Name ist Pflicht</mat-error>
+                        <mat-error *ngIf="raetselDataError('name', 'maxLength')">maximal 100 Zeichen</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Kommentar</mat-label>
+                        <input matInput maxlength="200" inputmode="tel" placeholder="Kommentar"
+                            formControlName="kommentar" #kommentarInput>
+                        <mat-hint>Kommentare sind in Volltextsuche eingebunden</mat-hint>
+                        <mat-error *ngIf="raetselDataError('kommentar', 'maxLength')">maximal 200 Zeichen</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="column wrap" fxLayoutGap="10px" fxLayoutAlign="flex-start">
+                    <div class="mb-2 row">
+                        <mat-form-field class="form-box" appearance="fill">
+                            <mat-label>ID der Quelle</mat-label>
+                            <input matInput maxlength="36" inputmode="tel" placeholder="Quelle"
+                                formControlName="quelleId" #quelleIdInput>
+                            <mat-hint *ngIf="quellenFacade.selectedQuelle$ | async as quelle">{{quelle.name}}
+                                ({{quelle.quellenart}})</mat-hint>
+                            <mat-error *ngIf="raetselDataError('quelleId', 'required')">Quelle ist Pflicht</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-2 row">
+                        <button mat-raised-button color="primary" (click)="quelleSuchen()">andere Quelle</button>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Status</mat-label>
+                        <select matNativeControl formControlName="status" #statusInput>
+                            <option *ngFor="let status of selectStatusInput" [value]="status">{{status}}</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+
+                <div *ngIf="raetsel.raetsel.imageFrage">
+                    <mja-raetsel-images [raetsel]="raetsel.raetsel"></mja-raetsel-images>
+                    <div *ngIf="!raetsel.raetsel.imageFrage">
+                        <p>noch keine Images generiert</p>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Frage</mat-label>
+                        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="10"
+                            placeholder="Frage" formControlName="frage" #frageInput></textarea>
+                        <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
+                        <mat-error *ngIf="raetselDataError('frage', 'required')">Frage ist Pflicht</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Lösung</mat-label>
+                        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="10"
+                            placeholder="Lösung" formControlName="loesung" #loesungInput></textarea>
+                        <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Anzahl Antwortvorschläge</mat-label>
+                        <select matNativeControl formControlName="anzahlAntwortvorschlaege"
+                            #anzahlAntwortvorschlaegeInput (change)="onChangeAnzahlAntwortvorschlaege($event)">
+                            <option *ngFor="let anz of anzahlenAntwortvorschlaege" [value]="anz">{{anz}}</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Antwortvorschlag- Controls -->
+            <div *ngFor="let antwortvorschlag of antwortvorschlaegeFormGroup; let i = index">
+                <h3>Antwortvorschlag {{getBuchstabe(i)}}</h3>
+
+                <div [formGroup]="antwortvorschlag">
+                    <div class="mb-2">
+                        <mat-form-field class="form-box" appearance="fill">
+                            <mat-label>Text</mat-label>
+                            <input matInput maxlength="30" placeholder="Text" formControlName="text" #textInput>
+                            <mat-hint>Text des Antwortvorschlags - Wort oder kurze Wortgruppe</mat-hint>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mb-2">
+                        <mat-slide-toggle formControlName="korrekt" #korrektInput> korrekt (nein/ja)</mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+            <mat-error *ngIf="antwortvorschlaegeErrors()">Antwortvorschläge sind noch fehlerhaft: genau einer muss
+                korrekt sein.</mat-error>
+        </form>
+
+
+
+        <h3>Deskriptoren</h3>
+        <!--
+        <mja-select-items [itemList]="raetsel.selectableDeskriptoren"
+            (selectedItemsChanged)="onSelectableItemsChanged($event)"></mja-select-items>
+        -->
+
+        <div *ngIf="raetselFacade.isGeneratingOutput$ | async" class="loader">
+            <mat-progress-spinner mode="indeterminate" diameter='40' strokeWidth='5'></mat-progress-spinner>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+
+            <div fxFlex="0 1 calc(20%-20px)">
+                <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
+                    (click)="submit()">speichern</button>
+            </div>
+            <div fxFlex="0 1 calc(20%-20px)">
+                <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
+                    (click)="openPrintPNGDialog()">PNG generieren</button>
+            </div>
+            <div fxFlex="0 1 calc(20%-20px)">
+                <button mat-raised-button color="primary" (click)="cancelEdit()">abbrechen</button>
+            </div>
+        </div>
+
+        <div *ngIf="!form.valid || antwortvorschlaegeErrors()" class="hint-red mt-1 mb-2">
+            Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
+            Pflichtangaben und so.
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+<ng-template #keinRaetsel>
+    <h2>Rätsel Details</h2>
+    <p>kein Rätsel ausgewählt</p>
+</ng-template>

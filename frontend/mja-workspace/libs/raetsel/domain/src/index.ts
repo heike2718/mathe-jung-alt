@@ -7,3 +7,5 @@ export * from './lib/infrastructure/raetsel.datasource';
 export * from './lib/+state/raetsel/raetsel.actions';
 
 export * from './lib/application/raetsel.facade';
+
+export * from './lib/infrastructure/raetsel-details.guard';
