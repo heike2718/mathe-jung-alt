@@ -9,6 +9,7 @@ export const QUELLE_FEATURE_KEY = 'quellen-quelle';
 export interface QuellenState extends EntityState<Quelle> {
   selectedId?: string | number; // which Quelle record has been selected
   loaded: boolean; // has the Quelle list been loaded
+  adminQuelle?: Quelle,
   page: Quelle[];
 }
 
@@ -45,6 +46,19 @@ const quelleReducer = createReducer(
     return quelleAdapter.addOne(quelle, {
       ...state,
       selectedId: quelle.id,
+      loaded: false,
+      page: quellen.slice(0, 5)
+    })
+  }),
+
+  on(QuelleActions.quelleAdminLoaded, (state, { quelle }) => {
+
+    const quellen: Quelle[] = [];
+    quellen.push(quelle);
+
+    return quelleAdapter.addOne(quelle, {
+      ...state,
+      adminQuelle: quelle,
       loaded: false,
       page: quellen.slice(0, 5)
     })

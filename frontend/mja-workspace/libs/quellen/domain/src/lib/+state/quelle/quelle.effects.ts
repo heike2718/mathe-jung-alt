@@ -27,7 +27,7 @@ export class QuelleEffects {
 
   loadQuelle$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(QuelleActions.findQuelle),
+      ofType(QuelleActions.loadQuelle),
       this.safeNgrx.safeSwitchMap((action) =>
         this.quelleDataService.loadQuelle(action.uuid).pipe(
           map((quelle) =>
@@ -53,9 +53,9 @@ export class QuelleEffects {
       this.safeNgrx.safeSwitchMap((action) =>
         this.quelleDataService.loadQuelleAdmin(action.session.user).pipe(
           map((quelle: Quelle | undefined) =>
-            quelle ? QuelleActions.quelleFound({ quelle }) : noopAction()
+            quelle ? QuelleActions.quelleAdminLoaded({ quelle }) : noopAction()
           )
-        ), 'Ups, beim Laden der Quelle ist etwas schiefgegangen', noopAction()
+        ), 'Ups, beim Laden der Admin-Quelle ist etwas schiefgegangen', noopAction()
       )
     )
   );
@@ -68,7 +68,7 @@ export class QuelleEffects {
           map((quelle: Quelle | undefined) =>
             quelle ? QuelleActions.quelleFound({ quelle }) : noopAction()
           )
-        ), 'Ups, beim Laden der Quelle ist etwas schiefgegangen', noopAction()
+        ), 'Ups, beim Laden der Admin-Quelle ist etwas schiefgegangen', noopAction()
       )
     )
   );

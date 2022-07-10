@@ -12,7 +12,6 @@ export const quellenFound = createAction(
   props<{ quellen: Quelle[] }>()
 );
 
-
 export const quelleSelected = createAction(
   '[Quelle] selected',
   props<{quelle: Quelle}>()
@@ -25,15 +24,18 @@ export const pageSelected = createAction('[Quelle] page selected',
   props<{ quellen: Quelle[] }>()
 );
 
-
-
-export const findQuelle = createAction(
-  '[Quelle] find by id',
+export const loadQuelle = createAction(
+  '[Quelle] loadQuelle by id',
   props<{uuid: string}>()
 );
 
 export const quelleFound = createAction(
   '[Quelle] found by id',
+  props<{quelle: Quelle}>()
+);
+
+export const quelleAdminLoaded = createAction(
+  '[Quelle] quelleAdminLoaded',
   props<{quelle: Quelle}>()
 );
 

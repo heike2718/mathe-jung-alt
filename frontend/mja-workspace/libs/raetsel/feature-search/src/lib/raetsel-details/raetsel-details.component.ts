@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
 import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselSearchFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
@@ -20,7 +21,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   constructor(public raetselFacade: RaetselSearchFacade,
     public authFacade: AuthFacade,
-    private quellenFacade: QuellenFacade,
+    public quellenFacade: QuellenFacade,
+    private router: Router,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -29,6 +31,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
       details => {
         if (details) {
           this.#raetselDetails = details;
+          this.quellenFacade.loadQuelle(details.quelleId);
         }
       }
     );
@@ -44,6 +47,10 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   openPrintPDFDialog(): void {
     this.openPrintDialog('PDF');
+  }
+
+  gotoRaetselUebersicht(): void {
+    this.router.navigateByUrl('/raetsel/uebersicht');
   }
 
   private openPrintDialog(outputformat: LATEX_OUTPUTFORMAT): void {

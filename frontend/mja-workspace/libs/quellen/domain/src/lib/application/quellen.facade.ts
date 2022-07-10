@@ -14,7 +14,9 @@ export class QuellenFacade {
   loaded$ = this.store.pipe(select(QuelleSelectors.getQuelleLoaded));
   quellenList$ = this.store.pipe(select(QuelleSelectors.getAllQuellen));
   selectedQuelle$ = this.store.pipe(select(QuelleSelectors.getSelected));
+  adminQuelle$ = this.store.pipe(select(QuelleSelectors.getAdminQuelle));
   page$ = this.store.pipe(select(QuelleSelectors.getPage));
+  isGewaehlteQuelleAdminQuelle$ = this.store.pipe(select(QuelleSelectors.isGewaehlteQuelleAdminQuelle));
 
   public lastSuchfilter: Suchfilter = {
     kontext: 'QUELLEN',
@@ -48,6 +50,12 @@ export class QuellenFacade {
 
     if (suchkriterienVorhanden(suchfilter)) {
       this.store.dispatch(QuellenActions.findQuellen({ suchfilter }));
+    }
+  }
+
+  loadQuelle(uuid: string) {
+    if (uuid) {
+      this.store.dispatch(QuellenActions.loadQuelle({ uuid }));
     }
   }
 
