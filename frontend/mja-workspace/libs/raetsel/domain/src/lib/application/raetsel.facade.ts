@@ -16,6 +16,7 @@ export class RaetselSearchFacade {
   page$ = this.store.pipe(select(RaetselSelectors.getPage));
   paginationState$ = this.store.pipe(select(RaetselSelectors.getPaginationState));
   raetselDetails$ = this.store.pipe(select(RaetselSelectors.getRaetselDetails));
+  isGeneratingOutput$ = this.store.pipe(select(RaetselSelectors.isGeneratingOutput));
 
   public lastSuchfilter: Suchfilter = {
     kontext: 'RAETSEL',

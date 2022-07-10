@@ -73,6 +73,8 @@ const raetselReducer = createReducer(
     return { ...state, selectedId: action.raetselDetails.id, raetselDetailsContent: { ...state.raetselDetailsContent, raetsel: action.raetselDetails } };
   }),
 
+  on(RaetselActions.generateOutput, (state, _action) => ({...state, generatingOutput: true})),
+
   on(RaetselActions.outputGenerated, (state, action) => {
 
     if (state.raetselDetailsContent && state.raetselDetailsContent.raetsel) {
