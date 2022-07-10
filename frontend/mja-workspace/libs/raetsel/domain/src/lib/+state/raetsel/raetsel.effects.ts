@@ -6,7 +6,7 @@ import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { MessageService, SafeNgrxService, noopAction } from '@mja-workspace/shared/util-mja';
 import { Router } from '@angular/router';
 import { SuchfilterFacade } from '@mja-workspace/suchfilter/domain';
-import { RaetselSearchFacade } from '../../application/raetsel-search.facade';
+import { RaetselSearchFacade } from '../../application/raetsel.facade';
 import { AuthHttpService } from '@mja-workspace/shared/auth/domain';
 
 @Injectable()
@@ -58,7 +58,23 @@ export class RaetselEffects {
       }),
     ), { dispatch: false });
 
-
+  generiereRaetselOutput$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.generateOutput),
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.raetselDataService.generiereRaetselOutput(action.raetselId, action.outputFormat, action.layoutAntwortvorschlaege).pipe(
+          tap(() => {
+            if (action.outputFormat === 'PDF') {
+              this.messageService.info('PDF erfolgreich generiert');
+            }
+          }),
+          map((images) =>
+            RaetselActions.outputGenerated({ images })
+          )
+        ), 'Ups, beim Generieren des Rätsels ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
 
   constructor(
     private actions$: Actions,

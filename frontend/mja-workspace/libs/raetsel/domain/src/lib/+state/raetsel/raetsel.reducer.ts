@@ -2,7 +2,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import * as RaetselActions from './raetsel.actions';
-import { initialRaetselDetailsContent, Raetsel, RaetselDetailsContent } from '../../entities/raetsel';
+import { initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
 import { PaginationState, initialPaginationState } from '@mja-workspace/suchfilter/domain';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel-raetsel';
@@ -71,6 +71,17 @@ const raetselReducer = createReducer(
   on(RaetselActions.raetselDetailsLoaded, (state, action) => {
 
     return { ...state, selectedId: action.raetselDetails.id, raetselDetailsContent: { ...state.raetselDetailsContent, raetsel: action.raetselDetails } };
+  }),
+
+  on(RaetselActions.outputGenerated, (state, action) => {
+
+    if (state.raetselDetailsContent && state.raetselDetailsContent.raetsel) {
+      const neueDetails: RaetselDetails = { ...state.raetselDetailsContent.raetsel, imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung };
+      const neuerContent = { ...state.raetselDetailsContent, raetsel: neueDetails };
+      return { ...state, raetselDetailsContent: neuerContent, generatingOutput: false };
+    }
+
+    return { ...state };
   }),
 
   on(RaetselActions.raetsellisteCleared, (state, _action) => ({

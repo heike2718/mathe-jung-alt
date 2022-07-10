@@ -34,10 +34,15 @@
                 <mat-icon routerLinkActive="active-icon">home</mat-icon><span class="ml-2"> Startseite </span>
             </a>            
             <a *ngIf="authFacade.isAdmin$| async" [routerLink]="['/quellen/uebersicht']" mat-list-item href="#" routerLinkActive="active">
-                <mat-icon routerLinkActive="active-icon">settings</mat-icon><span class="ml-2"> Quellen</span>
+                <mat-icon routerLinkActive="active-icon">newspaper</mat-icon><span class="ml-2"> Quellen</span>
             </a>
+            <!--
             <a *ngIf="authFacade.isLoggedIn$ | async" [routerLink]="['/raetsel/uebersicht']" mat-list-item href="#" routerLinkActive="active">
-                <mat-icon routerLinkActive="active-icon">settings</mat-icon><span class="ml-2"> Rätsel</span>
+                <mat-icon routerLinkActive="active-icon">quiz</mat-icon><span class="ml-2"> Rätsel</span>
+            </a>
+            -->
+            <a *ngIf="authFacade.isLoggedIn$ | async" [routerLink]="['/raetsel/uebersicht']" mat-list-item href="#" routerLinkActive="active">
+                <mat-icon routerLinkActive="active-icon">folder</mat-icon><span class="ml-2"> Rätsel</span>
             </a>
         </mat-nav-list>
     </mat-sidenav>

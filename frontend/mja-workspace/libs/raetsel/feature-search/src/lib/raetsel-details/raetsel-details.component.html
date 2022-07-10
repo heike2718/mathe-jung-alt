@@ -1,4 +1,4 @@
-<div *ngIf="raetselSearchFacade.raetselDetails$ | async as raetsel else keinRaetsel" fxLayout="column" fxLayoutGap="20px"
+<div *ngIf="raetselFacade.raetselDetails$ | async as raetsel else keinRaetsel" fxLayout="column" fxLayoutGap="20px"
     class="container">
 
     <h2>Rätsel {{raetsel.schluessel}}: Details</h2>

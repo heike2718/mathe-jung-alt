@@ -12,7 +12,7 @@ import { Suchfilter,
   SuchfilterQueryParameterMapper,
   PageDefinition
 } from '@mja-workspace/suchfilter/domain';
-import { Raetsel, RaetselDetails } from '../entities/raetsel';
+import { GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselDataService {
@@ -87,4 +87,14 @@ export class RaetselDataService {
     const headers = new HttpHeaders().set('Accept', 'application/json');
     return this.http.get<RaetselDetails>(url, { headers: headers });
   }
+
+  public generiereRaetselOutput(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
+
+    const url = this.#url + '/' + outputFormat + '/' + raetselId;
+
+    const headers = new HttpHeaders().set('Accept', 'application/json');
+    const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+
+    return this.http.get<GeneratedImages>(url, { headers: headers, params: params });    
+ }
 }

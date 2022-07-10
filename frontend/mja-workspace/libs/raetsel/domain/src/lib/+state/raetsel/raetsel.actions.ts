@@ -1,6 +1,6 @@
 import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
-import { Raetsel, RaetselDetails } from '../../entities/raetsel';
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, GeneratedImages } from '../../entities/raetsel';
 
 export const setSuchfilter = createAction(
   '[Raetsel] setSuchfilter',
@@ -58,3 +58,18 @@ export const showRaetselDetails = createAction(
 export const raetsellisteCleared = createAction(
   '[Raetsel] raetselliste cleared '
 );
+
+export const generateOutput = createAction(
+  '[Raetsel] generate output',
+  props<{ raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>()
+);
+
+export const outputGenerated = createAction(
+  '[Raetsel] output generated',
+  props<{ images: GeneratedImages }>()
+);
+
+export const generateOutputError = createAction(
+  '[Raetsel] generate error'
+);
+

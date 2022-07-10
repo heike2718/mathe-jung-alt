@@ -1,6 +1,6 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs';
-import { RaetselSearchFacade } from '../application/raetsel-search.facade';
+import { RaetselSearchFacade } from '../application/raetsel.facade';
 import { Raetsel } from '../entities/raetsel';
 
 

@@ -48,6 +48,14 @@ export interface RaetselDetailsContent {
   readonly selectableDeskriptoren: SelectableItem[];
 };
 
+export interface GeneratedImages {
+  readonly outputFormat: LATEX_OUTPUTFORMAT,
+  readonly imageFrage: string | null;
+  readonly imageLoesung: string | null;
+  readonly urlFrage?: string;
+  readonly urlLoesung?: string;
+};
+
 export const initialRaetselDetails: RaetselDetails = {
   id: 'neu',
   schluessel: '',
@@ -62,6 +70,8 @@ export const initialRaetselDetails: RaetselDetails = {
   imageFrage: null,
   imageLoesung: null
 };
+
+
 
 export const initialRaetselDetailsContent: RaetselDetailsContent = {
   kontext: "RAETSEL",

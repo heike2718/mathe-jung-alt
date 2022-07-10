@@ -6,7 +6,7 @@ import { filter, tap } from 'rxjs';
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
 import * as RaetselSelectors from '../+state/raetsel/raetsel.selectors';
-import { Raetsel } from '../entities/raetsel';
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselSearchFacade {
@@ -60,6 +60,10 @@ export class RaetselSearchFacade {
 
   selectRaetsel(raetsel: Raetsel): void {
     this.store.dispatch(RaetselActions.raetselSelected({ raetsel }));
+  }
+
+  generiereRaetselOutput(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+    this.store.dispatch(RaetselActions.generateOutput({ raetselId, outputFormat, layoutAntwortvorschlaege }));
   }
 
   // ///// private methods //////
