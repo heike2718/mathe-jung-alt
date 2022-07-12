@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
 import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayload, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mja-workspace/raetsel/domain';
+import { JaNeinDialogComponent, JaNeinDialogData } from '@mja-workspace/shared/ui-components';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { Deskriptor } from '@mja-workspace/suchfilter/domain';
@@ -78,7 +79,7 @@ export class RaetselEditComponent implements OnInit {
     this.#selectedQuelleSubscription.unsubscribe();
   }
 
-  submit() {
+  submitWithHistory() {
 
     const raetsel: RaetselDetails = this.readFormValues();
 
@@ -182,6 +183,29 @@ export class RaetselEditComponent implements OnInit {
         this.raetselFacade.generiereRaetselOutput(this.raetselDetailsContent.raetsel.id, 'PNG', layout);
       }
     });
+  }
+
+  openHistorieLaTeXSpeichernDialog(): void {
+
+    const dialogData: JaNeinDialogData = {
+      frage: 'Soll Historie gespeichert werden?',
+      hinweis: 'Bei Rechtschreibkorrekturen bitte nicht. Nur bei inhaltlichen Korrekturen'
+    }
+
+    const dialogRef = this.dialog.open(JaNeinDialogComponent, {
+      height: '300px',
+      width: '700px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result) {
+
+        
+      }
+    });
+
   }
 
   private initForm() {

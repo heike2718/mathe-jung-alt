@@ -152,7 +152,11 @@
 
             <div fxFlex="0 1 calc(20%-20px)">
                 <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
-                    (click)="submit()">speichern</button>
+                    (click)="submitWithHistory()">speichern</button>
+            </div>
+            <div fxFlex="0 1 calc(20%-20px)">
+                <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
+                    (click)="openHistorieLaTeXSpeichernDialog()">Dialogtest</button>
             </div>
             <div fxFlex="0 1 calc(20%-20px)">
                 <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
