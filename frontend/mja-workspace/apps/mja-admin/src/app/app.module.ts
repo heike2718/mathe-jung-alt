@@ -12,7 +12,7 @@ import { NotAuthorizedComponent } from './not-authorized/not-authorized.componen
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedConfigurationModule } from '@mja-workspace/shared/util-configuration';
-import { SharedAuthDomainModule } from '@mja-workspace/shared/auth/domain';
+import { AuthInterceptor, SharedAuthDomainModule } from '@mja-workspace/shared/auth/domain';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutComponent } from './layout/layout.component';
 import { RaetselFeatureSearchModule } from '@mja-workspace/raetsel/feature-search';
@@ -22,6 +22,7 @@ import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { QuellenDomainModule } from '@mja-workspace/quellen/domain';
 import { QuellenFeatureSearchModule } from '@mja-workspace/quellen/feature-search';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,11 @@ import { QuellenFeatureSearchModule } from '@mja-workspace/quellen/feature-searc
   providers: [
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     { provide: LOCALE_ID, useValue: 'de-DE' },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
     // { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
   ],
   bootstrap: [AppComponent],

@@ -31,12 +31,7 @@ export class SharedAuthDomainModule {
     return {
       ngModule: SharedAuthDomainModule,
       providers: [
-        AuthGuard,
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: AuthInterceptor,
-          multi: true
-        },
+        AuthGuard        
       ]
     }
   }

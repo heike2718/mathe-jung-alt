@@ -5,6 +5,7 @@ export * from './lib/entities/auth.model';
 export * from './lib/application/auth.facade';
 export * from './lib/infrastructure/auth.guard';
 export * from './lib/infrastructure/admin.guard';
+export * from './lib/infrastructure/auth.interceptor';
 
 export * from './lib/+state/auth.actions';
 
