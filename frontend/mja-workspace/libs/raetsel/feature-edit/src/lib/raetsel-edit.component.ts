@@ -6,7 +6,7 @@ import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayl
 import { JaNeinDialogComponent, JaNeinDialogData, SelectItemsCompomentModel, SelectItemsComponent } from '@mja-workspace/shared/ui-components';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
-import { Deskriptor } from '@mja-workspace/suchfilter/domain';
+import { Deskriptor, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { combineLatest, Subscription } from 'rxjs';
 
 interface AntwortvorschlagFormValue {
@@ -28,9 +28,14 @@ export class RaetselEditComponent implements OnInit {
   raetselDetailsContent!: RaetselDetailsContent;
   selectDeskriptorenComponentModel!: SelectItemsCompomentModel;
 
+  #kontext: Suchkontext = 'RAETSEL';
+
 
   #raetselSubscription: Subscription = new Subscription();
   #selectedQuelleSubscription: Subscription = new Subscription();
+
+  #selectedDeskriptoren: Deskriptor[] = [];
+
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
   selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
@@ -64,7 +69,8 @@ export class RaetselEditComponent implements OnInit {
           this.raetselDetailsContent = raetsel;
 
           const gewaehlteItems: SelectableItem[] = [];
-          this.raetselDetailsContent.raetsel.deskriptoren.forEach(d => gewaehlteItems.push({id: d.id, name: d.name, selected: true}));
+          this.raetselDetailsContent.raetsel.deskriptoren.forEach(d => gewaehlteItems.push({ id: d.id, name: d.name, selected: true }));
+          this.#selectedDeskriptoren = this.raetselDetailsContent.raetsel.deskriptoren;
 
           this.selectDeskriptorenComponentModel = {
             ueberschriftAuswahlliste: 'Deskriptoren',
@@ -142,8 +148,16 @@ export class RaetselEditComponent implements OnInit {
 
   onSelectedDesktiptorenChanged($event: any) {
 
-    if ($event && $event.target && $event.target.value) {
-      this.selectDeskriptorenComponentModel = <SelectItemsCompomentModel>$event.target.value;
+    if ($event) {
+      const selectedItems: SelectableItem[] = (<SelectItemsCompomentModel>$event).gewaehlteItems;
+      this.#selectedDeskriptoren = [];
+      selectedItems.forEach(item => this.#selectedDeskriptoren.push(
+        {
+          id: item.id,
+          admin: true,
+          kontext: this.#kontext,
+          name: item.name
+        }));
     }
   }
 
@@ -281,8 +295,6 @@ export class RaetselEditComponent implements OnInit {
     const formValue = this.form.value;
 
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
-    const deskriptoren: Deskriptor[] = [];
-    this.selectDeskriptorenComponentModel.gewaehlteItems.forEach(item => deskriptoren.push({ id: item.id, kontext: 'RAETSEL', name: item.name, admin: true }));
 
     const raetsel: RaetselDetails = {
       ...this.raetselDetailsContent.raetsel,
@@ -293,7 +305,7 @@ export class RaetselEditComponent implements OnInit {
       frage: formValue['frage'] !== null ? formValue['frage'].trim() : '',
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
       antwortvorschlaege: antwortvorschlaegeNeu,
-      deskriptoren: deskriptoren,
+      deskriptoren: this.#selectedDeskriptoren,
       imageFrage: null,
       imageLoesung: null
     };
