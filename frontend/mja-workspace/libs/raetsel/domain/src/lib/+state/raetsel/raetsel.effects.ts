@@ -66,13 +66,17 @@ export class RaetselEffects {
       }),
     ), { dispatch: false });
 
-    saveRaetsel$ = createEffect(() =>
+  saveRaetsel$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.saveRaetsel),
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
       this.safeNgrx.safeSwitchMap((action) =>
         this.raetselDataService.saveRaetsel(action.editRaetselPayload, action.csrfToken).pipe(
-          map((raetselDetails) => RaetselActions.raetselSaved({ raetselDetails, successMessage: 'Das Raetsel wurde erfolgreich gespeichert: uuid=' + raetselDetails.id }))
+          map((raetselDetails) => RaetselActions.raetselSaved({
+            raetselDetails,
+            successMessage: 'Das Raetsel wurde erfolgreich gespeichert: uuid=' + raetselDetails.id,
+            insert: action.editRaetselPayload.raetsel.id === 'neu'
+          }))
         ), 'Ups, beim Speichern des Rätsels ist etwas schiefgegangen', noopAction()
       )
     )
@@ -84,7 +88,7 @@ export class RaetselEffects {
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
       this.safeNgrx.safeSwitchMap((action) =>
         this.authService.getCsrfToken().pipe(
-          map((token) => RaetselActions.saveRaetsel({editRaetselPayload: action.editRaetselPayload, csrfToken: token}))
+          map((token) => RaetselActions.saveRaetsel({ editRaetselPayload: action.editRaetselPayload, csrfToken: token }))
         ), 'Ups, beim Speichern des Rätsels ist etwas schiefgegangen', noopAction()
       )
     )

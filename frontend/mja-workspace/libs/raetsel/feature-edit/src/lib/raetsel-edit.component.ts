@@ -20,7 +20,7 @@ interface AntwortvorschlagFormValue {
   styleUrls: ['./raetsel-edit.component.scss'],
 })
 export class RaetselEditComponent implements OnInit {
-  
+
   // https://coryrylan.com/blog/building-reusable-forms-in-angular
   // https://stackblitz.com/edit/angular-10-dynamic-reactive-forms-example?file=src%2Fapp%2Fapp.component.html
   // https://jasonwatmore.com/post/2020/09/18/angular-10-dynamic-reactive-forms-example
@@ -60,14 +60,14 @@ export class RaetselEditComponent implements OnInit {
       if (raetsel) {
         this.raetselDetailsContent = raetsel;
         this.#selectedDeskriptoren = this.raetselDetailsContent.raetsel.deskriptoren;
-        this.initForm();
+        this.#initForm();
       }
     });
 
     this.#selectedQuelleSubscription = this.quellenFacade.selectedQuelle$.subscribe(
       quelle => {
         if (quelle) {
-          const raetsel: RaetselDetails = { ...this.readFormValues(), quelleId: quelle.id };
+          const raetsel: RaetselDetails = { ...this.#readFormValues(), quelleId: quelle.id };
           // this.raetselFacade.cacheRaetselDetails(raetsel);
         }
       }
@@ -79,12 +79,20 @@ export class RaetselEditComponent implements OnInit {
     this.#selectedQuelleSubscription.unsubscribe();
   }
 
-  submitWithHistory() {
+  submit() {
 
-    const raetsel: RaetselDetails = this.readFormValues();
+    const raetsel: RaetselDetails = this.#readFormValues();
 
-    const latexHistorisieren = this.raetselDetailsContent.raetsel.id !== 'neu' &&
-      (raetsel.frage !== this.raetselDetailsContent.raetsel.frage || raetsel.loesung !== this.raetselDetailsContent.raetsel.loesung);
+    const laTeXChanged = this.#latexChanged(raetsel);
+
+    if (laTeXChanged) {
+      this.openHistorieLaTeXSpeichernDialog(raetsel);
+    } else {
+      this.#doSubmit(raetsel, false);
+    }
+  }
+
+  #doSubmit(raetsel: RaetselDetails, latexHistorisieren: boolean) {
 
     const editRaetselPayload: EditRaetselPayload = {
       latexHistorisieren: latexHistorisieren,
@@ -116,7 +124,7 @@ export class RaetselEditComponent implements OnInit {
   onChangeAnzahlAntwortvorschlaege($event: any) {
 
     const anz = parseInt($event.target.value);
-    this.addOrRemoveAntowrtvorschlagFormParts(anz);
+    this.#addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
   onSelectableItemsChanged($items: SelectableItem[]) {
@@ -129,7 +137,7 @@ export class RaetselEditComponent implements OnInit {
   }
 
   quelleSuchen(): void {
-    const raetsel: RaetselDetails = this.readFormValues();
+    const raetsel: RaetselDetails = this.#readFormValues();
     // this.raetselFacade.cacheRaetselDetails(raetsel);
     this.quellenFacade.navigateToQuellensuche();
   }
@@ -139,7 +147,7 @@ export class RaetselEditComponent implements OnInit {
   }
 
   antwortvorschlaegeErrors(): boolean {
-    const antworten: Antwortvorschlag[] = this.collectAntwortvorschlaege();
+    const antworten: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
 
     if (antworten.length === 0) {
       return false;
@@ -174,7 +182,7 @@ export class RaetselEditComponent implements OnInit {
       if (result && dialogData.selectedLayoutAntwortvorschlaege) {
 
         let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
-        switch(dialogData.selectedLayoutAntwortvorschlaege) {
+        switch (dialogData.selectedLayoutAntwortvorschlaege) {
           case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
           case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
           case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
@@ -185,11 +193,11 @@ export class RaetselEditComponent implements OnInit {
     });
   }
 
-  openHistorieLaTeXSpeichernDialog(): void {
+  openHistorieLaTeXSpeichernDialog(raetsel: RaetselDetails): void {
 
     const dialogData: JaNeinDialogData = {
       frage: 'Soll Historie gespeichert werden?',
-      hinweis: 'Bei Rechtschreibkorrekturen bitte nicht. Nur bei inhaltlichen Korrekturen'
+      hinweis: 'Bitte nur bei inhaltlichen Korrekturen. Das spart Speicherplatz'
     }
 
     const dialogRef = this.dialog.open(JaNeinDialogComponent, {
@@ -199,16 +207,11 @@ export class RaetselEditComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
-      if (result) {
-
-        
-      }
+      this.#doSubmit(raetsel, result);
     });
-
   }
 
-  private initForm() {
+  #initForm() {
 
     const raetsel = this.raetselDetailsContent.raetsel;
 
@@ -220,7 +223,7 @@ export class RaetselEditComponent implements OnInit {
     this.form.controls['kommentar'].setValue(raetsel.kommentar);
     this.form.controls['anzahlAntwortvorschlaege'].setValue(raetsel.antwortvorschlaege.length + '');
 
-    this.addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
+    this.#addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
 
     for (let i = 0; i < raetsel.antwortvorschlaege.length; i++) {
 
@@ -231,7 +234,7 @@ export class RaetselEditComponent implements OnInit {
     }
   }
 
-  private collectAntwortvorschlaege(): Antwortvorschlag[] {
+  #collectAntwortvorschlaege(): Antwortvorschlag[] {
 
     const result: Antwortvorschlag[] = [];
 
@@ -246,7 +249,7 @@ export class RaetselEditComponent implements OnInit {
     return result;
   }
 
-  private addOrRemoveAntowrtvorschlagFormParts(anz: number) {
+  #addOrRemoveAntowrtvorschlagFormParts(anz: number) {
 
     if (this.avFormArray.length < anz) {
 
@@ -263,10 +266,10 @@ export class RaetselEditComponent implements OnInit {
     }
   }
 
-  private readFormValues(): RaetselDetails {
+  #readFormValues(): RaetselDetails {
     const formValue = this.form.value;
 
-    const antwortvorschlaegeNeu: Antwortvorschlag[] = this.collectAntwortvorschlaege();
+    const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
 
     const raetsel: RaetselDetails = {
       ...this.raetselDetailsContent.raetsel,
@@ -297,5 +300,11 @@ export class RaetselEditComponent implements OnInit {
     }
 
     return '';
+  }
+
+  #latexChanged(raetsel: RaetselDetails): boolean {
+
+    return this.raetselDetailsContent.raetsel.id !== 'neu' &&
+      (raetsel.frage !== this.raetselDetailsContent.raetsel.frage || raetsel.loesung !== this.raetselDetailsContent.raetsel.loesung);
   }
 }

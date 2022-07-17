@@ -1,9 +1,10 @@
 import { createReducer, on, Action } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { EntityState, EntityAdapter, createEntityAdapter, Update } from '@ngrx/entity';
 
 import * as RaetselActions from './raetsel.actions';
 import { initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
 import { PaginationState, initialPaginationState } from '@mja-workspace/suchfilter/domain';
+import { SelectableItem } from '@mja-workspace/shared/util-mja';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel-raetsel';
 
@@ -73,7 +74,7 @@ const raetselReducer = createReducer(
     return { ...state, selectedId: action.raetselDetails.id, raetselDetailsContent: { ...state.raetselDetailsContent, raetsel: action.raetselDetails } };
   }),
 
-  on(RaetselActions.generateOutput, (state, _action) => ({...state, generatingOutput: true})),
+  on(RaetselActions.generateOutput, (state, _action) => ({ ...state, generatingOutput: true })),
 
   on(RaetselActions.outputGenerated, (state, action) => {
 
@@ -84,6 +85,44 @@ const raetselReducer = createReducer(
     }
 
     return { ...state };
+  }),
+
+  on(RaetselActions.raetselSaved, (state, action) => {
+
+    const details: RaetselDetails = action.raetselDetails;
+
+    const raetsel: Raetsel = {
+      id: details.id,
+      deskriptoren: details.deskriptoren,
+      name: details.name,
+      schluessel: details.name,
+      status: details.status,
+      kommentar: details.kommentar
+    }
+
+    let firstState: RaetselState;
+
+    if (action.insert) {
+      firstState = raetselAdapter.upsertOne(raetsel, state);
+    } else {
+      const update: Update<Raetsel> = {
+        id: details.id,
+        changes: raetsel
+      };
+      firstState = raetselAdapter.updateOne(update, state);
+    }
+
+    const selectableDeskriptoren: SelectableItem[] = [];
+    details.deskriptoren.forEach(d => {
+      selectableDeskriptoren.push({
+        id: d.id,
+        name: d.name,
+        selected: true
+      })
+    });
+
+    return { ...firstState, raetselDetailsContent: 
+      { ...firstState.raetselDetailsContent, kontext: 'RAETSEL', quelleId: details.quelleId, selectableDeskriptoren: selectableDeskriptoren, raetsel: details } };
   }),
 
   on(RaetselActions.raetsellisteCleared, (state, _action) => ({

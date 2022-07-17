@@ -64,8 +64,6 @@ export const editRaetsel = createAction(
   props<{ raetselDetailsContent: RaetselDetailsContent }>()
 );
 
-
-
 export const cancelEdit = createAction(
   '[Raetsel] cancel edit'
 );
@@ -82,7 +80,7 @@ export const saveRaetsel = createAction(
 
 export const raetselSaved = createAction(
   '[Raetsel] raetsel saved',
-  props<{ raetselDetails: RaetselDetails, successMessage: string }>()
+  props<{ raetselDetails: RaetselDetails, successMessage: string, insert: boolean }>()
 );
 
 export const generateOutput = createAction(
