@@ -1,3 +1,4 @@
+import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
 import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, GeneratedImages, RaetselDetailsContent, EditRaetselPayload } from '../../entities/raetsel';
@@ -57,6 +58,11 @@ export const showRaetselDetails = createAction(
 
 export const raetsellisteCleared = createAction(
   '[Raetsel] raetselliste cleared '
+);
+
+export const raetselDeskriptorenLoaded = createAction(
+  '[Raetsel] raetselDeskriptorenLoaded',
+  props<{selectableDeskriptoren: SelectableItem[]}>()
 );
 
 export const editRaetsel = createAction(

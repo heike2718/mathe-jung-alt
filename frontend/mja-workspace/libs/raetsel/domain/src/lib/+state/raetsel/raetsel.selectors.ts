@@ -61,3 +61,8 @@ export const getDetailsContent = createSelector(
   getRaetselState,
   (state: RaetselState) => state.raetselDetailsContent
 );
+
+export const getRaetselDeskriptoren = createSelector(
+  getRaetselState,
+  (state: RaetselState) => state.selectableDeskriptoren
+);

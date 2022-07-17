@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
-import { Deskriptor, filterByKontext, getDifferenzmenge, PageDefinition, Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
+import { filterByKontext, PageDefinition, Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, filter, Observable, tap } from 'rxjs';
+import { combineLatest, Observable, tap } from 'rxjs';
 
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
@@ -21,6 +21,7 @@ export class RaetselFacade {
   raetselDetails$ = this.store.pipe(select(RaetselSelectors.getRaetselDetails));
   isGeneratingOutput$ = this.store.pipe(select(RaetselSelectors.isGeneratingOutput));
   editorContent$: Observable<RaetselDetailsContent | undefined> = this.store.pipe(select(RaetselSelectors.getDetailsContent));
+  editorSelectableDeskriptoren$: Observable<SelectableItem[]> = this.store.pipe(select(RaetselSelectors.getRaetselDeskriptoren));
   
   lastSuchfilter: Suchfilter = {
     kontext: 'RAETSEL',
@@ -29,7 +30,7 @@ export class RaetselFacade {
   };
 
   #deskriptorenLoaded = false;
-  #raetselDeskriptoren: Deskriptor[] = [];
+  // #raetselDeskriptoren: Deskriptor[] = [];
   #adminQuelleId: string | undefined;
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>,
@@ -42,7 +43,11 @@ export class RaetselFacade {
       this.suchfilterFacade.allDeskriptoren$,
     ]).subscribe(([deskriptorenLoaded, allDeskriptoren]) => {
       if (deskriptorenLoaded) {
-        this.#raetselDeskriptoren = filterByKontext('RAETSEL', allDeskriptoren);
+        
+        const raetselDeskriptoren = filterByKontext('RAETSEL', allDeskriptoren);
+        const selectableDeskriptoren: SelectableItem[] = [];
+        raetselDeskriptoren.forEach(deskriptor => selectableDeskriptoren.push({id: deskriptor.id, name: deskriptor.name, selected: false}));
+        this.store.dispatch(RaetselActions.raetselDeskriptorenLoaded({selectableDeskriptoren}));
       }
     });
 
@@ -108,22 +113,10 @@ export class RaetselFacade {
 
   editRaetsel(raetselDetails: RaetselDetails): void {
 
-    const vorrat: Deskriptor[] = getDifferenzmenge(this.#raetselDeskriptoren, raetselDetails.deskriptoren);
-    const selectableDeskriptoren: SelectableItem[] = [];
-
-    raetselDetails.deskriptoren.forEach(deskriptor => {
-      selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: true });
-    });
-
-    vorrat.forEach(deskriptor => {
-      selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: false });
-    });
-
     const content: RaetselDetailsContent = {
       raetsel: raetselDetails,
       quelleId: raetselDetails.quelleId,
-      kontext: 'RAETSEL',
-      selectableDeskriptoren: selectableDeskriptoren
+      kontext: 'RAETSEL'
     };
 
     this.store.dispatch(RaetselActions.editRaetsel({ raetselDetailsContent: content }));

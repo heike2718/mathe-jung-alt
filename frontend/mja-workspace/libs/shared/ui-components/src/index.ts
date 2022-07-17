@@ -8,3 +8,7 @@ export { AdminSuchfilterComponent } from './lib/admin-suchfilter/admin-suchfilte
 export { JaNeinDialogComponent } from './lib/ja-nein-dialog/ja-nein-dialog.component';
 
 export * from './lib/material.module';
+
+export { SelectItemsComponent } from './lib/select-items/select-items.component';
+// export { SelectItemsFacade } from './lib/select-items/select-items.facade';
+export * from './lib/select-items/select-items.model';

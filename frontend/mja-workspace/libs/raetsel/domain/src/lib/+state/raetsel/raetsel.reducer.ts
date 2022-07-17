@@ -5,6 +5,7 @@ import * as RaetselActions from './raetsel.actions';
 import { initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
 import { PaginationState, initialPaginationState } from '@mja-workspace/suchfilter/domain';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
+import { state } from '@angular/animations';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel-raetsel';
 
@@ -17,6 +18,7 @@ export interface RaetselState extends EntityState<Raetsel> {
   paginationState: PaginationState;
   raetselDetailsContent: RaetselDetailsContent;
   generatingOutput: boolean;
+  selectableDeskriptoren: SelectableItem[];
 }
 
 export interface RaetselPartialState {
@@ -31,7 +33,8 @@ export const initialState: RaetselState = raetselAdapter.getInitialState({
   page: [],
   paginationState: initialPaginationState,
   raetselDetailsContent: initialRaetselDetailsContent,
-  generatingOutput: false
+  generatingOutput: false,
+  selectableDeskriptoren: []
 });
 
 const raetselReducer = createReducer(
@@ -73,6 +76,11 @@ const raetselReducer = createReducer(
 
     return { ...state, selectedId: action.raetselDetails.id, raetselDetailsContent: { ...state.raetselDetailsContent, raetsel: action.raetselDetails } };
   }),
+
+  on(RaetselActions.raetselDeskriptorenLoaded, (state, action) => ({
+    ...state,
+    selectableDeskriptoren: action.selectableDeskriptoren
+  })),
 
   on(RaetselActions.generateOutput, (state, _action) => ({ ...state, generatingOutput: true })),
 

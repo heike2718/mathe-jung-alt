@@ -7,7 +7,7 @@ export interface MjaEntityWrapper<T extends MjaEntity> {
     entity: T
 };
 
-export interface SelectableItem {
+export interface SelectableItem extends MjaEntity {
     readonly id: string | number;
     readonly name: string;
     readonly selected: boolean;

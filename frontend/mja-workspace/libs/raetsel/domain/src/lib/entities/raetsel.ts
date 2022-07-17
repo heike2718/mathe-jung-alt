@@ -45,7 +45,6 @@ export interface RaetselDetailsContent {
   readonly kontext: Suchkontext;
   readonly raetsel: RaetselDetails;
   readonly quelleId?: string;
-  readonly selectableDeskriptoren: SelectableItem[];
 };
 
 export interface EditRaetselPayload {
@@ -80,7 +79,6 @@ export const initialRaetselDetails: RaetselDetails = {
 
 export const initialRaetselDetailsContent: RaetselDetailsContent = {
   kontext: "RAETSEL",
-  raetsel: initialRaetselDetails,
-  selectableDeskriptoren: []
+  raetsel: initialRaetselDetails
 };
 

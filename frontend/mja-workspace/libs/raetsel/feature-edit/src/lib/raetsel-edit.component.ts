@@ -3,11 +3,11 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
 import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayload, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mja-workspace/raetsel/domain';
-import { JaNeinDialogComponent, JaNeinDialogData } from '@mja-workspace/shared/ui-components';
+import { JaNeinDialogComponent, JaNeinDialogData, SelectItemsCompomentModel, SelectItemsComponent } from '@mja-workspace/shared/ui-components';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { Deskriptor } from '@mja-workspace/suchfilter/domain';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -26,7 +26,8 @@ export class RaetselEditComponent implements OnInit {
   // https://jasonwatmore.com/post/2020/09/18/angular-10-dynamic-reactive-forms-example
   // #raetsel: RaetselDetails = initialRaetselDetails;
   raetselDetailsContent!: RaetselDetailsContent;
-  #selectedDeskriptoren: Deskriptor[] = [];
+  selectDeskriptorenComponentModel!: SelectItemsCompomentModel;
+
 
   #raetselSubscription: Subscription = new Subscription();
   #selectedQuelleSubscription: Subscription = new Subscription();
@@ -56,13 +57,25 @@ export class RaetselEditComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.#raetselSubscription = this.raetselFacade.editorContent$.subscribe((raetsel) => {
-      if (raetsel) {
-        this.raetselDetailsContent = raetsel;
-        this.#selectedDeskriptoren = this.raetselDetailsContent.raetsel.deskriptoren;
-        this.#initForm();
-      }
-    });
+    this.#raetselSubscription = combineLatest([this.raetselFacade.editorContent$, this.raetselFacade.editorSelectableDeskriptoren$])
+      .subscribe(([raetsel, items]) => {
+
+        if (raetsel) {
+          this.raetselDetailsContent = raetsel;
+
+          const gewaehlteItems: SelectableItem[] = [];
+          this.raetselDetailsContent.raetsel.deskriptoren.forEach(d => gewaehlteItems.push({id: d.id, name: d.name, selected: true}));
+
+          this.selectDeskriptorenComponentModel = {
+            ueberschriftAuswahlliste: 'Deskriptoren',
+            ueberschriftGewaehlteItems: 'gewählt:',
+            vorrat: items,
+            gewaehlteItems: gewaehlteItems
+          };
+          this.#initForm();
+        }
+
+      });
 
     this.#selectedQuelleSubscription = this.quellenFacade.selectedQuelle$.subscribe(
       quelle => {
@@ -127,13 +140,11 @@ export class RaetselEditComponent implements OnInit {
     this.#addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
-  onSelectableItemsChanged($items: SelectableItem[]) {
+  onSelectedDesktiptorenChanged($event: any) {
 
-    this.#selectedDeskriptoren = [];
-
-    $items.forEach(item => {
-      this.#selectedDeskriptoren.push({ id: item.id, name: item.name, admin: true, kontext: 'RAETSEL' });
-    });
+    if ($event && $event.target && $event.target.value) {
+      this.selectDeskriptorenComponentModel = <SelectItemsCompomentModel>$event.target.value;
+    }
   }
 
   quelleSuchen(): void {
@@ -270,6 +281,8 @@ export class RaetselEditComponent implements OnInit {
     const formValue = this.form.value;
 
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
+    const deskriptoren: Deskriptor[] = [];
+    this.selectDeskriptorenComponentModel.gewaehlteItems.forEach(item => deskriptoren.push({ id: item.id, kontext: 'RAETSEL', name: item.name, admin: true }));
 
     const raetsel: RaetselDetails = {
       ...this.raetselDetailsContent.raetsel,
@@ -280,7 +293,7 @@ export class RaetselEditComponent implements OnInit {
       frage: formValue['frage'] !== null ? formValue['frage'].trim() : '',
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
       antwortvorschlaege: antwortvorschlaegeNeu,
-      deskriptoren: this.#selectedDeskriptoren,
+      deskriptoren: deskriptoren,
       imageFrage: null,
       imageLoesung: null
     };

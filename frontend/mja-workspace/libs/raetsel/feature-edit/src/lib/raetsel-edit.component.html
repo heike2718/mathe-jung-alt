@@ -136,13 +136,11 @@
                 korrekt sein.</mat-error>
         </form>
 
-
-
-        <h3>Deskriptoren</h3>
-        <!--
-        <mja-select-items [itemList]="raetsel.selectableDeskriptoren"
-            (selectedItemsChanged)="onSelectableItemsChanged($event)"></mja-select-items>
-        -->
+        
+        <div *ngIf="selectDeskriptorenComponentModel">            
+            <mja-select-items [model]="selectDeskriptorenComponentModel"
+                (selectedItemsChanged)="onSelectedDesktiptorenChanged($event)"></mja-select-items>
+        </div>
 
         <div *ngIf="raetselFacade.isGeneratingOutput$ | async" class="loader">
             <mat-progress-spinner mode="indeterminate" diameter='40' strokeWidth='5'></mat-progress-spinner>
