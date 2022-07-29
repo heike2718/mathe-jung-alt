@@ -82,6 +82,8 @@ const raetselReducer = createReducer(
     selectableDeskriptoren: action.selectableDeskriptoren
   })),
 
+  on(RaetselActions.editRaetsel, (state, action) => ({ ...state, raetselDetailsContent: action.raetselDetailsContent })),
+
   on(RaetselActions.generateOutput, (state, _action) => ({ ...state, generatingOutput: true })),
 
   on(RaetselActions.outputGenerated, (state, action) => {
