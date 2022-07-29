@@ -1,8 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
-import { Configuration, SharedConfigService } from "@mja-workspace/shared/util-configuration";
+import { Configuration, SharedConfigService, STORAGE_KEY_DEV_SESSION_ID } from "@mja-workspace/shared/util-configuration";
 import { Observable } from "rxjs";
-import { STORAGE_KEY_DEV_SESSION_ID } from "../entities/auth.model";
 
 
 @Injectable({

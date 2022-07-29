@@ -1,6 +1,6 @@
 import { NgModule, ModuleWithProviders } from "@angular/core";
 import { CommonModule } from '@angular/common';
-import { Configuration, SharedConfigService } from "./shared.configurartion";
+import { Configuration, SharedConfigService } from "./shared.configuration";
 
 @NgModule({
     imports: [

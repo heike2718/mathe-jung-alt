@@ -32,7 +32,7 @@ import de.egladil.web.mja_auth.util.SecUtils;
 @ApplicationScoped
 public class SessionService {
 
-	private static final int SESSION_IDLE_TIMEOUT_MINUTES = 120;
+	private static final int SESSION_IDLE_TIMEOUT_MINUTES = 6;// 120;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
 

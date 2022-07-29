@@ -1,14 +1,13 @@
 
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { STORAGE_KEY_QUELLE } from '@mja-workspace/quellen/domain';
-import { Configuration, SharedConfigService } from '@mja-workspace/shared/util-configuration';
+import { Configuration, SharedConfigService, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, STORAGE_KEY_USER } from '@mja-workspace/shared/util-configuration';
 import { MessageService, SafeNgrxService, noopAction, isExpired } from '@mja-workspace/shared/util-mja';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { concatMap, map, switchMap, tap } from 'rxjs/operators';
-import { Session, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, STORAGE_KEY_USER, User } from '../entities/auth.model';
+import { Session, User } from '../entities/auth.model';
 import { AuthHttpService } from '../infrastructure/auth-http.service';
 import * as AuthActions from './auth.actions';
 
@@ -21,7 +20,6 @@ export class AuthEffects {
 
     constructor(private actions$: Actions,
         @Inject(SharedConfigService) private configuration: Configuration,
-        private globalStore: Store,
         private authHttpService: AuthHttpService,
         private messageService: MessageService,
         private safeNgrx: SafeNgrxService,
@@ -112,6 +110,7 @@ export class AuthEffects {
             ofType(AuthActions.logout),
             map(() => {
                 this.#clearSession();
+                this.messageService.clear();
                 this.router.navigateByUrl('');
                 return AuthActions.userLoggedOut();
             })
@@ -180,12 +179,6 @@ export class AuthEffects {
     }
 
     #clearSession(): void {
-        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
-        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
-        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_USER);
-        localStorage.removeItem(STORAGE_KEY_QUELLE);
-        this.messageService.clear();
-        this.globalStore.dispatch(AuthActions.clearStoreAction())
-        // this.suchfilterFacade.clearAll();
+        this.safeNgrx.clearSession();
     }
 }

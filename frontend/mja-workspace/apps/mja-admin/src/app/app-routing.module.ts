@@ -25,6 +25,10 @@ const routes = [
 
     },
     {
+        path: 'home',
+        component: HomeComponent
+    },
+    {
         path: '',
         pathMatch: 'full',
         component: HomeComponent,

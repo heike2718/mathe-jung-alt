@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Message } from "@mja-workspace/shared/util-mja";
-import { Configuration, SharedConfigService } from "@mja-workspace/shared/util-configuration";
-import { map, Observable, of, tap } from "rxjs";
-import { AuthResult, Session, STORAGE_KEY_DEV_SESSION_ID } from "../entities/auth.model";
+import { Configuration, SharedConfigService, STORAGE_KEY_DEV_SESSION_ID } from "@mja-workspace/shared/util-configuration";
+import { map, Observable, tap } from "rxjs";
+import { AuthResult, Session } from "../entities/auth.model";
 
 @Injectable({
     providedIn: 'root'

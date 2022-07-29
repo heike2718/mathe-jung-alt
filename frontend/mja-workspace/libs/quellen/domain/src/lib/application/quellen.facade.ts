@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { STORAGE_KEY_USER, User } from '@mja-workspace/shared/auth/domain';
-import { Configuration, SharedConfigService } from '@mja-workspace/shared/util-configuration';
+import { User } from '@mja-workspace/shared/auth/domain';
+import { Configuration, SharedConfigService, STORAGE_KEY_USER } from '@mja-workspace/shared/util-configuration';
 import { Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 import { tap } from 'rxjs';

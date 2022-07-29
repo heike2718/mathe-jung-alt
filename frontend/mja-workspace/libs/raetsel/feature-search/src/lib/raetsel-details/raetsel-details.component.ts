@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { QuellenFacade, STORAGE_KEY_QUELLE } from '@mja-workspace/quellen/domain';
+import { QuellenFacade } from '@mja-workspace/quellen/domain';
 import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
+import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 import { Subscription } from 'rxjs';
 
 @Component({

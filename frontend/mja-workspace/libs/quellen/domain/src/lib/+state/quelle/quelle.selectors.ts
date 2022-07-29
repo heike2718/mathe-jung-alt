@@ -1,5 +1,4 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { STORAGE_KEY_QUELLE } from '../../entities/quelle';
 import {
   QUELLE_FEATURE_KEY,
   QuellenState,

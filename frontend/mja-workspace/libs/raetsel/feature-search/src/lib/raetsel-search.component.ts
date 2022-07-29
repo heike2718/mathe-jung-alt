@@ -1,9 +1,10 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Quelle, QuellenFacade, STORAGE_KEY_QUELLE } from '@mja-workspace/quellen/domain';
+import { Quelle, QuellenFacade } from '@mja-workspace/quellen/domain';
 import { Raetsel, RaetselDataSource, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
+import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 import { deskriptorenToString, PageDefinition, Suchfilter, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { debounceTime, distinctUntilChanged, filter, merge, Subscription, tap } from 'rxjs';
 

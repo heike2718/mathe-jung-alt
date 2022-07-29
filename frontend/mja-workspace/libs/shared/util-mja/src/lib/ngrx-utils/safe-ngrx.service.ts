@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { AuthFacade } from "@mja-workspace/shared/auth/domain";
+import { Inject, Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { Configuration, SharedConfigService, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_QUELLE, STORAGE_KEY_SESSION_EXPIRES_AT, STORAGE_KEY_USER } from "@mja-workspace/shared/util-configuration";
 import { TypedAction } from "@ngrx/store/src/models";
 import { catchError, concatMap, exhaustMap, mergeMap, Observable, of, OperatorFunction, switchMap, tap } from 'rxjs';
 import { ConstraintViolation } from "../http-utils/http.context";
@@ -13,7 +14,15 @@ import { MessageService } from "../message-utils/message.service";
 })
 export class SafeNgrxService {
 
-    constructor(private messageService: MessageService, private authFacade: AuthFacade) { }
+    #storagePrefix!: string;
+
+    constructor(private messageService: MessageService,
+        @Inject(SharedConfigService) private configuration: Configuration,
+        private router: Router
+
+        ) {
+            this.#storagePrefix = this.configuration.storagePrefix;
+        }
 
     public safeConcatMap<S, T extends string>(
         project: (value: S) => Observable<TypedAction<T>>,
@@ -24,7 +33,7 @@ export class SafeNgrxService {
             source$.pipe(
                 concatMap((value) =>
                     project(value).pipe(catchError((error) => {
-                        this.handleError(error, errorMessage);
+                        this.#handleError(error, errorMessage);
                         return of(errorAction);
                     }))
                 )
@@ -40,7 +49,7 @@ export class SafeNgrxService {
             source$.pipe(
                 switchMap((value) =>
                     project(value).pipe(catchError((error) => {
-                        this.handleError(error, errorMessage);
+                        this.#handleError(error, errorMessage);
                         return of(errorAction);
                     }))
                 )
@@ -56,7 +65,7 @@ export class SafeNgrxService {
             source$.pipe(
                 exhaustMap((value) =>
                     project(value).pipe(catchError((error) => {
-                        this.handleError(error, errorMessage);
+                        this.#handleError(error, errorMessage);
                         return of(errorAction);
                     }))
                 )
@@ -72,21 +81,28 @@ export class SafeNgrxService {
             source$.pipe(
                 mergeMap((value) =>
                     project(value).pipe(catchError((error) => {
-                        this.handleError(error, errorMessage);
+                        this.#handleError(error, errorMessage);
                         return of(errorAction);
                     }))
                 )
             );
     }
 
+    clearSession(): void {
+        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
+        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
+        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_USER);
+        localStorage.removeItem(STORAGE_KEY_QUELLE);
+    }
+
     // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    private handleError(error: any, errorMessage: string): void {
+    #handleError(error: any, errorMessage: string): void {
 
         window.location.hash = '';
 
-        const httpErrorResponse: HttpErrorResponse | undefined = this.getHttpErrorResponse(error);
+        const httpErrorResponse: HttpErrorResponse | undefined = this.#getHttpErrorResponse(error);
         if (httpErrorResponse === undefined) {
             console.log('SafeNgrxService: error=' + error);
             this.messageService.error(errorMessage);
@@ -94,9 +110,11 @@ export class SafeNgrxService {
         } else {
             const status = httpErrorResponse.status;
             if (status === 440) {
-                this.authFacade.logoutOnSessionExpired({level: 'WARN', message: 'Die Session ist abgelaufen. Bitte neu einloggen.'})
+                this.clearSession();
+                this.router.navigateByUrl('home')
+                this.messageService.warn('Die Session ist abgelaufen. Bitte neu einloggen.');                
             } else {
-                const message = this.extractServerErrorMessage(httpErrorResponse);
+                const message = this.#extractServerErrorMessage(httpErrorResponse);
                 if (message) {
                     if (message.level === 'WARN') {
                         this.messageService.warn(message.message);
@@ -110,7 +128,7 @@ export class SafeNgrxService {
         }
     }
 
-    private getHttpErrorResponse(error: any): HttpErrorResponse | undefined {
+    #getHttpErrorResponse(error: any): HttpErrorResponse | undefined {
 
         if (error instanceof HttpErrorResponse) {
             return <HttpErrorResponse>error;
@@ -122,7 +140,7 @@ export class SafeNgrxService {
 
 
 
-    private extractServerErrorMessage(error: HttpErrorResponse): Message | undefined {
+    #extractServerErrorMessage(error: HttpErrorResponse): Message | undefined {
 
         if (error.status === 0) {
             return { level: 'ERROR', message: 'Der Server ist nicht erreichbar.' };

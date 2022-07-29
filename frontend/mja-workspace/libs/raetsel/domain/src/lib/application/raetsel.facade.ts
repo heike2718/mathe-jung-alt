@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Quelle, QuellenFacade, STORAGE_KEY_QUELLE } from '@mja-workspace/quellen/domain';
+import { Quelle, QuellenFacade } from '@mja-workspace/quellen/domain';
+import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { filterByKontext, PageDefinition, Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
 import { select, Store } from '@ngrx/store';

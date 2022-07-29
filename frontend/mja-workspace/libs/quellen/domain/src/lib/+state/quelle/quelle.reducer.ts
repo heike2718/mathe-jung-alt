@@ -2,7 +2,8 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import * as QuelleActions from './quelle.actions';
-import { Quelle, STORAGE_KEY_QUELLE } from '../../entities/quelle';
+import { Quelle } from '../../entities/quelle';
+import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 
 export const QUELLE_FEATURE_KEY = 'quellen-quelle';
 
