@@ -13,8 +13,7 @@
     </ng-container>
 
     <ng-container *ngIf="raetsel.id !== 'neu'">
-        <h1>Rätsel {{raetsel.schluessel}}: Details <span
-                *ngIf="quellenFacade.isGewaehlteQuelleAdminQuelle$ | async">(eigenes Rätsel)</span></h1>
+        <h1>Rätsel {{raetsel.schluessel}}: Details <span *ngIf="isEigenesRaetsel()">(eigenes Rätsel)</span></h1>
 
         <div fxLayout="row" fxLayoutAlign="space-between">
             <div fxLayout="column">
@@ -86,7 +85,7 @@
                 </div>
                 <div *ngIf="quellenFacade.selectedQuelle$ | async as raetselQuelle" fxFlex="0 1 calc(90%-20px)"
                     class="mb-1">{{raetselQuelle.name}}
-                    <span *ngIf="quellenFacade.isGewaehlteQuelleAdminQuelle$ | async">
+                    <span *ngIf="isEigenesRaetsel()">
                         <mat-chip color="accent">eigenes Rätsel</mat-chip>
                     </span>
                 </div>

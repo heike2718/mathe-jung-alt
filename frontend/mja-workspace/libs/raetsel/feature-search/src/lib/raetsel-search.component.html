@@ -56,26 +56,26 @@
     <div fxFlex="0 1 calc(20%-20px)">
       <button mat-raised-button color="primary" (click)="neueSuche()">neue Suche</button>
     </div>
-    <ng-component *ngIf="(quellenFacade.adminQuelle$ | async) === undefined else adminQuelle">
+    <div *ngIf="canCreateRaetsel() else keineQuelle" fxFlex="0 1 calc(20%-20px)">
+      <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
+    </div>
+    <!--
+    <ng-component *ngIf="quelle else keineQuelle">
       <div fxFlex="0 1 calc(20%-20px)">
-        <button mat-raised-button color="primary" [disabled]="true" (click)="neuesRaetsel()">neues Rätsel</button>
+        <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
       </div>
-      <div fxFlex="0 1 calc(80%-20px)">
-        Quelle: zuerst <button mat-raised-button color="primary" (click)="quelleWaehlen()">Quelle wählen</button> dann
-        neues Rätsel anlegen
-      </div>
+      <div *ngIf="quelle" fxFlex="0 1 calc(80%-20px)" class="m-1">mit Quelle {{quelle.name}}</div>      
     </ng-component>
+  -->
   </div>
 
 </div>
 
-<ng-template #adminQuelle>
+<ng-template #keineQuelle>
   <div fxLayout="column m-1">
-    <div *ngIf="(quellenFacade.adminQuelle$ | async) as quelle">
-      <div fxFlex="0 1 calc(20%-20px)">
-        <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
-      </div>
-      <div fxFlex="0 1 calc(80%-20px)" class="m-1">Quelle: {{quelle.name}}</div>
+    <div fxFlex="0 1 calc(80%-20px)">
+      Quelle: zuerst <button mat-raised-button color="primary" (click)="quelleWaehlen()">Quelle wählen</button> dann
+      neues Rätsel anlegen
     </div>
   </div>
 </ng-template>

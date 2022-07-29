@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { QuellenFacade } from '@mja-workspace/quellen/domain';
+import { Quelle, QuellenFacade, STORAGE_KEY_QUELLE } from '@mja-workspace/quellen/domain';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { filterByKontext, PageDefinition, Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
@@ -22,7 +22,7 @@ export class RaetselFacade {
   isGeneratingOutput$ = this.store.pipe(select(RaetselSelectors.isGeneratingOutput));
   editorContent$: Observable<RaetselDetailsContent | undefined> = this.store.pipe(select(RaetselSelectors.getDetailsContent));
   editorSelectableDeskriptoren$: Observable<SelectableItem[]> = this.store.pipe(select(RaetselSelectors.getRaetselDeskriptoren));
-  
+
   lastSuchfilter: Suchfilter = {
     kontext: 'RAETSEL',
     deskriptoren: [],
@@ -31,7 +31,6 @@ export class RaetselFacade {
 
   #deskriptorenLoaded = false;
   // #raetselDeskriptoren: Deskriptor[] = [];
-  #adminQuelleId: string | undefined;
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>,
     private suchfilterFacade: SuchfilterFacade,
@@ -43,11 +42,11 @@ export class RaetselFacade {
       this.suchfilterFacade.allDeskriptoren$,
     ]).subscribe(([deskriptorenLoaded, allDeskriptoren]) => {
       if (deskriptorenLoaded) {
-        
+
         const raetselDeskriptoren = filterByKontext('RAETSEL', allDeskriptoren);
         const selectableDeskriptoren: SelectableItem[] = [];
-        raetselDeskriptoren.forEach(deskriptor => selectableDeskriptoren.push({id: deskriptor.id, name: deskriptor.name, selected: false}));
-        this.store.dispatch(RaetselActions.raetselDeskriptorenLoaded({selectableDeskriptoren}));
+        raetselDeskriptoren.forEach(deskriptor => selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: false }));
+        this.store.dispatch(RaetselActions.raetselDeskriptorenLoaded({ selectableDeskriptoren }));
       }
     });
 
@@ -56,16 +55,6 @@ export class RaetselFacade {
         this.lastSuchfilter = suchfilter
       }
     })).subscribe();
-
-    this.quellenFacade.adminQuelle$.subscribe(
-      quelle => {
-        if (quelle) {
-          this.#adminQuelleId = quelle.id;
-        } else {
-          this.#adminQuelleId = undefined;
-        }
-      }
-    );
   }
 
   checkOrLoadDeskriptoren(): void {
@@ -103,8 +92,10 @@ export class RaetselFacade {
 
   createAndEditRaetsel(): void {
     let raetselDetails: RaetselDetails;
-    if (this.#adminQuelleId) {
-      raetselDetails = { ...initialRaetselDetails, quelleId: this.#adminQuelleId };
+    const storedQuelle = localStorage.getItem(STORAGE_KEY_QUELLE);
+    if (storedQuelle) {
+      const quelle: Quelle = JSON.parse(storedQuelle);
+      raetselDetails = { ...initialRaetselDetails, quelleId: quelle.id };
       this.editRaetsel(raetselDetails);
     } else {
       this.router.navigateByUrl('/quellen');

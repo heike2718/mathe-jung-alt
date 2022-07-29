@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { STORAGE_KEY_QUELLE } from '../../entities/quelle';
 import {
   QUELLE_FEATURE_KEY,
   QuellenState,
@@ -35,18 +36,7 @@ export const getSelected = createSelector(
   (entities, selectedId) => selectedId && entities[selectedId]
 );
 
-export const getAdminQuelle = createSelector(
-  getQuelleState,
-  (state) => state.adminQuelle
-);
-
 export const getPage = createSelector(
   getQuelleState,
   (state: QuellenState) => state.page
-);
-
-export const isGewaehlteQuelleAdminQuelle = createSelector(
-  getAdminQuelle,
-  getSelectedId,
-  (adminQuelle, selectedId) => adminQuelle && selectedId && adminQuelle.id === selectedId
 );

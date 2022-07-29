@@ -2,14 +2,13 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
 import * as QuelleActions from './quelle.actions';
-import { Quelle } from '../../entities/quelle';
+import { Quelle, STORAGE_KEY_QUELLE } from '../../entities/quelle';
 
 export const QUELLE_FEATURE_KEY = 'quellen-quelle';
 
 export interface QuellenState extends EntityState<Quelle> {
   selectedId?: string | number; // which Quelle record has been selected
   loaded: boolean; // has the Quelle list been loaded
-  adminQuelle?: Quelle,
   page: Quelle[];
 }
 
@@ -53,15 +52,8 @@ const quelleReducer = createReducer(
 
   on(QuelleActions.quelleAdminLoaded, (state, { quelle }) => {
 
-    const quellen: Quelle[] = [];
-    quellen.push(quelle);
-
-    return quelleAdapter.addOne(quelle, {
-      ...state,
-      adminQuelle: quelle,
-      loaded: false,
-      page: quellen.slice(0, 5)
-    })
+    localStorage.setItem(STORAGE_KEY_QUELLE, JSON.stringify(quelle));
+    return {...state};
   }),
 
   on(QuelleActions.quelleSelected, (state, { quelle }) => {

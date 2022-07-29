@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { QuellenFacade } from '@mja-workspace/quellen/domain';
+import { Quelle, QuellenFacade, STORAGE_KEY_QUELLE } from '@mja-workspace/quellen/domain';
 import { Raetsel, RaetselDataSource, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
-import { deskriptorenToString, PageDefinition, Suchfilter, SuchfilterFacade, Suchkontext, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
-import { filter, Subscription, debounceTime, tap, merge, distinctUntilChanged } from 'rxjs';
+import { deskriptorenToString, PageDefinition, Suchfilter, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
+import { debounceTime, distinctUntilChanged, filter, merge, Subscription, tap } from 'rxjs';
 
 
 @Component({
@@ -24,9 +24,11 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   #sortChangedSubscription: Subscription = new Subscription();
   #paginatorSubscription: Subscription = new Subscription();
   #paginationStateSubscription: Subscription = new Subscription();
+  #selectedQuelleSubscription: Subscription = new Subscription();
 
 
   isAdmin = false;
+  storedQuelle: Quelle | undefined
 
   suchfilter!: Suchfilter;
 
@@ -35,6 +37,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   #columnDefinitionsPublic = ['schluessel', 'name', 'deskriptoren'];
   #columnDefinitionsAdmin = ['schluessel', 'name', 'kommentar'];
+  #selectedQuelle!: Quelle;
 
   dataSource!: RaetselDataSource;
   anzahlRaetsel: number = 0;
@@ -44,12 +47,14 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     private suchfilterFacade: SuchfilterFacade,
     private authFacade: AuthFacade,
     private changeDetector: ChangeDetectorRef
-  ) {
-
-    console.log('SearchComponent created');
-  }
+  ) { }
 
   ngOnInit() {
+
+    const _storedQuelle = localStorage.getItem(STORAGE_KEY_QUELLE);
+    if (_storedQuelle) {
+      this.storedQuelle = JSON.parse(_storedQuelle);
+    }
 
     this.dataSource = new RaetselDataSource(this.raetselFacade);
     this.raetselFacade.checkOrLoadDeskriptoren();
@@ -84,6 +89,13 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       }
     );
 
+    this.#selectedQuelleSubscription = this.quellenFacade.selectedQuelle$.subscribe(
+      (quelle) => {
+        if (quelle) {
+          this.#selectedQuelle = quelle;
+        }
+      }
+    );
   }
 
   ngAfterViewInit(): void {
@@ -111,6 +123,8 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.changeDetector.detectChanges();
   }
 
+
+
   ngOnDestroy(): void {
     this.#suchfilterSubscription.unsubscribe();
     this.#sucheClearedSubscription.unsubscribe();
@@ -119,11 +133,12 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.#sortChangedSubscription.unsubscribe();
     this.#paginatorSubscription.unsubscribe();
     this.#paginationStateSubscription.unsubscribe();
+    this.#selectedQuelleSubscription.unsubscribe();
   }
 
   getDisplayedColumns(): string[] {
     return this.isAdmin ? this.#columnDefinitionsAdmin : this.#columnDefinitionsPublic;
-  }
+  }  
 
   onDeskriptorenChanged($event: any): void {
 
@@ -163,6 +178,17 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   quelleWaehlen(): void {
     this.quellenFacade.navigateToQuellensuche();
+  }
+
+  canCreateRaetsel(): boolean {
+
+    if (this.#selectedQuelle) {
+      if (this.storedQuelle && this.storedQuelle.id === this.#selectedQuelle.id) {
+        return true;
+      }
+      return this.#selectedQuelle.quellenart !== 'PERSON';
+    }
+    return this.storedQuelle !== undefined;
   }
 
 

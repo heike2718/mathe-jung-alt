@@ -1,6 +1,7 @@
 
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { STORAGE_KEY_QUELLE } from '@mja-workspace/quellen/domain';
 import { Configuration, SharedConfigService } from '@mja-workspace/shared/util-configuration';
 import { MessageService, SafeNgrxService, noopAction, isExpired } from '@mja-workspace/shared/util-mja';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -76,7 +77,7 @@ export class AuthEffects {
                 of({ session: action.session }).pipe(
                     tap(() => window.location.hash = ''),
                     map(({ session }) => {
-                        this.storeSessionInLocalStorage(session);
+                        this.#storeSessionInLocalStorage(session);
                         return AuthActions.sessionCreated({ session: session });
                     })
                 )
@@ -110,7 +111,7 @@ export class AuthEffects {
         this.actions$.pipe(
             ofType(AuthActions.logout),
             map(() => {
-                this.clearSession();
+                this.#clearSession();
                 this.router.navigateByUrl('');
                 return AuthActions.userLoggedOut();
             })
@@ -121,7 +122,7 @@ export class AuthEffects {
         this.actions$.pipe(
             ofType(AuthActions.sessionExpired),
             map((action) => {
-                this.clearSession();
+                this.#checkSessionInLocalStorage();
                 this.router.navigateByUrl('');
                 this.messageService.message(action.message);
                 return noopAction();
@@ -132,11 +133,11 @@ export class AuthEffects {
     clearOrRestoreSession$ = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthActions.clearOrRestoreSession),
-            switchMap(() => this.checkSessionInLocalStorage()),
-            map((session: Session | undefined) => this.getClearOrRestoreResultAction(session))
+            switchMap(() => this.#checkSessionInLocalStorage()),
+            map((session: Session | undefined) => this.#getClearOrRestoreResultAction(session))
         ));
 
-    private getClearOrRestoreResultAction(session?: Session): Action {
+    #getClearOrRestoreResultAction(session?: Session): Action {
 
         if (session) {
             return AuthActions.sessionRestored({ session: session });
@@ -144,7 +145,7 @@ export class AuthEffects {
         return AuthActions.sessionCleared();
     }
 
-    private checkSessionInLocalStorage(): Observable<Session | undefined> {
+    #checkSessionInLocalStorage(): Observable<Session | undefined> {
 
         const u = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_USER);
 
@@ -168,7 +169,7 @@ export class AuthEffects {
         });
     }
 
-    private storeSessionInLocalStorage(session: Session): void {
+    #storeSessionInLocalStorage(session: Session): void {
 
         const user = session.user;
         localStorage.setItem(this.#storagePrefix + STORAGE_KEY_USER, JSON.stringify(user));
@@ -178,10 +179,11 @@ export class AuthEffects {
         localStorage.setItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT, JSON.stringify(session.expiresAt));
     }
 
-    private clearSession(): void {
+    #clearSession(): void {
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_USER);
+        localStorage.removeItem(STORAGE_KEY_QUELLE);
         this.messageService.clear();
         this.globalStore.dispatch(AuthActions.clearStoreAction())
         // this.suchfilterFacade.clearAll();

@@ -1,3 +1,4 @@
+import { User } from '@mja-workspace/shared/auth/domain';
 import { Suchfilter } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
 import { Quelle } from '../../entities/quelle';
@@ -27,6 +28,11 @@ export const pageSelected = createAction('[Quelle] page selected',
 export const loadQuelle = createAction(
   '[Quelle] loadQuelle by id',
   props<{uuid: string}>()
+);
+
+export const loadQuelleForUser = createAction(
+  '[Quelle] loadQuelleForUser',
+  props<{user: User}>()
 );
 
 export const quelleFound = createAction(

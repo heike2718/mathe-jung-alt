@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { QuellenFacade } from '@mja-workspace/quellen/domain';
+import { QuellenFacade, STORAGE_KEY_QUELLE } from '@mja-workspace/quellen/domain';
 import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
@@ -58,6 +58,16 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   gotoRaetselUebersicht(): void {
     this.router.navigateByUrl('/raetsel/uebersicht');
+  }
+
+  isEigenesRaetsel(): boolean {
+
+    const storedQuelle = localStorage.getItem(STORAGE_KEY_QUELLE);
+    if (!storedQuelle) {
+      return false;
+    }
+    const quelle = JSON.parse(storedQuelle);
+    return quelle.id === this.#raetselDetails.quelleId;
   }
 
   private openPrintDialog(outputformat: LATEX_OUTPUTFORMAT): void {

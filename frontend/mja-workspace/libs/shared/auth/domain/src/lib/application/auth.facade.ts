@@ -60,7 +60,6 @@ export class AuthFacade {
     }
 
     public clearOrRestoreSession(): void {
-        // Dies triggert einen SideEffect (siehe auth.effects.ts)
         this.store.dispatch(AuthActions.clearOrRestoreSession());
     }
 
@@ -70,7 +69,7 @@ export class AuthFacade {
 
     public logoutOnSessionExpired(message: Message): void {
 
-        this.store.dispatch(AuthActions.logout());
+        this.store.dispatch(AuthActions.sessionExpired({message}));
 
     }
 
