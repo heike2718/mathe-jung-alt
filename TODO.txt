@@ -4,8 +4,9 @@
 (-) wenn in räetselsuche zurück aus Edit-Kontext, dann Suchparameter und Trefferliste nicht leeren
 (-) wenn edit raetsel abbrechen, Suchparameter und Trefferliste nicht leeren
 (-) geaendert_am wird beim Ändern der deskriptoren nicht aktualisiert (bin aber nicht sicher)
-(/) Rätsel: status muss ins EditRaetselPayload
+(-) Rätsel: status muss ins EditRaetselPayload
 (-) Rätsel editieren: die Deskriptoren der Suche sind dann doppelt vorhanden. Brauchen eine klarere Abgrenzung zwischen Suchfilter, Deskriptoren-Control und Kontext
 (-) Quellen können noch nicht erfasst und editiert werden.
 (-) Medien können noch nicht erfasst und editiert werden.
 (-) Benutzerverwaltung zum Freischalten von Menschen mit Minikänguru-Account
+(-) neues Raetsel: Status falsch => es ist noch das zuvor gewählte Rätsel im Status

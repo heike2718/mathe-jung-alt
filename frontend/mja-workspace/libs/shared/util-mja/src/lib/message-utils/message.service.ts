@@ -28,6 +28,10 @@ export class MessageService {
         this.add({ message: text, level: 'ERROR' });
     }
 
+    public message(message: Message): void {
+        this.add(message);
+    }
+
     public clear(): void {
 
         this.#messageSubject$.next(undefined);

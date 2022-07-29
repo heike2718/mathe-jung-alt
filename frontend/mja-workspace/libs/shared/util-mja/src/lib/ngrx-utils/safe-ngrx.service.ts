@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { AuthFacade } from "@mja-workspace/shared/auth/domain";
 import { TypedAction } from "@ngrx/store/src/models";
 import { catchError, concatMap, exhaustMap, mergeMap, Observable, of, OperatorFunction, switchMap, tap } from 'rxjs';
 import { ConstraintViolation } from "../http-utils/http.context";
@@ -12,7 +13,7 @@ import { MessageService } from "../message-utils/message.service";
 })
 export class SafeNgrxService {
 
-    constructor(private messageService: MessageService) { }
+    constructor(private messageService: MessageService, private authFacade: AuthFacade) { }
 
     public safeConcatMap<S, T extends string>(
         project: (value: S) => Observable<TypedAction<T>>,
@@ -91,15 +92,20 @@ export class SafeNgrxService {
             this.messageService.error(errorMessage);
             // this.messageService.error(error);
         } else {
-            const message = this.extractServerErrorMessage(httpErrorResponse);
-            if (message) {
-                if (message.level === 'WARN') {
-                    this.messageService.warn(message.message);
-                } else {
-                    this.messageService.error(message.message);
-                }
+            const status = httpErrorResponse.status;
+            if (status === 440) {
+                this.authFacade.logoutOnSessionExpired({level: 'WARN', message: 'Die Session ist abgelaufen. Bitte neu einloggen.'})
             } else {
-                this.messageService.error(errorMessage);
+                const message = this.extractServerErrorMessage(httpErrorResponse);
+                if (message) {
+                    if (message.level === 'WARN') {
+                        this.messageService.warn(message.message);
+                    } else {
+                        this.messageService.error(message.message);
+                    }
+                } else {
+                    this.messageService.error(errorMessage);
+                }
             }
         }
     }

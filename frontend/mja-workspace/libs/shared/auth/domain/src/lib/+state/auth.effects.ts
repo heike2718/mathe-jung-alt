@@ -117,6 +117,18 @@ export class AuthEffects {
         )
     );
 
+    sessionExpired$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.sessionExpired),
+            map((action) => {
+                this.clearSession();
+                this.router.navigateByUrl('');
+                this.messageService.message(action.message);
+                return noopAction();
+            })
+        )
+    );
+
     clearOrRestoreSession$ = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthActions.clearOrRestoreSession),

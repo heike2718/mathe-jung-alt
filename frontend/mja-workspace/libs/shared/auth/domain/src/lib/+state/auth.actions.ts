@@ -1,3 +1,4 @@
+import { Message } from '@mja-workspace/shared/util-mja';
 import { createAction, props } from '@ngrx/store';
 import { AuthResult, Session } from '../entities/auth.model';
 
@@ -38,11 +39,15 @@ export const sessionRestored = createAction(
     props<{ session: Session }>()
 );
 
-export const clearStoreAction = createAction('[App] logout');
+export const clearStoreAction = createAction('[App] clear store');
 
 
 export const logout = createAction(
     '[Auth] log out'
+);
+
+export const sessionExpired = createAction('[Auth] sessionExpired',
+    props<{ message: Message }>()
 );
 
 export const userLoggedOut = createAction(

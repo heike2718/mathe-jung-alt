@@ -6,6 +6,7 @@ import { AuthPartialState } from "../+state/auth.reducer";
 
 import { AuthResult, User } from "../entities/auth.model";
 import { Observable } from "rxjs";
+import { Message } from "@mja-workspace/shared/util-mja";
 
 
 @Injectable({
@@ -65,6 +66,12 @@ export class AuthFacade {
 
     public logout(): void {
         this.store.dispatch(AuthActions.logout());
+    }
+
+    public logoutOnSessionExpired(message: Message): void {
+
+        this.store.dispatch(AuthActions.logout());
+
     }
 
     public createSession(authResult: AuthResult): void {

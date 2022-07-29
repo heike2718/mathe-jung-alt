@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.exception.AuthException;
+import de.egladil.web.mja_auth.exception.SessionExpiredException;
 import de.egladil.web.mja_shared.exceptions.LaTeXCompileException;
 
 /**
@@ -46,6 +47,12 @@ public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
 
 			LOGGER.warn(exception.getMessage());
 			return Response.status(Status.UNAUTHORIZED).build();
+		}
+
+		if (exception instanceof SessionExpiredException) {
+
+			return Response.status(440).entity(MessagePayload.warn(exception.getMessage()))
+				.build();
 		}
 
 		LOGGER.error(exception.getMessage(), exception);
