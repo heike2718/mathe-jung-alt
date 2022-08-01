@@ -50,7 +50,7 @@
         <div *ngIf="raetselFacade.isGeneratingOutput$ | async" class="loader">
             <mat-progress-spinner mode="indeterminate" diameter='40' strokeWidth='5'></mat-progress-spinner>
         </div>
-        
+
         <ng-container *ngIf="authFacade.isAdmin$ | async">
 
             <h2>Metadaten und LaTeX</h2>
@@ -132,7 +132,23 @@
                         disabled="true">{{raetsel.kommentar}}</textarea>
                 </mat-expansion-panel>
 
+                <mat-expansion-panel *ngIf="raetsel.grafikPfade.length !== 0">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Grafiken
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
 
+                    <mat-nav-list>
+                        <mat-list-item *ngFor="let link of raetsel.grafikPfade">
+                            {{ link }}
+                            <button mat-icon-button (click)="showInfo(link)">
+                                <mat-icon>info</mat-icon>
+                            </button>
+                        </mat-list-item>
+                    </mat-nav-list>
+
+                </mat-expansion-panel>
             </mat-accordion>
         </ng-container>
     </ng-container>

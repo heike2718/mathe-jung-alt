@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_admin_api.domain.raetsel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -53,6 +54,9 @@ public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
 	private byte[] imageLoesung;
+
+	@JsonProperty
+	private List<String> grafikPfade = new ArrayList<>();
 
 	/**
 	 *
@@ -223,6 +227,16 @@ public class Raetsel extends AbstractDomainEntity {
 
 		this.status = status;
 		return this;
+	}
+
+	public List<String> getGrafikPfade() {
+
+		return grafikPfade;
+	}
+
+	public void setGrafikPfade(final List<String> grafikPfade) {
+
+		this.grafikPfade = grafikPfade;
 	}
 
 }

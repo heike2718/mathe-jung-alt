@@ -55,24 +55,7 @@ public class RaetselServiceImpl implements RaetselService {
 	@Inject
 	RaetselDao raetselDao;
 
-	// @Override
-	// public long zaehleRaetselMitSuchfilter(final Suchfilter suchfilter) {
-	//
-	// SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
-	//
-	// long result = 0;
-	//
-	// switch (suchfilterVariante) {
-	//
-	// case COMPLETE -> result = raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds());
-	// case DESKRIPTOREN -> result = raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
-	// case VOLLTEXT -> result = raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
-	// default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
-	// }
-	//
-	// return result;
-	//
-	// }
+	private final FindPathsGrafikParser findPathsGrafikParser = new FindPathsGrafikParser();
 
 	@Override
 	public RaetselsucheTreffer sucheRaetsel(final Suchfilter suchfilter, final int limit, final int offset, final SortDirection sortDirection) {
@@ -183,12 +166,16 @@ public class RaetselServiceImpl implements RaetselService {
 
 		Raetsel result = mapFromDB(raetsel);
 
+		List<String> grafikLinks = findPathsGrafikParser.findPaths(raetsel.frage);
+		grafikLinks.addAll(findPathsGrafikParser.findPaths(raetsel.loesung));
+
 		byte[] imageFrage = raetselFileService.findImageFrage(result.getSchluessel());
 		result.setImageFrage(imageFrage);
 
 		byte[] imageLoesung = raetselFileService.findImageLoesung(result.getSchluessel());
 		result.setImageLoesung(imageLoesung);
 
+		result.setGrafikPfade(grafikLinks);
 		return result;
 	}
 

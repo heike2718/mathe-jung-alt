@@ -43,6 +43,7 @@ export interface RaetselDetails {
   readonly deskriptoren: Deskriptor[];
   readonly imageFrage: string | null;
   readonly imageLoesung: string | null;
+  readonly grafikPfade: string[];
 };
 
 export interface RaetselDetailsContent {
@@ -76,7 +77,8 @@ export const initialRaetselDetails: RaetselDetails = {
   antwortvorschlaege: [],
   deskriptoren: [],
   imageFrage: null,
-  imageLoesung: null
+  imageLoesung: null,
+  grafikPfade:  []
 };
 
 

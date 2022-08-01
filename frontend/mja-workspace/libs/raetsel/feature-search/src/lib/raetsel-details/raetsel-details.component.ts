@@ -101,5 +101,9 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  showInfo(link: string): void {
+    console.log('jetzt image holen: ' + link);
+  }
+
   
 }
