@@ -15,6 +15,10 @@ export interface Antwortvorschlag {
   readonly korrekt: boolean;
 };
 
+export interface RaetselsucheTreffer {
+  readonly trefferGesamt: number;
+  readonly treffer: Raetsel[];
+};
 
 /** Minimalset an Attributen, die bei einer Suche geladen werden sollen */
 export interface Raetsel {

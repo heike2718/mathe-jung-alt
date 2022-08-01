@@ -52,22 +52,16 @@ const raetselReducer = createReducer(
     }
   }),
 
-  on(RaetselActions.raetselCounted, (state, action) => {
-    return {
-      ...state,
-      paginationState: {
-        ...state.paginationState,
-        anzahlTreffer: action.anzahl
-      }
-    };
-  }),
+  on(RaetselActions.findRaetselSuccess, (state, { suchergebnis }) =>
 
-  on(RaetselActions.findRaetselSuccess, (state, { raetsel }) =>
-
-    raetselAdapter.setAll(raetsel, {
+    raetselAdapter.setAll(suchergebnis.treffer, {
       ...state,
       loaded: true,
-      page: raetsel
+      page: suchergebnis.treffer,
+          paginationState: {
+        ...state.paginationState,
+        anzahlTreffer: suchergebnis.trefferGesamt
+      }
     })
 
   ),

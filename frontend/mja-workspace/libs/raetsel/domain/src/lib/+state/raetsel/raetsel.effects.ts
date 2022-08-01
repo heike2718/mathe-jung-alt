@@ -6,23 +6,10 @@ import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
 import { MessageService, SafeNgrxService, noopAction } from '@mja-workspace/shared/util-mja';
 import { Router } from '@angular/router';
 import { SuchfilterFacade } from '@mja-workspace/suchfilter/domain';
-import { RaetselFacade } from '../../application/raetsel.facade';
 import { AuthHttpService } from '@mja-workspace/shared/auth/domain';
 
 @Injectable()
 export class RaetselEffects {
-
-  prepareSearch$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(RaetselActions.prepareSearch),
-      this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.countRaetsel(action.suchfilter).pipe(
-          tap((anzahl) => this.raetselFacade.startSearch(anzahl, action.suchfilter, action.pageDefinition)),
-          map(() => noopAction())
-        ), 'Ups, beim Zählen der Rätsel ist etwas schiefgegangen', noopAction()
-      )
-    )
-  );
 
   findRaetsel$ = createEffect(() =>
     this.actions$.pipe(
@@ -32,7 +19,7 @@ export class RaetselEffects {
         this.raetselDataService.loadPage(action.suchfilter,
           { pageIndex: action.pageDefinition.pageIndex, pageSize: action.pageDefinition.pageSize, sortDirection: action.pageDefinition.sortDirection }).pipe(
             tap(() => this.suchfilterFacade.sucheFinished(action.kontext)),
-            map((raetsel) => RaetselActions.findRaetselSuccess({ raetsel }))
+            map((suchergebnis) => RaetselActions.findRaetselSuccess({ suchergebnis }))
           ), 'Ups, beim Suchen nach Rätseln ist etwas schiefgegangen', noopAction()
       )
     ));
@@ -131,7 +118,6 @@ export class RaetselEffects {
     private actions$: Actions,
     private authService: AuthHttpService,
     private raetselDataService: RaetselDataService,
-    private raetselFacade: RaetselFacade,
     private suchfilterFacade: SuchfilterFacade,
     private safeNgrx: SafeNgrxService,
     private messageService: MessageService,

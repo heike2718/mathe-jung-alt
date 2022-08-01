@@ -4,8 +4,6 @@
 // =====================================================
 package de.egladil.mja_admin_api.domain.raetsel;
 
-import java.util.List;
-
 import de.egladil.mja_admin_api.domain.dto.SortDirection;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.raetsel.dto.EditRaetselPayload;
@@ -16,13 +14,13 @@ import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
  */
 public interface RaetselService {
 
-	/**
-	 * Ermittelt die Anzahl der RAETSEL, auf die der gegebene Suchfilter passt.
-	 *
-	 * @param  suchfilter
-	 * @return            long
-	 */
-	long zaehleRaetselMitSuchfilter(Suchfilter suchfilter);
+	// /**
+	// * Ermittelt die Anzahl der RAETSEL, auf die der gegebene Suchfilter passt.
+	// *
+	// * @param suchfilter
+	// * @return long
+	// */
+	// long zaehleRaetselMitSuchfilter(Suchfilter suchfilter);
 
 	/**
 	 * Sucht alle Rätsel, die zum Suchfilter passen.
@@ -36,7 +34,7 @@ public interface RaetselService {
 	 *                       SortDirection nach schluessel
 	 * @return               List
 	 */
-	List<RaetselsucheTreffer> sucheRaetsel(Suchfilter suchfilter, final int limit, final int offset, SortDirection sortDirection);
+	RaetselsucheTreffer sucheRaetsel(Suchfilter suchfilter, final int limit, final int offset, SortDirection sortDirection);
 
 	/**
 	 * Legt ein neues Rätsel an.

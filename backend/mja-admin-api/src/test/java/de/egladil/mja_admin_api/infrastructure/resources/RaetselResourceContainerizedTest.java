@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
+import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_admin_api.profiles.ContainerDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -36,29 +38,22 @@ import io.restassured.response.Response;
 public class RaetselResourceContainerizedTest {
 
 	@Test
-	void testZaehleRaetselMitDeskriptoren() {
-
-		given()
-			.when().get("size?deskriptoren=Minikänguru,A&typeDeskriptoren=STRING")
-			.then()
-			.statusCode(200)
-			.body(is("1"));
-	}
-
-	@Test
 	void testFindRaetselMitDeskriptoren() throws Exception {
 
-		String expected = "[{\"id\":\"7a94e100-85e9-4ffb-903b-06835851063b\",\"schluessel\":\"02789\",\"name\":\"2022 zählen\",\"kommentar\":\"Minikänguru 2022 Klasse 1\",\"status\":\"ERFASST\",\"deskriptoren\":[{\"id\":1,\"name\":\"Mathematik\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":2,\"name\":\"Minikänguru\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":4,\"name\":\"Klasse 1\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":7,\"name\":\"EINS\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":9,\"name\":\"A\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":29,\"name\":\"Multiple Choice\",\"admin\":false,\"kontext\":\"RAETSEL\"}]}]";
+		String expected = "{\"trefferGesamt\":1,\"treffer\":[{\"id\":\"7a94e100-85e9-4ffb-903b-06835851063b\",\"schluessel\":\"02789\",\"name\":\"2022 zählen\",\"kommentar\":\"Minikänguru 2022 Klasse 1\",\"status\":\"ERFASST\",\"deskriptoren\":[{\"id\":1,\"name\":\"Mathematik\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":2,\"name\":\"Minikänguru\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":4,\"name\":\"Klasse 1\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":7,\"name\":\"EINS\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":9,\"name\":\"A\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":29,\"name\":\"Multiple Choice\",\"admin\":false,\"kontext\":\"RAETSEL\"}]}]}";
 		Response response = given()
 			.when().get("?deskriptoren=Minikänguru,A&typeDeskriptoren=STRING");
 
 		String responsePayload = response.asString();
 		System.out.println(responsePayload);
 
-		RaetselsucheTreffer[] treffer = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer[].class);
+		RaetselsucheTreffer suchergebnis = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer.class);
+
+		List<RaetselsucheTrefferItem> treffer = suchergebnis.getTreffer();
 
 		assertEquals(200, response.getStatusCode());
-		assertEquals(1, treffer.length);
+		assertEquals(1, suchergebnis.getTrefferGesamt());
+		assertEquals(1, treffer.size());
 		assertEquals(expected, responsePayload);
 	}
 

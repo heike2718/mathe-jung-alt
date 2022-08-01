@@ -4,9 +4,6 @@
 // =====================================================
 package de.egladil.mja_admin_api.infrastructure.resources;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.EnumType;
@@ -73,35 +70,10 @@ public class RaetselResource {
 	private final CsrfTokenValidator csrfTokenValidator = new CsrfTokenValidator();
 
 	@GET
-	@Path("size")
-	@Produces(MediaType.TEXT_PLAIN)
-	@RolesAllowed("ADMIN")
-	// @formatter:off
-	public long zaehleRatsel(
-		@QueryParam(value = "suchstring") @Pattern(
-		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{1,30}$",
-		message = "ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
-		@QueryParam(value = "deskriptoren") @Pattern(
-				regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
-				message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
-		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren) {
-	// @formatter:on
-
-		String deskriptorenOrdinal = checkAndTransformDeskriptoren(deskriptoren, typeDeskriptoren);
-
-		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
-
-			return Long.valueOf(0);
-		}
-
-		return raetselService.zaehleRaetselMitSuchfilter(new Suchfilter(suchstring, deskriptorenOrdinal));
-	}
-
-	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	// @formatter:off
-	public List<RaetselsucheTreffer> sucheRaetsel(
+	public RaetselsucheTreffer sucheRaetsel(
 		@QueryParam(value = "suchstring") @Pattern(
 		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{4,30}$",
 		message = "ungültige Eingabe: mindestens 4 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
@@ -120,7 +92,7 @@ public class RaetselResource {
 
 		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
 
-			return new ArrayList<>();
+			return new RaetselsucheTreffer();
 		}
 
 		return raetselService.sucheRaetsel(new Suchfilter(suchstring, deskriptorenOrdinal), limit, offset,

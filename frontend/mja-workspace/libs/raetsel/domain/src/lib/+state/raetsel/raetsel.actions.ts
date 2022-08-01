@@ -1,30 +1,16 @@
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
-import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, GeneratedImages, RaetselDetailsContent, EditRaetselPayload } from '../../entities/raetsel';
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, GeneratedImages, RaetselDetailsContent, EditRaetselPayload, RaetselsucheTreffer } from '../../entities/raetsel';
 
 export const setSuchfilter = createAction(
   '[Raetsel] setSuchfilter',
   props<{ suchfilter: Suchfilter}>()
 )
 
-export const prepareSearch = createAction(
-  '[Raetsel] prepareSearch',
-  props<{ suchfilter: Suchfilter, pageDefinition: PageDefinition }>()
-);
-
 export const selectPage = createAction(
   '[Raetsel] setPageDefinition',
   props<{ pageDefinition: PageDefinition }>()
-);
-
-export const countRaetsel = createAction(
-  '[Raetsel] count'
-);
-
-export const raetselCounted = createAction(
-  '[Raetsel] count completed',
-  props<{ anzahl: number }>()
 );
 
 export const findRaetsel = createAction(
@@ -34,7 +20,7 @@ export const findRaetsel = createAction(
 
 export const findRaetselSuccess = createAction(
   '[Raetsel] find Raetsel Success',
-  props<{ raetsel: Raetsel[] }>()
+  props<{ suchergebnis: RaetselsucheTreffer }>()
 );
 
 export const pageSelected = createAction(

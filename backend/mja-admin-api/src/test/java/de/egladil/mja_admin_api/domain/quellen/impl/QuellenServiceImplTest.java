@@ -6,6 +6,7 @@ package de.egladil.mja_admin_api.domain.quellen.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -25,7 +26,6 @@ import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.quellen.QuelleReadonly;
 import de.egladil.mja_admin_api.domain.quellen.QuellenRepository;
 import de.egladil.mja_admin_api.domain.quellen.Quellenart;
-import de.egladil.mja_admin_api.domain.quellen.impl.QuellenServiceImpl;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import io.quarkus.test.junit.QuarkusTest;
@@ -56,10 +56,16 @@ public class QuellenServiceImplTest {
 			String suchstring = "  ";
 
 			// Act
-			List<QuelleReadonly> result = service.sucheQuellen(new Suchfilter(suchstring, ""));
+			try {
+
+				service.sucheQuellen(new Suchfilter(suchstring, ""));
+				fail("keine IllegalArgumentException");
+			} catch (IllegalArgumentException e) {
+
+				assertEquals("suchstring oder deskriptorenIds erforderlich", e.getMessage());
+			}
 
 			// Assert
-			assertEquals(0, result.size());
 			verify(quellenRepository, never()).findQuellenLikeMediumOrPerson(suchstring);
 			verify(deskriptorenService, never()).mapToDeskriptoren(any());
 		}

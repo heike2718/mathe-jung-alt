@@ -4,108 +4,40 @@
 // =====================================================
 package de.egladil.mja_admin_api.domain.raetsel.dto;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_admin_api.domain.raetsel.DomainEntityStatus;
-import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
-
 /**
- * RaetselsucheTreffer
+ * RaetselsucheTreffer enthält die Anzahl aller Treffer und eine Page der Treffermenge.
  */
 public class RaetselsucheTreffer {
 
 	@JsonProperty
-	private String id;
+	private long trefferGesamt = 0;
 
 	@JsonProperty
-	private String schluessel;
+	private List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
 
-	@JsonProperty
-	private String name;
+	public long getTrefferGesamt() {
 
-	@JsonProperty
-	private String kommentar;
-
-	@JsonProperty
-	private DomainEntityStatus status;
-
-	@JsonProperty
-	private List<Deskriptor> deskriptoren;
-
-	public String getId() {
-
-		return id;
+		return trefferGesamt;
 	}
 
-	public String getSchluessel() {
+	public void setTrefferGesamt(final long trefferGesamt) {
 
-		return schluessel;
+		this.trefferGesamt = trefferGesamt;
 	}
 
-	public String getName() {
+	public List<RaetselsucheTrefferItem> getTreffer() {
 
-		return name;
+		return treffer;
 	}
 
-	public List<Deskriptor> getDeskriptoren() {
+	public void setTreffer(final List<RaetselsucheTrefferItem> treffer) {
 
-		return deskriptoren;
-	}
-
-	public RaetselsucheTreffer withId(final String id) {
-
-		this.id = id;
-		return this;
-	}
-
-	public RaetselsucheTreffer withSchluessel(final String schluessel) {
-
-		this.schluessel = schluessel;
-		return this;
-	}
-
-	public RaetselsucheTreffer withName(final String name) {
-
-		this.name = name;
-		return this;
-	}
-
-	public RaetselsucheTreffer withDeskriptoren(final List<Deskriptor> deskriptoren) {
-
-		this.deskriptoren = deskriptoren;
-		return this;
-	}
-
-	public String deskriptorenIds() {
-
-		List<String> ids = deskriptoren.stream().map(d -> d.id + "").toList();
-		return StringUtils.join(ids, ',');
-	}
-
-	public String getKommentar() {
-
-		return kommentar;
-	}
-
-	public RaetselsucheTreffer withKommentar(final String kommentar) {
-
-		this.kommentar = kommentar;
-		return this;
-	}
-
-	public DomainEntityStatus getStatus() {
-
-		return status;
-	}
-
-	public RaetselsucheTreffer withStatus(final DomainEntityStatus status) {
-
-		this.status = status;
-		return this;
+		this.treffer = treffer;
 	}
 
 }

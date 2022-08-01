@@ -32,6 +32,7 @@ import de.egladil.mja_admin_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_admin_api.domain.raetsel.RaetselService;
 import de.egladil.mja_admin_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
+import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import de.egladil.web.mja_auth.dto.MessagePayload;
@@ -54,31 +55,48 @@ public class RaetselServiceImpl implements RaetselService {
 	@Inject
 	RaetselDao raetselDao;
 
+	// @Override
+	// public long zaehleRaetselMitSuchfilter(final Suchfilter suchfilter) {
+	//
+	// SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
+	//
+	// long result = 0;
+	//
+	// switch (suchfilterVariante) {
+	//
+	// case COMPLETE -> result = raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds());
+	// case DESKRIPTOREN -> result = raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
+	// case VOLLTEXT -> result = raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
+	// default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
+	// }
+	//
+	// return result;
+	//
+	// }
+
 	@Override
-	public long zaehleRaetselMitSuchfilter(final Suchfilter suchfilter) {
-
-		SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
-
-		long result = 0;
-
-		switch (suchfilterVariante) {
-
-		case COMPLETE -> result = raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds());
-		case DESKRIPTOREN -> result = raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
-		case VOLLTEXT -> result = raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
-		default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
-		}
-
-		return result;
-
-	}
-
-	@Override
-	public List<RaetselsucheTreffer> sucheRaetsel(final Suchfilter suchfilter, final int limit, final int offset, final SortDirection sortDirection) {
+	public RaetselsucheTreffer sucheRaetsel(final Suchfilter suchfilter, final int limit, final int offset, final SortDirection sortDirection) {
 
 		SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
 
 		List<PersistentesRaetsel> trefferliste = new ArrayList<>();
+
+		List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
+		long anzahlGesamt = 0L;
+
+		switch (suchfilterVariante) {
+
+		case COMPLETE -> anzahlGesamt = raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(),
+			suchfilter.getDeskriptorenIds());
+		case DESKRIPTOREN -> anzahlGesamt = raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
+		case VOLLTEXT -> anzahlGesamt = raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
+		default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
+		}
+
+		if (anzahlGesamt == 0) {
+
+			return new RaetselsucheTreffer();
+		}
 
 		switch (suchfilterVariante) {
 
@@ -92,7 +110,13 @@ public class RaetselServiceImpl implements RaetselService {
 		default -> new IllegalArgumentException("Unexpected value: " + suchfilterVariante);
 		}
 
-		return trefferliste.stream().map(pr -> mapToSucheTrefferFromDB(pr)).toList();
+		treffer = trefferliste.stream().map(pr -> mapToSucheTrefferFromDB(pr)).toList();
+
+		RaetselsucheTreffer result = new RaetselsucheTreffer();
+		result.setTreffer(treffer);
+		result.setTrefferGesamt(anzahlGesamt);
+
+		return result;
 	}
 
 	@Override
@@ -197,9 +221,9 @@ public class RaetselServiceImpl implements RaetselService {
 		return result;
 	}
 
-	RaetselsucheTreffer mapToSucheTrefferFromDB(final PersistentesRaetsel raetselDB) {
+	RaetselsucheTrefferItem mapToSucheTrefferFromDB(final PersistentesRaetsel raetselDB) {
 
-		RaetselsucheTreffer result = new RaetselsucheTreffer()
+		RaetselsucheTrefferItem result = new RaetselsucheTrefferItem()
 			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
 			.withId(raetselDB.uuid)
 			.withName(raetselDB.name)

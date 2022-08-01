@@ -13,7 +13,7 @@ import {
   SuchfilterQueryParameterMapper,
   PageDefinition
 } from '@mja-workspace/suchfilter/domain';
-import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails } from '../entities/raetsel';
+import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselDataService {
@@ -23,40 +23,10 @@ export class RaetselDataService {
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 
-  countRaetsel(suchfilter: Suchfilter | undefined): Observable<number> {
+  loadPage(suchfilter: Suchfilter | undefined, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
 
     if (suchfilter === undefined) {
-      return of(0);
-    }
-
-    if (suchfilter.deskriptoren.length === 0 && (suchfilter.suchstring === undefined || suchfilter.suchstring.trim().length === 0)) {
-      return of(0);
-    }
-
-    const mapper = new SuchfilterQueryParameterMapper(suchfilter);
-
-    let params = new HttpParams();
-
-    if (suchfilter.suchstring && suchfilter.suchstring.trim().length > 0) {
-      params = params.set(QUERY_PARAM_SUCHSTRING, suchfilter.suchstring.trim());
-    }
-
-    if (suchfilter.deskriptoren.length > 0) {
-      params = params.set(QUERY_PARAM_DESKRIPTOREN, mapper.getDeskriptoren());
-    }
-
-    params = params.set(QUERY_PARAM_TYPE_DESKRIPTOREN, 'ORDINAL');
-
-    const headers = new HttpHeaders().set('Accept', 'text/plain');
-    const url = this.#url + '/size';
-
-    return this.http.get<number>(url, { headers, params });
-  }
-
-  loadPage(suchfilter: Suchfilter | undefined, pageDefinition: PageDefinition): Observable<Raetsel[]> {
-
-    if (suchfilter === undefined) {
-      return of([]);
+      return of({trefferGesamt: 0, treffer: []});
     }
 
     const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
@@ -79,7 +49,7 @@ export class RaetselDataService {
     params = params.set(QUERY_PARAM_TYPE_DESKRIPTOREN, 'ORDINAL');
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    return this.http.get<Raetsel[]>(this.#url, { headers, params });
+    return this.http.get<RaetselsucheTreffer>(this.#url, { headers, params });
   }
 
   findById(uuid: string): Observable<RaetselDetails> {
