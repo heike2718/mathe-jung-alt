@@ -14,10 +14,9 @@
 	<description>Webservice für "Mathe für jung und alt"- Administration</description>
 
 
-
 	<dependencies>
 
-	<dependency>
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>mja-shared</artifactId>
 			<version>1.0.0</version>
@@ -27,6 +26,12 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>mja-auth</artifactId>
 			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>de.egladil.web</groupId>
+			<artifactId>filescanner-service</artifactId>
+			<version>${filescanner.version}</version>
 		</dependency>
 
 		<!-- START quarkus dependencies -->
@@ -48,6 +53,11 @@
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-resteasy-reactive-jackson</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-multipart-provider</artifactId>
 		</dependency>
 
 		<dependency>
@@ -101,6 +111,12 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
 		</dependency>
 
 		<dependency>

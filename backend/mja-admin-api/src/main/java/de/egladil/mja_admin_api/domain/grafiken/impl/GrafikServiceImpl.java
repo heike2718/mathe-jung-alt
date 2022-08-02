@@ -4,15 +4,24 @@
 // =====================================================
 package de.egladil.mja_admin_api.domain.grafiken.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.apache.commons.io.IOUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_admin_api.domain.dto.UploadRequestDto;
+import de.egladil.mja_admin_api.domain.exception.MjaAdminServerException;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_admin_api.domain.grafiken.GrafikService;
 import de.egladil.mja_admin_api.domain.raetsel.impl.FindPathsGrafikParser;
@@ -30,6 +39,9 @@ public class GrafikServiceImpl implements GrafikService {
 
 	@Inject
 	RaetselFileService fileService;
+
+	@ConfigProperty(name = "images.base.dir")
+	String imagesBaseDir;
 
 	/**
 	 *
@@ -63,6 +75,45 @@ public class GrafikServiceImpl implements GrafikService {
 		}
 
 		return MessagePayload.ok();
+	}
+
+	@Override
+	public MessagePayload grafikSpeichern(final String relativerPfad, final UploadRequestDto uploadRequestDto) {
+
+		if (relativerPfad == null) {
+
+			LOGGER.error("Aufruf ohne relativen Pfad");
+			return MessagePayload.error("Aufruf ohne Pfad");
+		}
+
+		if (!validPath(relativerPfad)) {
+
+			LOGGER.error("Aufruf mit ungültigem relativen Pfad!");
+			return MessagePayload.error("Aufruf mit ungültigem Pfad");
+		}
+
+		File file = new File(imagesBaseDir + relativerPfad);
+
+		File uploadDir = new File(file.getParent());
+
+		if (!uploadDir.exists()) {
+
+			uploadDir.mkdirs();
+		}
+
+		try (FileOutputStream fos = new FileOutputStream(file);
+			InputStream in = new ByteArrayInputStream(uploadRequestDto.getUploadData().getData())) {
+
+			IOUtils.copy(in, fos);
+			fos.flush();
+		} catch (IOException e) {
+
+			LOGGER.error("Fehler beim Speichern im Filesystem: " + e.getMessage(), e);
+			throw new MjaAdminServerException("Konnte Grafik nicht ins Filesystem speichern: " + e.getMessage(), e);
+		}
+
+		LOGGER.info("Grafikdatei hochgeladen: {} - {}", uploadRequestDto.getBenutzerUuid(), file.getAbsolutePath());
+		return MessagePayload.info("Grafik erfolgreich gespeichert");
 	}
 
 	boolean validPath(final String relativerPfad) {

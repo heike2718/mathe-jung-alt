@@ -7,6 +7,7 @@ import { DeskriptorenFilterComponent } from './deskriptoren-filter/deskriptoren-
 import { AdminSuchfilterComponent } from './admin-suchfilter/admin-suchfilter.component';
 import { JaNeinDialogComponent } from './ja-nein-dialog/ja-nein-dialog.component';
 import { SelectItemsComponent } from './select-items/select-items.component';
+import { FileUploadComponent } from './ui-file-upload/file-upload.component';
 
 @NgModule({
   imports: [FormsModule, SharedUtilMjaModule, MaterialModule],
@@ -16,6 +17,7 @@ import { SelectItemsComponent } from './select-items/select-items.component';
     AdminSuchfilterComponent,
     JaNeinDialogComponent,
     SelectItemsComponent,
+    FileUploadComponent
   ],
   exports: [
     MessageComponent,
@@ -24,7 +26,8 @@ import { SelectItemsComponent } from './select-items/select-items.component';
     FormsModule,
     MaterialModule,
     SharedUtilMjaModule,
-    SelectItemsComponent // keine Ahnung, warum der Export in index.ts bei dieser Komponente nicht reicht, bei den anderen Komponenten aber schon
+    SelectItemsComponent, // keine Ahnung, warum der Export in index.ts bei dieser Komponente nicht reicht, bei den anderen Komponenten aber schon
+    FileUploadComponent
   ],
 })
 export class SharedUiComponentsModule {}

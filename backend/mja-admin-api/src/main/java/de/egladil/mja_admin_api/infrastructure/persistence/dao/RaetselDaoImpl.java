@@ -104,7 +104,7 @@ public class RaetselDaoImpl implements RaetselDao {
 
 		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
-		LOGGER.info("[deskriptoren=" + wrappedDeskriptoren + "]");
+		LOGGER.debug("[deskriptoren=" + wrappedDeskriptoren + "]");
 
 		String queryId = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC
 			: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN;

@@ -10,6 +10,7 @@
 
 	<properties>
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
+		<filescanner.version>2.0.4</filescanner.version>
 		<failsafe.useModulePath>false</failsafe.useModulePath>
 		<maven.compiler.release>17</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

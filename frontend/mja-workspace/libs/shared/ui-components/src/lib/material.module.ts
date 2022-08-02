@@ -23,6 +23,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 const materialModules = [
@@ -34,6 +35,7 @@ const materialModules = [
   MatSortModule,
   MatChipsModule,
   MatProgressSpinnerModule,
+  MatProgressBarModule,
   MatGridListModule,
   MatInputModule,
   MatRadioModule,
