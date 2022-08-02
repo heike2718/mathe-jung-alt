@@ -15,6 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@mja-workspace/grafik/domain": ["libs/grafik/domain/src/index.ts"],
+      "@mja-workspace/grafik/feature-search": [
+        "libs/grafik/feature-search/src/index.ts"
+      ],
       "@mja-workspace/quellen/domain": ["libs/quellen/domain/src/index.ts"],
       "@mja-workspace/quellen/feature-search": [
         "libs/quellen/feature-search/src/index.ts"

@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/grafik/feature-search",
+  "sourceRoot": "libs/grafik/feature-search/src",
+  "prefix": "grafik",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/grafik/feature-search"],
+      "options": {
+        "project": "libs/grafik/feature-search/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/grafik/feature-search/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/grafik/feature-search/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/grafik/feature-search"],
+      "options": {
+        "jestConfig": "libs/grafik/feature-search/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/grafik/feature-search/src/**/*.ts",
+          "libs/grafik/feature-search/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:grafik", "type:feature"]
+}

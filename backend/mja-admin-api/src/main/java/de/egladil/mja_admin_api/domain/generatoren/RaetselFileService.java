@@ -49,4 +49,11 @@ public interface RaetselFileService {
 	 */
 	byte[] findImageLoesung(String schluessel);
 
+	/**
+	 * Prüft, ob die Datei existiert.
+	 *
+	 * @param  relativerPfad
+	 * @return
+	 */
+	boolean existsGrafik(String relativerPfad);
 }

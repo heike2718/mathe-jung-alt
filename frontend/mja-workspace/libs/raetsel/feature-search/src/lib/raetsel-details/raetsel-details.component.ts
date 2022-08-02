@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { GrafikFacade } from '@mja-workspace/grafik/domain';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
 import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
@@ -24,7 +25,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     public authFacade: AuthFacade,
     public quellenFacade: QuellenFacade,
     private router: Router,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    public grafikFacade: GrafikFacade) { }
 
   ngOnInit(): void {
 
@@ -101,9 +103,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  showInfo(link: string): void {
-    console.log('jetzt image holen: ' + link);
-  }
-
-  
+  grafikLaden(link: string): void {
+    this.grafikFacade.grafikPruefen(link);
+  }  
 }

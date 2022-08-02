@@ -1,6 +1,8 @@
 {
   "version": 2,
   "projects": {
+    "grafik-domain": "libs/grafik/domain",
+    "grafik-feature-search": "libs/grafik/feature-search",
     "mja-admin": "apps/mja-admin",
     "mja-admin-e2e": "apps/mja-admin-e2e",
     "quellen-domain": "libs/quellen/domain",

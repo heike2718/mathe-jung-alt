@@ -154,6 +154,15 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		return null;
 	}
 
+	@Override
+	public boolean existsGrafik(final String relativerPfad) {
+
+		String path = imagesBaseDir + relativerPfad;
+		File file = new File(path);
+
+		return file.exists() && file.isFile();
+	}
+
 	String loadTemplatePdf() {
 
 		try (InputStream in = getClass().getResourceAsStream("/latex/template-pdf.tex");

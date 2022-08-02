@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class FindPathsGrafikParser {
 
-	private static final String REGEXP_GRAFIK = "/resources/\\d{3}/\\d{5}[_-]{0,1}\\d{0,2}.eps";
+	public static final String REGEXP_GRAFIK = "/resources/\\d{3}/\\d{5}[_-]{0,1}\\d{0,2}.eps";
 
 	private final Pattern pattern;
 

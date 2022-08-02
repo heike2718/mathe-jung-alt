@@ -11,6 +11,8 @@ import { AuthGuard } from '@mja-workspace/shared/auth/domain';
 import { RaetselDetailsComponent } from './raetsel-details/raetsel-details.component';
 import { AntwortvorschlagComponent } from './antwortvorschlag/antwortvorschlag.component';
 import { SharedUiRaetselModule } from '@mja-workspace/shared/ui-raetsel';
+import { GrafikDomainModule } from '@mja-workspace/grafik/domain';
+import { GrafikFeatureSearchModule } from '@mja-workspace/grafik/feature-search';
 
 @NgModule({
   imports: [
@@ -20,6 +22,8 @@ import { SharedUiRaetselModule } from '@mja-workspace/shared/ui-raetsel';
     SuchfilterDomainModule,
     SharedUiComponentsModule,
     SharedUiRaetselModule,
+    GrafikDomainModule,
+    GrafikFeatureSearchModule,
     MaterialModule,
     RouterModule.forChild([
       {

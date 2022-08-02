@@ -1,0 +1,15 @@
+<div *ngIf="grafikFacade.isLoaded$ | async else grafikNichtGeprueft">
+    <ng-container *ngIf="grafikFacade.getGrafikSearchResult$ | async as messagePayload">
+        <div *ngIf="messagePayload.level !=='INFO'" class="bordered bg-white">
+            {{messagePayload.message}}
+        </div>
+        <div *ngIf="messagePayload.level ==='INFO'" class="bordered bg-white">
+            Alles gut: Grafik ist schon hochgeladen.
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #grafikNichtGeprueft>
+    <p>zum Prüfen auf info klicken</p>
+  </ng-template>
+

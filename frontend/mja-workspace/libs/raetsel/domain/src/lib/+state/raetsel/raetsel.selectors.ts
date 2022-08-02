@@ -1,8 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   RAETSEL_FEATURE_KEY,
-  RaetselState,
-  RaetselPartialState,
+  RaetselState,  
   raetselAdapter,
 } from './raetsel.reducer';
 

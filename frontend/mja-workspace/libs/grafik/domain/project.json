@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/grafik/domain",
+  "sourceRoot": "libs/grafik/domain/src",
+  "prefix": "grafik",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/grafik/domain"],
+      "options": {
+        "project": "libs/grafik/domain/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/grafik/domain/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/grafik/domain/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/grafik/domain"],
+      "options": {
+        "jestConfig": "libs/grafik/domain/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/grafik/domain/src/**/*.ts",
+          "libs/grafik/domain/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:grafik", "type:domain-logic"]
+}
