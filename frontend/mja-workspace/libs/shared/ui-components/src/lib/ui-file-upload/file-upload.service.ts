@@ -21,7 +21,7 @@ export class FileUploadService {
         //     .set('pfad', uploadModel.pfad)
         //     .set('type', uploadModel.typ);
 
-        const headers = new HttpHeaders().set('Accept', 'application/json').set('Content-Type', 'multipart/form-data');
+        const headers = new HttpHeaders().set('Accept', 'application/json');
 
         return this.http.post(this.#url + '/fixed', formData, {
             headers: headers,
