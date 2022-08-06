@@ -13,6 +13,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -21,7 +22,6 @@ import javax.ws.rs.core.SecurityContext;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.jboss.resteasy.reactive.MultipartForm;
 import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -33,8 +33,8 @@ import de.egladil.mja_admin_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_admin_api.domain.dto.UploadType;
 import de.egladil.mja_admin_api.domain.grafiken.GrafikService;
 import de.egladil.mja_admin_api.domain.upload.FormData;
+import de.egladil.mja_admin_api.domain.upload.UploadFileService;
 import de.egladil.mja_admin_api.domain.upload.UploadScannerDelegate;
-import de.egladil.mja_admin_api.domain.utils.MultipartUtils;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import io.vertx.core.eventbus.EventBus;
 
@@ -51,21 +51,29 @@ public class UploadResource {
 	EventBus bus;
 
 	@Inject
+	UploadFileService uploadFileService;
+
+	@Inject
 	GrafikService grafikService;
 
 	@Inject
 	UploadScannerDelegate uploadScanner;
 
-	@Inject
+	@Context
 	SecurityContext securityContext;
 
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@RolesAllowed("ADMIN")
 	public Response grafikHochladen(@QueryParam(value = "type") final UploadType fileType, @QueryParam(
-		value = "pfad") final String relativerPfad, final MultipartFormDataInput input) {
+		value = "pfad") final String relativerPfad, @MultipartForm final FormData body) {
 
-		UploadData uploadData = MultipartUtils.getUploadData(input);
+		FileUpload file = body.file;
+
+		File theFile = file.filePath().toFile();
+		UploadData uploadData = new UploadData(relativerPfad, theFile);
+
+		uploadFileService.processFile(uploadData);
 
 		UploadRequestDto uploadRequest = new UploadRequestDto().withBenutzerUuid(securityContext.getUserPrincipal().getName())
 			.withUploadData(uploadData).withUploadType(fileType);
@@ -83,45 +91,12 @@ public class UploadResource {
 	}
 
 	@POST
-	@Path("fixed")
-	@Consumes({ MediaType.MULTIPART_FORM_DATA })
-	@RolesAllowed("ADMIN")
-	public Response grafikHochladen(@MultipartForm final FormData body) {
-
-		// https://quarkus.io/guides/resteasy-reactive#multipart
-
-		final UploadType fileType = UploadType.GRAFIK;
-		final String relativerPfad = "/resources/001/00001.eps";
-
-		FileUpload file = body.file;
-
-		if (file == null) {
-
-			throw new NullPointerException("da hat was mit der Deserialisierung des bodys nicht geklappt");
-		}
-
-		LOGGER.info("upload() " + body.description);
-
-		File theFile = file.filePath().toFile();
-		bus.send("file-service", theFile);
-
-		LOGGER.info("upload() before response Accepted");
-
-		return Response
-			.accepted()
-			.build();
-	}
-
-	@POST
 	@Path("swagger")
 	@Consumes({ MediaType.MULTIPART_FORM_DATA })
 	@RolesAllowed("ADMIN")
 	public Response grafikHochladenMitSwagger(@MultipartForm final MultipartBody body) {
 
 		// https://dev.to/felipewind/uploading-a-file-through-swagger-in-quarkus-3l8l
-
-		final UploadType fileType = UploadType.GRAFIK;
-		final String relativerPfad = "/resources/001/00001.eps";
 
 		FileUpload file = body.uploadedFile;
 

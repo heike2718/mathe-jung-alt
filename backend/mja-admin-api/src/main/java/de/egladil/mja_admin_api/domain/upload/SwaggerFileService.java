@@ -19,12 +19,12 @@ import org.slf4j.LoggerFactory;
 import io.quarkus.vertx.ConsumeEvent;
 
 /**
- * FileService
+ * SwaggerFileService
  */
 @ApplicationScoped
-public class FileService {
+public class SwaggerFileService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(FileService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerFileService.class);
 
 	@ConsumeEvent(blocking = true, value = "file-service")
 	public void processFile(final File theFile) throws InterruptedException {

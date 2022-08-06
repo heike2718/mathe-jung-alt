@@ -99,6 +99,33 @@
 
             <mat-accordion>
 
+                <mat-expansion-panel *ngIf="raetsel.grafikPfade.length !== 0">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Grafiken
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <mat-nav-list>
+                        <mat-list-item *ngFor="let link of raetsel.grafikPfade">
+                            {{ link }}
+                            <button mat-icon-button (click)="grafikLaden(link)">
+                                <mat-icon>info</mat-icon>
+                            </button>
+                        </mat-list-item>
+                    </mat-nav-list>
+
+                    <div *ngIf="grafikFacade.isLoading$ | async" class="loader">
+                        <mat-progress-spinner mode="indeterminate" diameter='40' strokeWidth='5'></mat-progress-spinner>
+                    </div>
+
+                    <div *ngIf="grafikFacade.isLoaded$ | async">
+                        <div *ngIf="grafikFacade.getGrafikSearchResult$ | async as grafikSearchResult">
+                            <mja-grafik [grafikSearchResult]="grafikSearchResult"></mja-grafik>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
@@ -130,34 +157,6 @@
 
                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
                         disabled="true">{{raetsel.kommentar}}</textarea>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel *ngIf="raetsel.grafikPfade.length !== 0">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Grafiken
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-
-                    <mat-nav-list>
-                        <mat-list-item *ngFor="let link of raetsel.grafikPfade">
-                            {{ link }}
-                            <button mat-icon-button (click)="grafikLaden(link)">
-                                <mat-icon>info</mat-icon>
-                            </button>
-                            <mja-grafik [pfad]="link"></mja-grafik>
-                        </mat-list-item>
-                    </mat-nav-list>
-
-                    <div *ngIf="grafikFacade.isLoading$ | async" class="loader">
-                        <mat-progress-spinner mode="indeterminate" diameter='40' strokeWidth='5'></mat-progress-spinner>
-                    </div>
-
-                    <div *ngIf="grafikFacade.isLoaded$ | async">
-                        <div *ngIf="grafikFacade.getGrafikSearchResult$ | async as grafikSearchResult">
-                            <mja-grafik [grafikSearchResult]="grafikSearchResult"></mja-grafik>
-                        </div>
-                    </div>
                 </mat-expansion-panel>
             </mat-accordion>
         </ng-container>

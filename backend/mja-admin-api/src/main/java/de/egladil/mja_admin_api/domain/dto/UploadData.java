@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_admin_api.domain.dto;
 
+import java.io.File;
 import java.util.Base64;
 
 import de.egladil.mja_admin_api.domain.semantik.ValueObject;
@@ -17,18 +18,25 @@ public class UploadData {
 
 	private final String filename;
 
-	private final byte[] data;
+	private byte[] data;
 
-	public UploadData(final String filename, final byte[] data) {
+	private final File file;
+
+	public UploadData(final String filename, final File file) {
 
 		super();
 		this.filename = filename;
-		this.data = data;
+		this.file = file;
 	}
 
 	public String getFilename() {
 
 		return filename;
+	}
+
+	public void setData(final byte[] data) {
+
+		this.data = data;
 	}
 
 	public byte[] getData() {
@@ -51,6 +59,11 @@ public class UploadData {
 	public int size() {
 
 		return this.data.length;
+	}
+
+	public File getFile() {
+
+		return file;
 	}
 
 }

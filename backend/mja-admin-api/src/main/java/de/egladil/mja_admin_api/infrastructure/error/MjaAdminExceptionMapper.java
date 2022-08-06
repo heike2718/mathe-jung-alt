@@ -16,6 +16,7 @@ import javax.ws.rs.ext.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_admin_api.domain.exception.FileUploadException;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.exception.AuthException;
 import de.egladil.web.mja_auth.exception.SessionExpiredException;
@@ -53,6 +54,13 @@ public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
 
 			return Response.status(440).entity(MessagePayload.warn(exception.getMessage()))
 				.build();
+		}
+
+		if (exception instanceof FileUploadException) {
+
+			return Response.status(400).entity(MessagePayload.error(exception.getMessage()))
+				.build();
+
 		}
 
 		LOGGER.error(exception.getMessage(), exception);
