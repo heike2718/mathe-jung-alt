@@ -86,7 +86,7 @@ public class RaetselResource {
 		@QueryParam(value = "sortDirection")  @DefaultValue("asc") final SortDirection sortDirection) {
 		// @formatter:on
 
-		LOGGER.info("authorizationEnabled=" + this.authorizationEnabled);
+		LOGGER.debug("authorizationEnabled=" + this.authorizationEnabled);
 
 		String deskriptorenOrdinal = checkAndTransformDeskriptoren(deskriptoren, typeDeskriptoren);
 

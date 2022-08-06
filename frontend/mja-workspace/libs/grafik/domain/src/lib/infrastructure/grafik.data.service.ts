@@ -3,6 +3,7 @@ import { Inject, Injectable } from "@angular/core";
 import { Configuration, SharedConfigService } from "@mja-workspace/shared/util-configuration";
 import { Message } from "@mja-workspace/shared/util-mja";
 import { Observable } from "rxjs";
+import { GrafikSearchResult } from "../entities/grafik.model";
 
 
 @Injectable(
@@ -15,7 +16,7 @@ export class GrafikDataService {
 
     constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) {}
 
-    public loadGrafik(relativerPfad: string): Observable<Message> {
+    public loadGrafik(relativerPfad: string): Observable<GrafikSearchResult> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
@@ -25,7 +26,7 @@ export class GrafikDataService {
 
         const url = this.#url;
 
-        return this.http.get<Message>(url, { headers: headers, params: params });
+        return this.http.get<GrafikSearchResult>(url, { headers: headers, params: params });
     }
 
 

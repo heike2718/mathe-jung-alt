@@ -2,7 +2,7 @@
 
 <div class="file-upload">
 
-  {{fileName || "Datei auswählen"}}
+  Datei auswählen
 
   <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
     <mat-icon>attach_file</mat-icon>
@@ -10,6 +10,8 @@
   </button>
 
 </div>
+
+<div *ngIf="fileName.length > 0">{{fileName}} wird hochgeladen</div>
 
 <div class="progress">
 

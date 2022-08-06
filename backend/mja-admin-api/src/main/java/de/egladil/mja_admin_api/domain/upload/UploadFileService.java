@@ -38,7 +38,7 @@ public class UploadFileService {
 
 			uploadData.setData(bos.toByteArray());
 
-			LOGGER.info("FileInputStream gelesen");
+			LOGGER.debug("FileInputStream gelesen");
 
 		} catch (IOException e) {
 

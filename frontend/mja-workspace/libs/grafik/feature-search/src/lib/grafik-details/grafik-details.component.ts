@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { GrafikFacade } from '@mja-workspace/grafik/domain';
-import { initialUploadComponentModel, UploadComponentModel } from '@mja-workspace/shared/ui-components';
-import { Message, MessageService } from '@mja-workspace/shared/util-mja';
+import { UploadComponentModel } from '@mja-workspace/shared/ui-components';
+import { GrafikSearchResult } from 'libs/grafik/domain/src/lib/entities/grafik.model';
 
 @Component({
   selector: 'mja-grafik',
@@ -11,13 +11,24 @@ import { Message, MessageService } from '@mja-workspace/shared/util-mja';
 export class GrafikDetailsComponent implements OnInit {
 
   @Input()
-  pfad!: string;
-  
+  grafikSearchResult!: GrafikSearchResult;
+
   uploadModel!: UploadComponentModel;
 
   constructor(public grafikFacade: GrafikFacade) { }
 
   ngOnInit(): void {
-    this.uploadModel = { ...initialUploadComponentModel, pfad: this.pfad };
+
+    this.uploadModel = {
+      typ: 'GRAFIK',
+      pfad: this.grafikSearchResult.pfad,
+      titel: 'Grafik hochladen',
+      maxSizeBytes: 2097152,
+      errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
+      accept: '.eps',
+      acceptMessage: 'erlaubte Dateitypen: eps'
+    };
+
+    console.log(JSON.stringify(this.uploadModel));
   }
 }

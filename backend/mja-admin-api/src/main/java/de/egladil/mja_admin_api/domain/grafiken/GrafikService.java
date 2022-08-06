@@ -5,6 +5,7 @@
 package de.egladil.mja_admin_api.domain.grafiken;
 
 import de.egladil.mja_admin_api.domain.dto.UploadRequestDto;
+import de.egladil.mja_admin_api.domain.grafiken.dto.Grafik;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
@@ -18,7 +19,7 @@ public interface GrafikService {
 	 * @param  relativerPfad
 	 * @return               Grafik oder null;
 	 */
-	MessagePayload findGrafik(String relativerPfad);
+	Grafik findGrafik(String relativerPfad);
 
 	/**
 	 * Speichert die Grafik-Datei, sofern sie virenfrei ist und alle anderen Validierungen passen.

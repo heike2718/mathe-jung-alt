@@ -48,6 +48,7 @@ export class FileUploadComponent implements OnInit {
         this.showMaxSizeExceeded = false;
 
         if (file) {
+            this.fileName = file.name;
             const size = file.size;
             this.#calculateFileSize(size);
 

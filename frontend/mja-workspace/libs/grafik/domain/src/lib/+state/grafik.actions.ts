@@ -1,5 +1,5 @@
-import { Message } from "@mja-workspace/shared/util-mja";
 import { createAction, props } from "@ngrx/store";
+import { GrafikSearchResult } from "../entities/grafik.model";
 
 export const pruefeGrafik = createAction(
     '[Grafik] pruefeGrafik',
@@ -8,5 +8,5 @@ export const pruefeGrafik = createAction(
 
 export const grafikGeprueft = createAction(
     '[Grafik] grafikGeprueft',
-    props<{messagePayload: Message}>()
+    props<{grafikSearchResult: GrafikSearchResult}>()
 );

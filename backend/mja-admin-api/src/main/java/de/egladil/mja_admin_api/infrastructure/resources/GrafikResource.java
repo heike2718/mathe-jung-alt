@@ -13,7 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import de.egladil.mja_admin_api.domain.grafiken.GrafikService;
-import de.egladil.web.mja_auth.dto.MessagePayload;
+import de.egladil.mja_admin_api.domain.grafiken.dto.Grafik;
 
 /**
  * GrafikResource
@@ -27,7 +27,7 @@ public class GrafikResource {
 
 	@GET
 	@RolesAllowed("ADMIN")
-	public MessagePayload pruefeGrafik(@QueryParam(value = "pfad") final String relativerPfad) {
+	public Grafik pruefeGrafik(@QueryParam(value = "pfad") final String relativerPfad) {
 
 		return grafikService.findGrafik(relativerPfad);
 	}

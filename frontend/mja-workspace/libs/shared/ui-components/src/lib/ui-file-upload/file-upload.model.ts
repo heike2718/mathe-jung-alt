@@ -10,13 +10,3 @@ export interface UploadComponentModel {
 	readonly accept: string;
 	readonly acceptMessage: string;
 };
-
-export const initialUploadComponentModel: UploadComponentModel = {
-    typ: 'GRAFIK',
-	pfad: '',
-	titel: 'Grafik hochladen',
-	maxSizeBytes: 2097152,
-	errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
-	accept: '.eps',
-	acceptMessage: 'erlaubte Dateitypen: eps'	
-};

@@ -18,8 +18,8 @@ export class GrafikEffects {
             ofType(GrafikActions.pruefeGrafik),
             this.ngrxService.safeSwitchMap((action) =>
                 this.grafikDataService.loadGrafik(action.pfad).pipe(
-                    map((messagePayload) =>
-                        GrafikActions.grafikGeprueft({messagePayload: messagePayload})
+                    map((grafikSearchResult) =>
+                        GrafikActions.grafikGeprueft({grafikSearchResult})
                     )
                 ), 'Ups, beim Laden des Grafik ist etwas schiefgegangen', noopAction()
             )

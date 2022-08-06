@@ -24,6 +24,7 @@ import de.egladil.mja_admin_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_admin_api.domain.exception.MjaAdminServerException;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_admin_api.domain.grafiken.GrafikService;
+import de.egladil.mja_admin_api.domain.grafiken.dto.Grafik;
 import de.egladil.mja_admin_api.domain.raetsel.impl.FindPathsGrafikParser;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 
@@ -53,28 +54,30 @@ public class GrafikServiceImpl implements GrafikService {
 	}
 
 	@Override
-	public MessagePayload findGrafik(final String relativerPfad) {
+	public Grafik findGrafik(final String relativerPfad) {
 
 		if (relativerPfad == null) {
 
 			LOGGER.error("Aufruf ohne relativen Pfad");
-			return MessagePayload.error("Aufruf ohne Pfad");
+			return new Grafik().withMessagePayload(MessagePayload.error("Aufruf ohne Pfad")).withPfad("");
 		}
 
 		if (!validPath(relativerPfad)) {
 
 			LOGGER.error("Aufruf mit ungültigem relativen Pfad!");
-			return MessagePayload.error("Aufruf mit ungültigem Pfad");
+			return new Grafik().withMessagePayload(MessagePayload.error("Aufruf mit ungültigem Pfad")).withPfad("");
 		}
 
 		boolean exists = fileService.existsGrafik(relativerPfad);
 
 		if (!exists) {
 
-			return MessagePayload.warn("Falls der Pfad stimmt, wurde die Grafik noch nicht hochgeladen.");
+			return new Grafik()
+				.withMessagePayload(MessagePayload.warn("Falls der Pfad stimmt, wurde die Grafik noch nicht hochgeladen."))
+				.withPfad(relativerPfad);
 		}
 
-		return MessagePayload.ok();
+		return new Grafik().withMessagePayload(MessagePayload.ok()).withPfad(relativerPfad);
 	}
 
 	@Override
