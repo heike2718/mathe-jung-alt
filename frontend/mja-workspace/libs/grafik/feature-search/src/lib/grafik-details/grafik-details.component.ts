@@ -1,34 +1,41 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GrafikFacade } from '@mja-workspace/grafik/domain';
 import { UploadComponentModel } from '@mja-workspace/shared/ui-components';
-import { GrafikSearchResult } from 'libs/grafik/domain/src/lib/entities/grafik.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'mja-grafik',
   templateUrl: './grafik-details.component.html',
   styleUrls: ['./grafik-details.component.scss'],
 })
-export class GrafikDetailsComponent implements OnInit {
+export class GrafikDetailsComponent implements OnInit, OnDestroy {
 
-  @Input()
-  grafikSearchResult!: GrafikSearchResult;
+  uploadModel: UploadComponentModel = {
+    typ: 'GRAFIK',
+    pfad: '',
+    titel: 'Grafik hochladen',
+    maxSizeBytes: 2097152,
+    errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
+    accept: '.eps',
+    acceptMessage: 'erlaubte Dateitypen: eps'
+  };
 
-  uploadModel!: UploadComponentModel;
+  #selectedGrafikSubscription: Subscription = new Subscription();
 
   constructor(public grafikFacade: GrafikFacade) { }
 
   ngOnInit(): void {
 
-    this.uploadModel = {
-      typ: 'GRAFIK',
-      pfad: this.grafikSearchResult.pfad,
-      titel: 'Grafik hochladen',
-      maxSizeBytes: 2097152,
-      errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
-      accept: '.eps',
-      acceptMessage: 'erlaubte Dateitypen: eps'
-    };
+    this.#selectedGrafikSubscription = this.grafikFacade.getSelectedGrafikSearchResult$.subscribe(
+      (selectedGrafik) => {
+        if (selectedGrafik && selectedGrafik.pfad.length > 0) {
+          this.uploadModel = { ...this.uploadModel, pfad: selectedGrafik.pfad };
+        }
+      }
+    );
+  }
 
-    console.log(JSON.stringify(this.uploadModel));
+  ngOnDestroy(): void {
+    this.#selectedGrafikSubscription.unsubscribe();
   }
 }

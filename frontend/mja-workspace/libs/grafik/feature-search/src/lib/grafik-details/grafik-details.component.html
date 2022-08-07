@@ -1,16 +1,18 @@
-<div *ngIf="grafikFacade.isLoaded$ | async else grafikNichtGeprueft">
-    <ng-container *ngIf="grafikFacade.getGrafikSearchResult$ | async as messagePayload">
-        <div *ngIf="grafikSearchResult.messagePayload.level !=='INFO'" class="bordered bg-white">
-            {{grafikSearchResult.messagePayload.message}}
+<div *ngIf="grafikFacade.getSelectedGrafikSearchResult$ | async as selectedGrafik">
+    <ng-container *ngIf="selectedGrafik.pfad.length > 0"  else grafikNichtGeladen>
+        <div *ngIf="selectedGrafik.messagePayload.level !=='INFO'" class="bordered bg-white">
+            {{selectedGrafik.pfad}}: {{selectedGrafik.messagePayload.message}}
         </div>
-        <div *ngIf="grafikSearchResult.messagePayload.level ==='INFO'" class="bordered bg-white">
-            Alles gut: Grafik ist schon hochgeladen.
+        <div *ngIf="selectedGrafik.messagePayload.level ==='INFO'" class="bordered bg-white">
+            {{selectedGrafik.pfad}}: Alles gut: Grafik ist schon hochgeladen.
         </div>
     </ng-container>
 </div>
 
-<mja-file-upload [uploadModel]="uploadModel"></mja-file-upload>
+<ng-container *ngIf="uploadModel.pfad.length > 0">
+    <mja-file-upload [uploadModel]="uploadModel"></mja-file-upload>
+</ng-container>
 
-<ng-template #grafikNichtGeprueft>
+<ng-template #grafikNichtGeladen>
     <p>zum Prüfen auf info klicken</p>
 </ng-template>

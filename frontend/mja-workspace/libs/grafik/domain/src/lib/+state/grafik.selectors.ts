@@ -7,4 +7,4 @@ export const getGrafikState = createFeatureSelector<GrafikState>(GRAFIK_FEATURE_
 export const isLoading = createSelector(getGrafikState, (state) => state.loading);
 export const isLoaded = createSelector(getGrafikState, (state) => state.loaded);
 export const getPfad = createSelector(getGrafikState, (state) => state.pfad);
-export const getGrafikSearchResult = createSelector(getGrafikState, (state) => state.grafikSearchResult);
+export const getSelectedGrafikSearchResult = createSelector(getGrafikState, (state) => state.selectedGrafikSearchResult);

@@ -14,7 +14,7 @@ export class GrafikFacade {
 
     public isLoading$: Observable<boolean> = this.store.pipe(select(GrafikSelectors.isLoading));
     public isLoaded$: Observable<boolean> = this.store.pipe(select(GrafikSelectors.isLoaded));
-    public getGrafikSearchResult$: Observable<GrafikSearchResult> = this.store.pipe(select(GrafikSelectors.getGrafikSearchResult));
+    public getSelectedGrafikSearchResult$: Observable<GrafikSearchResult> = this.store.pipe(select(GrafikSelectors.getSelectedGrafikSearchResult));
 
     constructor(private store: Store<fromGrafik.GrafikState> ) {}
 
