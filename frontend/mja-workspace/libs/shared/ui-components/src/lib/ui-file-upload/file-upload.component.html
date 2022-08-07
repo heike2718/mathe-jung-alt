@@ -11,11 +11,11 @@
 			</button>
 		</div>
 
-		<div *ngIf="showMaxSizeExceeded" class="col-12 text-danger">{{fileSize}}: {{errmMaxFileSize}}</div>
-		<div class="col-12">
+		<div *ngIf="showMaxSizeExceeded" class="mt-1 hint-red">{{fileSize}}: {{errmMaxFileSize}}</div>
+		<div class="mt-1">
 			{{maxFileSizeInfo}}
 		</div>
-		<div class="col-12">
+		<div class="mt-1">
 			{{uploadModel.acceptMessage}}
 		</div>
 	</div>
