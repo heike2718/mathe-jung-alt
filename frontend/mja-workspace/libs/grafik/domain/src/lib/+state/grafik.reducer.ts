@@ -21,7 +21,8 @@ const grafikReducer = createReducer(
 
     on(GrafikActions.pruefeGrafik, (state, _action) => ({ ...state, loading: true, selectedGrafikSearchResult:  undefined})),
     on(GrafikActions.grafikGeprueft, (state, action) => ({ ...state, loading: false, loaded: true, selectedGrafikSearchResult: action.grafikSearchResult })),
-    on(GrafikActions.grafikHochgeladen, (state, action) => ({ ...state, loading: false, loaded: false, selectedGrafikSearchResult: undefined })),
+    on(GrafikActions.grafikHochgeladen, (state, _action) => ({ ...state, loading: false, loaded: false, selectedGrafikSearchResult: undefined })),
+    on(GrafikActions.clearVorschau, (state, _action) => ({ ...state, loading: false, loaded: false, selectedGrafikSearchResult: undefined })),
 );
 
 

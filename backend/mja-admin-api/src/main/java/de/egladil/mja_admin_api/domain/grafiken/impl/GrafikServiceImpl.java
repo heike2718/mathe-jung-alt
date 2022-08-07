@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_admin_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_admin_api.domain.exception.MjaAdminServerException;
+import de.egladil.mja_admin_api.domain.generatoren.ImageGeneratorService;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_admin_api.domain.grafiken.GrafikService;
 import de.egladil.mja_admin_api.domain.grafiken.dto.Grafik;
@@ -40,6 +41,9 @@ public class GrafikServiceImpl implements GrafikService {
 
 	@Inject
 	RaetselFileService fileService;
+
+	@Inject
+	ImageGeneratorService imageGeneratorService;
 
 	@ConfigProperty(name = "images.base.dir")
 	String imagesBaseDir;
@@ -77,7 +81,19 @@ public class GrafikServiceImpl implements GrafikService {
 				.withPfad(relativerPfad);
 		}
 
-		return new Grafik().withMessagePayload(MessagePayload.ok()).withPfad(relativerPfad);
+		try {
+
+			byte[] image = imageGeneratorService.generiereGrafikvorschau(relativerPfad);
+			LOGGER.info("Grafikvorschau generiert: {}", relativerPfad);
+			return new Grafik().withMessagePayload(MessagePayload.ok()).withPfad(relativerPfad).withImage(image);
+		} catch (Exception e) {
+
+			LOGGER.error("Exception beim Laden des Images: " + e.getMessage(), e);
+			return new Grafik()
+				.withMessagePayload(
+					MessagePayload.warn("Die Grafik existiert zwar, aber beim Umwandeln in png lief etwas schief."))
+				.withPfad(relativerPfad);
+		}
 	}
 
 	@Override

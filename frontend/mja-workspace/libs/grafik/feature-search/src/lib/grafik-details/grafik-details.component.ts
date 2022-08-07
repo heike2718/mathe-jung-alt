@@ -46,9 +46,7 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
   }
 
   onDateiAusgewaehlt(_event: string): void {
-
-    // this.schulteilnahmenFacade.dateiAusgewaelt();
-    console.log('datei ausgewählt: ' + _event);
+    // interessiert uns hier nicht so sehr.
   }
 
   onResponse(messagePayload: Message | any): void {
@@ -58,5 +56,9 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
       const mp: Message = { ...messagePayload, message: message };
       this.grafikFacade.grafikHochgeladen(mp);
     }
+  }
+
+  reset(): void {
+    this.grafikFacade.clearVorschau();
   }
 }

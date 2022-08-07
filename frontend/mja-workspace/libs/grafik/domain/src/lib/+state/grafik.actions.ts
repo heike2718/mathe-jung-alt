@@ -15,4 +15,8 @@ export const grafikGeprueft = createAction(
 export const grafikHochgeladen = createAction(
   '[Grafik] grafik hochgeladen',
   props<{message: Message}>()
-)
+);
+
+export const clearVorschau = createAction(
+  '[Grafik] clearVorschau'
+);

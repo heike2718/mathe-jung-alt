@@ -124,6 +124,8 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 						byte[] imageLoesung = this.raetselFileService.findImageLoesung(raetsel.getSchluessel());
 
+						// System.out.println(new String(Base64.getEncoder().encode(imageLoesung)));
+
 						result.setImageLoesung(imageLoesung);
 						result.setUrlLoesung(output2Url(filenameLoesung));
 					} else {

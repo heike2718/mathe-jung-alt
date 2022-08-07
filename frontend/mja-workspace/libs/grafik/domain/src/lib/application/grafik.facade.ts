@@ -26,4 +26,8 @@ export class GrafikFacade {
     public grafikHochgeladen(message: Message): void {
         this.store.dispatch(GrafikActions.grafikHochgeladen({message}));
     }
+
+    public clearVorschau(): void {
+        this.store.dispatch(GrafikActions.clearVorschau());
+    }
 }

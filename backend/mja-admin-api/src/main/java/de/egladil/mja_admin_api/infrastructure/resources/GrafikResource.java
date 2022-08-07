@@ -31,5 +31,4 @@ public class GrafikResource {
 
 		return grafikService.findGrafik(relativerPfad);
 	}
-
 }
