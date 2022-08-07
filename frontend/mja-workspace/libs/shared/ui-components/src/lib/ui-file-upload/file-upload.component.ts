@@ -1,8 +1,6 @@
 import { HttpEventType } from "@angular/common/http";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Message } from "@mja-workspace/shared/util-mja";
-import { Subscription } from "rxjs";
-import { finalize } from 'rxjs/operators';
+import { Message, SafeNgrxService } from "@mja-workspace/shared/util-mja";
 import { UploadComponentModel } from "./file-upload.model";
 import { FileUploadService } from "./file-upload.service";
 
@@ -19,7 +17,15 @@ export class FileUploadComponent implements OnInit {
     @Input()
     uploadModel!: UploadComponentModel;
 
+    @Output()
+    responsePayload: EventEmitter<Message> = new EventEmitter<Message>();
+
+    @Output()
+    dateiAusgewaehlt: EventEmitter<string> = new EventEmitter<string>();
+
     fileName = '';
+    selectedFiles?: FileList;
+  	currentFile?: File;
 
     maxFileSizeInfo!: string;
     fileSize = '';
@@ -30,10 +36,7 @@ export class FileUploadComponent implements OnInit {
     showMaxSizeExceeded = false;
     errmMaxFileSize = 'die gewählte Datei ist zu groß. Bitte wählen Sie eine andere Datei.'
 
-    uploadProgress!: number;
-    uploadSub!: Subscription;
-
-    constructor(private fileUploadService: FileUploadService) { }
+    constructor(private fileUploadService: FileUploadService, private errorMapper: SafeNgrxService) { }
 
     ngOnInit(): void {
         const maxFileSizeInKB = this.uploadModel.maxSizeBytes / 1024;
@@ -42,55 +45,60 @@ export class FileUploadComponent implements OnInit {
         this.maxFileSizeInfo = 'Maximale erlaubte Größe: ' + maxFileSizeInKB + ' kB bzw. ' + maxFileSizeInMB + ' MB';
     }
 
-    onFileSelected(event: any) {
+    onFileAdded($event: any) {
 
-        const file: File = event.target.files[0];
-        this.showMaxSizeExceeded = false;
+        this.selectedFiles = $event.target.files;
+		this.showMaxSizeExceeded = false;
 
-        if (file) {
-            this.fileName = file.name;
-            const size = file.size;
-            this.#calculateFileSize(size);
+		if (this.selectedFiles && this.selectedFiles.length === 1) {
+			
+			const size = this.selectedFiles[0].size;
+			this.#calculateFileSize(size);
 
-            if (size <= this.uploadModel.maxSizeBytes) {
-                this.#submitUpload(file);
-            } else {
-                this.showMaxSizeExceeded = true;
-            }
-        }
+			if (size <= this.uploadModel.maxSizeBytes) {				
+				this.currentFile = this.selectedFiles[0];
+				this.showMaxSizeExceeded = false;
+				this.canSubmit = true;	
+				this.dateiAusgewaehlt.emit(this.currentFile.name);	
+				this.uploading = false;	
+			} else {
+				this.showMaxSizeExceeded = true;
+			}									
+		}
     }
 
-    cancelUpload() {
-        if (this.uploadSub) {
-            this.uploadSub.unsubscribe();
-        }
-        this.#reset();
-    }
+    submitUpload(): void {
 
-    #submitUpload(file: File): void {
-        this.showMaxSizeExceeded = false;
+		this.showMaxSizeExceeded = false;
 
-        if (this.uploadSuccessful) {
-            return;
-        }
+		if (this.uploadSuccessful) {
+			return;
+		}
 
-        if (file) {
+		if (!this.currentFile) {
+			return;
+		}
 
+		this.uploading = true;	
 
-            this.uploading = true;
-            
+		this.fileUploadService.uploadFile(this.currentFile, this.uploadModel).subscribe(
+			(rp: Message) => {
 
-            const upload$ = this.fileUploadService.uploadFile(file, this.uploadModel).pipe(
-                finalize(() => this.#reset())
-            );
+				this.uploading = false;
+				this.currentFile = undefined;
+				this.canSubmit = false;
+				this.responsePayload.emit(rp);
 
-            this.uploadSub = upload$.subscribe(event => {
-                if (event.type == HttpEventType.UploadProgress) {
-                    this.uploadProgress = Math.round(100 * (event.loaded / event.total));
-                }
-            })
-        }
-    }
+			},
+			(error => {
+				this.uploading = false;
+				this.currentFile = undefined;
+				this.canSubmit = true;
+
+                this.errorMapper.handleError(error, 'Leider konnte die Datei nicht hochgeladen werden.')
+			})
+		);		
+	}
 
     #calculateFileSize(size: number): void {
 
@@ -102,14 +110,6 @@ export class FileUploadComponent implements OnInit {
             this.fileSize = Math.round(size / 1024) + ' kB';
         } else {
             this.fileSize = Math.round(size / 1024 / 1024) + ' MB';
-        }
-    }
-
-
-
-    #reset(): void {
-        if (this.uploadSub) {
-            this.uploadSub.unsubscribe();
         }
     }
 }

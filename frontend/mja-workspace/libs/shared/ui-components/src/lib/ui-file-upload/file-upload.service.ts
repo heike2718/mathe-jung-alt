@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Configuration, SharedConfigService } from "@mja-workspace/shared/util-configuration";
+import { Message } from "@mja-workspace/shared/util-mja";
 import { Observable } from "rxjs";
 import { UploadComponentModel } from "./file-upload.model";
 
@@ -12,7 +13,7 @@ export class FileUploadService {
 
     constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 
-    public uploadFile(file: File, uploadModel: UploadComponentModel): Observable<any> {
+    public uploadFile(file: File, uploadModel: UploadComponentModel): Observable<Message> {
 
         const formData = new FormData();
         formData.append('uploadedFile', file);
@@ -23,11 +24,9 @@ export class FileUploadService {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        return this.http.post(this.#url, formData, {
+        return this.http.post<Message> (this.#url, formData, {
             headers: headers,
-            params: params,
-            reportProgress: true,
-            observe: 'events'
+            params: params
         });
     }
 

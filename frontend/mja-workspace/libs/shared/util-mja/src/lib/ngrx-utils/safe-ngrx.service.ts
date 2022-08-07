@@ -33,7 +33,7 @@ export class SafeNgrxService {
             source$.pipe(
                 concatMap((value) =>
                     project(value).pipe(catchError((error) => {
-                        this.#handleError(error, errorMessage);
+                        this.handleError(error, errorMessage);
                         return of(errorAction);
                     }))
                 )
@@ -49,7 +49,7 @@ export class SafeNgrxService {
             source$.pipe(
                 switchMap((value) =>
                     project(value).pipe(catchError((error) => {
-                        this.#handleError(error, errorMessage);
+                        this.handleError(error, errorMessage);
                         return of(errorAction);
                     }))
                 )
@@ -65,7 +65,7 @@ export class SafeNgrxService {
             source$.pipe(
                 exhaustMap((value) =>
                     project(value).pipe(catchError((error) => {
-                        this.#handleError(error, errorMessage);
+                        this.handleError(error, errorMessage);
                         return of(errorAction);
                     }))
                 )
@@ -81,7 +81,7 @@ export class SafeNgrxService {
             source$.pipe(
                 mergeMap((value) =>
                     project(value).pipe(catchError((error) => {
-                        this.#handleError(error, errorMessage);
+                        this.handleError(error, errorMessage);
                         return of(errorAction);
                     }))
                 )
@@ -95,10 +95,7 @@ export class SafeNgrxService {
         localStorage.removeItem(STORAGE_KEY_QUELLE);
     }
 
-    // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    #handleError(error: any, errorMessage: string): void {
+    handleError(error: any, errorMessage: string): void {
 
         window.location.hash = '';
 
@@ -127,6 +124,9 @@ export class SafeNgrxService {
             }
         }
     }
+
+    // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     #getHttpErrorResponse(error: any): HttpErrorResponse | undefined {
 

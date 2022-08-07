@@ -8,20 +8,20 @@ export interface GrafikState {
     readonly loading: boolean;
     readonly loaded: boolean;
     readonly pfad?: string;
-    readonly selectedGrafikSearchResult: GrafikSearchResult;
+    readonly selectedGrafikSearchResult?: GrafikSearchResult;
 };
 
 export const initialGrafikState: GrafikState = {
     loading: false,
-    loaded: false,
-    selectedGrafikSearchResult: nullGraphicSearchResult
+    loaded: false
 };
 
 const grafikReducer = createReducer(
     initialGrafikState,
 
-    on(GrafikActions.pruefeGrafik, (state, _action) => ({ ...state, loading: true, selectedGrafikSearchResult:  nullGraphicSearchResult})),
-    on(GrafikActions.grafikGeprueft, (state, action) => ({ ...state, loading: false, loaded: true, selectedGrafikSearchResult: action.grafikSearchResult }))
+    on(GrafikActions.pruefeGrafik, (state, _action) => ({ ...state, loading: true, selectedGrafikSearchResult:  undefined})),
+    on(GrafikActions.grafikGeprueft, (state, action) => ({ ...state, loading: false, loaded: true, selectedGrafikSearchResult: action.grafikSearchResult })),
+    on(GrafikActions.grafikHochgeladen, (state, action) => ({ ...state, loading: false, loaded: false, selectedGrafikSearchResult: undefined })),
 );
 
 

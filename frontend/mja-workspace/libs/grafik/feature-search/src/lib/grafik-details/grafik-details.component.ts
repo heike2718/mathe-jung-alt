@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GrafikFacade } from '@mja-workspace/grafik/domain';
 import { UploadComponentModel } from '@mja-workspace/shared/ui-components';
+import { Message } from '@mja-workspace/shared/util-mja';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,6 +21,8 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
     acceptMessage: 'erlaubte Dateitypen: eps'
   };
 
+  grafikSelected = false;
+
   #selectedGrafikSubscription: Subscription = new Subscription();
 
   constructor(public grafikFacade: GrafikFacade) { }
@@ -28,8 +31,11 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
 
     this.#selectedGrafikSubscription = this.grafikFacade.getSelectedGrafikSearchResult$.subscribe(
       (selectedGrafik) => {
-        if (selectedGrafik && selectedGrafik.pfad.length > 0) {
+        if (selectedGrafik) {
           this.uploadModel = { ...this.uploadModel, pfad: selectedGrafik.pfad };
+          this.grafikSelected = true;
+        } else {
+          this.grafikSelected = false;
         }
       }
     );
@@ -37,5 +43,20 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.#selectedGrafikSubscription.unsubscribe();
+  }
+
+  onDateiAusgewaehlt(_event: string): void {
+
+    // this.schulteilnahmenFacade.dateiAusgewaelt();
+    console.log('datei ausgewählt: ' + _event);
+  }
+
+  onResponse(messagePayload: Message | any): void {
+
+    if (messagePayload) {
+      const message = this.uploadModel.pfad + ': ' + messagePayload.message;
+      const mp: Message = { ...messagePayload, message: message };
+      this.grafikFacade.grafikHochgeladen(mp);
+    }
   }
 }
