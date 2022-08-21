@@ -153,7 +153,7 @@
                     (click)="submit()">speichern</button>
             </div>
             <div fxFlex="0 1 calc(20%-20px)">
-                <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
+                <button mat-raised-button color="primary" [disabled]="generierenDiabled()"
                     (click)="openPrintPNGDialog()">PNG generieren</button>
             </div>
             <div fxFlex="0 1 calc(20%-20px)">

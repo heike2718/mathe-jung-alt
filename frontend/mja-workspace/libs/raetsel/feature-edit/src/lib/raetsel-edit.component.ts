@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
-import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayload, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mja-workspace/raetsel/domain';
+import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayload, GrafikInfo, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mja-workspace/raetsel/domain';
 import { JaNeinDialogComponent, JaNeinDialogData, SelectItemsCompomentModel, SelectItemsComponent } from '@mja-workspace/shared/ui-components';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
@@ -187,6 +187,12 @@ export class RaetselEditComponent implements OnInit {
     });
 
     return anzahlKorrekt !== 1;
+  }
+
+  generierenDiabled(): boolean {
+
+    const grafikInfosOhneFile: GrafikInfo[] = this.raetselDetailsContent.raetsel.grafikInfos.filter(gi => !gi.existiert);
+    return !this.form.valid || this.antwortvorschlaegeErrors() || grafikInfosOhneFile.length > 0;
   }
 
   openPrintPNGDialog(): void {
