@@ -24,10 +24,21 @@ export class AdminSuchfilterComponent implements AfterViewInit, OnDestroy {
   private suchlisteDeskriptorenChanged: EventEmitter<Deskriptor[]> = new EventEmitter<Deskriptor[]>();
 
   #keySubscription: Subscription = new Subscription();
+  #textSusbcription: Subscription = new Subscription();
 
-  constructor() { }  
+  constructor(private suchfilterFacade: SuchfilterFacade) { }
 
   ngAfterViewInit(): void {
+
+    this.#textSusbcription = this.suchfilterFacade.selectedSuchfilter$.subscribe(
+
+      (selectedSuchfilter) => {
+        if (selectedSuchfilter) {
+          this.input.nativeElement.value = selectedSuchfilter.suchstring;
+        }
+      }
+    );
+
     this.#keySubscription = fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
         debounceTime(300),
@@ -41,6 +52,7 @@ export class AdminSuchfilterComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.#keySubscription.unsubscribe();
+    this.#textSusbcription.unsubscribe();
   }
 
   public onDeskriptorenChanged($event: Deskriptor[]) {

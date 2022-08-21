@@ -33,11 +33,6 @@ export class SuchfilterFacade {
         this.store.dispatch(SuchfilterActions.setSuchfilter({ suchfilter }));
     }
 
-
-    public resetSuchfilter(kontext: Suchkontext): void {
-        this.store.dispatch(SuchfilterActions.resetKontext({ kontext }));
-    }
-
     public sucheFinished(kontext: Suchkontext): void {
         this.store.dispatch(SuchfilterActions.markUnchanged({ kontext }));
     }

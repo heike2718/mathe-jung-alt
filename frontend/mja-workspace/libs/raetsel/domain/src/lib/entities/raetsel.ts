@@ -20,6 +20,11 @@ export interface RaetselsucheTreffer {
   readonly treffer: Raetsel[];
 };
 
+export interface GrafikInfo {
+  readonly pfad: string;
+  readonly existiert: boolean;
+};
+
 /** Minimalset an Attributen, die bei einer Suche geladen werden sollen */
 export interface Raetsel {
   readonly id: string;
@@ -43,7 +48,8 @@ export interface RaetselDetails {
   readonly deskriptoren: Deskriptor[];
   readonly imageFrage: string | null;
   readonly imageLoesung: string | null;
-  readonly grafikPfade: string[];
+  // readonly grafikPfade: string[];
+  readonly grafikInfos: GrafikInfo[];
 };
 
 export interface RaetselDetailsContent {
@@ -65,6 +71,8 @@ export interface GeneratedImages {
   readonly urlLoesung?: string;
 };
 
+
+
 export const initialRaetselDetails: RaetselDetails = {
   id: 'neu',
   schluessel: '',
@@ -78,7 +86,9 @@ export const initialRaetselDetails: RaetselDetails = {
   deskriptoren: [],
   imageFrage: null,
   imageLoesung: null,
-  grafikPfade:  []
+  // grafikPfade:  [],
+  grafikInfos: []
+  
 };
 
 

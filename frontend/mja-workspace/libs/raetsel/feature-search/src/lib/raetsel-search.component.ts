@@ -16,9 +16,6 @@ import { debounceTime, distinctUntilChanged, filter, merge, Subscription, tap } 
 })
 export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  #kontext: Suchkontext = 'RAETSEL';
-
-  #sucheClearedSubscription: Subscription = new Subscription();
   #userAdminSubscription: Subscription = new Subscription();
   #canStartSucheSubscription: Subscription = new Subscription();
   #suchfilterSubscription: Subscription = new Subscription();
@@ -128,7 +125,6 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngOnDestroy(): void {
     this.#suchfilterSubscription.unsubscribe();
-    this.#sucheClearedSubscription.unsubscribe();
     this.#userAdminSubscription.unsubscribe();
     this.#canStartSucheSubscription.unsubscribe();
     this.#sortChangedSubscription.unsubscribe();
@@ -139,7 +135,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   getDisplayedColumns(): string[] {
     return this.isAdmin ? this.#columnDefinitionsAdmin : this.#columnDefinitionsPublic;
-  }  
+  }
 
   onDeskriptorenChanged($event: any): void {
 
@@ -170,7 +166,12 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   neueSuche(): void {
     this.raetselFacade.clearTrefferliste();
-    this.suchfilterFacade.resetSuchfilter(this.#kontext);
+    this.raetselFacade.checkOrLoadDeskriptoren();
+    this.suchfilterFacade.setSuchfilter({
+      kontext: 'RAETSEL',
+      deskriptoren: [],
+      suchstring: ''
+    });
   }
 
   neuesRaetsel(): void {

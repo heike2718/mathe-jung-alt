@@ -35,35 +35,5 @@ public class ResponseFilter implements ContainerResponseFilter {
 
 			responseContext.getHeaders().add(CONTENT_SECURITY_POLICY, "default-src 'self'; ");
 		}
-
-		if (headers.get("Access-Control-Allow-Headers") == null) {
-
-			headers.add("Access-Control-Allow-Headers",
-				configService.getAllowedHeaders());
-		}
-
-		if (headers.get("Access-Control-Expose-Headers") == null) {
-
-			headers.add("Access-Control-Expose-Headers",
-				configService.getExposedHeaders());
-		}
-
-		if (headers.get("Access-Control-Allow-Origin") == null) {
-
-			headers.add("Access-Control-Allow-Origin", configService.getAllowedOrigin());
-		}
-
-		if (headers.get("Access-Control-Allow-Credentials") == null) {
-
-			headers.add("Access-Control-Allow-Credentials", "false");
-		}
-
-		// Achtung: mod-security verbietet standardmäßig PUT und DELETE.
-		// Daher parallel in /etc/apache2/sites-available/opa-wetterwachs.conf die rule 911100 für checklistenserver entfernen,
-		// sonst bekommt man 403
-		if (headers.get("Access-Control-Allow-Methods") == null) {
-
-			headers.add("Access-Control-Allow-Methods", configService.getAllowedMethods());
-		}
 	}
 }

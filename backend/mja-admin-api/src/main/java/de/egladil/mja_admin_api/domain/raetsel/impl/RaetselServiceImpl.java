@@ -31,6 +31,7 @@ import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
 import de.egladil.mja_admin_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_admin_api.domain.raetsel.RaetselService;
 import de.egladil.mja_admin_api.domain.raetsel.dto.EditRaetselPayload;
+import de.egladil.mja_admin_api.domain.raetsel.dto.GrafikInfo;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetsel;
@@ -169,13 +170,28 @@ public class RaetselServiceImpl implements RaetselService {
 		List<String> grafikLinks = findPathsGrafikParser.findPaths(raetsel.frage);
 		grafikLinks.addAll(findPathsGrafikParser.findPaths(raetsel.loesung));
 
+		List<GrafikInfo> grafikInfos = getGrafikInfos(grafikLinks);
+
 		byte[] imageFrage = raetselFileService.findImageFrage(result.getSchluessel());
 		result.setImageFrage(imageFrage);
 
 		byte[] imageLoesung = raetselFileService.findImageLoesung(result.getSchluessel());
 		result.setImageLoesung(imageLoesung);
 
-		result.setGrafikPfade(grafikLinks);
+		result.setGrafikInfos(grafikInfos);
+		return result;
+	}
+
+	List<GrafikInfo> getGrafikInfos(final List<String> pfade) {
+
+		final ArrayList<GrafikInfo> result = new ArrayList<>();
+
+		pfade.forEach(pfad -> {
+
+			boolean exists = raetselFileService.existsGrafik(pfad);
+			result.add(new GrafikInfo(pfad, exists));
+		});
+
 		return result;
 	}
 

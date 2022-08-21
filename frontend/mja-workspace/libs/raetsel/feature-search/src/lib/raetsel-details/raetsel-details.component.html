@@ -61,10 +61,10 @@
                     <button mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button>
                 </div>
                 <div fxFlex="0 1 calc(25%-20px)" class="mb-1">
-                    <button mat-raised-button color="primary" (click)="openPrintPNGDialog()">PNG generieren</button>
+                    <button mat-raised-button color="primary" [disabled]="generierenDiabled()" (click)="openPrintPNGDialog()">PNG generieren</button>
                 </div>
                 <div fxFlex="0 1 calc(50%-20px)" class="mb-1">
-                    <button mat-raised-button color="primary" (click)="openPrintPDFDialog()">PDF generieren</button>
+                    <button mat-raised-button color="primary" [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF generieren</button>
                 </div>
             </div>
 
@@ -99,7 +99,7 @@
 
             <mat-accordion>
 
-                <mat-expansion-panel *ngIf="raetsel.grafikPfade.length !== 0">
+                <mat-expansion-panel *ngIf="raetsel.grafikInfos.length !== 0">
                     <mat-expansion-panel-header>
                         <mat-panel-title>
                             Grafiken
@@ -107,9 +107,9 @@
                     </mat-expansion-panel-header>
 
                     <mat-nav-list>
-                        <mat-list-item *ngFor="let link of raetsel.grafikPfade">
-                            {{ link }}
-                            <button mat-icon-button (click)="grafikLaden(link)">
+                        <mat-list-item *ngFor="let grafikInfo of raetsel.grafikInfos">
+                            {{ grafikInfo.pfad }}
+                            <button mat-icon-button (click)="grafikLaden(grafikInfo.pfad)">
                                 <mat-icon>info</mat-icon>
                             </button>
                         </mat-list-item>
