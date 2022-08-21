@@ -8,6 +8,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -42,6 +43,12 @@ public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
 				.entity(MessagePayload.error(MessageFormat.format(applicationMessages.getString("latex.error"), ex.getNameFile())))
 				.build();
 
+		}
+
+		if (exception instanceof WebApplicationException) {
+
+			WebApplicationException ex = (WebApplicationException) exception;
+			return ex.getResponse();
 		}
 
 		if (exception instanceof AuthException) {

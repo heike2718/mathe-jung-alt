@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_admin_api.domain.AbstractDomainEntity;
+import de.egladil.mja_admin_api.domain.raetsel.dto.GrafikInfo;
 import de.egladil.mja_admin_api.domain.semantik.AggregateRoot;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
@@ -57,6 +58,9 @@ public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
 	private List<String> grafikPfade = new ArrayList<>();
+
+	@JsonProperty
+	private List<GrafikInfo> grafikInfos = new ArrayList<>();
 
 	/**
 	 *
@@ -229,14 +233,24 @@ public class Raetsel extends AbstractDomainEntity {
 		return this;
 	}
 
-	public List<String> getGrafikPfade() {
+	public List<GrafikInfo> getGrafikInfos() {
 
-		return grafikPfade;
+		return grafikInfos;
 	}
 
-	public void setGrafikPfade(final List<String> grafikPfade) {
+	public void setGrafikInfos(final List<GrafikInfo> grafikInfos) {
 
-		this.grafikPfade = grafikPfade;
+		this.grafikInfos = grafikInfos;
 	}
+
+	// public List<String> getGrafikPfade() {
+	//
+	// return grafikPfade;
+	// }
+	//
+	// public void setGrafikPfade(final List<String> grafikPfade) {
+	//
+	// this.grafikPfade = grafikPfade;
+	// }
 
 }

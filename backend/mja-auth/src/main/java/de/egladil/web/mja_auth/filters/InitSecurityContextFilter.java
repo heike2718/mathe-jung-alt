@@ -71,7 +71,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 				boolean secure = !configService.getStage().equals(ConfigService.STAGE_DEV);
 				requestContext.setSecurityContext(new MjaSecurityContext(session, secure));
-				LOGGER.info("securityContext set");
+				LOGGER.debug("securityContext set");
 
 			}
 		}

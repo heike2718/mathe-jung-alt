@@ -113,4 +113,28 @@ public class FindPathsGrafikParserTest {
 
 	}
 
+	@Test
+	void should_returnGrafikPfadeSize2_when_zweiGrafikenInVerschedenenVerzeichnissen() throws Exception {
+
+		// Arrange
+		String latex = "";
+
+		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex"); StringWriter sw = new StringWriter()) {
+
+			IOUtils.copy(in, sw, "UTF-8");
+
+			latex = sw.toString();
+
+		}
+
+		// Act
+		List<String> result = new FindPathsGrafikParser().findPaths(latex);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertEquals("/resources/003/01138.eps", result.get(0));
+		assertEquals("/resources/001/00001.eps", result.get(1));
+
+	}
+
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Quelle, QuellenFacade } from '@mja-workspace/quellen/domain';
+import { Quelle } from '@mja-workspace/quellen/domain';
 import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { filterByKontext, PageDefinition, Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
@@ -35,7 +35,6 @@ export class RaetselFacade {
 
   constructor(private store: Store<fromRaetsel.RaetselPartialState>,
     private suchfilterFacade: SuchfilterFacade,
-    private quellenFacade: QuellenFacade,
     private router: Router) {
 
     combineLatest([
@@ -43,7 +42,7 @@ export class RaetselFacade {
       this.suchfilterFacade.allDeskriptoren$,
     ]).subscribe(([deskriptorenLoaded, allDeskriptoren]) => {
       if (deskriptorenLoaded) {
-
+        this.#deskriptorenLoaded = deskriptorenLoaded;
         const raetselDeskriptoren = filterByKontext('RAETSEL', allDeskriptoren);
         const selectableDeskriptoren: SelectableItem[] = [];
         raetselDeskriptoren.forEach(deskriptor => selectableDeskriptoren.push({ id: deskriptor.id, name: deskriptor.name, selected: false }));

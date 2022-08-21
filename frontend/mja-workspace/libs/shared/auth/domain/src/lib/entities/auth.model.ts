@@ -1,3 +1,7 @@
+import { logout } from "../+state/auth.actions";
+
+export const LOGOUT_ACTION_TYPE = logout.type;
+
 export interface AuthResult {
     expiresAt?: number;
     state?: string;

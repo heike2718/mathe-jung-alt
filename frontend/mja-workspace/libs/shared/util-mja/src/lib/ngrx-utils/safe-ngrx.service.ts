@@ -20,9 +20,9 @@ export class SafeNgrxService {
         @Inject(SharedConfigService) private configuration: Configuration,
         private router: Router
 
-        ) {
-            this.#storagePrefix = this.configuration.storagePrefix;
-        }
+    ) {
+        this.#storagePrefix = this.configuration.storagePrefix;
+    }
 
     public safeConcatMap<S, T extends string>(
         project: (value: S) => Observable<TypedAction<T>>,
@@ -109,7 +109,7 @@ export class SafeNgrxService {
             if (status === 440) {
                 this.clearSession();
                 this.router.navigateByUrl('home')
-                this.messageService.warn('Die Session ist abgelaufen. Bitte neu einloggen.');                
+                this.messageService.warn('Die Session ist abgelaufen. Bitte neu einloggen.');
             } else {
                 const message = this.#extractServerErrorMessage(httpErrorResponse);
                 if (message) {
@@ -163,6 +163,12 @@ export class SafeNgrxService {
                 });
 
                 return { level: 'ERROR', message: message };
+            } else {
+                const payload: Message = errorResponse.error;
+
+                if (payload) {
+                    return payload;
+                }
             }
         } else {
             const payload: Message = errorResponse.error;

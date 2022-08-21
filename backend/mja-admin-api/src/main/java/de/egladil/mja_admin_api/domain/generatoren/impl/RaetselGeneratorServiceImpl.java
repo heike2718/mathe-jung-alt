@@ -5,11 +5,14 @@
 package de.egladil.mja_admin_api.domain.generatoren.impl;
 
 import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -63,6 +66,26 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
+		List<String> fehlendeGrafiken = raetsel.getGrafikInfos().stream().filter(gi -> !gi.isExistiert()).map(gi -> gi.getPfad())
+			.collect(Collectors.toList());
+
+		if (!fehlendeGrafiken.isEmpty()) {
+
+			String message = "Es fehlen noch Grafiken: ";
+
+			for (int i = 0; i < fehlendeGrafiken.size(); i++) {
+
+				message += fehlendeGrafiken.get(i);
+
+				if (i < fehlendeGrafiken.size() - 2) {
+
+					message += ", ";
+				}
+			}
+
+			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
+		}
+
 		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege);
 
 		boolean generateLoesung = StringUtils.isNotBlank(raetsel.getLoesung());
@@ -80,25 +103,25 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 			switch (outputformat) {
 
-			case PDF -> {
+				case PDF -> {
 
-				responseFrage = laTeXClient.latex2PDF(raetsel.getSchluessel());
+					responseFrage = laTeXClient.latex2PDF(raetsel.getSchluessel());
 
-				if (generateLoesung) {
+					if (generateLoesung) {
 
-					responseLoesung = laTeXClient.latex2PDF(raetsel.getSchluessel() + "_l");
+						responseLoesung = laTeXClient.latex2PDF(raetsel.getSchluessel() + "_l");
+					}
 				}
-			}
-			case PNG -> {
+				case PNG -> {
 
-				responseFrage = laTeXClient.latex2PNG(raetsel.getSchluessel());
+					responseFrage = laTeXClient.latex2PNG(raetsel.getSchluessel());
 
-				if (generateLoesung) {
+					if (generateLoesung) {
 
-					responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + "_l");
+						responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + "_l");
+					}
 				}
-			}
-			default -> throw new IllegalArgumentException("unbekanntes outputformat " + outputformat);
+				default -> throw new IllegalArgumentException("unbekanntes outputformat " + outputformat);
 			}
 
 			LOGGER.debug("nach Aufruf LaTeXRestClient");

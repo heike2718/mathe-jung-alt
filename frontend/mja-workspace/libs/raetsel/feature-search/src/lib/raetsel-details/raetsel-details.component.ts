@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GrafikFacade } from '@mja-workspace/grafik/domain';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
-import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselFacade } from '@mja-workspace/raetsel/domain';
+import { anzeigeAntwortvorschlaegeSelectInput, GrafikInfo, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
 import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
@@ -105,5 +105,12 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   grafikLaden(link: string): void {
     this.grafikFacade.grafikPruefen(link);
-  }  
+  }
+  
+  generierenDiabled(): boolean {
+
+    const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.grafikInfos.filter(gi => !gi.existiert);
+
+    return grafikInfosOhneFile.length > 0;
+  }
 }

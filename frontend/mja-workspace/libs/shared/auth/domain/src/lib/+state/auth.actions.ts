@@ -43,7 +43,7 @@ export const sessionRestored = createAction(
 
 
 export const logout = createAction(
-    '[Auth] log out'
+    '[Auth] logout'
 );
 
 export const sessionExpired = createAction('[Auth] sessionExpired',
