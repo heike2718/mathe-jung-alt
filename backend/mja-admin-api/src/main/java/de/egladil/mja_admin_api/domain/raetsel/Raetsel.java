@@ -57,9 +57,6 @@ public class Raetsel extends AbstractDomainEntity {
 	private byte[] imageLoesung;
 
 	@JsonProperty
-	private List<String> grafikPfade = new ArrayList<>();
-
-	@JsonProperty
 	private List<GrafikInfo> grafikInfos = new ArrayList<>();
 
 	/**
@@ -242,15 +239,4 @@ public class Raetsel extends AbstractDomainEntity {
 
 		this.grafikInfos = grafikInfos;
 	}
-
-	// public List<String> getGrafikPfade() {
-	//
-	// return grafikPfade;
-	// }
-	//
-	// public void setGrafikPfade(final List<String> grafikPfade) {
-	//
-	// this.grafikPfade = grafikPfade;
-	// }
-
 }
