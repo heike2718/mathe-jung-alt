@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
 import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayload, GrafikInfo, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mja-workspace/raetsel/domain';
@@ -40,11 +40,11 @@ export class RaetselEditComponent implements OnInit {
 
   selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
 
-  form!: FormGroup;
+  form!: UntypedFormGroup;
 
   constructor(public raetselFacade: RaetselFacade,
     public quellenFacade: QuellenFacade,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialog: MatDialog) {
 
     this.form = this.fb.group({
@@ -56,7 +56,7 @@ export class RaetselEditComponent implements OnInit {
       loesung: [''],
       kommentar: [''],
       anzahlAntwortvorschlaege: ['0'],
-      antwortvorschlaege: new FormArray([])
+      antwortvorschlaege: new UntypedFormArray([])
     });
   }
 
@@ -137,8 +137,8 @@ export class RaetselEditComponent implements OnInit {
   }
 
   // convenience getters for easy access to form fields
-  get avFormArray() { return this.form.controls['antwortvorschlaege'] as FormArray; }
-  get antwortvorschlaegeFormGroup() { return this.avFormArray.controls as FormGroup[]; }
+  get avFormArray() { return this.form.controls['antwortvorschlaege'] as UntypedFormArray; }
+  get antwortvorschlaegeFormGroup() { return this.avFormArray.controls as UntypedFormGroup[]; }
 
   onChangeAnzahlAntwortvorschlaege($event: any) {
 

@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'quellen-domain',
+/* eslint-disable */
+export default {
+  displayName: 'raetsel-feature-edit',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/quellen/domain',
+  coverageDirectory: '../../../coverage/libs/raetsel/feature-edit',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

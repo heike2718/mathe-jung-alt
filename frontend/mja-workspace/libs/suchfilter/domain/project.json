@@ -1,6 +1,6 @@
 {
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/suchfilter/domain",
   "sourceRoot": "libs/suchfilter/domain/src",
   "prefix": "suchfilter",
   "targets": {
@@ -25,7 +25,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/suchfilter/domain"],
       "options": {
-        "jestConfig": "libs/suchfilter/domain/jest.config.js",
+        "jestConfig": "libs/suchfilter/domain/jest.config.ts",
         "passWithNoTests": true
       }
     },

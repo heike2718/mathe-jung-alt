@@ -1,6 +1,6 @@
 {
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/shared/auth/domain",
   "sourceRoot": "libs/shared/auth/domain/src",
   "prefix": "auth",
   "targets": {
@@ -25,7 +25,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/shared/auth/domain"],
       "options": {
-        "jestConfig": "libs/shared/auth/domain/jest.config.js",
+        "jestConfig": "libs/shared/auth/domain/jest.config.ts",
         "passWithNoTests": true
       }
     },

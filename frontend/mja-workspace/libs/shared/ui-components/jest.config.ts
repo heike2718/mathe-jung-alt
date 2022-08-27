@@ -1,6 +1,7 @@
-module.exports = {
-  displayName: 'mja-admin',
-  preset: '../../jest.preset.js',
+/* eslint-disable */
+export default {
+  displayName: 'shared-ui-components',
+  preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/apps/mja-admin',
+  coverageDirectory: '../../../coverage/libs/shared/ui-components',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

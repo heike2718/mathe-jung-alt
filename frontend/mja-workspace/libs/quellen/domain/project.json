@@ -1,6 +1,6 @@
 {
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/quellen/domain",
   "sourceRoot": "libs/quellen/domain/src",
   "prefix": "quellen",
   "targets": {
@@ -25,7 +25,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/quellen/domain"],
       "options": {
-        "jestConfig": "libs/quellen/domain/jest.config.js",
+        "jestConfig": "libs/quellen/domain/jest.config.ts",
         "passWithNoTests": true
       }
     },

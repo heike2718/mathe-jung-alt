@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
-const routes = [
+const routes: Routes = [
     { path: 'forbidden', component: NotAuthorizedComponent },
     {
         path: 'quellen',

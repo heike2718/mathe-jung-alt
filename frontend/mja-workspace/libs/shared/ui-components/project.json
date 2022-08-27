@@ -1,6 +1,6 @@
 {
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/shared/ui-components",
   "sourceRoot": "libs/shared/ui-components/src",
   "prefix": "components",
   "targets": {
@@ -25,7 +25,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/shared/ui-components"],
       "options": {
-        "jestConfig": "libs/shared/ui-components/jest.config.js",
+        "jestConfig": "libs/shared/ui-components/jest.config.ts",
         "passWithNoTests": true
       }
     },

@@ -7,6 +7,15 @@
     "inlineSources": true,
     "types": []
   },
-  "exclude": ["src/test-setup.ts", "**/*.spec.ts", "**/*.test.ts"],
-  "include": ["**/*.ts", "../../suchfilter/domain/src/lib/infrastructure/deskriptor-data.service.ts", "../util-configuration/src/lib/storage-constants.ts"]
+  "exclude": [
+    "src/test-setup.ts",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "jest.config.ts"
+  ],
+  "include": [
+    "**/*.ts",
+    "../../suchfilter/domain/src/lib/infrastructure/deskriptor-data.service.ts",
+    "../util-configuration/src/lib/storage-constants.ts"
+  ]
 }

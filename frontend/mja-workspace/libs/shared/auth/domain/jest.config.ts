@@ -1,6 +1,7 @@
-module.exports = {
-  displayName: 'shared-ui-components',
-  preset: '../../../jest.preset.js',
+/* eslint-disable */
+export default {
+  displayName: 'shared-auth-domain',
+  preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/shared/ui-components',
+  coverageDirectory: '../../../../coverage/libs/shared/auth/domain',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

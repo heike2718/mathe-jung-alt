@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'raetsel-feature-search',
+/* eslint-disable */
+export default {
+  displayName: 'shared-ui-raetsel',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/raetsel/feature-search',
+  coverageDirectory: '../../../coverage/libs/shared/ui-raetsel',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

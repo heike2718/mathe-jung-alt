@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'shared-util-mja',
+/* eslint-disable */
+export default {
+  displayName: 'grafik-feature-search',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/shared/util-mja',
+  coverageDirectory: '../../../coverage/libs/grafik/feature-search',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

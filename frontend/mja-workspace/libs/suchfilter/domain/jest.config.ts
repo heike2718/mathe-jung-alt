@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'raetsel-feature-edit',
+/* eslint-disable */
+export default {
+  displayName: 'suchfilter-domain',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/raetsel/feature-edit',
+  coverageDirectory: '../../../coverage/libs/suchfilter/domain',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },
