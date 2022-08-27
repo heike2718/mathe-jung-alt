@@ -8,6 +8,7 @@
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": ["dist/libs/shared/ui-components"],
       "options": {
+        "tsConfig": "libs/shared/ui-components/tsconfig.lib.json",
         "project": "libs/shared/ui-components/ng-package.json"
       },
       "configurations": {

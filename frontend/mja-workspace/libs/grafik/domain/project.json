@@ -8,6 +8,7 @@
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": ["dist/libs/grafik/domain"],
       "options": {
+        "tsConfig": "libs/grafik/domain/tsconfig.lib.json",
         "project": "libs/grafik/domain/ng-package.json"
       },
       "configurations": {

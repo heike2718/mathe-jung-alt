@@ -6,6 +6,7 @@
     "e2e": {
       "executor": "@nrwl/cypress:cypress",
       "options": {
+        "tsConfig": "apps/mja-admin-e2e/tsConfig.json",
         "cypressConfig": "apps/mja-admin-e2e/cypress.json",
         "devServerTarget": "mja-admin:serve:development"
       },

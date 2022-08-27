@@ -8,6 +8,7 @@
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": ["dist/libs/suchfilter/domain"],
       "options": {
+        "tsConfig": "libs/suchfilter/domain/tsconfig.lib.json",
         "project": "libs/suchfilter/domain/ng-package.json"
       },
       "configurations": {

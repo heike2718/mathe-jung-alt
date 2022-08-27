@@ -8,6 +8,7 @@
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": ["dist/libs/shared/auth/domain"],
       "options": {
+        "tsConfig": "libs/shared/auth/domain/tsconfig.lib.json",
         "project": "libs/shared/auth/domain/ng-package.json"
       },
       "configurations": {

@@ -8,6 +8,7 @@
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": ["dist/libs/quellen/domain"],
       "options": {
+        "tsConfig": "libs/quellen/domain/tsconfig.lib.json",
         "project": "libs/quellen/domain/ng-package.json"
       },
       "configurations": {

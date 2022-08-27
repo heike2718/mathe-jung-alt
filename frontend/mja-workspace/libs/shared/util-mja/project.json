@@ -8,6 +8,7 @@
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": ["dist/libs/shared/util-mja"],
       "options": {
+        "tsConfig": "libs/shared/util-mja/tsconfig.lib.json",
         "project": "libs/shared/util-mja/ng-package.json"
       },
       "configurations": {

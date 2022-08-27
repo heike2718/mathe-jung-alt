@@ -8,6 +8,7 @@
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": ["dist/libs/raetsel/feature-search"],
       "options": {
+        "tsConfig": "libs/raetsel/feature-search/tsconfig.lib.json",
         "project": "libs/raetsel/feature-search/ng-package.json"
       },
       "configurations": {

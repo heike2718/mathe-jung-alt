@@ -8,6 +8,7 @@
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": ["dist/libs/grafik/feature-search"],
       "options": {
+        "tsConfig": "libs/grafik/feature-search/tsconfig.lib.json",
         "project": "libs/grafik/feature-search/ng-package.json"
       },
       "configurations": {

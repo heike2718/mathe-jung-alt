@@ -8,6 +8,7 @@
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": ["dist/libs/raetsel/domain"],
       "options": {
+        "tsConfig": "libs/raetsel/domain/tsconfig.lib.json",
         "project": "libs/raetsel/domain/ng-package.json"
       },
       "configurations": {
