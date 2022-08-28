@@ -11,15 +11,15 @@
 
 
 	<properties>
-		<undertow.version>2.2.0.Final</undertow.version>
-		<jackson.version>2.13.2.1</jackson.version>
+		<undertow.version>2.2.19.Final</undertow.version>
+		<jackson.version>2.13.3</jackson.version>
 		<slf4j.version>1.7.33</slf4j.version>
 		<junit.version>5.8.2</junit.version>
 		<mockito.version>4.4.0</mockito.version>
-		<logback.version>1.2.10</logback.version>
+		<logback.version>1.3.0-beta0</logback.version>
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-		<dependency-check.version>7.0.1</dependency-check.version>
+		<dependency-check.version>7.1.2</dependency-check.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>

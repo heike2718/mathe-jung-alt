@@ -29,7 +29,7 @@ Das Transformieren der LaTeX-Datei ist nicht threadsafe, d.h. die Anwendung, die
 Dockerimages
 ------------
 
-Es werden 2 Dockerimages zur Verfügung gestellt.
+Es werden 3 Dockerimages zur Verfügung gestellt.
 
 docker-java-latex
 ~~~~~~~~~~~~~~~~~
@@ -40,12 +40,20 @@ Es verwendet (anders als das aktuelle Image) ubuntu:20.04 als Basis und erweiter
 
 Falls jemand eine andere Java-Version benötigt, muss er das Image anpassen.
 
-docker-latex-client
-~~~~~~~~~~~~~~~~~~~
+Leider dauert das Bauen des images sehr lange, weil ein Haufen Tex-Zeug installiert werden muss.
+
+
+docker-java-latex-imagetools
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Dieses Image erweitert heike2718/docker-java-latex um netbpm, damit im container das command pnm zur Verfügung steht, um aus ps-Files png-Files herauszuschneiden.
 
-Außerdem stellt es die shell-Skripte latex2pdf.sh und latex2png.sh zur Verfügung, die die Transformation von LaTeX zu PDF bzw. png kapseln, sowie einen in java geschriebenen http-Service, der diese beiden Skripte aufruft, um ein LaTeX-File in das gewünschte Format zu transformieren.
+docker-latex-client
+~~~~~~~~~~~~~~~~~~~
+
+Dieses Image erweitert heike2718/docker-java-latex-imagetools um shellscripts latex2png.sh sowie latex2pdf.sh und eine Java-Anwendung, die diese scripte mit einem LaTeX-File als Argument aufruft, um dieses in das gewünschte Format zu tranformieren. Der Aufruf wird mittels undertow als http-Service zur Verfügung gestellt.
+
+Der Austausch der Files erfolgt über ein gemountetes docker volume. In diesem müssen sich alle Ressourcen befinden, die der LaTeX-Compiler benötigt, beispielsweise Files, die per include importiert wwerden oder eps-Dateien, die als Grafiken eingebunden werden.
 
 Der java-Service kann bei Bedarf angepasst oder ersetzt werden, um latex2pdf.sh bzw latex2png.sh anderweitig aufzurufen.
 
@@ -58,17 +66,20 @@ docker-java-latex
 
 docker image build -t heike2718/docker-java-latex .
 
+docker-java-latex-imagetools
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DOCKER_BUILDKIT=1 docker image build -t heike2718/docker-java-latex-imagetools .
+
+
+(Der präfix vor docker image... ist erforderlich, weil anderenfalls chmod und chown beim Bauen des Images nicht zur Verfügung stehen).
+
+*Achtung:* wenn der Name des docker-java-latex-Images geändert werden soll, muss das Dockerfile im Verzeichnis docker-latex-client angepasst werden.
 
 docker-latex-client
 ~~~~~~~~~~~~~~~~~~~
 
-Zuerst muss mittels mvn package die latex-client.jar gebaut und ins Verzeichnis docker/docker-latex-client/deployment kopiert werden./
-
-*Achtung:* wenn der Name des docker-java-latex-Images geändert werden soll, muss das Dockerfile im Verzeichnis docker-latex-client angepasst werden.
-
-DOCKER_BUILDKIT=1 docker image build -t heike2718/docker-latex-client .
-
-(Der präfix vor docker image... ist erforderlich, weil anderenfalls chmod und chown beim Bauen des Images nicht zur Verfügung stehen).
+Zuerst muss mittels mvn package die latex-client.jar gebaut und ins Verzeichnis docker/docker-latex-client/deployment kopiert werden.
 
 Testen des Images
 ~~~~~~~~~~~~~~~~~
@@ -76,9 +87,10 @@ Testen des Images
 docker container run -it -v /home/heike/git/mathe-jung-alt/backend/testfiles:/doc --name latex --entrypoint=/bin/bash heike2718/docker-latex-client
 
 docker container exec -it latex /bin/latex2png.sh test1
+
 docker container exec -it latex /bin/latex2pdf.sh test1
 
-Das File test1.tex muss dazu in /home/heike/git/mathe-jung-alt/backend/testfiles vorhanden sein. Dort liegt anschließend auch das Ergebnisfile test1.pdf oder test1.png
+Das File test1.tex muss dazu in dem docker-volume liegen, das beim Starten des containers gemounted wird. Dort liegt anschließend auch das Ergebnisfile test1.pdf oder test1.png
 
 Java-LaTeX-Client
 -----------------
@@ -97,7 +109,6 @@ Die Architekturidee ist, den Java-LaTeX-Client-Microservice in ein Dockernetzwer
 *Achtung:* Für die Input-Validierung des LaTeX-Codes ist der nach außen sichtbare Service zuständig. Dieser muss LaTeX-Injection zuverlässig abwehren, damit durch den Aufruf des Java-LaTeX-Client-Microservice kein Sicherheitsrisiko besteht.
 
 Die zu transformierenden Files werden über einen gemeinsam genutzten Volume ausgetauscht. Das Zielverzeichnis im Container ist /doc. Also der nach außen sichtbare Service legt in /doc ein tex-File und ggf. andere Files wie images ab, ruft dann den Microservice zum Transformieren auf und sammelt das Ergebnisfile aus /doc wieder auf.
-
 
 
 REST-API

@@ -42,6 +42,34 @@
             {
               "replace": "apps/mja-admin/src/environments/environment.ts",
               "with": "apps/mja-admin/src/environments/environment.prod.ts"
+            },
+            {
+              "replace": "apps/mja-admin/src/apps/mja-admin/src/app/store-config/store-devtools.ts",
+              "with": "build-env/store-devtools.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },"a300": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "2mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/mja-admin/src/environments/environment.ts",
+              "with": "build-env/mja-admin/environment.a300.ts"
+            },
+            {
+              "replace": "apps/mja-admin/src/apps/mja-admin/src/app/store-config/store-devtools.ts",
+              "with": "build-env/store-devtools.a300.ts"
             }
           ],
           "outputHashing": "all"

@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.3"
 
 services:
 
@@ -9,7 +9,7 @@ services:
     ports:
       - 9200:8080
     volumes:
-      - /home/heike/test:/doc
+      - /home/drpwzrd/docker-volumes/latex/doc:/doc
     environment:
       - TZ=Europe/Berlin
     restart: on-failure:3

@@ -44,7 +44,7 @@ public class ProcessExecutionServiceTest {
 		System.out.println("exitCode=" + exitCode);
 
 		// Assert
-		assertTrue(exitCode != 0);
+		assertTrue(exitCode == 0);
 	}
 
 	void prepareTestFiles() throws Exception {

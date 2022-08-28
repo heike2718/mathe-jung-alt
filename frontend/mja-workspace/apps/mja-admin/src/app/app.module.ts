@@ -1,6 +1,6 @@
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { LoadingIndicatorComponent, SharedUiComponentsModule } from '@mja-workspace/shared/ui-components';
+import { SharedUiComponentsModule } from '@mja-workspace/shared/ui-components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { EffectsModule } from '@ngrx/effects';
@@ -23,6 +23,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { QuellenDomainModule } from '@mja-workspace/quellen/domain';
 import { QuellenFeatureSearchModule } from '@mja-workspace/quellen/feature-search';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { StoreDevModules } from './store-config/store-devtools';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     QuellenFeatureSearchModule,
     RaetselFeatureSearchModule,
     EffectsModule.forRoot([]),
+    StoreDevModules,
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     // NoopAnimationsModule, // dies verhindert das spinnen des loading indicators
