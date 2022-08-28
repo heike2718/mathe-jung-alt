@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response.Status;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.quellen.QuelleReadonly;
 import de.egladil.mja_admin_api.domain.quellen.QuellenService;
+import de.egladil.mja_admin_api.domain.utils.DevDelayService;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
@@ -30,6 +31,9 @@ import de.egladil.web.mja_auth.dto.MessagePayload;
  */
 @Path("/quellen/v1")
 public class QuellenResource {
+
+	@Inject
+	DevDelayService delayService;
 
 	@Inject
 	QuellenService quellenService;
@@ -47,6 +51,8 @@ public class QuellenResource {
 				message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma") final String deskriptoren) {
 		// @formatter:on
 
+		this.delayService.pause();
+
 		return quellenService.sucheQuellen(new Suchfilter(suchstring, deskriptoren));
 	}
 
@@ -55,6 +61,8 @@ public class QuellenResource {
 	@Path("admin")
 	@RolesAllowed({ "ADMIN", "DEFAULT" })
 	public QuelleReadonly findQuelleByPerson(@QueryParam(value = "person") final String person) {
+
+		this.delayService.pause();
 
 		Optional<QuelleReadonly> result = this.quellenService.sucheAdministrator(person);
 
@@ -72,6 +80,8 @@ public class QuellenResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	public QuelleReadonly findQuelleById(@PathParam(value = "quelleId") final String quelleId) {
+
+		this.delayService.pause();
 
 		Optional<QuelleReadonly> result = this.quellenService.sucheQuelleMitId(quelleId);
 

@@ -13,7 +13,7 @@ import { Message } from '@mja-workspace/shared/util-mja';
 })
 export class GrafikFacade {
 
-    public isLoading$: Observable<boolean> = this.store.pipe(select(GrafikSelectors.isLoading));
+    // public isLoading$: Observable<boolean> = this.store.pipe(select(GrafikSelectors.isLoading));
     public isLoaded$: Observable<boolean> = this.store.pipe(select(GrafikSelectors.isLoaded));
     public getSelectedGrafikSearchResult$: Observable<GrafikSearchResult | undefined> = this.store.pipe(select(GrafikSelectors.getSelectedGrafikSearchResult));
 

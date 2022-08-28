@@ -14,6 +14,7 @@ import {
   PageDefinition
 } from '@mja-workspace/suchfilter/domain';
 import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
+import { LoadingIndicatorService } from '@mja-workspace/shared/util-mja';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselDataService {
@@ -21,7 +22,7 @@ export class RaetselDataService {
   #url = this.configuration.baseUrl + '/raetsel/v1';
   #csrfHeaderName = 'X-XSRF-TOKEN';
 
-  constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
+  constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration, private loadingService: LoadingIndicatorService) { }
 
   loadPage(suchfilter: Suchfilter | undefined, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
 
@@ -49,14 +50,14 @@ export class RaetselDataService {
     params = params.set(QUERY_PARAM_TYPE_DESKRIPTOREN, 'ORDINAL');
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    return this.http.get<RaetselsucheTreffer>(this.#url, { headers, params });
+    return this.loadingService.showLoaderUntilCompleted(this.http.get<RaetselsucheTreffer>(this.#url, { headers, params }));
   }
 
   findById(uuid: string): Observable<RaetselDetails> {
 
     const url = this.#url + '/' + uuid;
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    return this.http.get<RaetselDetails>(url, { headers: headers });
+    return this.loadingService.showLoaderUntilCompleted(this.http.get<RaetselDetails>(url, { headers: headers }));
   }
 
   generiereRaetselOutput(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
@@ -66,7 +67,7 @@ export class RaetselDataService {
     const headers = new HttpHeaders().set('Accept', 'application/json');
     const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
-    return this.http.get<GeneratedImages>(url, { headers: headers, params: params });
+    return this.loadingService.showLoaderUntilCompleted(this.http.get<GeneratedImages>(url, { headers: headers, params: params }));
   }
 
   saveRaetsel(editRaetselPayload: EditRaetselPayload, csrfToken: string | null): Observable<RaetselDetails> {
@@ -82,6 +83,6 @@ export class RaetselDataService {
       return this.http.post<RaetselDetails>(this.#url, editRaetselPayload, { headers });
     }
 
-    return this.http.put<RaetselDetails>(this.#url, editRaetselPayload, { headers });
+    return this.loadingService.showLoaderUntilCompleted(this.http.put<RaetselDetails>(this.#url, editRaetselPayload, { headers }));
   }
 }

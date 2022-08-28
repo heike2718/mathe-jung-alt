@@ -35,6 +35,7 @@ import de.egladil.mja_admin_api.domain.grafiken.GrafikService;
 import de.egladil.mja_admin_api.domain.upload.FormData;
 import de.egladil.mja_admin_api.domain.upload.UploadFileService;
 import de.egladil.mja_admin_api.domain.upload.UploadScannerDelegate;
+import de.egladil.mja_admin_api.domain.utils.DevDelayService;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import io.vertx.core.eventbus.EventBus;
 
@@ -49,6 +50,9 @@ public class UploadResource {
 
 	@Inject
 	EventBus bus;
+
+	@Inject
+	DevDelayService delayService;
 
 	@Inject
 	UploadFileService uploadFileService;
@@ -67,6 +71,8 @@ public class UploadResource {
 	@RolesAllowed("ADMIN")
 	public Response grafikHochladen(@QueryParam(value = "type") final UploadType fileType, @QueryParam(
 		value = "pfad") final String relativerPfad, @MultipartForm final FormData body) {
+
+		this.delayService.pause();
 
 		FileUpload file = body.file;
 

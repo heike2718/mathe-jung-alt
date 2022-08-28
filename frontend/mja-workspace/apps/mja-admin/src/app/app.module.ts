@@ -1,6 +1,6 @@
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { SharedUiComponentsModule } from '@mja-workspace/shared/ui-components';
+import { LoadingIndicatorComponent, SharedUiComponentsModule } from '@mja-workspace/shared/ui-components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { EffectsModule } from '@ngrx/effects';

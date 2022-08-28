@@ -20,7 +20,6 @@ export class RaetselFacade {
   page$ = this.store.pipe(select(RaetselSelectors.getPage));
   paginationState$ = this.store.pipe(select(RaetselSelectors.getPaginationState));
   raetselDetails$ = this.store.pipe(select(RaetselSelectors.getRaetselDetails));
-  isGeneratingOutput$ = this.store.pipe(select(RaetselSelectors.isGeneratingOutput));
   editorContent$: Observable<RaetselDetailsContent | undefined> = this.store.pipe(select(RaetselSelectors.getDetailsContent));
   editorSelectableDeskriptoren$: Observable<SelectableItem[]> = this.store.pipe(select(RaetselSelectors.getRaetselDeskriptoren));
 

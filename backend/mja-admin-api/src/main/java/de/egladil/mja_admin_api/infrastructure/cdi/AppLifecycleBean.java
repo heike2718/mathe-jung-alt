@@ -38,6 +38,9 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "quarkus.http.cors.origins", defaultValue = "")
 	String corsAllowedOrigins;
 
+	@ConfigProperty(name = "delay.milliseconds", defaultValue = "0")
+	long delayMillis = 0;
+
 	void onStartup(@Observes final StartupEvent ev) {
 
 		checkLatexBaseDir();
@@ -46,6 +49,11 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
 		LOGGER.info(" ===========>  the images.base.dir is {}", imagesBaseDir);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
+
+		if (delayMillis > 0) {
+
+			LOGGER.warn("Achtung, der Service antwortet immer erst nach {} ms!!!", delayMillis);
+		}
 
 	}
 

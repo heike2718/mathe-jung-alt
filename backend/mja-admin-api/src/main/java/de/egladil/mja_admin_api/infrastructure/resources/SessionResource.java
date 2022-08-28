@@ -18,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.egladil.mja_admin_api.domain.utils.DevDelayService;
 import de.egladil.web.mja_auth.dto.AuthResult;
 import de.egladil.web.mja_auth.login.LoginLogoutService;
 import de.egladil.web.mja_auth.login.LoginUrlService;
@@ -33,6 +34,9 @@ import de.egladil.web.mja_auth.session.SessionUtils;
 public class SessionResource {
 
 	@Inject
+	DevDelayService delayService;
+
+	@Inject
 	LoginUrlService loginUrlService;
 
 	@Inject
@@ -43,6 +47,8 @@ public class SessionResource {
 	@PermitAll
 	public Response getLoginUrl() {
 
+		this.delayService.pause();
+
 		return this.loginUrlService.getLoginUrl();
 
 	}
@@ -51,6 +57,8 @@ public class SessionResource {
 	@Path("login")
 	@PermitAll
 	public Response login(final AuthResult authResult) {
+
+		this.delayService.pause();
 
 		return loginLogoutService.login(authResult, true);
 	}

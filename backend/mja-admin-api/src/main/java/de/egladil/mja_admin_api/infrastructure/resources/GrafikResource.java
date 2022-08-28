@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import de.egladil.mja_admin_api.domain.grafiken.GrafikService;
 import de.egladil.mja_admin_api.domain.grafiken.dto.Grafik;
+import de.egladil.mja_admin_api.domain.utils.DevDelayService;
 
 /**
  * GrafikResource
@@ -23,11 +24,16 @@ import de.egladil.mja_admin_api.domain.grafiken.dto.Grafik;
 public class GrafikResource {
 
 	@Inject
+	DevDelayService delayService;
+
+	@Inject
 	GrafikService grafikService;
 
 	@GET
 	@RolesAllowed("ADMIN")
 	public Grafik pruefeGrafik(@QueryParam(value = "pfad") final String relativerPfad) {
+
+		this.delayService.pause();
 
 		return grafikService.findGrafik(relativerPfad);
 	}

@@ -9,6 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './+state/auth.effects';
 import { AuthInterceptor } from './infrastructure/auth.interceptor';
 import { AuthGuard } from './infrastructure/auth.guard';
+import { SharedUiComponentsModule } from '@mja-workspace/shared/ui-components';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { AuthGuard } from './infrastructure/auth.guard';
     HttpClientModule,
     SharedUtilMjaModule,
     SharedConfigurationModule,
+    SharedUiComponentsModule,
     StoreModule.forFeature(
       fromAuth.AUTH_FEATURE_KEY,
       fromAuth.reducer

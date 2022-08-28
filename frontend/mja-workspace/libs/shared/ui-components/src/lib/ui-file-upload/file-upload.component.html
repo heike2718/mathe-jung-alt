@@ -28,9 +28,5 @@
 			<button mat-raised-button color="primary" [disabled]="!uploading && !canSubmit"
 				(click)="submitUpload()">hochladen</button>
 		</div>
-
-		<div *ngIf="uploading">
-			Upload läuft, bitte warten... <mat-progress-spinner mode="indeterminate" diameter='40' strokeWidth='5'></mat-progress-spinner>
-		</div>
 	</div>
 </div>

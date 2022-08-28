@@ -5,14 +5,14 @@ import * as GrafikActions from './grafik.actions';
 export const GRAFIK_FEATURE_KEY = 'grafik';
 
 export interface GrafikState {
-    readonly loading: boolean;
+    // readonly loading: boolean;
     readonly loaded: boolean;
     readonly pfad?: string;
     readonly selectedGrafikSearchResult?: GrafikSearchResult;
 };
 
 export const initialGrafikState: GrafikState = {
-    loading: false,
+    // loading: false,
     loaded: false
 };
 

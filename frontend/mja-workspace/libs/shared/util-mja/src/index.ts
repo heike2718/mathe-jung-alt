@@ -13,3 +13,5 @@ export * from './lib/http-utils/with-error-message-context';
 
 export { noopAction } from './lib/ngrx-utils/noop.action';
 export * from './lib/ngrx-utils/safe-ngrx.service';
+
+export { LoadingIndicatorService } from './lib/loading-service/loading-indicator.service';

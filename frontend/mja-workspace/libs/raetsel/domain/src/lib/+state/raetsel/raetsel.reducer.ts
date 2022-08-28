@@ -17,7 +17,6 @@ export interface RaetselState extends EntityState<Raetsel> {
   saveSuccessMessage?: string,
   paginationState: PaginationState;
   raetselDetailsContent: RaetselDetailsContent;
-  generatingOutput: boolean;
   selectableDeskriptoren: SelectableItem[];
 }
 
@@ -77,8 +76,6 @@ const raetselReducer = createReducer(
   })),
 
   on(RaetselActions.editRaetsel, (state, action) => ({ ...state, raetselDetailsContent: action.raetselDetailsContent })),
-
-  on(RaetselActions.generateOutput, (state, _action) => ({ ...state, generatingOutput: true })),
 
   on(RaetselActions.outputGenerated, (state, action) => {
 

@@ -142,10 +142,6 @@
                 (selectedItemsChanged)="onSelectedDesktiptorenChanged($event)"></mja-select-items>
         </div>
 
-        <div *ngIf="raetselFacade.isGeneratingOutput$ | async" class="loader">
-            <mat-progress-spinner mode="indeterminate" diameter='40' strokeWidth='5'></mat-progress-spinner>
-        </div>
-
         <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
 
             <div fxFlex="0 1 calc(20%-20px)">

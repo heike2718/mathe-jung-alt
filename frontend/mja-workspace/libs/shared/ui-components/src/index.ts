@@ -15,3 +15,5 @@ export * from './lib/select-items/select-items.model';
 export * from './lib/ui-file-upload/file-upload.model';
 export { FileUploadComponent } from './lib/ui-file-upload/file-upload.component';
 export * from './lib/ui-file-upload/file-upload.service';
+
+export { LoadingIndicatorComponent } from './lib/loading-indicator/loading-indicator.component';

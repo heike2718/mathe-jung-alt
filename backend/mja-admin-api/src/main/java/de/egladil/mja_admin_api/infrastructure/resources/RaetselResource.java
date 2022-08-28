@@ -40,6 +40,7 @@ import de.egladil.mja_admin_api.domain.raetsel.RaetselService;
 import de.egladil.mja_admin_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_admin_api.domain.raetsel.dto.GeneratedImages;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
+import de.egladil.mja_admin_api.domain.utils.DevDelayService;
 import de.egladil.mja_admin_api.infrastructure.validation.CsrfTokenValidator;
 import de.egladil.web.mja_auth.session.AuthenticatedUser;
 import de.egladil.web.mja_auth.session.Session;
@@ -57,6 +58,9 @@ public class RaetselResource {
 
 	@Context
 	SecurityContext securityContext;
+
+	@Inject
+	DevDelayService delayService;
 
 	@Inject
 	RaetselService raetselService;
@@ -88,6 +92,8 @@ public class RaetselResource {
 
 		LOGGER.debug("authorizationEnabled=" + this.authorizationEnabled);
 
+		this.delayService.pause();
+
 		String deskriptorenOrdinal = checkAndTransformDeskriptoren(deskriptoren, typeDeskriptoren);
 
 		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
@@ -105,6 +111,8 @@ public class RaetselResource {
 	@RolesAllowed("ADMIN")
 	public Response raetselDetailsLaden(@PathParam(value = "raetselUuid") final String raetselUuid) {
 
+		this.delayService.pause();
+
 		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
 
 		if (raetsel == null) {
@@ -121,6 +129,8 @@ public class RaetselResource {
 	@RolesAllowed("ADMIN")
 	public Response raetselAnlegen(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
+		this.delayService.pause();
+
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
 		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
 		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
@@ -136,6 +146,8 @@ public class RaetselResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	public Response raetselAendern(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+
+		this.delayService.pause();
 
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
 		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
@@ -154,6 +166,8 @@ public class RaetselResource {
 		value = "outputformat") final Outputformat outputformat, @PathParam(
 			value = "raetselUuid") final String raetselUuid, @QueryParam(
 				value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+
+		this.delayService.pause();
 
 		GeneratedImages result = generatorService.produceOutputReaetsel(outputformat, raetselUuid, layoutAntwortvorschlaege);
 
