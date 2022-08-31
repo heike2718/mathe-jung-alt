@@ -10,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTrefferItem;
@@ -75,19 +75,26 @@ public class RaetselResourceTest {
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		assertEquals(3, alleRaetsel.size());
-		assertEquals(3, suchergebnis.getTrefferGesamt());
+		assertEquals(4, alleRaetsel.size());
+		assertEquals(4, suchergebnis.getTrefferGesamt());
 
 		{
 
 			RaetselsucheTrefferItem raetsel = alleRaetsel.get(0);
+			assertEquals("08dc5237-505d-4db2-b5f9-3fd3d74981e0", raetsel.getId());
+			assertEquals("02602", raetsel.getSchluessel());
+		}
+
+		{
+
+			RaetselsucheTrefferItem raetsel = alleRaetsel.get(1);
 			assertEquals("f3b70e16-c431-42b7-b919-751de708d9d7", raetsel.getId());
 			assertEquals("02777", raetsel.getSchluessel());
 		}
 
 		{
 
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(1);
+			RaetselsucheTrefferItem raetsel = alleRaetsel.get(2);
 			assertEquals("7a94e100-85e9-4ffb-903b-06835851063b", raetsel.getId());
 			assertEquals("02789", raetsel.getSchluessel());
 		}
@@ -109,8 +116,8 @@ public class RaetselResourceTest {
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		assertEquals(6, alleRaetsel.size());
-		assertEquals(6, suchergebnis.getTrefferGesamt());
+		assertEquals(7, alleRaetsel.size());
+		assertEquals(7, suchergebnis.getTrefferGesamt());
 
 		{
 
@@ -122,34 +129,41 @@ public class RaetselResourceTest {
 		{
 
 			RaetselsucheTrefferItem raetsel = alleRaetsel.get(1);
+			assertEquals("08dc5237-505d-4db2-b5f9-3fd3d74981e0", raetsel.getId());
+			assertEquals("02602", raetsel.getSchluessel());
+		}
+
+		{
+
+			RaetselsucheTrefferItem raetsel = alleRaetsel.get(2);
 			assertEquals("f3b70e16-c431-42b7-b919-751de708d9d7", raetsel.getId());
 			assertEquals("02777", raetsel.getSchluessel());
 		}
 
 		{
 
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(2);
+			RaetselsucheTrefferItem raetsel = alleRaetsel.get(3);
 			assertEquals("7a94e100-85e9-4ffb-903b-06835851063b", raetsel.getId());
 			assertEquals("02789", raetsel.getSchluessel());
 		}
 
 		{
 
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(3);
+			RaetselsucheTrefferItem raetsel = alleRaetsel.get(4);
 			assertEquals("1267285d-f781-42e1-b0e6-7b46ef2e85b2", raetsel.getId());
 			assertEquals("02790", raetsel.getSchluessel());
 		}
 
 		{
 
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(4);
+			RaetselsucheTrefferItem raetsel = alleRaetsel.get(5);
 			assertEquals("a18315fc-ed01-45c3-bf2d-078dd1fa47f4", raetsel.getId());
 			assertEquals("02791", raetsel.getSchluessel());
 		}
 
 		{
 
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(5);
+			RaetselsucheTrefferItem raetsel = alleRaetsel.get(6);
 			assertEquals("024f4ca4-3235-48a4-9c88-e77990ea059c", raetsel.getId());
 			assertEquals("02816", raetsel.getSchluessel());
 		}

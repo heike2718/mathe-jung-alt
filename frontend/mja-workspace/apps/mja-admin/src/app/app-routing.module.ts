@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { environment } from '../environments/environment';
 import { HomeComponent } from './home/home.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -36,13 +37,14 @@ const routes: Routes = [
     { path: '**', component: NotFoundComponent },
 ];
 
-
+// { enableTracing: false, useHash: true, relativeLinkResolution: 'legacy' }
+            
 @NgModule({
     imports: [
         RouterModule.forRoot(
             routes,
-            // { enableTracing: false, useHash: true, relativeLinkResolution: 'legacy' }
-            { enableTracing: false, useHash: false }
+            { enableTracing: false, useHash: true, relativeLinkResolution: 'legacy' }
+            
         )
     ],
     exports: [
