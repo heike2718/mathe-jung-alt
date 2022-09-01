@@ -198,7 +198,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
     const pageDefinition: PageDefinition = {
       pageIndex: this.paginator ? this.paginator.pageIndex : 0,
-      pageSize: this.paginator ? this.paginator.pageSize : 10,
+      pageSize: this.paginator ? this.paginator.pageSize : 20,
       sortDirection: this.sort ? this.sort.direction : 'asc'
     }
 

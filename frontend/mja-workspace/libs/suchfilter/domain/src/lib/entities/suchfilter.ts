@@ -54,7 +54,7 @@ export interface PaginationState {
 
 export const initialPaginationState: PaginationState = {
     anzahlTreffer: 0,
-    pageSize: 10,
+    pageSize: 20,
     pageIndex: 0,
     sortDirection: 'asc'
 };
