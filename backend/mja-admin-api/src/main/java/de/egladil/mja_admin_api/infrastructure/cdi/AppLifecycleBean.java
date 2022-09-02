@@ -15,6 +15,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.web.mja_auth.session.SessionService;
 import io.quarkus.runtime.StartupEvent;
 
 /**
@@ -22,10 +23,6 @@ import io.quarkus.runtime.StartupEvent;
  */
 @ApplicationScoped
 public class AppLifecycleBean {
-
-	private static final String NAME_DOWNLOAD_DIR = "unterlagen";
-
-	private static final String NAME_UPLOAD_DIR = "upload";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AppLifecycleBean.class);
 
@@ -46,6 +43,7 @@ public class AppLifecycleBean {
 		checkLatexBaseDir();
 		checkImagesBaseDir();
 
+		LOGGER.info(" ===========>  session timeout nach {} min", SessionService.SESSION_IDLE_TIMEOUT_MINUTES);
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
 		LOGGER.info(" ===========>  the images.base.dir is {}", imagesBaseDir);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);

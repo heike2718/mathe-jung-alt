@@ -18,7 +18,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   ngOnInit(): void {
 
-    this.authFacade.clearOrRestoreSession();
+    // this.authFacade.clearOrRestoreSession();
 
     const hash = window.location.hash;
 

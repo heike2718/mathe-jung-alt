@@ -48,6 +48,13 @@ public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
 		if (exception instanceof WebApplicationException) {
 
 			WebApplicationException ex = (WebApplicationException) exception;
+
+			if (ex.getResponse().getStatus() == 403) {
+
+				LOGGER.warn("403: könnte mod-security-Konfiguration sein, wenn es ein PUT oder DELETE-Request war");
+				return Response.status(403).entity(MessagePayload.error("Diese Aktion ist nicht erlaubt")).build();
+			}
+
 			return ex.getResponse();
 		}
 

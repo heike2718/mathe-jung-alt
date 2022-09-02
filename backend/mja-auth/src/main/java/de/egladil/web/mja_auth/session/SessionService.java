@@ -15,13 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.egladil.web.mja_auth.exception.AuthException;
 import de.egladil.web.mja_auth.exception.SessionExpiredException;
@@ -32,7 +32,7 @@ import de.egladil.web.mja_auth.util.SecUtils;
 @ApplicationScoped
 public class SessionService {
 
-	private static final int SESSION_IDLE_TIMEOUT_MINUTES = 6;// 120;
+	public static final int SESSION_IDLE_TIMEOUT_MINUTES = 120;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
 
