@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { LoadingIndicatorService, Message } from "@mja-workspace/shared/util-mja";
-import { Configuration, SharedConfigService, STORAGE_KEY_DEV_SESSION_ID } from "@mja-workspace/shared/util-configuration";
+import { Configuration, SharedConfigService, STORAGE_KEY_SESSION } from "@mja-workspace/shared/util-configuration";
 import { map, Observable, tap } from "rxjs";
 import { AuthResult, Session } from "../entities/auth.model";
 
@@ -44,8 +44,11 @@ export class AuthHttpService {
 
     logout(): Observable<Message> {
 
-        const devSessionId = localStorage.getItem(this.configuration.storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
-        let url = this.#baseUrl + '/logout';
+        const session = this.#getSessionFromLocalStorage();
+
+        const devSessionId = session ? session.sessionId : undefined;
+
+        let url = this.#baseUrl + '/logout';        
 
         if (devSessionId) {
             url = this.#baseUrl + '/dev/logout/' + devSessionId;
@@ -60,5 +63,14 @@ export class AuthHttpService {
             const httpHeaders = response.headers;
             console.log(httpHeaders.keys);
         }
+    }
+
+    #getSessionFromLocalStorage(): Session | undefined {
+
+        const sessionSerialized = localStorage.getItem(STORAGE_KEY_SESSION);
+        if (!sessionSerialized) {
+            return undefined;
+        }
+        return JSON.parse(sessionSerialized);
     }
 }

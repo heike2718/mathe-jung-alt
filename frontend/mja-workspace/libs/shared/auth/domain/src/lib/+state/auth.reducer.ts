@@ -19,17 +19,13 @@ const initialState: AuthState = {
 const authReducer = createReducer(initialState,
 
     on(AuthActions.sessionCreated, (state, action) => {
-        return { ...state, session: action.session };
+        return { ...state, session: action.session }
     }),
 
     on(AuthActions.sessionRestored, (state, action) => {
-        return { ...state, session: action.session };
+        return { ...state, session: action.session }
     }),
 
-    on(AuthActions.sessionCleared, (state, _action) => {
-        return { ...state, session: undefined };
-    }),
-    
     on(AuthActions.userLoggedOut, (state, _action) => {
         return { ...state, session: undefined };
     }),

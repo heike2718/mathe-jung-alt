@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Configuration, SharedConfigService, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_QUELLE, STORAGE_KEY_SESSION_EXPIRES_AT, STORAGE_KEY_USER } from '@mja-workspace/shared/util-configuration';
+import { Configuration, SharedConfigService, STORAGE_KEY_QUELLE, STORAGE_KEY_SESSION } from '@mja-workspace/shared/util-configuration';
 import { TypedAction } from '@ngrx/store/src/models';
 import { catchError, concatMap, exhaustMap, mergeMap, Observable, of, OperatorFunction, switchMap, tap } from 'rxjs';
 import { ConstraintViolation } from '../http-utils/http.context';
@@ -89,9 +89,7 @@ export class SafeNgrxService {
     }
 
     clearSession(): void {
-        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID);
-        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
-        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_USER);
+        localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION);
         localStorage.removeItem(STORAGE_KEY_QUELLE);
     }
 

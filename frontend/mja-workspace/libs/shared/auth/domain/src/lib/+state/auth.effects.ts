@@ -1,8 +1,8 @@
 
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Configuration, SharedConfigService, STORAGE_KEY_DEV_SESSION_ID, STORAGE_KEY_SESSION_EXPIRES_AT, STORAGE_KEY_USER } from '@mja-workspace/shared/util-configuration';
-import { MessageService, SafeNgrxService, noopAction, isExpired } from '@mja-workspace/shared/util-mja';
+import { Configuration, SharedConfigService, STORAGE_KEY_SESSION } from '@mja-workspace/shared/util-configuration';
+import { MessageService, SafeNgrxService, noopAction } from '@mja-workspace/shared/util-mja';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
@@ -146,36 +146,16 @@ export class AuthEffects {
 
     #checkSessionInLocalStorage(): Observable<Session | undefined> {
 
-        const u = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_USER);
+        const session = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_SESSION);
 
-        if (!u) {
+        if (!session) {
             return of(undefined);
         }
-
-        const expiresAt = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT);
-
-        // TODO: wenn abgelaufen
-        if (!expiresAt || isExpired(JSON.parse(expiresAt))) {
-            return of(undefined);
-        }
-
-        const exp: number = JSON.parse(expiresAt);
-        const user: User = JSON.parse(u);
-
-        return of({
-            expiresAt: exp,
-            user: user
-        });
+        return of(JSON.parse(session));
     }
 
     #storeSessionInLocalStorage(session: Session): void {
-
-        const user = session.user;
-        localStorage.setItem(this.#storagePrefix + STORAGE_KEY_USER, JSON.stringify(user));
-        if (session.sessionId) {
-            localStorage.setItem(this.#storagePrefix + STORAGE_KEY_DEV_SESSION_ID, session.sessionId);
-        }
-        localStorage.setItem(this.#storagePrefix + STORAGE_KEY_SESSION_EXPIRES_AT, JSON.stringify(session.expiresAt));
+        localStorage.setItem(this.#storagePrefix + STORAGE_KEY_SESSION, JSON.stringify(session));
     }
 
     #clearSession(): void {

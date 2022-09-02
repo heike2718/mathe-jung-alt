@@ -16,9 +16,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   constructor(public authFacade: AuthFacade, private breakpointObserver: BreakpointObserver) { }
 
-  ngOnInit(): void {
-
-    // this.authFacade.clearOrRestoreSession();
+  ngOnInit(): void {   
 
     const hash = window.location.hash;
 
@@ -28,11 +26,12 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
       if (authResult.state) {
         if (authResult.state === 'login') {
           this.authFacade.createSession(authResult);
-
         }
       } else {
         window.location.hash = '';
       }
+    } else {
+      this.authFacade.clearOrRestoreSession();
     }
 
   }

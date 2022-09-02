@@ -36,7 +36,7 @@ export class LayoutComponent implements OnInit {
   }
 
   login(): void {
-    this.authFacade.requestLoginRedirectUrl();
+    this.authFacade.login();
   }
 
   logout(): void {

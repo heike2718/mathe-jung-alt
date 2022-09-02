@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
 
     canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> | boolean {
 
-        return this.authFacade.isAuthorized$.pipe(
+        return this.authFacade.isLoggedIn$.pipe(
             tap((auth) => {
                 if (!auth) {
                     this.router.navigateByUrl('/forbidden')

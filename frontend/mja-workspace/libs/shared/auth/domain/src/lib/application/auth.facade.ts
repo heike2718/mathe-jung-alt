@@ -25,7 +25,7 @@ export class AuthFacade {
     constructor(private store: Store<AuthPartialState>) { }
 
 
-    public requestLoginRedirectUrl(): void {
+    public login(): void {
         // Dies triggert einen SideEffect (siehe auth.effects.ts)
         this.store.dispatch(AuthActions.requestLoginUrl());
     }

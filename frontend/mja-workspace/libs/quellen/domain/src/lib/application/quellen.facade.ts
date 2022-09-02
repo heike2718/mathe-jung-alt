@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '@mja-workspace/shared/auth/domain';
-import { Configuration, SharedConfigService, STORAGE_KEY_USER } from '@mja-workspace/shared/util-configuration';
+import { anonymousSession, isAnonymousSession, Session, User } from '@mja-workspace/shared/auth/domain';
+import { Configuration, SharedConfigService, STORAGE_KEY_SESSION } from '@mja-workspace/shared/util-configuration';
 import { Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 import { tap } from 'rxjs';
@@ -62,10 +62,13 @@ export class QuellenFacade {
   }
 
   loadQuelleAdmin(): void {
-    const storedUser = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_USER);
-    const user: User = storedUser ? JSON.parse(storedUser) : undefined;
+    const storedSession = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_SESSION);
+    const session: Session = storedSession ? JSON.parse(storedSession) : anonymousSession;
+    const user: User | undefined = isAnonymousSession(session) ? undefined : session.user;
 
-    this.store.dispatch(QuellenActions.loadQuelleForUser({ user }));
+    if (user) {
+      this.store.dispatch(QuellenActions.loadQuelleForUser({ user }));
+    }
   }
 
   loadQuelle(uuid: string) {

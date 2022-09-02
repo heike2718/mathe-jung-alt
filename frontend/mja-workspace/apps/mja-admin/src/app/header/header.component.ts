@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void { }
 
   public login(): void {
-    this.authFacade.requestLoginRedirectUrl();
+    this.authFacade.login();
   }
 
   public logout(): void {
