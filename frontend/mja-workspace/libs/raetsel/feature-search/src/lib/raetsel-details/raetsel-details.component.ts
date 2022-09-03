@@ -7,6 +7,7 @@ import { anzeigeAntwortvorschlaegeSelectInput, GrafikInfo, LATEX_LAYOUT_ANTWORTV
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
 import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
+import { Message } from '@mja-workspace/shared/util-mja';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -92,7 +93,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
       if (result && dialogData.selectedLayoutAntwortvorschlaege) {
 
         let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
-        switch(dialogData.selectedLayoutAntwortvorschlaege) {
+        switch (dialogData.selectedLayoutAntwortvorschlaege) {
           case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
           case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
           case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
@@ -106,11 +107,17 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   grafikLaden(link: string): void {
     this.grafikFacade.grafikPruefen(link);
   }
-  
+
   generierenDiabled(): boolean {
 
     const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.grafikInfos.filter(gi => !gi.existiert);
 
     return grafikInfosOhneFile.length > 0;
+  }
+
+  onGrafikHochgeladen($event: Message): void {
+    if ($event.level === 'INFO') {
+      this.raetselFacade.selectRaetsel(this.#raetselDetails);
+    }
   }
 }
