@@ -37,7 +37,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     private getSessionIdFromLocalStorage(): string | undefined {
 
-        const sessionSerialized = localStorage.getItem(STORAGE_KEY_SESSION);
+        const sessionSerialized = localStorage.getItem(this.config.storagePrefix + STORAGE_KEY_SESSION);
         
         let sessionId = undefined;
 

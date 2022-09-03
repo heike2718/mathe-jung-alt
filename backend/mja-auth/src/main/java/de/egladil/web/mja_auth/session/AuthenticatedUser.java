@@ -10,6 +10,8 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * AuthenticatedUser
  */
@@ -47,8 +49,7 @@ public class AuthenticatedUser implements Principal {
 	@Override
 	public String toString() {
 
-		return "AuthenticatedUser [fullName=" + fullName + ", roles=" + Arrays.toString(roles) + ", uuid=" + uuid + ", csrfToken="
-			+ csrfToken + "]";
+		return "AuthenticatedUser [uuid=" + StringUtils.abbreviate(uuid, 11) + ", roles=" + Arrays.toString(roles) + "]";
 	}
 
 	@Override

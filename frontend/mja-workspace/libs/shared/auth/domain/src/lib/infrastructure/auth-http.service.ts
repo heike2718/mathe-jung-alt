@@ -67,7 +67,7 @@ export class AuthHttpService {
 
     #getSessionFromLocalStorage(): Session | undefined {
 
-        const sessionSerialized = localStorage.getItem(STORAGE_KEY_SESSION);
+        const sessionSerialized = localStorage.getItem(this.configuration.storagePrefix + STORAGE_KEY_SESSION);
         if (!sessionSerialized) {
             return undefined;
         }

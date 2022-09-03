@@ -61,7 +61,6 @@ export class AuthEffects {
             ofType(AuthActions.createSession),
             this.safeNgrx.safeSwitchMap((action) =>
                 this.authHttpService.createSession(action.authResult).pipe(
-                    tap(() => console.log(JSON.stringify(action.authResult))),
                     map((session: Session) => AuthActions.userLoggedIn({ session: session }))
                 ), 'Login fehlgeschlagen', noopAction()
             )
@@ -108,13 +107,28 @@ export class AuthEffects {
     logout$ = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthActions.logout),
-            map(() => {
+            this.safeNgrx.safeSwitchMap((action) =>
+                this.authHttpService.logout().pipe(
+                    tap(() => {
+                        this.authHttpService.logout();
+                        this.#clearSession();
+                        this.messageService.clear();
+                    }),
+                    map(() => AuthActions.userLoggedOut())
+                ), '', noopAction()
+            ))
+    );
+
+    userLoggedOut$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.userLoggedOut),
+            tap(() => {
+                this.authHttpService.logout();
                 this.#clearSession();
                 this.messageService.clear();
-                this.router.navigateByUrl('');
-                return AuthActions.userLoggedOut();
+                this.router.navigateByUrl('')
             })
-        )
+        ), { dispatch: false }
     );
 
     sessionExpired$ = createEffect(() =>

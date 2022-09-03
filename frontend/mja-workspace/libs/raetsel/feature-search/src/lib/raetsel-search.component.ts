@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, SortDirection } from '@angular/material/sort';
 import { Quelle, QuellenFacade } from '@mja-workspace/quellen/domain';
 import { Raetsel, RaetselDataSource, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
@@ -36,6 +36,8 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   #columnDefinitionsPublic = ['schluessel', 'name', 'deskriptoren'];
   #columnDefinitionsAdmin = ['schluessel', 'name', 'kommentar'];
   #selectedQuelle!: Quelle;
+  #pageIndex = 0;
+  #sortDirection: SortDirection = 'asc';
 
   dataSource!: RaetselDataSource;
   anzahlRaetsel: number = 0;
@@ -59,7 +61,11 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.suchfilterFacade.setSuchfilter(this.raetselFacade.lastSuchfilter);
 
     this.#paginationStateSubscription = this.raetselFacade.paginationState$.subscribe(
-      (state) => this.anzahlRaetsel = state.anzahlTreffer
+      (state) => {
+        this.anzahlRaetsel = state.anzahlTreffer;
+        this.#pageIndex = state.pageIndex;
+        this.#sortDirection = state.sortDirection === 'asc' ? 'asc' : 'desc';
+      }
     );
 
     this.#canStartSucheSubscription = this.suchfilterFacade.canStartSuche$.pipe(
@@ -112,7 +118,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.#paginatorSubscription = merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => {
         if (this.suchfilter !== undefined) {
-          console.log(JSON.stringify(this.suchfilter));
+          // console.log(JSON.stringify(this.suchfilter));
           this.#triggerSuche();
         }
       })
@@ -120,8 +126,6 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
     this.changeDetector.detectChanges();
   }
-
-
 
   ngOnDestroy(): void {
     this.#suchfilterSubscription.unsubscribe();
@@ -197,9 +201,9 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   #triggerSuche(): void {
 
     const pageDefinition: PageDefinition = {
-      pageIndex: this.paginator ? this.paginator.pageIndex : 0,
+      pageIndex: this.paginator ? this.paginator.pageIndex : this.#pageIndex,
       pageSize: this.paginator ? this.paginator.pageSize : 20,
-      sortDirection: this.sort ? this.sort.direction : 'asc'
+      sortDirection: this.sort ? this.sort.direction : this.#sortDirection
     }
 
     this.raetselFacade.triggerSearch(this.suchfilter, pageDefinition);
@@ -207,6 +211,8 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   #initPaginator(): void {
 
+    this.paginator.pageIndex = this.#pageIndex;
+    this.sort.direction = this.#sortDirection;
     // reset Paginator when sort changed
     this.#sortChangedSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
   }

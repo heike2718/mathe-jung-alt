@@ -99,9 +99,9 @@ export class SafeNgrxService {
 
         const httpErrorResponse: HttpErrorResponse | undefined = this.#getHttpErrorResponse(error);
         if (httpErrorResponse === undefined) {
-            console.log('SafeNgrxService: error=' + error);
-            this.messageService.error(errorMessage);
-            // this.messageService.error(error);
+            if (errorMessage.length > 0) {
+                this.messageService.error(errorMessage);
+            }
         } else {
             const status = httpErrorResponse.status;
             if (status === 440) {
@@ -117,7 +117,9 @@ export class SafeNgrxService {
                         this.messageService.error(message.message);
                     }
                 } else {
-                    this.messageService.error(errorMessage);
+                    if (errorMessage.length > 0) {
+                        this.messageService.error(errorMessage);
+                    }
                 }
             }
         }

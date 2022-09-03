@@ -83,7 +83,7 @@ public class SessionService {
 
 			sessions.put(session.getSessionId(), session);
 
-			LOGGER.info("User eingeloggt. " + session.toString());
+			LOGGER.info("User eingeloggt: {}", session.getUser().toString());
 
 			return session;
 		} catch (TokenExpiredException e) {
@@ -130,7 +130,7 @@ public class SessionService {
 
 		if (sessionId == null) {
 
-			LOGGER.info("invalidateSession ohne sessionId aufgerufen");
+			LOGGER.debug("invalidateSession ohne sessionId aufgerufen");
 			return;
 		}
 
@@ -138,7 +138,7 @@ public class SessionService {
 
 		if (session != null && !session.isAnonym()) {
 
-			LOGGER.info("User " + session.getUser().getUuid() + " ausgeloggt");
+			LOGGER.info("User ausgeloggt: {}", session.getUser().toString());
 		}
 	}
 
