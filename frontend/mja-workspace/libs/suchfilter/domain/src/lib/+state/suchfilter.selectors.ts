@@ -14,14 +14,7 @@ export const getSelectedSuchfilter = createSelector(getSelectedSuchfilterUIModel
 export const getFilteredDeskriptoren = createSelector(getSelectedSuchfilterUIModel, (model?: SuchfilterUIModel) => model? model.filteredDeskriptoren : []);
 export const getSuchliste = createSelector(getSelectedSuchfilter, (suchfilter?: Suchfilter) => suchfilter ? suchfilter.deskriptoren : []);
 
-const suchfilterChanged = createSelector(getSelectedSuchfilterUIModel, (model?: SuchfilterUIModel) => model ? model.changed : false);
-
-export const isSuchfilterReadyToGo = createSelector(
-    getSelectedSuchfilter,
-    suchfilterChanged,
-    (suchfilter: Suchfilter | undefined, changed: boolean) =>
-        changed && suchkriterienVorhanden(suchfilter));
-
+export const suchfilterChanged = createSelector(getSelectedSuchfilterUIModel, (model?: SuchfilterUIModel) => model ? model.changed : false);
 
 export const getRestliste = createSelector(
     getFilteredDeskriptoren,

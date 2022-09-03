@@ -5,8 +5,8 @@ import { Quelle, QuellenFacade } from '@mja-workspace/quellen/domain';
 import { Raetsel, RaetselDataSource, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
-import { deskriptorenToString, PageDefinition, Suchfilter, SuchfilterFacade, Suchkontext } from '@mja-workspace/suchfilter/domain';
-import { debounceTime, distinctUntilChanged, filter, merge, Subscription, tap } from 'rxjs';
+import { deskriptorenToString, PageDefinition, Suchfilter, SuchfilterFacade, Suchkontext, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, merge, Subscription, tap } from 'rxjs';
 
 
 @Component({
@@ -68,8 +68,13 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       }
     );
 
-    this.#canStartSucheSubscription = this.suchfilterFacade.canStartSuche$.pipe(
-      filter((ready) => ready === true),
+    this.#canStartSucheSubscription = combineLatest([this.suchfilterFacade.selectedSuchfilter$, this.suchfilterFacade.suchfilterChanged$]).pipe(
+      tap(([suchfilter, _changed]) => {
+        if (suchfilter) {
+          this.suchfilter = suchfilter;          
+        }
+      }),
+      filter(([suchfilter, changed]) => changed && suchkriterienVorhanden(suchfilter)),
       debounceTime(300),
       distinctUntilChanged(),
       tap(() => {

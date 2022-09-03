@@ -214,7 +214,9 @@ export function suchkriterienVorhanden(suchfilter: Suchfilter | undefined): bool
     }
 
     // Worte mit weniger als 4 Zeichen sind nicht Teil des Volltextindex. Daher erst fertig, wenn mindestens 4 Zeichen
-    return suchfilter.suchstring.trim().length > 3 || suchfilter.deskriptoren.length > 0;
+    const result = suchfilter.suchstring.trim().length > 3 || suchfilter.deskriptoren.length > 0;
+    // console.log('suchfilterVorhanden:' + result);
+    return result;
 }
 
 

@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Quelle, QuellenDataSource, QuellenFacade } from '@mja-workspace/quellen/domain';
 import { Deskriptor, deskriptorenToString, Suchfilter, SuchfilterFacade, Suchkontext, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
-import { debounceTime, distinctUntilChanged, filter, merge, Subscription, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, merge, Subscription, tap, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'mja-quellen-search',
@@ -23,6 +23,7 @@ export class QuellenSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   #sortChangedSubscription: Subscription = new Subscription();
   #paginatorSubscription: Subscription = new Subscription();
 
+  canStartSuche = false;
   suchfilter!: Suchfilter;
   quelleList$ = this.quellenFacade.quellenList$;
 
@@ -56,17 +57,22 @@ export class QuellenSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       }
     );
 
-    this.#canStartSucheSubscription = this.suchfilterFacade.canStartSuche$.pipe(
-      filter((ready) => ready),
+    this.#canStartSucheSubscription = combineLatest([this.suchfilterFacade.selectedSuchfilter$, this.suchfilterFacade.suchfilterChanged$]).pipe(
+      tap(([suchfilter, changed]) => {
+        this.canStartSuche = changed && suchkriterienVorhanden(suchfilter)
+        if (suchfilter) {
+          this.suchfilter = suchfilter;          
+        }
+      }),
+      filter(([suchfilter, changed]) => changed && suchkriterienVorhanden(suchfilter)),
       debounceTime(300),
       distinctUntilChanged(),
       tap(() => {
-        if (this.paginator && this.sort) {
+        if (this.paginator && this.sort && this.suchfilter) {
           this.#triggerSuche();
         }
       })
     ).subscribe();
-
   }
 
   ngOnDestroy(): void {

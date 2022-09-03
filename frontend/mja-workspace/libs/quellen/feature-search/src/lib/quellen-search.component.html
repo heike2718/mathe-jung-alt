@@ -6,7 +6,7 @@
     (inputChanged)="onInputChanged($event)">
   </mja-admin-suchfilter>
 
-  <ng-container *ngIf="(suchfilterFacade.canStartSuche$ | async) as ready">
+  <ng-container *ngIf="canStartSuche as ready">
     <p *ngIf="ready">Lasset die Suche beginnen: {{suchfilter | json}}</p>
     <p *ngIf="!ready">bitte Suchkriterien wählen</p>
   </ng-container>

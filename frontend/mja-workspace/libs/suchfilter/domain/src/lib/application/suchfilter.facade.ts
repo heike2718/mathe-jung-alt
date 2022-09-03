@@ -3,7 +3,7 @@ import { select, Store } from "@ngrx/store";
 import { SuchfilterPartialState } from "../+state/suchfilter.reducer";
 import * as SuchfilterActions from '../+state/suchfilter.actions';
 import * as SuchfilterSelectors from '../+state/suchfilter.selectors';
-import { Deskriptor, Suchfilter, SuchfilterUIModel, Suchkontext } from "../entities/suchfilter";
+import { Deskriptor, Suchfilter, Suchkontext } from "../entities/suchfilter";
 import { Observable } from "rxjs";
 
 
@@ -17,7 +17,7 @@ export class SuchfilterFacade {
     public suchliste$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getSuchliste));
     public restliste$: Observable<Deskriptor[]> = this.store.pipe(select(SuchfilterSelectors.getRestliste));
     public selectedSuchfilter$: Observable<Suchfilter | undefined> = this.store.pipe(select(SuchfilterSelectors.getSelectedSuchfilter));
-    public canStartSuche$: Observable<boolean> = this.store.pipe(select(SuchfilterSelectors.isSuchfilterReadyToGo));
+    public suchfilterChanged$: Observable<boolean> = this.store.pipe(select(SuchfilterSelectors.suchfilterChanged));
 
     constructor(private store: Store<SuchfilterPartialState>) { }
 
