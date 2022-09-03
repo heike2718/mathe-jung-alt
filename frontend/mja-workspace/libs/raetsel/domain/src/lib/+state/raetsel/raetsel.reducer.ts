@@ -122,8 +122,12 @@ const raetselReducer = createReducer(
       })
     });
 
+    const neueDetails: RaetselDetails = { ...state.raetselDetailsContent.raetsel, imageFrage: details.imageFrage, imageLoesung: details.imageLoesung, grafikInfos: details.grafikInfos };
+    const neuerContent = { ...firstState, raetsel: neueDetails };
+      
+
     return { ...firstState, raetselDetailsContent: 
-      { ...firstState.raetselDetailsContent, kontext: 'RAETSEL', quelleId: details.quelleId, selectableDeskriptoren: selectableDeskriptoren, raetsel: details } };
+      { ...neuerContent, kontext: 'RAETSEL', quelleId: details.quelleId, selectableDeskriptoren: selectableDeskriptoren, raetsel: details } };
   }),
 
   on(RaetselActions.raetsellisteCleared, (state, _action) => ({

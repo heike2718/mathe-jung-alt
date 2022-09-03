@@ -51,13 +51,13 @@ public class Raetsel extends AbstractDomainEntity {
 	private List<Deskriptor> deskriptoren;
 
 	@JsonProperty
+	private List<GrafikInfo> grafikInfos = new ArrayList<>();
+
+	@JsonProperty
 	private byte[] imageFrage;
 
 	@JsonProperty
 	private byte[] imageLoesung;
-
-	@JsonProperty
-	private List<GrafikInfo> grafikInfos = new ArrayList<>();
 
 	/**
 	 *

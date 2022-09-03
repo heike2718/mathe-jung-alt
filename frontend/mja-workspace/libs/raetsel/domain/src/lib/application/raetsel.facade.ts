@@ -10,7 +10,7 @@ import { combineLatest, Observable, tap } from 'rxjs';
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
 import * as RaetselSelectors from '../+state/raetsel/raetsel.selectors';
-import { EditRaetselPayload, initialRaetselDetails, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselDetailsContent } from '../entities/raetsel';
+import { EditRaetselPayload, GrafikInfo, initialRaetselDetails, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselDetailsContent } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -108,6 +108,22 @@ export class RaetselFacade {
 
   saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
     this.store.dispatch(RaetselActions.startSaveRaetsel({ editRaetselPayload }));
+  }
+
+  grafikHochgeladen(raetselDetails: RaetselDetails, pfad: string): void {
+
+    const grafikInfos: GrafikInfo[] = [];
+    raetselDetails.grafikInfos.forEach(gi => {
+      if (gi.pfad === pfad) {
+        grafikInfos.push({ ...gi, existiert: true });
+      } else {
+        grafikInfos.push(gi);
+      }
+    });
+
+    this.store.dispatch(RaetselActions.raetselSaved({ raetselDetails: { ...raetselDetails, grafikInfos: grafikInfos },
+      successMessage: 'Grafik ' + pfad + ' erfolgreich hochgeladen',
+      insert: false }));
   }
 
   cancelEditRaetsel(): void {

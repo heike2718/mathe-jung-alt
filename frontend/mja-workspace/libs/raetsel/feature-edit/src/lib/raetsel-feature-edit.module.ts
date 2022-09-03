@@ -6,7 +6,9 @@ import { SharedUiRaetselModule } from '@mja-workspace/shared/ui-raetsel';
 import { MaterialModule, SharedUiComponentsModule } from '@mja-workspace/shared/ui-components';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AdminGuard, AuthGuard } from '@mja-workspace/shared/auth/domain';
+import { AdminGuard } from '@mja-workspace/shared/auth/domain';
+import { GrafikDomainModule } from '@mja-workspace/grafik/domain';
+import { GrafikFeatureSearchModule } from '@mja-workspace/grafik/feature-search';
 
 @NgModule({
   imports: [
@@ -14,6 +16,8 @@ import { AdminGuard, AuthGuard } from '@mja-workspace/shared/auth/domain';
     RaetselDomainModule,
     SharedUiRaetselModule,
     SharedUiComponentsModule,
+    GrafikDomainModule,
+    GrafikFeatureSearchModule,
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild([

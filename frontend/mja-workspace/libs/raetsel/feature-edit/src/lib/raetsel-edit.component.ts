@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { GrafikFacade } from '@mja-workspace/grafik/domain';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
 import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayload, GrafikInfo, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mja-workspace/raetsel/domain';
 import { JaNeinDialogComponent, JaNeinDialogData, SelectItemsCompomentModel, SelectItemsComponent } from '@mja-workspace/shared/ui-components';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
-import { SelectableItem } from '@mja-workspace/shared/util-mja';
+import { Message, SelectableItem } from '@mja-workspace/shared/util-mja';
 import { Deskriptor, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { combineLatest, Subscription } from 'rxjs';
 
@@ -44,6 +45,7 @@ export class RaetselEditComponent implements OnInit {
 
   constructor(public raetselFacade: RaetselFacade,
     public quellenFacade: QuellenFacade,
+    private grafikFacade: GrafikFacade,
     private fb: UntypedFormBuilder,
     public dialog: MatDialog) {
 
@@ -240,6 +242,17 @@ export class RaetselEditComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.#doSubmit(raetsel, result);
     });
+  }
+
+  grafikLaden(link: string): void {
+    this.grafikFacade.grafikPruefen(link);
+  }
+
+  onGrafikHochgeladen($event: Message): void {
+    if ($event.level === 'INFO') {
+      const pfad = $event.message;
+      this.raetselFacade.grafikHochgeladen(this.raetselDetailsContent.raetsel, pfad);
+    }
   }
 
   #initForm() {

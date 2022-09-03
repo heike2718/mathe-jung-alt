@@ -58,7 +58,7 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
       const message = this.uploadModel.pfad + ': ' + messagePayload.message;
       const mp: Message = { ...messagePayload, message: message };
       this.grafikFacade.grafikHochgeladen(mp);
-      this.responsePayload.emit(mp);
+      this.responsePayload.emit({level: messagePayload.level, message: this.uploadModel.pfad});
     }
   }
 
