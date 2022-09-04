@@ -1,4 +1,3 @@
-import { SelectableItem } from "@mja-workspace/shared/util-mja";
 import { Deskriptor, Suchkontext } from "@mja-workspace/suchfilter/domain";
 
 export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';
@@ -48,7 +47,7 @@ export interface RaetselDetails {
   readonly deskriptoren: Deskriptor[];
   readonly imageFrage: string | null;
   readonly imageLoesung: string | null;
-  // readonly grafikPfade: string[];
+  readonly raetselPDF: Blob | null;
   readonly grafikInfos: GrafikInfo[];
 };
 
@@ -64,14 +63,17 @@ export interface EditRaetselPayload {
 };
 
 export interface GeneratedImages {
-  readonly outputFormat: LATEX_OUTPUTFORMAT,
   readonly imageFrage: string | null;
   readonly imageLoesung: string | null;
   readonly urlFrage?: string;
   readonly urlLoesung?: string;
 };
 
-
+export interface GeneratedPDF {
+  readonly url?: string,
+  readonly fileName: string,
+  readonly fileData: Blob
+};
 
 export const initialRaetselDetails: RaetselDetails = {
   id: 'neu',
@@ -86,7 +88,7 @@ export const initialRaetselDetails: RaetselDetails = {
   deskriptoren: [],
   imageFrage: null,
   imageLoesung: null,
-  // grafikPfade:  [],
+  raetselPDF: null,
   grafikInfos: []
   
 };

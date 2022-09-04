@@ -34,11 +34,11 @@ import de.egladil.mja_admin_api.domain.dto.SortDirection;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselGeneratorService;
 import de.egladil.mja_admin_api.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mja_admin_api.domain.raetsel.Outputformat;
 import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
 import de.egladil.mja_admin_api.domain.raetsel.RaetselService;
 import de.egladil.mja_admin_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_admin_api.domain.raetsel.dto.GeneratedImages;
+import de.egladil.mja_admin_api.domain.raetsel.dto.GeneratedPDF;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_admin_api.domain.utils.DevDelayService;
 import de.egladil.mja_admin_api.infrastructure.validation.CsrfTokenValidator;
@@ -159,17 +159,31 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("{outputformat}/{raetselUuid}")
+	@Path("PNG/{raetselUuid}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
-	public GeneratedImages raetselGenerieren(@PathParam(
-		value = "outputformat") final Outputformat outputformat, @PathParam(
-			value = "raetselUuid") final String raetselUuid, @QueryParam(
-				value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedImages raetselImagesGenerieren(@PathParam(
+		value = "raetselUuid") final String raetselUuid, @QueryParam(
+			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		this.delayService.pause();
 
-		GeneratedImages result = generatorService.produceOutputReaetsel(outputformat, raetselUuid, layoutAntwortvorschlaege);
+		GeneratedImages result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege);
+
+		return result;
+	}
+
+	@GET
+	@Path("PDF/{raetselUuid}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
+	public GeneratedPDF raetselPDFGenerieren(@PathParam(
+		value = "raetselUuid") final String raetselUuid, @QueryParam(
+			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+
+		this.delayService.pause();
+
+		GeneratedPDF result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege);
 
 		return result;
 	}

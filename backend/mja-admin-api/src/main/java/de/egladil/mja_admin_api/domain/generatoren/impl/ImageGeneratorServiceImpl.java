@@ -61,7 +61,7 @@ public class ImageGeneratorServiceImpl implements ImageGeneratorService {
 		if (message.isOk()) {
 
 			String pathImage = path.replaceAll(".tex", ".png");
-			byte[] image = MjaFileUtils.loadImage(pathImage, true);
+			byte[] image = MjaFileUtils.loadBinaryFile(pathImage, true);
 			// System.out.println(new String(Base64.getEncoder().encode(image)));
 
 			return image;

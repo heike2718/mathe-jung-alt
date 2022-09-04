@@ -27,6 +27,7 @@ import de.egladil.mja_admin_api.domain.raetsel.Outputformat;
 import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
 import de.egladil.mja_admin_api.domain.raetsel.RaetselService;
 import de.egladil.mja_admin_api.domain.raetsel.dto.GeneratedImages;
+import de.egladil.mja_admin_api.domain.raetsel.dto.GeneratedPDF;
 import de.egladil.mja_admin_api.infrastructure.restclient.LaTeXRestClient;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_shared.exceptions.LaTeXCompileException;
@@ -54,7 +55,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public GeneratedImages produceOutputReaetsel(final Outputformat outputformat, final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedImages generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
@@ -101,41 +102,24 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 		try {
 
-			switch (outputformat) {
+			responseFrage = laTeXClient.latex2PNG(raetsel.getSchluessel());
 
-				case PDF -> {
+			if (generateLoesung) {
 
-					responseFrage = laTeXClient.latex2PDF(raetsel.getSchluessel());
-
-					if (generateLoesung) {
-
-						responseLoesung = laTeXClient.latex2PDF(raetsel.getSchluessel() + "_l");
-					}
-				}
-				case PNG -> {
-
-					responseFrage = laTeXClient.latex2PNG(raetsel.getSchluessel());
-
-					if (generateLoesung) {
-
-						responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + "_l");
-					}
-				}
-				default -> throw new IllegalArgumentException("unbekanntes outputformat " + outputformat);
+				responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + "_l");
 			}
 
 			LOGGER.debug("nach Aufruf LaTeXRestClient");
 			MessagePayload message = responseFrage.readEntity(MessagePayload.class);
 
-			String filename = raetsel.getSchluessel() + outputformat.getFilenameExtension();
-			String filenameLoesung = raetsel.getSchluessel() + "_l" + outputformat.getFilenameExtension();
+			String filename = raetsel.getSchluessel() + Outputformat.PNG.getFilenameExtension();
+			String filenameLoesung = raetsel.getSchluessel() + "_l" + Outputformat.PNG.getFilenameExtension();
 
 			if (message.isOk()) {
 
 				byte[] imageFrage = this.raetselFileService.findImageFrage(raetsel.getSchluessel());
 
 				GeneratedImages result = new GeneratedImages();
-				result.setOutputFormat(outputformat);
 				result.setImageFrage(imageFrage);
 				result.setUrlFrage(output2Url(filename));
 
@@ -174,14 +158,120 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			throw e;
 		} catch (Exception e) {
 
-			String msg = "Beim Generieren des Outputs " + outputformat + " zu Raetsel [schluessel="
+			String msg = "Beim Generieren des Outputs " + Outputformat.PNG + " zu Raetsel [schluessel="
 				+ raetsel.getSchluessel()
 				+ ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: " + e.getMessage();
 			LOGGER.error(msg, e);
 			throw new MjaRuntimeException(msg, e);
 
+		} finally {
+
+			if (responseFrage != null) {
+
+				responseFrage.close();
+			}
+
+			if (responseLoesung != null) {
+
+				responseLoesung.close();
+			}
 		}
 
+	}
+
+	@Override
+	public GeneratedPDF generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+
+		LOGGER.debug("start generate output");
+
+		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
+
+		if (raetsel == null) {
+
+			throw new WebApplicationException(
+				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
+		}
+
+		List<String> fehlendeGrafiken = raetsel.getGrafikInfos().stream().filter(gi -> !gi.isExistiert()).map(gi -> gi.getPfad())
+			.collect(Collectors.toList());
+
+		if (!fehlendeGrafiken.isEmpty()) {
+
+			String message = "Es fehlen noch Grafiken: ";
+
+			for (int i = 0; i < fehlendeGrafiken.size(); i++) {
+
+				message += fehlendeGrafiken.get(i);
+
+				if (i < fehlendeGrafiken.size() - 2) {
+
+					message += ", ";
+				}
+			}
+
+			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
+		}
+
+		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege);
+
+		Response response = null;
+		LOGGER.debug("vor Aufruf LaTeXRestClient");
+
+		try {
+
+			response = laTeXClient.latex2PDF(raetsel.getSchluessel() + "_x");
+
+			LOGGER.debug("nach Aufruf LaTeXRestClient");
+			MessagePayload message = response.readEntity(MessagePayload.class);
+
+			String filename = raetsel.getSchluessel() + Outputformat.PDF.getFilenameExtension();
+
+			if (message.isOk()) {
+
+				byte[] pdf = this.raetselFileService.findPDF(raetsel.getSchluessel());
+
+				String url = output2Url(filename);
+				if (pdf == null) {
+
+					String msg = "Das generierte PDF zu Raetsel [schluessel="
+						+ raetsel.getSchluessel()
+						+ ", uuid=" + raetselUuid + "] konnte nicht geladen werden. Bitte " + url + " prüfen";
+					LOGGER.error(msg);
+					throw new MjaRuntimeException(msg);
+				}
+
+				GeneratedPDF result = new GeneratedPDF();
+				result.setFileData(pdf);
+				result.setUrl(url);
+				result.setFileName(filename);
+
+				return result;
+			}
+
+			LOGGER.error("Mist: generieren des PDFs hat nicht geklappt: " + message.getMessage());
+			throw new LaTeXCompileException("Beim Generieren des PDFs ist etwas schiefgegangen: " + message.getMessage())
+				.withNameFile(filename);
+
+		} catch (LaTeXCompileException e) {
+
+			throw e;
+		} catch (MjaRuntimeException e) {
+
+			throw e;
+		} catch (Exception e) {
+
+			String msg = "Beim Generieren des Outputs " + Outputformat.PDF + " zu Raetsel [schluessel="
+				+ raetsel.getSchluessel()
+				+ ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: " + e.getMessage();
+			LOGGER.error(msg, e);
+			throw new MjaRuntimeException(msg, e);
+		} finally {
+
+			if (response != null) {
+
+				response.close();
+			}
+		}
 	}
 
 	String output2Url(final String filename) {

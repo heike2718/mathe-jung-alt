@@ -75,7 +75,12 @@ export class RaetselFacade {
   }
 
   generiereRaetselOutput(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-    this.store.dispatch(RaetselActions.generateOutput({ raetselId, outputFormat, layoutAntwortvorschlaege }));
+
+    switch(outputFormat) {
+      case 'PNG': this.store.dispatch(RaetselActions.generateRaetselPNGs({ raetselId, layoutAntwortvorschlaege })); break;
+      case 'PDF': this.store.dispatch(RaetselActions.generateRaetselPDF({ raetselId, layoutAntwortvorschlaege })); break;
+      default: throw new Error('Unbekanntes outputFormat ' + outputFormat);
+    }    
   }
 
 

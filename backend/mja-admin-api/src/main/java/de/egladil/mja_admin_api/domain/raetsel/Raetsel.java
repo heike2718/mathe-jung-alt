@@ -59,6 +59,9 @@ public class Raetsel extends AbstractDomainEntity {
 	@JsonProperty
 	private byte[] imageLoesung;
 
+	@JsonProperty
+	private byte[] raetselPDF;
+
 	/**
 	 *
 	 */

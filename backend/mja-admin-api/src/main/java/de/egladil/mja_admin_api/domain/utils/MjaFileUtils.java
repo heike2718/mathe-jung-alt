@@ -72,14 +72,14 @@ public class MjaFileUtils {
 	}
 
 	/**
-	 * Läd das Image.
+	 * Läd ein binäres File, also png oder pdf oder so.
 	 *
 	 * @param  path
 	 * @param  isTemporaryFile
 	 *                         boolean, wenn true, dann wird es anschließend gelöscht.
 	 * @return                 byte[] oder null
 	 */
-	public static byte[] loadImage(final String path, final boolean isTemporaryFile) {
+	public static byte[] loadBinaryFile(final String path, final boolean isTemporaryFile) {
 
 		File file = new File(path);
 

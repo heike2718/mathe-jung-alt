@@ -13,7 +13,7 @@ import {
   SuchfilterQueryParameterMapper,
   PageDefinition
 } from '@mja-workspace/suchfilter/domain';
-import { EditRaetselPayload, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
+import { EditRaetselPayload, GeneratedImages, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
 import { LoadingIndicatorService } from '@mja-workspace/shared/util-mja';
 
 @Injectable({ providedIn: 'root' })
@@ -60,14 +60,24 @@ export class RaetselDataService {
     return this.loadingService.showLoaderUntilCompleted(this.http.get<RaetselDetails>(url, { headers: headers }));
   }
 
-  generiereRaetselOutput(raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
+  generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
 
-    const url = this.#url + '/' + outputFormat + '/' + raetselId;
+    const url = this.#url + '/PNG/' + raetselId;
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
     const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
     return this.loadingService.showLoaderUntilCompleted(this.http.get<GeneratedImages>(url, { headers: headers, params: params }));
+  }
+
+  generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedPDF> {
+
+    const url = this.#url + '/PDF/' + raetselId;
+
+    const headers = new HttpHeaders().set('Accept', 'application/json');
+    const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+
+    return this.loadingService.showLoaderUntilCompleted(this.http.get<GeneratedPDF>(url, { headers: headers, params: params }));
   }
 
   saveRaetsel(editRaetselPayload: EditRaetselPayload, csrfToken: string | null): Observable<RaetselDetails> {

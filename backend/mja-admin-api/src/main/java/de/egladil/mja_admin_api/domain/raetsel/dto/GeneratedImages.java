@@ -6,15 +6,10 @@ package de.egladil.mja_admin_api.domain.raetsel.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_admin_api.domain.raetsel.Outputformat;
-
 /**
  * GeneratedImages
  */
 public class GeneratedImages {
-
-	@JsonProperty
-	private Outputformat outputFormat;
 
 	@JsonProperty
 	private String urlFrage;
@@ -67,15 +62,4 @@ public class GeneratedImages {
 
 		this.urlLoesung = urlLoesung;
 	}
-
-	public Outputformat getOutputFormat() {
-
-		return outputFormat;
-	}
-
-	public void setOutputFormat(final Outputformat outputFormat) {
-
-		this.outputFormat = outputFormat;
-	}
-
 }

@@ -1,7 +1,7 @@
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
-import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, GeneratedImages, RaetselDetailsContent, EditRaetselPayload, RaetselsucheTreffer } from '../../entities/raetsel';
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, GeneratedImages, RaetselDetailsContent, EditRaetselPayload, RaetselsucheTreffer, GeneratedPDF } from '../../entities/raetsel';
 
 export const setSuchfilter = createAction(
   '[Raetsel] setSuchfilter',
@@ -75,14 +75,24 @@ export const raetselSaved = createAction(
   props<{ raetselDetails: RaetselDetails, successMessage: string, insert: boolean }>()
 );
 
-export const generateOutput = createAction(
-  '[Raetsel] generate output',
-  props<{ raetselId: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>()
+export const generateRaetselPNGs = createAction(
+  '[Raetsel] generate PNGs',
+  props<{ raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>()
 );
 
-export const outputGenerated = createAction(
-  '[Raetsel] output generated',
+export const raetselPNGsGenerated = createAction(
+  '[Raetsel] raetsel PNGs generated',
   props<{ images: GeneratedImages }>()
+);
+
+export const generateRaetselPDF = createAction(
+  '[Raetsel] generate PDF',
+  props<{ raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>()
+);
+
+export const raetselPDFGenerated = createAction(
+  '[Raetsel] raetsel PDF generated',
+  props<{ pdf: GeneratedPDF }>()
 );
 
 export const generateOutputError = createAction(

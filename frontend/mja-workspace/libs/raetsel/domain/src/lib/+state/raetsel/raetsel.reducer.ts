@@ -77,7 +77,7 @@ const raetselReducer = createReducer(
 
   on(RaetselActions.editRaetsel, (state, action) => ({ ...state, raetselDetailsContent: action.raetselDetailsContent })),
 
-  on(RaetselActions.outputGenerated, (state, action) => {
+  on(RaetselActions.raetselPNGsGenerated, (state, action) => {
 
     if (state.raetselDetailsContent && state.raetselDetailsContent.raetsel) {
       const neueDetails: RaetselDetails = { ...state.raetselDetailsContent.raetsel, imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung };

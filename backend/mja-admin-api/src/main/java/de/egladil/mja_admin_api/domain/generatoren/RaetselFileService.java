@@ -34,6 +34,17 @@ public interface RaetselFileService {
 	String generateLoesungLaTeX(Raetsel raetsel);
 
 	/**
+	 * Schreibt frage und (falls existent) Lösung in das gleiche LaTeX-File im Filessystem und gibt den Pfad des Files zurück.
+	 *
+	 * @param  raetsel
+	 *                                  Der Name des Files ist der Schlüssel des Raetsels mit angehängtem _x.
+	 * @param  layoutAntwortvorschlaege
+	 *                                  LayoutAntwortvorschlaege
+	 * @return                          String
+	 */
+	String generateFrageUndLoesung(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+
+	/**
 	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.
 	 *
 	 * @param  schluessel
@@ -48,6 +59,14 @@ public interface RaetselFileService {
 	 * @return
 	 */
 	byte[] findImageLoesung(String schluessel);
+
+	/**
+	 * Falls das PDF bereits generiert wurde, wird es aus dem Dateisystem gelesen.
+	 *
+	 * @param  schluessel
+	 * @return            byte[]
+	 */
+	byte[] findPDF(String schluessel);
 
 	/**
 	 * Prüft, ob die Datei existiert.

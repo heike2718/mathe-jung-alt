@@ -3,7 +3,7 @@ import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { map, tap } from 'rxjs/operators';
 import * as RaetselActions from './raetsel.actions';
 import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
-import { MessageService, SafeNgrxService, noopAction } from '@mja-workspace/shared/util-mja';
+import { MessageService, SafeNgrxService, noopAction, FileService } from '@mja-workspace/shared/util-mja';
 import { Router } from '@angular/router';
 import { SuchfilterFacade } from '@mja-workspace/suchfilter/domain';
 import { AuthHttpService } from '@mja-workspace/shared/auth/domain';
@@ -96,23 +96,38 @@ export class RaetselEffects {
       tap(() => this.router.navigateByUrl('raetsel/uebersicht')),
     ), { dispatch: false });
 
-  generiereRaetselOutput$ = createEffect(() =>
+  generateRaetselPNGs$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(RaetselActions.generateOutput),
+      ofType(RaetselActions.generateRaetselPNGs),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.generiereRaetselOutput(action.raetselId, action.outputFormat, action.layoutAntwortvorschlaege).pipe(
-          tap(() => {
-            if (action.outputFormat === 'PDF') {
-              this.messageService.info('PDF erfolgreich generiert');
-            }
-          }),
+        this.raetselDataService.generateRaetselPNGs(action.raetselId, action.layoutAntwortvorschlaege).pipe(
           map((images) =>
-            RaetselActions.outputGenerated({ images })
+            RaetselActions.raetselPNGsGenerated({ images })
           )
-        ), 'Ups, beim Generieren des Rätsels ist etwas schiefgegangen', noopAction()
+        ), 'Ups, beim Generieren der PNGs für das Rätsel ist etwas schiefgegangen', noopAction()
       )
     )
   );
+
+  generateRaetselPDF$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.generateRaetselPDF),
+      this.safeNgrx.safeSwitchMap((action) =>
+        this.raetselDataService.generateRaetselPDF(action.raetselId, action.layoutAntwortvorschlaege).pipe(
+          map((generatedPDF) =>
+            RaetselActions.raetselPDFGenerated({ pdf: generatedPDF })
+          )
+        ), 'Ups, beim Generieren des PDFs mit dem Rätsel ist etwas schiefgegangen', noopAction()
+      )
+    )
+  );
+
+  downloadPDF$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselActions.raetselPDFGenerated),
+      tap((action) => this.fileService.downloadPdf(action.pdf.fileData, action.pdf.fileName)),
+    ), { dispatch: false });
+
 
   constructor(
     private actions$: Actions,
@@ -121,6 +136,7 @@ export class RaetselEffects {
     private suchfilterFacade: SuchfilterFacade,
     private safeNgrx: SafeNgrxService,
     private messageService: MessageService,
+    private fileService: FileService,
     private router: Router
   ) { }
 }
