@@ -1,5 +1,12 @@
 # Release-Notes
 
+__1.0.1__
+
+* [Admin: Volltextsuche in Rätseln auch ohne Deskriptoren](https://github.com/heike2718/mathe-jung-alt/issues/32)
+* [Beim Generieren von PDF soll das PDF heruntergeladen werden](https://github.com/heike2718/mathe-jung-alt/issues/33)
+* [Aktuell gewählte page merken](https://github.com/heike2718/mathe-jung-alt/issues/34)
+* [Rätseldetails: wenn das letzte Image hochgeladen wurde, soll das Generieren sofort aktiviert werden](https://github.com/heike2718/mathe-jung-alt/issues/36)
+
 __1.0.0__
 
 * [Frontend zum Anlegen und Ändern von Rätseln](https://github.com/heike2718/mathe-jung-alt/issues/1)

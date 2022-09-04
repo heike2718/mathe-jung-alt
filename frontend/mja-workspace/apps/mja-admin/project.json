@@ -70,10 +70,6 @@
             {
               "replace": "apps/mja-admin/src/app/store-config/store-devtools.ts",
               "with": "build-env/store-devtools.a300.ts"
-            },
-            {
-              "replace": "apps/mja-admin/src/index.html",
-              "with": "build-env/index.prod.html"
             }
           ],
           "outputHashing": "all"
