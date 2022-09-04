@@ -143,6 +143,9 @@ export class SafeNgrxService {
     #extractServerErrorMessage(error: HttpErrorResponse): Message | undefined {
 
         if (error.status === 0) {
+            this.clearSession();
+            this.router.navigateByUrl('home');
+            window.location.reload();
             return { level: 'ERROR', message: 'Der Server ist nicht erreichbar.' };
         }
 
