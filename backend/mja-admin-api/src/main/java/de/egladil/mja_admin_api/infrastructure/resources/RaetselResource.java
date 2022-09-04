@@ -164,11 +164,16 @@ public class RaetselResource {
 	@RolesAllowed("ADMIN")
 	public GeneratedImages raetselImagesGenerieren(@PathParam(
 		value = "raetselUuid") final String raetselUuid, @QueryParam(
-			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		this.delayService.pause();
 
+		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
+		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
+
 		GeneratedImages result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege);
+
+		LOGGER.info("Raetsel Images generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(userUuid, 11));
 
 		return result;
 	}
@@ -179,11 +184,16 @@ public class RaetselResource {
 	@RolesAllowed({ "ADMIN", "LEHRER", "PRIVAT", "STANDARD" })
 	public GeneratedPDF raetselPDFGenerieren(@PathParam(
 		value = "raetselUuid") final String raetselUuid, @QueryParam(
-			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		this.delayService.pause();
 
+		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
+		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
+
 		GeneratedPDF result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege);
+
+		LOGGER.info("Raetsel PDF generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(userUuid, 11));
 
 		return result;
 	}
