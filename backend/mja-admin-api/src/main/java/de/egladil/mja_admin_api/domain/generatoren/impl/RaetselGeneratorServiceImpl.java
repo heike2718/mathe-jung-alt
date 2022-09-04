@@ -55,37 +55,11 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public GeneratedImages generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public synchronized GeneratedImages generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
-
-		if (raetsel == null) {
-
-			throw new WebApplicationException(
-				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
-		}
-
-		List<String> fehlendeGrafiken = raetsel.getGrafikInfos().stream().filter(gi -> !gi.isExistiert()).map(gi -> gi.getPfad())
-			.collect(Collectors.toList());
-
-		if (!fehlendeGrafiken.isEmpty()) {
-
-			String message = "Es fehlen noch Grafiken: ";
-
-			for (int i = 0; i < fehlendeGrafiken.size(); i++) {
-
-				message += fehlendeGrafiken.get(i);
-
-				if (i < fehlendeGrafiken.size() - 2) {
-
-					message += ", ";
-				}
-			}
-
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
-		}
+		Raetsel raetsel = loadRaetsel(raetselUuid);
 
 		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege);
 
@@ -106,14 +80,15 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 			if (generateLoesung) {
 
-				responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + "_l");
+				responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN);
 			}
 
 			LOGGER.debug("nach Aufruf LaTeXRestClient");
 			MessagePayload message = responseFrage.readEntity(MessagePayload.class);
 
 			String filename = raetsel.getSchluessel() + Outputformat.PNG.getFilenameExtension();
-			String filenameLoesung = raetsel.getSchluessel() + "_l" + Outputformat.PNG.getFilenameExtension();
+			String filenameLoesung = raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN
+				+ Outputformat.PNG.getFilenameExtension();
 
 			if (message.isOk()) {
 
@@ -143,6 +118,16 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 								.withNameFile(filenameLoesung);
 					}
 
+				}
+
+				raetselFileService
+					.deleteTemporaryFiles(new String[] { raetsel.getSchluessel() + ".tex" });
+
+				if (generateLoesung) {
+
+					raetselFileService
+						.deleteTemporaryFiles(
+							new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN + ".tex" });
 				}
 
 				return result;
@@ -180,37 +165,11 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	}
 
 	@Override
-	public GeneratedPDF generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public synchronized GeneratedPDF generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
-
-		if (raetsel == null) {
-
-			throw new WebApplicationException(
-				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
-		}
-
-		List<String> fehlendeGrafiken = raetsel.getGrafikInfos().stream().filter(gi -> !gi.isExistiert()).map(gi -> gi.getPfad())
-			.collect(Collectors.toList());
-
-		if (!fehlendeGrafiken.isEmpty()) {
-
-			String message = "Es fehlen noch Grafiken: ";
-
-			for (int i = 0; i < fehlendeGrafiken.size(); i++) {
-
-				message += fehlendeGrafiken.get(i);
-
-				if (i < fehlendeGrafiken.size() - 2) {
-
-					message += ", ";
-				}
-			}
-
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
-		}
+		Raetsel raetsel = loadRaetsel(raetselUuid);
 
 		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege);
 
@@ -219,7 +178,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 		try {
 
-			response = laTeXClient.latex2PDF(raetsel.getSchluessel() + "_x");
+			response = laTeXClient.latex2PDF(raetsel.getSchluessel() + RaetselFileService.SUFFIX_PDF);
 
 			LOGGER.debug("nach Aufruf LaTeXRestClient");
 			MessagePayload message = response.readEntity(MessagePayload.class);
@@ -231,6 +190,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				byte[] pdf = this.raetselFileService.findPDF(raetsel.getSchluessel());
 
 				String url = output2Url(filename);
+
 				if (pdf == null) {
 
 					String msg = "Das generierte PDF zu Raetsel [schluessel="
@@ -244,6 +204,9 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				result.setFileData(pdf);
 				result.setUrl(url);
 				result.setFileName(filename);
+
+				raetselFileService
+					.deleteTemporaryFiles(new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_PDF + ".tex" });
 
 				return result;
 			}
@@ -272,6 +235,45 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				response.close();
 			}
 		}
+	}
+
+	/**
+	 * @param  raetselUuid
+	 * @return                         Raetsel
+	 * @throws WebApplicationException
+	 *                                 wenn es keinen Eintrag mit der URI gibt oder noch nicht alle erforderlichen Grafikdateien
+	 *                                 vorhanden sind.
+	 */
+	Raetsel loadRaetsel(final String raetselUuid) throws WebApplicationException {
+
+		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
+
+		if (raetsel == null) {
+
+			throw new WebApplicationException(
+				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
+		}
+
+		List<String> fehlendeGrafiken = raetsel.getGrafikInfos().stream().filter(gi -> !gi.isExistiert()).map(gi -> gi.getPfad())
+			.collect(Collectors.toList());
+
+		if (!fehlendeGrafiken.isEmpty()) {
+
+			String message = "Es fehlen noch Grafiken: ";
+
+			for (int i = 0; i < fehlendeGrafiken.size(); i++) {
+
+				message += fehlendeGrafiken.get(i);
+
+				if (i < fehlendeGrafiken.size() - 2) {
+
+					message += ", ";
+				}
+			}
+
+			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
+		}
+		return raetsel;
 	}
 
 	String output2Url(final String filename) {

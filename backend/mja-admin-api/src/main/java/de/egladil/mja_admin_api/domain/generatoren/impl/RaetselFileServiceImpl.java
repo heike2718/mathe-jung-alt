@@ -73,7 +73,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	@Override
 	public String generateLoesungLaTeX(final Raetsel raetsel) {
 
-		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + "_l.tex";
+		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + SUFFIX_LOESUNGEN + ".tex";
 		File file = new File(path);
 
 		String textLoesungsbuchstabe = getTextLoesungsbuchstabe(raetsel.getAntwortvorschlaege());
@@ -91,7 +91,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	@Override
 	public String generateFrageUndLoesung(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + "_x.tex";
+		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + SUFFIX_PDF + ".tex";
 		File file = new File(path);
 
 		String antworten = AntwortvorschlagGeneratorStrategegy.create(layoutAntwortvorschlaege)
@@ -139,14 +139,14 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	@Override
 	public byte[] findImageLoesung(final String schluessel) {
 
-		String path = imagesBaseDir + File.separator + schluessel + "_l.png";
+		String path = imagesBaseDir + File.separator + schluessel + SUFFIX_LOESUNGEN + ".png";
 		return MjaFileUtils.loadBinaryFile(path, false);
 	}
 
 	@Override
 	public byte[] findPDF(final String schluessel) {
 
-		String path = imagesBaseDir + File.separator + schluessel + "_x.pdf";
+		String path = imagesBaseDir + File.separator + schluessel + SUFFIX_PDF + ".pdf";
 		return MjaFileUtils.loadBinaryFile(path, true);
 
 	}
@@ -158,6 +158,21 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		File file = new File(path);
 
 		return file.exists() && file.isFile();
+	}
+
+	@Override
+	public void deleteTemporaryFiles(final String... filenames) {
+
+		for (String filename : filenames) {
+
+			String path = latexBaseDir + File.separator + filename;
+			boolean deleted = new File(path).delete();
+
+			if (!deleted) {
+
+				LOGGER.warn("File {} wurde nicht gelöscht", path);
+			}
+		}
 	}
 
 	void setLatexBaseDir(final String latexBaseDir) {

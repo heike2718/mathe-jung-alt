@@ -176,7 +176,7 @@ public class RaetselResource {
 	@GET
 	@Path("PDF/{raetselUuid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "LEHRER", "PRIVAT", "STANDARD" })
 	public GeneratedPDF raetselPDFGenerieren(@PathParam(
 		value = "raetselUuid") final String raetselUuid, @QueryParam(
 			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {

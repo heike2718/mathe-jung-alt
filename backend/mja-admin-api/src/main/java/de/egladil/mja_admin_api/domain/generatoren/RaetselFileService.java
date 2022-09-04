@@ -12,6 +12,10 @@ import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
  */
 public interface RaetselFileService {
 
+	final String SUFFIX_LOESUNGEN = "_l";
+
+	final String SUFFIX_PDF = "_x";
+
 	/**
 	 * Schreibt die Frage des gegebenen Raetsels in ein LaTeX-File im Filesystem und gibt den Pfad des File zurück. Der Name des
 	 * Files ist der Schlüssel des Raetsels.
@@ -75,4 +79,12 @@ public interface RaetselFileService {
 	 * @return
 	 */
 	boolean existsGrafik(String relativerPfad);
+
+	/**
+	 * Löscht die temporären Files aus dem latex-basedir.
+	 *
+	 * @param filenames
+	 *                  String oder String[]
+	 */
+	void deleteTemporaryFiles(String... filenames);
 }
