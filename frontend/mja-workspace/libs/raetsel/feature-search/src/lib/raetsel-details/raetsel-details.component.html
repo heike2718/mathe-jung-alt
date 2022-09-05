@@ -4,10 +4,9 @@
         <h1>Rätsel Details</h1>
         <p>kein Rätsel ausgewählt</p>
 
-        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-
-            <div fxFlex="0 1 calc(25%-20px)">
-                <button mat-raised-button color="primary" (click)="gotoRaetselUebersicht()">zur Übersicht</button>
+        <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+            <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                    (click)="gotoRaetselUebersicht()">zur Übersicht</button>
             </div>
         </div>
     </ng-container>
@@ -50,46 +49,50 @@
 
             <h2>Metadaten und LaTeX</h2>
 
-            <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
 
-                <div fxFlex="0 1 calc(25%-20px)">
-                    <button mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button>
-                </div>
-                <div fxFlex="0 1 calc(25%-20px)" class="mb-1">
-                    <button mat-raised-button color="primary" [disabled]="generierenDiabled()" (click)="openPrintPNGDialog()">PNG generieren</button>
-                </div>
-                <div fxFlex="0 1 calc(50%-20px)" class="mb-1">
-                    <button mat-raised-button color="primary" [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF generieren</button>
+            <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                        (click)="startEdit()">bearbeiten</button></div>
+                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                        [disabled]="generierenDiabled()" (click)="openPrintPNGDialog()">PNG generieren</button></div>
+                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                        [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF generieren</button></div>
+                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                        (click)="gotoRaetselUebersicht()">zur Übersicht</button>
                 </div>
             </div>
 
-            <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-
-                <div fxFlex="0 1 calc(10%-20px)">
+            <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+                <div fxLayoutAlign="left center" fxFlex="20">
                     <mat-label>ID:</mat-label>
                 </div>
-                <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.id}}</div>
+                <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.id}}</div>
+            </div>
 
-                <div fxFlex="0 1 calc(10%-20px)">
+            <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+                <div fxLayoutAlign="left center" fxFlex="20">
                     <mat-label>Name:</mat-label>
                 </div>
-                <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.name}}</div>
+                <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.name}}</div>
+            </div>
 
-                <div fxFlex="0 1 calc(10%-20px)">
+            <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+                <div fxLayoutAlign="left center" fxFlex="20">
                     <mat-label>Quelle:</mat-label>
                 </div>
-                <div *ngIf="quellenFacade.selectedQuelle$ | async as raetselQuelle" fxFlex="0 1 calc(90%-20px)"
-                    class="mb-1">{{raetselQuelle.name}}
-                    <span *ngIf="isEigenesRaetsel()">
+                <div fxLayoutAlign="left center" fxFlex="80"
+                    *ngIf="quellenFacade.selectedQuelle$ | async as raetselQuelle">{{raetselQuelle.name}}<span
+                        class="ml-1" *ngIf="isEigenesRaetsel()">
                         <mat-chip color="accent">eigenes Rätsel</mat-chip>
                     </span>
                 </div>
+            </div>
 
-                <div fxFlex="0 1 calc(10%-20px)">
+            <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+                <div fxLayoutAlign="left center" fxFlex="20">
                     <mat-label>Status:</mat-label>
                 </div>
-                <div fxFlex="0 1 calc(90%-20px)" class="mb-1">{{raetsel.status}}</div>
-
+                <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.status}}</div>
             </div>
 
             <mat-accordion>

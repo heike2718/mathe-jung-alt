@@ -87,8 +87,9 @@
                 <div class="mb-2">
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Frage</mat-label>
-                        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="10"
-                            placeholder="Frage" formControlName="frage" #frageInput></textarea>
+                        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" [cdkAutosizeMinRows]="5"
+                            [cdkAutosizeMaxRows]="15" placeholder="Frage" formControlName="frage"
+                            #frageInput></textarea>
                         <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
                         <mat-error *ngIf="raetselDataError('frage', 'required')">Frage ist Pflicht</mat-error>
                     </mat-form-field>
@@ -97,8 +98,9 @@
                 <div class="mb-2">
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Lösung</mat-label>
-                        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="10"
-                            placeholder="Lösung" formControlName="loesung" #loesungInput></textarea>
+                        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" [cdkAutosizeMinRows]="5"
+                            [cdkAutosizeMaxRows]="15" placeholder="Lösung" formControlName="loesung"
+                            #loesungInput></textarea>
                         <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
                     </mat-form-field>
                 </div>
@@ -136,24 +138,19 @@
                 korrekt sein.</mat-error>
         </form>
 
-        
-        <div *ngIf="selectDeskriptorenComponentModel">            
+
+        <div *ngIf="selectDeskriptorenComponentModel">
             <mja-select-items [model]="selectDeskriptorenComponentModel"
                 (selectedItemsChanged)="onSelectedDesktiptorenChanged($event)"></mja-select-items>
         </div>
 
-        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-
-            <div fxFlex="0 1 calc(20%-20px)">
-                <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
-                    (click)="submit()">speichern</button>
-            </div>
-            <div fxFlex="0 1 calc(20%-20px)">
-                <button mat-raised-button color="primary" [disabled]="generierenDiabled()"
-                    (click)="openPrintPNGDialog()">PNG generieren</button>
-            </div>
-            <div fxFlex="0 1 calc(20%-20px)">
-                <button mat-raised-button color="primary" (click)="cancelEdit()">zurück zu Details</button>
+        <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+            <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                    [disabled]="!form.valid || antwortvorschlaegeErrors()" (click)="submit()">speichern</button></div>
+            <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                    [disabled]="generierenDiabled()" (click)="openPrintPNGDialog()">PNG generieren</button></div>
+            <div fxLayoutAlign="left center" fxFlex="20"><button  fxFlexFill mat-raised-button color="primary"
+                    (click)="cancelEdit()">zurück zu Details</button>
             </div>
         </div>
 

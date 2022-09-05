@@ -1,5 +1,5 @@
 <div *ngIf="raetsel.imageFrage !== null" class="bordered bg-white">
-    <img src="data:image/png;base64,{{raetsel.imageFrage}}" />
+    <img src="data:image/png;base64,{{raetsel.imageFrage}}" class="mja-image" />
 </div>
 
 <div *ngIf="raetsel.imageLoesung !== null" class="mt-1">
@@ -12,7 +12,7 @@
             </mat-expansion-panel-header>
 
             <div class="bordered bg-white">
-                <img src="data:image/png;base64,{{raetsel.imageLoesung}}" />
+                <img src="data:image/png;base64,{{raetsel.imageLoesung}}" class="mja-image" />
             </div>
         </mat-expansion-panel>
 
