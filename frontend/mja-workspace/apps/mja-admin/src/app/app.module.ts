@@ -1,6 +1,6 @@
 import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { SharedUiComponentsModule } from '@mja-workspace/shared/ui-components';
+import { MaterialModule, SharedUiComponentsModule } from '@mja-workspace/shared/ui-components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { EffectsModule } from '@ngrx/effects';
@@ -12,8 +12,10 @@ import { NotAuthorizedComponent } from './not-authorized/not-authorized.componen
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedConfigurationModule } from '@mja-workspace/shared/util-configuration';
-import { AuthInterceptor, SharedAuthDomainModule } from '@mja-workspace/shared/auth/domain';
-import { NavigationComponent } from './navigation/navigation.component';
+import {
+  AuthInterceptor,
+  SharedAuthDomainModule,
+} from '@mja-workspace/shared/auth/domain';
 import { LayoutComponent } from './layout/layout.component';
 import { RaetselFeatureSearchModule } from '@mja-workspace/raetsel/feature-search';
 import { SuchfilterDomainModule } from '@mja-workspace/suchfilter/domain';
@@ -24,21 +26,27 @@ import { QuellenDomainModule } from '@mja-workspace/quellen/domain';
 import { QuellenFeatureSearchModule } from '@mja-workspace/quellen/feature-search';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreDevModules } from './store-config/store-devtools';
+import { SidenavComponent } from './navigation/sidenav/sidenav.component';
+import { HeaderComponent } from './navigation/header/header.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotAuthorizedComponent,
     HomeComponent,
-    NavigationComponent,
     LayoutComponent,
     NotFoundComponent,
+    HeaderComponent,
+    SidenavComponent,
   ],
   imports: [
     RouterModule,
-    AppRoutingModule,   
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
+    MaterialModule,
+    FlexLayoutModule,
     SharedAuthDomainModule,
     SharedUiComponentsModule,
     SuchfilterDomainModule,
@@ -64,7 +72,7 @@ import { StoreDevModules } from './store-config/store-devtools';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
+      multi: true,
     },
     // { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
   ],

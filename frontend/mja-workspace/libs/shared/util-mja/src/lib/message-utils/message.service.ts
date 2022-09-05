@@ -39,13 +39,14 @@ export class MessageService {
 
     private add(message: Message) {
         this.#messageSubject$.next(message);
-        this.scrollToTop();
-
-    }
+        // this.scrollToTop();
+    }   
 
     private scrollToTop() {
+        let document = this.document;
         (function smoothscroll() {
             var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            console.log('currentScroll=' + currentScroll);
             if (currentScroll > 0) {
                 window.requestAnimationFrame(smoothscroll);
                 window.scrollTo(0, currentScroll - (currentScroll / 8));

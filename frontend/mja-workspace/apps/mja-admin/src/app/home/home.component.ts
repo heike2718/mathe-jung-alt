@@ -19,4 +19,12 @@ export class HomeComponent implements OnInit {
     this.menuOpen = $event;
 
   }
+
+  public login(): void {
+    this.authFacade.login();
+  }
+
+  public logout(): void {
+    this.authFacade.logout();
+  }
 }

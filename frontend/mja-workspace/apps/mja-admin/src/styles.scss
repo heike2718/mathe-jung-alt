@@ -20,8 +20,7 @@ $palette: (
   A200: #5798ff,
   A400: #2479ff,
   A700: #0a69ff,
-  contrast: (
-    50: #000000,
+  contrast: (50: #000000,
     100: #000000,
     200: #000000,
     300: #000000,
@@ -34,38 +33,37 @@ $palette: (
     A100: #000000,
     A200: #000000,
     A400: #000000,
-    A700: #000000
-  ),
+    A700: #000000),
 );
 
 $main-color: mat-color($palette, 500);
 
-/*
-
-*/
-
 $mja-admin-primary: mat-palette($palette);
 $mja-admin-accent: mat-palette($palette, A200, A100, A400);
-$mja-admin-theme: mat-light-theme(
-    $mja-admin-primary,
-    $mja-admin-accent
-);
+$mja-admin-theme: mat-light-theme($mja-admin-primary,
+    $mja-admin-accent);
 
 @include angular-material-theme($mja-admin-theme);
 
+html,
 body {
   margin: 0;
-  margin-bottom: 10px;
-  /* font-family: Roboto, "Helvetica Neue", sans-serif; */
-  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+}
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
   font-size: 1.0rem;
 }
 
-a, .link {
+a,
+.link {
   color: #255783;
 }
 
-mat-checkbox + mat-checkbox, mat-radio-button + mat-radio-button {
+mat-checkbox+mat-checkbox,
+mat-radio-button+mat-radio-button {
   margin-left: 1.5em;
 }
 
@@ -149,5 +147,3 @@ th.mat-sort-header-sorted {
   font-size: small;
   color: red;
 }
-
-

@@ -1,58 +1,6 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
 
-        <button mat-icon-button (click)="drawer.toggle();">
-            <mat-icon routerLinkActive="active-icon">menu</mat-icon>
-        </button>
-        <span>{{title}}</span>
-
-        <span class="toolbar-spacer"></span>
-
-        <ng-container *ngIf="authFacade.isLoggedOut$ | async">
-            <a (click)="login()" data-testid="btn-log-in" mat-raised-button>einloggen</a>
-        </ng-container>
-        <ng-container *ngIf="authFacade.isLoggedIn$ | async">
-            <ng-container *ngIf="authFacade.getUser$ | async as user">
-                <div *ngIf="isHandset === false && user !== undefined" class="mr-1">
-                    Moin, {{user.fullName}} <span *ngIf="authFacade.isAdmin$ | async">(ADMIN)</span>
-                </div>
-            </ng-container>
-            <a (click)="logout()" data-testid="btn-log-out" mat-raised-button>ausloggen</a>
-        </ng-container>
-
-    </mat-toolbar-row>
-</mat-toolbar>
-
-<mja-message></mja-message>
-
-<mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #drawer class="sidenav" [attr.role]="isHandset ? 'dialog' : 'navigation'"
-        [mode]="isHandset ? 'over' : 'side'" [opened]="isMenuOpen">
-
-        <mat-nav-list>
-            <a [routerLink]="['/']" mat-list-item href="#" routerLinkActive="active">
-                <mat-icon routerLinkActive="active-icon">home</mat-icon><span class="ml-2"> Startseite </span>
-            </a>
-            <a *ngIf="authFacade.isAdmin$| async" [routerLink]="['/quellen/uebersicht']" mat-list-item href="#"
-                routerLinkActive="active">
-                <mat-icon routerLinkActive="active-icon">newspaper</mat-icon><span class="ml-2"> Quellen</span>
-            </a>
-            <!--
-            <a *ngIf="authFacade.isLoggedIn$ | async" [routerLink]="['/raetsel/uebersicht']" mat-list-item href="#" routerLinkActive="active">
-                <mat-icon routerLinkActive="active-icon">quiz</mat-icon><span class="ml-2"> Rätsel</span>
-            </a>
-            -->
-            <a *ngIf="authFacade.isLoggedIn$ | async" [routerLink]="['/raetsel/uebersicht']" mat-list-item href="#"
-                routerLinkActive="active">
-                <mat-icon routerLinkActive="active-icon">folder</mat-icon><span class="ml-2"> Rätsel</span>
-            </a>
-        </mat-nav-list>
-    </mat-sidenav>
-
-    <mat-sidenav-content [ngStyle]="{ 'margin-left.px': contentMargin }">
-        <div class="main content">
-            <mja-loading-indicator></mja-loading-indicator>
-            <router-outlet #outlet="outlet"></router-outlet>
-        </div>
-    </mat-sidenav-content>
-</mat-sidenav-container>
+<div fxLayout="row wrap" fxLayoutAlign="center center" class="layout-wrapper"> 
+    <div fxFlex="80%" fxFlex.lt-md="100%" class="flex-wrapper"> 
+        <ng-content></ng-content> 
+    </div> 
+</div>
