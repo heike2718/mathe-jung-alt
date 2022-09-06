@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_admin_api.domain.raetsel.DomainEntityStatus;
+import de.egladil.mja_admin_api.domain.DomainEntityStatus;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 
 /**

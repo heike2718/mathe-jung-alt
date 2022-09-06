@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_admin_api.domain.AbstractDomainEntity;
+import de.egladil.mja_admin_api.domain.DomainEntityStatus;
 import de.egladil.mja_admin_api.domain.raetsel.dto.GrafikInfo;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;

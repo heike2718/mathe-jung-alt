@@ -8,13 +8,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -23,29 +19,17 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.egladil.mja_admin_api.domain.DomainEntityStatus;
+import de.egladil.mja_admin_api.domain.sammlungen.Referenztyp;
+import de.egladil.mja_admin_api.domain.sammlungen.Schwierigkeitsgrad;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 /**
- * PersistentesRaetsel
+ * PersistenteRaetselsammlung
  */
 @Entity
-@Table(name = "RAETSEL")
-@NamedQueries({
-	@NamedQuery(
-		name = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN",
-		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren order by r.schluessel"),
-	@NamedQuery(
-		name = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC",
-		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren order by r.schluessel desc")
-})
-public class PersistentesRaetsel extends PanacheEntityBase implements PersistenteMjaEntity {
-
-	public static final String FIND_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN";
-
-	public static final String FIND_WITH_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC";
+@Table(name = "RAETSELSAMMLUNGEN")
+public class PersistenteRaetselsammlung extends PanacheEntityBase implements PersistenteMjaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
@@ -53,41 +37,26 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 		name = "uuid_generator", strategy = "de.egladil.mja_admin_api.infrastructure.persistence.entities.UuidGenerator")
 	@NotNull
 	@Size(min = 1, max = 40)
-	@Column(name = "UUID")
+	@Column
 	public String uuid;
 
 	@Column
-	@NotNull
-	public String schluessel;
-
-	@Column
-	@NotNull
 	public String name;
 
 	@Column
-	@NotNull
-	public String quelle;
+	public Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@Column
-	public String deskriptoren;
+	public Referenztyp referenztyp;
+
+	@Column(name = "REFERENZ")
+	public String referenz;
 
 	@Column
-	public String kommentar;
-
-	@Column
-	@Enumerated(EnumType.STRING)
-	@NotNull
 	public DomainEntityStatus status;
 
 	@Column
-	@NotNull
-	public String frage;
-
-	@Column
-	public String loesung;
-
-	@Column
-	public String antwortvorschlaege;
+	public String kommentar;
 
 	@Column(name = "GEAENDERT_DURCH")
 	@NotNull
@@ -98,7 +67,6 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 
 	@Version
 	@Column(name = "VERSION")
-	@JsonIgnore
 	public int version;
 
 	@Transient
@@ -114,5 +82,4 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 
 		this.importierteUuid = importierteUuid;
 	}
-
 }

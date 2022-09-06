@@ -14,14 +14,6 @@ import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
  */
 public interface RaetselService {
 
-	// /**
-	// * Ermittelt die Anzahl der RAETSEL, auf die der gegebene Suchfilter passt.
-	// *
-	// * @param suchfilter
-	// * @return long
-	// */
-	// long zaehleRaetselMitSuchfilter(Suchfilter suchfilter);
-
 	/**
 	 * Sucht alle Rätsel, die zum Suchfilter passen.
 	 *
@@ -65,5 +57,4 @@ public interface RaetselService {
 	 * @return    Raetsel oder null.
 	 */
 	Raetsel getRaetselZuId(String id);
-
 }

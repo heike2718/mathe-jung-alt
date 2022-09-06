@@ -70,11 +70,11 @@ public class RaetselServiceImpl implements RaetselService {
 
 		switch (suchfilterVariante) {
 
-		case COMPLETE -> anzahlGesamt = raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(),
-			suchfilter.getDeskriptorenIds());
-		case DESKRIPTOREN -> anzahlGesamt = raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
-		case VOLLTEXT -> anzahlGesamt = raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
-		default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
+			case COMPLETE -> anzahlGesamt = raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(),
+				suchfilter.getDeskriptorenIds());
+			case DESKRIPTOREN -> anzahlGesamt = raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
+			case VOLLTEXT -> anzahlGesamt = raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
+			default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
 		}
 
 		if (anzahlGesamt == 0) {
@@ -84,14 +84,16 @@ public class RaetselServiceImpl implements RaetselService {
 
 		switch (suchfilterVariante) {
 
-		case COMPLETE -> trefferliste = raetselDao.sucheRaetselComplete(suchfilter.getSuchstring(), suchfilter.getDeskriptorenIds(),
-			limit,
-			offset, sortDirection);
-		case DESKRIPTOREN -> trefferliste = raetselDao.sucheMitDeskriptoren(suchfilter.getDeskriptorenIds(), limit, offset,
-			sortDirection);
-		case VOLLTEXT -> trefferliste = raetselDao.sucheRaetselVolltext(suchfilter.getSuchstring(), limit, offset, sortDirection);
+			case COMPLETE -> trefferliste = raetselDao.sucheRaetselComplete(suchfilter.getSuchstring(),
+				suchfilter.getDeskriptorenIds(),
+				limit,
+				offset, sortDirection);
+			case DESKRIPTOREN -> trefferliste = raetselDao.sucheMitDeskriptoren(suchfilter.getDeskriptorenIds(), limit, offset,
+				sortDirection);
+			case VOLLTEXT -> trefferliste = raetselDao.sucheRaetselVolltext(suchfilter.getSuchstring(), limit, offset,
+				sortDirection);
 
-		default -> new IllegalArgumentException("Unexpected value: " + suchfilterVariante);
+			default -> new IllegalArgumentException("Unexpected value: " + suchfilterVariante);
 		}
 
 		treffer = trefferliste.stream().map(pr -> mapToSucheTrefferFromDB(pr)).toList();

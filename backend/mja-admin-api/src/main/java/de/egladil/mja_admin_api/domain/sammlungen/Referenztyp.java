@@ -2,14 +2,13 @@
 // Project: mja-admin-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_admin_api.domain.raetsel;
+package de.egladil.mja_admin_api.domain.sammlungen;
 
 /**
- * DomainEntityStatus
+ * Referenztyp
  */
-public enum DomainEntityStatus {
+public enum Referenztyp {
 
-	ERFASST,
-	FREIGEGEBEN;
-
+	MINIKAENGURU,
+	SERIE;
 }
