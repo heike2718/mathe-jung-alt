@@ -13,9 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_admin_api.domain.AbstractDomainEntity;
 import de.egladil.mja_admin_api.domain.raetsel.dto.GrafikInfo;
-import de.egladil.mja_admin_api.domain.semantik.AggregateRoot;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
+import de.egladil.web.mja_shared.semantik.AggregateRoot;
 
 /**
  * Raetsel

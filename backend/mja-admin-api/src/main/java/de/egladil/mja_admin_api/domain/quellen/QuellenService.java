@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
-import de.egladil.mja_admin_api.domain.semantik.DomainService;
+import de.egladil.web.mja_shared.semantik.DomainService;
 
 /**
  * QuellenService
