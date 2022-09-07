@@ -18,15 +18,11 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_admin_api.domain.dto.SortDirection;
 import de.egladil.mja_admin_api.domain.dto.Suchfilter;
 import de.egladil.mja_admin_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselFileService;
-import de.egladil.mja_admin_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
 import de.egladil.mja_admin_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_admin_api.domain.raetsel.RaetselService;
@@ -34,10 +30,10 @@ import de.egladil.mja_admin_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_admin_api.domain.raetsel.dto.GrafikInfo;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTrefferItem;
+import de.egladil.mja_admin_api.domain.utils.AntwortvorschlaegeMapper;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import de.egladil.web.mja_auth.dto.MessagePayload;
-import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
 
 /**
  * RaetselServiceImpl
@@ -214,7 +210,7 @@ public class RaetselServiceImpl implements RaetselService {
 	Raetsel mapFromDB(final PersistentesRaetsel raetselDB) {
 
 		Raetsel result = new Raetsel(raetselDB.uuid)
-			.withAntwortvorschlaege(deserializeAntwortvorschlaege(raetselDB.antwortvorschlaege))
+			.withAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(raetselDB.antwortvorschlaege))
 			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
 			.withFrage(raetselDB.frage)
 			.withKommentar(raetselDB.kommentar)
@@ -239,19 +235,4 @@ public class RaetselServiceImpl implements RaetselService {
 		return result;
 	}
 
-	Antwortvorschlag[] deserializeAntwortvorschlaege(final String json) {
-
-		if (json == null) {
-
-			return new Antwortvorschlag[0];
-		}
-
-		try {
-
-			return new ObjectMapper().readValue(json, Antwortvorschlag[].class);
-		} catch (JsonProcessingException e) {
-
-			throw new MjaRuntimeException("konnte antwortvorschlaege nicht deserialisieren: " + e.getMessage(), e);
-		}
-	}
 }

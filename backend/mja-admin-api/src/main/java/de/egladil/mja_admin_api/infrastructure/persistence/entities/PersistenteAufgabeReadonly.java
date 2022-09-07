@@ -35,20 +35,24 @@ public class PersistenteAufgabeReadonly extends PanacheEntityBase {
 	public Quellenart quellenart;
 
 	@Column(name = "PERSON")
-	private String person;
+	public String person;
 
 	@Column(name = "MEDIUM_TITEL")
-	private String mediumTitel;
+	public String mediumTitel;
 
 	@Column(name = "JAHRGANG")
-	private String jahrgang;
+	public String jahrgang;
 
 	@Column(name = "AUSGABE")
-	private String ausgabe;
+	public String ausgabe;
 
 	@Column(name = "SEITE")
-	private String seite;
+	public String seite;
 
 	@Column(name = "HW")
-	private boolean hw;
+	public boolean hw;
+
+	@Column(name = "DESKRIPTOREN")
+	public String deskriptoren;
+
 }

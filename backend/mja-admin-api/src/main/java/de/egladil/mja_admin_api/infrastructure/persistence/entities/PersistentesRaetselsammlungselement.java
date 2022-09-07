@@ -28,12 +28,12 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 @Table(name = "RAETSELSAMMLUNGSELEMENTE")
 @NamedQueries({
 	@NamedQuery(
-		name = "PersistentesRaetselsammlungselement.FIND_BY_SAMMLUNG",
+		name = "PersistentesRaetselsammlungselement.LOAD_BY_SAMMLUNG",
 		query = "select e from PersistentesRaetselsammlungselement e where e.raetselsammlungID = :raetselsammlungID")
 })
 public class PersistentesRaetselsammlungselement extends PanacheEntityBase implements PersistenteMjaEntity {
 
-	public static final String FIND_BY_SAMMLUNG = "PersistentesRaetselsammlungselement.FIND_BY_SAMMLUNG";
+	public static final String LOAD_BY_SAMMLUNG = "PersistentesRaetselsammlungselement.LOAD_BY_SAMMLUNG";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
@@ -45,13 +45,13 @@ public class PersistentesRaetselsammlungselement extends PanacheEntityBase imple
 	public String uuid;
 
 	@Column
-	private String nummer;
+	public String nummer;
 
 	@Column(name = "SAMMLUNG")
-	private String raetselsammlungID;
+	public String raetselsammlungID;
 
 	@Column(name = "RAETSEL")
-	private String raetselID;
+	public String raetselID;
 
 	@Version
 	@Column(name = "VERSION")

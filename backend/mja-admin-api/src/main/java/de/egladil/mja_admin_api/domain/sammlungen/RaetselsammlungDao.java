@@ -55,7 +55,7 @@ public interface RaetselsammlungDao {
 	 * @param  referenztyp
 	 * @param  referenz
 	 * @param  schwierigkeitsgrad
-	 * @return
+	 * @return                    PersistenteRaetselsammlung oder null
 	 */
 	PersistenteRaetselsammlung findByUniqueKey(Referenztyp referenztyp, String referenz, Schwierigkeitsgrad schwierigkeitsgrad);
 
@@ -73,7 +73,7 @@ public interface RaetselsammlungDao {
 	 * @param  raetselsammlungID
 	 * @return                   List
 	 */
-	List<PersistentesRaetselsammlungselement> findElementeZuRaetselsammlung(String raetselsammlungID);
+	List<PersistentesRaetselsammlungselement> loadElementeZuRaetselsammlung(String raetselsammlungID);
 
 	/**
 	 * Läd die Aufagben mit den gegebenen UUIDs

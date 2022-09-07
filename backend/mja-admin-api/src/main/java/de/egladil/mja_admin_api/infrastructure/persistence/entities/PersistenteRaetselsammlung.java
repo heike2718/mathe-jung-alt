@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -29,7 +31,14 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
  */
 @Entity
 @Table(name = "RAETSELSAMMLUNGEN")
+@NamedQueries({
+	@NamedQuery(
+		name = "PersistenteRaetselsammlung.FIND_BY_UNIQUE_KEY",
+		query = "select s from PersistenteRaetselsammlung s where s.referenztyp = :referenztyp and s. referenz = :referenz and s.schwierigkeitsgrad = :schwierigkeitsgrad")
+})
 public class PersistenteRaetselsammlung extends PanacheEntityBase implements PersistenteMjaEntity {
+
+	public static final String FIND_BY_UNIQUE_KEY = "PersistenteRaetselsammlung.FIND_BY_UNIQUE_KEY";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")

@@ -12,6 +12,8 @@ import javax.persistence.EntityManager;
 
 import org.hibernate.MultiIdentifierLoadAccess;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_admin_api.domain.DomainEntityStatus;
 import de.egladil.mja_admin_api.domain.dto.SortDirection;
@@ -21,12 +23,15 @@ import de.egladil.mja_admin_api.domain.sammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteRaetselsammlung;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetselsammlungselement;
+import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
 
 /**
  * RaetselsammlungDaoImpl
  */
 @ApplicationScoped
 public class RaetselsammlungDaoImpl implements RaetselsammlungDao {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselsammlungDaoImpl.class);
 
 	@Inject
 	EntityManager entityManager;
@@ -46,7 +51,21 @@ public class RaetselsammlungDaoImpl implements RaetselsammlungDao {
 	@Override
 	public PersistenteRaetselsammlung findByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
 
-		return null;
+		List<PersistenteRaetselsammlung> trefferliste = entityManager
+			.createNamedQuery(PersistenteRaetselsammlung.FIND_BY_UNIQUE_KEY, PersistenteRaetselsammlung.class)
+			.setParameter("schwierigkeitsgrad", schwierigkeitsgrad)
+			.setParameter("referenztyp", referenztyp)
+			.setParameter("referenz", referenz)
+			.getResultList();
+
+		if (trefferliste.size() > 1) {
+
+			LOGGER.error("{} Treffer zu einem eigentlich eindeutigen key referenzty={}, referenz={}, schwierigkeitsgrad={}",
+				trefferliste.size(), referenztyp, referenz, schwierigkeitsgrad);
+			throw new MjaRuntimeException("mehr als 1 Treffer zu einem eigentlich eindeutigen key");
+		}
+
+		return trefferliste.isEmpty() ? null : trefferliste.get(0);
 	}
 
 	@Override
@@ -68,10 +87,10 @@ public class RaetselsammlungDaoImpl implements RaetselsammlungDao {
 	}
 
 	@Override
-	public List<PersistentesRaetselsammlungselement> findElementeZuRaetselsammlung(final String raetselsammlungID) {
+	public List<PersistentesRaetselsammlungselement> loadElementeZuRaetselsammlung(final String raetselsammlungID) {
 
 		return entityManager
-			.createNamedQuery(PersistentesRaetselsammlungselement.FIND_BY_SAMMLUNG, PersistentesRaetselsammlungselement.class)
+			.createNamedQuery(PersistentesRaetselsammlungselement.LOAD_BY_SAMMLUNG, PersistentesRaetselsammlungselement.class)
 			.setParameter("raetselsammlungID", raetselsammlungID).getResultList();
 	}
 
