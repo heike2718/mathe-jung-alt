@@ -33,10 +33,15 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 @Table(name = "RAETSELSAMMLUNGEN")
 @NamedQueries({
 	@NamedQuery(
+		name = "PersistenteRaetselsammlung.FIND_BY_NAME",
+		query = "select s from PersistenteRaetselsammlung s where s.name = :name"),
+	@NamedQuery(
 		name = "PersistenteRaetselsammlung.FIND_BY_UNIQUE_KEY",
 		query = "select s from PersistenteRaetselsammlung s where s.referenztyp = :referenztyp and s. referenz = :referenz and s.schwierigkeitsgrad = :schwierigkeitsgrad")
 })
 public class PersistenteRaetselsammlung extends PanacheEntityBase implements PersistenteMjaEntity {
+
+	public static final String FIND_BY_NAME = "PersistenteRaetselsammlung.FIND_BY_NAME";
 
 	public static final String FIND_BY_UNIQUE_KEY = "PersistenteRaetselsammlung.FIND_BY_UNIQUE_KEY";
 

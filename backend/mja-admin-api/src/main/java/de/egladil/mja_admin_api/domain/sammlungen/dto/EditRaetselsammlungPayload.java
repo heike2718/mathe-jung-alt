@@ -5,6 +5,7 @@
 package de.egladil.mja_admin_api.domain.sammlungen.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -34,13 +35,17 @@ public class EditRaetselsammlungPayload {
 	private String kommentar;
 
 	@JsonProperty
+	@NotNull
 	private Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@JsonProperty
+	@NotNull
 	private Referenztyp referenztyp;
 
 	@JsonProperty
 	@Pattern(regexp = "^[\\w äöüß]{1,20}$")
+	@Size(min = 1, max = 36)
+	@NotBlank
 	private String referenz;
 
 	@JsonProperty
@@ -79,5 +84,40 @@ public class EditRaetselsammlungPayload {
 	public DomainEntityStatus getStatus() {
 
 		return status;
+	}
+
+	void setId(final String id) {
+
+		this.id = id;
+	}
+
+	void setName(final String name) {
+
+		this.name = name;
+	}
+
+	void setKommentar(final String kommentar) {
+
+		this.kommentar = kommentar;
+	}
+
+	void setSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
+
+		this.schwierigkeitsgrad = schwierigkeitsgrad;
+	}
+
+	void setReferenztyp(final Referenztyp referenztyp) {
+
+		this.referenztyp = referenztyp;
+	}
+
+	void setReferenz(final String referenz) {
+
+		this.referenz = referenz;
+	}
+
+	void setStatus(final DomainEntityStatus status) {
+
+		this.status = status;
 	}
 }

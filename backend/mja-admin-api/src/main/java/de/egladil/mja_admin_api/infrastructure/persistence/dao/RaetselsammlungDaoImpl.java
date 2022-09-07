@@ -69,6 +69,23 @@ public class RaetselsammlungDaoImpl implements RaetselsammlungDao {
 	}
 
 	@Override
+	public PersistenteRaetselsammlung findByName(final String name) {
+
+		List<PersistenteRaetselsammlung> trefferliste = entityManager
+			.createNamedQuery(PersistenteRaetselsammlung.FIND_BY_NAME, PersistenteRaetselsammlung.class).setParameter("name", name)
+			.getResultList();
+
+		if (trefferliste.size() > 1) {
+
+			LOGGER.error("{} Treffer mit dem Namen name={}",
+				trefferliste.size(), name);
+			throw new MjaRuntimeException("mehr als 1 Treffer mit diesem Namen");
+		}
+
+		return trefferliste.isEmpty() ? null : trefferliste.get(0);
+	}
+
+	@Override
 	public List<PersistenteAufgabeReadonly> loadAufgabenByRaetselIds(final List<String> uuids) {
 
 		Session session = entityManager.unwrap(Session.class);
@@ -92,6 +109,19 @@ public class RaetselsammlungDaoImpl implements RaetselsammlungDao {
 		return entityManager
 			.createNamedQuery(PersistentesRaetselsammlungselement.LOAD_BY_SAMMLUNG, PersistentesRaetselsammlungselement.class)
 			.setParameter("raetselsammlungID", raetselsammlungID).getResultList();
+	}
+
+	@Override
+	public PersistenteRaetselsammlung saveRaetselsammlung(final PersistenteRaetselsammlung sammlung) {
+
+		if (sammlung.isPersistent()) {
+
+			return entityManager.merge(sammlung);
+		}
+
+		entityManager.persist(sammlung);
+
+		return sammlung;
 	}
 
 }

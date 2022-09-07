@@ -13,11 +13,11 @@ import {
   SuchfilterQueryParameterMapper,
   PageDefinition
 } from '@mja-workspace/suchfilter/domain';
-import { EditRaetselPayload, GeneratedImages, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
-import { LoadingIndicatorService } from '@mja-workspace/shared/util-mja';
+import { EditRaetselPayload, GeneratedImages, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
+import { LoadingIndicatorService, SafeHttpService } from '@mja-workspace/shared/util-mja';
 
 @Injectable({ providedIn: 'root' })
-export class RaetselDataService {
+export class RaetselHttpService {
 
   #url = this.configuration.baseUrl + '/raetsel/v1';
   #csrfHeaderName = 'X-XSRF-TOKEN';

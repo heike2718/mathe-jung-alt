@@ -7,7 +7,7 @@ import { QUERY_PARAM_DESKRIPTOREN, QUERY_PARAM_SUCHSTRING, QUERY_PARAM_TYPE_DESK
 import { isAdmin, User } from '@mja-workspace/shared/auth/domain';
 
 @Injectable({ providedIn: 'root' })
-export class QuelleDataService {
+export class QuellenHttpService {
 
   #url = this.configuration.baseUrl + '/quellen/v1';
 

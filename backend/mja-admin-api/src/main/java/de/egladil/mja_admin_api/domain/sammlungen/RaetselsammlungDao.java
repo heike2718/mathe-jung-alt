@@ -35,8 +35,7 @@ public interface RaetselsammlungDao {
 
 	/**
 	 * Sucht die Rätselsammlungen die den Filterkriterien entsprechen, sortiert nach name. Die Parameter können null sein. Bei name
-	 * und kommentar wird mit
-	 * like gesucht, alle anderen mit equal.
+	 * und kommentar wird mit like gesucht, alle anderen mit equal.
 	 *
 	 * @param  name
 	 * @param  kommentar
@@ -58,6 +57,12 @@ public interface RaetselsammlungDao {
 	 * @return                    PersistenteRaetselsammlung oder null
 	 */
 	PersistenteRaetselsammlung findByUniqueKey(Referenztyp referenztyp, String referenz, Schwierigkeitsgrad schwierigkeitsgrad);
+
+	/**
+	 * @param  name
+	 * @return      PersistenteRaetselsammlung oder null
+	 */
+	PersistenteRaetselsammlung findByName(String name);
 
 	/**
 	 * Zählt die Elemente der Rätselsammlung.
@@ -82,4 +87,12 @@ public interface RaetselsammlungDao {
 	 * @return
 	 */
 	List<PersistenteAufgabeReadonly> loadAufgabenByRaetselIds(List<String> uuids);
+
+	/**
+	 * Speichert die gegebene Rätselsammlung und gibt die gespeicherte Entity zurück.
+	 *
+	 * @param  sammlung
+	 * @return          PersistenteRaetselsammlung
+	 */
+	PersistenteRaetselsammlung saveRaetselsammlung(PersistenteRaetselsammlung sammlung);
 }

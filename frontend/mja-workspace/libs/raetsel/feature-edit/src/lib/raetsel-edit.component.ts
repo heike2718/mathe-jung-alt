@@ -3,10 +3,18 @@ import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } fr
 import { MatDialog } from '@angular/material/dialog';
 import { GrafikFacade } from '@mja-workspace/grafik/domain';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
-import { Antwortvorschlag, anzeigeAntwortvorschlaegeSelectInput, EditRaetselPayload, GrafikInfo, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselDetailsContent, RaetselFacade, STATUS } from '@mja-workspace/raetsel/domain';
-import { JaNeinDialogComponent, JaNeinDialogData, SelectItemsCompomentModel, SelectItemsComponent } from '@mja-workspace/shared/ui-components';
+import { Antwortvorschlag,
+  anzeigeAntwortvorschlaegeSelectInput,
+  EditRaetselPayload,
+  GrafikInfo,
+  LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
+  RaetselDetails,
+  RaetselDetailsContent,
+  RaetselFacade 
+} from '@mja-workspace/raetsel/domain';
+import { JaNeinDialogComponent, JaNeinDialogData, SelectItemsCompomentModel } from '@mja-workspace/shared/ui-components';
 import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
-import { Message, SelectableItem } from '@mja-workspace/shared/util-mja';
+import { Message, SelectableItem, STATUS } from '@mja-workspace/shared/util-mja';
 import { Deskriptor, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { combineLatest, Subscription } from 'rxjs';
 

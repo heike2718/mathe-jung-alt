@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Message, MessageService, noopAction, SafeNgrxService } from "@mja-workspace/shared/util-mja";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { map, tap } from 'rxjs/operators';
-import { GrafikDataService } from "../infrastructure/grafik.data.service";
+import { GrafikHttpService } from "../infrastructure/grafik.http.service";
 import * as GrafikActions from './grafik.actions';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class GrafikEffects {
 
     constructor(
         private actions$: Actions,
-        private grafikDataService: GrafikDataService,
+        private grafikHttpService: GrafikHttpService,
         private messageService: MessageService,
         private ngrxService: SafeNgrxService) { }
 
@@ -18,7 +18,7 @@ export class GrafikEffects {
         this.actions$.pipe(
             ofType(GrafikActions.pruefeGrafik),
             this.ngrxService.safeSwitchMap((action) =>
-                this.grafikDataService.loadGrafik(action.pfad).pipe(
+                this.grafikHttpService.loadGrafik(action.pfad).pipe(
                     map((grafikSearchResult) =>
                         GrafikActions.grafikGeprueft({ grafikSearchResult })
                     )

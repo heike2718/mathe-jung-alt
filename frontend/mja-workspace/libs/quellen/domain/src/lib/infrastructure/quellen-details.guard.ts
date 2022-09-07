@@ -4,7 +4,7 @@ import { map, Observable } from "rxjs";
 import { QuellenFacade } from "../application/quellen.facade";
 
 @Injectable({ providedIn: 'root' })
-export class QuelleDetailsGuard implements CanActivate {
+export class QuellenDetailsGuard implements CanActivate {
 
     constructor(private quellenFacade: QuellenFacade) { }
 

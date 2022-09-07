@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import de.egladil.mja_admin_api.domain.DomainEntityStatus;
 import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_admin_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_admin_api.domain.sammlungen.dto.Aufgabe;
@@ -41,7 +42,8 @@ public class AufgabensammlungService {
 	DeskriptorenService descriptorenService;
 
 	/**
-	 * Sucht alle Aufgaben der durch die Parameter eindeutig bestimmten Sammlung zur Präsentation im Browser.
+	 * Sucht alle Aufgaben der durch die Parameter eindeutig bestimmten Sammlung zur Präsentation im Browser. Es werden nur die
+	 * Sammlungen mit Status FREIGEGEBEN gefunden.
 	 *
 	 * @param  referenztyp
 	 * @param  referenz
@@ -52,7 +54,7 @@ public class AufgabensammlungService {
 
 		PersistenteRaetselsammlung dbResult = raetselsammlungDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
 
-		if (dbResult == null) {
+		if (dbResult == null || dbResult.status != DomainEntityStatus.FREIGEGEBEN) {
 
 			return Optional.empty();
 		}

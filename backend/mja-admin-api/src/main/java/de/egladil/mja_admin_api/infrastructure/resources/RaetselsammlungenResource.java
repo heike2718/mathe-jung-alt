@@ -14,7 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,13 +21,11 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_admin_api.domain.AbstractDomainEntity;
-import de.egladil.mja_admin_api.domain.raetsel.dto.RaetselsucheTrefferItem;
+import de.egladil.mja_admin_api.domain.sammlungen.RaetselsammlungService;
 import de.egladil.mja_admin_api.domain.sammlungen.dto.EditRaetselsammlungPayload;
-import de.egladil.mja_admin_api.domain.sammlungen.impl.RaetselsammlungService;
+import de.egladil.mja_admin_api.domain.sammlungen.dto.RaetselsammlungSucheTrefferItem;
 import de.egladil.mja_admin_api.domain.utils.DevDelayService;
 import de.egladil.mja_admin_api.infrastructure.validation.CsrfTokenValidator;
-import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.session.AuthenticatedUser;
 import de.egladil.web.mja_auth.session.Session;
 
@@ -67,14 +64,7 @@ public class RaetselsammlungenResource {
 		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
 		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
 
-		if (!AbstractDomainEntity.UUID_NEUE_ENTITY.equals(requestPayload.getId())) {
-
-			LOGGER.error("POST mit vorhandener Entity uuid={} aufgerufen", requestPayload.getId());
-			return Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("POST darf nur mit id='neu' aufgerufen werden"))
-				.build();
-		}
-
-		RaetselsucheTrefferItem raetselsammlung = raetselsammlungService.raetselsammlungAnlegen(requestPayload, userUuid);
+		RaetselsammlungSucheTrefferItem raetselsammlung = raetselsammlungService.raetselsammlungAnlegen(requestPayload, userUuid);
 
 		LOGGER.info("Raetselsammlung angelegt: [raetselsammlung={}, user={}]", raetselsammlung.getId(),
 			StringUtils.abbreviate(userUuid, 11));

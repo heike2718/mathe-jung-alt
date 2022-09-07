@@ -37,6 +37,86 @@ public class RaetselsammlungSucheTrefferItem {
 	private DomainEntityStatus status;
 
 	@JsonProperty
-	private int anzahlElemente;
+	private long anzahlElemente;
+
+	public String getId() {
+
+		return id;
+	}
+
+	public void setId(final String id) {
+
+		this.id = id;
+	}
+
+	public String getName() {
+
+		return name;
+	}
+
+	public void setName(final String name) {
+
+		this.name = name;
+	}
+
+	public String getKommentar() {
+
+		return kommentar;
+	}
+
+	public void setKommentar(final String kommentar) {
+
+		this.kommentar = kommentar;
+	}
+
+	public Schwierigkeitsgrad getSchwierigkeitsgrad() {
+
+		return schwierigkeitsgrad;
+	}
+
+	public void setSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
+
+		this.schwierigkeitsgrad = schwierigkeitsgrad;
+	}
+
+	public Referenztyp getReferenztyp() {
+
+		return referenztyp;
+	}
+
+	public void setReferenztyp(final Referenztyp referenztyp) {
+
+		this.referenztyp = referenztyp;
+	}
+
+	public String getReferenz() {
+
+		return referenz;
+	}
+
+	public void setReferenz(final String referenz) {
+
+		this.referenz = referenz;
+	}
+
+	public DomainEntityStatus getStatus() {
+
+		return status;
+	}
+
+	public void setStatus(final DomainEntityStatus status) {
+
+		this.status = status;
+	}
+
+	public long getAnzahlElemente() {
+
+		return anzahlElemente;
+	}
+
+	public void setAnzahlElemente(final long anzahlElemente) {
+
+		this.anzahlElemente = anzahlElemente;
+	}
 
 }

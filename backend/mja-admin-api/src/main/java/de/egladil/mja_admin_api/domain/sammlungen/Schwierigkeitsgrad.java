@@ -14,7 +14,7 @@ public enum Schwierigkeitsgrad {
 	EINS("Klasse 1"),
 	EINS_ZWEI("Klassen 1/2"),
 	FUENF_SECHS("Klassen 5/6"),
-	GRUNDSCHULE("Grundechule"),
+	GRUNDSCHULE("Grundschule"),
 	IKID("Inklusion"),
 	SEK_1("Sekundarstufe 1"),
 	SEK_2("Sekundarstufe 2"),

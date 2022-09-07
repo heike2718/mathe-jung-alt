@@ -9,7 +9,7 @@ import { GrafikSearchResult } from "../entities/grafik.model";
 @Injectable(
     {providedIn: 'root'}
 )
-export class GrafikDataService {
+export class GrafikHttpService {
 
     #url = this.configuration.baseUrl + '/grafiken/v1';
 

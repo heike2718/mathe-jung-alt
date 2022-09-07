@@ -5,14 +5,15 @@ create table mathe_jung_alt.RAETSELSAMMLUNGEN(
 	UUID varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL PRIMARY KEY,
 	NAME varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Name der Sammlung',
 	SCHWIERIGKEITSGRAD varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'mapped die enum Schwierigkeitsgrad',
-	REFERENZTYP varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'Typ der semantischen Referenz entsprechend enum Referenztyp',
-	REFERENZ varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'ID der Referenz, z.B. mk_wettbewerbe.WETTBEWERBE oder matheag.serien',
+	REFERENZTYP varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Typ der semantischen Referenz entsprechend enum Referenztyp',
+	REFERENZ varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'ID der Referenz, z.B. mk_wettbewerbe.WETTBEWERBE oder matheag.serien',
 	STATUS varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT 'ERFASST' NOT NULL COMMENT 'Status der Sammlung entsprechend Enum DomainEntityStatus',
 	KOMMENTAR varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   	GEAENDERT_AM timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   	GEAENDERT_DURCH varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'UUID eines ADMINS',
 	VERSION int(10) DEFAULT 0,
-	UNIQUE KEY uk_raetselsammlungen_1 (NAME)
+	UNIQUE KEY uk_raetselsammlungen_1 (REFERENZTYP, REFERENZ, SCHWIERIGKEITSGRAD),
+	UNIQUE KEY uk_raetselsammlungen_2 (NAME)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 create table mathe_jung_alt.RAETSELSAMMLUNGSELEMENTE(
