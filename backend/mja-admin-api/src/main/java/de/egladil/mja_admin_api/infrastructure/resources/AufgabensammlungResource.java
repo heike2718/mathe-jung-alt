@@ -36,7 +36,7 @@ public class AufgabensammlungResource {
 	@Path("{referenztyp}/{referenz}/{schwierigkeitsgrad}")
 	@PermitAll
 	public Response getAufgabensammlung(@PathParam(
-		value = "referenztyp") final Referenztyp referenztyp, @Pattern(regexp = "^[\\w ]{1,20}$") @PathParam(
+		value = "referenztyp") final Referenztyp referenztyp, @Pattern(regexp = "^[\\w äöüß]{1,20}$") @PathParam(
 			value = "referenz") final String referenz, @PathParam(
 				value = "schwierigkeitsgrad") final Schwierigkeitsgrad schwierigkeitsgrad) {
 

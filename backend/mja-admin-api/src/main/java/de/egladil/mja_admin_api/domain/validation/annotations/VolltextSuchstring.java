@@ -16,6 +16,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 
 import de.egladil.mja_admin_api.infrastructure.validation.VolltextSuchstringValidator;
 
@@ -28,4 +29,9 @@ import de.egladil.mja_admin_api.infrastructure.validation.VolltextSuchstringVali
 @Constraint(validatedBy = { VolltextSuchstringValidator.class })
 public @interface VolltextSuchstring {
 
+	String message() default "Ungültiger Wert";
+
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] palyload() default {};
 }

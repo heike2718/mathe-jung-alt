@@ -31,7 +31,7 @@ public class RaetselsammlungSucheTrefferItem {
 	private Referenztyp referenztyp;
 
 	@JsonProperty
-	private String semantischeReferenz;
+	private String referenz;
 
 	@JsonProperty
 	private DomainEntityStatus status;
