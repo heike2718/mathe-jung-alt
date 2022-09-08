@@ -1,5 +1,10 @@
 # Release-Notes
 
+__1.0.2__
+
+* Softwarearchitektur Backend vereinfacht
+* bumped quarkus to 2.12.1.Final
+
 __1.0.1__
 
 * [Admin: Volltextsuche in Rätseln auch ohne Deskriptoren](https://github.com/heike2718/mathe-jung-alt/issues/32)

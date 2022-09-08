@@ -1,7 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'mja-admin-header',
@@ -9,10 +8,8 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  
-  titel = 'Mja Admin (' + environment.version + ')';
 
-  @Output() 
+  @Output()
   sidenavToggle = new EventEmitter();
 
   constructor(public authFacade: AuthFacade, private breakpointObserver: BreakpointObserver) { }
@@ -33,5 +30,5 @@ export class HeaderComponent implements OnInit {
 
   public onToggleSidenav = () => {
     this.sidenavToggle.emit();
-  }  
+  }
 }
