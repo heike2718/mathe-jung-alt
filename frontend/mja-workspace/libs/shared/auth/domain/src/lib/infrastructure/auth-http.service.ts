@@ -29,7 +29,7 @@ export class AuthHttpService {
 
     getLoginRedirectUrl(): Observable<string> {
 
-        const url = this.#baseUrl + '/authurls/login';
+        const url = this.#baseUrl + '/authurls/login/' + this.configuration.clientType;
 
         return this.loadingService.showLoaderUntilCompleted(this.http.get<Message>(url)).pipe(
             map(message => message.message)
@@ -38,7 +38,7 @@ export class AuthHttpService {
 
     createSession(authResult: AuthResult): Observable<Session> {
 
-        const url = this.#baseUrl + '/login';
+        const url = this.#baseUrl + '/login/' + this.configuration.clientType;
         return this.loadingService.showLoaderUntilCompleted(this.http.post<Session>(url, authResult));
     }
 

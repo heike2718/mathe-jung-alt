@@ -13,6 +13,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.web.mja_auth.ClientType;
 import de.egladil.web.mja_auth.clientauth.ClientAccessTokenService;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.login.LoginUrlService;
@@ -28,21 +29,28 @@ public class LoginUrlServiceImpl implements LoginUrlService {
 	@ConfigProperty(name = "auth-app.url")
 	String authAppUrl;
 
-	@ConfigProperty(name = "redirect-url.login")
-	String loginRedirectUrl;
+	@ConfigProperty(name = "admin-redirect-url.login")
+	String adminLoginRedirectUrl;
+
+	@ConfigProperty(name = "public-redirect-url.login")
+	String publicLoginRedirectUrl;
 
 	@Inject
 	ClientAccessTokenService clientAccessTokenService;
 
 	@Override
-	public Response getLoginUrl() {
+	public Response getLoginUrl(final ClientType clientType) {
 
-		String accessToken = clientAccessTokenService.orderAccessToken();
+		String accessToken = clientAccessTokenService.orderAccessToken(clientType);
 
 		if (StringUtils.isBlank(accessToken)) {
 
 			return Response.serverError().entity("Fehler beim Authentisieren des Clients").build();
 		}
+
+		String loginRedirectUrl = getLoginRedirectUrl(clientType);
+
+		LOGGER.info("loginRedirectUrl={}", loginRedirectUrl);
 
 		String redirectUrl = authAppUrl + "#/login?accessToken=" + accessToken + "&state=login&redirectUrl="
 			+ loginRedirectUrl;
@@ -50,5 +58,27 @@ public class LoginUrlServiceImpl implements LoginUrlService {
 		LOGGER.debug(redirectUrl);
 
 		return Response.ok(MessagePayload.info(redirectUrl)).build();
+	}
+
+	/**
+	 * @param  clientType
+	 * @return
+	 */
+	private String getLoginRedirectUrl(final ClientType clientType) {
+
+		switch (clientType) {
+
+			case ADMIN:
+				return adminLoginRedirectUrl;
+
+			case PUBLIC:
+				return publicLoginRedirectUrl;
+
+			default:
+				break;
+
+		}
+
+		throw new IllegalArgumentException("unerwarteter ClientType " + clientType);
 	}
 }

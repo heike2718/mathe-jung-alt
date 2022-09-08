@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.web.mja_auth.session.SessionService;
 import io.quarkus.runtime.StartupEvent;
+import io.quarkus.runtime.configuration.ProfileManager;
 
 /**
  * AppLifecycleBean
@@ -39,6 +40,8 @@ public class AppLifecycleBean {
 	long delayMillis = 0;
 
 	void onStartup(@Observes final StartupEvent ev) {
+
+		LOGGER.info(" ===========> The application is starting with profile " + ProfileManager.getActiveProfile());
 
 		checkLatexBaseDir();
 		checkImagesBaseDir();

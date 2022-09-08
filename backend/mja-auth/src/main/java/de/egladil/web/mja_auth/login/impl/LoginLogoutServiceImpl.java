@@ -12,13 +12,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.web.mja_auth.ClientType;
+import de.egladil.web.mja_auth.clientauth.OAuthClientCredentialsProvider;
 import de.egladil.web.mja_auth.config.ConfigService;
 import de.egladil.web.mja_auth.dto.AuthResult;
 import de.egladil.web.mja_auth.dto.MessagePayload;
+import de.egladil.web.mja_auth.dto.OAuthClientCredentials;
 import de.egladil.web.mja_auth.login.LoginLogoutService;
 import de.egladil.web.mja_auth.login.TokenExchangeService;
 import de.egladil.web.mja_auth.session.Session;
@@ -33,11 +35,8 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginLogoutServiceImpl.class);
 
-	@ConfigProperty(name = "client-id")
-	String clientId;
-
-	@ConfigProperty(name = "client-secret")
-	String clientSecret;
+	@Inject
+	OAuthClientCredentialsProvider clientCredentialsProvider;
 
 	@Inject
 	SessionService sessionService;
@@ -49,7 +48,7 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 	ConfigService configService;
 
 	@Override
-	public Response login(final AuthResult authResult, final boolean needsRoleAdmin) {
+	public Response login(final ClientType clientType, final AuthResult authResult, final boolean needsRoleAdmin) {
 
 		if (authResult == null) {
 
@@ -63,7 +62,10 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 		LOGGER.debug("idToken={}", StringUtils.abbreviate(oneTimeToken, 11));
 
-		String jwt = this.tokenExchangeService.exchangeTheOneTimeToken(clientId, clientSecret, oneTimeToken);
+		OAuthClientCredentials clientCredentials = clientCredentialsProvider.getClientCredentials(clientType, null);
+
+		String jwt = this.tokenExchangeService.exchangeTheOneTimeToken(clientCredentials.getClientId(),
+			clientCredentials.getClientSecret(), oneTimeToken);
 
 		Session session = this.sessionService.initSession(jwt, needsRoleAdmin);
 

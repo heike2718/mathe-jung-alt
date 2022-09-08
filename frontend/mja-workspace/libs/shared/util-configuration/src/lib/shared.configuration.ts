@@ -7,6 +7,7 @@ export interface Configuration {
     readonly production: boolean;
     readonly profileUrl: string;
     readonly admin: boolean;
+    readonly clientType: string;
 }
 
 export const SharedConfigService = new InjectionToken<Configuration>('Configuration');

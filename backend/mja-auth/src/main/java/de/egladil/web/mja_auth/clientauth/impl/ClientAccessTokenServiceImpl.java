@@ -12,13 +12,14 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.RestClientDefinitionException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.web.mja_auth.ClientType;
 import de.egladil.web.mja_auth.clientauth.ClientAccessTokenService;
+import de.egladil.web.mja_auth.clientauth.OAuthClientCredentialsProvider;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.dto.OAuthClientCredentials;
 import de.egladil.web.mja_auth.dto.ResponsePayload;
@@ -34,21 +35,18 @@ public class ClientAccessTokenServiceImpl implements ClientAccessTokenService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientAccessTokenServiceImpl.class);
 
-	@ConfigProperty(name = "client-id")
-	String clientId;
-
-	@ConfigProperty(name = "client-secret")
-	String clientSecret;
+	@Inject
+	OAuthClientCredentialsProvider clientCredentialsProvider;
 
 	@Inject
 	@RestClient
 	InitAccessTokenRestClient initAccessTokenRestClient;
 
 	@Override
-	public String orderAccessToken() {
+	public String orderAccessToken(final ClientType clientType) {
 
 		String nonce = UUID.randomUUID().toString();
-		OAuthClientCredentials credentials = OAuthClientCredentials.create(clientId, clientSecret, nonce);
+		OAuthClientCredentials credentials = clientCredentialsProvider.getClientCredentials(clientType, nonce);
 
 		Response authResponse = null;
 

@@ -6,6 +6,7 @@ package de.egladil.web.mja_auth.login;
 
 import javax.ws.rs.core.Response;
 
+import de.egladil.web.mja_auth.ClientType;
 import de.egladil.web.mja_auth.dto.AuthResult;
 
 /**
@@ -18,17 +19,17 @@ public interface LoginLogoutService {
 	 *
 	 * @param  authResult
 	 * @param  needsRoleAdmin
-	 *                    boolean
+	 *                        boolean
 	 * @param  authMode
-	 *                    AuthMode
-	 * @return            Response
+	 *                        AuthMode
+	 * @return                Response
 	 */
-	Response login(final AuthResult authResult, boolean needsRoleAdmin);
+	Response login(ClientType clientType, final AuthResult authResult, boolean needsRoleAdmin);
 
 	/**
 	 * Logout in Prod, also mit Cookies.
-	 *
 	 * @param  sessionId
+	 *
 	 * @return           Response
 	 */
 	Response logout(final String sessionId);

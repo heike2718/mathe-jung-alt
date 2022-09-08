@@ -35,7 +35,7 @@ public class UploadScannerDelegate {
 	@ConfigProperty(name = "upload.max.bytes")
 	String maxFilesizeBytes;
 
-	@ConfigProperty(name = "client-id")
+	@ConfigProperty(name = "admin-client-id")
 	String clientId;
 
 	@Inject

@@ -64,6 +64,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
       profileUrl: environment.profileUrl,
       storagePrefix: environment.storageKeyPrefix,
       admin: true,
+      clientType: 'ADMIN'
     }),
   ],
   providers: [

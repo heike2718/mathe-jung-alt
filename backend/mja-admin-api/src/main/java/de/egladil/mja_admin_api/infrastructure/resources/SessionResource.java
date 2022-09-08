@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import de.egladil.mja_admin_api.domain.utils.DevDelayService;
+import de.egladil.web.mja_auth.ClientType;
 import de.egladil.web.mja_auth.dto.AuthResult;
 import de.egladil.web.mja_auth.login.LoginLogoutService;
 import de.egladil.web.mja_auth.login.LoginUrlService;
@@ -43,30 +44,32 @@ public class SessionResource {
 	LoginLogoutService loginLogoutService;
 
 	@GET
-	@Path("authurls/login")
+	@Path("authurls/login/{clientType}")
 	@PermitAll
-	public Response getLoginUrl() {
+	public Response getLoginUrl(@PathParam(value = "clientType") final ClientType clientType) {
 
 		this.delayService.pause();
 
-		return this.loginUrlService.getLoginUrl();
+		return this.loginUrlService.getLoginUrl(clientType);
 
 	}
 
 	@POST
-	@Path("login")
+	@Path("login/{clientType}")
 	@PermitAll
-	public Response login(final AuthResult authResult) {
+	public Response login(@PathParam(
+		value = "clientType") final ClientType clientType, final AuthResult authResult) {
 
 		this.delayService.pause();
 
-		return loginLogoutService.login(authResult, true);
+		return loginLogoutService.login(clientType, authResult, clientType == ClientType.ADMIN);
 	}
 
 	@DELETE
 	@Path("logout")
 	@PermitAll
-	public Response logout(@CookieParam(value = SessionUtils.SESSION_COOKIE_NAME) final String sessionId) {
+	public Response logout(@CookieParam(
+		value = SessionUtils.SESSION_COOKIE_NAME) final String sessionId) {
 
 		return loginLogoutService.logout(sessionId);
 	}

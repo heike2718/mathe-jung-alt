@@ -12,8 +12,8 @@ public interface TokenExchangeService {
 	/**
 	 * Tauscht ein accessToken gegen ein JWT aus.
 	 *
-	 * @param  clientId
-	 * @param  clientSecret
+	 * @param  adminClientId
+	 * @param  adminClientSecret
 	 * @param  oneTimeToken
 	 * @return              String das jwt
 	 */
