@@ -12,7 +12,6 @@ import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 export class LayoutComponent implements OnInit {
 
   isMenuOpen = true;
-  contentMargin = 240;
 
   constructor(public authFacade: AuthFacade, private breakpointObserver: BreakpointObserver) { }
 

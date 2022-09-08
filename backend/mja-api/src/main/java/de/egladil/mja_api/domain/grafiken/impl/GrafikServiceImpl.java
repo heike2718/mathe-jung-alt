@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
-import de.egladil.mja_api.domain.exceptions.MjaAdminServerException;
+import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.ImageGeneratorService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.grafiken.Grafik;
@@ -128,7 +128,7 @@ public class GrafikServiceImpl implements GrafikService {
 		} catch (IOException e) {
 
 			LOGGER.error("Fehler beim Speichern im Filesystem: " + e.getMessage(), e);
-			throw new MjaAdminServerException("Konnte Grafik nicht ins Filesystem speichern: " + e.getMessage(), e);
+			throw new MjaRuntimeException("Konnte Grafik nicht ins Filesystem speichern: " + e.getMessage(), e);
 		}
 
 		LOGGER.info("Grafikdatei hochgeladen: {} - {}", uploadRequestDto.getBenutzerUuid(), file.getAbsolutePath());
