@@ -16,15 +16,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mja_admin_api.domain.raetsel.Antwortvorschlag;
-import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
-import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * RaetselTest
  */
-@QuarkusTest
 public class RaetselTest {
 
 	@Nested

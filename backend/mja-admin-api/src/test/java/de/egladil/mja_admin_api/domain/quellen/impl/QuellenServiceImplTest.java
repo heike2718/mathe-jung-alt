@@ -28,13 +28,16 @@ import de.egladil.mja_admin_api.domain.quellen.QuellenRepository;
 import de.egladil.mja_admin_api.domain.quellen.Quellenart;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
+import de.egladil.mja_admin_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.junit.mockito.InjectMock;
 
 /**
  * QuellenServiceImplTest
  */
 @QuarkusTest
+@TestProfile(FullDatabaseTestProfile.class)
 public class QuellenServiceImplTest {
 
 	@InjectMock

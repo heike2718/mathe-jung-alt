@@ -162,9 +162,11 @@ public final class SessionUtils {
 			return sessionCookie.getValue();
 		}
 
-		if (!requestContext.getUriInfo().getAbsolutePath().getPath().toLowerCase().contains("aufgabensammlungen")) {
+		String path = requestContext.getUriInfo().getAbsolutePath().getPath();
 
-			LOGGER.warn("{}: Request ohne {}-Cookie", requestContext.getUriInfo(), SESSION_COOKIE_NAME);
+		if (!path.toLowerCase().contains("aufgabensammlungen")) {
+
+			LOGGER.warn("{}: Request ohne {}-Cookie", path, SESSION_COOKIE_NAME);
 		}
 		return null;
 	}

@@ -12,19 +12,19 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.mja_admin_api.profiles.ContainerDatabaseTestProfile;
+import de.egladil.mja_admin_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.restassured.response.Response;
 
 /**
- * DeskriptorenResourceContainerizedTest
+ * DeskriptorenResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(DeskriptorenResource.class)
-@TestProfile(ContainerDatabaseTestProfile.class)
-public class DeskriptorenResourceContainerizedTest {
+@TestProfile(FullDatabaseTestProfile.class)
+public class DeskriptorenResourceTest {
 
 	@Test
 	public void testLoadDeskriptorenEndpoint() throws Exception {
@@ -37,7 +37,7 @@ public class DeskriptorenResourceContainerizedTest {
 
 		Deskriptor[] deskriptoren = new ObjectMapper().readValue(responsePayload, Deskriptor[].class);
 
-		assertEquals(15, deskriptoren.length);
+		assertEquals(81, deskriptoren.length);
 
 		response
 			.then()
@@ -53,7 +53,7 @@ public class DeskriptorenResourceContainerizedTest {
 			}
 		}
 
-		assertEquals(8, anzahlAdmin);
+		assertEquals(54, anzahlAdmin);
 
 	}
 

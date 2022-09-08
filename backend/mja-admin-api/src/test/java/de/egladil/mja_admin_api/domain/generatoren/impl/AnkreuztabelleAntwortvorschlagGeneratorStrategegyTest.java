@@ -10,15 +10,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_admin_api.TestFileUtils;
-import de.egladil.mja_admin_api.domain.generatoren.impl.AnkreuztabelleAntwortvorschlagGeneratorStrategegy;
 import de.egladil.mja_admin_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
+import de.egladil.mja_admin_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 
 /**
  * AnkreuztabelleAntwortvorschlagGeneratorStrategegyTest
  */
 @QuarkusTest
+@TestProfile(FullDatabaseTestProfile.class)
 public class AnkreuztabelleAntwortvorschlagGeneratorStrategegyTest {
 
 	private AnkreuztabelleAntwortvorschlagGeneratorStrategegy strategy = new AnkreuztabelleAntwortvorschlagGeneratorStrategegy();

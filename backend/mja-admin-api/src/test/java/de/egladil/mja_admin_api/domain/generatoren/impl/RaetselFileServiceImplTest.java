@@ -17,16 +17,18 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_admin_api.TestFileUtils;
-import de.egladil.mja_admin_api.domain.generatoren.impl.RaetselFileServiceImpl;
 import de.egladil.mja_admin_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_admin_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_admin_api.domain.raetsel.Raetsel;
+import de.egladil.mja_admin_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 
 /**
  * RaetselFileServiceImplTest
  */
 @QuarkusTest
+@TestProfile(FullDatabaseTestProfile.class)
 public class RaetselFileServiceImplTest {
 
 	private static final String BASE_DIR = "/home/heike/test";

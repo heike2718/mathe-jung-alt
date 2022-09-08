@@ -13,27 +13,26 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_admin_api.domain.quellen.QuelleReadonly;
-import de.egladil.mja_admin_api.profiles.ContainerDatabaseTestProfile;
+import de.egladil.mja_admin_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.restassured.response.Response;
 
 /**
- * QuellenResourceContainerizedTest
+ * QuellenResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(QuellenResource.class)
-@TestProfile(ContainerDatabaseTestProfile.class)
-public class QuellenResourceContainerizedTest {
+@TestProfile(FullDatabaseTestProfile.class)
+public class QuellenResourceTest {
 
 	@Test
 	void testSucheOhneDeskriptorenMitTreffer() {
 
-		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Ponder Stibbons\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":17,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
-
+		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":40,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
 		given()
-			.when().get("?suchstring=Ponder")
+			.when().get("?suchstring=Winkelvoß")
 			.then()
 			.statusCode(200)
 			.body(is(expected));
@@ -43,10 +42,10 @@ public class QuellenResourceContainerizedTest {
 	@Test
 	void testSucheMitDeskriptorenMitTreffer() {
 
-		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Ponder Stibbons\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":17,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
+		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":40,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
 
 		given()
-			.when().get("?suchstring=Stibbons&deskriptoren=17")
+			.when().get("?suchstring=Heike&deskriptoren=40")
 			.then()
 			.statusCode(200)
 			.body(is(expected));
@@ -96,7 +95,7 @@ public class QuellenResourceContainerizedTest {
 	void testFindQuelleByPersonMitTreffer() throws Exception {
 
 		Response response = given()
-			.when().get("admin?person=Ponder Stibbons");
+			.when().get("admin?person=Heike Winkelvoß");
 
 		String responsePayload = response.asString();
 
@@ -144,7 +143,7 @@ public class QuellenResourceContainerizedTest {
 
 		QuelleReadonly quelle = new ObjectMapper().readValue(responsePayload, QuelleReadonly.class);
 
-		assertEquals("Ponder Stibbons", quelle.getName());
+		assertEquals("Heike Winkelvoß", quelle.getName());
 
 		assertEquals(200, response.statusCode());
 
