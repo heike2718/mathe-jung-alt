@@ -14,8 +14,8 @@
 	<description>Webservice für "Mathe für jung und alt"- Administration</description>
 
 	<dependencies>
-	
-	<dependency>
+
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>mja-shared</artifactId>
 			<version>${project.version}</version>
@@ -102,6 +102,18 @@
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-smallrye-health</artifactId>
+		</dependency>
+
+		<!-- Flyway specific dependencies -->
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-flyway</artifactId>
+		</dependency>
+
+		<!-- Flyway MariaDB/MySQL specific dependencies -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
 		</dependency>
 
 		<!-- END quarkus dependencies -->

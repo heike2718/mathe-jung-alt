@@ -7,9 +7,9 @@ package de.egladil.mja_admin_api.domain.deskriptoren;
 import java.util.List;
 import java.util.Optional;
 
-import de.egladil.mja_admin_api.domain.semantik.DomainService;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.web.mja_shared.domain.deskriptoren.DeskriptorSuchkontext;
+import de.egladil.web.mja_shared.semantik.DomainService;
 
 /**
  * DeskriptorenService

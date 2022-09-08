@@ -46,38 +46,38 @@ public class PersistenteQuelleReadonly {
 	public static final String FIND_WITH_DESKRIPTOREN = "PersistenteQuelleReadonly.FIND_WITH_DESKRIPTOREN";
 
 	@Id
-	private String uuid;
+	public String uuid;
 
 	@Column(name = "ART")
 	@Enumerated(EnumType.STRING)
-	private Quellenart quellenart;
+	public Quellenart quellenart;
 
 	@Column(name = "SORTNR")
-	private long sortNumber;
+	public long sortNumber;
 
 	@Column(name = "PERSON")
-	private String person;
+	public String person;
 
 	@Column(name = "MEDIUM_UUID")
-	private String mediumUuid;
+	public String mediumUuid;
 
 	@Column(name = "MEDIUM_TITEL")
-	private String mediumTitel;
+	public String mediumTitel;
 
 	@Column(name = "JAHRGANG")
-	private String jahrgang;
+	public String jahrgang;
 
 	@Column(name = "AUSGABE")
-	private String ausgabe;
+	public String ausgabe;
 
 	@Column(name = "SEITE")
-	private String seite;
+	public String seite;
 
 	@Column(name = "HW")
-	private boolean hw;
+	public boolean hw;
 
 	@Column(name = "DESKRIPTOREN")
-	private String deskriptoren;
+	public String deskriptoren;
 
 	/**
 	 * @return the uuid

@@ -30,6 +30,12 @@
       "@mja-workspace/raetsel/feature-search": [
         "libs/raetsel/feature-search/src/index.ts"
       ],
+      "@mja-workspace/sammlungen/domain": [
+        "libs/sammlungen/domain/src/index.ts"
+      ],
+      "@mja-workspace/sammlungen/feature-search": [
+        "libs/sammlungen/feature-search/src/index.ts"
+      ],
       "@mja-workspace/shared/auth/domain": [
         "libs/shared/auth/domain/src/index.ts"
       ],

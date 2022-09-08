@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { map, tap } from 'rxjs/operators';
 import * as RaetselActions from './raetsel.actions';
-import { RaetselDataService } from '../../infrastructure/raetsel.data.service';
+import { RaetselHttpService } from '../../infrastructure/raetsel.http.service';
 import { MessageService, SafeNgrxService, noopAction, FileService } from '@mja-workspace/shared/util-mja';
 import { Router } from '@angular/router';
 import { SuchfilterFacade } from '@mja-workspace/suchfilter/domain';
@@ -16,7 +16,7 @@ export class RaetselEffects {
       ofType(RaetselActions.findRaetsel),
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.loadPage(action.suchfilter,
+        this.raetselHttpService.loadPage(action.suchfilter,
           { pageIndex: action.pageDefinition.pageIndex, pageSize: action.pageDefinition.pageSize, sortDirection: action.pageDefinition.sortDirection }).pipe(
             tap(() => this.suchfilterFacade.sucheFinished(action.kontext)),
             map((suchergebnis) => RaetselActions.findRaetselSuccess({ suchergebnis }))
@@ -28,7 +28,7 @@ export class RaetselEffects {
     this.actions$.pipe(
       ofType(RaetselActions.raetselSelected),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.findById(action.raetsel.id).pipe(
+        this.raetselHttpService.findById(action.raetsel.id).pipe(
           map((raetselDetails) =>
             RaetselActions.raetselDetailsLoaded({ raetselDetails })
           )
@@ -58,7 +58,7 @@ export class RaetselEffects {
       ofType(RaetselActions.saveRaetsel),
       // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.saveRaetsel(action.editRaetselPayload, action.csrfToken).pipe(
+        this.raetselHttpService.saveRaetsel(action.editRaetselPayload, action.csrfToken).pipe(
           map((raetselDetails) => RaetselActions.raetselSaved({
             raetselDetails,
             successMessage: 'Das Raetsel wurde erfolgreich gespeichert: uuid=' + raetselDetails.id,
@@ -100,7 +100,7 @@ export class RaetselEffects {
     this.actions$.pipe(
       ofType(RaetselActions.generateRaetselPNGs),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.generateRaetselPNGs(action.raetselId, action.layoutAntwortvorschlaege).pipe(
+        this.raetselHttpService.generateRaetselPNGs(action.raetselId, action.layoutAntwortvorschlaege).pipe(
           map((images) =>
             RaetselActions.raetselPNGsGenerated({ images })
           )
@@ -113,7 +113,7 @@ export class RaetselEffects {
     this.actions$.pipe(
       ofType(RaetselActions.generateRaetselPDF),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselDataService.generateRaetselPDF(action.raetselId, action.layoutAntwortvorschlaege).pipe(
+        this.raetselHttpService.generateRaetselPDF(action.raetselId, action.layoutAntwortvorschlaege).pipe(
           map((generatedPDF) =>
             RaetselActions.raetselPDFGenerated({ pdf: generatedPDF })
           )
@@ -132,7 +132,7 @@ export class RaetselEffects {
   constructor(
     private actions$: Actions,
     private authService: AuthHttpService,
-    private raetselDataService: RaetselDataService,
+    private raetselHttpService: RaetselHttpService,
     private suchfilterFacade: SuchfilterFacade,
     private safeNgrx: SafeNgrxService,
     private messageService: MessageService,

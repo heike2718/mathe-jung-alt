@@ -25,7 +25,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.egladil.mja_admin_api.domain.raetsel.DomainEntityStatus;
+import de.egladil.mja_admin_api.domain.DomainEntityStatus;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 /**

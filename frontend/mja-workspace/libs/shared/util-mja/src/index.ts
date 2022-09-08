@@ -18,3 +18,5 @@ export { LoadingIndicatorService } from './lib/loading-service/loading-indicator
 export * from './lib/http-utils/safe-http.service';
 
 export * from './lib/files/file.service';
+
+export * from './lib/constants/constants';

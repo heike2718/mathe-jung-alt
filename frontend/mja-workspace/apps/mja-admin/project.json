@@ -49,7 +49,8 @@
             }
           ],
           "outputHashing": "all"
-        },"a300": {
+        },
+        "a300": {
           "budgets": [
             {
               "type": "initial",

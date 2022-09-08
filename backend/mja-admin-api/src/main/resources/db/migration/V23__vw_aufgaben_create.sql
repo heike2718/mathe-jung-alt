@@ -1,0 +1,19 @@
+CREATE OR REPLACE VIEW mathe_jung_alt.VW_AUFGABEN
+AS
+select
+	r.UUID,
+	r.SCHLUESSEL,
+	r.ANTWORTVORSCHLAEGE,
+	vq.art,
+	vq.MEDIUM_TITEL,
+	vq.SEITE,
+	vq.AUSGABE,
+	vq.JAHRGANG,
+	vq.PERSON,
+	vq.HW,
+	vq.DESKRIPTOREN
+from
+	RAETSEL r,
+	VW_QUELLEN vq
+where
+	r.QUELLE = vq.UUID;

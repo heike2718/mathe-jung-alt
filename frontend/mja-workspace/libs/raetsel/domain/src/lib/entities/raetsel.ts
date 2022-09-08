@@ -1,8 +1,8 @@
+import { STATUS } from "@mja-workspace/shared/util-mja";
 import { Deskriptor, Suchkontext } from "@mja-workspace/suchfilter/domain";
 
 export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';
 export type LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
-export type STATUS = 'ERFASST' | 'FREIGEGEBEN';
 
 export const anzeigeAntwortvorschlaegeSelectInput: string[] = [
   'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'

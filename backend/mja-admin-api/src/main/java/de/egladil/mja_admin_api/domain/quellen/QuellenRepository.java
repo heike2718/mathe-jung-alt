@@ -7,8 +7,8 @@ package de.egladil.mja_admin_api.domain.quellen;
 import java.util.List;
 import java.util.Optional;
 
-import de.egladil.mja_admin_api.domain.semantik.Repository;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
+import de.egladil.web.mja_shared.semantik.Repository;
 
 /**
  * QuellenRepository

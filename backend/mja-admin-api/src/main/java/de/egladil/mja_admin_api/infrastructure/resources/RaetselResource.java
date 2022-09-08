@@ -49,6 +49,7 @@ import de.egladil.web.mja_auth.session.Session;
  * RaetselResource
  */
 @Path("/raetsel/v1")
+@Produces(MediaType.APPLICATION_JSON)
 public class RaetselResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselResource.class);
@@ -74,7 +75,6 @@ public class RaetselResource {
 	private final CsrfTokenValidator csrfTokenValidator = new CsrfTokenValidator();
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	// @formatter:off
 	public RaetselsucheTreffer sucheRaetsel(
@@ -107,7 +107,6 @@ public class RaetselResource {
 
 	@GET
 	@Path("{raetselUuid}")
-	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	public Response raetselDetailsLaden(@PathParam(value = "raetselUuid") final String raetselUuid) {
 
@@ -125,7 +124,6 @@ public class RaetselResource {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	public Response raetselAnlegen(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
@@ -137,13 +135,15 @@ public class RaetselResource {
 		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
 
 		Raetsel raetsel = raetselService.raetselAnlegen(payload, userUuid);
+
+		LOGGER.info("Raetsel angelegt: [raetsel={}, user={}]", raetsel.getId(), StringUtils.abbreviate(userUuid, 11));
+
 		return Response.status(201).entity(raetsel).build();
 
 	}
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	public Response raetselAendern(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
@@ -155,12 +155,14 @@ public class RaetselResource {
 		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
 
 		Raetsel raetsel = raetselService.raetselAendern(payload, userUuid);
+
+		LOGGER.info("Raetsel geaendert: [raetsel={}, user={}]", raetsel.getId(), StringUtils.abbreviate(userUuid, 11));
+
 		return Response.status(200).entity(raetsel).build();
 	}
 
 	@GET
 	@Path("PNG/{raetselUuid}")
-	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	public GeneratedImages raetselImagesGenerieren(@PathParam(
 		value = "raetselUuid") final String raetselUuid, @QueryParam(
@@ -180,7 +182,6 @@ public class RaetselResource {
 
 	@GET
 	@Path("PDF/{raetselUuid}")
-	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({ "ADMIN", "LEHRER", "PRIVAT", "STANDARD" })
 	public GeneratedPDF raetselPDFGenerieren(@PathParam(
 		value = "raetselUuid") final String raetselUuid, @QueryParam(

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs/operators';
 import * as QuelleActions from './quelle.actions';
-import { QuelleDataService } from '../../infrastructure/quelle.data.service';
+import { QuellenHttpService } from '../../infrastructure/quellen.http.service';
 import { QuellenFacade } from '../../application/quellen.facade';
 import { SafeNgrxService, noopAction } from '@mja-workspace/shared/util-mja';
 import * as AuthActions from '@mja-workspace/shared/auth/domain';
@@ -16,7 +16,7 @@ export class QuelleEffects {
     this.actions$.pipe(
       ofType(QuelleActions.findQuellen),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.quelleDataService.findQuellen(action.suchfilter).pipe(
+        this.quellenHttpService.findQuellen(action.suchfilter).pipe(
           map((quellen) =>
             QuelleActions.quellenFound({ quellen })
           )
@@ -29,7 +29,7 @@ export class QuelleEffects {
     this.actions$.pipe(
       ofType(QuelleActions.loadQuelle),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.quelleDataService.loadQuelle(action.uuid).pipe(
+        this.quellenHttpService.loadQuelle(action.uuid).pipe(
           map((quelle) =>
             QuelleActions.quelleFound({ quelle })
           )
@@ -51,7 +51,7 @@ export class QuelleEffects {
     this.actions$.pipe(
       ofType(AuthActions.sessionCreated),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.quelleDataService.loadQuelleAdmin(action.session.user).pipe(
+        this.quellenHttpService.loadQuelleAdmin(action.session.user).pipe(
           map((quelle: Quelle | undefined) =>
             quelle ? QuelleActions.quelleAdminLoaded({ quelle }) : noopAction()
           )
@@ -64,7 +64,7 @@ export class QuelleEffects {
     this.actions$.pipe(
       ofType(AuthActions.sessionRestored),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.quelleDataService.loadQuelleAdmin(action.session.user).pipe(
+        this.quellenHttpService.loadQuelleAdmin(action.session.user).pipe(
           map((quelle: Quelle | undefined) =>
             quelle ? QuelleActions.quelleFound({ quelle }) : noopAction()
           )
@@ -76,7 +76,7 @@ export class QuelleEffects {
   constructor(
     private actions$: Actions,
     private quellenFacade: QuellenFacade,
-    private quelleDataService: QuelleDataService,
+    private quellenHttpService: QuellenHttpService,
     private safeNgrx: SafeNgrxService
   ) { }
 }

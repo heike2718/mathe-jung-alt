@@ -22,10 +22,10 @@ import de.egladil.mja_admin_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_admin_api.domain.quellen.QuelleReadonly;
 import de.egladil.mja_admin_api.domain.quellen.QuellenRepository;
 import de.egladil.mja_admin_api.domain.quellen.QuellenService;
-import de.egladil.mja_admin_api.domain.semantik.DomainService;
 import de.egladil.mja_admin_api.domain.utils.SetOperationUtils;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
+import de.egladil.web.mja_shared.semantik.DomainService;
 
 /**
  * QuellenServiceImpl

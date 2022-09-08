@@ -21,9 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
-import de.egladil.mja_admin_api.domain.semantik.DomainService;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.web.mja_shared.domain.deskriptoren.DeskriptorSuchkontext;
+import de.egladil.web.mja_shared.semantik.DomainService;
 
 /**
  * DeskriptorenServiceImpl

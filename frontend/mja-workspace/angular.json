@@ -10,6 +10,8 @@
     "raetsel-domain": "libs/raetsel/domain",
     "raetsel-feature-edit": "libs/raetsel/feature-edit",
     "raetsel-feature-search": "libs/raetsel/feature-search",
+    "sammlungen-domain": "libs/sammlungen/domain",
+    "sammlungen-feature-search": "libs/sammlungen/feature-search",
     "shared-auth-domain": "libs/shared/auth/domain",
     "shared-ui-components": "libs/shared/ui-components",
     "shared-ui-raetsel": "libs/shared/ui-raetsel",

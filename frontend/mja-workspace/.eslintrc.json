@@ -61,6 +61,13 @@
               {
                 "sourceTag": "domain:grafik",
                 "onlyDependOnLibsWithTags": ["domain:grafik", "domain:shared"]
+              },
+              {
+                "sourceTag": "domain:sammlungen",
+                "onlyDependOnLibsWithTags": [
+                  "domain:sammlungen",
+                  "domain:shared"
+                ]
               }
             ]
           }
