@@ -18,7 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
+import de.egladil.mja_admin_api.domain.exception.MjaRuntimeException;
 
 /**
  * MjaFileUtils

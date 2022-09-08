@@ -2,7 +2,7 @@
 // Project: mja-shared
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.web.mja_shared.domain.deskriptoren;
+package de.egladil.mja_admin_api.domain.deskriptoren;
 
 import java.util.Arrays;
 import java.util.List;

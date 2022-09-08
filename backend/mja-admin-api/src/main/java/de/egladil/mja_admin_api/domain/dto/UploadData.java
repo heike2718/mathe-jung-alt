@@ -7,8 +7,8 @@ package de.egladil.mja_admin_api.domain.dto;
 import java.io.File;
 import java.util.Base64;
 
+import de.egladil.mja_admin_api.domain.semantik.ValueObject;
 import de.egladil.web.filescanner_service.scan.Upload;
-import de.egladil.web.mja_shared.semantik.ValueObject;
 
 /**
  * UploadData ein Upload

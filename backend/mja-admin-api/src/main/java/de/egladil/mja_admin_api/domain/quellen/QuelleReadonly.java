@@ -7,8 +7,8 @@ package de.egladil.mja_admin_api.domain.quellen;
 import java.util.List;
 
 import de.egladil.mja_admin_api.domain.AbstractDomainEntity;
+import de.egladil.mja_admin_api.domain.semantik.AggregateRoot;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.web.mja_shared.semantik.AggregateRoot;
 
 /**
  * QuelleReadonly

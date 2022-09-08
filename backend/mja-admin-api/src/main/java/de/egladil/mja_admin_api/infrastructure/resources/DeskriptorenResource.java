@@ -15,10 +15,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_admin_api.domain.deskriptoren.impl.DeskriptorenRepository;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.web.mja_shared.domain.deskriptoren.DeskriptorSuchkontext;
 import io.quarkus.panache.common.Sort;
 
 /**

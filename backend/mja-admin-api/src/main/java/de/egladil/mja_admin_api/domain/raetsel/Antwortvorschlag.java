@@ -4,7 +4,7 @@
 // =====================================================
 package de.egladil.mja_admin_api.domain.raetsel;
 
-import de.egladil.web.mja_shared.semantik.ValueObject;
+import de.egladil.mja_admin_api.domain.semantik.ValueObject;
 
 /**
  * Antwortvorschlag

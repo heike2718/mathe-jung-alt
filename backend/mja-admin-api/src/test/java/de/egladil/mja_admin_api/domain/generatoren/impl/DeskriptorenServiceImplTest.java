@@ -21,11 +21,11 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import de.egladil.mja_admin_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_admin_api.domain.deskriptoren.impl.DeskriptorenRepository;
 import de.egladil.mja_admin_api.domain.deskriptoren.impl.DeskriptorenServiceImpl;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_admin_api.profiles.FullDatabaseTestProfile;
-import de.egladil.web.mja_shared.domain.deskriptoren.DeskriptorSuchkontext;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.junit.mockito.InjectMock;

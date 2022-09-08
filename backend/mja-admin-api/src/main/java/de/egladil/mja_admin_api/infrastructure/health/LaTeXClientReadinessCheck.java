@@ -18,10 +18,10 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_admin_api.domain.exception.MjaRuntimeException;
 import de.egladil.mja_admin_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_admin_api.infrastructure.restclient.LaTeXRestClient;
 import de.egladil.web.mja_auth.dto.MessagePayload;
-import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
 
 /**
  * LaTeXClientReadinessCheck

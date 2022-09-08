@@ -2,7 +2,7 @@
 // Project: mja-shared
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.web.mja_shared.exceptions;
+package de.egladil.mja_admin_api.domain.exception;
 
 /**
  * RequestTimeoutException

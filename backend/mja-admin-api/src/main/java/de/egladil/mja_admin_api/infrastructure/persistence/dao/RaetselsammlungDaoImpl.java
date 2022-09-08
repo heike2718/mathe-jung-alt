@@ -17,13 +17,13 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_admin_api.domain.DomainEntityStatus;
 import de.egladil.mja_admin_api.domain.dto.SortDirection;
+import de.egladil.mja_admin_api.domain.exception.MjaRuntimeException;
 import de.egladil.mja_admin_api.domain.sammlungen.RaetselsammlungDao;
 import de.egladil.mja_admin_api.domain.sammlungen.Referenztyp;
 import de.egladil.mja_admin_api.domain.sammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteRaetselsammlung;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetselsammlungselement;
-import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
 
 /**
  * RaetselsammlungDaoImpl

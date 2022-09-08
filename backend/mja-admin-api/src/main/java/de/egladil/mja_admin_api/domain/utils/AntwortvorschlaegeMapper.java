@@ -7,8 +7,8 @@ package de.egladil.mja_admin_api.domain.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.egladil.mja_admin_api.domain.exception.MjaRuntimeException;
 import de.egladil.mja_admin_api.domain.raetsel.Antwortvorschlag;
-import de.egladil.web.mja_shared.exceptions.MjaRuntimeException;
 
 /**
  * AntwortvorschlaegeMapper

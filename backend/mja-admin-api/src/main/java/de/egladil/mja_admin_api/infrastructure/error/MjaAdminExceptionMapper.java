@@ -18,10 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_admin_api.domain.exception.FileUploadException;
+import de.egladil.mja_admin_api.domain.exception.LaTeXCompileException;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.exception.AuthException;
 import de.egladil.web.mja_auth.exception.SessionExpiredException;
-import de.egladil.web.mja_shared.exceptions.LaTeXCompileException;
 
 /**
  * MjaAdminExceptionMapper

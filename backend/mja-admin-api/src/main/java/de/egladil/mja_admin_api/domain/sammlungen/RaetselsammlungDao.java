@@ -8,10 +8,10 @@ import java.util.List;
 
 import de.egladil.mja_admin_api.domain.DomainEntityStatus;
 import de.egladil.mja_admin_api.domain.dto.SortDirection;
+import de.egladil.mja_admin_api.domain.semantik.Repository;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistenteRaetselsammlung;
 import de.egladil.mja_admin_api.infrastructure.persistence.entities.PersistentesRaetselsammlungselement;
-import de.egladil.web.mja_shared.semantik.Repository;
 
 /**
  * RaetselsammlungDao
