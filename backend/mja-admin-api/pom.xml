@@ -9,7 +9,7 @@
 		<version>1.0.1</version>
 	</parent>
 
-	<artifactId>mja-admin-api</artifactId>
+	<artifactId>mja-api</artifactId>
 
 	<description>Webservice für "Mathe für jung und alt"- Administration</description>
 
