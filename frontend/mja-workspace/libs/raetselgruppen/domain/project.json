@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/raetselgruppen/domain/src",
+  "prefix": "raetselgruppen",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/raetselgruppen/domain"],
+      "options": {
+        "project": "libs/raetselgruppen/domain/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/raetselgruppen/domain/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/raetselgruppen/domain/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/raetselgruppen/domain"],
+      "options": {
+        "jestConfig": "libs/raetselgruppen/domain/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/raetselgruppen/domain/**/*.ts",
+          "libs/raetselgruppen/domain/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["domain:raetselgruppen", "type:domain-logic"]
+}

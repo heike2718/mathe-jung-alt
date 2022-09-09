@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.infrastructure.resources.AufgabensammlungResource;
+import de.egladil.mja_api.infrastructure.resources.AufgabengruppenResource;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -20,7 +20,7 @@ import io.restassured.response.Response;
  * AufgabensammlungResourceTest
  */
 @QuarkusTest
-@TestHTTPEndpoint(AufgabensammlungResource.class)
+@TestHTTPEndpoint(AufgabengruppenResource.class)
 @TestProfile(FullDatabaseTestProfile.class)
 public class AufgabensammlungResourceTest {
 

@@ -63,9 +63,9 @@
                 "onlyDependOnLibsWithTags": ["domain:grafik", "domain:shared"]
               },
               {
-                "sourceTag": "domain:sammlungen",
+                "sourceTag": "domain:raetselgruppen",
                 "onlyDependOnLibsWithTags": [
-                  "domain:sammlungen",
+                  "domain:raetselgruppen",
                   "domain:shared"
                 ]
               }
