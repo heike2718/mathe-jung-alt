@@ -29,6 +29,7 @@ import { StoreDevModules } from './store-config/store-devtools';
 import { SidenavComponent } from './navigation/sidenav/sidenav.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { RaetselgruppenFeatureSearchModule } from '@mja-workspace/raetselgruppen/feature-search';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     QuellenDomainModule,
     QuellenFeatureSearchModule,
     RaetselFeatureSearchModule,
+    RaetselgruppenFeatureSearchModule,
     EffectsModule.forRoot([]),
     StoreDevModules,
     StoreModule.forRoot(reducers, { metaReducers }),

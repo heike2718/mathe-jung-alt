@@ -5,9 +5,8 @@ import * as RaetselActions from './raetsel.actions';
 import { initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
 import { PaginationState, initialPaginationState } from '@mja-workspace/suchfilter/domain';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
-import { state } from '@angular/animations';
 
-export const RAETSEL_FEATURE_KEY = 'raetsel-raetsel';
+export const RAETSEL_FEATURE_KEY = 'raetsel';
 
 export interface RaetselState extends EntityState<Raetsel> {
   selectedId?: string | number; // which Raetsel record has been selected
@@ -27,7 +26,7 @@ export interface RaetselPartialState {
 export const raetselAdapter: EntityAdapter<Raetsel> =
   createEntityAdapter<Raetsel>();
 
-export const initialState: RaetselState = raetselAdapter.getInitialState({
+const initialState: RaetselState = raetselAdapter.getInitialState({
   loaded: false,
   page: [],
   paginationState: initialPaginationState,
@@ -143,4 +142,4 @@ const raetselReducer = createReducer(
 
 export function reducer(state: RaetselState | undefined, action: Action) {
   return raetselReducer(state, action);
-}
+};

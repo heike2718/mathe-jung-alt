@@ -31,7 +31,7 @@ public class RaetselDaoImpl implements RaetselDao {
 	EntityManager entityManager;
 
 	@Override
-	public long zaehleRaetselVolltext(final String suchstring) {
+	public long countRaetselVolltext(final String suchstring) {
 
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring)";
 
@@ -46,7 +46,7 @@ public class RaetselDaoImpl implements RaetselDao {
 	}
 
 	@Override
-	public long zaehleMitDeskriptoren(final String deskriptorenIDs) {
+	public long countWithDeskriptoren(final String deskriptorenIDs) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
@@ -62,7 +62,7 @@ public class RaetselDaoImpl implements RaetselDao {
 	}
 
 	@Override
-	public long zaehleRaetselComplete(final String suchstring, final String deskriptorenIDs) {
+	public long countRaetselWithFilter(final String suchstring, final String deskriptorenIDs) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
@@ -83,7 +83,7 @@ public class RaetselDaoImpl implements RaetselDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<PersistentesRaetsel> sucheRaetselVolltext(final String suchstring, final int limit, final int offset, final SortDirection sortDirection) {
+	public List<PersistentesRaetsel> findRaetselVolltext(final String suchstring, final int limit, final int offset, final SortDirection sortDirection) {
 
 		String stmt = sortDirection == SortDirection.desc
 			? "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) ORDER BY SCHLUESSEL desc"
@@ -100,7 +100,7 @@ public class RaetselDaoImpl implements RaetselDao {
 	}
 
 	@Override
-	public List<PersistentesRaetsel> sucheMitDeskriptoren(final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection) {
+	public List<PersistentesRaetsel> findWithDeskriptoren(final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection) {
 
 		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
@@ -118,7 +118,7 @@ public class RaetselDaoImpl implements RaetselDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<PersistentesRaetsel> sucheRaetselComplete(final String suchstring, final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection) {
+	public List<PersistentesRaetsel> findRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 

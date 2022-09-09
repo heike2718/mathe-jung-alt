@@ -66,10 +66,10 @@ public class RaetselServiceImpl implements RaetselService {
 
 		switch (suchfilterVariante) {
 
-			case COMPLETE -> anzahlGesamt = raetselDao.zaehleRaetselComplete(suchfilter.getSuchstring(),
+			case COMPLETE -> anzahlGesamt = raetselDao.countRaetselWithFilter(suchfilter.getSuchstring(),
 				suchfilter.getDeskriptorenIds());
-			case DESKRIPTOREN -> anzahlGesamt = raetselDao.zaehleMitDeskriptoren(suchfilter.getDeskriptorenIds());
-			case VOLLTEXT -> anzahlGesamt = raetselDao.zaehleRaetselVolltext(suchfilter.getSuchstring());
+			case DESKRIPTOREN -> anzahlGesamt = raetselDao.countWithDeskriptoren(suchfilter.getDeskriptorenIds());
+			case VOLLTEXT -> anzahlGesamt = raetselDao.countRaetselVolltext(suchfilter.getSuchstring());
 			default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
 		}
 
@@ -80,13 +80,13 @@ public class RaetselServiceImpl implements RaetselService {
 
 		switch (suchfilterVariante) {
 
-			case COMPLETE -> trefferliste = raetselDao.sucheRaetselComplete(suchfilter.getSuchstring(),
+			case COMPLETE -> trefferliste = raetselDao.findRaetselWithFilter(suchfilter.getSuchstring(),
 				suchfilter.getDeskriptorenIds(),
 				limit,
 				offset, sortDirection);
-			case DESKRIPTOREN -> trefferliste = raetselDao.sucheMitDeskriptoren(suchfilter.getDeskriptorenIds(), limit, offset,
+			case DESKRIPTOREN -> trefferliste = raetselDao.findWithDeskriptoren(suchfilter.getDeskriptorenIds(), limit, offset,
 				sortDirection);
-			case VOLLTEXT -> trefferliste = raetselDao.sucheRaetselVolltext(suchfilter.getSuchstring(), limit, offset,
+			case VOLLTEXT -> trefferliste = raetselDao.findRaetselVolltext(suchfilter.getSuchstring(), limit, offset,
 				sortDirection);
 
 			default -> new IllegalArgumentException("Unexpected value: " + suchfilterVariante);

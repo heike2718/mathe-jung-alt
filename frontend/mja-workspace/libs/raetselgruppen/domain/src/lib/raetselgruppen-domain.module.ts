@@ -1,7 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import * as fromRaetselgruppen from './+state/raetselgruppen.reducer';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    StoreModule.forFeature(
+      fromRaetselgruppen.RAETSELGRUPPEN_FEATURE_KEY,
+      fromRaetselgruppen.reducer
+    ),
+  ],
 })
-export class RaetselgruppenDomainModule {}
+export class RaetselgruppenDomainModule { }

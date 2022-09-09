@@ -26,6 +26,12 @@ const routes: Routes = [
 
     },
     {
+        path: 'raetselgruppen',
+        loadChildren: () =>
+            import('@mja-workspace/raetselgruppen/feature-search').then((m) => m.RaetselgruppenFeatureSearchModule),
+
+    },
+    {
         path: 'home',
         component: HomeComponent
     },

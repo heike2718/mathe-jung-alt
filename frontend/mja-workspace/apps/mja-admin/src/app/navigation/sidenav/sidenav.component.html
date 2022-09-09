@@ -14,6 +14,11 @@
         <span class="nav-caption">Rätsel</span>
     </a>
 
+    <a *ngIf="authFacade.isAdmin$| async" mat-list-item routerLink="/raetselgruppen/uebersicht">
+        <mat-icon>menu_book</mat-icon>
+        <span class="nav-caption">Rätselgruppen</span>
+    </a>
+
     <a *ngIf="authFacade.isLoggedOut$ | async" mat-list-item (click)="login()">
         <mat-icon>login</mat-icon>
         <span class="nav-caption">einloggen</span>

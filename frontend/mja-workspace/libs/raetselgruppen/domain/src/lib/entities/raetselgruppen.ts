@@ -16,13 +16,21 @@ export type Schwierigkeitsgrad = 'AB_NEUN' |
 
 export type Referenztyp = 'MINIKAENGURU' | 'SERIE';
 
-export interface RaetselgruppensucheTrefferItem {
+export interface RaetselgruppeBasisdaten {
     readonly id: string;
-    readonly name: string;
+    readonly name?: string;
     readonly kommentar?: string;
-    readonly schwierigkeitsgrad: Schwierigkeitsgrad;
-    readonly referenztyp: Referenztyp;
-    readonly referenz: string;
+    readonly schwierigkeitsgrad?: Schwierigkeitsgrad;
+    readonly referenztyp?: Referenztyp;
+    readonly referenz?: string;
     readonly status: STATUS;
+};
+
+export const initialRaetselgruppeBasisdaten: RaetselgruppeBasisdaten = {
+    id: 'neu',
+    status: 'ERFASST'
+};
+
+export interface RaetselgruppensucheTrefferItem extends RaetselgruppeBasisdaten {
     readonly anzahlElemente: number;
 };

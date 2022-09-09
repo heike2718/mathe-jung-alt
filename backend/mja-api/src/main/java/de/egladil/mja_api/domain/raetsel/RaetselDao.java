@@ -20,7 +20,7 @@ public interface RaetselDao {
 	 * @param  suchstring
 	 * @return            List
 	 */
-	long zaehleRaetselVolltext(String suchstring);
+	long countRaetselVolltext(String suchstring);
 
 	/**
 	 * Sucht alle Raetsel, deren Deskriptoren die deskriptorenIDs als Teilmenge enthalten.
@@ -29,7 +29,7 @@ public interface RaetselDao {
 	 *                         String die IDs der Deskriptoren
 	 * @return                 List
 	 */
-	long zaehleMitDeskriptoren(String deskriptorenIDs);
+	long countWithDeskriptoren(String deskriptorenIDs);
 
 	/**
 	 * Volltextsuche mit Deskriptoren in RAETSEL mit dem gegebenen Suchstring.
@@ -40,7 +40,7 @@ public interface RaetselDao {
 	 *                         String die IDs der Deskriptoren, kommasepariert
 	 * @return                 List
 	 */
-	long zaehleRaetselComplete(String suchstring, String deskriptorenIDs);
+	long countRaetselWithFilter(String suchstring, String deskriptorenIDs);
 
 	/**
 	 * Volltextsuche in RAETSEL mit dem gegebenen Suchstring.
@@ -54,7 +54,7 @@ public interface RaetselDao {
 	 *                       SortDirection asc/desc
 	 * @return               List
 	 */
-	List<PersistentesRaetsel> sucheRaetselVolltext(String suchstring, int limit, int offset, SortDirection sortDirection);
+	List<PersistentesRaetsel> findRaetselVolltext(String suchstring, int limit, int offset, SortDirection sortDirection);
 
 	/**
 	 * Sucht alle Raetsel, deren Deskriptoren die deskriptorenIDs als Teilmenge enthalten.
@@ -69,7 +69,7 @@ public interface RaetselDao {
 	 *                         SortDirection asc/desc
 	 * @return                 List
 	 */
-	List<PersistentesRaetsel> sucheMitDeskriptoren(String deskriptorenIDs, int limit, int offset, SortDirection sortDirection);
+	List<PersistentesRaetsel> findWithDeskriptoren(String deskriptorenIDs, int limit, int offset, SortDirection sortDirection);
 
 	/**
 	 * Volltextsuche mit Deskriptoren in RAETSEL mit dem gegebenen Suchstring.
@@ -86,6 +86,6 @@ public interface RaetselDao {
 	 *                         SortDirection asc/desc
 	 * @return                 List
 	 */
-	List<PersistentesRaetsel> sucheRaetselComplete(String suchstring, String deskriptorenIDs, int limit, int offset, SortDirection sortDirection);
+	List<PersistentesRaetsel> findRaetselWithFilter(String suchstring, String deskriptorenIDs, int limit, int offset, SortDirection sortDirection);
 
 }

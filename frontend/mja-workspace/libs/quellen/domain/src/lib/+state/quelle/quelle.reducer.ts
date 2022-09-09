@@ -5,7 +5,7 @@ import * as QuelleActions from './quelle.actions';
 import { Quelle } from '../../entities/quelle';
 import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 
-export const QUELLE_FEATURE_KEY = 'quellen-quelle';
+export const QUELLE_FEATURE_KEY = 'quellen';
 
 export interface QuellenState extends EntityState<Quelle> {
   selectedId?: string | number; // which Quelle record has been selected
