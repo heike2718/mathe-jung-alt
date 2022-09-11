@@ -27,12 +27,11 @@ public class EditRaetselgruppePayloadTest {
 
 			// Arrange
 			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-			payload.setId("abcdef-123456");
-			payload.setKommentar("ein sinnloser Kommentar");
+			payload.setId("neu");
 			payload.setName("Minikänguruwettbewerb 2022 - Klasse 1");
 			payload.setReferenz("2022");
 			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
+			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.IKID);
 			payload.setStatus(DomainEntityStatus.ERFASST);
 
 			// Act

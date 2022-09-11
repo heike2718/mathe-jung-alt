@@ -1,0 +1,8 @@
+<div *ngIf="raetsegruppenFacade.selectedGruppe$ | async as raetsel else keineGruppe" fxLayout="column"
+    fxLayoutGap="20px" class="container">
+</div>
+
+<ng-template #keineGruppe>
+    <h2>Rätselgruppe Details</h2>
+    <p>keine Gruppe ausgewählt</p>
+</ng-template>

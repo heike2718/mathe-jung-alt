@@ -13,18 +13,6 @@ export class QuellenHttpService {
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 
-  load(): Observable<Quelle[]> {
-    // Uncomment if needed
-    /*
-        const url = '...';
-        const params = new HttpParams().set('param', 'value');
-        const headers = new HttpHeaders().set('Accept', 'application/json');
-        return this.http.get<Quelle[]>(url, {params, headers});
-        */
-
-    return of([]);
-  }
-
   findQuellen(suchfilter: Suchfilter): Observable<Quelle[]> {
 
     const mapper = new SuchfilterQueryParameterMapper(suchfilter);

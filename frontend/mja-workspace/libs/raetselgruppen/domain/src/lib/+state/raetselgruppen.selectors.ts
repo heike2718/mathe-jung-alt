@@ -1,21 +1,29 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
     RAETSELGRUPPEN_FEATURE_KEY,
-    RaetselgruppenState,
-    raetselgruppenAdapter
+    RaetselgruppenState
 } from './raetselgruppen.reducer';
 
-// Lookup the 'Raetsel' feature state managed by NgRx
-export const getRaetselState = createFeatureSelector<RaetselgruppenState>(RAETSELGRUPPEN_FEATURE_KEY);
+// Lookup the 'Raetselgruppen' feature state managed by NgRx
+const getRaetselgruppenState = createFeatureSelector<RaetselgruppenState>(RAETSELGRUPPEN_FEATURE_KEY);
 
-const { selectAll, selectEntities } = raetselgruppenAdapter.getSelectors();
+export const getRaetselgruppenSuchparameter = createSelector(
+    getRaetselgruppenState,
+    (state: RaetselgruppenState) => state.suchparameter
+);
 
-export const getPaginationState = createSelector(
-    getRaetselState,
-    (state: RaetselgruppenState) => state.paginationState
+export const getAnzahlTrefferGesamt = createSelector(
+    getRaetselgruppenState,
+    (state: RaetselgruppenState) => state.anzahlTrefferGesamt
 );
 
 export const getPage = createSelector(
-    getRaetselState,
+    getRaetselgruppenState,
     (state: RaetselgruppenState) => state.page
 );
+
+export const getSelectedGruppe = createSelector(
+    getRaetselgruppenState,
+    (state: RaetselgruppenState) => state.selectedGruppe
+);
+

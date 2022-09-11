@@ -44,7 +44,6 @@ export const initialSuchfilter: Suchfilter = {
     deskriptoren: []
 };
 
-
 export interface PaginationState {
     anzahlTreffer: number;
     pageSize: number,

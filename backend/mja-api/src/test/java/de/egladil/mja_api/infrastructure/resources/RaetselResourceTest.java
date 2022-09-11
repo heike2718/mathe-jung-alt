@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
-import de.egladil.mja_api.infrastructure.resources.RaetselResource;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;

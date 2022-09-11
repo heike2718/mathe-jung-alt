@@ -1,5 +1,7 @@
 import { STATUS } from "@mja-workspace/shared/util-mja";
 
+export type SortOrder = 'asc' | 'desc' |'noop';
+
 
 export type Schwierigkeitsgrad = 'AB_NEUN' |
     'DREI_VIER' |
@@ -34,3 +36,33 @@ export const initialRaetselgruppeBasisdaten: RaetselgruppeBasisdaten = {
 export interface RaetselgruppensucheTrefferItem extends RaetselgruppeBasisdaten {
     readonly anzahlElemente: number;
 };
+
+export interface RaetselgruppensucheTreffer {
+    readonly anzahlTreffer: number;
+    readonly items: RaetselgruppensucheTrefferItem[];
+};
+
+export interface RaetselgruppenSuchparameter {
+    name?: string;
+    // sortName: SortOrder;
+    schwierigkeitsgrad?: Schwierigkeitsgrad;
+    // sortSchwierigkeitsgrad: SortOrder;
+    referenztyp?: Referenztyp;
+    // sortReferenztyp: SortOrder;
+    referenz?: string;
+    // sortReferenz: SortOrder;
+    pageSize: number;
+    pageIndex: number;
+};
+
+export const initialRaetselgruppenSuchparameter: RaetselgruppenSuchparameter = {
+    pageIndex: 0,
+    pageSize: 20,
+    // sortName: 'asc',
+    // sortSchwierigkeitsgrad: 'noop',
+    // sortReferenztyp: 'noop' ,
+    // sortReferenz: 'noop'   
+}
+
+
+

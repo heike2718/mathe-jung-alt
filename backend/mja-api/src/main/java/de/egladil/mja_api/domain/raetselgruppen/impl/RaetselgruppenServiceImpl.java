@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetselgruppen.impl;
 
+import java.util.List;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -19,7 +21,9 @@ import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenDao;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
+import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
+import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.web.mja_auth.dto.MessagePayload;
@@ -34,6 +38,32 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	@Inject
 	RaetselgruppenDao raetselgruppenDao;
+
+	@Override
+	public RaetselgruppensucheTreffer findRaetselgruppen(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
+
+		RaetselgruppensucheTreffer result = new RaetselgruppensucheTreffer();
+		long anzahlGesamt = raetselgruppenDao.countByFilter(suchparameter);
+
+		if (anzahlGesamt == 0L) {
+
+			return result;
+		}
+
+		List<PersistenteRaetselgruppe> trefferliste = raetselgruppenDao.findByFilter(suchparameter, limit, offset);
+
+		for (PersistenteRaetselgruppe treffer : trefferliste) {
+
+			long anzahlElemente = raetselgruppenDao.countElementeRaetselgruppe(treffer.uuid);
+
+			RaetselgruppensucheTrefferItem item = mapFromDB(treffer);
+			item.setAnzahlElemente(anzahlElemente);
+			result.addItem(item);
+		}
+
+		result.setTrefferGesamt(anzahlGesamt);
+		return result;
+	}
 
 	@Override
 	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload, final String user) throws WebApplicationException {

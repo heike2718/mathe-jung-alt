@@ -8,6 +8,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,15 +60,18 @@ public class PersistenteRaetselgruppe extends PanacheEntityBase implements Persi
 	public String name;
 
 	@Column
+	@Enumerated(EnumType.STRING)
 	public Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@Column
+	@Enumerated(EnumType.STRING)
 	public Referenztyp referenztyp;
 
 	@Column(name = "REFERENZ")
 	public String referenz;
 
 	@Column
+	@Enumerated(EnumType.STRING)
 	public DomainEntityStatus status;
 
 	@Column

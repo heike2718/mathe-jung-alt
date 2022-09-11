@@ -9,6 +9,7 @@ import { RaetselgruppenDomainModule } from '@mja-workspace/raetselgruppen/domain
 import { RaetselgruppenSearchComponent } from './raetselgruppen-search/raetselgruppen-search.component';
 import { RouterModule } from '@angular/router';
 import { AdminGuard } from '@mja-workspace/shared/auth/domain';
+import { RaetselgruppeDetailsComponent } from './raetselgruppe-details/raetselgruppe-details.component';
 
 @NgModule({
   imports: [
@@ -22,11 +23,17 @@ import { AdminGuard } from '@mja-workspace/shared/auth/domain';
         path: 'uebersicht',
         canActivate: [AdminGuard],
         component: RaetselgruppenSearchComponent,
-      }
+      }, 
+      {
+        path: 'details',
+        canActivate: [AdminGuard],
+        component: RaetselgruppeDetailsComponent,
+      },
     ]),
   ],
   declarations: [
-    RaetselgruppenSearchComponent
+    RaetselgruppenSearchComponent,
+    RaetselgruppeDetailsComponent
   ],
   exports: [
     RaetselgruppenSearchComponent

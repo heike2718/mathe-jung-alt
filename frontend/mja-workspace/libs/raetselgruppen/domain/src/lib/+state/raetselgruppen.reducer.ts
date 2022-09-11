@@ -1,48 +1,51 @@
 import { createReducer, on, Action } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter, Update } from '@ngrx/entity';
 import * as RaetselgruppenActions from './raetselgruppen.actions';
 
 export const RAETSELGRUPPEN_FEATURE_KEY = 'raetselgruppen';
 
-import { RaetselgruppensucheTrefferItem } from "../entities/raetselgruppen";
-import { initialPaginationState, PaginationState } from '@mja-workspace/suchfilter/domain';
+import { initialRaetselgruppenSuchparameter, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 
 
-export interface RaetselgruppenState extends EntityState<RaetselgruppensucheTrefferItem> {
+export interface RaetselgruppenState {
     readonly page: RaetselgruppensucheTrefferItem[];
-    readonly paginationState: PaginationState;
+    readonly anzahlTrefferGesamt: number;
+    readonly suchparameter: RaetselgruppenSuchparameter,
+    readonly selectedGruppe: RaetselgruppensucheTrefferItem | undefined;
 };
 
 export interface RaetselgruppenPartialState {
     readonly [RAETSELGRUPPEN_FEATURE_KEY]: RaetselgruppenState;
 };
 
-export const raetselgruppenAdapter: EntityAdapter<RaetselgruppensucheTrefferItem> =
-    createEntityAdapter<RaetselgruppensucheTrefferItem>();
-
-const initialState: RaetselgruppenState = raetselgruppenAdapter.getInitialState({
+const initialState: RaetselgruppenState = {
     page: [],
-    paginationState: initialPaginationState
-});
+    anzahlTrefferGesamt: 0,
+    suchparameter: initialRaetselgruppenSuchparameter,
+    selectedGruppe: undefined
+};
 
 const raetselgruppenReducer = createReducer(
     initialState,
 
-    on(RaetselgruppenActions.selectPage, (state, action) => {
+    on(RaetselgruppenActions.suchparameterChanged, (state, action) => {
         return {
             ...state,
-            paginationState: {
-                ...state.paginationState,
-                pageIndex: action.pageDefinition.pageIndex,
-                pageSize: action.pageDefinition.pageSize,
-                sortDirection: action.pageDefinition.sortDirection
-            }
-        }
+            suchparameter: action.suchparameter
+        };
     }),
+
+    on(RaetselgruppenActions.pageLoaded, (state, action) => {
+
+        console.log('on pageLoaded');
+
+        return {
+            ...state,
+            page: action.treffer.items,
+            anzahlTrefferGesamt: action.treffer.anzahlTreffer
+        };
+    })
 );
 
 export function reducer(state: RaetselgruppenState | undefined, action: Action) {
     return raetselgruppenReducer(state, action);
 };
-
-

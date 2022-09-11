@@ -6,8 +6,9 @@ package de.egladil.mja_api.domain.raetselgruppen;
 
 import java.util.List;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
-import de.egladil.mja_api.domain.dto.SortDirection;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
@@ -23,32 +24,21 @@ public interface RaetselgruppenDao {
 	 * Zählt die Treffermenge bei Anwendung des gegebenen Filters. Die Parameter können null sein. Bei name und kommentar wird mit
 	 * like gesucht, alle anderen mit equal.
 	 *
-	 * @param  name
-	 * @param  kommentar
-	 * @param  schwierigkeitsgrad
-	 * @param  referenztyp
-	 * @param  referenz
-	 * @param  status
-	 * @return
+	 * @param  suchparameter
+	 * @return               long
 	 */
-	long countByFilter(String name, String kommentar, Schwierigkeitsgrad schwierigkeitsgrad, Referenztyp referenztyp, String referenz, DomainEntityStatus status);
+	long countByFilter(RaetselgruppenSuchparameter suchparameter);
 
 	/**
 	 * Sucht die Rätselgruppen die den Filterkriterien entsprechen, sortiert nach name. Die Parameter können null sein. Bei name
 	 * und kommentar wird mit like gesucht, alle anderen mit equal.
 	 *
-	 * @param  name
-	 * @param  kommentar
-	 * @param  schwierigkeitsgrad
-	 * @param  referenztyp
-	 * @param  referenz
-	 * @param  status
+	 * @param  suchparameter
 	 * @param  limit
 	 * @param  offset
-	 * @param  sortDirection
-	 * @return
+	 * @return               List
 	 */
-	List<PersistenteRaetselgruppe> findByFilter(String name, String kommentar, Schwierigkeitsgrad schwierigkeitsgrad, Referenztyp referenztyp, String referenz, DomainEntityStatus status, int limit, int offset, SortDirection sortDirection);
+	List<PersistenteRaetselgruppe> findByFilter(RaetselgruppenSuchparameter suchparameter, int limit, int offset);
 
 	/**
 	 * @param  referenztyp
@@ -63,14 +53,6 @@ public interface RaetselgruppenDao {
 	 * @return      PersistenteRaetselgruppe oder null
 	 */
 	PersistenteRaetselgruppe findByName(String name);
-
-	/**
-	 * Zählt die Elemente der Rätselgruppe.
-	 *
-	 * @param  gruppeID
-	 * @return
-	 */
-	long countElementeRaetselgruppe(String gruppeID);
 
 	/**
 	 * Gibt alle Elemente der gegebenen Rästelgruppe zurück.
@@ -96,4 +78,10 @@ public interface RaetselgruppenDao {
 	 * @return        PersistenteRaetselgruppe
 	 */
 	PersistenteRaetselgruppe saveRaetselgruppe(PersistenteRaetselgruppe gruppe);
+
+	/**
+	 * @param  uuid
+	 * @return
+	 */
+	long countElementeRaetselgruppe(@NotNull @Size(min = 1, max = 40) String uuid);
 }

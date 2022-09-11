@@ -85,7 +85,7 @@ public class RaetselResource {
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
 		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren,
-		@QueryParam(value = "limit") @DefaultValue("10") final int limit,
+		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
 		@QueryParam(value = "sortDirection")  @DefaultValue("asc") final SortDirection sortDirection) {
 		// @formatter:on

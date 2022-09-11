@@ -34,7 +34,7 @@ const quelleReducer = createReducer(
     quelleAdapter.setAll(quellen, {
       ...state,
       loaded: true,
-      page: quellen.slice(0, 5)
+      page: quellen.slice(0, 20)
     })
   ),
 

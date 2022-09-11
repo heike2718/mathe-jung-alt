@@ -20,4 +20,14 @@ public class RaetselgruppensucheTreffer {
 	@JsonProperty
 	private List<RaetselgruppensucheTrefferItem> items = new ArrayList<>();
 
+	public void setTrefferGesamt(final long trefferGesamt) {
+
+		this.trefferGesamt = trefferGesamt;
+	}
+
+	public void addItem(final RaetselgruppensucheTrefferItem item) {
+
+		items.add(item);
+	}
+
 }
