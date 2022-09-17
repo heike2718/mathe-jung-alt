@@ -6,19 +6,26 @@ package de.egladil.web.mja_auth.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 /**
  * AuthResult
  */
+@Schema(name = "AuthResult", description = "Ergebnis der Authentifizierung beim authprovider")
 public class AuthResult {
 
+	@Schema(description = "Gültigkeit des generierten Einmaltokens")
 	private long expiresAt;
 
+	@Schema(description = "ein Kontext, also Login oder SignUp")
 	private String state;
 
 	@NotBlank
+	@Schema(description = "für die Autorisierung generierter String, der vom authprovider unverändert zurückgegeben wird")
 	private String nonce;
 
 	@NotBlank
+	@Schema(description = "Einmaltoken, mit dem sich der authprovider-Client das JWT holen kann")
 	private String idToken;
 
 	/**

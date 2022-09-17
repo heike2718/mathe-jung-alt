@@ -4,9 +4,14 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetselgruppen;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 /**
  * Schwierigkeitsgrad
  */
+@Schema(
+	name = "Schwierigkeitsgrad",
+	description = "enum Schwierigkeitsgrad für Rätselgruppen oder Aufgabengruppen. Kann als Path- oder Query-Parameter verwendet werden")
 public enum Schwierigkeitsgrad {
 
 	AB_NEUN("ab Klasse 9"),

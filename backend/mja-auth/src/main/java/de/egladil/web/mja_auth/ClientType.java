@@ -4,9 +4,12 @@
 // =====================================================
 package de.egladil.web.mja_auth;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 /**
- * ClientType
+ * ClientType. Dient dazu, die korrekten ClientCredentials für den authprovider aus den application.properties zu laden.
  */
+@Schema(description = "für das Login erforderlich")
 public enum ClientType {
 
 	ADMIN("mja-admin"),

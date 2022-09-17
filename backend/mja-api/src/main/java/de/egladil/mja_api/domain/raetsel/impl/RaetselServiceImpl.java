@@ -169,12 +169,7 @@ public class RaetselServiceImpl implements RaetselService {
 		grafikLinks.addAll(findPathsGrafikParser.findPaths(raetsel.loesung));
 
 		List<GrafikInfo> grafikInfos = getGrafikInfos(grafikLinks);
-
-		byte[] imageFrage = raetselFileService.findImageFrage(result.getSchluessel());
-		result.setImageFrage(imageFrage);
-
-		byte[] imageLoesung = raetselFileService.findImageLoesung(result.getSchluessel());
-		result.setImageLoesung(imageLoesung);
+		result.setImages(raetselFileService.findImages(result.getSchluessel()));
 
 		result.setGrafikInfos(grafikInfos);
 		return result;

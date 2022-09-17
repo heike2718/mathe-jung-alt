@@ -45,7 +45,7 @@ import de.egladil.web.mja_auth.session.Session;
  * RaetselgruppenResource
  */
 @Path("raetselgruppen/v1")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class RaetselgruppenResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenResource.class);

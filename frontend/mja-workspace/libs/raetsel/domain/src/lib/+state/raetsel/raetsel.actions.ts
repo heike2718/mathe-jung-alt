@@ -1,7 +1,7 @@
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
-import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, GeneratedImages, RaetselDetailsContent, EditRaetselPayload, RaetselsucheTreffer, GeneratedPDF } from '../../entities/raetsel';
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, Raetsel, RaetselDetails, GeneratedImages, RaetselDetailsContent, EditRaetselPayload, RaetselsucheTreffer, GeneratedPDF } from '../../entities/raetsel';
 
 export const setSuchfilter = createAction(
   '[Raetsel] setSuchfilter',

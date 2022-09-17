@@ -12,6 +12,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
 import de.egladil.mja_api.domain.grafiken.Grafik;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
@@ -20,7 +26,8 @@ import de.egladil.mja_api.domain.utils.DevDelayService;
  * GrafikResource
  */
 @Path("/grafiken/v1")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Tag(name = "Grafikvorschau")
 public class GrafikResource {
 
 	@Inject
@@ -31,7 +38,16 @@ public class GrafikResource {
 
 	@GET
 	@RolesAllowed("ADMIN")
-	public Grafik pruefeGrafik(@QueryParam(value = "pfad") final String relativerPfad) {
+	@Operation(
+		operationId = "findGrafik", summary = "liefert eine Grafikvorschau (png) für ein Image, das in LaTeX eingebunden wird.")
+	@APIResponse(
+		name = "FindGrafikOKResponse",
+		description = "Grafikvorschau geladen",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = Grafik.class)))
+	public Grafik findGrafik(@QueryParam(value = "pfad") final String relativerPfad) {
 
 		this.delayService.pause();
 

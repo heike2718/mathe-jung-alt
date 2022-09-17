@@ -7,11 +7,15 @@ package de.egladil.mja_api.domain.raetsel;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetsel.dto.GrafikInfo;
+import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 
@@ -19,45 +23,58 @@ import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
  * Raetsel
  */
 @AggregateRoot
+@Schema(name = "Raetsel", description = "Stammdaten eines Rätsels")
 public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
+	@Schema(description = "fachlicher Schlüssel im Aufgabenarchiv.")
 	private String schluessel;
 
 	@JsonProperty
+	@Schema(description = "kurzer Titel zum Anzeigen in Suchergebnissen, volltextsuchfähig")
 	private String name;
 
 	@JsonProperty
+	@Schema(description = "LaTeX-Code der Frage, volltextsuchfähig")
 	private String frage;
 
 	@JsonProperty
+	@Schema(description = "LaTeX-Code der Lösung, volltextsuchfähig")
 	private String loesung;
 
 	@JsonProperty
+	@Schema(description = "Kommentar, volltextsuchfähig")
 	private String kommentar;
 
 	@JsonProperty
+	@Schema(description = "Veröffentlichungsstatus des Rätsels, nur freigegebene können in der mja-app gefunden werden.")
 	private DomainEntityStatus status;
 
 	@JsonProperty
+	@Schema(description = "Referenz auf die Quelle des Rätsels")
 	private String quelleId;
 
 	@JsonProperty
+	@Schema(
+		type = SchemaType.ARRAY, implementation = Antwortvorschlag.class,
+		description = "optionale Antwortvorschläge, wenn es für multiple choice genutzt werden kann")
 	private Antwortvorschlag[] antwortvorschlaege;
 
 	@JsonProperty
+	@Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class, description = "Deskriptoren, für das Rätsel")
 	private List<Deskriptor> deskriptoren;
 
 	@JsonProperty
+	@Schema(
+		type = SchemaType.ARRAY, implementation = GrafikInfo.class,
+		description = "Info über die im LaTeX-Code der Frage oder Lösung eingebundenen eps-Images.")
 	private List<GrafikInfo> grafikInfos = new ArrayList<>();
 
-	@JsonProperty
-	private byte[] imageFrage;
+	@Schema(description = "Images, die angezeigt werden können")
+	private Images images;
 
 	@JsonProperty
-	private byte[] imageLoesung;
-
-	@JsonProperty
+	@Schema(description = "PDF")
 	private byte[] raetselPDF;
 
 	/**
@@ -188,24 +205,14 @@ public class Raetsel extends AbstractDomainEntity {
 		return this;
 	}
 
-	public byte[] getImageFrage() {
+	public Images getImages() {
 
-		return imageFrage;
+		return images;
 	}
 
-	public void setImageFrage(final byte[] imageFrage) {
+	public void setImages(final Images images) {
 
-		this.imageFrage = imageFrage;
-	}
-
-	public byte[] getImageLoesung() {
-
-		return imageLoesung;
-	}
-
-	public void setImageLoesung(final byte[] imageLoesung) {
-
-		this.imageLoesung = imageLoesung;
+		this.images = images;
 	}
 
 	public DomainEntityStatus getStatus() {

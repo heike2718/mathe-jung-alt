@@ -17,6 +17,7 @@ import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 
 /**
@@ -141,6 +142,12 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 
 		String path = imagesBaseDir + File.separator + schluessel + SUFFIX_LOESUNGEN + ".png";
 		return MjaFileUtils.loadBinaryFile(path, false);
+	}
+
+	@Override
+	public Images findImages(final String schluessel) {
+
+		return new Images().withImageFrage(findImageFrage(schluessel)).withImageLoesung(findImageLoesung(schluessel));
 	}
 
 	@Override

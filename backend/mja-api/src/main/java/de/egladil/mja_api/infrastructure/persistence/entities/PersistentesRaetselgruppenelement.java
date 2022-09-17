@@ -53,6 +53,9 @@ public class PersistentesRaetselgruppenelement extends PanacheEntityBase impleme
 	@Column(name = "RAETSEL")
 	public String raetselID;
 
+	@Column
+	public int punkte;
+
 	@Version
 	@Column(name = "VERSION")
 	public int version;

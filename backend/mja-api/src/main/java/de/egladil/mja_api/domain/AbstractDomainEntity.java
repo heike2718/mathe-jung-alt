@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -13,6 +15,7 @@ public abstract class AbstractDomainEntity {
 
 	public static final String UUID_NEUE_ENTITY = "neu";
 
+	@Schema(description = "technische ID")
 	private String id;
 
 	/**

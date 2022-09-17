@@ -37,7 +37,7 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedImages;
+import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.utils.DevDelayService;
@@ -49,7 +49,7 @@ import de.egladil.web.mja_auth.session.Session;
  * RaetselResource
  */
 @Path("/raetsel/v1")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class RaetselResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselResource.class);
@@ -164,7 +164,7 @@ public class RaetselResource {
 	@GET
 	@Path("PNG/{raetselUuid}")
 	@RolesAllowed("ADMIN")
-	public GeneratedImages raetselImagesGenerieren(@PathParam(
+	public Images raetselImagesGenerieren(@PathParam(
 		value = "raetselUuid") final String raetselUuid, @QueryParam(
 			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
@@ -173,7 +173,7 @@ public class RaetselResource {
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
 		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
 
-		GeneratedImages result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege);
+		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege);
 
 		LOGGER.info("Raetsel Images generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(userUuid, 11));
 

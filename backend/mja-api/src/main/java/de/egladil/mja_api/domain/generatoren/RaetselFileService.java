@@ -6,6 +6,7 @@ package de.egladil.mja_api.domain.generatoren;
 
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.dto.Images;
 
 /**
  * RaetselFileService
@@ -63,6 +64,14 @@ public interface RaetselFileService {
 	 * @return
 	 */
 	byte[] findImageLoesung(String schluessel);
+
+	/**
+	 * Schaut, ob die Images für Frage und Lösung bereits da sind und verpackt sie in ein Objekt.
+	 *
+	 * @param  schluessel
+	 * @return
+	 */
+	Images findImages(String schluessel);
 
 	/**
 	 * Falls das PDF bereits generiert wurde, wird es aus dem Dateisystem gelesen.

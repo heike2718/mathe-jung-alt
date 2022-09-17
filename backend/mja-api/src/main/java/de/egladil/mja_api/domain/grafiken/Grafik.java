@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.grafiken;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.web.mja_auth.dto.MessagePayload;
@@ -11,15 +13,20 @@ import de.egladil.web.mja_auth.dto.MessagePayload;
 /**
  * Grafik
  */
+@Schema(name = "Grafik", description = "Vorschau (png) einer Grafik, die in LaTeX eingebunden wird.")
 public class Grafik {
 
 	@JsonProperty
+	@Schema(description = "Info, ob die Grafik bereits da ist")
 	private MessagePayload messagePayload;
 
 	@JsonProperty
+	@Schema(description = "der relative Pfad im LaTeX")
 	private String pfad;
 
 	@JsonProperty
+	@Schema(
+		description = "Base64-encodetes png Kann mit einem img src=\\\"data:image/png;base64- Tag angezeigt werden. Kann null sein!")
 	private byte[] image;
 
 	public String getPfad() {

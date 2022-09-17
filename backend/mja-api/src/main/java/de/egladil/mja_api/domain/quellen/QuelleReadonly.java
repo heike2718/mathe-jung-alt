@@ -6,6 +6,9 @@ package de.egladil.mja_api.domain.quellen;
 
 import java.util.List;
 
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
@@ -14,16 +17,22 @@ import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
  * QuelleReadonly
  */
 @AggregateRoot
+@Schema(name = "Quelle", description = "Quelle für ein Rätsel")
 public class QuelleReadonly extends AbstractDomainEntity {
 
+	@Schema(description = "Art der Quelle: Mensch, Buch, Zeitschrift")
 	private Quellenart quellenart;
 
+	@Schema(description = "Zahl zum Sortieren")
 	private long sortNumber;
 
+	@Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe")
 	private String name;
 
+	@Schema(description = "Referenz auf ein Buch oder eine Zeitschrift")
 	private String mediumUuid;
 
+	@Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class, description = "Deskriptoren, für die Quelle")
 	private List<Deskriptor> deskriptoren;
 
 	/**

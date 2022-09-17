@@ -4,18 +4,23 @@
 // =====================================================
 package de.egladil.web.mja_auth.dto;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * ResponsePayload
  */
+@Schema(name = "ResponsePayload", description = "generisches Response-Objekt, das ein MessagePayload und ggf. Daten enthält")
 public class ResponsePayload {
 
 	@JsonProperty
+	@Schema(description = "das MessagePayload")
 	private MessagePayload message;
 
 	@JsonProperty
+	@Schema(description = "daten die als JSON mitgegeben werden. Kann null sein")
 	private Object data;
 
 	/**

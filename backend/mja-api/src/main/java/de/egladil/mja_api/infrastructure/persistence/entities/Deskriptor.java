@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 /**
@@ -18,19 +20,25 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
  */
 @Entity
 @Table(name = "DESKRIPTOREN")
+@Schema(
+	name = "Deskriptor", description = "Deskriptor zur Kategorisierung von Domainobjekten. Mit Deskriptoren kann gesucht werden.")
 public class Deskriptor extends PanacheEntityBase {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(description = "technische ID")
 	public Long id;
 
 	@Column(name = "NAME")
+	@Schema(description = "Name zum Anzeigen")
 	public String name;
 
 	@Column(name = "ADMIN")
+	@Schema(description = "Flag, ob dieser Deskriptor nur in der Admin-Anwendung zur Verfügung steht")
 	public boolean admin;
 
 	@Column(name = "KONTEXT")
+	@Schema(description = "Kontext des Deskriptors")
 	public String kontext;
 
 	/**

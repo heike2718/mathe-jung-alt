@@ -17,7 +17,7 @@ import org.eclipse.microprofile.openapi.annotations.info.License;
 @OpenAPIDefinition(
 	info = @Info(
 		title = "Mathe-Jung-Alt - Admin-API",
-		version = "1.0.0",
+		version = "1.0.2",
 		contact = @Contact(
 			name = "Mathe für jung und alt",
 			url = "https://mathe-jung-alt.de/index.html",

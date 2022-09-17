@@ -323,7 +323,7 @@ export class RaetselEditComponent implements OnInit {
 
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
 
-    const raetsel: RaetselDetails = {
+    const raetselDetails: RaetselDetails = {
       ...this.raetselDetailsContent.raetsel,
       schluessel: formValue['schluessel'].trim(),
       name: formValue['name'] !== null ? formValue['name'].trim() : '',
@@ -333,11 +333,10 @@ export class RaetselEditComponent implements OnInit {
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
       antwortvorschlaege: antwortvorschlaegeNeu,
       deskriptoren: this.#selectedDeskriptoren,
-      imageFrage: null,
-      imageLoesung: null
+      images: null
     };
 
-    return raetsel;
+    return raetselDetails;
   }
 
 

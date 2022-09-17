@@ -43,7 +43,7 @@ import io.vertx.core.eventbus.EventBus;
  * UploadResource
  */
 @Path("/file-upload/v1")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class UploadResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UploadResource.class);

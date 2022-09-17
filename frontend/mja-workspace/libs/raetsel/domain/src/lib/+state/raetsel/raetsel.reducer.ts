@@ -2,7 +2,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter, Update } from '@ngrx/entity';
 
 import * as RaetselActions from './raetsel.actions';
-import { initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
+import { GeneratedImages, initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
 import { PaginationState, initialPaginationState } from '@mja-workspace/suchfilter/domain';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 
@@ -56,7 +56,7 @@ const raetselReducer = createReducer(
       ...state,
       loaded: true,
       page: suchergebnis.treffer,
-          paginationState: {
+      paginationState: {
         ...state.paginationState,
         anzahlTreffer: suchergebnis.trefferGesamt
       }
@@ -79,7 +79,8 @@ const raetselReducer = createReducer(
   on(RaetselActions.raetselPNGsGenerated, (state, action) => {
 
     if (state.raetselDetailsContent && state.raetselDetailsContent.raetsel) {
-      const neueDetails: RaetselDetails = { ...state.raetselDetailsContent.raetsel, imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung };
+      const images: GeneratedImages = { imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung };
+      const neueDetails: RaetselDetails = { ...state.raetselDetailsContent.raetsel, images: images };
       const neuerContent = { ...state.raetselDetailsContent, raetsel: neueDetails };
       return { ...state, raetselDetailsContent: neuerContent, generatingOutput: false };
     }
@@ -121,12 +122,14 @@ const raetselReducer = createReducer(
       })
     });
 
-    const neueDetails: RaetselDetails = { ...state.raetselDetailsContent.raetsel, imageFrage: details.imageFrage, imageLoesung: details.imageLoesung, grafikInfos: details.grafikInfos };
+    const neueDetails: RaetselDetails = { ...state.raetselDetailsContent.raetsel, images: action.raetselDetails.images, grafikInfos: details.grafikInfos };
     const neuerContent = { ...firstState, raetsel: neueDetails };
-      
 
-    return { ...firstState, raetselDetailsContent: 
-      { ...neuerContent, kontext: 'RAETSEL', quelleId: details.quelleId, selectableDeskriptoren: selectableDeskriptoren, raetsel: details } };
+
+    return {
+      ...firstState, raetselDetailsContent:
+        { ...neuerContent, kontext: 'RAETSEL', quelleId: details.quelleId, selectableDeskriptoren: selectableDeskriptoren, raetsel: details }
+    };
   }),
 
   on(RaetselActions.raetsellisteCleared, (state, _action) => ({

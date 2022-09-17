@@ -20,6 +20,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.quellen.QuelleReadonly;
 import de.egladil.mja_api.domain.quellen.QuellenService;
@@ -30,6 +36,7 @@ import de.egladil.web.mja_auth.dto.MessagePayload;
  * QuellenResource
  */
 @Path("/quellen/v1")
+@Tag(name = "Quellen")
 public class QuellenResource {
 
 	@Inject
@@ -39,10 +46,18 @@ public class QuellenResource {
 	QuellenService quellenService;
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "findQuellen", summary = "Gibt alle Quellen zurück, die auf die gegebene Suchanfrage passen.")
+	@APIResponse(
+		name = "FindQuellenOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = QuelleReadonly.class)))
 	// @formatter:off
-	public List<QuelleReadonly> sucheQuellen(
+	public List<QuelleReadonly> findQuellen(
 		@QueryParam(value = "suchstring") @Pattern(
 		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{1,30}$",
 		message = "ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
@@ -51,15 +66,32 @@ public class QuellenResource {
 				message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma") final String deskriptoren) {
 		// @formatter:on
 
+		// TODO: pagination
+
 		this.delayService.pause();
 
 		return quellenService.sucheQuellen(new Suchfilter(suchstring, deskriptoren));
 	}
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("admin")
 	@RolesAllowed({ "ADMIN", "DEFAULT" })
+	@Operation(
+		operationId = "findQuelleByPerson",
+		summary = "Gibt die Quelle zurück, die 'Vorname Nachname' der eingeloggten Person gehört")
+	@APIResponse(
+		name = "FindQuelleByPersonOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = QuelleReadonly.class)))
+	@APIResponse(
+		name = "QuellePersonNotFound",
+		description = "Gibt es nicht",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	public QuelleReadonly findQuelleByPerson(@QueryParam(value = "person") final String person) {
 
 		this.delayService.pause();
@@ -77,8 +109,23 @@ public class QuellenResource {
 
 	@GET
 	@Path("{quelleId}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "findQuelleById",
+		summary = "Gibt die Quelle mit der gegebenen ID zurück")
+	@APIResponse(
+		name = "FindQuelleByIDOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = QuelleReadonly.class)))
+	@APIResponse(
+		name = "QuelleByIDNotFound",
+		description = "Gibt es nicht",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	public QuelleReadonly findQuelleById(@PathParam(value = "quelleId") final String quelleId) {
 
 		this.delayService.pause();

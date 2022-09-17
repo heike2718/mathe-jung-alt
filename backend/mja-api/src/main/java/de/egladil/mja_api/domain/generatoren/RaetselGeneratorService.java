@@ -5,7 +5,7 @@
 package de.egladil.mja_api.domain.generatoren;
 
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedImages;
+import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
 
 /**
@@ -22,7 +22,7 @@ public interface RaetselGeneratorService {
 	 *                                  AnzeigeAntwortvorschlaegeTyp
 	 * @return
 	 */
-	GeneratedImages generatePNGsRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	Images generatePNGsRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 	/**
 	 * Generiert das Rätsel als 2seitiges PDF.

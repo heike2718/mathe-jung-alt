@@ -4,18 +4,24 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetsel;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import de.egladil.mja_api.domain.semantik.ValueObject;
 
 /**
  * Antwortvorschlag
  */
 @ValueObject
+@Schema(name = "Antwortvorschlag", description = "Antwortvorschlag für ein multiple choice-Rätsel")
 public class Antwortvorschlag {
 
+	@Schema(description = "der Antwortbuchstabe A, B, C, ... zur Anzeige einer Vorschlagsauswahl")
 	private String buchstabe;
 
+	@Schema(description = "optionaler Text der Antwort")
 	private String text;
 
+	@Schema(description = "Flag, ob dies die korrekte Antwort ist.")
 	private boolean korrekt;
 
 	public String getBuchstabe() {

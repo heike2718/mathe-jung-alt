@@ -5,18 +5,23 @@
 
 package de.egladil.web.mja_auth.dto;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * MessagePayload
  */
+@Schema(name = "MessagePayload", description = "eine kategorisierte Meldung")
 public class MessagePayload {
 
 	@JsonProperty
+	@Schema(description = "Level der Message: INFO | WARN | ERROR")
 	private String level;
 
 	@JsonProperty
+	@Schema(description = "die message")
 	private String message;
 
 	/**

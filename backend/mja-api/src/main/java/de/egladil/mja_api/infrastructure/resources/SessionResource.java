@@ -31,7 +31,7 @@ import de.egladil.web.mja_auth.session.SessionUtils;
 @RequestScoped
 @Path("session")
 @Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class SessionResource {
 
 	@Inject

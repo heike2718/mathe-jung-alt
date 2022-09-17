@@ -45,8 +45,7 @@ export interface RaetselDetails {
   readonly quelleId: string;
   readonly antwortvorschlaege: Antwortvorschlag[];
   readonly deskriptoren: Deskriptor[];
-  readonly imageFrage: string | null;
-  readonly imageLoesung: string | null;
+  readonly images: GeneratedImages | null;
   readonly raetselPDF: Blob | null;
   readonly grafikInfos: GrafikInfo[];
 };
@@ -65,8 +64,6 @@ export interface EditRaetselPayload {
 export interface GeneratedImages {
   readonly imageFrage: string | null;
   readonly imageLoesung: string | null;
-  readonly urlFrage?: string;
-  readonly urlLoesung?: string;
 };
 
 export interface GeneratedPDF {
@@ -86,11 +83,9 @@ export const initialRaetselDetails: RaetselDetails = {
   quelleId: '',
   antwortvorschlaege: [],
   deskriptoren: [],
-  imageFrage: null,
-  imageLoesung: null,
+  images: null,
   raetselPDF: null,
-  grafikInfos: []
-  
+  grafikInfos: []  
 };
 
 

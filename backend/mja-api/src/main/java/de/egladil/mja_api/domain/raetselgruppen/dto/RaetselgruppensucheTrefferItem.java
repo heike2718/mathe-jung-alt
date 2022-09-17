@@ -4,6 +4,9 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetselgruppen.dto;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
@@ -16,27 +19,34 @@ import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 public class RaetselgruppensucheTrefferItem {
 
 	@JsonProperty
+	@Schema(description = "technische ID")
 	private String id;
 
 	@JsonProperty
+	@Schema(description = "Name der Rätselgruppe")
 	private String name;
 
 	@JsonProperty
+	@Schema(description = "poptionaler Kommentar")
 	private String kommentar;
 
-	@JsonProperty
-	private Schwierigkeitsgrad schwierigkeitsgrad;
+	@JsonIgnore
+	private Schwierigkeitsgrad schwierigkeitsgradType;
 
 	@JsonProperty
+	@Schema(description = "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz")
 	private Referenztyp referenztyp;
 
 	@JsonProperty
+	@Schema(description = "ID einers Wettbwerbs oder einer Serie im alten Aufgabenarchiv")
 	private String referenz;
 
 	@JsonProperty
+	@Schema(description = "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar")
 	private DomainEntityStatus status;
 
 	@JsonProperty
+	@Schema(description = "Anzahl der Elemente (also der Rätsel)")
 	private long anzahlElemente;
 
 	public String getId() {
@@ -69,14 +79,21 @@ public class RaetselgruppensucheTrefferItem {
 		this.kommentar = kommentar;
 	}
 
-	public Schwierigkeitsgrad getSchwierigkeitsgrad() {
+	@JsonProperty
+	@Schema(name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Rätselgruppe gedacht ist, in lesbarer Form")
+	public String getSchwierigkeitsgrad() {
 
-		return schwierigkeitsgrad;
+		return schwierigkeitsgradType.getLabel();
 	}
 
-	public void setSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
+	public Schwierigkeitsgrad getSchwierigkeitsgradType() {
 
-		this.schwierigkeitsgrad = schwierigkeitsgrad;
+		return schwierigkeitsgradType;
+	}
+
+	public void setSchwierigkeitsgradType(final Schwierigkeitsgrad schwierigkeitsgradType) {
+
+		this.schwierigkeitsgradType = schwierigkeitsgradType;
 	}
 
 	public Referenztyp getReferenztyp() {

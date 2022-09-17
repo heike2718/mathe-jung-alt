@@ -8,25 +8,32 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import de.egladil.web.mja_auth.util.SecUtils;
 
 /**
  * OAuthClientCredentials
  */
+@Schema(name = "OAuthClientCredentials", description = "credentials des OAuth2-Clients beim authprovider")
 public class OAuthClientCredentials {
 
 	@NotBlank
 	@Pattern(regexp = "[a-zA-Z0-9+=]*")
 	@Size(max = 50)
+	@Schema(description = "ID des authprovider-Clients")
 	private String clientId;
 
 	@NotBlank
 	@Pattern(regexp = "[a-zA-Z0-9+=]*")
 	@Size(max = 50)
+	@Schema(description = "secret des authprovider-Clients")
 	private String clientSecret;
 
 	@Pattern(regexp = "[a-zA-Z0-9\\-]*")
 	@Size(max = 36)
+	@Schema(
+		description = "zur Authentifizierung des Clients generierter String, der vom authprovider unverändert zurückgegeben wird")
 	private String nonce;
 
 	public static OAuthClientCredentials create(final String clientId, final String clientSecret, final String nonce) {

@@ -2,7 +2,7 @@
 // Project: mja-admin-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen;
+package de.egladil.mja_api.domain.quiz;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +15,23 @@ import javax.inject.Inject;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
+import de.egladil.mja_api.domain.quiz.dto.Quiz;
+import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
+import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.AntwortvorschlaegeMapper;
-import de.egladil.mja_api.domain.raetselgruppen.dto.Aufgabe;
-import de.egladil.mja_api.domain.raetselgruppen.dto.Aufgabengruppe;
-import de.egladil.mja_api.domain.raetselgruppen.impl.AufgabenComparator;
+import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenDao;
+import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
+import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
 
 /**
- * AufgabengruppenService
+ * QuizService
  */
 @ApplicationScoped
-public class AufgabengruppenService {
+public class QuizService {
 
 	private static final String QUELLE_HW = "Heike Winkelvoß";
 
@@ -50,7 +53,7 @@ public class AufgabengruppenService {
 	 * @param  schwierigkeitsgrad
 	 * @return                    Optional
 	 */
-	public Optional<Aufgabengruppe> findAufgabengruppeByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
+	public Optional<Quiz> findAufgabengruppeByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
 
@@ -63,10 +66,10 @@ public class AufgabengruppenService {
 		List<String> raetselUuids = elemente.stream().map(el -> el.raetselID).collect(Collectors.toList());
 		List<PersistenteAufgabeReadonly> aufgabenReadonly = raetselgruppenDao.loadAufgabenByRaetselIds(raetselUuids);
 
-		List<Aufgabe> aufgaben = new ArrayList<>();
+		List<Quizaufgabe> aufgaben = new ArrayList<>();
 		aufgabenReadonly.forEach(aufgabeDB -> {
 
-			Aufgabe aufgabe = mapFromDB(aufgabeDB);
+			Quizaufgabe aufgabe = mapFromDB(aufgabeDB);
 			Optional<PersistentesRaetselgruppenelement> optElementDB = elemente.stream()
 				.filter(el -> el.raetselID.equals(aufgabeDB.uuid)).findFirst();
 
@@ -76,23 +79,24 @@ public class AufgabengruppenService {
 			}
 			aufgaben.add(aufgabe);
 		});
-		aufgaben.sort(new AufgabenComparator());
+		aufgaben.sort(new QuizaufgabeComparator());
 
-		Aufgabengruppe aufgabengruppe = new Aufgabengruppe().withKlassenstufe(dbResult.schwierigkeitsgrad.getLabel())
+		Quiz aufgabengruppe = new Quiz().withKlassenstufe(dbResult.schwierigkeitsgrad.getLabel())
 			.withName(dbResult.name);
 		aufgabengruppe.setAufgaben(aufgaben);
 
 		return Optional.of(aufgabengruppe);
 	}
 
-	Aufgabe mapFromDB(final PersistenteAufgabeReadonly dbAufgabe) {
+	Quizaufgabe mapFromDB(final PersistenteAufgabeReadonly dbAufgabe) {
 
-		Aufgabe aufgabe = new Aufgabe();
+		Quizaufgabe aufgabe = new Quizaufgabe();
 		aufgabe.setAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(dbAufgabe.antwortvorschlaege));
 		aufgabe.setSchluessel(dbAufgabe.schluessel);
-		aufgabe.setImageFrage(raetselFileService.findImageFrage(dbAufgabe.schluessel));
-		aufgabe.setImageLoesung(raetselFileService.findImageLoesung(dbAufgabe.schluessel));
+		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.schluessel));
 		aufgabe.setQuelle(mapQuelle(dbAufgabe));
+		aufgabe.setPunkte(dbAufgabe.punkte);
+		aufgabe.setStrafpunkte(berechneStrafpunkte(aufgabe.getPunkte(), aufgabe.getAntwortvorschlaege().length));
 
 		return aufgabe;
 	}
@@ -128,4 +132,15 @@ public class AufgabengruppenService {
 				throw new IllegalArgumentException("Unexpected value: " + dbAufgabe.quellenart);
 		}
 	}
+
+	int berechneStrafpunkte(final int punkte, final int anzahlAntwortvorschlaege) {
+
+		if (anzahlAntwortvorschlaege == 0 || anzahlAntwortvorschlaege == 1) {
+
+			return 0;
+		}
+
+		return punkte / (anzahlAntwortvorschlaege - 1);
+	}
+
 }

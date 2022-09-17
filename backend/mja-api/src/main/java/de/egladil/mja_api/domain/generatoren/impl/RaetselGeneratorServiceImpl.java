@@ -28,8 +28,8 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedImages;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 
@@ -55,7 +55,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public synchronized GeneratedImages generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
@@ -94,9 +94,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 				byte[] imageFrage = this.raetselFileService.findImageFrage(raetsel.getSchluessel());
 
-				GeneratedImages result = new GeneratedImages();
-				result.setImageFrage(imageFrage);
-				result.setUrlFrage(output2Url(filename));
+				Images result = new Images().withImageFrage(imageFrage);
 
 				if (responseLoesung != null) {
 
@@ -108,8 +106,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 						// System.out.println(new String(Base64.getEncoder().encode(imageLoesung)));
 
-						result.setImageLoesung(imageLoesung);
-						result.setUrlLoesung(output2Url(filenameLoesung));
+						result.withImageLoesung(imageLoesung);
 					} else {
 
 						LOGGER.error("Mist: generieren der Lösung hat nicht geklappt: " + message.getMessage());
