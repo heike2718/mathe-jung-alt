@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
@@ -8,6 +8,7 @@ import java.io.File;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,8 +20,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 import org.jboss.resteasy.reactive.MultipartForm;
 import org.jboss.resteasy.reactive.RestForm;
@@ -42,8 +49,9 @@ import io.vertx.core.eventbus.EventBus;
 /**
  * UploadResource
  */
-@Path("/file-upload/v1")
+@Path("/uploads/v1")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Tag(name = "Upload")
 public class UploadResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UploadResource.class);
@@ -69,8 +77,36 @@ public class UploadResource {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@RolesAllowed("ADMIN")
-	public Response grafikHochladen(@QueryParam(value = "type") final UploadType fileType, @QueryParam(
-		value = "pfad") final String relativerPfad, @MultipartForm final FormData body) {
+	@Operation(
+		operationId = "uploadFile",
+		summary = "Nimmt eine hochgeladene Datei des UploadTypes (eps) entgegen und speichert sie in dem gewünschten Unterverzeichnis des latex.base.dirs")
+	@Parameters({
+		@Parameter(name = "type", description = "Typ des Files, der festlegt, wie die Datei verarbeitet bzw. genutzt wird"),
+		@Parameter(
+			name = "pfad",
+			description = "Pfad des Zielverzeichnisses relativ zum konfigurierten latex.base.dir. Der Wert des Parameters muss mit einem / beginnen") })
+	@APIResponse(
+		name = "UploadFileOKResponse",
+		description = "Datei erfolgreich hochgeladen",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "UploadFileConstraintViolation",
+		description = "pfad verstößt gegen Validierungsregel oder File ist zu groß oder hat Virus",
+		responseCode = "400")
+	@APIResponse(
+		name = "UploadFileServerException",
+		description = "sonstige Fehler",
+		responseCode = "500",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+
+	public Response uploadFile(@QueryParam(value = "type") final UploadType fileType, @Pattern(
+		regexp = "^(/[\\da-zA-Z_\\-/]*\\.[\\da-zA-Z_\\-/]*)$", message = "pfad enthält ungültige Zeichen") @QueryParam(
+			value = "pfad") final String relativerPfad, @MultipartForm final FormData body) {
 
 		this.delayService.pause();
 
@@ -96,11 +132,11 @@ public class UploadResource {
 		return Response.status(Status.NOT_FOUND).build();
 	}
 
-	@POST
-	@Path("swagger")
-	@Consumes({ MediaType.MULTIPART_FORM_DATA })
-	@RolesAllowed("ADMIN")
-	public Response grafikHochladenMitSwagger(@MultipartForm final MultipartBody body) {
+	// @POST
+	// @Path("swagger")
+	// @Consumes({ MediaType.MULTIPART_FORM_DATA })
+	// @RolesAllowed("ADMIN")
+	Response grafikHochladenMitSwagger(@MultipartForm final MultipartBody body) {
 
 		// https://dev.to/felipewind/uploading-a-file-through-swagger-in-quarkus-3l8l
 

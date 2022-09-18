@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
@@ -19,6 +19,8 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -45,6 +47,8 @@ public class DeskriptorenResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@RolesAllowed("ADMIN")
 	@Operation(operationId = "loadDeskriptoren", summary = "Liefert die Liste aller Deskriptoren")
+	@Parameters({
+		@Parameter(name = "kontext", description = "Kontext, zu dem die Deskriptoren geladen werden") })
 	@APIResponse(
 		name = "LadeDeskriptoren",
 		description = "Alle Deskriptoren erfolgreich gelesen.",
@@ -64,13 +68,15 @@ public class DeskriptorenResource {
 	@RolesAllowed("ADMIN")
 	@Operation(
 		operationId = "transformToDeskriptorenOrdinal",
-		summary = "Wandelt die Deskriptoren in eine kommaseparierte Liste ihrer IDs um")
+		summary = "Wandelt Deskriptoren in eine kommaseparierte Liste ihrer IDs um")
+	@Parameters({
+		@Parameter(name = "deskriptoren", description = "kommaseparierte Liste von Namen von Deskriptoren") })
 	@APIResponse(
 		name = "TransformDeskriptoren",
 		description = "Deskriptoren erfolgreich transformiert.",
 		responseCode = "200",
 		content = @Content(
-			mediaType = "application/json",
+			mediaType = "text/plain",
 			schema = @Schema(implementation = String.class)))
 	public String transformDeskriptorenStringToOrdinal(@QueryParam(value = "deskriptoren") @Pattern(
 		regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
@@ -78,5 +84,4 @@ public class DeskriptorenResource {
 
 		return deskriptorenService.transformToDeskriptorenOrdinal(deskriptoren);
 	}
-
 }

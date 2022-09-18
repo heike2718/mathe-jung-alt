@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
@@ -48,9 +48,6 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
-
-	@ConfigProperty(name = "images.base.dir")
-	String imagesBaseDir;
 
 	@Override
 	public String generateFrageLaTeX(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
@@ -118,7 +115,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	@Override
 	public byte[] findImageFrage(final String schluessel) {
 
-		String path = imagesBaseDir + File.separator + schluessel + ".png";
+		String path = latexBaseDir + File.separator + schluessel + ".png";
 		return MjaFileUtils.loadBinaryFile(path, false);
 	}
 
@@ -140,7 +137,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	@Override
 	public byte[] findImageLoesung(final String schluessel) {
 
-		String path = imagesBaseDir + File.separator + schluessel + SUFFIX_LOESUNGEN + ".png";
+		String path = latexBaseDir + File.separator + schluessel + SUFFIX_LOESUNGEN + ".png";
 		return MjaFileUtils.loadBinaryFile(path, false);
 	}
 
@@ -153,7 +150,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	@Override
 	public byte[] findPDF(final String schluessel) {
 
-		String path = imagesBaseDir + File.separator + schluessel + SUFFIX_PDF + ".pdf";
+		String path = latexBaseDir + File.separator + schluessel + SUFFIX_PDF + ".pdf";
 		return MjaFileUtils.loadBinaryFile(path, true);
 
 	}
@@ -161,7 +158,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	@Override
 	public boolean existsGrafik(final String relativerPfad) {
 
-		String path = imagesBaseDir + relativerPfad;
+		String path = latexBaseDir + relativerPfad;
 		File file = new File(path);
 
 		return file.exists() && file.isFile();
@@ -185,11 +182,6 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	void setLatexBaseDir(final String latexBaseDir) {
 
 		this.latexBaseDir = latexBaseDir;
-	}
-
-	void setImagesBaseDir(final String imagesBaseDir) {
-
-		this.imagesBaseDir = imagesBaseDir;
 	}
 
 	String getTextLoesungsbuchstabe(final Antwortvorschlag[] antwortvorschlaege) {

@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.domain.grafiken.impl;
@@ -45,8 +45,8 @@ public class GrafikServiceImpl implements GrafikService {
 	@Inject
 	ImageGeneratorService imageGeneratorService;
 
-	@ConfigProperty(name = "images.base.dir")
-	String imagesBaseDir;
+	@ConfigProperty(name = "latex.base.dir")
+	String latexBaseDir;
 
 	/**
 	 *
@@ -111,7 +111,7 @@ public class GrafikServiceImpl implements GrafikService {
 			return MessagePayload.error("Aufruf mit ungültigem Pfad");
 		}
 
-		File file = new File(imagesBaseDir + relativerPfad);
+		File file = new File(latexBaseDir + relativerPfad);
 
 		File uploadDir = new File(file.getParent());
 

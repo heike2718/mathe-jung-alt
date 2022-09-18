@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
@@ -21,8 +21,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -50,12 +53,17 @@ public class QuellenResource {
 	@RolesAllowed("ADMIN")
 	@Operation(
 		operationId = "findQuellen", summary = "Gibt alle Quellen zurück, die auf die gegebene Suchanfrage passen.")
+	@Parameters({
+		@Parameter(
+			name = "suchstring",
+			description = "Freitext zum suchen. Es wird mit like nach diesem Text gesucht"),
+		@Parameter(name = "deskriptoren", description = "kommaseparierte Liste von Namen von Deskriptoren") })
 	@APIResponse(
 		name = "FindQuellenOKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = QuelleReadonly.class)))
+			schema = @Schema(type = SchemaType.ARRAY, implementation = QuelleReadonly.class)))
 	// @formatter:off
 	public List<QuelleReadonly> findQuellen(
 		@QueryParam(value = "suchstring") @Pattern(
@@ -80,6 +88,10 @@ public class QuellenResource {
 	@Operation(
 		operationId = "findQuelleByPerson",
 		summary = "Gibt die Quelle zurück, die 'Vorname Nachname' der eingeloggten Person gehört")
+	@Parameters({
+		@Parameter(
+			name = "person",
+			description = "Vorname Nachname einer Person, so wie sie nach dem Einloggen in der mja-admin-app angezeigt wird") })
 	@APIResponse(
 		name = "FindQuelleByPersonOKResponse",
 		responseCode = "200",
@@ -92,7 +104,9 @@ public class QuellenResource {
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public QuelleReadonly findQuelleByPerson(@QueryParam(value = "person") final String person) {
+	public QuelleReadonly findQuelleByPerson(@Pattern(
+		regexp = "[\\w äöüßÄÖÜ\\-@&,.()\"]*",
+		message = "person enthält ungültige Zeichen") @QueryParam(value = "person") final String person) {
 
 		this.delayService.pause();
 
@@ -114,6 +128,10 @@ public class QuellenResource {
 	@Operation(
 		operationId = "findQuelleById",
 		summary = "Gibt die Quelle mit der gegebenen ID zurück")
+	@Parameters({
+		@Parameter(
+			name = "quelleId",
+			description = "technische ID der Quelle") })
 	@APIResponse(
 		name = "FindQuelleByIDOKResponse",
 		responseCode = "200",
@@ -126,7 +144,9 @@ public class QuellenResource {
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public QuelleReadonly findQuelleById(@PathParam(value = "quelleId") final String quelleId) {
+	public QuelleReadonly findQuelleById(@Pattern(
+		regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "quelleId enthält ungültige Zeichen") @PathParam(
+			value = "quelleId") final String quelleId) {
 
 		this.delayService.pause();
 

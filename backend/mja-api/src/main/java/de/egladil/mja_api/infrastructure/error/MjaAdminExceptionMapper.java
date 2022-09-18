@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.infrastructure.error;
@@ -17,8 +17,8 @@ import javax.ws.rs.ext.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.exceptions.FileUploadException;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
+import de.egladil.mja_api.domain.exceptions.UploadFormatException;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.exception.AuthException;
 import de.egladil.web.mja_auth.exception.SessionExpiredException;
@@ -70,9 +70,9 @@ public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
 				.build();
 		}
 
-		if (exception instanceof FileUploadException) {
+		if (exception instanceof UploadFormatException) {
 
-			return Response.status(400).entity(MessagePayload.error(exception.getMessage()))
+			return Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(exception.getMessage()))
 				.build();
 
 		}

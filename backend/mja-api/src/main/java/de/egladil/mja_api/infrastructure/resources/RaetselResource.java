@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
@@ -26,6 +26,14 @@ import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,11 +45,12 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
-import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.infrastructure.validation.CsrfTokenValidator;
+import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.session.AuthenticatedUser;
 import de.egladil.web.mja_auth.session.Session;
 
@@ -50,6 +59,7 @@ import de.egladil.web.mja_auth.session.Session;
  */
 @Path("/raetsel/v1")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Tag(name = "Raetsel")
 public class RaetselResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselResource.class);
@@ -76,8 +86,31 @@ public class RaetselResource {
 
 	@GET
 	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "findRaetsel", summary = "Gibt alle Rätsel zurück, die auf die gegebene Suchanfrage passen.")
+	@Parameters({
+		@Parameter(
+			name = "suchstring",
+			description = "Freitext zum suchen. Es erfolgt eine Volltextsuche über Schlüssel, Name, Kommentar, Frage und Lösung"),
+		@Parameter(name = "deskriptoren", description = "kommaseparierte Liste von Deskriptoren-Identifizierern"),
+		@Parameter(name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
+		@Parameter(
+			name = "limit",
+			description = "Pagination: pageSize"),
+		@Parameter(
+			name = "offset",
+			description = "Pagination: pageIndex"),
+		@Parameter(
+			name = "sortDirection",
+			description = "Sortierung. Es wird nach SCHLUESSEL sortiert.") })
+	@APIResponse(
+		name = "FindRaetselOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(type = SchemaType.ARRAY, implementation = RaetselsucheTreffer.class)))
 	// @formatter:off
-	public RaetselsucheTreffer sucheRaetsel(
+	public RaetselsucheTreffer findRaetsel(
 		@QueryParam(value = "suchstring") @Pattern(
 		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{4,30}$",
 		message = "ungültige Eingabe: mindestens 4 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
@@ -106,9 +139,30 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("{raetselUuid}")
+	@Path("{raetselID}")
 	@RolesAllowed("ADMIN")
-	public Response raetselDetailsLaden(@PathParam(value = "raetselUuid") final String raetselUuid) {
+	@Operation(
+		operationId = "raetselDetailsLaden",
+		summary = "Läd die Details des Rätsels mit der gegebenen ID")
+	@Parameters({
+		@Parameter(
+			name = "raetselID",
+			description = "technische ID des Rätsels") })
+	@APIResponse(
+		name = "FindRaetselByIDOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = Raetsel.class)))
+	@APIResponse(
+		name = "RaetselByIDNotFound",
+		description = "Gibt es nicht",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Response raetselDetailsLaden(@Pattern(
+		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid) {
 
 		this.delayService.pause();
 
@@ -125,6 +179,21 @@ public class RaetselResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "raetselAnlegen",
+		summary = "neues Rätsel anlegen")
+	@APIResponse(
+		name = "CreateRaetselOKResponse",
+		responseCode = "201",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = Raetsel.class)))
+	@APIResponse(
+		name = "CreateRaetselServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	public Response raetselAnlegen(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		this.delayService.pause();
@@ -145,6 +214,21 @@ public class RaetselResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "raetselAendern",
+		summary = "vorhandenes Rätsel ändern")
+	@APIResponse(
+		name = "UpdateRaetselOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = Raetsel.class)))
+	@APIResponse(
+		name = "UpdateRaetselServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	public Response raetselAendern(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		this.delayService.pause();
@@ -162,10 +246,32 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("PNG/{raetselUuid}")
+	@Path("PNG/{raetselID}")
 	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "raetselImagesGenerieren",
+		summary = "generiert die Vorschaubilder (png) des Rätsels")
+	@Parameters({
+		@Parameter(
+			name = "raetselID",
+			description = "technische ID des Rätsels"),
+		@Parameter(
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)") })
+	@APIResponse(
+		name = "GenerateImagesRaetselOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = Images.class)))
+	@APIResponse(
+		name = "GenerateImagesRaetselServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	public Images raetselImagesGenerieren(@PathParam(
-		value = "raetselUuid") final String raetselUuid, @QueryParam(
+		value = "raetselID") final String raetselUuid, @QueryParam(
 			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		this.delayService.pause();
@@ -181,11 +287,35 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("PDF/{raetselUuid}")
+	@Path("PDF/{raetselID}")
 	@RolesAllowed({ "ADMIN", "LEHRER", "PRIVAT", "STANDARD" })
-	public GeneratedPDF raetselPDFGenerieren(@PathParam(
-		value = "raetselUuid") final String raetselUuid, @QueryParam(
-			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+	@Operation(
+		operationId = "raetselPDFGenerieren",
+		summary = "generiert ein PDF mit dem Rätsel")
+	@Parameters({
+		@Parameter(
+			name = "raetselID",
+			description = "technische ID des Rätsels"),
+		@Parameter(
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)") })
+	@APIResponse(
+		name = "GeneratePDFRaetselOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = GeneratedPDF.class)))
+	@APIResponse(
+		name = "GeneratePDFRaetselServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public GeneratedPDF raetselPDFGenerieren(@Pattern(
+		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		message = "raetselID enthält ungültige Zeichen") @PathParam(
+			value = "raetselID") final String raetselUuid, @QueryParam(
+				value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		this.delayService.pause();
 

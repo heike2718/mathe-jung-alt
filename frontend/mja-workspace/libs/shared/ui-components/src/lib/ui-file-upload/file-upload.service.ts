@@ -9,7 +9,7 @@ import { UploadComponentModel } from "./file-upload.model";
 @Injectable({ providedIn: 'root' })
 export class FileUploadService {
 
-    #url = this.configuration.baseUrl + '/file-upload/v1';
+    #url = this.configuration.baseUrl + '/uploads/v1';
 
     constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 

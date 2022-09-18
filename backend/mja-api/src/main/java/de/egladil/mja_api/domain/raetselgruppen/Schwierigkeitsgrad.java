@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.domain.raetselgruppen;
@@ -11,7 +11,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
  */
 @Schema(
 	name = "Schwierigkeitsgrad",
-	description = "enum Schwierigkeitsgrad für Rätselgruppen oder Aufgabengruppen. Kann als Path- oder Query-Parameter verwendet werden")
+	description = "enum Schwierigkeitsgrad für Rätselgruppen oder Quiz(e)")
 public enum Schwierigkeitsgrad {
 
 	AB_NEUN("ab Klasse 9"),

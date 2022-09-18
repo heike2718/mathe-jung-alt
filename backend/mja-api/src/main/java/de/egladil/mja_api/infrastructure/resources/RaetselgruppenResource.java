@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
@@ -25,6 +25,14 @@ import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +54,7 @@ import de.egladil.web.mja_auth.session.Session;
  */
 @Path("raetselgruppen/v1")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Tag(name = "Raetselgruppen")
 public class RaetselgruppenResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenResource.class);
@@ -66,6 +75,33 @@ public class RaetselgruppenResource {
 
 	@GET
 	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "findGruppen", summary = "Gibt alle Rätselgruppen zurück, die auf die gegebene Suchanfrage passen.")
+	@Parameters({
+		@Parameter(
+			name = "name",
+			description = "Teil des Namens der Gruppe (Suche mit like)"),
+		@Parameter(
+			name = "schwierigkeitsgrad",
+			description = "Klassenstufe, für die die Rätselgruppe gedacht ist (enum)"),
+		@Parameter(
+			name = "referenztyp",
+			description = "Kontext zur Interpretation des Parameters 'referenz'"),
+		@Parameter(
+			name = "referenz",
+			description = "ID im alten Aufgabenarchiv"),
+		@Parameter(
+			name = "limit",
+			description = "Pagination: pageSize"),
+		@Parameter(
+			name = "offset",
+			description = "Pagination: pageIndex") })
+	@APIResponse(
+		name = "FindRaetselgruppenOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(type = SchemaType.ARRAY, implementation = RaetselgruppensucheTreffer.class)))
 	// @formatter:off
 	public RaetselgruppensucheTreffer findGruppen(
 		@QueryParam(value = "name") @Pattern(regexp = "[\\w äöüß\\:\\-\\.\\,]*", message = "name enthält unerlaubte Zeichen")
@@ -95,7 +131,22 @@ public class RaetselgruppenResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
-	public Response raetselsammlungAnlegen(final EditRaetselgruppePayload requestPayload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+	@Operation(
+		operationId = "raetselgruppeAnlegen",
+		summary = "neue Rätselgruppe anlegen")
+	@APIResponse(
+		name = "CreateRaetselgruppeOKResponse",
+		responseCode = "201",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = RaetselgruppensucheTrefferItem.class)))
+	@APIResponse(
+		name = "CreateRaetselgruppeServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Response raetselgruppeAnlegen(final EditRaetselgruppePayload requestPayload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		delayService.pause();
 
@@ -106,7 +157,7 @@ public class RaetselgruppenResource {
 
 		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeAnlegen(requestPayload, userUuid);
 
-		LOGGER.info("Raetselsammlung angelegt: [raetselsammlung={}, user={}]", raetselsammlung.getId(),
+		LOGGER.info("Raetselgruppe angelegt: [raetselgruppe={}, user={}]", raetselsammlung.getId(),
 			StringUtils.abbreviate(userUuid, 11));
 
 		return Response.status(201).entity(raetselsammlung).build();

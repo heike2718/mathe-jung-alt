@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-admin-api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.infrastructure.cdi;
@@ -30,9 +30,6 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
 
-	@ConfigProperty(name = "images.base.dir")
-	String imagesBaseDir;
-
 	@ConfigProperty(name = "quarkus.http.cors.origins", defaultValue = "")
 	String corsAllowedOrigins;
 
@@ -44,11 +41,9 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========> The application is starting with profile " + ProfileManager.getActiveProfile());
 
 		checkLatexBaseDir();
-		checkImagesBaseDir();
 
 		LOGGER.info(" ===========>  session timeout nach {} min", SessionService.SESSION_IDLE_TIMEOUT_MINUTES);
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
-		LOGGER.info(" ===========>  the images.base.dir is {}", imagesBaseDir);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
 
 		if (delayMillis > 0) {
@@ -61,22 +56,6 @@ public class AppLifecycleBean {
 	private void checkLatexBaseDir() {
 
 		File uploadDir = new File(latexBaseDir);
-
-		if (!uploadDir.exists()) {
-
-			try {
-
-				FileUtils.forceMkdir(uploadDir);
-			} catch (IOException e) {
-
-				LOGGER.error("Verzeichnis {} konnte nicht ereugt werden: {}", e.getMessage());
-			}
-		}
-	}
-
-	private void checkImagesBaseDir() {
-
-		File uploadDir = new File(imagesBaseDir);
 
 		if (!uploadDir.exists()) {
 
