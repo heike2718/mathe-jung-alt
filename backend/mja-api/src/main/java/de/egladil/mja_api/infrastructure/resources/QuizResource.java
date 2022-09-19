@@ -74,7 +74,7 @@ public class QuizResource {
 				value = "referenz") final String referenz, @PathParam(
 					value = "schwierigkeitsgrad") final Schwierigkeitsgrad schwierigkeitsgrad) {
 
-		Optional<Quiz> optResult = aufgabengruppenService.findAufgabengruppeByUniqueKey(referenztyp, referenz,
+		Optional<Quiz> optResult = aufgabengruppenService.findQuizByUniqueKey(referenztyp, referenz,
 			schwierigkeitsgrad);
 
 		if (optResult.isEmpty()) {

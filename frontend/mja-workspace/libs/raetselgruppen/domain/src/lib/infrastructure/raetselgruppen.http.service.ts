@@ -23,7 +23,7 @@ export class RaetselgruppenHttpService {
 
         let params = new HttpParams();
 
-        if (suchparameter.name) {
+        if (suchparameter.name && suchparameter.name.trim().length > 0) {
             params = params.set('name', suchparameter.name.trim());
         }
 
@@ -35,14 +35,12 @@ export class RaetselgruppenHttpService {
             params = params.set('referenztyp', suchparameter.referenztyp);
         }
 
-        if (suchparameter.referenz) {
-            params = params.set('referenz', suchparameter.referenz);
+        if (suchparameter.referenz && suchparameter.referenz.trim().length > 0) {
+            params = params.set('referenz', suchparameter.referenz.trim());
         }
 
-        // params = params.set('sortName', suchparameter.sortName);
-        // params = params.set('sortSchwierigkeitsgrad', suchparameter.sortSchwierigkeitsgrad);
-        // params = params.set('sortReferenztyp', suchparameter.sortReferenztyp);
-        // params = params.set('sortReferenz', suchparameter.sortReferenz);
+        params = params.set('sortAttribute', suchparameter.sortAttribute);
+        params = params.set('sortDirection', suchparameter.sortOrder.toString());
         params = params.set('limit', suchparameter.pageSize);
         params = params.set('offset', suchparameter.pageIndex);
 

@@ -81,9 +81,10 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 			stmt += " where " + whereStmt;
 		}
 
-		// String sortStmt = createSortStatement(suchparameter);
+		String sortStmt = " order by g." + suchparameter.sortAttribute().toString() + " "
+			+ suchparameter.sortDirection().toString();
 
-		stmt += " order by g.name";
+		stmt += sortStmt;
 
 		TypedQuery<PersistenteRaetselgruppe> query = entityManager.createQuery(stmt,
 			PersistenteRaetselgruppe.class).setFirstResult(offset)
@@ -146,41 +147,6 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 
 		return whereStmt;
 	}
-
-	// String createSortStatement(final RaetselgruppenSuchparameter suchparameter) {
-	//
-	// String sortStmt = "";
-	//
-	// if (!suchparameter.hatSortierung()) {
-	//
-	// return " order by g.name asc";
-	// }
-	//
-	// if (suchparameter.sortName().isDirection()) {
-	//
-	// sortStmt = " order by g.name " + suchparameter.sortName().toString();
-	// } else {
-	//
-	// sortStmt = " order by g.name asc";
-	// }
-	//
-	// if (suchparameter.sortReferenz().isDirection()) {
-	//
-	// sortStmt += ", g.referenz " + suchparameter.sortReferenz().toString();
-	// }
-	//
-	// if (suchparameter.sortReferenztyp().isDirection()) {
-	//
-	// sortStmt += ", g.referenztyp " + suchparameter.sortReferenztyp().toString();
-	// }
-	//
-	// if (suchparameter.sortSchwierigkeitsgrad().isDirection()) {
-	//
-	// sortStmt += ", g.schwierigkeitsgrad " + suchparameter.sortSchwierigkeitsgrad().toString();
-	// }
-	//
-	// return sortStmt;
-	// }
 
 	void setParameters(final Query query, final RaetselgruppenSuchparameter suchparameter) {
 

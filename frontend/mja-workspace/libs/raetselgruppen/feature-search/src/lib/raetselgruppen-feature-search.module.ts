@@ -10,10 +10,12 @@ import { RaetselgruppenSearchComponent } from './raetselgruppen-search/raetselgr
 import { RouterModule } from '@angular/router';
 import { AdminGuard } from '@mja-workspace/shared/auth/domain';
 import { RaetselgruppeDetailsComponent } from './raetselgruppe-details/raetselgruppe-details.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     RaetselgruppenDomainModule,
     SharedUiComponentsModule,
     SuchfilterDomainModule,

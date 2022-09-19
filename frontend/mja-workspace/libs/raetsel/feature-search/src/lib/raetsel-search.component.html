@@ -1,7 +1,5 @@
 <h1>Rätsel</h1>
 
-
-
 <ng-container *ngIf="isAdmin">
   <mja-admin-suchfilter [suchfilter]="suchfilter" (suchlisteDeskriptorenChanged)="onDeskriptorenChanged($event)"
     (inputChanged)="onInputChanged($event)">
@@ -15,43 +13,44 @@
 
 <p *ngIf="suchfilter">Suchkriterien: {{suchfilter | json}}</p>
 
-<div class="scrolling-container">
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="schluessel"
-    matSortDirection="asc" matSortDisableClear class="mja-table">
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortActive="schluessel"
+  matSortDirection="asc" matSortDisableClear>
 
-    <ng-container matColumnDef="schluessel">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> SCHLUESSEL </th>
-      <td mat-cell *matCellDef="let raetsel">
-        <span *ngIf="raetsel.status === 'ERFASST'">
-          <mat-icon>block</mat-icon>
-        </span>
-        <span *ngIf="raetsel.status === 'FREIGEGEBEN'">
-          <mat-icon>check_circle_outline</mat-icon>
-        </span>
-        {{raetsel.schluessel}}
-      </td>
-    </ng-container>
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__1"></mat-header-cell>
+    <mat-cell *matCellDef="let raetsel" class="mat-cell__1"><span *ngIf="raetsel.status === 'ERFASST'">
+        <mat-icon>block</mat-icon>
+      </span>
+      <span *ngIf="raetsel.status === 'FREIGEGEBEN'">
+        <mat-icon>check_circle_outline</mat-icon>
+      </span>
+    </mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let raetsel"> {{raetsel.name}} </td>
-    </ng-container>
+  <ng-container matColumnDef="schluessel">
+    <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell__2">{{getHeaderSchluessel()}}</mat-header-cell>
+    <mat-cell *matCellDef="let raetsel" class="mat-cell__2">{{raetsel.schluessel}}</mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="deskriptoren">
-      <th mat-header-cell *matHeaderCellDef> Deskriptoren </th>
-      <td mat-cell *matCellDef="let raetsel"> {{deskriptorenToString(raetsel)}} </td>
-    </ng-container>
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__3">Name</mat-header-cell>
+    <mat-cell *matCellDef="let raetsel" class="mat-cell__3"> {{raetsel.name}} </mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="kommentar">
-      <th mat-header-cell *matHeaderCellDef> Kommentar </th>
-      <td mat-cell *matCellDef="let raetsel"> {{raetsel.kommentar}} </td>
-    </ng-container>
+  <ng-container *ngIf="!isAdmin" matColumnDef="deskriptoren">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__4">Deskriptoren</mat-header-cell>
+    <mat-cell *matCellDef="let raetsel" class="mat-cell__4"> {{deskriptorenToString(raetsel)}} </mat-cell>
+  </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)"></tr>
+  <ng-container *ngIf="isAdmin" matColumnDef="kommentar">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__4">Kommentar</mat-header-cell>
+    <mat-cell *matCellDef="let raetsel" class="mat-cell__4"> {{raetsel.kommentar}} </mat-cell>
+  </ng-container>
 
-  </table>
-</div>
+  <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)"></mat-row>
+
+</mat-table>
 
 <mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
 

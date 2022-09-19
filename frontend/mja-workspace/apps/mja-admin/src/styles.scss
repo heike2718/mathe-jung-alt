@@ -148,19 +148,7 @@ th.mat-sort-header-sorted {
   color: red;
 }
 
-.form-box,
-.mat-form-field,
-.mja-table {
-  width: 75vw;
-  /** x% der viewport-Breite*/
-}
-
 @media(max-width: 959px) {
-  .mja-table {
-    width: 65vw;
-    /** x% der viewport-Breite*/
-  }
-
   .form-box,
   .mat-form-field {
     width: 95vw;

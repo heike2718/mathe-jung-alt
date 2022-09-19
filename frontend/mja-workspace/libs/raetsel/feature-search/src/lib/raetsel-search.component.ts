@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { Quelle, QuellenFacade } from '@mja-workspace/quellen/domain';
@@ -24,17 +24,24 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   #paginationStateSubscription: Subscription = new Subscription();
   #selectedQuelleSubscription: Subscription = new Subscription();
 
-
   isAdmin = false;
   storedQuelle: Quelle | undefined
 
   suchfilter!: Suchfilter;
 
+  // Declare height and width variables
+  // #scrHeight: number;
+  #scrWidth!: number;
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize() {
+    // this.#scrHeight = window.innerHeight;
+    this.#scrWidth = window.innerWidth;
+  }
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  #columnDefinitionsPublic = ['schluessel', 'name', 'deskriptoren'];
-  #columnDefinitionsAdmin = ['schluessel', 'name', 'kommentar'];
   #selectedQuelle!: Quelle;
   #pageIndex = 0;
   #sortDirection: SortDirection = 'asc';
@@ -47,7 +54,9 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     private suchfilterFacade: SuchfilterFacade,
     private authFacade: AuthFacade,
     private changeDetector: ChangeDetectorRef
-  ) { }
+  ) {
+    this.getScreenSize();
+  }
 
   ngOnInit() {
 
@@ -71,11 +80,11 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.#canStartSucheSubscription = combineLatest([this.suchfilterFacade.selectedSuchfilter$, this.suchfilterFacade.suchfilterChanged$]).pipe(
       tap(([suchfilter, _changed]) => {
         if (suchfilter) {
-          this.suchfilter = suchfilter;          
+          this.suchfilter = suchfilter;
         }
       }),
       filter(([suchfilter, changed]) => changed && suchkriterienVorhanden(suchfilter)),
-      debounceTime(300),
+      debounceTime(500),
       distinctUntilChanged(),
       tap(() => {
         if (this.paginator && this.sort && this.suchfilter) {
@@ -143,7 +152,29 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   getDisplayedColumns(): string[] {
-    return this.isAdmin ? this.#columnDefinitionsAdmin : this.#columnDefinitionsPublic;
+
+    if (this.isAdmin) {
+      if (this.#scrWidth > 959) {
+        return ['status', 'schluessel', 'name', 'kommentar'];
+      } else {
+        return ['status', 'schluessel', 'name'];
+      }
+    } else {
+      if (this.#scrWidth > 959) {
+        return ['schluessel', 'name', 'deskriptoren'];
+      } else {
+        return ['schluessel', 'name'];
+      }
+    }
+  }
+
+  getHeaderSchluessel(): string {
+
+    if (this.#scrWidth > 959) {
+      return 'SCHLUESSEL';
+    } else {
+      return 'SCHL';
+    }
   }
 
   onDeskriptorenChanged($event: any): void {

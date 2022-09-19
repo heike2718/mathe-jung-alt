@@ -10,20 +10,5 @@ package de.egladil.mja_api.domain.dto;
 public enum SortDirection {
 
 	asc,
-	desc,
-	noop {
-
-		@Override
-		public boolean isDirection() {
-
-			return false;
-		}
-
-	};
-
-	public boolean isDirection() {
-
-		return true;
-	}
-
+	desc;
 }

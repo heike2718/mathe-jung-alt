@@ -1,0 +1,44 @@
+<h1>Rätselgruppen</h1>
+
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="name"
+  matSortDirection="asc" (matSortChange)="announceSortChange($event)" class="mja-table">
+
+  <!-- name -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Name </th>
+    <td mat-cell *matCellDef="let gruppe">
+      <span *ngIf="gruppe.status === 'ERFASST'">
+        <mat-icon>block</mat-icon>
+      </span>
+      <span *ngIf="gruppe.status === 'FREIGEGEBEN'">
+        <mat-icon>check_circle_outline</mat-icon>
+      </span>
+      {{gruppe.name}} ({{gruppe.anzahlElemente}})
+    </td>
+  </ng-container>
+
+  <!-- schwierigkeitsgrad -->
+  <ng-container matColumnDef="schwierigkeitsgrad">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by schwierigkeitsgrad"> Level
+    </th>
+    <td mat-cell *matCellDef="let gruppe"> {{gruppe.schwierigkeitsgrad}} </td>
+  </ng-container>
+
+  <!-- referenzty -->
+  <ng-container matColumnDef="referenztyp">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by referenztyp"> Referenztyp
+    </th>
+    <td mat-cell *matCellDef="let gruppe"> {{gruppe.referenztyp}} </td>
+  </ng-container>
+
+  <!-- referenz -->
+  <ng-container matColumnDef="referenz">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by referenz"> Referenz </th>
+    <td mat-cell *matCellDef="let gruppe"> {{gruppe.referenz}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnDefinitions; sticky"></tr>
+  <tr mat-row *matRowDef="let row; columns: columnDefinitions" (click)="onRowClicked(row)"></tr>
+
+</table>
+<mat-paginator [length]="anzahlRaetselgruppen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>

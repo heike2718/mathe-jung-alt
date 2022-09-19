@@ -53,7 +53,7 @@ public class QuizService {
 	 * @param  schwierigkeitsgrad
 	 * @return                    Optional
 	 */
-	public Optional<Quiz> findAufgabengruppeByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
+	public Optional<Quiz> findQuizByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
 

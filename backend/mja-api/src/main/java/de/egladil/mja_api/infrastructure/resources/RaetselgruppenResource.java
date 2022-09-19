@@ -36,7 +36,9 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
+import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSortattribute;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
@@ -91,6 +93,12 @@ public class RaetselgruppenResource {
 			name = "referenz",
 			description = "ID im alten Aufgabenarchiv"),
 		@Parameter(
+			name = "sortAttribute",
+			description = "Attribut, nach dem sortiert wird"),
+		@Parameter(
+			name = "sortDirection",
+			description = "Sortierrichtung für das gewählte Attribut"),
+		@Parameter(
 			name = "limit",
 			description = "Pagination: pageSize"),
 		@Parameter(
@@ -110,10 +118,8 @@ public class RaetselgruppenResource {
 		@QueryParam(value = "referenztyp") final Referenztyp referenztyp,
 		@QueryParam(value = "referenz") @Pattern(regexp = "^[\\w äöüß]{1,20}$" , message = "referenz enthält unerlaubte Zeichen")
 		@Size(min = 1, max = 36, message = "nicht mehr als 36 Zeichen") final String referenz,
-//		@QueryParam(value = "sortName") @NotNull final SortDirection sortDirectionName,
-//		@QueryParam(value = "sortSchwierigkeitsgrad") @NotNull final SortDirection sortDirectionSchwierigkeitsgrad,
-//		@QueryParam(value = "sortReferenztyp") @NotNull final SortDirection sortDirectionReferenztyp,
-//		@QueryParam(value = "sortReferenz") @NotNull final SortDirection sortDirectionReferenz,
+		@QueryParam(value = "sortAttribute") @DefaultValue("name") final RaetselgruppenSortattribute sortAttribute,
+		@QueryParam(value = "sortDirection") @DefaultValue("asc")  final SortDirection sortDirection,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset) {
 		// @formatter:off
@@ -122,9 +128,9 @@ public class RaetselgruppenResource {
 			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("nicht mehr als 50 auf einmal abfragen.")).build());
 		}
 
-//		RaetselgruppenSuchparameter suchparameter = new RaetselgruppenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz, sortDirectionName, sortDirectionSchwierigkeitsgrad, sortDirectionReferenztyp, sortDirectionReferenz);
+		RaetselgruppenSuchparameter suchparameter = new RaetselgruppenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz, sortAttribute, sortDirection);
 
-		RaetselgruppenSuchparameter suchparameter = new RaetselgruppenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz);
+//		RaetselgruppenSuchparameter suchparameter = new RaetselgruppenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz);
 		return raetselgruppenService.findRaetselgruppen(suchparameter, limit, offset);
 	}
 

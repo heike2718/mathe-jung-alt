@@ -1,18 +1,47 @@
 .mat-row .mat-cell {
-    border-bottom: 1px solid transparent;
-    border-top: 1px solid transparent;
-    cursor: pointer;
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
 }
 
 .mat-row:hover .mat-cell {
-    border-color: currentColor;
+  border-color: currentColor;
 }
 
-.demo-row-is-clicked {
-    font-weight: bold;
+.mat-header-cell__1,
+.mat-cell__1 {
+  flex: 0 1 5%;
 }
 
-.scrolling-container {
-    overflow: auto;
-    max-height: 900px;
+.mat-header-cell__2,
+.mat-cell__2 {
+  flex: 0 1 10%;
+}
+
+.mat-header-cell__3,
+.mat-cell__3 {
+  flex: 0 1 30%;
+}
+
+.mat-header-cell__4,
+.mat-cell__4 {
+  flex: 0 1 55%;
+}
+
+@media(max-width: 959px) {
+
+  .mat-header-cell__1,
+  .mat-cell__1 {
+    flex: 0 1 10%;
+  }
+
+  .mat-header-cell__2,
+  .mat-cell__2 {
+    flex: 0 1 30%;
+  }
+
+  .mat-header-cell__3,
+  .mat-cell__3 {
+    flex: 0 1 60%;
+  }
 }

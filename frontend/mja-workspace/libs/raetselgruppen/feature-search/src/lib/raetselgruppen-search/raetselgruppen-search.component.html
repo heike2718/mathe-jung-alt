@@ -1,46 +1,111 @@
 <h1>Rätselgruppen</h1>
 
-<div class="scrolling-container">
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="name"
-    matSortDirection="asc" (matSortChange)="announceSortChange($event)" class="mja-table">
+<mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="name"
+  matSortDirection="asc" matSortDisableClear (matSortChange)="announceSortChange($event)">
 
-    <!-- name -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Name </th>
-      <td mat-cell *matCellDef="let gruppe">
-        <span *ngIf="gruppe.status === 'ERFASST'">
-          <mat-icon>block</mat-icon>
-        </span>
-        <span *ngIf="gruppe.status === 'FREIGEGEBEN'">
-          <mat-icon>check_circle_outline</mat-icon>
-        </span>
-        {{gruppe.name}} ({{gruppe.anzahlElemente}})
-      </td>
-    </ng-container>
+  <!-- status -->
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__1"> </mat-header-cell>
+    <mat-cell *matCellDef="let gruppe" class="mat-cell__1"> <span *ngIf="gruppe.status === 'ERFASST'">
+        <mat-icon>block</mat-icon>
+      </span>
+      <span *ngIf="gruppe.status === 'FREIGEGEBEN'">
+        <mat-icon>check_circle_outline</mat-icon>
+      </span>
+    </mat-cell>
+  </ng-container>
 
-    <!-- schwierigkeitsgrad -->
-    <ng-container matColumnDef="schwierigkeitsgrad">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by schwierigkeitsgrad"> Level
-      </th>
-      <td mat-cell *matCellDef="let gruppe"> {{gruppe.schwierigkeitsgrad}} </td>
-    </ng-container>
+  <!-- name -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__2">
+      <div fxLayout="column">
+        <label mat-sort-header>
+          Name
+        </label>
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always">
+          <input matInput [formControl]="nameFilterControl" type="text" #nameFilterInput />
+          <button mat-button *ngIf="nameFilterInput.value" matSuffix mat-icon-button
+            class="mat-form-field-suffix__clear" aria-label="Clear" (click)="clearFilter(nameFilterControl)">
+            <mat-icon>
+              close
+            </mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let gruppe" class="mat-cell__2">
+      {{gruppe.name}} ({{gruppe.anzahlElemente}})
+    </mat-cell>>
+  </ng-container>
 
-    <!-- referenzty -->
-    <ng-container matColumnDef="referenztyp">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by referenztyp"> Referenztyp
-      </th>
-      <td mat-cell *matCellDef="let gruppe"> {{gruppe.referenztyp}} </td>
-    </ng-container>
+  <!-- schwierigkeitsgrad -->
+  <ng-container matColumnDef="schwierigkeitsgrad">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__3">
+      <div fxLayout="column">
+        <label mat-sort-header>
+          Level
+        </label>
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always">
+          <input matInput [formControl]="schwierigkeitsgradSelectFilterControl" type="text" #levelFilterInput />
+          <button mat-button *ngIf="levelFilterInput.value" matSuffix mat-icon-button
+            class="mat-form-field-suffix__clear" aria-label="Clear"
+            (click)="clearFilter(schwierigkeitsgradSelectFilterControl)">
+            <mat-icon>
+              close
+            </mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let gruppe" class="mat-cell__3"> {{gruppe.schwierigkeitsgrad}} </mat-cell>
+  </ng-container>
 
-    <!-- referenz -->
-    <ng-container matColumnDef="referenz">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by referenz"> Referenz </th>
-      <td mat-cell *matCellDef="let gruppe"> {{gruppe.referenz}} </td>
-    </ng-container>
+  <!-- referenztyp -->
+  <ng-container matColumnDef="referenztyp">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__4">
+      <div fxLayout="column">
+        <label mat-sort-header>
+          Referenztyp
+        </label>
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always">
+          <input matInput [formControl]="referenztypSelectFilterControl" type="text" #referenztypFilterInput />
+          <button mat-button *ngIf="referenztypFilterInput.value" matSuffix mat-icon-button
+            class="mat-form-field-suffix__clear" aria-label="Clear"
+            (click)="clearFilter(referenztypSelectFilterControl)">
+            <mat-icon>
+              close
+            </mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let gruppe" class="mat-cell__4"> {{gruppe.referenztyp}} </mat-cell>
+  </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columnDefinitions; sticky"></tr>
-    <tr mat-row *matRowDef="let row; columns: columnDefinitions" (click)="onRowClicked(row)"></tr>
+  <!-- referenz -->
+  <ng-container matColumnDef="referenz">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__5">
+      <div fxLayout="column">
+        <label mat-sort-header>
+          Referenz
+        </label>
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always">
+          <input matInput [formControl]="referenzFilterControl" type="text" #referenzFilterInput />
+          <button mat-button *ngIf="referenzFilterInput.value" matSuffix mat-icon-button
+            class="mat-form-field-suffix__clear" aria-label="Clear" (click)="clearFilter(referenzFilterControl)">
+            <mat-icon>
+              close
+            </mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let gruppe" class="mat-cell__5"> {{gruppe.referenz}} </mat-cell>
+  </ng-container>
 
-  </table>
-</div>
-<mat-paginator [length]="anzahlRaetselgruppen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
+  <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)"></mat-row>
+
+</mat-table>
+<mat-paginator [length]="anzahlRaetselgruppen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons>
+</mat-paginator>
