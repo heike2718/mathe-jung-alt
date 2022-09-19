@@ -17,12 +17,12 @@
 
   <!-- name -->
   <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef class="mat-header-cell__2">
+    <mat-header-cell *matHeaderCellDef>
       <div fxLayout="column">
         <label mat-sort-header>
           Name
         </label>
-        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always">
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <input matInput [formControl]="nameFilterControl" type="text" #nameFilterInput />
           <button mat-button *ngIf="nameFilterInput.value" matSuffix mat-icon-button
             class="mat-form-field-suffix__clear" aria-label="Clear" (click)="clearFilter(nameFilterControl)">
@@ -33,49 +33,45 @@
         </mat-form-field>
       </div>
     </mat-header-cell>
-    <mat-cell *matCellDef="let gruppe" class="mat-cell__2">
+    <mat-cell *matCellDef="let gruppe">
       {{gruppe.name}} ({{gruppe.anzahlElemente}})
     </mat-cell>>
   </ng-container>
 
   <!-- schwierigkeitsgrad -->
   <ng-container matColumnDef="schwierigkeitsgrad">
-    <mat-header-cell *matHeaderCellDef class="mat-header-cell__3">
+    <mat-header-cell *matHeaderCellDef>
       <div fxLayout="column">
         <label mat-sort-header>
           Level
         </label>
-        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always">
-          <input matInput [formControl]="schwierigkeitsgradSelectFilterControl" type="text" #levelFilterInput />
-          <button mat-button *ngIf="levelFilterInput.value" matSuffix mat-icon-button
-            class="mat-form-field-suffix__clear" aria-label="Clear"
-            (click)="clearFilter(schwierigkeitsgradSelectFilterControl)">
-            <mat-icon>
-              close
-            </mat-icon>
-          </button>
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
+          <mat-select floatLabel="always" [formControl]="schwierigkeitsgradSelectFilterControl">
+            <mat-option [value]=""></mat-option>
+            <mat-option *ngFor="let level of schwierigkeitsgrade" [value]="level">
+              {{ level }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
     </mat-header-cell>
-    <mat-cell *matCellDef="let gruppe" class="mat-cell__3"> {{gruppe.schwierigkeitsgrad}} </mat-cell>
+    <mat-cell *matCellDef="let gruppe"> {{gruppe.schwierigkeitsgrad}} </mat-cell>
   </ng-container>
 
   <!-- referenztyp -->
   <ng-container matColumnDef="referenztyp">
-    <mat-header-cell *matHeaderCellDef class="mat-header-cell__4">
+    <mat-header-cell *matHeaderCellDef>
       <div fxLayout="column">
         <label mat-sort-header>
           Referenztyp
         </label>
-        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always">
-          <input matInput [formControl]="referenztypSelectFilterControl" type="text" #referenztypFilterInput />
-          <button mat-button *ngIf="referenztypFilterInput.value" matSuffix mat-icon-button
-            class="mat-form-field-suffix__clear" aria-label="Clear"
-            (click)="clearFilter(referenztypSelectFilterControl)">
-            <mat-icon>
-              close
-            </mat-icon>
-          </button>
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
+          <mat-select floatLabel="always" [formControl]="referenztypSelectFilterControl">
+            <mat-option [value]=""></mat-option>
+            <mat-option *ngFor="let reftyp of referenztypen" [value]="reftyp">
+              {{ reftyp }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
     </mat-header-cell>
@@ -84,12 +80,12 @@
 
   <!-- referenz -->
   <ng-container matColumnDef="referenz">
-    <mat-header-cell *matHeaderCellDef class="mat-header-cell__5">
+    <mat-header-cell *matHeaderCellDef>
       <div fxLayout="column">
         <label mat-sort-header>
           Referenz
         </label>
-        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always">
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <input matInput [formControl]="referenzFilterControl" type="text" #referenzFilterInput />
           <button mat-button *ngIf="referenzFilterInput.value" matSuffix mat-icon-button
             class="mat-form-field-suffix__clear" aria-label="Clear" (click)="clearFilter(referenzFilterControl)">
@@ -100,7 +96,7 @@
         </mat-form-field>
       </div>
     </mat-header-cell>
-    <mat-cell *matCellDef="let gruppe" class="mat-cell__5"> {{gruppe.referenz}} </mat-cell>
+    <mat-cell *matCellDef="let gruppe"> {{gruppe.referenz}} </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>

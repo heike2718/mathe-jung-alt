@@ -1,4 +1,4 @@
-/*
+
 .mat-form-field-suffix__clear {
     position: absolute !important;
     right: 37px;
@@ -11,7 +11,11 @@
         right: 3px;
     }
 }
-*/
+
+
+.flexWithSpace {
+  justify-content: space-between;
+}
 
 .mat-header-cell__1,
 .mat-cell__1 {
@@ -20,7 +24,7 @@
 
 .mat-header-cell__2,
 .mat-cell__2 {
-  flex: 0 1 40%;
+  flex: 0 1 30%;
 }
 
 .mat-header-cell__3,
@@ -39,7 +43,7 @@
 }
 
 .filter {
-    display: block;
+  display: block;
 }
 
 @media(max-width: 959px) {
@@ -51,16 +55,6 @@
 
   .mat-header-cell__2,
   .mat-cell__2 {
-    flex: 0 1 60%;
+    flex: 0 1 70%;
   }
-
-  .mat-header-cell__3,
-  .mat-cell__3 {
-    flex: 0 1 30%;
-  }
-
-  .filter {
-    margin-right: 3px;
-    margin-left: 3px;
-}
 }

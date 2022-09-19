@@ -63,7 +63,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   referenzFilterControl = new FormControl('');
 
   /** controls for the MatSelect filter keyword */
-  schwierigkeitsgradSelectFilterControl: FormControl = new FormControl();
+  schwierigkeitsgradSelectFilterControl: FormControl = new FormControl('kein Filter');
   referenztypSelectFilterControl: FormControl = new FormControl();
 
   constructor(public raetselgruppenFacade: RaetselgruppenFacade, private _liveAnnouncer: LiveAnnouncer) {
@@ -97,7 +97,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     ).subscribe();
 
     this.#nameFilterSubscription = this.nameFilterControl.valueChanges.pipe(
-      debounceTime(800),
+      debounceTime(500),
       distinctUntilChanged(),
       tap((name) => {
         name ? this.#suchparameter = { ...this.#suchparameter, name: name, pageIndex: 0 } : { ...this.#suchparameter, name: null, pageIndex: 0 };
@@ -106,15 +106,17 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     ).subscribe();
 
     this.#schwierigkeitsgradFilterSubscription = this.schwierigkeitsgradSelectFilterControl.valueChanges.pipe(
-      debounceTime(800),
-      distinctUntilChanged(),
-      tap(() => { })
+      tap((level) => {
+        level ? this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: level, pageIndex: 0 } : { ...this.#suchparameter, schwierigkeitsgrad: null, pageIndex: 0 };
+        this.#loadRaetselgruppen();
+      })
     ).subscribe();
 
     this.#referenztypFilterSubscription = this.referenztypSelectFilterControl.valueChanges.pipe(
-      debounceTime(800),
-      distinctUntilChanged(),
-      tap(() => { })
+      tap((reftyp) => {
+        reftyp ? this.#suchparameter = { ...this.#suchparameter, referenztyp: reftyp, pageIndex: 0 } : { ...this.#suchparameter, refereztyp: null, pageIndex: 0 };
+        this.#loadRaetselgruppen();
+      })
     ).subscribe();
 
     this.#referenzFilterSubscription = this.referenzFilterControl.valueChanges.pipe(
@@ -141,7 +143,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     if (this.#scrWidth > 959) {
       return [STATUS, NAME, LEVEL, REFERENZTYP, REFERENZ];
     } else {
-      return [STATUS, NAME, LEVEL];
+      return [STATUS, NAME];
     }
   }
 

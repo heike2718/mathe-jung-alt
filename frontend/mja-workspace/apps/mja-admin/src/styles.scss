@@ -147,11 +147,3 @@ th.mat-sort-header-sorted {
   font-size: small;
   color: red;
 }
-
-@media(max-width: 959px) {
-  .form-box,
-  .mat-form-field {
-    width: 95vw;
-    /** x% der viewport-Breite*/
-  }
-}

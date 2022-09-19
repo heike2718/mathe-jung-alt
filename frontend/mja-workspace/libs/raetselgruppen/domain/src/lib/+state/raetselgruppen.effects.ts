@@ -19,7 +19,6 @@ export class RaetselgruppenEffects {
             ofType(RaetselgruppenActions.suchparameterChanged),
             this.safeNgrx.safeSwitchMap((action) =>
                 this.raetselHttpService.findGruppen(action.suchparameter).pipe(
-                    tap((treffer) => console.log('response erhalten: Anzahl gesamt=' + treffer.anzahlTreffer)),
                     map((treffer) =>
                         RaetselgruppenActions.pageLoaded({ treffer: treffer })
                     )
