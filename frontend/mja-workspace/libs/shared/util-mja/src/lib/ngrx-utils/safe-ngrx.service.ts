@@ -17,7 +17,7 @@ export class SafeNgrxService {
     #storagePrefix!: string;
 
     constructor(private messageService: MessageService,
-        @Inject(SharedConfigService) private configuration: Configuration,
+        @Inject(SharedConfigService) private configuration: Configuration,        
         private router: Router
 
     ) {
@@ -91,6 +91,7 @@ export class SafeNgrxService {
     clearSession(): void {
         localStorage.removeItem(this.#storagePrefix + STORAGE_KEY_SESSION);
         localStorage.removeItem(STORAGE_KEY_QUELLE);
+        localStorage.setItem(this.configuration.storagePrefix + 'SESSIONSTATE', 'expired');
     }
 
     handleError(error: any, errorMessage: string): void {

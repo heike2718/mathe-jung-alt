@@ -4,10 +4,12 @@ import * as fromRaetselgruppen from './+state/raetselgruppen.reducer';
 import { StoreModule } from '@ngrx/store';
 import { RaetselgruppenEffects } from './+state/raetselgruppen.effects';
 import { EffectsModule } from '@ngrx/effects';
+import { SharedUtilMjaModule } from '@mja-workspace/shared/util-mja';
 
 @NgModule({
   imports: [
     CommonModule,
+    SharedUtilMjaModule,
     StoreModule.forFeature(
       fromRaetselgruppen.RAETSELGRUPPEN_FEATURE_KEY,
       fromRaetselgruppen.reducer

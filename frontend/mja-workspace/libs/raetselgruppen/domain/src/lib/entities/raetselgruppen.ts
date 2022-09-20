@@ -1,28 +1,10 @@
-import { STATUS } from "@mja-workspace/shared/util-mja";
-
-export type SortOrder = 'asc' | 'desc';
-
-
-export type Schwierigkeitsgrad = 'AB_NEUN' |
-    'DREI_VIER' |
-    'EINS' |
-    'EINS_ZWEI' |
-    'FUENF_SECHS' |
-    'GRUNDSCHULE' |
-    'IKID' |
-    'SEK_1' |
-    'SEK_2' |
-    'SIEBEN_ACHT' |
-    'VORSCHULE' |
-    'ZWEI';
-
-export type Referenztyp = 'MINIKAENGURU' | 'SERIE';
+import { Referenztyp, Schwierigkeitsgrad, SortOrder, STATUS } from "@mja-workspace/shared/util-mja";
 
 export interface RaetselgruppeBasisdaten {
     readonly id: string;
     readonly name?: string;
     readonly kommentar?: string;
-    readonly schwierigkeitsgrad?: Schwierigkeitsgrad;
+    readonly schwierigkeitsgrad: Schwierigkeitsgrad;
     readonly referenztyp?: Referenztyp;
     readonly referenz?: string;
     readonly status: STATUS;
@@ -31,9 +13,10 @@ export interface RaetselgruppeBasisdaten {
 
 export const initialRaetselgruppeBasisdaten: RaetselgruppeBasisdaten = {
     id: 'neu',
-    status: 'ERFASST'
+    status: 'ERFASST',
+    schwierigkeitsgrad: 'NOOP',
+    referenztyp: 'NOOP'
 };
-
 export interface RaetselgruppensucheTrefferItem extends RaetselgruppeBasisdaten {
     readonly anzahlElemente: number;
 };
@@ -89,6 +72,3 @@ export interface Raetselgruppenelement extends EditRaetselgruppenelementPayload 
 export interface RaetselgruppeDetails extends EditRaetselgruppePayload {
     readonly elemente: Raetselgruppenelement[];
 };
-
-
-

@@ -4,7 +4,8 @@ import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild } 
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { initialRaetselgruppenSuchparameter, RaetselgruppeDatasource, RaetselgruppenFacade, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter, Referenztyp, Schwierigkeitsgrad, SortOrder } from '@mja-workspace/raetselgruppen/domain';
+import { initialRaetselgruppenSuchparameter, RaetselgruppeDatasource, RaetselgruppenFacade, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from '@mja-workspace/raetselgruppen/domain';
+import { getGuiRaetselgruppeReferenztypen, getSchwierigkeitsgrade, GuiRaetselgruppeReferenztyp, GuiSchwierigkeitsgrad, initialGuiRaetselgruppeReferenztyp, initialSchwierigkeitsgrad, SortOrder } from '@mja-workspace/shared/util-mja';
 import { debounceTime, distinctUntilChanged, merge, Subscription, tap } from 'rxjs';
 
 const STATUS = 'status';
@@ -47,8 +48,8 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   dataSource!: RaetselgruppeDatasource;
   anzahlRaetselgruppen: number = 0;
 
-  schwierigkeitsgrade: Schwierigkeitsgrad[] = ['IKID', 'EINS', 'ZWEI', 'VORSCHULE', 'EINS_ZWEI', 'DREI_VIER', 'FUENF_SECHS', 'SIEBEN_ACHT', 'AB_NEUN', 'GRUNDSCHULE', 'SEK_1', 'SEK_2'];
-  referenztypen: Referenztyp[] = ['MINIKAENGURU', 'SERIE'];
+  schwierigkeitsgrade: GuiSchwierigkeitsgrad[] = getSchwierigkeitsgrade();
+  referenztypen: GuiRaetselgruppeReferenztyp[] = getGuiRaetselgruppeReferenztypen();
 
   filterValues = {
     name: '',
@@ -63,11 +64,14 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   referenzFilterControl = new FormControl('');
 
   /** controls for the MatSelect filter keyword */
-  schwierigkeitsgradSelectFilterControl: FormControl = new FormControl('kein Filter');
+  schwierigkeitsgradSelectFilterControl: FormControl = new FormControl();
   referenztypSelectFilterControl: FormControl = new FormControl();
 
   constructor(public raetselgruppenFacade: RaetselgruppenFacade, private _liveAnnouncer: LiveAnnouncer) {
     this.getScreenSize();
+
+    this.schwierigkeitsgradSelectFilterControl.setValue(initialSchwierigkeitsgrad);
+    this.referenztypSelectFilterControl.setValue(initialGuiRaetselgruppeReferenztyp);
   }
 
   ngOnInit(): void {
@@ -106,21 +110,30 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     ).subscribe();
 
     this.#schwierigkeitsgradFilterSubscription = this.schwierigkeitsgradSelectFilterControl.valueChanges.pipe(
-      tap((level) => {
-        level ? this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: level, pageIndex: 0 } : { ...this.#suchparameter, schwierigkeitsgrad: null, pageIndex: 0 };
+      tap((level: GuiSchwierigkeitsgrad) => {
+        if (level && level.id !== 'NOOP') {
+          this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: level.id, pageIndex: 0 };
+        } else {
+          this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: null, pageIndex: 0 };
+        }
         this.#loadRaetselgruppen();
       })
     ).subscribe();
 
     this.#referenztypFilterSubscription = this.referenztypSelectFilterControl.valueChanges.pipe(
       tap((reftyp) => {
-        reftyp ? this.#suchparameter = { ...this.#suchparameter, referenztyp: reftyp, pageIndex: 0 } : { ...this.#suchparameter, refereztyp: null, pageIndex: 0 };
+
+        if (reftyp && reftyp.id !== 'NOOP') {
+          this.#suchparameter = { ...this.#suchparameter, referenztyp: reftyp.id, pageIndex: 0 }
+        } else {
+          this.#suchparameter = { ...this.#suchparameter, referenztyp: null, pageIndex: 0 }
+        }
         this.#loadRaetselgruppen();
       })
     ).subscribe();
 
     this.#referenzFilterSubscription = this.referenzFilterControl.valueChanges.pipe(
-      debounceTime(800),
+      debounceTime(500),
       distinctUntilChanged(),
       tap((referenz) => {
         referenz ? this.#suchparameter = { ...this.#suchparameter, referenz: referenz, pageIndex: 0 } : { ...this.#suchparameter, referenz: null, pageIndex: 0 };

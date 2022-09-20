@@ -18,15 +18,13 @@ export class RaetselgruppenFacade {
     anzahlTrefferGesamt$ = this.store.pipe(select(RaetselgruppenSelectors.getAnzahlTrefferGesamt));
     suchparameter$: Observable<RaetselgruppenSuchparameter> = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppenSuchparameter));
     selectedGruppe$ = this.store.pipe(select(RaetselgruppenSelectors.getSelectedGruppe));
-    raetselgruppeBasisdaten$ = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppeBasisdaten));
+    editorContent$ = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppeBasisdaten));
 
 
     constructor(private store: Store<fromRaetselgruppen.RaetselgruppenPartialState>, private safeHttpService: SafeHttpService, private httpService: RaetselgruppenHttpService) { }
 
     public setSuchparameter(suchparameter: RaetselgruppenSuchparameter): void {
-        console.log('suchparameter changed');
-
-        this.store.dispatch(RaetselgruppenActions.suchparameterChanged({suchparameter}));
+        this.store.dispatch(RaetselgruppenActions.suchparameterChanged({ suchparameter }));
     }
 
     public selectRaetselgruppe(raetselgruppe: RaetselgruppensucheTrefferItem): void {
@@ -36,6 +34,6 @@ export class RaetselgruppenFacade {
     public createAndEditRaetselgruppe(): void {
 
         const raetselgruppeBasisdaten: RaetselgruppeBasisdaten = initialRaetselgruppeBasisdaten;
-        this.store.dispatch(RaetselgruppenActions.editRaetselgruppe({raetselgruppeBasisdaten}));
+        this.store.dispatch(RaetselgruppenActions.editRaetselgruppe({ raetselgruppeBasisdaten }));
     }
 }

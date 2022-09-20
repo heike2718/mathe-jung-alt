@@ -1,1 +1,103 @@
-<h1>Rätselgruppeneditor</h1>
+<div fxLayout="column">
+
+    <h1>Rätselgruppeneditor</h1>
+
+    <div *ngIf="raetselgruppenFacade.editorContent$ | async as gruppe else keineRaetselgruppe">
+
+        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+            <mat-label class="mat-form-field__1">ID:</mat-label>
+            <div class="mat-form-field__1 mb-1">{{gruppe.id}}</div>
+        </div>
+
+        <div *ngIf="gruppe.geaendertDurch" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+            <mat-label class="mat-form-field__1">geändert durch:</mat-label>
+            <div class="mat-form-field__1 mb-1">{{gruppe.geaendertDurch}}</div>
+        </div>
+
+        <form [formGroup]="form" novalidate>
+
+            <div fxLayout="column wrap" fxLayoutGap="10px" fxLayoutAlign="flex-start">
+
+                <!-- Name -->
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Name</mat-label>
+                        <input matInput maxlength="100" placeholder="name" formControlName="name" #nameInput>
+                        <mat-hint>wird in der Trefferliste angezeigt</mat-hint>
+                        <mat-error *ngIf="raetselgruppeDataError('name', 'required')">Name ist Pflicht</mat-error>
+                        <mat-error *ngIf="raetselgruppeDataError('name', 'maxLength')">maximal 100 Zeichen</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Kommentar -->
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Kommentar</mat-label>
+                        <input matInput maxlength="200" placeholder="Kommentar" formControlName="kommentar"
+                            #kommentarInput>
+                        <mat-error *ngIf="raetselgruppeDataError('kommentar', 'maxLength')">maximal 200 Zeichen
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Status -->
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Status</mat-label>
+                        <select matNativeControl formControlName="status" #statusInput>
+                            <option *ngFor="let status of selectStatusInput" [value]="status">{{status}}</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+
+                <!-- Schwierigkeitsgrade -->
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Level</mat-label>
+                        <select matNativeControl formControlName="schwierigkeitsgrad" #schwierigkeitsgradInput>
+                            <option *ngFor="let level of selectSchwierigkeitsgradeInput" [value]="level.id">{{level.label}}</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+
+                <!-- Referenztypen -->
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Referenztyp</mat-label>
+                        <select matNativeControl formControlName="referenztyp" #referenztypInput>
+                            <option *ngFor="let reftyp of selectReferenztypenInput" [value]="reftyp.id">{{reftyp.label}}</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+
+                <!-- Referenz -->
+                <div class="mb-2">
+                    <mat-form-field class="form-box" appearance="fill">
+                        <mat-label>Referenz</mat-label>
+                        <input matInput maxlength="36" placeholder="Referenz" formControlName="referenz" #nameInput>
+                        <mat-hint>Referenz auf ID im alten Aufgabenarchiv. Pflicht, wenn Referenztyp gewählt</mat-hint>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+
+        <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+            <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                    [disabled]="formInvalid()" (click)="submit()">speichern</button></div>
+            <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                    (click)="cancelEdit()">abbrechen</button>
+            </div>
+        </div>
+
+        <div *ngIf="formInvalid()" class="hint-red mt-1 mb-2">
+            Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
+            Pflichtangaben und so.
+        </div>
+    </div>
+
+
+    <ng-template #keineRaetselgruppe>
+        <h2>Rätselgruppe Basisdaten</h2>
+        <p>keine Rätselgruppe ausgewählt</p>
+    </ng-template>
+</div>

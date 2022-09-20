@@ -34,7 +34,7 @@
                 <div class="mb-2">
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Name</mat-label>
-                        <input matInput maxlength="100" inputmode="tel" placeholder="name" formControlName="name"
+                        <input matInput maxlength="100" placeholder="name" formControlName="name"
                             #nameInput>
                         <mat-hint>wird in der Trefferliste angezeigt</mat-hint>
                         <mat-error *ngIf="raetselDataError('name', 'required')">Name ist Pflicht</mat-error>
@@ -45,7 +45,7 @@
                 <div class="mb-2">
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Kommentar</mat-label>
-                        <input matInput maxlength="200" inputmode="tel" placeholder="Kommentar"
+                        <input matInput maxlength="200" placeholder="Kommentar"
                             formControlName="kommentar" #kommentarInput>
                         <mat-hint>Kommentare sind in Volltextsuche eingebunden</mat-hint>
                         <mat-error *ngIf="raetselDataError('kommentar', 'maxLength')">maximal 200 Zeichen</mat-error>
@@ -56,7 +56,7 @@
                     <div class="mb-2 row">
                         <mat-form-field class="form-box" appearance="fill">
                             <mat-label>ID der Quelle</mat-label>
-                            <input matInput maxlength="36" inputmode="tel" placeholder="Quelle"
+                            <input matInput maxlength="36" placeholder="Quelle"
                                 formControlName="quelleId" #quelleIdInput>
                             <mat-hint *ngIf="quellenFacade.selectedQuelle$ | async as quelle">{{quelle.name}}
                                 ({{quelle.quellenart}})</mat-hint>

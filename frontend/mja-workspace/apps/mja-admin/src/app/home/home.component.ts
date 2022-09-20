@@ -9,13 +9,18 @@ import { environment } from '../../environments/environment';
 })
 export class HomeComponent implements OnInit {
 
+  #storageKeySessionState = environment.storageKeyPrefix + 'SESSIONSTATE';
+
   version = environment.version;
 
   menuOpen = false;
 
   constructor(public authFacade: AuthFacade) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+
+    this.#checkSessionState();
+  }
 
   onMenuStateChanged($event: any): void {
 
@@ -29,5 +34,15 @@ export class HomeComponent implements OnInit {
 
   public logout(): void {
     this.authFacade.logout();
+  }
+
+  #checkSessionState(): void {
+    // ist ein bisschen von hinten durch die Brust ins Auge, weil ich nicht pollen will 
+    // und die 440 vom Server im SafeNgrxService aufschlägt, der keine Referenz auf AuthFacade haben kann wegen circular dependency.
+    const sessionState = localStorage.getItem(this.#storageKeySessionState);
+    if ('expired' === sessionState) {
+      this.authFacade.logout();
+      localStorage.removeItem(this.#storageKeySessionState);
+    }
   }
 }

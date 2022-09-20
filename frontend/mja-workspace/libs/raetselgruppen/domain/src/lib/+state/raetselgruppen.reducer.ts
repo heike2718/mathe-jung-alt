@@ -37,9 +37,6 @@ const raetselgruppenReducer = createReducer(
     }),
 
     on(RaetselgruppenActions.pageLoaded, (state, action) => {
-
-        console.log('on pageLoaded');
-
         return {
             ...state,
             page: action.treffer.items,

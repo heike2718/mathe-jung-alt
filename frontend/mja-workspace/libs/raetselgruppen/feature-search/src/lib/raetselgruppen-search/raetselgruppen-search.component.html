@@ -47,9 +47,8 @@
         </label>
         <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <mat-select floatLabel="always" [formControl]="schwierigkeitsgradSelectFilterControl">
-            <mat-option [value]=""></mat-option>
             <mat-option *ngFor="let level of schwierigkeitsgrade" [value]="level">
-              {{ level }}
+              {{ level.id }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -67,9 +66,8 @@
         </label>
         <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <mat-select floatLabel="always" [formControl]="referenztypSelectFilterControl">
-            <mat-option [value]=""></mat-option>
             <mat-option *ngFor="let reftyp of referenztypen" [value]="reftyp">
-              {{ reftyp }}
+              {{ reftyp.id }}
             </mat-option>
           </mat-select>
         </mat-form-field>

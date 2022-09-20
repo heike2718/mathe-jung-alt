@@ -2,8 +2,8 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Configuration, SharedConfigService } from "@mja-workspace/shared/util-configuration";
 import { LoadingIndicatorService } from "@mja-workspace/shared/util-mja";
-import { Observable, of } from "rxjs";
-import { EditRaetselgruppePayload, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter, Referenztyp, Schwierigkeitsgrad } from "../entities/raetselgruppen";
+import { Observable } from "rxjs";
+import { EditRaetselgruppePayload, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 
 
 @Injectable(

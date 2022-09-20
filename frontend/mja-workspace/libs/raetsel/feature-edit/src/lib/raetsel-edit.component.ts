@@ -61,7 +61,7 @@ export class RaetselEditComponent implements OnInit {
       schluessel: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
       name: ['', [Validators.required, Validators.maxLength(100)]],
       quelleId: ['', [Validators.required]],
-      status: ['ERFASST', [Validators.required]],
+      status: ['', [Validators.required]],
       frage: ['', [Validators.required]],
       loesung: [''],
       kommentar: [''],
@@ -270,6 +270,7 @@ export class RaetselEditComponent implements OnInit {
     this.form.controls['schluessel'].setValue(raetsel.schluessel);
     this.form.controls['name'].setValue(raetsel.name);
     this.form.controls['quelleId'].setValue(raetsel.quelleId);
+    this.form.controls['status'].setValue(raetsel.status);
     this.form.controls['frage'].setValue(raetsel.frage);
     this.form.controls['loesung'].setValue(raetsel.loesung);
     this.form.controls['kommentar'].setValue(raetsel.kommentar);
