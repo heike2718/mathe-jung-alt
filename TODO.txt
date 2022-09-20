@@ -13,4 +13,10 @@
 (/) neues Raetsel: Status falsch => es ist noch das zuvor gewählte Rätsel im Status
 (/) Suche: workflow ändern: die Trefferliste muss gleich auch die Gesamtzahl der Treffer fürs pagination mitliefern, dann ist kein count-Preflight erforderlich
 (/) Button "neues Rätsel" ist nicht sichtbar, obwohl eine Quelle ausgewählt wurde
-(-) loading indicator: facade mit globalem status, damit er bei errors verschwinden kann. Hübsch wäre ein mittig angeordneter blockierender Indicator, den man auch schließen kann.
+(/) loading indicator: facade mit globalem status, damit er bei errors verschwinden kann. Hübsch wäre ein mittig angeordneter blockierender Indicator, den man auch schließen kann.
+(-) Raetselgrppe anlegen: Backend ist noch nicht fertig, frontend noch nicht angebunden
+(-) Rätselgruppe Details: frontend -> tabelle select-event öffnet Details mit Liste der Elemente und einem Button zum Ändern
+(-) Click auf Ändern setzt Raetselgruppe als editorContent und öffnet den Editor
+(-) Controls zum Zuordnen von Rätseln. Irgendwie müssen sie ausgewählt werden können. Möglich wäre, Kontextmenü in der Rätselübersicht, mit der ein Rätsel einer Gruppe
+    zugeordnet werden kann => Dialog: Gruppe auswählen, Dialog Punkte und Nummer eingeben => add
+(-) anderer Weg: Gruppe-Details zeigt Tabelle mit Elementen an und darunter einen neuen Button, der einen Dialog zum Auswählen eines Rätsels öffnet
