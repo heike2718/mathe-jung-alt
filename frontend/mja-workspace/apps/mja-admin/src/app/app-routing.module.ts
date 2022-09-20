@@ -32,6 +32,12 @@ const routes: Routes = [
 
     },
     {
+        path: 'raetselgruppe-editor',
+        loadChildren: () =>
+            import('@mja-workspace/raetselgruppen/feature-edit').then((m) => m.RaetselgruppenFeatureEditModule),
+
+    },
+    {
         path: 'home',
         component: HomeComponent
     },

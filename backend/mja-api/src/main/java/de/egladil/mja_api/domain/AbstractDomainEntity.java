@@ -15,7 +15,7 @@ public abstract class AbstractDomainEntity {
 
 	public static final String UUID_NEUE_ENTITY = "neu";
 
-	@Schema(description = "technische ID")
+	@Schema(description = "technische ID, 'neu' für neue Rätsel")
 	private String id;
 
 	/**

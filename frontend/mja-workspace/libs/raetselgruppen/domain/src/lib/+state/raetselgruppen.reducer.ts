@@ -3,7 +3,7 @@ import * as RaetselgruppenActions from './raetselgruppen.actions';
 
 export const RAETSELGRUPPEN_FEATURE_KEY = 'raetselgruppen';
 
-import { initialRaetselgruppenSuchparameter, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
+import { initialRaetselgruppenSuchparameter, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 
 
 export interface RaetselgruppenState {
@@ -11,6 +11,7 @@ export interface RaetselgruppenState {
     readonly anzahlTrefferGesamt: number;
     readonly suchparameter: RaetselgruppenSuchparameter,
     readonly selectedGruppe: RaetselgruppensucheTrefferItem | undefined;
+    readonly raetselgruppeBasisdaten: RaetselgruppeBasisdaten | undefined;
 };
 
 export interface RaetselgruppenPartialState {
@@ -21,7 +22,8 @@ const initialState: RaetselgruppenState = {
     page: [],
     anzahlTrefferGesamt: 0,
     suchparameter: initialRaetselgruppenSuchparameter,
-    selectedGruppe: undefined
+    selectedGruppe: undefined,
+    raetselgruppeBasisdaten: undefined
 };
 
 const raetselgruppenReducer = createReducer(
@@ -43,7 +45,13 @@ const raetselgruppenReducer = createReducer(
             page: action.treffer.items,
             anzahlTrefferGesamt: action.treffer.anzahlTreffer
         };
-    })
+    }),
+
+    on(RaetselgruppenActions.editRaetselgruppe, (state, action) => {
+
+        // console.log(action.raetselgruppeBasisdaten);
+        return { ...state, raetselgruppeBasisdaten: action.raetselgruppeBasisdaten };
+    }),
 );
 
 export function reducer(state: RaetselgruppenState | undefined, action: Action) {

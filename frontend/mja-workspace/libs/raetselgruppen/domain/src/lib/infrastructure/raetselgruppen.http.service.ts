@@ -3,7 +3,7 @@ import { Inject, Injectable } from "@angular/core";
 import { Configuration, SharedConfigService } from "@mja-workspace/shared/util-configuration";
 import { LoadingIndicatorService } from "@mja-workspace/shared/util-mja";
 import { Observable, of } from "rxjs";
-import { RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter, Referenztyp, Schwierigkeitsgrad } from "../entities/raetselgruppen";
+import { EditRaetselgruppePayload, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter, Referenztyp, Schwierigkeitsgrad } from "../entities/raetselgruppen";
 
 
 @Injectable(
@@ -51,79 +51,18 @@ export class RaetselgruppenHttpService {
         return this.loadingService.showLoaderUntilCompleted(obs$);
     }
 
-    // public findGruppen(suchparameter: RaetselgruppenSuchparameter): Observable<RaetselgruppensucheTreffer> {
+    public saveRaetselgruppe(editRaetselgruppPayload: EditRaetselgruppePayload, csrfToken: string | null): Observable<RaetselgruppensucheTrefferItem> {
 
-    //     console.log('start mocking result');
-    //     const items: RaetselgruppensucheTrefferItem[] = [];
-    //     items.push({
-    //         anzahlElemente: 0,
-    //         id: 'uuid-1',
-    //         status: 'ERFASST',
-    //         schwierigkeitsgrad: 'EINS',
-    //         name: 'Blubbdi',
-    //         referenztyp: 'MINIKAENGURU',
-    //         referenz: '2022'
-    //     });
-
-    //     items.push({
-    //         anzahlElemente: 0,
-    //         id: 'uuid-1',
-    //         status: 'ERFASST',
-    //         schwierigkeitsgrad: 'ZWEI',
-    //         name: 'Blubbdi bla',
-    //         referenztyp: 'MINIKAENGURU',
-    //         referenz: '2022'
-    //     });
-
-    //     const result: RaetselgruppensucheTreffer = {
-    //         anzahlTreffer: 24,
-    //         items: items
-    //     };
-
-    //     console.log('before return' + result);
-
-    //     return of(result);
-
-    // }
-
-    // #getItems(): RaetselgruppensucheTrefferItem[] {
-
-    //     const result: RaetselgruppensucheTrefferItem[] = [];
-
-    //     for (let index = 0; index++; index < 15) {
-
-    //         const jahr = 2000 + index;
-
-    //         const item: RaetselgruppensucheTrefferItem = {
-    //             anzahlElemente: 0,
-    //             id: '' + index,
-    //             status: 'ERFASST',
-    //             name: 'Name ' + index,
-    //             referenztyp: 'MINIKAENGURU',
-    //             referenz: '' + jahr
-    //         };
-
-    //         result.push(item);
-    //     }
-
-    //     for (let index = 15; index++; index < 20) {
-
-    //         const item: RaetselgruppensucheTrefferItem = {
-    //             anzahlElemente: 0,
-    //             id: '' + index,
-    //             status: 'ERFASST',
-    //             name: 'Name ' + index,
-    //             referenztyp: 'SERIE',
-    //             referenz: '' + index
-    //         };
-
-    //         result.push(item);
-    //     }
-
-    //     console.log('mocked item created');
-
-    //     return result;
-    // }
-
+        let headers = new HttpHeaders().set('Accept', 'application/json');
+        if (csrfToken !== null) {
+          headers = headers.set(this.#csrfHeaderName, csrfToken);
+        }
+    
+        if ('neu' === editRaetselgruppPayload.id) {
+          return this.http.post<RaetselgruppensucheTrefferItem>(this.#url, editRaetselgruppPayload, { headers });
+        }
+    
+        return this.loadingService.showLoaderUntilCompleted(this.http.put<RaetselgruppensucheTrefferItem>(this.#url, editRaetselgruppPayload, { headers }));
+    }
 
 }

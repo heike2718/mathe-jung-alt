@@ -49,6 +49,7 @@ export class RaetselEffects {
     this.actions$.pipe(
       ofType(RaetselActions.editRaetsel),
       tap((_action) => {
+        // console.log('navigate to raetseleditor');
         this.router.navigateByUrl('raetseleditor');
       }),
     ), { dispatch: false });

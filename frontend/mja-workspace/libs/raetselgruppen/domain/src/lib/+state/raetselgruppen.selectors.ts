@@ -27,3 +27,8 @@ export const getSelectedGruppe = createSelector(
     (state: RaetselgruppenState) => state.selectedGruppe
 );
 
+export const getRaetselgruppeBasisdaten = createSelector(
+    getRaetselgruppenState, 
+    (state: RaetselgruppenState) => state.raetselgruppeBasisdaten
+);
+

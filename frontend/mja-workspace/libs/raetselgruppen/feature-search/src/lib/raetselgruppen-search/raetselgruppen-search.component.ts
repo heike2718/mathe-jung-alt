@@ -166,6 +166,10 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     filterFormControl.patchValue('');
   }
 
+  neueRaetselgruppe(): void {
+    this.raetselgruppenFacade.createAndEditRaetselgruppe();
+  }
+
   #loadRaetselgruppen(): void {
 
     if (this.#suchparameter) {

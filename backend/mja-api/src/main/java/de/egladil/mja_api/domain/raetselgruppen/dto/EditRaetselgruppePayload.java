@@ -22,11 +22,11 @@ import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
  */
 @Schema(
 	name = "EditRaetselgruppePayload",
-	description = "Payload zum Anlegen und Ändern einer Rätselgruppe. Eine Rätselruppe ist eine freie Zusammenstellung von Rätseln. Ziel ist die Erzeugung eines PDFs. Die Rästel werden in der Reihenfolge gedruckt, in der sie in der Rätselgruppe eingetragen werden.")
+	description = "Payload zum Anlegen und Ändern einer Rätselgruppe ohne Elemente.")
 public class EditRaetselgruppePayload {
 
 	@JsonProperty
-	@Schema(description = "technische ID")
+	@Schema(description = "technische ID, 'neu' für neue Rätselgruppen")
 	private String id;
 
 	@JsonProperty

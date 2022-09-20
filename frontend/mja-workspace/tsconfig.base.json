@@ -33,6 +33,9 @@
       "@mja-workspace/raetselgruppen/domain": [
         "libs/raetselgruppen/domain/src/index.ts"
       ],
+      "@mja-workspace/raetselgruppen/feature-edit": [
+        "libs/raetselgruppen/feature-edit/src/index.ts"
+      ],
       "@mja-workspace/raetselgruppen/feature-search": [
         "libs/raetselgruppen/feature-search/src/index.ts"
       ],

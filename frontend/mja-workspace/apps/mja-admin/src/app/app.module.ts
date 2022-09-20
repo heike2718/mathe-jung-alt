@@ -30,6 +30,7 @@ import { SidenavComponent } from './navigation/sidenav/sidenav.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RaetselgruppenFeatureSearchModule } from '@mja-workspace/raetselgruppen/feature-search';
+import { RaetselgruppenFeatureEditModule } from '@mja-workspace/raetselgruppen/feature-edit';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { RaetselgruppenFeatureSearchModule } from '@mja-workspace/raetselgruppen
     QuellenFeatureSearchModule,
     RaetselFeatureSearchModule,
     RaetselgruppenFeatureSearchModule,
+    RaetselgruppenFeatureEditModule,
     EffectsModule.forRoot([]),
     StoreDevModules,
     StoreModule.forRoot(reducers, { metaReducers }),

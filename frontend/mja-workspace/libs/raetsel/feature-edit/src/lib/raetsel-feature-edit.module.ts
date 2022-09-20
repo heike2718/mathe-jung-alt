@@ -28,7 +28,11 @@ import { GrafikFeatureSearchModule } from '@mja-workspace/grafik/feature-search'
       },
     ]),
   ],
-  declarations: [RaetselEditComponent],
-  exports: [RaetselEditComponent],
+  declarations: [
+    RaetselEditComponent
+  ],
+  exports: [
+    RaetselEditComponent
+  ],
 })
 export class RaetselFeatureEditModule {}

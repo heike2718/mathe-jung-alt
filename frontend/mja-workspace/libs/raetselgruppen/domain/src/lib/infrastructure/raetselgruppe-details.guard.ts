@@ -1,22 +1,20 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { map, Observable, tap } from "rxjs";
-import { RaetselFacade } from "../application/raetsel.facade";
+import { RaetselgruppenFacade } from "../application/raetselgruppen.facade";
 
 @Injectable({ providedIn: 'root' })
-export class RaetselDetailsGuard implements CanActivate {
+export class RaetselgruppeDetailsGuard implements CanActivate {
 
-    constructor(private raetselFacade: RaetselFacade) { }
-
+    constructor(private raetselgruppenFacade: RaetselgruppenFacade) { }
 
 
     canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-
-
-        return this.raetselFacade.raetselDetails$.pipe(
+       
+        return this.raetselgruppenFacade.raetselgruppeBasisdaten$.pipe(
             tap((details) => console.log(details)),
             map((details) => details !== undefined)
-        )
+        );
     }
 
 }

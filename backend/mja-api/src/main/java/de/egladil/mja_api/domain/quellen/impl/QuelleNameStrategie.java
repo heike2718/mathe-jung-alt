@@ -26,10 +26,10 @@ public interface QuelleNameStrategie {
 
 		switch (quellenart) {
 
-		case PERSON -> result = new PersonquelleNameStrategie();
-		case BUCH -> result = new BuchquelleNameStrategie();
-		case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
-		default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
+			case PERSON -> result = new PersonquelleNameStrategie();
+			case BUCH -> result = new BuchquelleNameStrategie();
+			case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
+			default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
 		}
 
 		return result;

@@ -11,6 +11,7 @@
     "raetsel-feature-edit": "libs/raetsel/feature-edit",
     "raetsel-feature-search": "libs/raetsel/feature-search",
     "raetselgruppen-domain": "libs/raetselgruppen/domain",
+    "raetselgruppen-feature-edit": "libs/raetselgruppen/feature-edit",
     "raetselgruppen-feature-search": "libs/raetselgruppen/feature-search",
     "shared-auth-domain": "libs/shared/auth/domain",
     "shared-ui-components": "libs/shared/ui-components",

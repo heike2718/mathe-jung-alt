@@ -9,11 +9,14 @@ import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -43,6 +46,8 @@ import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
+import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPayload;
+import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.domain.utils.DevDelayService;
@@ -129,8 +134,6 @@ public class RaetselgruppenResource {
 		}
 
 		RaetselgruppenSuchparameter suchparameter = new RaetselgruppenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz, sortAttribute, sortDirection);
-
-//		RaetselgruppenSuchparameter suchparameter = new RaetselgruppenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz);
 		return raetselgruppenService.findRaetselgruppen(suchparameter, limit, offset);
 	}
 
@@ -169,4 +172,182 @@ public class RaetselgruppenResource {
 		return Response.status(201).entity(raetselsammlung).build();
 	}
 
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "raetselgruppeAendern",
+		summary = "neue Rätselgruppe anlegen")
+	@APIResponse(
+		name = "UpdateRaetselgruppeOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = RaetselgruppensucheTrefferItem.class)))
+	@APIResponse(
+		name = "UpdateRaetselgruppeServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Response raetselgruppeAendern(final EditRaetselgruppePayload requestPayload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+
+		delayService.pause();
+
+		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
+		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
+		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
+		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
+
+		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeBasisdatenAendern(requestPayload, userUuid);
+
+		LOGGER.info("Raetselgruppe angelegt: [raetselgruppe={}, user={}]", raetselsammlung.getId(),
+			StringUtils.abbreviate(userUuid, 11));
+
+		return Response.status(200).entity(raetselsammlung).build();
+	}
+
+	@GET
+	@Path("{raetselgruppeID}")
+	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "raetselgruppeDetailsLaden",
+		summary = "Läd die Details der Rätselgruppe mit der gegebenen ID")
+	@Parameters({
+		@Parameter(
+			name = "raetselgruppeID",
+			description = "technische ID der Rätselgruppe") })
+	@APIResponse(
+		name = "FindRaetselgruppeByIDOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = RaetselgruppeDetails.class)))
+	@APIResponse(
+		name = "RaetselgruppeByIDNotFound",
+		description = "Gibt es nicht",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public RaetselgruppeDetails raetselgruppeDetailsLaden(@PathParam(value = "raetselgruppeID") @Pattern(
+		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID) {
+		return null;
+	}
+
+	@POST
+	@Path("{raetselgruppeID}/elemente")
+	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "raetselgruppenelementAnlegen",
+		summary = "Legt ein neues Element in einer Rätselgruppe an")
+	@Parameters({
+		@Parameter(
+			name = "raetselgruppeID",
+			description = "technische ID der Rätselgruppe")})
+	@APIResponse(
+		name = "CreateRaetselgruppenelementOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = RaetselgruppeDetails.class)))
+	@APIResponse(
+		name = "CreateRaetselgruppenelementNotFoundResponse",
+		description = "Die Rätselgruppe oder das Rätsel mit dem fachlichen SCHLUESSEL gibt es nicht",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "CreateRaetselgruppenelementServerError",
+		description = "Gibt es nicht",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public RaetselgruppeDetails raetselgruppenelementAnlegen(@PathParam(value = "raetselgruppeID") @Pattern(
+		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
+
+		return null;
+	}
+
+
+	@PUT
+	@Path("{raetselgruppeID}/elemente/{elementID}")
+	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "raetselgruppenelementAendern",
+		summary = "Ändert das Element einer Rätselgruppe")
+	@Parameters({
+		@Parameter(
+			name = "raetselgruppeID",
+			description = "technische ID der Rätselgruppe"),
+		@Parameter(
+			name = "elementID",
+			description = "technische ID des Elements") })
+	@APIResponse(
+		name = "UpdateRaetselgruppenelementOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = RaetselgruppeDetails.class)))
+	@APIResponse(
+		name = "UpdateRaetselgruppenelementNotFoundResponse",
+		description = "Die Rätselgruppe oder das Element gibt es nicht",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "UpdateRaetselgruppenelementServerError",
+		description = "Gibt es nicht",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public RaetselgruppeDetails raetselgruppenelementAendern(@PathParam(value = "raetselgruppeID") @Pattern(
+		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, @PathParam(value = "elementID") @Pattern(
+			regexp = "^[a-fA-F\\d\\-]{1,36}$",
+			message = "raetselgruppeID enthält ungültige Zeichen") final String elementID, final EditRaetselgruppenelementPayload element) {
+
+		return null;
+	}
+
+	@DELETE
+	@Path("{raetselgruppeID}/elemente/{elementID}")
+	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "raetselgruppenelementLoeschen",
+		summary = "Löscht das Element einer Rätselgruppe")
+	@Parameters({
+		@Parameter(
+			name = "raetselgruppeID",
+			description = "technische ID der Rätselgruppe"),
+		@Parameter(
+			name = "elementID",
+			description = "technische ID des Elements") })
+	@APIResponse(
+		name = "DeleteRaetselgruppenelementOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = RaetselgruppeDetails.class)))
+	@APIResponse(
+		name = "DeleteRaetselgruppenelementNotFoundResponse",
+		description = "Die Rätselgruppe oder das Element gibt es nicht",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "DeleteRaetselgruppenelementServerError",
+		description = "Gibt es nicht",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public RaetselgruppeDetails raetselgruppenelementLoeschen(@PathParam(value = "raetselgruppeID") @Pattern(
+		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, @PathParam(value = "elementID") @Pattern(
+			regexp = "^[a-fA-F\\d\\-]{1,36}$",
+			message = "raetselgruppeID enthält ungültige Zeichen") final String elementID) {
+
+		return null;
+	}
 }

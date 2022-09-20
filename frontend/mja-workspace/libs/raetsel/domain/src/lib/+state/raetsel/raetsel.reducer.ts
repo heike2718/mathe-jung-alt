@@ -74,7 +74,11 @@ const raetselReducer = createReducer(
     selectableDeskriptoren: action.selectableDeskriptoren
   })),
 
-  on(RaetselActions.editRaetsel, (state, action) => ({ ...state, raetselDetailsContent: action.raetselDetailsContent })),
+  on(RaetselActions.editRaetsel, (state, action) => {
+
+    // console.log(action.raetselDetailsContent);
+    return { ...state, raetselDetailsContent: action.raetselDetailsContent };
+  }),
 
   on(RaetselActions.raetselPNGsGenerated, (state, action) => {
 

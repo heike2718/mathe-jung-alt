@@ -26,6 +26,7 @@ export interface RaetselgruppeBasisdaten {
     readonly referenztyp?: Referenztyp;
     readonly referenz?: string;
     readonly status: STATUS;
+    readonly geaendertDurch?: string;
 };
 
 export const initialRaetselgruppeBasisdaten: RaetselgruppeBasisdaten = {
@@ -62,6 +63,31 @@ export const initialRaetselgruppenSuchparameter: RaetselgruppenSuchparameter = {
     pageSize: 20,
     sortAttribute: 'name',
     sortOrder: 'asc'
+};
+
+export interface EditRaetselgruppePayload {
+    readonly id: string;
+    readonly name: string;
+    readonly kommentar?: string;
+    readonly schwierigkeitsgrad: Schwierigkeitsgrad;
+    readonly referenztyp: Referenztyp;
+    readonly referenz: string;
+    readonly status: STATUS;
+};
+
+export interface EditRaetselgruppenelementPayload {
+    readonly id: string;
+    readonly nummer: string;
+    readonly punkte: number;
+    readonly raetselSchluessel: string;
+}
+
+export interface Raetselgruppenelement extends EditRaetselgruppenelementPayload {
+    readonly name: string;
+};
+
+export interface RaetselgruppeDetails extends EditRaetselgruppePayload {
+    readonly elemente: Raetselgruppenelement[];
 };
 
 
