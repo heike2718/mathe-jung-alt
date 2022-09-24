@@ -8,6 +8,9 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
+
 /**
  * Raetselgruppenelement
  */
@@ -34,44 +37,28 @@ public class Raetselgruppenelement {
 	@Schema(description = "Name des Rätsels, nicht Teil der Daten des Elements. Nützlich für die Anzeige")
 	private String name;
 
+	/**
+	 * Erzeugt ein Objekt aus den verschiedenen Daten.
+	 *
+	 * @param  aufgabe
+	 *                 PersistenteAufgabeReadonly
+	 * @param  element
+	 *                 PersistentesRaetselgruppenelement
+	 * @return         Raetselgruppenelement
+	 */
+	public static Raetselgruppenelement merge(final PersistenteAufgabeReadonly aufgabe, final PersistentesRaetselgruppenelement element) {
+
+		Raetselgruppenelement result = new Raetselgruppenelement();
+		result.id = element.uuid;
+		result.nummer = element.nummer;
+		result.punkte = element.punkte;
+		result.raetselSchluessel = aufgabe.schluessel;
+		result.name = aufgabe.name;
+		return result;
+	}
+
 	public String getNummer() {
 
 		return nummer;
 	}
-
-	public void setNummer(final String nummer) {
-
-		this.nummer = nummer;
-	}
-
-	public int getPunkte() {
-
-		return punkte;
-	}
-
-	public void setPunkte(final int punkte) {
-
-		this.punkte = punkte;
-	}
-
-	public String getRaetselSchluessel() {
-
-		return raetselSchluessel;
-	}
-
-	public void setRaetselSchluessel(final String raetselSchluessel) {
-
-		this.raetselSchluessel = raetselSchluessel;
-	}
-
-	public String getName() {
-
-		return name;
-	}
-
-	public void setName(final String name) {
-
-		this.name = name;
-	}
-
 }

@@ -28,6 +28,9 @@ public class PersistenteAufgabeReadonly extends PanacheEntityBase {
 	public String schluessel;
 
 	@Column
+	public String name;
+
+	@Column
 	public String antwortvorschlaege;
 
 	@Column

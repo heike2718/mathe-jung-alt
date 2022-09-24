@@ -17,6 +17,7 @@ import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 
 /**
  * RaetselgruppeDetails
@@ -39,7 +40,7 @@ public class RaetselgruppeDetails {
 	private String kommentar;
 
 	@JsonIgnore
-	private Schwierigkeitsgrad schwierigkeitsgradType;
+	private Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@JsonProperty
 	@Schema(description = "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz")
@@ -60,4 +61,23 @@ public class RaetselgruppeDetails {
 	@JsonProperty
 	@Schema(type = SchemaType.ARRAY, description = "Elemente der Rätselgruppe")
 	private List<Raetselgruppenelement> elemente = new ArrayList<>();
+
+	public static RaetselgruppeDetails createFromDB(final PersistenteRaetselgruppe gruppeDB) {
+
+		RaetselgruppeDetails result = new RaetselgruppeDetails();
+		result.geaendertDurch = gruppeDB.geaendertDurch;
+		result.id = gruppeDB.uuid;
+		result.kommentar = gruppeDB.kommentar;
+		result.name = gruppeDB.name;
+		result.referenz = gruppeDB.referenz;
+		result.referenztyp = gruppeDB.referenztyp;
+		result.schwierigkeitsgrad = gruppeDB.schwierigkeitsgrad;
+		result.status = gruppeDB.status;
+		return result;
+	}
+
+	public void addElement(final Raetselgruppenelement element) {
+
+		this.elemente.add(element);
+	}
 }

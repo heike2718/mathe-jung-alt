@@ -3,8 +3,8 @@ import { select, Store } from "@ngrx/store";
 import * as fromRaetselgruppen from '../+state/raetselgruppen.reducer';
 import * as RaetselgruppenActions from '../+state/raetselgruppen.actions';
 import * as RaetselgruppenSelectors from '../+state/raetselgruppen.selectors';
-import { EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
-import { Observable, tap } from "rxjs";
+import { EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
+import { Observable } from "rxjs";
 import { SafeHttpService } from "@mja-workspace/shared/util-mja";
 import { RaetselgruppenHttpService } from "../infrastructure/raetselgruppen.http.service";
 
@@ -19,7 +19,8 @@ export class RaetselgruppenFacade {
     suchparameter$: Observable<RaetselgruppenSuchparameter> = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppenSuchparameter));
     selectedGruppe$ = this.store.pipe(select(RaetselgruppenSelectors.getSelectedGruppe));
     editorContent$ = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppeBasisdaten));
-
+    raetselgruppeDetails$: Observable<RaetselgruppeDetails | undefined> = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppeDetails));
+    raetselgruppenelemente$ = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppenelemente));
 
     constructor(private store: Store<fromRaetselgruppen.RaetselgruppenPartialState>, private safeHttpService: SafeHttpService, private httpService: RaetselgruppenHttpService) { }
 
@@ -38,6 +39,6 @@ export class RaetselgruppenFacade {
     }
 
     public saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): void {
-        this.store.dispatch(RaetselgruppenActions.startSaveRaetselgruppe({editRaetselgruppePayload}));
+        this.store.dispatch(RaetselgruppenActions.startSaveRaetselgruppe({ editRaetselgruppePayload }));
     }
 }

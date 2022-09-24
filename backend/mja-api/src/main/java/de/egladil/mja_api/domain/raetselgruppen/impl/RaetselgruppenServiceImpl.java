@@ -5,6 +5,8 @@
 package de.egladil.mja_api.domain.raetselgruppen.impl;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -19,13 +21,18 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
+import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenDao;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
+import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
+import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
@@ -38,6 +45,9 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	@Inject
 	RaetselgruppenDao raetselgruppenDao;
+
+	@Inject
+	RaetselService raetselService;
 
 	@Override
 	public RaetselgruppensucheTreffer findRaetselgruppen(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
@@ -63,6 +73,35 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		result.setTrefferGesamt(anzahlGesamt);
 		return result;
+	}
+
+	@Override
+	public Optional<RaetselgruppeDetails> loadDetails(final String raetselgruppeId) {
+
+		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeId);
+
+		if (raetselgruppe == null) {
+
+			return Optional.empty();
+		}
+
+		final RaetselgruppeDetails result = RaetselgruppeDetails.createFromDB(raetselgruppe);
+
+		List<PersistentesRaetselgruppenelement> elementeDB = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeId);
+		List<String> raetselIDs = elementeDB.stream().map(el -> el.raetselID).collect(Collectors.toList());
+		List<PersistenteAufgabeReadonly> aufgaben = raetselgruppenDao.loadAufgabenByRaetselIds(raetselIDs);
+
+		elementeDB.forEach(r -> {
+
+			Optional<PersistenteAufgabeReadonly> optAufgabe = aufgaben.stream().filter(a -> a.uuid.equals(r.raetselID)).findFirst();
+
+			if (optAufgabe.isPresent()) {
+
+				result.addElement(Raetselgruppenelement.merge(optAufgabe.get(), r));
+			}
+		});
+
+		return Optional.of(result);
 	}
 
 	@Override

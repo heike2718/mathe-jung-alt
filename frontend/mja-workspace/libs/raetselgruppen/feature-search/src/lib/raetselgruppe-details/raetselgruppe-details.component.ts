@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RaetselgruppenFacade, RaetselgruppensucheTrefferItem } from '@mja-workspace/raetselgruppen/domain';
+import { RaetselgruppeDetails, RaetselgruppenFacade, RaetselgruppensucheTrefferItem } from '@mja-workspace/raetselgruppen/domain';
 import { Subscription, tap } from 'rxjs';
 
 @Component({
@@ -7,28 +7,10 @@ import { Subscription, tap } from 'rxjs';
   templateUrl: './raetselgruppe-details.component.html',
   styleUrls: ['./raetselgruppe-details.component.scss'],
 })
-export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
+export class RaetselgruppeDetailsComponent implements OnInit {
 
-  #selectedGruppeSubscription = new Subscription();
+  constructor(public raetselgruppenFacade: RaetselgruppenFacade) { }
 
-  #selectedGruppe?: RaetselgruppensucheTrefferItem;
-
-
-  constructor(public raetsegruppenFacade: RaetselgruppenFacade) {}
-
-  ngOnInit(): void {
-
-    this.#selectedGruppeSubscription = this.raetsegruppenFacade.selectedGruppe$.pipe(
-      tap((gruppe) => {
-        if (gruppe) {
-          this.#selectedGruppe = gruppe;
-        }
-      })
-    ).subscribe();
-
-  }
-
-  ngOnDestroy(): void {
-      this.#selectedGruppeSubscription.unsubscribe();
+  ngOnInit(): void {    
   }
 }

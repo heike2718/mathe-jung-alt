@@ -71,4 +71,5 @@ export interface Raetselgruppenelement extends EditRaetselgruppenelementPayload 
 
 export interface RaetselgruppeDetails extends EditRaetselgruppePayload {
     readonly elemente: Raetselgruppenelement[];
+    readonly geaendertDurch: string;
 };

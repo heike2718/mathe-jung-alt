@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
 
+import java.util.Optional;
+
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
@@ -232,7 +234,14 @@ public class RaetselgruppenResource {
 	public RaetselgruppeDetails raetselgruppeDetailsLaden(@PathParam(value = "raetselgruppeID") @Pattern(
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID) {
-		return null;
+
+		Optional<RaetselgruppeDetails> optDetails = raetselgruppenService.loadDetails(raetselgruppeID);
+
+		if (optDetails.isEmpty()) {
+			throw new WebApplicationException(Response.status(404).entity(MessagePayload.error("kein Treffer")).build());
+		}
+
+		return optDetails.get();
 	}
 
 	@POST

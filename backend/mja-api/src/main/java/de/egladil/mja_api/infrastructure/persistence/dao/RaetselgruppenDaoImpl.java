@@ -192,6 +192,12 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 	}
 
 	@Override
+	public PersistenteRaetselgruppe findByID(final String raetselgruppeID) {
+
+		return entityManager.find(PersistenteRaetselgruppe.class, raetselgruppeID);
+	}
+
+	@Override
 	public PersistenteRaetselgruppe findByName(final String name) {
 
 		List<PersistenteRaetselgruppe> trefferliste = entityManager

@@ -1,54 +1,54 @@
-<div *ngIf="raetsegruppenFacade.selectedGruppe$ | async as raetsel else keineGruppe" fxLayout="column"
+<div *ngIf="raetselgruppenFacade.raetselgruppeDetails$ | async as gruppe else keineGruppe" fxLayout="column"
     fxLayoutGap="20px" class="container">
 
-    <h1>Rätselgruppe {{raetsel.name}}</h1>
+    <h1>Rätselgruppe {{gruppe.name}}</h1>
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
         <div fxLayoutAlign="left center" fxFlex="20">
             <mat-label>ID:</mat-label>
         </div>
-        <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.id}}</div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.id}}</div>
     </div>
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
         <div fxLayoutAlign="left center" fxFlex="20">
             <mat-label>Kommentar:</mat-label>
         </div>
-        <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.kommentar}}</div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.kommentar}}</div>
     </div>
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
         <div fxLayoutAlign="left center" fxFlex="20">
             <mat-label>geändert durch:</mat-label>
         </div>
-        <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.geaendertDurch}}</div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.geaendertDurch}}</div>
     </div>
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
         <div fxLayoutAlign="left center" fxFlex="20">
             <mat-label>Status:</mat-label>
         </div>
-        <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.status}}</div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.status}}</div>
     </div>
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
         <div fxLayoutAlign="left center" fxFlex="20">
             <mat-label>Referenztyp:</mat-label>
         </div>
-        <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.referenztyp}}</div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.referenztyp}}</div>
     </div>
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
         <div fxLayoutAlign="left center" fxFlex="20">
             <mat-label>Referenz:</mat-label>
         </div>
-        <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.referenz}}</div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.referenz}}</div>
     </div>
 
 
     <h2>Elemente</h2>
 
-    <mja-raetselgruppenelemente></mja-raetselgruppenelemente>
+    <mja-raetselgruppenelemente [elemente]="gruppe.elemente"></mja-raetselgruppenelemente>    
 
 </div>
 

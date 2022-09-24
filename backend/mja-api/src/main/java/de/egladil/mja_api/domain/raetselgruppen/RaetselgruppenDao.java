@@ -41,6 +41,12 @@ public interface RaetselgruppenDao {
 	List<PersistenteRaetselgruppe> findByFilter(RaetselgruppenSuchparameter suchparameter, int limit, int offset);
 
 	/**
+	 * @param  raetselgruppeID
+	 * @return
+	 */
+	PersistenteRaetselgruppe findByID(String raetselgruppeID);
+
+	/**
 	 * @param  referenztyp
 	 * @param  referenz
 	 * @param  schwierigkeitsgrad

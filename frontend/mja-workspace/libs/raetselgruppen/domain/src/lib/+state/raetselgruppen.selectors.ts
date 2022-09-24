@@ -1,4 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { of } from 'rxjs';
+import { RaetselgruppeDetails } from '../entities/raetselgruppen';
 import {
     RAETSELGRUPPEN_FEATURE_KEY,
     RaetselgruppenState
@@ -28,7 +30,17 @@ export const getSelectedGruppe = createSelector(
 );
 
 export const getRaetselgruppeBasisdaten = createSelector(
-    getRaetselgruppenState, 
+    getRaetselgruppenState,
     (state: RaetselgruppenState) => state.raetselgruppeBasisdaten
+);
+
+export const getRaetselgruppeDetails = createSelector(
+    getRaetselgruppenState,
+    (state: RaetselgruppenState) => state.raetselgruppeDetails
+);
+
+export const getRaetselgruppenelemente = createSelector(
+    getRaetselgruppenState,
+    (state: RaetselgruppenState) => state.raetselgruppeDetails ? state.raetselgruppeDetails.elemente : []
 );
 

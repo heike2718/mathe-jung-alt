@@ -4,9 +4,12 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetselgruppen;
 
+import java.util.Optional;
+
 import javax.ws.rs.WebApplicationException;
 
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
+import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 
@@ -38,4 +41,9 @@ public interface RaetselgruppenService {
 	 */
 	RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(EditRaetselgruppePayload payload, String user) throws WebApplicationException;
 
+	/**
+	 * @param  raetselgruppeId
+	 * @return
+	 */
+	Optional<RaetselgruppeDetails> loadDetails(String raetselgruppeId);
 }

@@ -1,26 +1,40 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { Raetselgruppenelement, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
-import { RaetselgruppenelementeDataSource } from './raetselgruppenelemente-datasource';
+import { Subscription, tap } from 'rxjs';
+import { RaetselgruppenelementeDataSource } from './raetselgruppenelemente.datasource';
 
 @Component({
   selector: 'mja-raetselgruppenelemente',
   templateUrl: './raetselgruppenelemente.component.html',
   styleUrls: ['./raetselgruppenelemente.component.scss']
 })
-export class RaetselgruppenelementeComponent implements AfterViewInit {
+export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Raetselgruppenelement>;
-  dataSource: RaetselgruppenelementeDataSource;
+  dataSource!: RaetselgruppenelementeDataSource;
+
+  #elementeSubscription = new Subscription();
 
   displayedColumns = ['schluessel', 'nummer', 'punkte', 'name'];
 
-  constructor(private raetselgruppenFacade: RaetselgruppenFacade) {
-    this.dataSource = new RaetselgruppenelementeDataSource(this.raetselgruppenFacade);
+  constructor(private raetselgruppenFacade: RaetselgruppenFacade) { }
+
+  ngOnInit(): void {
+    this.#elementeSubscription = this.raetselgruppenFacade.raetselgruppenelemente$.pipe(
+      tap((elemente) => {
+        console.log('Anzahl Elemente: ' + elemente.length);
+        this.dataSource = new RaetselgruppenelementeDataSource(elemente);
+      })
+    ).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.#elementeSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
