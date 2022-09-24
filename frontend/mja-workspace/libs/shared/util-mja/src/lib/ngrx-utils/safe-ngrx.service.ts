@@ -107,8 +107,7 @@ export class SafeNgrxService {
             const status = httpErrorResponse.status;
             if (status === 440) {
                 this.clearSession();
-                this.router.navigateByUrl('home')
-                this.messageService.warn('Die Session ist abgelaufen. Bitte neu einloggen.');
+                this.router.navigateByUrl('home');                
             } else {
                 const message = this.#extractServerErrorMessage(httpErrorResponse);
                 if (message) {

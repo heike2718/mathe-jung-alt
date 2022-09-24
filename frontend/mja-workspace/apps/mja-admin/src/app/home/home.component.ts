@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
+import { MessageService } from '@mja-workspace/shared/util-mja';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -15,7 +16,7 @@ export class HomeComponent implements OnInit {
 
   menuOpen = false;
 
-  constructor(public authFacade: AuthFacade) { }
+  constructor(public authFacade: AuthFacade, private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.#checkSessionState();
@@ -39,6 +40,7 @@ export class HomeComponent implements OnInit {
     const sessionState = localStorage.getItem(this.#storageKeySessionState);
     if ('expired' === sessionState) {
       this.authFacade.logout();
+      this.messageService.warn('Die Session ist abgelaufen. Bitte neu einloggen.');
     }
   }
 }
