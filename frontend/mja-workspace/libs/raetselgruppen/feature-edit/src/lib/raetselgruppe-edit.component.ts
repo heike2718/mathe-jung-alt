@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { RaetselgruppeBasisdaten, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
+import { EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
 import { getSchwierigkeitsgrade, GuiSchwierigkeitsgrad, STATUS, initialSchwierigkeitsgrad, schwierigkeitsgradValueOfLabel, GuiRaetselgruppeReferenztyp, getGuiRaetselgruppeReferenztypen, initialGuiRaetselgruppeReferenztyp, raetselgruppeReferenztypOfLabel } from '@mja-workspace/shared/util-mja';
 import { Subscription, tap } from 'rxjs';
 
@@ -58,7 +58,8 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
   }
 
   submit(): void {
-    console.log('jetzt speichern');
+    const editRaetselgruppePayload: EditRaetselgruppePayload = this.#readFormValues();
+    this.raetselgruppenFacade.saveRaetselgruppe(editRaetselgruppePayload);
   }
 
   cancelEdit(): void {
@@ -80,6 +81,26 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
     }
 
     return !this.form.valid;
+  }
+
+  #readFormValues(): EditRaetselgruppePayload {
+
+    const formValue = this.form.value;
+
+    const referenztypId = formValue['referenztyp'];
+
+    const editRaetselgruppePayload: EditRaetselgruppePayload = {
+      id: this.#raetselgruppeBasisdaten.id,
+      name: formValue['name'].trim(),
+      referenz: formValue['referenz'] && formValue['referenz'].trim().length > 0 ? formValue['referenz'].trim() : undefined,
+      referenztyp: referenztypId === 'NOOP' ? undefined : referenztypId,
+      schwierigkeitsgrad: formValue['schwierigkeitsgrad'],
+      status: formValue['status'],
+      kommentar: formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined
+    };
+
+    return editRaetselgruppePayload;
+
   }
 
   #initForm() {

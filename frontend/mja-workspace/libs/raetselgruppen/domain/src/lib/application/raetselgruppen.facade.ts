@@ -3,7 +3,7 @@ import { select, Store } from "@ngrx/store";
 import * as fromRaetselgruppen from '../+state/raetselgruppen.reducer';
 import * as RaetselgruppenActions from '../+state/raetselgruppen.actions';
 import * as RaetselgruppenSelectors from '../+state/raetselgruppen.selectors';
-import { initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
+import { EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 import { Observable, tap } from "rxjs";
 import { SafeHttpService } from "@mja-workspace/shared/util-mja";
 import { RaetselgruppenHttpService } from "../infrastructure/raetselgruppen.http.service";
@@ -35,5 +35,9 @@ export class RaetselgruppenFacade {
 
         const raetselgruppeBasisdaten: RaetselgruppeBasisdaten = initialRaetselgruppeBasisdaten;
         this.store.dispatch(RaetselgruppenActions.editRaetselgruppe({ raetselgruppeBasisdaten }));
+    }
+
+    public saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): void {
+        this.store.dispatch(RaetselgruppenActions.startSaveRaetselgruppe({editRaetselgruppePayload}));
     }
 }

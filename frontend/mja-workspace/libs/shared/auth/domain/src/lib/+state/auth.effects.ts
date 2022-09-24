@@ -174,5 +174,7 @@ export class AuthEffects {
 
     #clearSession(): void {
         this.safeNgrx.clearSession();
+        const storageKeySessionState = this.configuration.storagePrefix + 'SESSIONSTATE';
+        localStorage.removeItem(storageKeySessionState);
     }
 }

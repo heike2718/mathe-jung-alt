@@ -46,6 +46,10 @@ public class RaetselgruppensucheTrefferItem {
 	private DomainEntityStatus status;
 
 	@JsonProperty
+	@Schema(description = "ID des Änderers")
+	private String geaendertDurch;
+
+	@JsonProperty
 	@Schema(description = "Anzahl der Elemente (also der Rätsel)")
 	private long anzahlElemente;
 
@@ -134,6 +138,16 @@ public class RaetselgruppensucheTrefferItem {
 	public void setAnzahlElemente(final long anzahlElemente) {
 
 		this.anzahlElemente = anzahlElemente;
+	}
+
+	public String getGeaendertDurch() {
+
+		return geaendertDurch;
+	}
+
+	public void setGeaendertDurch(final String geaendertDurch) {
+
+		this.geaendertDurch = geaendertDurch;
 	}
 
 }

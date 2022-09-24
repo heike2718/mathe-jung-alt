@@ -53,8 +53,8 @@ export interface EditRaetselgruppePayload {
     readonly name: string;
     readonly kommentar?: string;
     readonly schwierigkeitsgrad: Schwierigkeitsgrad;
-    readonly referenztyp: Referenztyp;
-    readonly referenz: string;
+    readonly referenztyp?: Referenztyp;
+    readonly referenz?: string;
     readonly status: STATUS;
 };
 

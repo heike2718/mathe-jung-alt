@@ -181,6 +181,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		result.setReferenztyp(ausDB.referenztyp);
 		result.setSchwierigkeitsgradType(ausDB.schwierigkeitsgrad);
 		result.setStatus(ausDB.status);
+		result.setGeaendertDurch(ausDB.geaendertDurch);
 
 		return result;
 

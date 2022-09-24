@@ -4,14 +4,22 @@
 
     <div *ngIf="raetselgruppenFacade.editorContent$ | async as gruppe else keineRaetselgruppe">
 
-        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-            <mat-label class="mat-form-field__1">ID:</mat-label>
-            <div class="mat-form-field__1 mb-1">{{gruppe.id}}</div>
+        <div class="mb-2">
+            <div flex fxLayout="row" fxLayoutGap="20px" fxLayout.lt-sm="column">
+                <div fxLayoutAlign="left center" fxFlex="10">
+                    <mat-label>ID:</mat-label>
+                </div>
+                <div fxLayoutAlign="left center" fxFlex="90">{{gruppe.id}}</div>
+            </div>
         </div>
 
-        <div *ngIf="gruppe.geaendertDurch" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-            <mat-label class="mat-form-field__1">geändert durch:</mat-label>
-            <div class="mat-form-field__1 mb-1">{{gruppe.geaendertDurch}}</div>
+        <div class="mb-2">
+            <div *ngIf="gruppe.geaendertDurch" flex fxLayout="row" fxLayoutGap="20px" fxLayout.lt-sm="column">
+                <div fxLayoutAlign="left center" fxFlex="10">
+                    <mat-label>geändert durch:</mat-label>
+                </div>
+                <div fxLayoutAlign="left center" fxFlex="90">{{gruppe.geaendertDurch}}</div>
+            </div>
         </div>
 
         <form [formGroup]="form" novalidate>
@@ -23,7 +31,7 @@
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Name</mat-label>
                         <input matInput maxlength="100" placeholder="name" formControlName="name" #nameInput>
-                        <mat-hint>wird in der Trefferliste angezeigt</mat-hint>
+                        <mat-hint>wird in der Trefferliste angezeigt und in das Quiz übernommen</mat-hint>
                         <mat-error *ngIf="raetselgruppeDataError('name', 'required')">Name ist Pflicht</mat-error>
                         <mat-error *ngIf="raetselgruppeDataError('name', 'maxLength')">maximal 100 Zeichen</mat-error>
                     </mat-form-field>
@@ -55,7 +63,8 @@
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Level</mat-label>
                         <select matNativeControl formControlName="schwierigkeitsgrad" #schwierigkeitsgradInput>
-                            <option *ngFor="let level of selectSchwierigkeitsgradeInput" [value]="level.id">{{level.label}}</option>
+                            <option *ngFor="let level of selectSchwierigkeitsgradeInput" [value]="level.id">
+                                {{level.label}}</option>
                         </select>
                     </mat-form-field>
                 </div>
@@ -65,7 +74,8 @@
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Referenztyp</mat-label>
                         <select matNativeControl formControlName="referenztyp" #referenztypInput>
-                            <option *ngFor="let reftyp of selectReferenztypenInput" [value]="reftyp.id">{{reftyp.label}}</option>
+                            <option *ngFor="let reftyp of selectReferenztypenInput" [value]="reftyp.id">{{reftyp.label}}
+                            </option>
                         </select>
                     </mat-form-field>
                 </div>

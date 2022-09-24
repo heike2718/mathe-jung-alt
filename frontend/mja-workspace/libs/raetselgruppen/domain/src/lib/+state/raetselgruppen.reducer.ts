@@ -49,6 +49,11 @@ const raetselgruppenReducer = createReducer(
         // console.log(action.raetselgruppeBasisdaten);
         return { ...state, raetselgruppeBasisdaten: action.raetselgruppeBasisdaten };
     }),
+
+    on(RaetselgruppenActions.raetselgruppeSaved, (state, action) => {
+        const trefferItem: RaetselgruppensucheTrefferItem = action.raetselgruppe;
+        return { ...state, raetselgruppeBasisdaten: trefferItem, selectedGruppe: trefferItem};
+    })
 );
 
 export function reducer(state: RaetselgruppenState | undefined, action: Action) {

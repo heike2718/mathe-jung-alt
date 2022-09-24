@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthHttpService } from '@mja-workspace/shared/auth/domain';
-import { noopAction, SafeNgrxService } from '@mja-workspace/shared/util-mja';
+import { MessageService, noopAction, SafeNgrxService } from '@mja-workspace/shared/util-mja';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { map, tap } from 'rxjs/operators';
 import { RaetselgruppenHttpService } from '../infrastructure/raetselgruppen.http.service';
@@ -15,6 +15,7 @@ export class RaetselgruppenEffects {
         private authService: AuthHttpService,
         private raetselHttpService: RaetselgruppenHttpService,
         private safeNgrx: SafeNgrxService,
+        private messageService: MessageService,
         private router: Router
     ) { }
 
@@ -48,6 +49,19 @@ export class RaetselgruppenEffects {
             this.safeNgrx.safeSwitchMap((action) =>
                 this.authService.getCsrfToken().pipe(
                     map((token) => RaetselgruppenActions.saveRaetselgruppe({ editRaetselgruppePayload: action.editRaetselgruppePayload, csrfToken: token }))
+                ), 'Ups, beim Speichern der Rätselgruppe ist etwas schiefgegangen', noopAction()
+            )
+        )
+    );
+
+    saveRaetsel$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(RaetselgruppenActions.saveRaetselgruppe),
+            // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
+            this.safeNgrx.safeSwitchMap((action) =>
+                this.raetselHttpService.saveRaetselgruppe(action.editRaetselgruppePayload, action.csrfToken).pipe(
+                    tap((raetselgruppe) => this.messageService.info('Die Rätselgruppe wurde erfolgreich gespeichert: uuid=' + raetselgruppe.id)),
+                    map((raetselgruppe) => RaetselgruppenActions.raetselgruppeSaved({ raetselgruppe }))
                 ), 'Ups, beim Speichern der Rätselgruppe ist etwas schiefgegangen', noopAction()
             )
         )

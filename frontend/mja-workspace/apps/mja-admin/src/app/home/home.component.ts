@@ -18,14 +18,11 @@ export class HomeComponent implements OnInit {
   constructor(public authFacade: AuthFacade) { }
 
   ngOnInit(): void {
-
     this.#checkSessionState();
   }
 
   onMenuStateChanged($event: any): void {
-
     this.menuOpen = $event;
-
   }
 
   public login(): void {
@@ -42,7 +39,6 @@ export class HomeComponent implements OnInit {
     const sessionState = localStorage.getItem(this.#storageKeySessionState);
     if ('expired' === sessionState) {
       this.authFacade.logout();
-      localStorage.removeItem(this.#storageKeySessionState);
     }
   }
 }
