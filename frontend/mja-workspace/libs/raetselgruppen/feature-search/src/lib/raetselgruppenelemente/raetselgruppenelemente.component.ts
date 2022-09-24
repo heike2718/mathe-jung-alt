@@ -2,8 +2,8 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
-import { RaetselgruppenelementeDataSource, RaetselgruppenelementeItem } from './raetselgruppenelemente-datasource';
+import { Raetselgruppenelement, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
+import { RaetselgruppenelementeDataSource } from './raetselgruppenelemente-datasource';
 
 @Component({
   selector: 'mja-raetselgruppenelemente',
@@ -14,11 +14,10 @@ export class RaetselgruppenelementeComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<RaetselgruppenelementeItem>;
+  @ViewChild(MatTable) table!: MatTable<Raetselgruppenelement>;
   dataSource: RaetselgruppenelementeDataSource;
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+  displayedColumns = ['schluessel', 'nummer', 'punkte', 'name'];
 
   constructor(private raetselgruppenFacade: RaetselgruppenFacade) {
     this.dataSource = new RaetselgruppenelementeDataSource(this.raetselgruppenFacade);

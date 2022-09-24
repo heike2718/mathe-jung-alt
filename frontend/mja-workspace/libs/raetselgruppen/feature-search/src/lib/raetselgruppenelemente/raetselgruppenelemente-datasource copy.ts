@@ -2,23 +2,37 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge } from 'rxjs';
-import { Raetselgruppenelement, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
+import { Observable, of as merge } from 'rxjs';
+import { RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
 
 // TODO: Replace this with your own data model type
-const EXAMPLE_DATA: Raetselgruppenelement[] = [
-  { id: '1', nummer: 'A-1', name: 'Treppenlift 20', punkte: 300, raetselSchluessel: '00001' },
-  { id: '2', nummer: 'A-2', name: 'Treppenlift 2', punkte: 300, raetselSchluessel: '00002' },
-  { id: '3', nummer: 'A-3', name: 'Treppenlift 23', punkte: 300, raetselSchluessel: '00003' },
-  { id: '4', nummer: 'A-4', name: 'Treppenlift 14', punkte: 300, raetselSchluessel: '00004' },
-  { id: '5', nummer: 'B-1', name: 'Treppenlift 5', punkte: 400, raetselSchluessel: '00005' },
-  { id: '6', nummer: 'B-2', name: 'Treppenlift 6', punkte: 400, raetselSchluessel: '00006' },
-  { id: '7', nummer: 'B-3', name: 'Treppenlift 7', punkte: 400, raetselSchluessel: '00007' },
-  { id: '8', nummer: 'B-4', name: 'Treppenlift 8', punkte: 400, raetselSchluessel: '00008' },
-  { id: '9', nummer: 'C-1', name: 'Treppenlift 9', punkte: 500, raetselSchluessel: '00009' },
-  { id: '10', nummer: 'C-2', name: 'Treppenlift 10', punkte: 500, raetselSchluessel: '00010' },
-  { id: '11', nummer: 'C-3', name: 'Treppenlift 21', punkte: 500, raetselSchluessel: '00011' },
-  { id: '12', nummer: 'C-4', name: 'Treppenlift 11', punkte: 500, raetselSchluessel: '00012' },
+export interface RaetselgruppenelementeItem {
+  name: string;
+  id: number;
+}
+
+// TODO: replace this with real data from your application
+const EXAMPLE_DATA: RaetselgruppenelementeItem[] = [
+  { id: 1, name: 'Hydrogen' },
+  { id: 2, name: 'Helium' },
+  { id: 3, name: 'Lithium' },
+  { id: 4, name: 'Beryllium' },
+  { id: 5, name: 'Boron' },
+  { id: 6, name: 'Carbon' },
+  { id: 7, name: 'Nitrogen' },
+  { id: 8, name: 'Oxygen' },
+  { id: 9, name: 'Fluorine' },
+  { id: 10, name: 'Neon' },
+  { id: 11, name: 'Sodium' },
+  { id: 12, name: 'Magnesium' },
+  { id: 13, name: 'Aluminum' },
+  { id: 14, name: 'Silicon' },
+  { id: 15, name: 'Phosphorus' },
+  { id: 16, name: 'Sulfur' },
+  { id: 17, name: 'Chlorine' },
+  { id: 18, name: 'Argon' },
+  { id: 19, name: 'Potassium' },
+  { id: 20, name: 'Calcium' },
 ];
 
 /**
@@ -26,8 +40,8 @@ const EXAMPLE_DATA: Raetselgruppenelement[] = [
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppenelement> {
-  data: Raetselgruppenelement[] = EXAMPLE_DATA;
+export class RaetselgruppenelementeDataSourceMock extends DataSource<RaetselgruppenelementeItem> {
+  data: RaetselgruppenelementeItem[] = EXAMPLE_DATA;
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
 
@@ -40,15 +54,15 @@ export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppene
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<Raetselgruppenelement[]> {
+  connect(): Observable<RaetselgruppenelementeItem[]> {
     if (this.paginator && this.sort) {
       // Combine everything that affects the rendered data into one update
       // stream for the data-table to consume.
       return merge(this.raetselgruppenFacade.selectedGruppe$, this.paginator.page, this.sort.sortChange)
         .pipe(
           map(() => {
-            return this.getPagedDataMocked(this.getSortedDataMocked([...this.data]));
-          }));
+          return this.getPagedDataMocked(this.getSortedDataMocked([...this.data]));
+        }));
     } else {
       throw Error('Please set the paginator and sort on the data source before connecting.');
     }
@@ -64,7 +78,7 @@ export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppene
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedDataMocked(data: Raetselgruppenelement[]): Raetselgruppenelement[] {
+  private getPagedDataMocked(data: RaetselgruppenelementeItem[]): RaetselgruppenelementeItem[] {
     if (this.paginator) {
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       return data.splice(startIndex, this.paginator.pageSize);
@@ -77,7 +91,7 @@ export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppene
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedDataMocked(data: Raetselgruppenelement[]): Raetselgruppenelement[] {
+  private getSortedDataMocked(data: RaetselgruppenelementeItem[]): RaetselgruppenelementeItem[] {
     if (!this.sort || !this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -85,10 +99,8 @@ export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppene
     return data.sort((a, b) => {
       const isAsc = this.sort?.direction === 'asc';
       switch (this.sort?.active) {
-        case 'schluessel': return compare(a.raetselSchluessel, b.raetselSchluessel, isAsc);
-        case 'nummer': return compare(a.nummer, b.nummer, isAsc);
         case 'name': return compare(a.name, b.name, isAsc);
-        case 'punkte': return compare(a.punkte, b.punkte, isAsc);
+        case 'id': return compare(+a.id, +b.id, isAsc);
         default: return 0;
       }
     });
