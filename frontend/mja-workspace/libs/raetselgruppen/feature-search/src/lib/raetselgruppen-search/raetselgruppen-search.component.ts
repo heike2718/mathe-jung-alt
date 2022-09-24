@@ -161,7 +161,6 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   }
 
   onRowClicked(row: any): void {
-
     const raetselgruppe: RaetselgruppensucheTrefferItem = <RaetselgruppensucheTrefferItem>row;
     this.raetselgruppenFacade.selectRaetselgruppe(raetselgruppe);
   }

@@ -42,6 +42,27 @@ export class RaetselgruppenEffects {
         )
     );
 
+    selectRaetselgruppe$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(RaetselgruppenActions.selectRaetselgruppe),
+            this.safeNgrx.safeSwitchMap((action) =>
+                this.raetselHttpService.findById(action.raetselgruppe.id).pipe(
+                    map((raetraetselgruppeDetails) =>
+                        RaetselgruppenActions.raetselgruppeDetailsLoaded({ raetraetselgruppeDetails })
+                    )
+                ), 'Ups, beim Laden der Details ist etwas schiefgegangen', noopAction()
+            )
+        )
+    );
+
+    showDetailsAfterLoaded$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(RaetselgruppenActions.raetselgruppeDetailsLoaded),
+            tap(() => {
+                this.router.navigateByUrl('raetselgruppen/details');
+            }),
+        ), { dispatch: false });
+
     getCsrfToken$ = createEffect(() =>
         this.actions$.pipe(
             ofType(RaetselgruppenActions.startSaveRaetselgruppe),

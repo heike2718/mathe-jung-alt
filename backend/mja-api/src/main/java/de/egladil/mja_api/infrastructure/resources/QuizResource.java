@@ -35,7 +35,7 @@ import de.egladil.web.mja_auth.dto.MessagePayload;
  * QuizResource
  */
 @Path("/quiz/v1")
-@Tag(name = "Quiz")
+@Tag(name = "Quiz", description = "ist open data")
 public class QuizResource {
 
 	@Inject

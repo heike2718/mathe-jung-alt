@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { AdminGuard } from '@mja-workspace/shared/auth/domain';
 import { RaetselgruppeDetailsComponent } from './raetselgruppe-details/raetselgruppe-details.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RaetselgruppenelementeComponent } from './raetselgruppenelemente/raetselgruppenelemente.component';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   declarations: [
     RaetselgruppenSearchComponent,
-    RaetselgruppeDetailsComponent
+    RaetselgruppeDetailsComponent,
+    RaetselgruppenelementeComponent
   ],
   exports: [
     RaetselgruppenSearchComponent

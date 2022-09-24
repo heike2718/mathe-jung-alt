@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
+import { EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 
 
 export const suchparameterChanged = createAction(
@@ -12,29 +12,41 @@ export const selectRaetselgruppe = createAction(
     props<{ raetselgruppe: RaetselgruppensucheTrefferItem }>()
 );
 
+
+export const raetselgruppeDetailsLoaded = createAction(
+    '[Raetselgruppen] details loaded',
+    props<{ raetraetselgruppeDetails: RaetselgruppeDetails }>()
+);
+
+export const showRaetselgruppeDetails = createAction(
+    '[Raetselgruppen] show details'
+);
+
 export const pageLoaded = createAction(
     '[Raetselgruppen] loadPage',
-    props<{treffer: RaetselgruppensucheTreffer}>()
+    props<{ treffer: RaetselgruppensucheTreffer }>()
 );
 
 export const editRaetselgruppe = createAction(
     '[Raetselgruppen] editRaetselgruppe',
-    props<{raetselgruppeBasisdaten: RaetselgruppeBasisdaten}>()
+    props<{ raetselgruppeBasisdaten: RaetselgruppeBasisdaten }>()
 )
 
-export const startSaveRaetselgruppe = createAction( 
+export const startSaveRaetselgruppe = createAction(
     '[Raetselgruppen] startSaveRaetselgruppe',
-    props<{editRaetselgruppePayload: EditRaetselgruppePayload}>()
+    props<{ editRaetselgruppePayload: EditRaetselgruppePayload }>()
 );
 
-export const saveRaetselgruppe = createAction( 
+export const saveRaetselgruppe = createAction(
     '[Raetselgruppen] saveRaetselgruppe',
-    props<{editRaetselgruppePayload: EditRaetselgruppePayload, csrfToken: string | null}>()
+    props<{ editRaetselgruppePayload: EditRaetselgruppePayload, csrfToken: string | null }>()
 );
 
-export const raetselgruppeSaved = createAction (
+export const raetselgruppeSaved = createAction(
     '[Raetselgruppen] raetselgruppeSaved',
-    props<{raetselgruppe: RaetselgruppensucheTrefferItem}>()
+    props<{ raetselgruppe: RaetselgruppensucheTrefferItem }>()
 );
+
+
 
 

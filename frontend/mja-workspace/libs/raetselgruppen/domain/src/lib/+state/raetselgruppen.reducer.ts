@@ -52,8 +52,11 @@ const raetselgruppenReducer = createReducer(
 
     on(RaetselgruppenActions.raetselgruppeSaved, (state, action) => {
         const trefferItem: RaetselgruppensucheTrefferItem = action.raetselgruppe;
-        return { ...state, raetselgruppeBasisdaten: trefferItem, selectedGruppe: trefferItem};
-    })
+        return { ...state, raetselgruppeBasisdaten: trefferItem, selectedGruppe: trefferItem };
+    }),
+    
+    on(RaetselgruppenActions.selectRaetselgruppe, (state, action) => ({ ...state, selectedGruppe: action.raetselgruppe }))
+
 );
 
 export function reducer(state: RaetselgruppenState | undefined, action: Action) {
