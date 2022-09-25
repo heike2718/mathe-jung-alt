@@ -88,4 +88,9 @@ public interface RaetselDao {
 	 */
 	List<PersistentesRaetsel> findRaetselWithFilter(String suchstring, String deskriptorenIDs, int limit, int offset, SortDirection sortDirection);
 
+	/**
+	 * @param  schluessel
+	 * @return
+	 */
+	PersistentesRaetsel findWithSchluessel(String schluessel);
 }

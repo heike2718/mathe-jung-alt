@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
+import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 
 
 export const suchparameterChanged = createAction(
@@ -45,6 +45,16 @@ export const saveRaetselgruppe = createAction(
 export const raetselgruppeSaved = createAction(
     '[Raetselgruppen] raetselgruppeSaved',
     props<{ raetselgruppe: RaetselgruppensucheTrefferItem }>()
+);
+
+export const saveRaetselgruppenelement = createAction(
+    '[Raetselgruppen] saveRaetselgruppenelement',
+    props<{ raetselgruppeID: string, payload: EditRaetselgruppenelementPayload }>()
+);
+
+export const raetselgruppenelementSaved = createAction(
+    '[Raetselgruppen] RaetselgruppenelementSaved',
+    props<{ raetraetselgruppeDetails: RaetselgruppeDetails }>()
 );
 
 

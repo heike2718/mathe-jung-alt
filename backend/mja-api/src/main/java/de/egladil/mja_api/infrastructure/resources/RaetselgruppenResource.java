@@ -256,7 +256,7 @@ public class RaetselgruppenResource {
 			description = "technische ID der Rätselgruppe")})
 	@APIResponse(
 		name = "CreateRaetselgruppenelementOKResponse",
-		responseCode = "200",
+		responseCode = "201",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppeDetails.class)))
@@ -267,8 +267,14 @@ public class RaetselgruppenResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
+		name = "CreateRaetselgruppenelementConflict",
+		description = "Nummer würde doppelt vergeben",
+		responseCode = "409", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
 		name = "CreateRaetselgruppenelementServerError",
-		description = "Gibt es nicht",
+		description = "Serverfehler",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
@@ -276,7 +282,7 @@ public class RaetselgruppenResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
-		return null;
+		return this.raetselgruppenService.neuesElementAnlegen(raetselgruppeID, element);
 	}
 
 

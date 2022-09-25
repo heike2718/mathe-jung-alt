@@ -258,4 +258,16 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		return trefferliste.get(0).longValue();
 	}
 
+	@Override
+	public PersistentesRaetselgruppenelement saveRaetselgruppenelement(final PersistentesRaetselgruppenelement element) {
+
+		if (element.isPersistent()) {
+
+			return entityManager.merge(element);
+		}
+
+		entityManager.persist(element);
+		return element;
+	}
+
 }

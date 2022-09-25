@@ -45,7 +45,7 @@ public class QuizService {
 	DeskriptorenService descriptorenService;
 
 	/**
-	 * Sucht alle Aufgaben der durch die Parameter eindeutig bestimmten Raetselgruppe zur Präsentation im Browser. Es werden nur die
+	 * Sucht alle Aufgaben des durch die Parameter eindeutig bestimmten Quiz zur Präsentation im Browser. Es werden nur die
 	 * Gruppen mit Status FREIGEGEBEN gefunden.
 	 *
 	 * @param  referenztyp
@@ -75,7 +75,10 @@ public class QuizService {
 
 			if (optElementDB.isPresent()) {
 
-				aufgabe.setNummer(optElementDB.get().nummer);
+				PersistentesRaetselgruppenelement el = optElementDB.get();
+				aufgabe.setNummer(el.nummer);
+				aufgabe.setPunkte(el.punkte);
+				aufgabe.setStrafpunkte(berechneStrafpunkte(aufgabe.getPunkte(), aufgabe.getAntwortvorschlaege().length));
 			}
 			aufgaben.add(aufgabe);
 		});
@@ -95,8 +98,6 @@ public class QuizService {
 		aufgabe.setSchluessel(dbAufgabe.schluessel);
 		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.schluessel));
 		aufgabe.setQuelle(mapQuelle(dbAufgabe));
-		aufgabe.setPunkte(dbAufgabe.punkte);
-		aufgabe.setStrafpunkte(berechneStrafpunkte(aufgabe.getPunkte(), aufgabe.getAntwortvorschlaege().length));
 
 		return aufgabe;
 	}

@@ -7,6 +7,7 @@ package de.egladil.mja_api.domain.raetsel.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -228,6 +229,14 @@ public class RaetselServiceImpl implements RaetselService {
 			.withSchluessel(raetselDB.schluessel);
 
 		return result;
+	}
+
+	@Override
+	public Optional<String> getRaetselIdWithSchluessel(final String schluessel) {
+
+		PersistentesRaetsel raetsel = raetselDao.findWithSchluessel(schluessel);
+
+		return raetsel == null ? Optional.empty() : Optional.of(raetsel.uuid);
 	}
 
 }

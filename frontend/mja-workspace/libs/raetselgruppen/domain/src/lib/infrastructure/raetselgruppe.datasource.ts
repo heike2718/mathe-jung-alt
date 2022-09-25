@@ -1,7 +1,7 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { RaetselgruppenFacade } from '../application/raetselgruppen.facade';
-import { RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem } from '../entities/raetselgruppen';
+import { RaetselgruppensucheTrefferItem } from '../entities/raetselgruppen';
 
 export class RaetselgruppeDatasource implements DataSource<RaetselgruppensucheTrefferItem> {
 

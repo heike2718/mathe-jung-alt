@@ -172,7 +172,7 @@ export class RaetselEditComponent implements OnInit {
   }
 
   quelleSuchen(): void {
-    const raetsel: RaetselDetails = this.#readFormValues();
+    // const raetsel: RaetselDetails = this.#readFormValues();
     // this.raetselFacade.cacheRaetselDetails(raetsel);
     this.quellenFacade.navigateToQuellensuche();
   }

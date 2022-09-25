@@ -33,9 +33,6 @@ public class PersistenteAufgabeReadonly extends PanacheEntityBase {
 	@Column
 	public String antwortvorschlaege;
 
-	@Column
-	public int punkte;
-
 	@Column(name = "ART")
 	@Enumerated(EnumType.STRING)
 	public Quellenart quellenart;

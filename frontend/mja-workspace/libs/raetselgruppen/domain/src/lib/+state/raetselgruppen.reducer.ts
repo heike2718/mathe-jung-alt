@@ -4,6 +4,7 @@ import * as RaetselgruppenActions from './raetselgruppen.actions';
 export const RAETSELGRUPPEN_FEATURE_KEY = 'raetselgruppen';
 
 import { initialRaetselgruppenSuchparameter, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
+import { state } from '@angular/animations';
 
 
 export interface RaetselgruppenState {
@@ -59,44 +60,12 @@ const raetselgruppenReducer = createReducer(
 
     on(RaetselgruppenActions.selectRaetselgruppe, (state, action) => ({ ...state, selectedGruppe: action.raetselgruppe })),
 
-    on(RaetselgruppenActions.raetselgruppeDetailsLoaded, (state, action) => {
+    on(RaetselgruppenActions.raetselgruppeDetailsLoaded, (state, action) => ({ ...state, raetselgruppeDetails: action.raetraetselgruppeDetails })),
 
-        // TODO: mocked data entfernen
-        const elemente: Raetselgruppenelement[] = EXAMPLE_DATA;
-        const neueDetails = action.raetraetselgruppeDetails;
-        const details: RaetselgruppeDetails = {
-            elemente: elemente,
-            geaendertDurch: neueDetails.geaendertDurch,
-            id: neueDetails.id,
-            name: neueDetails.name,
-            schwierigkeitsgrad: neueDetails.schwierigkeitsgrad,
-            status: neueDetails.status,
-            kommentar: neueDetails.kommentar,
-            referenz: neueDetails.referenz,
-            referenztyp: neueDetails.referenztyp
-        };
-
-        return { ...state, raetselgruppeDetails: details };
-    }),
+    on(RaetselgruppenActions.raetselgruppenelementSaved, (state, action) => ({ ...state, raetselgruppeDetails: action.raetraetselgruppeDetails })),
 
 );
 
 export function reducer(state: RaetselgruppenState | undefined, action: Action) {
     return raetselgruppenReducer(state, action);
 };
-
-// TODO: Replace this with your own data model type
-const EXAMPLE_DATA: Raetselgruppenelement[] = [
-    { id: '1', nummer: 'A-1', name: 'Treppenlift 20', punkte: 300, raetselSchluessel: '00001' },
-    { id: '2', nummer: 'A-2', name: 'Treppenlift 2', punkte: 300, raetselSchluessel: '00002' },
-    { id: '3', nummer: 'A-3', name: 'Treppenlift 23', punkte: 300, raetselSchluessel: '00003' },
-    { id: '4', nummer: 'A-4', name: 'Treppenlift 14', punkte: 300, raetselSchluessel: '00004' },
-    { id: '5', nummer: 'B-1', name: 'Treppenlift 5', punkte: 400, raetselSchluessel: '00005' },
-    { id: '6', nummer: 'B-2', name: 'Treppenlift 6', punkte: 400, raetselSchluessel: '00006' },
-    { id: '7', nummer: 'B-3', name: 'Treppenlift 7', punkte: 400, raetselSchluessel: '00007' },
-    { id: '8', nummer: 'B-4', name: 'Treppenlift 8', punkte: 400, raetselSchluessel: '00008' },
-    { id: '9', nummer: 'C-1', name: 'Treppenlift 9', punkte: 500, raetselSchluessel: '00009' },
-    { id: '10', nummer: 'C-2', name: 'Treppenlift 10', punkte: 500, raetselSchluessel: '00010' },
-    { id: '11', nummer: 'C-3', name: 'Treppenlift 21', punkte: 500, raetselSchluessel: '00011' },
-    { id: '12', nummer: 'C-4', name: 'Treppenlift 11', punkte: 500, raetselSchluessel: '00012' },
-];

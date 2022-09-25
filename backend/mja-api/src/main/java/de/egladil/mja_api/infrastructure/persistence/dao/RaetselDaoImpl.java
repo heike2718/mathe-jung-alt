@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.dto.SortDirection;
+import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_api.domain.utils.SetOperationUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
@@ -135,5 +136,20 @@ public class RaetselDaoImpl implements RaetselDao {
 			.setFirstResult(offset)
 			.setMaxResults(limit)
 			.getResultList();
+	}
+
+	@Override
+	public PersistentesRaetsel findWithSchluessel(final String schluessel) {
+
+		List<PersistentesRaetsel> trefferliste = entityManager
+			.createNamedQuery(PersistentesRaetsel.FIND_WITH_SCHLUESSEL, PersistentesRaetsel.class)
+			.setParameter("schluessel", schluessel).getResultList();
+
+		if (trefferliste.size() > 1) {
+
+			throw new MjaRuntimeException("Da ist in den Daten was faul: mehr als ein Raetsel mit schluessel=" + schluessel);
+		}
+
+		return trefferliste.isEmpty() ? null : trefferliste.get(0);
 	}
 }

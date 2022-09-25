@@ -10,13 +10,15 @@ import { RaetselgruppenSearchComponent } from './raetselgruppen-search/raetselgr
 import { RouterModule } from '@angular/router';
 import { AdminGuard } from '@mja-workspace/shared/auth/domain';
 import { RaetselgruppeDetailsComponent } from './raetselgruppe-details/raetselgruppe-details.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RaetselgruppenelementeComponent } from './raetselgruppenelemente/raetselgruppenelemente.component';
+import { RaetselgruppenelementDialogComponent } from './raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     RaetselgruppenDomainModule,
     SharedUiComponentsModule,
     SuchfilterDomainModule,
@@ -26,7 +28,7 @@ import { RaetselgruppenelementeComponent } from './raetselgruppenelemente/raetse
         path: 'uebersicht',
         canActivate: [AdminGuard],
         component: RaetselgruppenSearchComponent,
-      }, 
+      },
       {
         path: 'details',
         canActivate: [AdminGuard],
@@ -37,11 +39,10 @@ import { RaetselgruppenelementeComponent } from './raetselgruppenelemente/raetse
   declarations: [
     RaetselgruppenSearchComponent,
     RaetselgruppeDetailsComponent,
-    RaetselgruppenelementeComponent
+    RaetselgruppenelementeComponent,
+    RaetselgruppenelementDialogComponent,
   ],
-  exports: [
-    RaetselgruppenSearchComponent
-  ],
+  exports: [RaetselgruppenSearchComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class RaetselgruppenFeatureSearchModule { }
+export class RaetselgruppenFeatureSearchModule {}

@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.ws.rs.WebApplicationException;
 
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
+import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPayload;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
@@ -42,8 +43,18 @@ public interface RaetselgruppenService {
 	RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(EditRaetselgruppePayload payload, String user) throws WebApplicationException;
 
 	/**
-	 * @param  raetselgruppeId
+	 * @param  raetselgruppeID
 	 * @return
 	 */
-	Optional<RaetselgruppeDetails> loadDetails(String raetselgruppeId);
+	Optional<RaetselgruppeDetails> loadDetails(String raetselgruppeID);
+
+	/**
+	 * Legt ein neues Element an
+	 *
+	 * @param  raetselgruppeID
+	 * @param  payload
+	 * @return                 RaetselgruppeDetails
+	 */
+	RaetselgruppeDetails neuesElementAnlegen(String raetselgruppeID, EditRaetselgruppenelementPayload payload);
+
 }

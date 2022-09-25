@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -22,13 +22,16 @@ export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit, O
 
   displayedColumns = ['schluessel', 'nummer', 'punkte', 'name'];
 
-  constructor(private raetselgruppenFacade: RaetselgruppenFacade) { }
+  constructor(private raetselgruppenFacade: RaetselgruppenFacade, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.#elementeSubscription = this.raetselgruppenFacade.raetselgruppenelemente$.pipe(
       tap((elemente) => {
-        console.log('Anzahl Elemente: ' + elemente.length);
-        this.dataSource = new RaetselgruppenelementeDataSource(elemente);
+        if (this.dataSource) {
+          this.dataSource.data = elemente;
+        } else {
+          this.dataSource = new RaetselgruppenelementeDataSource(elemente);
+        }
       })
     ).subscribe();
   }
@@ -41,5 +44,7 @@ export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit, O
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
+
+    this.changeDetector.detectChanges();
   }
 }

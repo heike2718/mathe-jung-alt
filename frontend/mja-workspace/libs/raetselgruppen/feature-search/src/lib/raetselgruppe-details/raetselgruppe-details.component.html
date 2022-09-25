@@ -45,10 +45,15 @@
         <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.referenz}}</div>
     </div>
 
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                [disabled]="!raetselgruppeID" (click)="openNeuesRaetselgruppenelementDialog()">neues Element</button>
+        </div>
+    </div>
 
     <h2>Elemente</h2>
 
-    <mja-raetselgruppenelemente [elemente]="gruppe.elemente"></mja-raetselgruppenelemente>    
+    <mja-raetselgruppenelemente [elemente]="gruppe.elemente"></mja-raetselgruppenelemente>
 
 </div>
 

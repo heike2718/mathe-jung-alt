@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetsel;
 
+import java.util.Optional;
+
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
@@ -57,4 +59,10 @@ public interface RaetselService {
 	 * @return    Raetsel oder null.
 	 */
 	Raetsel getRaetselZuId(String id);
+
+	/**
+	 * @param  schluessel
+	 * @return            Optional
+	 */
+	Optional<String> getRaetselIdWithSchluessel(String schluessel);
 }

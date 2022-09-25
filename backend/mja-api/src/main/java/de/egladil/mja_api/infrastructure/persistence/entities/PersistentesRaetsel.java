@@ -39,13 +39,18 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren order by r.schluessel"),
 	@NamedQuery(
 		name = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC",
-		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren order by r.schluessel desc")
+		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren order by r.schluessel desc"),
+	@NamedQuery(
+		name = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL",
+		query = "select r from PersistentesRaetsel r where r.schluessel = :schluessel")
 })
 public class PersistentesRaetsel extends PanacheEntityBase implements PersistenteMjaEntity {
 
 	public static final String FIND_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN";
 
 	public static final String FIND_WITH_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC";
+
+	public static final String FIND_WITH_SCHLUESSEL = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")

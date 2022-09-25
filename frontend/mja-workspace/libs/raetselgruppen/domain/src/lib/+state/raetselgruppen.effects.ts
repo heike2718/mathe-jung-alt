@@ -88,5 +88,18 @@ export class RaetselgruppenEffects {
         )
     );
 
+    saveRaetselgruppenelement$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(RaetselgruppenActions.saveRaetselgruppenelement),
+            // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
+            this.safeNgrx.safeSwitchMap((action) =>
+                this.raetselHttpService.saveRaetselgruppenelement(action.raetselgruppeID, action.payload).pipe(
+                    tap(() => this.messageService.info('Das Rästelgruppenelement wurde erfolgreich gespeichert')),
+                    map((raetraetselgruppeDetails) => RaetselgruppenActions.raetselgruppenelementSaved({ raetraetselgruppeDetails }))
+                ), 'Ups, beim Speichern des Rätselgruppenelements ist etwas schiefgegangen', noopAction()
+            )
+        )
+    );
+
 
 }

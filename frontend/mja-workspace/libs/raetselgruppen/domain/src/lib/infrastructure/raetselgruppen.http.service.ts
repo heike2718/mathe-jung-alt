@@ -3,7 +3,7 @@ import { Inject, Injectable } from "@angular/core";
 import { Configuration, SharedConfigService } from "@mja-workspace/shared/util-configuration";
 import { LoadingIndicatorService } from "@mja-workspace/shared/util-mja";
 import { Observable, of } from "rxjs";
-import { EditRaetselgruppePayload, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
+import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 
 
 @Injectable(
@@ -70,6 +70,15 @@ export class RaetselgruppenHttpService {
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const url = this.#url + '/' + uuid;
         const obs$: Observable<RaetselgruppeDetails> = this.http.get<RaetselgruppeDetails>(url, {headers});
+
+        return this.loadingService.showLoaderUntilCompleted(obs$);
+    }
+
+    public saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const url = this.#url + '/' + raetselgruppeID + '/elemente';
+        const obs$: Observable<RaetselgruppeDetails> = this.http.post<RaetselgruppeDetails>(url, payload, {headers});
 
         return this.loadingService.showLoaderUntilCompleted(obs$);
     }

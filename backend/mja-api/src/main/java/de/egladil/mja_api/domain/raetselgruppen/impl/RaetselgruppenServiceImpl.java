@@ -27,6 +27,7 @@ import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
 import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
+import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPayload;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
@@ -76,9 +77,9 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public Optional<RaetselgruppeDetails> loadDetails(final String raetselgruppeId) {
+	public Optional<RaetselgruppeDetails> loadDetails(final String raetselgruppeID) {
 
-		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeId);
+		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
 
 		if (raetselgruppe == null) {
 
@@ -87,7 +88,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		final RaetselgruppeDetails result = RaetselgruppeDetails.createFromDB(raetselgruppe);
 
-		List<PersistentesRaetselgruppenelement> elementeDB = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeId);
+		List<PersistentesRaetselgruppenelement> elementeDB = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeID);
 		List<String> raetselIDs = elementeDB.stream().map(el -> el.raetselID).collect(Collectors.toList());
 		List<PersistenteAufgabeReadonly> aufgaben = raetselgruppenDao.loadAufgabenByRaetselIds(raetselIDs);
 
@@ -237,5 +238,73 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		raetselgruppe.status = DomainEntityStatus.ERFASST;
 
 		return raetselgruppe;
+	}
+
+	@Override
+	public RaetselgruppeDetails neuesElementAnlegen(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
+
+		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
+
+		if (raetselgruppe == null) {
+
+			Response response = Response.status(Status.NOT_FOUND)
+				.entity(MessagePayload.error("Tja, diese Rätselgruppe gibt es gar nicht."))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
+		Optional<String> optRaetselId = raetselService.getRaetselIdWithSchluessel(payload.getRaetselSchluessel());
+
+		if (optRaetselId.isEmpty()) {
+
+			Response response = Response.status(Status.NOT_FOUND)
+				.entity(MessagePayload.error("Tja, mit dem gewünschen Schlüssel gibt es gar kein Rätsel."))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
+		List<PersistentesRaetselgruppenelement> persistenteElemente = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeID);
+
+		Optional<PersistentesRaetselgruppenelement> optElementMitGleicherNummer = persistenteElemente.stream()
+			.filter(el -> el.nummer.equalsIgnoreCase(payload.getNummer())).findFirst();
+
+		if (optElementMitGleicherNummer.isPresent()) {
+
+			Response response = Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer"))
+				.build();
+			throw new WebApplicationException(response);
+
+		}
+
+		this.createAndPersistNeuesRaetselgruppenelement(raetselgruppeID,
+			optRaetselId.get(), payload);
+
+		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
+
+		if (opt.isEmpty()) {
+
+			LOGGER.error("Raetselgruppe mit der UUID={} wurde ein paar Zeilen später nicht mehr gefunden", raetselgruppeID);
+			Response response = Response.status(Status.INTERNAL_SERVER_ERROR)
+				.entity(MessagePayload.error("Ups, da ist aber etwas komplett schiefgelaufen"))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
+		return opt.get();
+	}
+
+	@Transactional
+	PersistentesRaetselgruppenelement createAndPersistNeuesRaetselgruppenelement(final String raetselgruppeID, final String raetselID, final EditRaetselgruppenelementPayload payload) {
+
+		PersistentesRaetselgruppenelement neues = new PersistentesRaetselgruppenelement();
+		neues.nummer = payload.getNummer();
+		neues.punkte = payload.getPunkte();
+		neues.raetselgruppeID = raetselgruppeID;
+		neues.raetselID = raetselID;
+
+		PersistentesRaetselgruppenelement persisted = raetselgruppenDao.saveRaetselgruppenelement(neues);
+
+		return persisted;
 	}
 }

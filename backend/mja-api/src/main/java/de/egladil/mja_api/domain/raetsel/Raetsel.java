@@ -7,6 +7,8 @@ package de.egladil.mja_api.domain.raetsel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.Pattern;
+
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -28,6 +30,7 @@ public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
 	@Schema(description = "fachlicher Schlüssel im Aufgabenarchiv.")
+	@Pattern(regexp = "^[\\d]{5}$", message = "schluessel muss aus genau 5 Ziffern bestehen")
 	private String schluessel;
 
 	@JsonProperty
@@ -52,6 +55,9 @@ public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
 	@Schema(description = "Referenz auf die Quelle des Rätsels")
+	@Pattern(
+		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		message = "quelleID enthält ungültige Zeichen - muss eine UUID sein")
 	private String quelleId;
 
 	@JsonProperty

@@ -1,11 +1,9 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { filter, map, tap } from 'rxjs/operators';
-import { Observable, of as observableOf, merge, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Observable, of as observableOf, merge } from 'rxjs';
 import { Raetselgruppenelement, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
-import { Details } from '@mui/icons-material';
-import { EventEmitter } from '@angular/core';
 
 /**
  * Data source for the Raetselgruppenelemente view. This class should
@@ -20,6 +18,7 @@ export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppene
   constructor(public data: Raetselgruppenelement[]) {
     super();
   }
+
 
   /**
    * Connect this data source to the table. The table will only update when
@@ -39,6 +38,8 @@ export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppene
       throw Error('Please set the paginator and sort on the data source before connecting.');
     }
   }
+
+  
 
   /**
    *  Called when the table is being destroyed. Use this function, to clean up
