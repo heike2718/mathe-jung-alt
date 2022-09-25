@@ -4,8 +4,6 @@ import * as RaetselgruppenActions from './raetselgruppen.actions';
 export const RAETSELGRUPPEN_FEATURE_KEY = 'raetselgruppen';
 
 import { initialRaetselgruppenSuchparameter, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
-import { state } from '@angular/animations';
-
 
 export interface RaetselgruppenState {
     readonly page: RaetselgruppensucheTrefferItem[];

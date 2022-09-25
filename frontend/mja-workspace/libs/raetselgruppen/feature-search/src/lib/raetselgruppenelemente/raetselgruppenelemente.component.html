@@ -1,26 +1,26 @@
 <div class="mat-elevation-z8">
-  <table mat-table class="full-width-table" matSortDisableClear matSort aria-label="Elements">
+  <table mat-table class="full-width-table" aria-label="Elements">
     <!-- Schluessel Column -->
     <ng-container matColumnDef="schluessel">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>SCHLUESSEL</th>
+      <th mat-header-cell *matHeaderCellDef>SCHLUESSEL</th>
       <td mat-cell *matCellDef="let row">{{row.raetselSchluessel}}</td>
     </ng-container>
 
     <!-- Nummer Column -->
     <ng-container matColumnDef="nummer">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nummer</th>
+      <th mat-header-cell *matHeaderCellDef>Nummer</th>
       <td mat-cell *matCellDef="let row">{{row.nummer}}</td>
     </ng-container>
 
     <!-- Punkte Column -->
     <ng-container matColumnDef="punkte">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Punkte</th>
+      <th mat-header-cell *matHeaderCellDef>Punkte</th>
       <td mat-cell *matCellDef="let row">{{row.punkte}}</td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let row">{{row.name}}</td>
     </ng-container>
 
@@ -28,7 +28,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator #paginator [length]="dataSource.data.length" [pageIndex]="0" [pageSize]="5"
+  <!-- <mat-paginator #paginator [length]="dataSource.data.length" [pageIndex]="0" [pageSize]="5"
     [pageSizeOptions]="[5, 10, 20]" aria-label="Select page">
-  </mat-paginator>
+  </mat-paginator> -->
 </div>

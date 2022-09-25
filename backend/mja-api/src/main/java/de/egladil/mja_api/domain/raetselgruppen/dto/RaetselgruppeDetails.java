@@ -5,6 +5,7 @@
 package de.egladil.mja_api.domain.raetselgruppen.dto;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -17,6 +18,7 @@ import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenelementComparator;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 
 /**
@@ -79,5 +81,10 @@ public class RaetselgruppeDetails {
 	public void addElement(final Raetselgruppenelement element) {
 
 		this.elemente.add(element);
+	}
+
+	public void sortElemente() {
+
+		Collections.sort(elemente, new RaetselgruppenelementComparator());
 	}
 }

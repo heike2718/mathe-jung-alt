@@ -15,7 +15,7 @@ export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppene
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
 
-  constructor(public data: Raetselgruppenelement[]) {
+  constructor(private raetselgruppenFacade: RaetselgruppenFacade) {
     super();
   }
 
@@ -26,17 +26,7 @@ export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppene
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<Raetselgruppenelement[]> {
-    if (this.paginator && this.sort) {
-      // Combine everything that affects the rendered data into one update
-      // stream for the data-table to consume.
-      return merge(observableOf(this.data), this.paginator.page, this.sort.sortChange)
-        .pipe(
-          map(() => {
-            return this.#getPagedData(this.#getSortedData([...this.data]));
-          }))
-    } else {
-      throw Error('Please set the paginator and sort on the data source before connecting.');
-    }
+    return this.raetselgruppenFacade.raetselgruppenelemente$;
   }
 
   

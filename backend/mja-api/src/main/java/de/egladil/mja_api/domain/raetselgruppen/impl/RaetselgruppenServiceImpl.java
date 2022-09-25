@@ -102,6 +102,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 			}
 		});
 
+		result.sortElemente();
 		return Optional.of(result);
 	}
 

@@ -12,6 +12,13 @@
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
         <div fxLayoutAlign="left center" fxFlex="20">
+            <mat-label>Anzahl Elemente:</mat-label>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.elemente.length}}</div>
+    </div>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20">
             <mat-label>Kommentar:</mat-label>
         </div>
         <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.kommentar}}</div>

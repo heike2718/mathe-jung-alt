@@ -27,7 +27,7 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
         if (gruppe) {
           this.raetselgruppeID = gruppe.id;
         } else {
-          this.raetselgruppeID = undefined
+          this.raetselgruppeID = undefined;
         }
       })
     ).subscribe();
@@ -50,8 +50,8 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(RaetselgruppenelementDialogComponent, {
-      height: '500px',
-      width: '600px',
+      height: '400px',
+      width: '500px',
       data: dialogData
     });
 
