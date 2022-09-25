@@ -55,13 +55,13 @@ export class RaetselgruppenHttpService {
 
         let headers = new HttpHeaders().set('Accept', 'application/json');
         if (csrfToken !== null) {
-          headers = headers.set(this.#csrfHeaderName, csrfToken);
+            headers = headers.set(this.#csrfHeaderName, csrfToken);
         }
-    
+
         if ('neu' === editRaetselgruppPayload.id) {
-          return this.http.post<RaetselgruppensucheTrefferItem>(this.#url, editRaetselgruppPayload, { headers });
+            return this.http.post<RaetselgruppensucheTrefferItem>(this.#url, editRaetselgruppPayload, { headers });
         }
-    
+
         return this.loadingService.showLoaderUntilCompleted(this.http.put<RaetselgruppensucheTrefferItem>(this.#url, editRaetselgruppPayload, { headers }));
     }
 
@@ -69,17 +69,43 @@ export class RaetselgruppenHttpService {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const url = this.#url + '/' + uuid;
-        const obs$: Observable<RaetselgruppeDetails> = this.http.get<RaetselgruppeDetails>(url, {headers});
+        const obs$: Observable<RaetselgruppeDetails> = this.http.get<RaetselgruppeDetails>(url, { headers });
 
         return this.loadingService.showLoaderUntilCompleted(obs$);
     }
 
-    public saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+    public deleteRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+
+        const url = this.#url + '/' + raetselgruppeID + '/elemente/' + payload.id;
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        const url = this.#url + '/' + raetselgruppeID + '/elemente';
-        const obs$: Observable<RaetselgruppeDetails> = this.http.post<RaetselgruppeDetails>(url, payload, {headers});
+        const obs$: Observable<RaetselgruppeDetails> = this.http.delete<RaetselgruppeDetails>(url, { headers });
+        return this.loadingService.showLoaderUntilCompleted(obs$);
 
+    }
+
+    public saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+
+        const url = this.#url + '/' + raetselgruppeID + '/elemente';
+
+        if (payload.id === 'neu') {
+            return this.#insertRaetselgruppenelement(url, payload);
+        } else {
+            return this.#updateRaetselgruppenelement(url, payload);
+        }
+    }
+
+    #insertRaetselgruppenelement(url: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const obs$: Observable<RaetselgruppeDetails> = this.http.post<RaetselgruppeDetails>(url, payload, { headers });
+        return this.loadingService.showLoaderUntilCompleted(obs$);
+    }
+
+    #updateRaetselgruppenelement(url: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const obs$: Observable<RaetselgruppeDetails> = this.http.put<RaetselgruppeDetails>(url, payload, { headers });
         return this.loadingService.showLoaderUntilCompleted(obs$);
     }
 

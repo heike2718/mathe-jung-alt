@@ -45,4 +45,8 @@ export class RaetselgruppenFacade {
     public saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
         this.store.dispatch(RaetselgruppenActions.saveRaetselgruppenelement({raetselgruppeID, payload}));
     }
+
+    public deleteRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
+        this.store.dispatch(RaetselgruppenActions.deleteRaetselgruppenelement({raetselgruppeID, payload}));
+    }
 }

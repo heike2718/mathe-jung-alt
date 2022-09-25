@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -259,6 +260,12 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 	}
 
 	@Override
+	public PersistentesRaetselgruppenelement findElementById(final String raetselgruppenelementID) {
+
+		return entityManager.find(PersistentesRaetselgruppenelement.class, raetselgruppenelementID);
+	}
+
+	@Override
 	public PersistentesRaetselgruppenelement saveRaetselgruppenelement(final PersistentesRaetselgruppenelement element) {
 
 		if (element.isPersistent()) {
@@ -270,4 +277,15 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		return element;
 	}
 
+	@Override
+	@Transactional
+	public void deleteRaetselgruppenelement(final String elementID) {
+
+		final PersistentesRaetselgruppenelement element = entityManager.find(PersistentesRaetselgruppenelement.class, elementID);
+
+		if (element != null) {
+
+			entityManager.remove(element);
+		}
+	}
 }

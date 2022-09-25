@@ -55,6 +55,23 @@ public interface RaetselgruppenService {
 	 * @param  payload
 	 * @return                 RaetselgruppeDetails
 	 */
-	RaetselgruppeDetails neuesElementAnlegen(String raetselgruppeID, EditRaetselgruppenelementPayload payload);
+	RaetselgruppeDetails elementAnlegen(String raetselgruppeID, EditRaetselgruppenelementPayload payload);
 
+	/**
+	 * Ändert ein vorhandenes Element
+	 *
+	 * @param  raetselgruppeID
+	 * @param  payload
+	 * @return                 RaetselgruppeDetails
+	 */
+	RaetselgruppeDetails elementAendern(String raetselgruppeID, EditRaetselgruppenelementPayload payload);
+
+	/**
+	 * Löscht das gegebene Element der Rätselgruppe.
+	 *
+	 * @param  raetselgruppeID
+	 * @param  elementID
+	 * @return                 RaetselgruppeDetails
+	 */
+	RaetselgruppeDetails elementLoeschen(String raetselgruppeID, String elementID);
 }

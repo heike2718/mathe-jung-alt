@@ -60,7 +60,7 @@ const raetselgruppenReducer = createReducer(
 
     on(RaetselgruppenActions.raetselgruppeDetailsLoaded, (state, action) => ({ ...state, raetselgruppeDetails: action.raetraetselgruppeDetails })),
 
-    on(RaetselgruppenActions.raetselgruppenelementSaved, (state, action) => ({ ...state, raetselgruppeDetails: action.raetraetselgruppeDetails })),
+    on(RaetselgruppenActions.raetselgruppenelementeChanged, (state, action) => ({ ...state, raetselgruppeDetails: action.raetraetselgruppeDetails })),
 
 );
 

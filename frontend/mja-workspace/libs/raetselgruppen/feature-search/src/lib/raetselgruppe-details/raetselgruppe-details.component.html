@@ -60,7 +60,7 @@
 
     <h2>Elemente</h2>
 
-    <mja-raetselgruppenelemente [elemente]="gruppe.elemente"></mja-raetselgruppenelemente>
+    <mja-raetselgruppenelemente (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)" ></mja-raetselgruppenelemente>
 
 </div>
 

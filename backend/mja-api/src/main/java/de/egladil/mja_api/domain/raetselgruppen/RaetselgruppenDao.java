@@ -92,8 +92,19 @@ public interface RaetselgruppenDao {
 	long countElementeRaetselgruppe(@NotNull @Size(min = 1, max = 40) String uuid);
 
 	/**
+	 * @param  raetselgruppenelementID
+	 * @return                         PersistentesRaetselgruppenelement
+	 */
+	PersistentesRaetselgruppenelement findElementById(String raetselgruppenelementID);
+
+	/**
 	 * @param  element
 	 * @return         PersistentesRaetselgruppenelement
 	 */
 	PersistentesRaetselgruppenelement saveRaetselgruppenelement(PersistentesRaetselgruppenelement element);
+
+	/**
+	 * @param element
+	 */
+	void deleteRaetselgruppenelement(String elementID);
 }

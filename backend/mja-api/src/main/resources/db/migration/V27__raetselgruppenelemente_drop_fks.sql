@@ -1,3 +1,0 @@
-ALTER TABLE mathe_jung_alt.RAETSELGRUPPENELEMENTE DROP CONSTRAINT fk_elemente_raetsel;
-
-ALTER TABLE mathe_jung_alt.RAETSELGRUPPENELEMENTE DROP CONSTRAINT fk_elemente_gruppe;

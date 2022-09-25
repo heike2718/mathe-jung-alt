@@ -282,12 +282,12 @@ public class RaetselgruppenResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
-		return this.raetselgruppenService.neuesElementAnlegen(raetselgruppeID, element);
+		return this.raetselgruppenService.elementAnlegen(raetselgruppeID, element);
 	}
 
 
 	@PUT
-	@Path("{raetselgruppeID}/elemente/{elementID}")
+	@Path("{raetselgruppeID}/elemente")
 	@RolesAllowed("ADMIN")
 	@Operation(
 		operationId = "raetselgruppenelementAendern",
@@ -319,11 +319,9 @@ public class RaetselgruppenResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	public RaetselgruppeDetails raetselgruppenelementAendern(@PathParam(value = "raetselgruppeID") @Pattern(
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
-		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, @PathParam(value = "elementID") @Pattern(
-			regexp = "^[a-fA-F\\d\\-]{1,36}$",
-			message = "raetselgruppeID enthält ungültige Zeichen") final String elementID, final EditRaetselgruppenelementPayload element) {
+		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
-		return null;
+		return this.raetselgruppenService.elementAendern(raetselgruppeID, element);
 	}
 
 	@DELETE
@@ -363,6 +361,6 @@ public class RaetselgruppenResource {
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
 			message = "raetselgruppeID enthält ungültige Zeichen") final String elementID) {
 
-		return null;
+		return raetselgruppenService.elementLoeschen(raetselgruppeID, elementID);
 	}
 }

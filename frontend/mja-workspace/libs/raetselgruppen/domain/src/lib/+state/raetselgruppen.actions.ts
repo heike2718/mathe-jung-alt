@@ -52,9 +52,14 @@ export const saveRaetselgruppenelement = createAction(
     props<{ raetselgruppeID: string, payload: EditRaetselgruppenelementPayload }>()
 );
 
-export const raetselgruppenelementSaved = createAction(
-    '[Raetselgruppen] RaetselgruppenelementSaved',
+export const raetselgruppenelementeChanged = createAction(
+    '[Raetselgruppen] raetselgruppenelementeChanged',
     props<{ raetraetselgruppeDetails: RaetselgruppeDetails }>()
+);
+
+export const deleteRaetselgruppenelement = createAction(
+    '[Raetselgruppen] deleteRaetselgruppenelement',
+    props<{raetselgruppeID: string, payload: EditRaetselgruppenelementPayload}>()
 );
 
 

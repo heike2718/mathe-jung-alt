@@ -94,9 +94,22 @@ export class RaetselgruppenEffects {
             // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
             this.safeNgrx.safeSwitchMap((action) =>
                 this.raetselHttpService.saveRaetselgruppenelement(action.raetselgruppeID, action.payload).pipe(
-                    tap(() => this.messageService.info('Das Rästelgruppenelement wurde erfolgreich gespeichert')),
-                    map((raetraetselgruppeDetails) => RaetselgruppenActions.raetselgruppenelementSaved({ raetraetselgruppeDetails }))
+                    tap(() => this.messageService.info('Das Rätselgruppenelement wurde erfolgreich gespeichert')),
+                    map((raetraetselgruppeDetails) => RaetselgruppenActions.raetselgruppenelementeChanged({ raetraetselgruppeDetails }))
                 ), 'Ups, beim Speichern des Rätselgruppenelements ist etwas schiefgegangen', noopAction()
+            )
+        )
+    );
+
+    deleteRaetselgruppenelement$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(RaetselgruppenActions.deleteRaetselgruppenelement),
+            // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
+            this.safeNgrx.safeSwitchMap((action) =>
+                this.raetselHttpService.deleteRaetselgruppenelement(action.raetselgruppeID, action.payload).pipe(
+                    tap(() => this.messageService.info('Das Rätselgruppenelement wurde erfolgreich gelöscht')),
+                    map((raetraetselgruppeDetails) => RaetselgruppenActions.raetselgruppenelementeChanged({ raetraetselgruppeDetails }))
+                ), 'Ups, beim Löschen des Rätselgruppenelements ist etwas schiefgegangen', noopAction()
             )
         )
     );

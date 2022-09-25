@@ -70,16 +70,6 @@ public class QuizService {
 		aufgabenReadonly.forEach(aufgabeDB -> {
 
 			Quizaufgabe aufgabe = mapFromDB(aufgabeDB);
-			Optional<PersistentesRaetselgruppenelement> optElementDB = elemente.stream()
-				.filter(el -> el.raetselID.equals(aufgabeDB.uuid)).findFirst();
-
-			if (optElementDB.isPresent()) {
-
-				PersistentesRaetselgruppenelement el = optElementDB.get();
-				aufgabe.setNummer(el.nummer);
-				aufgabe.setPunkte(el.punkte);
-				aufgabe.setStrafpunkte(berechneStrafpunkte(aufgabe.getPunkte(), aufgabe.getAntwortvorschlaege().length));
-			}
 			aufgaben.add(aufgabe);
 		});
 		aufgaben.sort(new QuizaufgabeComparator());
@@ -98,6 +88,9 @@ public class QuizService {
 		aufgabe.setSchluessel(dbAufgabe.schluessel);
 		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.schluessel));
 		aufgabe.setQuelle(mapQuelle(dbAufgabe));
+		aufgabe.setNummer(dbAufgabe.nummer);
+		aufgabe.setPunkte(dbAufgabe.punkte);
+		aufgabe.setStrafpunkte(berechneStrafpunkte(aufgabe.getPunkte(), aufgabe.getAntwortvorschlaege().length));
 
 		return aufgabe;
 	}

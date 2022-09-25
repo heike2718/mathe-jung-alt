@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { EditRaetselgruppenelementPayload, RaetselgruppeDetails, RaetselgruppenFacade, RaetselgruppensucheTrefferItem } from '@mja-workspace/raetselgruppen/domain';
+import { EditRaetselgruppenelementPayload, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenFacade, RaetselgruppensucheTrefferItem } from '@mja-workspace/raetselgruppen/domain';
+import { JaNeinDialogComponent, JaNeinDialogData } from '@mja-workspace/shared/ui-components';
 import { Subscription, tap } from 'rxjs';
 import { RaetselgruppenelementDialogComponent } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
 import { RaetselgruppenelementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
@@ -44,11 +45,56 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
     const dialogData: RaetselgruppenelementDialogData = {
       titel: 'Neues Element',
       id: 'neu',
+      modusAendern: false,
       nummer: '',
       schluessel: '',
       punkte: 0
     };
 
+    this.#initAndOpenEditElementDialog(dialogData);
+  }
+
+  onEditElement($element: Raetselgruppenelement): void {
+
+    const dialogData: RaetselgruppenelementDialogData = {
+      titel: 'Element ändern',
+      id: $element.id,
+      modusAendern: true,
+      nummer: $element.nummer,
+      schluessel: $element.raetselSchluessel,
+      punkte: $element.punkte
+    };
+
+    this.#initAndOpenEditElementDialog(dialogData);
+  }
+
+  onDeleteElement($element: Raetselgruppenelement): void {
+    if (this.raetselgruppeID) {
+      this.#openConfirmLoeschenDialog(this.raetselgruppeID, $element);    
+    }
+  }
+
+  #openConfirmLoeschenDialog(raetselgruppeID: string, element: Raetselgruppenelement): void {
+
+    const dialogData: JaNeinDialogData = {
+      frage: 'Soll das Rätselgruppenelement wirklich gelöscht werden?',
+      hinweis: 'weg ist weg'
+    }
+
+    const dialogRef = this.dialog.open(JaNeinDialogComponent, {
+      height: '300px',
+      width: '700px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.raetselgruppenFacade.deleteRaetselgruppenelement(raetselgruppeID, element);
+      }
+    });
+  }
+
+  #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData):void {
     const dialogRef = this.dialog.open(RaetselgruppenelementDialogComponent, {
       height: '400px',
       width: '500px',

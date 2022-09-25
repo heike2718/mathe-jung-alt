@@ -3,7 +3,7 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Schlüssel*</mat-label>
-        <input type="text" matInput [(ngModel)]="data.schluessel">
+        <input type="text" matInput [(ngModel)]="data.schluessel" disabled="{{data.modusAendern}}">
         <mat-hint>SCHLUESSEL des Rätsels</mat-hint>
     </mat-form-field>
 

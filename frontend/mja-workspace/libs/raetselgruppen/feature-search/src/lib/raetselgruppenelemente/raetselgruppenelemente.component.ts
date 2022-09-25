@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -11,39 +11,34 @@ import { RaetselgruppenelementeDataSource } from './raetselgruppenelemente.datas
   templateUrl: './raetselgruppenelemente.component.html',
   styleUrls: ['./raetselgruppenelemente.component.scss']
 })
-export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit, OnDestroy {
+export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit {
 
-  // @ViewChild(MatPaginator) paginator!: MatPaginator;
-  // @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Raetselgruppenelement>;
   dataSource!: RaetselgruppenelementeDataSource;
 
-  // #elementeSubscription = new Subscription();
+  @Output()
+  editElement: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
 
-  displayedColumns = ['schluessel', 'nummer', 'punkte', 'name'];
+  @Output()
+  deleteElement: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
+
+  displayedColumns = ['schluessel', 'nummer', 'punkte', 'name', 'edit', 'delete'];
 
   constructor(private raetselgruppenFacade: RaetselgruppenFacade) { }
 
   ngOnInit(): void {
-    // this.#elementeSubscription = this.raetselgruppenFacade.raetselgruppenelemente$.pipe(
-    //   tap((elemente) => {
-    //     if (this.dataSource) {
-    //       this.dataSource.data = elemente;
-    //     } else {
-    //       this.dataSource = new RaetselgruppenelementeDataSource(elemente);
-    //     }
-    //   })
-    // ).subscribe();
     this.dataSource = new RaetselgruppenelementeDataSource(this.raetselgruppenFacade);
   }
 
-  ngOnDestroy(): void {
-    // this.#elementeSubscription.unsubscribe();
+  ngAfterViewInit(): void {
+    this.table.dataSource = this.dataSource;
   }
 
-  ngAfterViewInit(): void {
-    // this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
+  editElementClicked(element: Raetselgruppenelement): void {
+    this.editElement.emit(element);
+  }
+
+  deleteElementClicked(element: Raetselgruppenelement): void {
+    this.deleteElement.emit(element);
   }
 }

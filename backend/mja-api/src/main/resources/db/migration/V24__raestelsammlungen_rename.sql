@@ -19,11 +19,36 @@ create table mathe_jung_alt.RAETSELGRUPPEN(
 create table mathe_jung_alt.RAETSELGRUPPENELEMENTE(
 	UUID varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL PRIMARY KEY,
 	NUMMER varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Dient gleichzeitig als Überschrift des Elements in der Sammlung. Die Nummern müssen sortierbar sein, um eine feste Reihenfolge sicherzustellen',
+	PUNKTE int(10) COMMENT 'mit 100 multiplizierte Anzahl Punkte bei korrekter Lösung. Anzahl Strafpunkte ist dann PUNKTE / (k-1), wobei k die Anzahl der Antwortvorschläge ist',
 	RAETSEL varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'UUID des Rätsels',
 	GRUPPE varchar(36) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'UUID der Rästelgruppe',
 	VERSION int(10) DEFAULT 0,
-	UNIQUE KEY uk_raetselgruppenelemente_1 (NUMMER, RAETSEL, GRUPPE),
-	CONSTRAINT `fk_elemente_raetsel` FOREIGN KEY (`RAETSEL`) REFERENCES `RAETSEL` (`UUID`) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT `fk_elemente_gruppe` FOREIGN KEY (`GRUPPE`) REFERENCES `RAETSELGRUPPEN` (`UUID`) ON DELETE CASCADE ON UPDATE CASCADE
+	UNIQUE KEY uk_raetselgruppenelemente_1 (RAETSEL, GRUPPE)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE OR REPLACE VIEW mathe_jung_alt.VW_AUFGABEN
+AS
+select
+	r.UUID,
+	r.SCHLUESSEL,
+	r.ANTWORTVORSCHLAEGE,
+	r.NAME,
+	e.NUMMER,
+	e.PUNKTE,
+	vq.ART as QUELLE_ART,
+	vq.MEDIUM_TITEL,
+	vq.SEITE,
+	vq.AUSGABE,
+	vq.JAHRGANG,
+	vq.PERSON,
+	vq.HW,
+	vq.DESKRIPTOREN
+from
+	RAETSEL r,
+	RAETSELGRUPPENELEMENTE e,
+	VW_QUELLEN vq
+where
+    e.RAETSEL = r.UUID
+	AND r.QUELLE = vq.UUID;
+
 

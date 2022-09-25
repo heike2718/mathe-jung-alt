@@ -242,7 +242,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public RaetselgruppeDetails neuesElementAnlegen(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
+	public RaetselgruppeDetails elementAnlegen(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
 
 		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -278,6 +278,18 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		}
 
+		Optional<PersistentesRaetselgruppenelement> optElementMitGleichemRaetsel = persistenteElemente.stream()
+			.filter(el -> el.raetselID.equals(payload.getRaetselSchluessel())).findFirst();
+
+		if (optElementMitGleichemRaetsel.isPresent()) {
+
+			Response response = Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("Das Rätsel gibt es in dieser Rätselgruppe schon."))
+				.build();
+			throw new WebApplicationException(response);
+
+		}
+
 		this.createAndPersistNeuesRaetselgruppenelement(raetselgruppeID,
 			optRaetselId.get(), payload);
 
@@ -308,4 +320,97 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		return persisted;
 	}
+
+	@Override
+	public RaetselgruppeDetails elementAendern(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
+
+		PersistentesRaetselgruppenelement persistentesElement = raetselgruppenDao.findElementById(payload.getId());
+
+		if (persistentesElement == null) {
+
+			Response response = Response.status(Status.NOT_FOUND)
+				.entity(MessagePayload.error("Tja, dieses Rätselgruppenelement gibt es gar nicht."))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
+		if (!raetselgruppeID.equals(persistentesElement.raetselgruppeID)) {
+
+			LOGGER.error("Raetselgruppenkonflikt: persistentesElement.raetselgruppeID={}, raetselgruppeID={}",
+				persistentesElement.raetselgruppeID, raetselgruppeID);
+
+			Response response = Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("Rätselgruppenkonflikt"))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
+		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
+
+		if (raetselgruppe == null) {
+
+			Response response = Response.status(Status.NOT_FOUND)
+				.entity(MessagePayload.error("Tja, diese Rätselgruppe gibt es gar nicht."))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
+		List<PersistentesRaetselgruppenelement> persistenteElemente = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeID);
+
+		Optional<PersistentesRaetselgruppenelement> optElementMitGleicherNummer = persistenteElemente.stream()
+			.filter(el -> el.nummer.equalsIgnoreCase(payload.getNummer()) && !el.uuid.equals(payload.getId())).findFirst();
+
+		if (optElementMitGleicherNummer.isPresent()) {
+
+			Response response = Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer"))
+				.build();
+			throw new WebApplicationException(response);
+
+		}
+
+		mergeAndSaveRaetselgruppenelement(persistentesElement, payload);
+
+		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
+
+		if (opt.isEmpty()) {
+
+			LOGGER.error("Raetselgruppe mit der UUID={} wurde ein paar Zeilen später nicht mehr gefunden", raetselgruppeID);
+			Response response = Response.status(Status.INTERNAL_SERVER_ERROR)
+				.entity(MessagePayload.error("Tja, diese Rätselgruppe gibt es gar nicht."))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
+		return opt.get();
+	}
+
+	@Transactional
+	void mergeAndSaveRaetselgruppenelement(final PersistentesRaetselgruppenelement persistentesElement, final EditRaetselgruppenelementPayload payload) {
+
+		persistentesElement.nummer = payload.getNummer();
+		persistentesElement.punkte = payload.getPunkte();
+
+		raetselgruppenDao.saveRaetselgruppenelement(persistentesElement);
+	}
+
+	@Override
+	public RaetselgruppeDetails elementLoeschen(final String raetselgruppeID, final String elementID) {
+
+		raetselgruppenDao.deleteRaetselgruppenelement(elementID);
+
+		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
+
+		if (opt.isEmpty()) {
+
+			LOGGER.error("Raetselgruppe mit der UUID={} gibt es nicht", raetselgruppeID);
+			Response response = Response.status(Status.NOT_FOUND)
+				.entity(MessagePayload.error("Ups, da ist aber etwas komplett schiefgelaufen"))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
+		return opt.get();
+	}
+
 }
