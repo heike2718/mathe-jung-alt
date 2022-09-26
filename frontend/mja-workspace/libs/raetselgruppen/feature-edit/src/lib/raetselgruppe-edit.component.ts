@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
-import { getSchwierigkeitsgrade, GuiSchwierigkeitsgrad, STATUS, initialSchwierigkeitsgrad, schwierigkeitsgradValueOfLabel, GuiRaetselgruppeReferenztyp, getGuiRaetselgruppeReferenztypen, initialGuiRaetselgruppeReferenztyp, raetselgruppeReferenztypOfLabel } from '@mja-workspace/shared/util-mja';
+import { GuiSchwierigkeitsgrad, STATUS, initialSchwierigkeitsgrad, getReferenztypenSelectContent, guiSchwierigkeitsgradValueOfId, getSchwierigkeitsgradeSelectContent, initialGuiRaetselgruppeReferenztyp, GuiRaetselgruppeReferenztyp, guiReferenztypOfId, Referenztyp, raetselgruppeReferenztypOfLabel, Schwierigkeitsgrad, schwierigkeitsgradValueOfLabel } from '@mja-workspace/shared/util-mja';
 import { Subscription, tap } from 'rxjs';
 
 @Component({
@@ -16,22 +16,22 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
   #raetselgruppeBasisdaten!: RaetselgruppeBasisdaten;
 
   selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
-  selectSchwierigkeitsgradeInput: GuiSchwierigkeitsgrad[] = getSchwierigkeitsgrade();
-  selectReferenztypenInput: GuiRaetselgruppeReferenztyp[] = getGuiRaetselgruppeReferenztypen();
+  selectSchwierigkeitsgradeInput: string[] = getSchwierigkeitsgradeSelectContent();
+  selectReferenztypenSelectContent: string[] = getReferenztypenSelectContent();
 
-  form!: UntypedFormGroup;
+  form!: FormGroup;
 
   constructor(
     public raetselgruppenFacade: RaetselgruppenFacade,
-    private fb: UntypedFormBuilder,
+    private fb: FormBuilder,
     private router: Router) {
 
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
       status: ['ERFASST', [Validators.required]],
       kommentar: [''],
-      schwierigkeitsgrad: [initialSchwierigkeitsgrad, [Validators.required]],
-      referenztyp: [initialGuiRaetselgruppeReferenztyp],
+      schwierigkeitsgrad: [initialSchwierigkeitsgrad.label, [Validators.required]],
+      referenztyp: [initialGuiRaetselgruppeReferenztyp.label],
       referenz: ['']
     });
   }
@@ -53,7 +53,6 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
     this.#raetselgruppeBasisdatenSubscription.unsubscribe();
   }
-
 
   raetselgruppeDataError = (controlName: string, errorName: string) => {
     return this.form.controls[controlName].hasError(errorName);
@@ -98,14 +97,15 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
     const formValue = this.form.value;
 
-    const referenztypId = formValue['referenztyp'];
+    const referenztyp: Referenztyp = raetselgruppeReferenztypOfLabel(formValue['referenztyp']);
+    const schwierigkeitsgrad: Schwierigkeitsgrad = schwierigkeitsgradValueOfLabel(formValue['schwierigkeitsgrad']);
 
     const editRaetselgruppePayload: EditRaetselgruppePayload = {
       id: this.#raetselgruppeBasisdaten.id,
       name: formValue['name'].trim(),
       referenz: formValue['referenz'] && formValue['referenz'].trim().length > 0 ? formValue['referenz'].trim() : undefined,
-      referenztyp: referenztypId === 'NOOP' ? undefined : referenztypId,
-      schwierigkeitsgrad: formValue['schwierigkeitsgrad'],
+      referenztyp: referenztyp === 'NOOP' ? undefined : referenztyp,
+      schwierigkeitsgrad: schwierigkeitsgrad,
       status: formValue['status'],
       kommentar: formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined
     };
@@ -119,8 +119,14 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
     this.form.controls['name'].setValue(this.#raetselgruppeBasisdaten.name ? this.#raetselgruppeBasisdaten.name : '');
     this.form.controls['status'].setValue(this.#raetselgruppeBasisdaten.status);
     this.form.controls['kommentar'].setValue(this.#raetselgruppeBasisdaten.kommentar ? this.#raetselgruppeBasisdaten.kommentar : '');
-    this.form.controls['schwierigkeitsgrad'].setValue(this.#raetselgruppeBasisdaten.schwierigkeitsgrad ? schwierigkeitsgradValueOfLabel(this.#raetselgruppeBasisdaten.schwierigkeitsgrad) : initialSchwierigkeitsgrad);
-    this.form.controls['referenztyp'].setValue(this.#raetselgruppeBasisdaten.referenztyp ? raetselgruppeReferenztypOfLabel(this.#raetselgruppeBasisdaten.referenztyp) : initialGuiRaetselgruppeReferenztyp);
+
+
+    const guiSchwierigkeitsrad: GuiSchwierigkeitsgrad = this.#raetselgruppeBasisdaten ? guiSchwierigkeitsgradValueOfId(this.#raetselgruppeBasisdaten.schwierigkeitsgrad) : initialSchwierigkeitsgrad;
+    this.form.controls['schwierigkeitsgrad'].setValue(guiSchwierigkeitsrad.label);
+
+    const guiReferenztyp: GuiRaetselgruppeReferenztyp = this.#raetselgruppeBasisdaten ? guiReferenztypOfId(this.#raetselgruppeBasisdaten.referenztyp) : initialGuiRaetselgruppeReferenztyp;
+    this.form.controls['referenztyp'].setValue(guiReferenztyp.label);
+ 
     this.form.controls['referenz'].setValue(this.#raetselgruppeBasisdaten.referenz ? this.#raetselgruppeBasisdaten.referenz : '');
   }
 

@@ -63,8 +63,8 @@
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Level</mat-label>
                         <select matNativeControl formControlName="schwierigkeitsgrad" #schwierigkeitsgradInput>
-                            <option *ngFor="let level of selectSchwierigkeitsgradeInput" [value]="level.id">
-                                {{level.label}}</option>
+                            <option *ngFor="let level of selectSchwierigkeitsgradeInput" [value]="level">
+                                {{level}}</option>
                         </select>
                     </mat-form-field>
                 </div>
@@ -74,7 +74,7 @@
                     <mat-form-field class="form-box" appearance="fill">
                         <mat-label>Referenztyp</mat-label>
                         <select matNativeControl formControlName="referenztyp" #referenztypInput>
-                            <option *ngFor="let reftyp of selectReferenztypenInput" [value]="reftyp.id">{{reftyp.label}}
+                            <option *ngFor="let reftyp of selectReferenztypenSelectContent" [value]="reftyp">{{reftyp}}
                             </option>
                         </select>
                     </mat-form-field>

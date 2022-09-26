@@ -11,7 +11,6 @@ import java.util.List;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
@@ -38,10 +37,11 @@ public class RaetselgruppeDetails {
 	private String name;
 
 	@JsonProperty
-	@Schema(description = "poptionaler Kommentar")
+	@Schema(description = "optionaler Kommentar")
 	private String kommentar;
 
-	@JsonIgnore
+	@JsonProperty
+	@Schema(description = "Schwierigkeitsgrad, für das diese Rätselgruppe gedacht ist")
 	private Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@JsonProperty

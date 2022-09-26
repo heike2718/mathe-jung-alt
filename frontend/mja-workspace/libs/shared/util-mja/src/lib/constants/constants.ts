@@ -4,7 +4,7 @@ export type SortOrder = 'asc' | 'desc';
 
 export type Referenztyp = 'NOOP' | 'MINIKAENGURU' | 'SERIE';
 
-/** Referenztypen sinfd der Kontext zur Interpretation einer raetselgruppe.referenz auf das alte Aufgabenarchiv */
+/** Referenztypen sind der Kontext zur Interpretation einer raetselgruppe.referenz auf das alte Aufgabenarchiv */
 export interface GuiRaetselgruppeReferenztyp {
     readonly id: Referenztyp;
     readonly label: string;
@@ -24,7 +24,7 @@ export function getGuiRaetselgruppeReferenztypen(): GuiRaetselgruppeReferenztyp[
             label: 'Serie'
         }
     ]
-}
+};
 
 export function raetselgruppeReferenztypOfLabel(label: string): Referenztyp {
 
@@ -35,7 +35,26 @@ export function raetselgruppeReferenztypOfLabel(label: string): Referenztyp {
     }
 
     return 'NOOP';
-}
+};
+
+export function guiReferenztypOfId(id?: Referenztyp): GuiRaetselgruppeReferenztyp {
+
+    if (!id) {
+        return initialGuiRaetselgruppeReferenztyp;
+    }
+
+    const values = getGuiRaetselgruppeReferenztypen();
+    const filteredValues: GuiRaetselgruppeReferenztyp[] = values.filter(sg => id === sg.id);
+    if (filteredValues.length === 1) {
+        return filteredValues[0];
+    }
+
+    return initialGuiRaetselgruppeReferenztyp;
+};
+
+export function getReferenztypenSelectContent(): string[] {
+    return getGuiRaetselgruppeReferenztypen().map(rt => rt.label);
+};
 
 export type Schwierigkeitsgrad =
     'NOOP' |
@@ -79,6 +98,11 @@ export function getSchwierigkeitsgrade(): GuiSchwierigkeitsgrad[] {
     return result;
 };
 
+export function getSchwierigkeitsgradeSelectContent(): string[] {
+
+    return getSchwierigkeitsgrade().map(gs => gs.label);
+}
+
 
 export function schwierigkeitsgradValueOfLabel(label: string): Schwierigkeitsgrad {
 
@@ -89,4 +113,30 @@ export function schwierigkeitsgradValueOfLabel(label: string): Schwierigkeitsgra
     }
 
     return 'NOOP';
+}
+
+export function guiSchwierigkeitsgradValueOfLabel(label: string): GuiSchwierigkeitsgrad {
+
+    const values = getSchwierigkeitsgrade();
+    const filteredValues: GuiSchwierigkeitsgrad[] = values.filter(sg => label === sg.label);
+    if (filteredValues.length === 1) {
+        return filteredValues[0];
+    }
+
+    return initialSchwierigkeitsgrad;
+}
+
+export function guiSchwierigkeitsgradValueOfId(id?: Schwierigkeitsgrad): GuiSchwierigkeitsgrad {
+
+    if (id === undefined) {
+        return initialSchwierigkeitsgrad;
+    }
+
+    const values = getSchwierigkeitsgrade();
+    const filteredValues: GuiSchwierigkeitsgrad[] = values.filter(sg => id === sg.id);
+    if (filteredValues.length === 1) {
+        return filteredValues[0];
+    }
+
+    return initialSchwierigkeitsgrad;
 }
