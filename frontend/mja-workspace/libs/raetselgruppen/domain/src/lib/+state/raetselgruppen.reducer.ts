@@ -9,7 +9,6 @@ export interface RaetselgruppenState {
     readonly page: RaetselgruppensucheTrefferItem[];
     readonly anzahlTrefferGesamt: number;
     readonly suchparameter: RaetselgruppenSuchparameter,
-    readonly selectedGruppe: RaetselgruppensucheTrefferItem | undefined;
     readonly raetselgruppeBasisdaten: RaetselgruppeBasisdaten | undefined;
     readonly raetselgruppeDetails: RaetselgruppeDetails | undefined;
 };
@@ -22,7 +21,6 @@ const initialState: RaetselgruppenState = {
     page: [],
     anzahlTrefferGesamt: 0,
     suchparameter: initialRaetselgruppenSuchparameter,
-    selectedGruppe: undefined,
     raetselgruppeBasisdaten: undefined,
     raetselgruppeDetails: undefined
 };
@@ -53,14 +51,14 @@ const raetselgruppenReducer = createReducer(
 
     on(RaetselgruppenActions.raetselgruppeSaved, (state, action) => {
         const trefferItem: RaetselgruppensucheTrefferItem = action.raetselgruppe;
-        return { ...state, raetselgruppeBasisdaten: trefferItem, selectedGruppe: trefferItem };
+        return { ...state, raetselgruppeBasisdaten: trefferItem };
     }),
-
-    on(RaetselgruppenActions.selectRaetselgruppe, (state, action) => ({ ...state, selectedGruppe: action.raetselgruppe })),
 
     on(RaetselgruppenActions.raetselgruppeDetailsLoaded, (state, action) => ({ ...state, raetselgruppeDetails: action.raetraetselgruppeDetails })),
 
     on(RaetselgruppenActions.raetselgruppenelementeChanged, (state, action) => ({ ...state, raetselgruppeDetails: action.raetraetselgruppeDetails })),
+
+    on(RaetselgruppenActions.unselectRaetselgruppe, (state, _action) => ({ ...state, raetselgruppeDetails: undefined, raetselgruppeBasisdaten: undefined })),
 
 );
 

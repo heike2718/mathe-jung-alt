@@ -54,13 +54,20 @@
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                [disabled]="!raetselgruppeID" (click)="openNeuesRaetselgruppenelementDialog()">neues Element</button>
+                [disabled]="!getRaetselgruppeID()" (click)="openNeuesRaetselgruppenelementDialog()">neues
+                Element</button>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                (click)="startEdit()">bearbeiten</button></div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                (click)="gotoUebersicht()">zur Übersicht</button>
         </div>
     </div>
 
     <h2>Elemente</h2>
 
-    <mja-raetselgruppenelemente (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)" ></mja-raetselgruppenelemente>
+    <mja-raetselgruppenelemente (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
+    </mja-raetselgruppenelemente>
 
 </div>
 

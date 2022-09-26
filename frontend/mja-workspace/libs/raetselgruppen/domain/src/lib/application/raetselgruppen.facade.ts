@@ -17,12 +17,11 @@ export class RaetselgruppenFacade {
     page$ = this.store.pipe(select(RaetselgruppenSelectors.getPage));
     anzahlTrefferGesamt$ = this.store.pipe(select(RaetselgruppenSelectors.getAnzahlTrefferGesamt));
     suchparameter$: Observable<RaetselgruppenSuchparameter> = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppenSuchparameter));
-    selectedGruppe$ = this.store.pipe(select(RaetselgruppenSelectors.getSelectedGruppe));
     editorContent$ = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppeBasisdaten));
     raetselgruppeDetails$: Observable<RaetselgruppeDetails | undefined> = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppeDetails));
     raetselgruppenelemente$ = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppenelemente));
 
-    constructor(private store: Store<fromRaetselgruppen.RaetselgruppenPartialState>, private safeHttpService: SafeHttpService, private httpService: RaetselgruppenHttpService) { }
+    constructor(private store: Store<fromRaetselgruppen.RaetselgruppenPartialState>) { }
 
     public setSuchparameter(suchparameter: RaetselgruppenSuchparameter): void {
         this.store.dispatch(RaetselgruppenActions.suchparameterChanged({ suchparameter }));
@@ -32,9 +31,15 @@ export class RaetselgruppenFacade {
         this.store.dispatch(RaetselgruppenActions.selectRaetselgruppe({ raetselgruppe }));
     }
 
-    public createAndEditRaetselgruppe(): void {
+    public unselectRaetselgruppe(): void {
+        this.store.dispatch(RaetselgruppenActions.unselectRaetselgruppe());
+    }
 
-        const raetselgruppeBasisdaten: RaetselgruppeBasisdaten = initialRaetselgruppeBasisdaten;
+    public createAndEditRaetselgruppe(): void {
+        this.editRaetselgruppe(initialRaetselgruppeBasisdaten);
+    }
+
+    public editRaetselgruppe(raetselgruppeBasisdaten: RaetselgruppeBasisdaten): void {
         this.store.dispatch(RaetselgruppenActions.editRaetselgruppe({ raetselgruppeBasisdaten }));
     }
 

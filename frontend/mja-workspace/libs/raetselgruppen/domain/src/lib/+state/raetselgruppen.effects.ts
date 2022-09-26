@@ -55,6 +55,14 @@ export class RaetselgruppenEffects {
         )
     );
 
+    unselectRaetselgruppe$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(RaetselgruppenActions.unselectRaetselgruppe),
+            tap(() => {
+                this.router.navigateByUrl('raetselgruppen/uebersicht');
+            }),
+        ), { dispatch: false });
+
     showDetailsAfterLoaded$ = createEffect(() =>
         this.actions$.pipe(
             ofType(RaetselgruppenActions.raetselgruppeDetailsLoaded),

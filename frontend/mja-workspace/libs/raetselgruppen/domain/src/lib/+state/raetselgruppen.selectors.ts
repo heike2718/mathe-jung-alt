@@ -24,11 +24,6 @@ export const getPage = createSelector(
     (state: RaetselgruppenState) => state.page
 );
 
-export const getSelectedGruppe = createSelector(
-    getRaetselgruppenState,
-    (state: RaetselgruppenState) => state.selectedGruppe
-);
-
 export const getRaetselgruppeBasisdaten = createSelector(
     getRaetselgruppenState,
     (state: RaetselgruppenState) => state.raetselgruppeBasisdaten

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { EditRaetselgruppenelementPayload, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenFacade, RaetselgruppensucheTrefferItem } from '@mja-workspace/raetselgruppen/domain';
+import { EditRaetselgruppenelementPayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenFacade, RaetselgruppensucheTrefferItem } from '@mja-workspace/raetselgruppen/domain';
 import { JaNeinDialogComponent, JaNeinDialogData } from '@mja-workspace/shared/ui-components';
 import { Subscription, tap } from 'rxjs';
 import { RaetselgruppenelementDialogComponent } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
@@ -14,23 +14,14 @@ import { RaetselgruppenelementDialogData } from '../raetselgruppenelement-dialog
 export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
 
   #raetselgruppeSubscription = new Subscription();
-
-  raetselgruppeID: string | undefined;
+  #raetselgruppeBasidaten?: RaetselgruppeBasisdaten;
 
   constructor(public raetselgruppenFacade: RaetselgruppenFacade, public dialog: MatDialog) { }
-
-
 
   ngOnInit(): void {
 
     this.#raetselgruppeSubscription = this.raetselgruppenFacade.raetselgruppeDetails$.pipe(
-      tap((gruppe) => {
-        if (gruppe) {
-          this.raetselgruppeID = gruppe.id;
-        } else {
-          this.raetselgruppeID = undefined;
-        }
-      })
+      tap((gruppe) => this.#raetselgruppeBasidaten = gruppe)
     ).subscribe();
 
   }
@@ -38,6 +29,20 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
 
     this.#raetselgruppeSubscription.unsubscribe();
+  }
+
+  getRaetselgruppeID(): string | undefined {
+    return this.#raetselgruppeBasidaten ? this.#raetselgruppeBasidaten.id : undefined;
+  }
+
+  startEdit(): void {
+    if (this.#raetselgruppeBasidaten) {
+      this.raetselgruppenFacade.editRaetselgruppe(this.#raetselgruppeBasidaten);
+    }
+  }
+
+  gotoUebersicht(): void {
+    this.raetselgruppenFacade.unselectRaetselgruppe();
   }
 
   openNeuesRaetselgruppenelementDialog(): void {
@@ -69,8 +74,8 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
   }
 
   onDeleteElement($element: Raetselgruppenelement): void {
-    if (this.raetselgruppeID) {
-      this.#openConfirmLoeschenDialog(this.raetselgruppeID, $element);    
+    if (this.#raetselgruppeBasidaten) {
+      this.#openConfirmLoeschenDialog(this.#raetselgruppeBasidaten.id, $element);
     }
   }
 
@@ -94,7 +99,7 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData):void {
+  #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData): void {
     const dialogRef = this.dialog.open(RaetselgruppenelementDialogComponent, {
       height: '400px',
       width: '500px',
@@ -103,9 +108,9 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if (result && this.raetselgruppeID) {
+      if (result && this.#raetselgruppeBasidaten) {
         const data: RaetselgruppenelementDialogData = result as RaetselgruppenelementDialogData;
-        this.#saveReaetselgruppeElement(this.raetselgruppeID, data);
+        this.#saveReaetselgruppeElement(this.#raetselgruppeBasidaten.id, data);
       }
     });
   }

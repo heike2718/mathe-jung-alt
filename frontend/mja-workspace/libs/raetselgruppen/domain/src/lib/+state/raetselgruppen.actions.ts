@@ -12,6 +12,9 @@ export const selectRaetselgruppe = createAction(
     props<{ raetselgruppe: RaetselgruppensucheTrefferItem }>()
 );
 
+export const unselectRaetselgruppe = createAction(
+    '[Raetselgruppen] unselectRaetselgruppe');
+
 
 export const raetselgruppeDetailsLoaded = createAction(
     '[Raetselgruppen] details loaded',

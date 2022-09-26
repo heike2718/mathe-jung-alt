@@ -8,7 +8,6 @@
 (/) Bilder können noch nicht hochgeladen, mit metainfos versehen und eingebunden werden.
 (-) Quellen können noch nicht erfasst und editiert werden.
 (-) Medien können noch nicht erfasst und editiert werden.
-(-) Benutzerverwaltung zum Freischalten von Menschen mit Minikänguru-Account
 (/) neues Raetsel: Status falsch => es ist noch das zuvor gewählte Rätsel im Status
 (/) Suche: workflow ändern: die Trefferliste muss gleich auch die Gesamtzahl der Treffer fürs pagination mitliefern, dann ist kein count-Preflight erforderlich
 (/) Button "neues Rätsel" ist nicht sichtbar, obwohl eine Quelle ausgewählt wurde

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
 import { getSchwierigkeitsgrade, GuiSchwierigkeitsgrad, STATUS, initialSchwierigkeitsgrad, schwierigkeitsgradValueOfLabel, GuiRaetselgruppeReferenztyp, getGuiRaetselgruppeReferenztypen, initialGuiRaetselgruppeReferenztyp, raetselgruppeReferenztypOfLabel } from '@mja-workspace/shared/util-mja';
 import { Subscription, tap } from 'rxjs';
@@ -22,7 +23,8 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
   constructor(
     public raetselgruppenFacade: RaetselgruppenFacade,
-    private fb: UntypedFormBuilder) {
+    private fb: UntypedFormBuilder,
+    private router: Router) {
 
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -63,7 +65,16 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit(): void {
-    console.log('wenn neu, dann zur Suche, sonst zu den Details');
+    if (this.#raetselgruppeBasisdaten) {
+
+      if (this.#raetselgruppeBasisdaten.id === 'neu') {
+        this.raetselgruppenFacade.unselectRaetselgruppe();
+      } else {
+        this.router.navigateByUrl('raetselgruppen/details');
+      }
+    } else {
+      this.raetselgruppenFacade.unselectRaetselgruppe();
+    }
   }
 
   formInvalid(): boolean {
