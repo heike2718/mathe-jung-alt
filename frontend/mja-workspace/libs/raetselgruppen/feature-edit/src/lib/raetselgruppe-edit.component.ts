@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
-import { GuiSchwierigkeitsgrad, STATUS, initialSchwierigkeitsgrad, getReferenztypenSelectContent, guiSchwierigkeitsgradValueOfId, getSchwierigkeitsgradeSelectContent, initialGuiRaetselgruppeReferenztyp, GuiRaetselgruppeReferenztyp, guiReferenztypOfId, Referenztyp, raetselgruppeReferenztypOfLabel, Schwierigkeitsgrad, schwierigkeitsgradValueOfLabel } from '@mja-workspace/shared/util-mja';
+import { STATUS, Referenztyp, Schwierigkeitsgrad, GuiReferenztypenMap, GuiSchwierigkeitsgradeMap, GuiSchwierigkeitsgrad, GuiRefereztyp, initialGuiSchwierigkeitsgrad, initialGuiReferenztyp } from '@mja-workspace/shared/util-mja';
 import { Subscription, tap } from 'rxjs';
 
 @Component({
@@ -16,8 +16,8 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
   #raetselgruppeBasisdaten!: RaetselgruppeBasisdaten;
 
   selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
-  selectSchwierigkeitsgradeInput: string[] = getSchwierigkeitsgradeSelectContent();
-  selectReferenztypenSelectContent: string[] = getReferenztypenSelectContent();
+  selectSchwierigkeitsgradeInput: string[] = new GuiSchwierigkeitsgradeMap().getLabelsSorted();
+  selectReferenztypenSelectContent: string[] = new GuiReferenztypenMap().getLabelsSorted();
 
   form!: FormGroup;
 
@@ -30,8 +30,8 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
       name: ['', [Validators.required, Validators.maxLength(100)]],
       status: ['ERFASST', [Validators.required]],
       kommentar: [''],
-      schwierigkeitsgrad: [initialSchwierigkeitsgrad.label, [Validators.required]],
-      referenztyp: [initialGuiRaetselgruppeReferenztyp.label],
+      schwierigkeitsgrad: [initialGuiSchwierigkeitsgrad.label, [Validators.required]],
+      referenztyp: [initialGuiReferenztyp.label],
       referenz: ['']
     });
   }
@@ -97,8 +97,8 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
     const formValue = this.form.value;
 
-    const referenztyp: Referenztyp = raetselgruppeReferenztypOfLabel(formValue['referenztyp']);
-    const schwierigkeitsgrad: Schwierigkeitsgrad = schwierigkeitsgradValueOfLabel(formValue['schwierigkeitsgrad']);
+    const referenztyp: Referenztyp = new GuiReferenztypenMap().getReferenztypOfLabel(formValue['referenztyp']);
+    const schwierigkeitsgrad: Schwierigkeitsgrad = new GuiSchwierigkeitsgradeMap().getSchwierigkeitsgradOfLabel(formValue['schwierigkeitsgrad']);
 
     const editRaetselgruppePayload: EditRaetselgruppePayload = {
       id: this.#raetselgruppeBasisdaten.id,
@@ -121,12 +121,18 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
     this.form.controls['kommentar'].setValue(this.#raetselgruppeBasisdaten.kommentar ? this.#raetselgruppeBasisdaten.kommentar : '');
 
 
-    const guiSchwierigkeitsrad: GuiSchwierigkeitsgrad = this.#raetselgruppeBasisdaten ? guiSchwierigkeitsgradValueOfId(this.#raetselgruppeBasisdaten.schwierigkeitsgrad) : initialSchwierigkeitsgrad;
+    const guiSchwierigkeitsrad: GuiSchwierigkeitsgrad = this.#raetselgruppeBasisdaten && this.#raetselgruppeBasisdaten.schwierigkeitsgrad ? new GuiSchwierigkeitsgradeMap().getGuiSchwierigkeitsgrade(this.#raetselgruppeBasisdaten.schwierigkeitsgrad)
+      : initialGuiSchwierigkeitsgrad;
     this.form.controls['schwierigkeitsgrad'].setValue(guiSchwierigkeitsrad.label);
 
-    const guiReferenztyp: GuiRaetselgruppeReferenztyp = this.#raetselgruppeBasisdaten ? guiReferenztypOfId(this.#raetselgruppeBasisdaten.referenztyp) : initialGuiRaetselgruppeReferenztyp;
+    let guiReferenztyp: GuiRefereztyp = initialGuiReferenztyp;
+
+    if (this.#raetselgruppeBasisdaten && this.#raetselgruppeBasisdaten.referenztyp) {
+      guiReferenztyp = new GuiReferenztypenMap().getGuiRefereztyp(this.#raetselgruppeBasisdaten.referenztyp);
+    }
+
     this.form.controls['referenztyp'].setValue(guiReferenztyp.label);
- 
+
     this.form.controls['referenz'].setValue(this.#raetselgruppeBasisdaten.referenz ? this.#raetselgruppeBasisdaten.referenz : '');
   }
 

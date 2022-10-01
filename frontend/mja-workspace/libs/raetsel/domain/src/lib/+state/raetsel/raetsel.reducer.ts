@@ -3,8 +3,7 @@ import { EntityState, EntityAdapter, createEntityAdapter, Update } from '@ngrx/e
 
 import * as RaetselActions from './raetsel.actions';
 import { GeneratedImages, initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
-import { PaginationState, initialPaginationState } from '@mja-workspace/suchfilter/domain';
-import { SelectableItem } from '@mja-workspace/shared/util-mja';
+import { initialPaginationState, PaginationState, SelectableItem } from '@mja-workspace/shared/util-mja';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel';
 

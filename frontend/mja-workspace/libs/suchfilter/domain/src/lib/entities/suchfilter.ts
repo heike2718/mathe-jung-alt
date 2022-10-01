@@ -44,20 +44,6 @@ export const initialSuchfilter: Suchfilter = {
     deskriptoren: []
 };
 
-export interface PaginationState {
-    anzahlTreffer: number;
-    pageSize: number,
-    pageIndex: number,
-    sortDirection: string
-};
-
-export const initialPaginationState: PaginationState = {
-    anzahlTreffer: 0,
-    pageSize: 20,
-    pageIndex: 0,
-    sortDirection: 'asc'
-};
-
 export interface SuchfilterWithStatus {
     readonly suchfilter: Suchfilter;
     readonly nichtLeer: boolean;

@@ -3,7 +3,7 @@ import * as RaetselgruppenActions from './raetselgruppen.actions';
 
 export const RAETSELGRUPPEN_FEATURE_KEY = 'raetselgruppen';
 
-import { initialRaetselgruppenSuchparameter, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
+import { initialRaetselgruppenSuchparameter, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 
 export interface RaetselgruppenState {
     readonly page: RaetselgruppensucheTrefferItem[];

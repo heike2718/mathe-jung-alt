@@ -48,7 +48,7 @@
         <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <mat-select floatLabel="always" [formControl]="schwierigkeitsgradSelectFilterControl">
             <mat-option *ngFor="let level of schwierigkeitsgrade" [value]="level">
-              {{ level.id }}
+              {{ level.label }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -67,7 +67,7 @@
         <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <mat-select floatLabel="always" [formControl]="referenztypSelectFilterControl">
             <mat-option *ngFor="let reftyp of referenztypen" [value]="reftyp">
-              {{ reftyp.id }}
+              {{ reftyp.label }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -101,8 +101,8 @@
   <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)"></mat-row>
 
 </mat-table>
-<mat-paginator [length]="anzahlRaetselgruppen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons>
-</mat-paginator>
+
+<mat-paginator [length]="anzahlRaetselgruppen" [pageSizeOptions]="[2,20,30,50]" showFirstLastButtons></mat-paginator>
 
 <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
   <div fxFlex="0 1 calc(20%-20px)">

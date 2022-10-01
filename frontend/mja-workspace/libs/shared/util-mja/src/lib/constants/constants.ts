@@ -2,59 +2,21 @@ export type STATUS = 'ERFASST' | 'FREIGEGEBEN';
 
 export type SortOrder = 'asc' | 'desc';
 
+export interface PaginationState {
+    anzahlTreffer: number;
+    pageSize: number,
+    pageIndex: number,
+    sortDirection: string
+};
+
+export const initialPaginationState: PaginationState = {
+    anzahlTreffer: 0,
+    pageSize: 20,
+    pageIndex: 0,
+    sortDirection: 'asc'
+};
+
 export type Referenztyp = 'NOOP' | 'MINIKAENGURU' | 'SERIE';
-
-/** Referenztypen sind der Kontext zur Interpretation einer raetselgruppe.referenz auf das alte Aufgabenarchiv */
-export interface GuiRaetselgruppeReferenztyp {
-    readonly id: Referenztyp;
-    readonly label: string;
-};
-
-export const initialGuiRaetselgruppeReferenztyp: GuiRaetselgruppeReferenztyp = { id: 'NOOP', label: '' };
-
-export function getGuiRaetselgruppeReferenztypen(): GuiRaetselgruppeReferenztyp[] {
-    return [
-        initialGuiRaetselgruppeReferenztyp,
-        {
-            id: 'MINIKAENGURU',
-            label: 'Minikänguru'
-        },
-        {
-            id: 'SERIE',
-            label: 'Serie'
-        }
-    ]
-};
-
-export function raetselgruppeReferenztypOfLabel(label: string): Referenztyp {
-
-    const values = getGuiRaetselgruppeReferenztypen();
-    const filteredValues: GuiRaetselgruppeReferenztyp[] = values.filter(sg => label === sg.label);
-    if (filteredValues.length === 1) {
-        return filteredValues[0].id;
-    }
-
-    return 'NOOP';
-};
-
-export function guiReferenztypOfId(id?: Referenztyp): GuiRaetselgruppeReferenztyp {
-
-    if (!id) {
-        return initialGuiRaetselgruppeReferenztyp;
-    }
-
-    const values = getGuiRaetselgruppeReferenztypen();
-    const filteredValues: GuiRaetselgruppeReferenztyp[] = values.filter(sg => id === sg.id);
-    if (filteredValues.length === 1) {
-        return filteredValues[0];
-    }
-
-    return initialGuiRaetselgruppeReferenztyp;
-};
-
-export function getReferenztypenSelectContent(): string[] {
-    return getGuiRaetselgruppeReferenztypen().map(rt => rt.label);
-};
 
 export type Schwierigkeitsgrad =
     'NOOP' |
@@ -70,73 +32,147 @@ export type Schwierigkeitsgrad =
     'SIEBEN_ACHT' |
     'VORSCHULE' |
     'ZWEI';
+export interface GuiRefereztyp {
+    readonly id: Referenztyp;
+    readonly label: string;
+};
+
+export const initialGuiReferenztyp: GuiRefereztyp = { id: 'NOOP', label: '' };
+
+export class GuiReferenztypenMap {
+
+    #referenztypen: Map<Referenztyp, string> = new Map();
+
+    constructor() {
+        this.#referenztypen.set('NOOP', '');
+        this.#referenztypen.set('MINIKAENGURU', 'Minikänguru');
+        this.#referenztypen.set('SERIE', 'Serie');
+    }
+
+    public getReferenztypOfLabel(label: string): Referenztyp {
+
+        // (value: string, key: Referenztyp, map: Map<Referenztyp, string>)
+        this.#referenztypen.forEach((l: string, key: Referenztyp, _map: Map<Referenztyp, string>) => {
+            if (l === label) {
+                return key;
+            } else {
+                return 'NOOP';
+            }
+        });
+
+        return 'NOOP';
+    }
+
+    public getGuiRefereztyp(refTyp: Referenztyp): GuiRefereztyp {
+
+        if (this.#referenztypen.has(refTyp)) {
+            const label = this.#referenztypen.get(refTyp);
+
+            if (label) {
+                return { id: refTyp, label: label };
+            } else {
+                return initialGuiReferenztyp;
+            }
+            
+        }
+
+        return initialGuiReferenztyp;
+    }
+
+    public toGuiArray(): GuiRefereztyp[] {
+
+        const result: GuiRefereztyp[] = [];
+        this.#referenztypen.forEach((l: string, key: Referenztyp, _map: Map<Referenztyp, string>) => {
+            result.push({ id: key, label: l });
+        });
+
+        return result;
+    }
+
+    public getLabelsSorted(): string[] {
+
+        const result: string[] = [];
+
+        this.toGuiArray().forEach(element => result.push(element.label));
+        return result;
+    }
+
+
+};
 
 export interface GuiSchwierigkeitsgrad {
     readonly id: Schwierigkeitsgrad;
     readonly label: string;
 };
 
-export const initialSchwierigkeitsgrad: GuiSchwierigkeitsgrad = { id: 'NOOP', label: '' };
+export const initialGuiSchwierigkeitsgrad: GuiSchwierigkeitsgrad = { id: 'NOOP', label: '' };
 
-export function getSchwierigkeitsgrade(): GuiSchwierigkeitsgrad[] {
+export class GuiSchwierigkeitsgradeMap {
 
-    const result: GuiSchwierigkeitsgrad[] = [
-        initialSchwierigkeitsgrad,
-        { id: 'IKID', label: 'Inklusion' },
-        { id: 'EINS', label: 'Klasse 1' },
-        { id: 'ZWEI', label: 'Klasse 2' },
-        { id: 'EINS_ZWEI', label: 'Klassen 1/2' },
-        { id: 'DREI_VIER', label: 'Klassen 3/4' },
-        { id: 'FUENF_SECHS', label: 'Klassen 5/6' },
-        { id: 'SIEBEN_ACHT', label: 'Klassen 7/8' },
-        { id: 'AB_NEUN', label: 'ab Klasse 9' },
-        { id: 'VORSCHULE', label: 'Vorschule' },
-        { id: 'GRUNDSCHULE', label: 'Grundschule' },
-        { id: 'SEK_1', label: 'Sekundarstufe 1' },
-        { id: 'SEK_2', label: 'Sekundarstufe 2' }
-    ]
-    return result;
-};
+    #schwierigkeitsgrade: Map<Schwierigkeitsgrad, string> = new Map();
 
-export function getSchwierigkeitsgradeSelectContent(): string[] {
+    constructor() {
+        this.#schwierigkeitsgrade.set('NOOP', '');
+        this.#schwierigkeitsgrade.set('IKID', 'Inklusion');
+        this.#schwierigkeitsgrade.set('EINS', 'Klasse 1');
+        this.#schwierigkeitsgrade.set('ZWEI', 'Klasse 2');
+        this.#schwierigkeitsgrade.set('EINS_ZWEI', 'Klassen 1/2');
+        this.#schwierigkeitsgrade.set('DREI_VIER', 'Klassen 3/4');
+        this.#schwierigkeitsgrade.set('FUENF_SECHS', 'Klassen 5/6');
+        this.#schwierigkeitsgrade.set('SIEBEN_ACHT', 'Klassen 7/8');
+        this.#schwierigkeitsgrade.set('AB_NEUN', 'ab Klasse 9');
+        this.#schwierigkeitsgrade.set('VORSCHULE', 'Vorschule');
+        this.#schwierigkeitsgrade.set('GRUNDSCHULE', 'Grundschule');
+        this.#schwierigkeitsgrade.set('SEK_1', 'Sekundarstufe 1');
+        this.#schwierigkeitsgrade.set('SEK_2', 'Sekundarstufe 2');
+    }
 
-    return getSchwierigkeitsgrade().map(gs => gs.label);
+    public getSchwierigkeitsgradOfLabel(label: string): Schwierigkeitsgrad {
+
+        this.#schwierigkeitsgrade.forEach((l: string, key: Schwierigkeitsgrad, _map: Map<Schwierigkeitsgrad, string>) => {
+            if (l === label) {
+                return key;
+            } else {
+                return 'NOOP';
+            }
+        });
+
+        return 'NOOP';
+    }
+
+    public getGuiSchwierigkeitsgrade(refTyp: Schwierigkeitsgrad): GuiSchwierigkeitsgrad {
+
+        if (this.#schwierigkeitsgrade.has(refTyp)) {
+
+            const label = this.#schwierigkeitsgrade.get(refTyp);
+
+            if (label) {
+                return { id: refTyp, label: label };
+            } else {
+                return initialGuiSchwierigkeitsgrad;
+            }
+        }
+
+        return initialGuiSchwierigkeitsgrad;
+    }
+
+    public toGuiArray(): GuiSchwierigkeitsgrad[] {
+
+        const result: GuiSchwierigkeitsgrad[] = [];
+        this.#schwierigkeitsgrade.forEach((l: string, key: Schwierigkeitsgrad, _map: Map<Schwierigkeitsgrad, string>) => {
+            result.push({ id: key, label: l });
+        });
+
+        return result;
+    }
+
+    public getLabelsSorted(): string[] {
+
+        const result: string[] = [];
+
+        this.toGuiArray().forEach(element => result.push(element.label));
+        return result;
+    }
 }
 
 
-export function schwierigkeitsgradValueOfLabel(label: string): Schwierigkeitsgrad {
-
-    const values = getSchwierigkeitsgrade();
-    const filteredValues: GuiSchwierigkeitsgrad[] = values.filter(sg => label === sg.label);
-    if (filteredValues.length === 1) {
-        return filteredValues[0].id;
-    }
-
-    return 'NOOP';
-}
-
-export function guiSchwierigkeitsgradValueOfLabel(label: string): GuiSchwierigkeitsgrad {
-
-    const values = getSchwierigkeitsgrade();
-    const filteredValues: GuiSchwierigkeitsgrad[] = values.filter(sg => label === sg.label);
-    if (filteredValues.length === 1) {
-        return filteredValues[0];
-    }
-
-    return initialSchwierigkeitsgrad;
-}
-
-export function guiSchwierigkeitsgradValueOfId(id?: Schwierigkeitsgrad): GuiSchwierigkeitsgrad {
-
-    if (id === undefined) {
-        return initialSchwierigkeitsgrad;
-    }
-
-    const values = getSchwierigkeitsgrade();
-    const filteredValues: GuiSchwierigkeitsgrad[] = values.filter(sg => id === sg.id);
-    if (filteredValues.length === 1) {
-        return filteredValues[0];
-    }
-
-    return initialSchwierigkeitsgrad;
-}

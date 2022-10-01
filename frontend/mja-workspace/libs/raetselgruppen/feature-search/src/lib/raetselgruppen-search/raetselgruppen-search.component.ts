@@ -5,7 +5,7 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { initialRaetselgruppenSuchparameter, RaetselgruppeDatasource, RaetselgruppenFacade, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from '@mja-workspace/raetselgruppen/domain';
-import { getGuiRaetselgruppeReferenztypen, getSchwierigkeitsgrade, GuiRaetselgruppeReferenztyp, GuiSchwierigkeitsgrad, initialGuiRaetselgruppeReferenztyp, initialSchwierigkeitsgrad, SortOrder } from '@mja-workspace/shared/util-mja';
+import { GuiReferenztypenMap, GuiRefereztyp, GuiSchwierigkeitsgrad, GuiSchwierigkeitsgradeMap, initialGuiReferenztyp, initialGuiSchwierigkeitsgrad, Referenztyp, Schwierigkeitsgrad, SortOrder } from '@mja-workspace/shared/util-mja';
 import { debounceTime, distinctUntilChanged, merge, Subscription, tap } from 'rxjs';
 
 const STATUS = 'status';
@@ -43,13 +43,14 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   #schwierigkeitsgradFilterSubscription = new Subscription();
   #referenztypFilterSubscription = new Subscription();
   #referenzFilterSubscription = new Subscription();
+  #anzahlTrefferSubscription = new Subscription();
 
   columnDefinitions = [STATUS, NAME, LEVEL, REFERENZTYP, REFERENZ];
   dataSource!: RaetselgruppeDatasource;
   anzahlRaetselgruppen: number = 0;
 
-  schwierigkeitsgrade: GuiSchwierigkeitsgrad[] = getSchwierigkeitsgrade();
-  referenztypen: GuiRaetselgruppeReferenztyp[] = getGuiRaetselgruppeReferenztypen();
+  schwierigkeitsgrade: GuiSchwierigkeitsgrad[] = new GuiSchwierigkeitsgradeMap().toGuiArray();
+  referenztypen: GuiRefereztyp[] = new GuiReferenztypenMap().toGuiArray();
 
   filterValues = {
     name: '',
@@ -70,8 +71,8 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   constructor(public raetselgruppenFacade: RaetselgruppenFacade, private _liveAnnouncer: LiveAnnouncer) {
     this.getScreenSize();
 
-    this.schwierigkeitsgradSelectFilterControl.setValue(initialSchwierigkeitsgrad);
-    this.referenztypSelectFilterControl.setValue(initialGuiRaetselgruppeReferenztyp);
+    this.schwierigkeitsgradSelectFilterControl.setValue(initialGuiSchwierigkeitsgrad);
+    this.referenztypSelectFilterControl.setValue(initialGuiReferenztyp);
   }
 
   ngOnInit(): void {
@@ -110,8 +111,12 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     ).subscribe();
 
     this.#schwierigkeitsgradFilterSubscription = this.schwierigkeitsgradSelectFilterControl.valueChanges.pipe(
+
       tap((level: GuiSchwierigkeitsgrad) => {
-        if (level && level.id !== 'NOOP') {
+
+        const schwierigkeitsgrad: Schwierigkeitsgrad = level.id;
+
+        if (schwierigkeitsgrad !== 'NOOP') {
           this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: level.id, pageIndex: 0 };
         } else {
           this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: null, pageIndex: 0 };
@@ -121,9 +126,10 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     ).subscribe();
 
     this.#referenztypFilterSubscription = this.referenztypSelectFilterControl.valueChanges.pipe(
-      tap((reftyp) => {
+      tap((reftyp: GuiRefereztyp) => {
 
-        if (reftyp && reftyp.id !== 'NOOP') {
+        const referenztyp: Referenztyp = reftyp.id;
+        if (referenztyp !== 'NOOP') {
           this.#suchparameter = { ...this.#suchparameter, referenztyp: reftyp.id, pageIndex: 0 }
         } else {
           this.#suchparameter = { ...this.#suchparameter, referenztyp: null, pageIndex: 0 }
@@ -141,6 +147,10 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
       })
     ).subscribe();
 
+    this.#anzahlTrefferSubscription = this.raetselgruppenFacade.anzahlTrefferGesamt$.pipe(
+      tap((anzahl) => this.anzahlRaetselgruppen = anzahl)
+    ).subscribe();
+
     this.raetselgruppenFacade.setSuchparameter(initialRaetselgruppenSuchparameter);
   }
 
@@ -150,6 +160,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     this.#schwierigkeitsgradFilterSubscription.unsubscribe();
     this.#referenztypFilterSubscription.unsubscribe();
     this.#referenzFilterSubscription.unsubscribe();
+    this.#anzahlTrefferSubscription.unsubscribe();
   }
 
   getDisplayedColumns(): string[] {
