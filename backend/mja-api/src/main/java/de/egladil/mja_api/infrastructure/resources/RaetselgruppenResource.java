@@ -291,7 +291,7 @@ public class RaetselgruppenResource {
 	@RolesAllowed("ADMIN")
 	@Operation(
 		operationId = "raetselgruppenelementAendern",
-		summary = "Ändert das Element einer Rätselgruppe")
+		summary = "Ändert das Element einer Rätselgruppe. Es können nur Nummer und Punkte geändert werden. Wenn der Schlüssel nicht stimmt, muss es gelöscht und neu angelegt werden.")
 	@Parameters({
 		@Parameter(
 			name = "raetselgruppeID",

@@ -87,4 +87,49 @@ public class RaetselgruppeDetails {
 
 		Collections.sort(elemente, new RaetselgruppenelementComparator());
 	}
+
+	public String getId() {
+
+		return id;
+	}
+
+	public String getName() {
+
+		return name;
+	}
+
+	public String getKommentar() {
+
+		return kommentar;
+	}
+
+	public Schwierigkeitsgrad getSchwierigkeitsgrad() {
+
+		return schwierigkeitsgrad;
+	}
+
+	public Referenztyp getReferenztyp() {
+
+		return referenztyp;
+	}
+
+	public String getReferenz() {
+
+		return referenz;
+	}
+
+	public DomainEntityStatus getStatus() {
+
+		return status;
+	}
+
+	public String getGeaendertDurch() {
+
+		return geaendertDurch;
+	}
+
+	public List<Raetselgruppenelement> getElemente() {
+
+		return elemente;
+	}
 }

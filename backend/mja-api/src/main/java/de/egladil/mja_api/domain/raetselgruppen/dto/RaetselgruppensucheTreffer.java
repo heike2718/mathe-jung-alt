@@ -38,4 +38,14 @@ public class RaetselgruppensucheTreffer {
 		items.add(item);
 	}
 
+	public long getTrefferGesamt() {
+
+		return trefferGesamt;
+	}
+
+	public List<RaetselgruppensucheTrefferItem> getItems() {
+
+		return items;
+	}
+
 }

@@ -240,19 +240,6 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	}
 
-	PersistenteRaetselgruppe _mapFromPayload(final EditRaetselgruppePayload payload) {
-
-		PersistenteRaetselgruppe raetselgruppe = new PersistenteRaetselgruppe();
-		raetselgruppe.kommentar = payload.getKommentar();
-		raetselgruppe.name = payload.getName();
-		raetselgruppe.referenz = payload.getReferenz();
-		raetselgruppe.referenztyp = payload.getReferenztyp();
-		raetselgruppe.schwierigkeitsgrad = payload.getSchwierigkeitsgrad();
-		raetselgruppe.status = DomainEntityStatus.ERFASST;
-
-		return raetselgruppe;
-	}
-
 	void mergeFromPayload(final PersistenteRaetselgruppe raetselgruppe, final EditRaetselgruppePayload payload) {
 
 		raetselgruppe.kommentar = payload.getKommentar();
@@ -300,8 +287,10 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		}
 
+		final String raetselUuid = optRaetselId.get();
+
 		Optional<PersistentesRaetselgruppenelement> optElementMitGleichemRaetsel = persistenteElemente.stream()
-			.filter(el -> el.raetselID.equals(payload.getRaetselSchluessel())).findFirst();
+			.filter(el -> el.raetselID.equals(raetselUuid)).findFirst();
 
 		if (optElementMitGleichemRaetsel.isPresent()) {
 
@@ -344,6 +333,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
+	@Transactional
 	public RaetselgruppeDetails elementAendern(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
 
 		PersistentesRaetselgruppenelement persistentesElement = raetselgruppenDao.findElementById(payload.getId());
@@ -356,6 +346,16 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 			throw new WebApplicationException(response);
 		}
 
+		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
+
+		if (raetselgruppe == null) {
+
+			Response response = Response.status(Status.NOT_FOUND)
+				.entity(MessagePayload.error("Tja, diese Rätselgruppe gibt es gar nicht."))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
 		if (!raetselgruppeID.equals(persistentesElement.raetselgruppeID)) {
 
 			LOGGER.error("Raetselgruppenkonflikt: persistentesElement.raetselgruppeID={}, raetselgruppeID={}",
@@ -363,16 +363,6 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 			Response response = Response.status(Status.CONFLICT)
 				.entity(MessagePayload.error("Rätselgruppenkonflikt"))
-				.build();
-			throw new WebApplicationException(response);
-		}
-
-		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
-
-		if (raetselgruppe == null) {
-
-			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Tja, diese Rätselgruppe gibt es gar nicht."))
 				.build();
 			throw new WebApplicationException(response);
 		}
@@ -407,7 +397,6 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return opt.get();
 	}
 
-	@Transactional
 	void mergeAndSaveRaetselgruppenelement(final PersistentesRaetselgruppenelement persistentesElement, final EditRaetselgruppenelementPayload payload) {
 
 		persistentesElement.nummer = payload.getNummer();

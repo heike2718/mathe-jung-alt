@@ -130,7 +130,7 @@ public class RaetselResourceTest {
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		assertEquals(10, alleRaetsel.size());
+		assertEquals(11, alleRaetsel.size());
 		assertEquals(11, suchergebnis.getTrefferGesamt());
 
 		{
@@ -225,7 +225,7 @@ public class RaetselResourceTest {
 	void testRaetselDetailsLadenNotFound() throws Exception {
 
 		given()
-			.when().get("/existiert-nicht")
+			.when().get("/f4369b22")
 			.then()
 			.statusCode(404)
 			.body(is(""));

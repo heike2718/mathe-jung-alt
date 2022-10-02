@@ -98,37 +98,37 @@ public class EditRaetselgruppePayload {
 		return status;
 	}
 
-	void setId(final String id) {
+	public void setId(final String id) {
 
 		this.id = id;
 	}
 
-	void setName(final String name) {
+	public void setName(final String name) {
 
 		this.name = name;
 	}
 
-	void setKommentar(final String kommentar) {
+	public void setKommentar(final String kommentar) {
 
 		this.kommentar = kommentar;
 	}
 
-	void setSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
+	public void setSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
 
 		this.schwierigkeitsgrad = schwierigkeitsgrad;
 	}
 
-	void setReferenztyp(final Referenztyp referenztyp) {
+	public void setReferenztyp(final Referenztyp referenztyp) {
 
 		this.referenztyp = referenztyp;
 	}
 
-	void setReferenz(final String referenz) {
+	public void setReferenz(final String referenz) {
 
 		this.referenz = referenz;
 	}
 
-	void setStatus(final DomainEntityStatus status) {
+	public void setStatus(final DomainEntityStatus status) {
 
 		this.status = status;
 	}

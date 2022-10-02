@@ -61,4 +61,24 @@ public class Raetselgruppenelement {
 
 		return nummer;
 	}
+
+	public String getId() {
+
+		return id;
+	}
+
+	public int getPunkte() {
+
+		return punkte;
+	}
+
+	public String getRaetselSchluessel() {
+
+		return raetselSchluessel;
+	}
+
+	public String getName() {
+
+		return name;
+	}
 }

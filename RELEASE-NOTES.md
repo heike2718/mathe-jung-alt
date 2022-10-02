@@ -1,5 +1,10 @@
 # Release-Notes
 
+__1.1.0__
+
+* [FE: Sammlungen anlegen, suchen, ändern](https://github.com/heike2718/mathe-jung-alt/issues/38)
+* [BE: Domainmodel + Persistierung einer Aufgabensammlung](https://github.com/heike2718/mathe-jung-alt/issues/37)
+
 __1.0.2__
 
 * Softwarearchitektur Backend vereinfacht

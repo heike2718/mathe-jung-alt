@@ -77,6 +77,7 @@ public class Raetsel extends AbstractDomainEntity {
 	private List<GrafikInfo> grafikInfos = new ArrayList<>();
 
 	@Schema(description = "Images, die angezeigt werden können")
+	@JsonProperty
 	private Images images;
 
 	@JsonProperty
