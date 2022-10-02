@@ -63,17 +63,17 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
     this.raetselgruppenFacade.saveRaetselgruppe(editRaetselgruppePayload);
   }
 
-  cancelEdit(): void {
-    if (this.#raetselgruppeBasisdaten) {
+  showBtnDetails(): boolean {
+    return this.#raetselgruppeBasisdaten.id !== 'neu';
+  }
 
-      if (this.#raetselgruppeBasisdaten.id === 'neu') {
-        this.raetselgruppenFacade.unselectRaetselgruppe();
-      } else {
-        this.router.navigateByUrl('raetselgruppen/details');
-      }
-    } else {
-      this.raetselgruppenFacade.unselectRaetselgruppe();
-    }
+  cancelEdit(): void {
+    this.raetselgruppenFacade.cancelEdit(this.#raetselgruppeBasisdaten);
+  }
+
+  gotoUebersicht(): void {
+    this.raetselgruppenFacade.unselectRaetselgruppe();
+    this.router.navigateByUrl('raetselgruppen/uebersicht');      
   }
 
   formInvalid(): boolean {
@@ -82,11 +82,11 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
     const selectedRefTyp = this.form.controls['referenztyp'].value;
     const referenz = this.form.controls['referenz'].value;
 
-    if (selectedLevel === 'NOOP') {
+    if (selectedLevel === '') {
       return true;
     }
 
-    if (selectedRefTyp !== 'NOOP' && (!referenz || referenz.trim().length === 0)) {
+    if (selectedRefTyp !== '' && (!referenz || referenz.trim().length === 0)) {
       return true;
     }
 

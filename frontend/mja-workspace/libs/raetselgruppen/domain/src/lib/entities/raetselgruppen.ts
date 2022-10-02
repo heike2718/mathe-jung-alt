@@ -22,7 +22,7 @@ export interface RaetselgruppensucheTrefferItem extends RaetselgruppeBasisdaten 
 };
 
 export interface RaetselgruppensucheTreffer {
-    readonly anzahlTreffer: number;
+    readonly trefferGesamt: number;
     readonly items: RaetselgruppensucheTrefferItem[];
 };
 

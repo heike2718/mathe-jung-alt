@@ -14,9 +14,9 @@
 (/) loading indicator: facade mit globalem status, damit er bei errors verschwinden kann. Hübsch wäre ein mittig angeordneter blockierender Indicator, den man auch schließen kann.
 (/) Raetselgrppe anlegen: Frontend noch nicht angebunden
 (/) Button Ändern in Raelselgruppendetails => öffnet den Editor mit Rästelgruppe als Content
-(-) Raetselgrppe aendern: Frontend noch nicht angebunden
-(-) Raetselgrppe aendern: Name wird beim Ändern als Dublette erkannt
-(-) raetselgruppen-search: Pagination funltioniert nicht
+(/) Raetselgrppe aendern: Frontend noch nicht angebunden
+(/) Raetselgrppe aendern: Name wird beim Ändern als Dublette erkannt
+(/) raetselgruppen-search: Pagination funltioniert nicht
 (/) constants.ts muss aufgeräumt werden - die Namen sind bescheuert. Einheiltliches Vorgehen beim Mappen zwischen select-Controls mit Labels und den Werten in den components.
 (/) Rätselgruppe Details: frontend -> tabelle select-event öffnet Details mit Liste der Elemente und einem Button zum Ändern
 (-) public API: Liste von fachlich eindeutigen Schluesseln der Rätselgruppen eines Referenztyps, um die verfügbaren Parameter für die Einzelabfrage zu erhalten?

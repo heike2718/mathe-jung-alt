@@ -7,6 +7,7 @@ import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaet
 import { Observable } from "rxjs";
 import { SafeHttpService } from "@mja-workspace/shared/util-mja";
 import { RaetselgruppenHttpService } from "../infrastructure/raetselgruppen.http.service";
+import { Router } from "@angular/router";
 
 
 @Injectable({
@@ -21,7 +22,7 @@ export class RaetselgruppenFacade {
     raetselgruppeDetails$: Observable<RaetselgruppeDetails | undefined> = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppeDetails));
     raetselgruppenelemente$ = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppenelemente));
 
-    constructor(private store: Store<fromRaetselgruppen.RaetselgruppenPartialState>) { }
+    constructor(private store: Store<fromRaetselgruppen.RaetselgruppenPartialState>, private router: Router) { }
 
     public setSuchparameter(suchparameter: RaetselgruppenSuchparameter): void {
         this.store.dispatch(RaetselgruppenActions.suchparameterChanged({ suchparameter }));
@@ -29,6 +30,23 @@ export class RaetselgruppenFacade {
 
     public selectRaetselgruppe(raetselgruppe: RaetselgruppensucheTrefferItem): void {
         this.store.dispatch(RaetselgruppenActions.selectRaetselgruppe({ raetselgruppe }));
+    }
+
+    public cancelEdit(raetselgruppe: RaetselgruppeBasisdaten): void {
+
+        if (raetselgruppe.id === 'neu') {
+            this.router.navigateByUrl('/raetselgruppen/uebersicht');
+        } else {
+            const rg: RaetselgruppensucheTrefferItem = {
+                anzahlElemente: 0,
+                id: raetselgruppe.id,
+                schwierigkeitsgrad: raetselgruppe.schwierigkeitsgrad,
+                status: raetselgruppe.status,
+                referenztyp: raetselgruppe.referenztyp,
+                referenz: raetselgruppe.referenz
+            };
+            this.store.dispatch(RaetselgruppenActions.selectRaetselgruppe({ raetselgruppe: rg }));
+        }        
     }
 
     public unselectRaetselgruppe(): void {
@@ -48,10 +66,10 @@ export class RaetselgruppenFacade {
     }
 
     public saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
-        this.store.dispatch(RaetselgruppenActions.saveRaetselgruppenelement({raetselgruppeID, payload}));
+        this.store.dispatch(RaetselgruppenActions.saveRaetselgruppenelement({ raetselgruppeID, payload }));
     }
 
     public deleteRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
-        this.store.dispatch(RaetselgruppenActions.deleteRaetselgruppenelement({raetselgruppeID, payload}));
+        this.store.dispatch(RaetselgruppenActions.deleteRaetselgruppenelement({ raetselgruppeID, payload }));
     }
 }

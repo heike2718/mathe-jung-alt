@@ -94,9 +94,12 @@
         <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
             <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                     [disabled]="formInvalid()" (click)="submit()">speichern</button></div>
-            <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                    (click)="cancelEdit()">abbrechen</button>
+            <div *ngIf="showBtnDetails()" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                    (click)="cancelEdit()">abbrechen (Details)</button>
             </div>
+            <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                (click)="gotoUebersicht()">abbrechen (Übersicht)</button>
+        </div>
         </div>
 
         <div *ngIf="formInvalid()" class="hint-red mt-1 mb-2">

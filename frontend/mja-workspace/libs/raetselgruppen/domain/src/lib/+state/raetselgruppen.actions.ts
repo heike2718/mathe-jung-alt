@@ -47,7 +47,7 @@ export const saveRaetselgruppe = createAction(
 
 export const raetselgruppeSaved = createAction(
     '[Raetselgruppen] raetselgruppeSaved',
-    props<{ raetselgruppe: RaetselgruppensucheTrefferItem }>()
+    props<{ raetselgruppe: RaetselgruppeBasisdaten }>()
 );
 
 export const saveRaetselgruppenelement = createAction(

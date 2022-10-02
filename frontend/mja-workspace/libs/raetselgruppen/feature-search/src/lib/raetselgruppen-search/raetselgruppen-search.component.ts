@@ -84,6 +84,13 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
         this.#suchparameter = state;
       })
     ).subscribe();
+
+    this.#anzahlTrefferSubscription = this.raetselgruppenFacade.anzahlTrefferGesamt$.pipe(
+      tap((anzahl) => {
+        this.anzahlRaetselgruppen = anzahl;
+        console.log('Anzahl gesamt=' + this.anzahlRaetselgruppen);
+      })
+    ).subscribe();
   }
 
   ngAfterViewInit(): void {
@@ -145,11 +152,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
         referenz ? this.#suchparameter = { ...this.#suchparameter, referenz: referenz, pageIndex: 0 } : { ...this.#suchparameter, referenz: null, pageIndex: 0 };
         this.#loadRaetselgruppen();
       })
-    ).subscribe();
-
-    this.#anzahlTrefferSubscription = this.raetselgruppenFacade.anzahlTrefferGesamt$.pipe(
-      tap((anzahl) => this.anzahlRaetselgruppen = anzahl)
-    ).subscribe();
+    ).subscribe();    
 
     this.raetselgruppenFacade.setSuchparameter(initialRaetselgruppenSuchparameter);
   }

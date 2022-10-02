@@ -36,10 +36,14 @@ const raetselgruppenReducer = createReducer(
     }),
 
     on(RaetselgruppenActions.pageLoaded, (state, action) => {
+
+
+        console.log('action:' + action.treffer.trefferGesamt);
+
         return {
             ...state,
             page: action.treffer.items,
-            anzahlTrefferGesamt: action.treffer.anzahlTreffer
+            anzahlTrefferGesamt: action.treffer.trefferGesamt
         };
     }),
 
@@ -50,8 +54,8 @@ const raetselgruppenReducer = createReducer(
     }),
 
     on(RaetselgruppenActions.raetselgruppeSaved, (state, action) => {
-        const trefferItem: RaetselgruppensucheTrefferItem = action.raetselgruppe;
-        return { ...state, raetselgruppeBasisdaten: trefferItem };
+        const raetselgruppeBasisdaten: RaetselgruppeBasisdaten = action.raetselgruppe;
+        return { ...state, raetselgruppeBasisdaten: raetselgruppeBasisdaten };
     }),
 
     on(RaetselgruppenActions.raetselgruppeDetailsLoaded, (state, action) => ({ ...state, raetselgruppeDetails: action.raetraetselgruppeDetails })),

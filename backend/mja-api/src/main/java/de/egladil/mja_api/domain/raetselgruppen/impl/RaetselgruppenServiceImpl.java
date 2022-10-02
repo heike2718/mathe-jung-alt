@@ -107,6 +107,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
+	@Transactional
 	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload, final String user) throws WebApplicationException {
 
 		if (!AbstractDomainEntity.UUID_NEUE_ENTITY.equals(payload.getId())) {
@@ -134,7 +135,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 					.build());
 		}
 
-		PersistenteRaetselgruppe raetselgruppe = mapFromPayload(payload);
+		PersistenteRaetselgruppe raetselgruppe = new PersistenteRaetselgruppe();
+		mergeFromPayload(raetselgruppe, payload);
 		raetselgruppe.geaendertDurch = user;
 		raetselgruppe.status = DomainEntityStatus.ERFASST;
 
@@ -147,6 +149,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
+	@Transactional
 	public RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(final EditRaetselgruppePayload payload, final String user) throws WebApplicationException {
 
 		if (dupletteNachKeysExistiert(payload)) {
@@ -165,10 +168,20 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 					.build());
 		}
 
-		PersistenteRaetselgruppe raetselgruppe = mapFromPayload(payload);
-		raetselgruppe.geaendertDurch = user;
+		PersistenteRaetselgruppe ausDB = raetselgruppenDao.findByID(payload.getId());
 
-		PersistenteRaetselgruppe persistierte = speichern(raetselgruppe);
+		if (ausDB == null) {
+
+			throw new WebApplicationException(
+				Response.status(Status.NOT_FOUND)
+					.entity(MessagePayload.error("Diese Rätselgruppe gibt es nicht."))
+					.build());
+		}
+
+		mergeFromPayload(ausDB, payload);
+		ausDB.geaendertDurch = user;
+
+		PersistenteRaetselgruppe persistierte = speichern(ausDB);
 
 		RaetselgruppensucheTrefferItem result = mapFromDB(persistierte);
 
@@ -180,7 +193,6 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return result;
 	}
 
-	@Transactional
 	PersistenteRaetselgruppe speichern(final PersistenteRaetselgruppe raetselgruppe) {
 
 		return raetselgruppenDao.saveRaetselgruppe(raetselgruppe);
@@ -220,7 +232,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		result.setName(ausDB.name);
 		result.setReferenz(ausDB.referenz);
 		result.setReferenztyp(ausDB.referenztyp);
-		result.setSchwierigkeitsgradType(ausDB.schwierigkeitsgrad);
+		result.setSchwierigkeitsgrad(ausDB.schwierigkeitsgrad);
 		result.setStatus(ausDB.status);
 		result.setGeaendertDurch(ausDB.geaendertDurch);
 
@@ -228,7 +240,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	}
 
-	PersistenteRaetselgruppe mapFromPayload(final EditRaetselgruppePayload payload) {
+	PersistenteRaetselgruppe _mapFromPayload(final EditRaetselgruppePayload payload) {
 
 		PersistenteRaetselgruppe raetselgruppe = new PersistenteRaetselgruppe();
 		raetselgruppe.kommentar = payload.getKommentar();
@@ -239,6 +251,16 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		raetselgruppe.status = DomainEntityStatus.ERFASST;
 
 		return raetselgruppe;
+	}
+
+	void mergeFromPayload(final PersistenteRaetselgruppe raetselgruppe, final EditRaetselgruppePayload payload) {
+
+		raetselgruppe.kommentar = payload.getKommentar();
+		raetselgruppe.name = payload.getName();
+		raetselgruppe.referenz = payload.getReferenz();
+		raetselgruppe.referenztyp = payload.getReferenztyp();
+		raetselgruppe.schwierigkeitsgrad = payload.getSchwierigkeitsgrad();
+		raetselgruppe.status = payload.getStatus();
 	}
 
 	@Override

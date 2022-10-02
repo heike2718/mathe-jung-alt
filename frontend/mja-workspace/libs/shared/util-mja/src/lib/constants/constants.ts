@@ -42,25 +42,22 @@ export const initialGuiReferenztyp: GuiRefereztyp = { id: 'NOOP', label: '' };
 export class GuiReferenztypenMap {
 
     #referenztypen: Map<Referenztyp, string> = new Map();
+    #referenztypenInvers: Map<string, Referenztyp> = new Map();
 
     constructor() {
         this.#referenztypen.set('NOOP', '');
         this.#referenztypen.set('MINIKAENGURU', 'Minikänguru');
         this.#referenztypen.set('SERIE', 'Serie');
+
+        this.#referenztypenInvers.set('','NOOP');
+        this.#referenztypenInvers.set('Minikänguru','MINIKAENGURU');
+        this.#referenztypenInvers.set('Serie','SERIE');
     }
 
     public getReferenztypOfLabel(label: string): Referenztyp {
 
-        // (value: string, key: Referenztyp, map: Map<Referenztyp, string>)
-        this.#referenztypen.forEach((l: string, key: Referenztyp, _map: Map<Referenztyp, string>) => {
-            if (l === label) {
-                return key;
-            } else {
-                return 'NOOP';
-            }
-        });
-
-        return 'NOOP';
+        const value = this.#referenztypenInvers.get(label);
+        return value ? value : 'NOOP';
     }
 
     public getGuiRefereztyp(refTyp: Referenztyp): GuiRefereztyp {
@@ -110,6 +107,7 @@ export const initialGuiSchwierigkeitsgrad: GuiSchwierigkeitsgrad = { id: 'NOOP',
 export class GuiSchwierigkeitsgradeMap {
 
     #schwierigkeitsgrade: Map<Schwierigkeitsgrad, string> = new Map();
+    #schwierigkeitsgradeInvers: Map<string, Schwierigkeitsgrad> = new Map();
 
     constructor() {
         this.#schwierigkeitsgrade.set('NOOP', '');
@@ -125,19 +123,26 @@ export class GuiSchwierigkeitsgradeMap {
         this.#schwierigkeitsgrade.set('GRUNDSCHULE', 'Grundschule');
         this.#schwierigkeitsgrade.set('SEK_1', 'Sekundarstufe 1');
         this.#schwierigkeitsgrade.set('SEK_2', 'Sekundarstufe 2');
+
+        this.#schwierigkeitsgradeInvers.set('', 'NOOP');
+        this.#schwierigkeitsgradeInvers.set('Inklusion', 'IKID');
+        this.#schwierigkeitsgradeInvers.set('Klasse 1', 'EINS');
+        this.#schwierigkeitsgradeInvers.set('Klasse 2', 'ZWEI');
+        this.#schwierigkeitsgradeInvers.set('Klassen 1/2', 'EINS_ZWEI');
+        this.#schwierigkeitsgradeInvers.set('Klassen 3/4','DREI_VIER');
+        this.#schwierigkeitsgradeInvers.set('Klassen 5/6','FUENF_SECHS');
+        this.#schwierigkeitsgradeInvers.set('Klassen 7/8','SIEBEN_ACHT');
+        this.#schwierigkeitsgradeInvers.set('ab Klasse 9','AB_NEUN');
+        this.#schwierigkeitsgradeInvers.set('Vorschule','VORSCHULE');
+        this.#schwierigkeitsgradeInvers.set('Grundschule','GRUNDSCHULE');
+        this.#schwierigkeitsgradeInvers.set('Sekundarstufe 1','SEK_1');
+        this.#schwierigkeitsgradeInvers.set('Sekundarstufe 2','SEK_2');
     }
 
     public getSchwierigkeitsgradOfLabel(label: string): Schwierigkeitsgrad {
 
-        this.#schwierigkeitsgrade.forEach((l: string, key: Schwierigkeitsgrad, _map: Map<Schwierigkeitsgrad, string>) => {
-            if (l === label) {
-                return key;
-            } else {
-                return 'NOOP';
-            }
-        });
-
-        return 'NOOP';
+        const value: Schwierigkeitsgrad | undefined = this.#schwierigkeitsgradeInvers.get(label);
+        return value ? value : 'NOOP';
     }
 
     public getGuiSchwierigkeitsgrade(refTyp: Schwierigkeitsgrad): GuiSchwierigkeitsgrad {

@@ -6,7 +6,6 @@ package de.egladil.mja_api.domain.raetselgruppen.dto;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
@@ -30,8 +29,9 @@ public class RaetselgruppensucheTrefferItem {
 	@Schema(description = "poptionaler Kommentar")
 	private String kommentar;
 
-	@JsonIgnore
-	private Schwierigkeitsgrad schwierigkeitsgradType;
+	@JsonProperty
+	@Schema(name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Rätselgruppe gedacht ist")
+	private Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@JsonProperty
 	@Schema(description = "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz")
@@ -83,21 +83,14 @@ public class RaetselgruppensucheTrefferItem {
 		this.kommentar = kommentar;
 	}
 
-	@JsonProperty
-	@Schema(name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Rätselgruppe gedacht ist, in lesbarer Form")
-	public String getSchwierigkeitsgrad() {
+	public Schwierigkeitsgrad getSchwierigkeitsgrad() {
 
-		return schwierigkeitsgradType.getLabel();
+		return schwierigkeitsgrad;
 	}
 
-	public Schwierigkeitsgrad getSchwierigkeitsgradType() {
+	public void setSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
 
-		return schwierigkeitsgradType;
-	}
-
-	public void setSchwierigkeitsgradType(final Schwierigkeitsgrad schwierigkeitsgradType) {
-
-		this.schwierigkeitsgradType = schwierigkeitsgradType;
+		this.schwierigkeitsgrad = schwierigkeitsgrad;
 	}
 
 	public Referenztyp getReferenztyp() {
