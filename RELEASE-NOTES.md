@@ -1,5 +1,11 @@
 # Release-Notes
 
+__1.1.1__
+
+* [Leere Fehlermeldungen wenn kein MessagePayload](https://github.com/heike2718/mathe-jung-alt/issues/40)
+* [Zu viele conosle-logs](https://github.com/heike2718/mathe-jung-alt/issues/43)
+* [Lösungsbuschtaben in Raetselgruppen anzeigen](https://github.com/heike2718/mathe-jung-alt/issues/45)
+
 __1.1.0__
 
 * [FE: Sammlungen anlegen, suchen, ändern](https://github.com/heike2718/mathe-jung-alt/issues/38)
