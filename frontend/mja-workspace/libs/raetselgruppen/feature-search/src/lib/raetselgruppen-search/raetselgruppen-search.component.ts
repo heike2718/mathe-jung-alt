@@ -88,7 +88,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     this.#anzahlTrefferSubscription = this.raetselgruppenFacade.anzahlTrefferGesamt$.pipe(
       tap((anzahl) => {
         this.anzahlRaetselgruppen = anzahl;
-        console.log('Anzahl gesamt=' + this.anzahlRaetselgruppen);
+        // console.log('Anzahl gesamt=' + this.anzahlRaetselgruppen);
       })
     ).subscribe();
   }
@@ -199,7 +199,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   #loadRaetselgruppen(): void {
 
     if (this.#suchparameter) {
-      console.log(this.#suchparameter);
+      // console.log(this.#suchparameter);
       this.raetselgruppenFacade.setSuchparameter(this.#suchparameter);
     } else {
       this.raetselgruppenFacade.setSuchparameter(initialRaetselgruppenSuchparameter);

@@ -95,7 +95,7 @@ export class QuellenSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.#paginatorSubscription = merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => {
         if (this.suchfilter !== undefined) {
-          console.log(JSON.stringify(this.suchfilter));
+          // console.log(JSON.stringify(this.suchfilter));
           this.#triggerSuche();
         }
       })

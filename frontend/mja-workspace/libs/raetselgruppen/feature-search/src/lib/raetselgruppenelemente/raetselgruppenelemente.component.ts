@@ -22,7 +22,7 @@ export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit {
   @Output()
   deleteElement: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
 
-  displayedColumns = ['schluessel', 'nummer', 'punkte', 'name', 'edit', 'delete'];
+  displayedColumns = ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'edit', 'delete'];
 
   constructor(private raetselgruppenFacade: RaetselgruppenFacade) { }
 

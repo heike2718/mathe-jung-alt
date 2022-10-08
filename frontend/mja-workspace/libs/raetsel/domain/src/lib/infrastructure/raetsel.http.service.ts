@@ -14,7 +14,7 @@ import {
   PageDefinition
 } from '@mja-workspace/suchfilter/domain';
 import { EditRaetselPayload, GeneratedImages, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
-import { LoadingIndicatorService, SafeHttpService } from '@mja-workspace/shared/util-mja';
+import { LoadingIndicatorService } from '@mja-workspace/shared/util-mja';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselHttpService {
@@ -22,7 +22,9 @@ export class RaetselHttpService {
   #url = this.configuration.baseUrl + '/raetsel/v1';
   #csrfHeaderName = 'X-XSRF-TOKEN';
 
-  constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration, private loadingService: LoadingIndicatorService) { }
+  constructor(private http: HttpClient,
+    @Inject(SharedConfigService) private configuration: Configuration,
+    private loadingService: LoadingIndicatorService) { }
 
   loadPage(suchfilter: Suchfilter | undefined, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
 

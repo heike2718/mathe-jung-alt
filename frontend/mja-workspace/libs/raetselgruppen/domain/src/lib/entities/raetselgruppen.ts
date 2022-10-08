@@ -67,6 +67,7 @@ export interface EditRaetselgruppenelementPayload {
 
 export interface Raetselgruppenelement extends EditRaetselgruppenelementPayload {
     readonly name: string;
+    readonly loesungsbuchstabe?: string;
 };
 
 export interface RaetselgruppeDetails extends EditRaetselgruppePayload {

@@ -38,7 +38,7 @@ const raetselgruppenReducer = createReducer(
     on(RaetselgruppenActions.pageLoaded, (state, action) => {
 
 
-        console.log('action:' + action.treffer.trefferGesamt);
+        // console.log('action:' + action.treffer.trefferGesamt);
 
         return {
             ...state,

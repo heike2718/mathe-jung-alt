@@ -119,6 +119,8 @@ export class SafeNgrxService {
                 } else {
                     if (errorMessage.length > 0) {
                         this.messageService.error(errorMessage);
+                    } else {
+                        this.messageService.error(this.#getGenericMessageForStatus(status));
                     }
                 }
             }
@@ -128,6 +130,21 @@ export class SafeNgrxService {
     // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+    #getGenericMessageForStatus(status: number): string {
+
+        let result = 'status: ';
+
+        switch(status) {
+            case 400: result += 'Payload oder Queryparameter haben Fehler'; break;
+            case 401: result += 'keine Berechtigung'; break;
+            case 403: result += 'unerlaubte Aktion'; break;
+            case 404: result += 'Das Objekt existiert nicht'; break;
+            default: result += 'Im Backend ist ein unerwarteter Fehler aufgetreten.';
+        }
+
+        return result;
+    }
+    
     #getHttpErrorResponse(error: any): HttpErrorResponse | undefined {
 
         if (error instanceof HttpErrorResponse) {

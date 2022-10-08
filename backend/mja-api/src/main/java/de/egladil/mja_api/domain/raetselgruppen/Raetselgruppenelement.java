@@ -4,10 +4,17 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetselgruppen;
 
+import java.util.Arrays;
+import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
 
@@ -37,6 +44,10 @@ public class Raetselgruppenelement {
 	@Schema(description = "Name des Rätsels, nicht Teil der Daten des Elements. Nützlich für die Anzeige")
 	private String name;
 
+	@JsonProperty
+	@Schema(description = "Loesungsbuchstabe, falls vorhanden. Kann null sein")
+	private String loesungsbuchstabe;
+
 	/**
 	 * Erzeugt ein Objekt aus den verschiedenen Daten.
 	 *
@@ -54,6 +65,28 @@ public class Raetselgruppenelement {
 		result.punkte = element.punkte;
 		result.raetselSchluessel = aufgabe.schluessel;
 		result.name = aufgabe.name;
+
+		String antwortvorschlaegeSerialized = aufgabe.antwortvorschlaege;
+
+		if (StringUtils.isNotBlank(antwortvorschlaegeSerialized)) {
+
+			try {
+
+				Antwortvorschlag[] antwortvorschlaege = new ObjectMapper().readValue(antwortvorschlaegeSerialized,
+					Antwortvorschlag[].class);
+
+				Optional<Antwortvorschlag> optKorrekt = Arrays.stream(antwortvorschlaege).filter(v -> v.isKorrekt()).findFirst();
+
+				if (optKorrekt.isPresent()) {
+
+					result.loesungsbuchstabe = optKorrekt.get().getBuchstabe();
+				}
+			} catch (JsonProcessingException e) {
+
+				throw new RuntimeException(e.getMessage(), e);
+			}
+		}
+
 		return result;
 	}
 

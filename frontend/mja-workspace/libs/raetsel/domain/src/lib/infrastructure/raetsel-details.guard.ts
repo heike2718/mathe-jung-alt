@@ -14,7 +14,7 @@ export class RaetselDetailsGuard implements CanActivate {
 
 
         return this.raetselFacade.raetselDetails$.pipe(
-            tap((details) => console.log(details)),
+            // tap((details) => console.log(details)),
             map((details) => details !== undefined)
         )
     }

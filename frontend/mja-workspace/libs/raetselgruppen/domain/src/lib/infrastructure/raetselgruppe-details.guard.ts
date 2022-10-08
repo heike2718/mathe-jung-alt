@@ -12,7 +12,7 @@ export class RaetselgruppeDetailsGuard implements CanActivate {
     canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
        
         return this.raetselgruppenFacade.editorContent$.pipe(
-            tap((details) => console.log(details)),
+            // tap((details) => console.log(details)),
             map((details) => details !== undefined)
         );
     }

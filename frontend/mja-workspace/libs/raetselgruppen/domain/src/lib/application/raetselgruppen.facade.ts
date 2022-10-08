@@ -5,8 +5,6 @@ import * as RaetselgruppenActions from '../+state/raetselgruppen.actions';
 import * as RaetselgruppenSelectors from '../+state/raetselgruppen.selectors';
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 import { Observable } from "rxjs";
-import { SafeHttpService } from "@mja-workspace/shared/util-mja";
-import { RaetselgruppenHttpService } from "../infrastructure/raetselgruppen.http.service";
 import { Router } from "@angular/router";
 
 
