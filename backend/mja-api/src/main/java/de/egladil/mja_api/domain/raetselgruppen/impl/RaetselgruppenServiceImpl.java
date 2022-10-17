@@ -200,6 +200,11 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	boolean dupletteNachKeysExistiert(final EditRaetselgruppePayload payload) {
 
+		if (payload.getReferenztyp() == null) {
+
+			return false;
+		}
+
 		PersistenteRaetselgruppe persistente = raetselgruppenDao.findByUniqueKey(payload.getReferenztyp(),
 			payload.getReferenz(), payload.getSchwierigkeitsgrad());
 

@@ -4,5 +4,5 @@ export const environment = {
   apiUrl: 'https://mathe-jung-alt.de/mja-api',
   profileUrl: 'https://opa-wetterwachs.de/profil-app',
   storageKeyPrefix: 'mja_adm_',
-  version: '1.1.1'
+  version: '1.1.2'
 };

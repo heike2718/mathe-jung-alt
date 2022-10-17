@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.mja_api.infrastructure.resources.DeskriptorenResource;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -38,7 +37,7 @@ public class DeskriptorenResourceTest {
 
 		Deskriptor[] deskriptoren = new ObjectMapper().readValue(responsePayload, Deskriptor[].class);
 
-		assertEquals(81, deskriptoren.length);
+		assertEquals(82, deskriptoren.length);
 
 		response
 			.then()
@@ -54,7 +53,7 @@ public class DeskriptorenResourceTest {
 			}
 		}
 
-		assertEquals(54, anzahlAdmin);
+		assertEquals(55, anzahlAdmin);
 
 	}
 

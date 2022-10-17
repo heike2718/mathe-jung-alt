@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -111,14 +112,7 @@ public class RaetselgruppenResourceTest {
 		RaetselgruppeDetails treffer = new ObjectMapper().readValue(responsePayload,
 			RaetselgruppeDetails.class);
 		List<Raetselgruppenelement> elemente = treffer.getElemente();
-		assertEquals(1, elemente.size());
-
-		Raetselgruppenelement element = elemente.get(0);
-		assertEquals("02774", element.getRaetselSchluessel());
-		assertEquals(300, element.getPunkte());
-		assertEquals("A-1", element.getNummer());
-		assertEquals("Tierbeine zählen", element.getName());
-
+		assertEquals(6, elemente.size());
 	}
 
 	@Test
@@ -140,6 +134,67 @@ public class RaetselgruppenResourceTest {
 
 		new ObjectMapper().readValue(responsePayload, MessagePayload.class);
 		assertTrue(responsePayload.contains("kein Treffer"));
+
+	}
+
+	@Test
+	@Order(8)
+	void testRaetselgruppeAnlegenOhneReferenz() throws Exception {
+
+		Response response = null;
+
+		{
+
+			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+			payload.setId("neu");
+			payload.setName("Kandidaten Minikänguru");
+			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
+			payload.setStatus(DomainEntityStatus.ERFASST);
+
+			String requestBody = new ObjectMapper().writeValueAsString(payload);
+
+			response = given()
+				.contentType(ContentType.JSON)
+				.body(requestBody)
+				.post("");
+
+			String responsePayload = response.asString();
+
+			System.out.println("=> " + responsePayload);
+
+			assertEquals(201, response.getStatusCode());
+		}
+
+	}
+
+	@Test
+	@Order(9)
+	void testRaetselgruppeAnlegenOhneReferenzGleicherNameAnderesLevel() throws Exception {
+
+		Response response = null;
+
+		{
+
+			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+			payload.setId("neu");
+			payload.setName("Kandidaten Minikänguru");
+			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.VORSCHULE);
+			payload.setStatus(DomainEntityStatus.ERFASST);
+
+			String requestBody = new ObjectMapper().writeValueAsString(payload);
+
+			response = given()
+				.contentType(ContentType.JSON)
+				.body(requestBody)
+				.post("");
+
+			String responsePayload = response.asString();
+
+			System.out.println("=> " + responsePayload);
+
+			assertEquals(409, response.getStatusCode());
+			assertTrue(responsePayload.contains("Es gibt bereits eine Rätselgruppe mit diesem Namen."));
+		}
 
 	}
 
@@ -243,8 +298,8 @@ public class RaetselgruppenResourceTest {
 
 			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
 			payload.setId("neu");
-			payload.setName("Minikänguru 2022 - Klasse 1");
-			payload.setReferenz("2022");
+			payload.setName("Minikänguru 2005 - Klasse 2");
+			payload.setReferenz("2003");
 			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
 			payload.setStatus(DomainEntityStatus.ERFASST);
@@ -469,7 +524,7 @@ public class RaetselgruppenResourceTest {
 			RaetselgruppeDetails treffer = new ObjectMapper().readValue(responsePayload,
 				RaetselgruppeDetails.class);
 			List<Raetselgruppenelement> elemente = treffer.getElemente();
-			assertEquals(0, elemente.size());
+			assertEquals(12, elemente.size());
 		}
 
 		{
@@ -478,9 +533,9 @@ public class RaetselgruppenResourceTest {
 
 			EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
 			payload.setId("neu");
-			payload.setNummer("A-1");
+			payload.setNummer("A-5");
 			payload.setPunkte(300);
-			payload.setRaetselSchluessel("02789");
+			payload.setRaetselSchluessel("02618");
 
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
@@ -501,8 +556,11 @@ public class RaetselgruppenResourceTest {
 
 			List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
 
-			assertEquals(1, elemente.size());
-			elementUuid = elemente.get(0).getId();
+			assertEquals(13, elemente.size());
+
+			Optional<Raetselgruppenelement> optNeu = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
+				.findFirst();
+			elementUuid = optNeu.get().getId();
 		}
 
 		{
@@ -513,9 +571,9 @@ public class RaetselgruppenResourceTest {
 
 				EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
 				payload.setId(elementUuid);
-				payload.setNummer("A-2");
+				payload.setNummer("B-5");
 				payload.setPunkte(300);
-				payload.setRaetselSchluessel("02789");
+				payload.setRaetselSchluessel("02618");
 
 				String requestBody = new ObjectMapper().writeValueAsString(payload);
 				response = given()
@@ -535,10 +593,11 @@ public class RaetselgruppenResourceTest {
 
 				List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
 
-				assertEquals(1, elemente.size());
-				Raetselgruppenelement element = elemente.get(0);
+				assertEquals(13, elemente.size());
+				Optional<Raetselgruppenelement> opt = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
+					.findFirst();
 
-				assertEquals("A-2", element.getNummer());
+				assertEquals("B-5", opt.get().getNummer());
 
 			}
 		}
@@ -565,7 +624,11 @@ public class RaetselgruppenResourceTest {
 
 				List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
 
-				assertEquals(0, elemente.size());
+				assertEquals(12, elemente.size());
+
+				Optional<Raetselgruppenelement> opt = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
+					.findFirst();
+				assertTrue(opt.isEmpty());
 
 			}
 		}
@@ -613,7 +676,7 @@ public class RaetselgruppenResourceTest {
 		RaetselgruppeDetails treffer = new ObjectMapper().readValue(responsePayload,
 			RaetselgruppeDetails.class);
 		List<Raetselgruppenelement> elemente = treffer.getElemente();
-		assertEquals(1, elemente.size());
+		assertEquals(6, elemente.size());
 
 		Raetselgruppenelement element = elemente.get(0);
 		assertEquals("02774", element.getRaetselSchluessel());
@@ -719,7 +782,7 @@ public class RaetselgruppenResourceTest {
 
 		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
 		payload.setId("neu");
-		payload.setNummer("A-2");
+		payload.setNummer("A-5");
 		payload.setPunkte(300);
 		payload.setRaetselSchluessel("02774");
 
@@ -845,9 +908,9 @@ public class RaetselgruppenResourceTest {
 
 			EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
 			payload.setId("neu");
-			payload.setNummer("B-1");
+			payload.setNummer("B-3");
 			payload.setPunkte(400);
-			payload.setRaetselSchluessel("02817");
+			payload.setRaetselSchluessel("02629");
 
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
@@ -866,18 +929,18 @@ public class RaetselgruppenResourceTest {
 				RaetselgruppeDetails.class);
 
 			List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
-			elementUuid = elemente.stream().filter(el -> "B-1".equals(el.getNummer())).findFirst().get().getId();
+			elementUuid = elemente.stream().filter(el -> "B-3".equals(el.getNummer())).findFirst().get().getId();
 		}
 
 		{
 
-			System.out.println("Element anlegen");
+			System.out.println("Element ändern");
 
 			EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
 			payload.setId(elementUuid);
-			payload.setNummer("A-1");
+			payload.setNummer("B-2");
 			payload.setPunkte(300);
-			payload.setRaetselSchluessel("02789");
+			payload.setRaetselSchluessel("02629");
 
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 

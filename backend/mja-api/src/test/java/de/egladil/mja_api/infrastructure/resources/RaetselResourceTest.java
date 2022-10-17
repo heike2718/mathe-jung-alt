@@ -88,28 +88,28 @@ public class RaetselResourceTest {
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		assertEquals(4, alleRaetsel.size());
-		assertEquals(4, suchergebnis.getTrefferGesamt());
+		assertEquals(6, alleRaetsel.size());
+		assertEquals(6, suchergebnis.getTrefferGesamt());
 
 		{
 
 			RaetselsucheTrefferItem raetsel = alleRaetsel.get(0);
+			assertEquals("4bfbb290-c808-4263-94f5-2fa19017cad1", raetsel.getId());
+			assertEquals("01219", raetsel.getSchluessel());
+		}
+
+		{
+
+			RaetselsucheTrefferItem raetsel = alleRaetsel.get(1);
 			assertEquals("08dc5237-505d-4db2-b5f9-3fd3d74981e0", raetsel.getId());
 			assertEquals("02602", raetsel.getSchluessel());
 		}
 
 		{
 
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(1);
-			assertEquals("f3b70e16-c431-42b7-b919-751de708d9d7", raetsel.getId());
-			assertEquals("02777", raetsel.getSchluessel());
-		}
-
-		{
-
 			RaetselsucheTrefferItem raetsel = alleRaetsel.get(2);
-			assertEquals("7a94e100-85e9-4ffb-903b-06835851063b", raetsel.getId());
-			assertEquals("02789", raetsel.getSchluessel());
+			assertEquals("a538e000-13a3-4f47-bd71-5d3cf48ad79e", raetsel.getId());
+			assertEquals("02624", raetsel.getSchluessel());
 		}
 	}
 
@@ -130,21 +130,21 @@ public class RaetselResourceTest {
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		assertEquals(11, alleRaetsel.size());
-		assertEquals(11, suchergebnis.getTrefferGesamt());
+		assertEquals(17, alleRaetsel.size());
+		assertEquals(17, suchergebnis.getTrefferGesamt());
 
 		{
 
 			RaetselsucheTrefferItem raetsel = alleRaetsel.get(0);
-			assertEquals("57d53a52-9609-46b2-bbfb-7e3d9e1983b5", raetsel.getId());
-			assertEquals("02596", raetsel.getSchluessel());
+			assertEquals("4bfbb290-c808-4263-94f5-2fa19017cad1", raetsel.getId());
+			assertEquals("01219", raetsel.getSchluessel());
 		}
 
 		{
 
 			RaetselsucheTrefferItem raetsel = alleRaetsel.get(1);
-			assertEquals("08dc5237-505d-4db2-b5f9-3fd3d74981e0", raetsel.getId());
-			assertEquals("02602", raetsel.getSchluessel());
+			assertEquals("57d53a52-9609-46b2-bbfb-7e3d9e1983b5", raetsel.getId());
+			assertEquals("02596", raetsel.getSchluessel());
 		}
 	}
 
