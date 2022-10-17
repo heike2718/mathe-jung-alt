@@ -1,6 +1,9 @@
 # Release-Notes
 
 __1.1.1__
+* [DB: RAETSELSAMMLUNGEN.REFERENZ ist leider not nullable](https://github.com/heike2718/mathe-jung-alt/issues/46)
+
+__1.1.1__
 
 * [Leere Fehlermeldungen wenn kein MessagePayload](https://github.com/heike2718/mathe-jung-alt/issues/40)
 * [Zu viele conosle-logs](https://github.com/heike2718/mathe-jung-alt/issues/43)
