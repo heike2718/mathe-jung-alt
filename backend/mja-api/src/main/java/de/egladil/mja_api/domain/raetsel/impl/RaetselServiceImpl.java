@@ -107,6 +107,14 @@ public class RaetselServiceImpl implements RaetselService {
 	@Transactional
 	public Raetsel raetselAnlegen(final EditRaetselPayload payload, final String uuidAendernderUser) {
 
+		boolean schluesselExistiert = this.schluesselExists(payload);
+
+		if (schluesselExistiert) {
+
+			throw new WebApplicationException(
+				Response.status(409).entity(MessagePayload.error("Der Schlüssel ist bereits vergeben.")).build());
+		}
+
 		PersistentesRaetsel neuesRaetsel = new PersistentesRaetsel();
 		String uuid = UUID.randomUUID().toString();
 		neuesRaetsel.setImportierteUuid(uuid);
@@ -137,6 +145,14 @@ public class RaetselServiceImpl implements RaetselService {
 				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
+		boolean schluesselExistiert = this.schluesselExists(payload);
+
+		if (schluesselExistiert) {
+
+			throw new WebApplicationException(
+				Response.status(409).entity(MessagePayload.error("Der Schlüssel ist bereits vergeben.")).build());
+		}
+
 		if (payload.isLatexHistorisieren()) {
 
 			PersistentesRaetselHistorieItem neuesHistorieItem = new PersistentesRaetselHistorieItem();
@@ -153,6 +169,18 @@ public class RaetselServiceImpl implements RaetselService {
 		PersistentesRaetsel.persist(persistentesRaetsel);
 
 		return getRaetselZuId(raetselId);
+	}
+
+	boolean schluesselExists(final EditRaetselPayload payload) {
+
+		PersistentesRaetsel persistentesRaetsel = raetselDao.findWithSchluessel(payload.getRaetsel().getSchluessel());
+
+		if (persistentesRaetsel == null) {
+
+			return false;
+		}
+
+		return !persistentesRaetsel.uuid.equals(payload.getRaetsel().getId());
 	}
 
 	@Override

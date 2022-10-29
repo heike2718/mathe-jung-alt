@@ -139,6 +139,7 @@ export class SafeNgrxService {
             case 401: result += 'keine Berechtigung'; break;
             case 403: result += 'unerlaubte Aktion'; break;
             case 404: result += 'Das Objekt existiert nicht'; break;
+            case 409: result += 'Speichern wegen eines Datenkonflikts nicht möglich'; break;
             default: result += 'Im Backend ist ein unerwarteter Fehler aufgetreten.';
         }
 

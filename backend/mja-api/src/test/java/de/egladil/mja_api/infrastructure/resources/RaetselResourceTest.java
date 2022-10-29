@@ -26,6 +26,7 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.web.mja_auth.dto.MessagePayload;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -330,6 +331,75 @@ public class RaetselResourceTest {
 			}
 
 			assertEquals(404, response.getStatusCode());
+		}
+
+	}
+
+	@Test
+	@Order(12)
+	void testRaetselAnlegen409() throws Exception {
+
+		try (InputStream in = getClass().getResourceAsStream("/payloads/EditRaetselPayloadInsertUKViolation.json");
+			StringWriter sw = new StringWriter()) {
+
+			IOUtils.copy(in, sw, StandardCharsets.UTF_8);
+
+			String requestBody = sw.toString();
+
+			Response response = null;
+
+			try {
+
+				response = given()
+					.contentType(ContentType.JSON)
+					.body(requestBody)
+					.post("");
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+			assertEquals(409, response.getStatusCode());
+
+			String responsePayload = response.asString();
+			MessagePayload messagePayload = new ObjectMapper().readValue(responsePayload, MessagePayload.class);
+			assertEquals("ERROR", messagePayload.getLevel());
+			assertEquals("Der Schlüssel ist bereits vergeben.", messagePayload.getMessage());
+
+		}
+
+	}
+
+	@Test
+	@Order(13)
+	void testRaetselAendern409() throws Exception {
+
+		try (InputStream in = getClass().getResourceAsStream("/payloads/EditRaetselPayloadUpdateUKViolation.json");
+			StringWriter sw = new StringWriter()) {
+
+			IOUtils.copy(in, sw, StandardCharsets.UTF_8);
+
+			String requestBody = sw.toString();
+
+			Response response = null;
+
+			try {
+
+				response = given()
+					.contentType(ContentType.JSON)
+					.body(requestBody)
+					.put("");
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+			assertEquals(409, response.getStatusCode());
+
+			String responsePayload = response.asString();
+			MessagePayload messagePayload = new ObjectMapper().readValue(responsePayload, MessagePayload.class);
+			assertEquals("ERROR", messagePayload.getLevel());
+			assertEquals("Der Schlüssel ist bereits vergeben.", messagePayload.getMessage());
 		}
 
 	}

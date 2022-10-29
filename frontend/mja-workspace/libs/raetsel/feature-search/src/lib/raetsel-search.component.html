@@ -13,6 +13,25 @@
 
 <p *ngIf="suchfilter">Suchkriterien: {{suchfilter | json}}</p>
 
+<div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+  <div fxFlex="0 1 calc(20%-20px)">
+    <button mat-raised-button color="primary" (click)="neueSuche()">neue Suche</button>
+  </div>
+  <div *ngIf="canCreateRaetsel() else keineQuelle" fxFlex="0 1 calc(20%-20px)">
+    <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
+  </div>
+  <!--
+    <ng-component *ngIf="quelle else keineQuelle">
+      <div fxFlex="0 1 calc(20%-20px)">
+        <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
+      </div>
+      <div *ngIf="quelle" fxFlex="0 1 calc(80%-20px)" class="m-1">mit Quelle {{quelle.name}}</div>      
+    </ng-component>
+  -->
+</div>
+
+<mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
+
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortActive="schluessel"
   matSortDirection="asc" matSortDisableClear>
 
@@ -51,25 +70,6 @@
   <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)"></mat-row>
 
 </mat-table>
-
-<mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
-
-<div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
-  <div fxFlex="0 1 calc(20%-20px)">
-    <button mat-raised-button color="primary" (click)="neueSuche()">neue Suche</button>
-  </div>
-  <div *ngIf="canCreateRaetsel() else keineQuelle" fxFlex="0 1 calc(20%-20px)">
-    <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
-  </div>
-  <!--
-    <ng-component *ngIf="quelle else keineQuelle">
-      <div fxFlex="0 1 calc(20%-20px)">
-        <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
-      </div>
-      <div *ngIf="quelle" fxFlex="0 1 calc(80%-20px)" class="m-1">mit Quelle {{quelle.name}}</div>      
-    </ng-component>
-  -->
-</div>
 
 <ng-template #keineQuelle>
   <div fxLayout="column m-1">

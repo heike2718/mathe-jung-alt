@@ -189,6 +189,12 @@ public class RaetselResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = Raetsel.class)))
 	@APIResponse(
+		name = "SchluesselConflict",
+		description = "der gewählte schluessel ist schon vergeben",
+		responseCode = "409", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
 		name = "CreateRaetselServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
@@ -223,6 +229,12 @@ public class RaetselResource {
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = Raetsel.class)))
+	@APIResponse(
+		name = "SchluesselConflict",
+		description = "der geänderte schluessel ist schon vergeben",
+		responseCode = "409", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "UpdateRaetselServerError",
 		description = "server error",

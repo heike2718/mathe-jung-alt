@@ -1,0 +1,35 @@
+{
+  "latexHistorisieren": false,
+  "idAendernderUser": "20721575-8c45-4201-a025-7a9fece1f2aa",
+  "raetsel": {
+    "id": "neu",
+    "schluessel": "02777",
+    "name": "Welches Kind ist das aelteste?",
+    "status": "ERFASST",
+    "frage": "Anton, Beate, Carola und Dennis sind in einer Klasse. Welches Kind ist am ältesten? In welcher Reihenfolge kommen die anderen Kinder?",
+    "loesung": "Dennis ist am ältesten. Danach kommen Beate, Anton und Carola.",
+    "kommentar": "Serie Serie-1, 1, Serie-65, 65",
+    "quelleId": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+    "antwortvorschlaege": [],
+    "deskriptoren": [
+      {
+        "id": 1,
+        "name": "Mathematik",
+        "admin": false,
+        "kontext": "RAETSEL"
+      },
+      {
+        "id": 4,
+        "name": "Klasse 1",
+        "admin": false,
+        "kontext": "RAETSEL"
+      },
+      {
+        "id": 14,
+        "name": "Logik",
+        "admin": false,
+        "kontext": "RAETSEL"
+      }
+    ]
+  }
+}
