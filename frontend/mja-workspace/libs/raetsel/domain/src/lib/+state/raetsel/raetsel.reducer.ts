@@ -2,8 +2,9 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter, Update } from '@ngrx/entity';
 
 import * as RaetselActions from './raetsel.actions';
-import { GeneratedImages, initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
+import { initialRaetselDetailsContent, Raetsel, RaetselDetails, RaetselDetailsContent } from '../../entities/raetsel';
 import { initialPaginationState, PaginationState, SelectableItem } from '@mja-workspace/shared/util-mja';
+import { GeneratedImages } from '@mja-workspace/shared/ui-components';
 
 export const RAETSEL_FEATURE_KEY = 'raetsel';
 

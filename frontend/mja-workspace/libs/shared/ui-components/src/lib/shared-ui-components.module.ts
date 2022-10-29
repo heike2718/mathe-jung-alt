@@ -9,6 +9,7 @@ import { JaNeinDialogComponent } from './ja-nein-dialog/ja-nein-dialog.component
 import { SelectItemsComponent } from './select-items/select-items.component';
 import { FileUploadComponent } from './ui-file-upload/file-upload.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
+import { RaetselImagesComponent } from './raetsel-image/raetsel-images.component';
 
 @NgModule({
   imports: [FormsModule, SharedUtilMjaModule, MaterialModule],
@@ -20,6 +21,7 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     SelectItemsComponent,
     FileUploadComponent,
     LoadingIndicatorComponent,
+    RaetselImagesComponent
   ],
   exports: [
     MessageComponent,
@@ -30,7 +32,8 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     SharedUtilMjaModule,
     SelectItemsComponent, // keine Ahnung, warum der Export in index.ts bei dieser Komponente nicht reicht, bei den anderen Komponenten aber schon
     FileUploadComponent,
-    LoadingIndicatorComponent
+    LoadingIndicatorComponent,
+    RaetselImagesComponent
   ],
 })
 export class SharedUiComponentsModule {}

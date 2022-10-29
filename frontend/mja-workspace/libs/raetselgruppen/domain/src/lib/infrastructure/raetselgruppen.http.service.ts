@@ -108,5 +108,4 @@ export class RaetselgruppenHttpService {
         const obs$: Observable<RaetselgruppeDetails> = this.http.put<RaetselgruppeDetails>(url, payload, { headers });
         return this.loadingService.showLoaderUntilCompleted(obs$);
     }
-
 }

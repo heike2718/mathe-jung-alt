@@ -17,12 +17,15 @@ export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit {
   dataSource!: RaetselgruppenelementeDataSource;
 
   @Output()
+  showImages: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
+
+  @Output()
   editElement: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
 
   @Output()
   deleteElement: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
 
-  displayedColumns = ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'edit', 'delete'];
+  displayedColumns = ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'show', 'edit', 'delete'];
 
   constructor(private raetselgruppenFacade: RaetselgruppenFacade) { }
 
@@ -32,6 +35,10 @@ export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit(): void {
     this.table.dataSource = this.dataSource;
+  }
+
+  showImagesClicked(element: Raetselgruppenelement): void {
+    this.showImages.emit(element);
   }
 
   editElementClicked(element: Raetselgruppenelement): void {

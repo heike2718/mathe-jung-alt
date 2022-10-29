@@ -1,3 +1,4 @@
+import { GeneratedImages } from "@mja-workspace/shared/ui-components";
 import { STATUS } from "@mja-workspace/shared/util-mja";
 import { Deskriptor, Suchkontext } from "@mja-workspace/suchfilter/domain";
 
@@ -59,11 +60,6 @@ export interface RaetselDetailsContent {
 export interface EditRaetselPayload {
   readonly latexHistorisieren: boolean;
   readonly raetsel: RaetselDetails;
-};
-
-export interface GeneratedImages {
-  readonly imageFrage: string | null;
-  readonly imageLoesung: string | null;
 };
 
 export interface GeneratedPDF {

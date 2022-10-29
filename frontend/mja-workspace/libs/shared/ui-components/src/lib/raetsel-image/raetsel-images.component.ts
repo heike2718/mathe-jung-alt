@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { GeneratedImages, RaetselDetails } from '@mja-workspace/raetsel/domain';
+import { Component, Input } from '@angular/core';
+import { GeneratedImages } from './raetsel-images.model';
 
 @Component({
   selector: 'mja-raetsel-images',

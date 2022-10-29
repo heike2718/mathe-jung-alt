@@ -13,8 +13,9 @@ import {
   SuchfilterQueryParameterMapper,
   PageDefinition
 } from '@mja-workspace/suchfilter/domain';
-import { EditRaetselPayload, GeneratedImages, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
+import { EditRaetselPayload, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
 import { LoadingIndicatorService } from '@mja-workspace/shared/util-mja';
+import { GeneratedImages } from '@mja-workspace/shared/ui-components';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselHttpService {
@@ -61,11 +62,7 @@ export class RaetselHttpService {
     const headers = new HttpHeaders().set('Accept', 'application/json');
     return this.loadingService.showLoaderUntilCompleted(this.http.get<RaetselDetails>(url, { headers: headers }));
   }
-
-  // loadRaetselPNGs(raetselId: string): Observable<GeneratedImages> {
-  //   const url = this.#url + '/PNG/' + raetselId;
-  // }
-
+  
   generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
 
     const url = this.#url + '/PNG/' + raetselId;

@@ -59,6 +59,10 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
     this.#initAndOpenEditElementDialog(dialogData);
   }
 
+  onShowImagesElement($element: Raetselgruppenelement): void {
+    
+  }
+
   onEditElement($element: Raetselgruppenelement): void {
 
     const dialogData: RaetselgruppenelementDialogData = {

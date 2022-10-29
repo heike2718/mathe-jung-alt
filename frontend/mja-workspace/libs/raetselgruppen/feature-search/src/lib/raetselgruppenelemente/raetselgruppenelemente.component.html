@@ -30,6 +30,13 @@
       <td mat-cell *matCellDef="let element"><span *ngIf="element.loesungsbuchstabe">{{element.loesungsbuchstabe}}</span></td>
     </ng-container>
 
+    <!-- Show Images Column -->
+    <ng-container matColumnDef="show">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element"> <button mat-raised-button color="primary"
+          (click)="showImagesClicked(element)">PNGs</button></td>
+    </ng-container>
+
     <!-- Edit Column -->
     <ng-container matColumnDef="edit">
       <th mat-header-cell *matHeaderCellDef></th>
