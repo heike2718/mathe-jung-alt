@@ -9,6 +9,7 @@ import java.util.Optional;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
+import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 
 /**
@@ -65,4 +66,11 @@ public interface RaetselService {
 	 * @return            Optional
 	 */
 	Optional<String> getRaetselIdWithSchluessel(String schluessel);
+
+	/**
+	 * @param  schluessel
+	 *                    String
+	 * @return            Optional
+	 */
+	Images findImagesZuSchluessel(String schluessel);
 }

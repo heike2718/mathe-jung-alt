@@ -13,6 +13,7 @@ import { RaetselgruppeDetailsComponent } from './raetselgruppe-details/raetselgr
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RaetselgruppenelementeComponent } from './raetselgruppenelemente/raetselgruppenelemente.component';
 import { RaetselgruppenelementDialogComponent } from './raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
+import { RaetselFeatureSearchModule } from '@mja-workspace/raetsel/feature-search';
 
 @NgModule({
   imports: [

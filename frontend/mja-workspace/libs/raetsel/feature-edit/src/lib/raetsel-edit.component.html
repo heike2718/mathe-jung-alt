@@ -78,7 +78,7 @@
                 </div>
 
                 <div *ngIf="raetselDetails.raetsel.images !== null && raetselDetails.raetsel.images.imageFrage">
-                    <mja-raetsel-images [raetsel]="raetselDetails.raetsel"></mja-raetsel-images>
+                    <mja-raetsel-images [images]="raetselDetails.raetsel.images"></mja-raetsel-images>
                     <div *ngIf="!raetselDetails.raetsel.images || !raetselDetails.raetsel.images.imageFrage">
                         <p>noch keine Images generiert</p>
                     </div>

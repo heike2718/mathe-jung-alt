@@ -246,6 +246,33 @@ public class RaetselResource {
 	}
 
 	@GET
+	@Path("PNG/{schluessel}")
+	@RolesAllowed("ADMIN")
+	@Operation(
+		operationId = "raetselImagesLaden",
+		summary = "Läd die Vorschaubilder (png) des Rätsels")
+	@Parameters({
+		@Parameter(
+			name = "schluessel",
+			description = "Fachlicher Schlüssel des Rätsels") })
+	@APIResponse(
+		name = "LoadImagesRaetselOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = Images.class)))
+	@APIResponse(
+		name = "LoadImagesRaetselServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Images raetselImagesLaden(@PathParam(value = "schluessel") final String schluessel) {
+
+		return this.raetselService.findImagesZuSchluessel(schluessel);
+	}
+
+	@POST
 	@Path("PNG/{raetselID}")
 	@RolesAllowed("ADMIN")
 	@Operation(
@@ -271,8 +298,7 @@ public class RaetselResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public Images raetselImagesGenerieren(@PathParam(
-		value = "raetselID") final String raetselUuid, @QueryParam(
-			value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+		value = "raetselID") final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		this.delayService.pause();
 

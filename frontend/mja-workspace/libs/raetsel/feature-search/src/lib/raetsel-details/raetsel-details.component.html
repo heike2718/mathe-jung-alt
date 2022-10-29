@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <mja-raetsel-images [raetsel]="raetsel"></mja-raetsel-images>
+        <mja-raetsel-images *ngIf="raetsel.images" [images]="raetsel.images"></mja-raetsel-images>
 
         <div *ngIf="raetsel.antwortvorschlaege.length > 0">
             <mat-accordion>
@@ -58,7 +58,7 @@
                 <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                         [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF generieren</button></div>
                 <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                        (click)="gotoRaetselUebersicht()">zur Übersicht</button>
+                        (click)="gotoRaetselUebersicht()">Suche</button>
                 </div>
             </div>
 

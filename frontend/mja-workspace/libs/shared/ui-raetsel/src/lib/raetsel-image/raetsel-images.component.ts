@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RaetselDetails } from '@mja-workspace/raetsel/domain';
+import { GeneratedImages, RaetselDetails } from '@mja-workspace/raetsel/domain';
 
 @Component({
   selector: 'mja-raetsel-images',
@@ -9,6 +9,5 @@ import { RaetselDetails } from '@mja-workspace/raetsel/domain';
 export class RaetselImagesComponent {
 
   @Input()
-  raetsel!: RaetselDetails;
-
+  images!: GeneratedImages;
 }

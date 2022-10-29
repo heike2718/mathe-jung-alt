@@ -62,14 +62,17 @@ export class RaetselHttpService {
     return this.loadingService.showLoaderUntilCompleted(this.http.get<RaetselDetails>(url, { headers: headers }));
   }
 
+  // loadRaetselPNGs(raetselId: string): Observable<GeneratedImages> {
+  //   const url = this.#url + '/PNG/' + raetselId;
+  // }
+
   generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
 
     const url = this.#url + '/PNG/' + raetselId;
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
-    return this.loadingService.showLoaderUntilCompleted(this.http.get<GeneratedImages>(url, { headers: headers, params: params }));
+    return this.loadingService.showLoaderUntilCompleted(this.http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers }));
   }
 
   generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedPDF> {
