@@ -8,6 +8,9 @@ import { GeneratedImages } from "../raetsel-image/raetsel-images.model";
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Stellt backend-Calls zur verfügung, die aus verschiedenen Libraries aufgerufen werden sollen.
+ */
 export class SharedHttpService {
 
   #url = this.configuration.baseUrl;

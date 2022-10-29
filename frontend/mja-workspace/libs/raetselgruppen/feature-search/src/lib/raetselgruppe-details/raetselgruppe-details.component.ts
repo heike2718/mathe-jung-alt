@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EditRaetselgruppenelementPayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenFacade, RaetselgruppensucheTrefferItem } from '@mja-workspace/raetselgruppen/domain';
-import { JaNeinDialogComponent, JaNeinDialogData } from '@mja-workspace/shared/ui-components';
+import { GeneratedImages, JaNeinDialogComponent, JaNeinDialogData, SharedHttpService } from '@mja-workspace/shared/ui-components';
 import { Subscription, tap } from 'rxjs';
 import { RaetselgruppenelementDialogComponent } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
 import { RaetselgruppenelementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
@@ -15,8 +15,14 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
 
   #raetselgruppeSubscription = new Subscription();
   #raetselgruppeBasidaten?: RaetselgruppeBasisdaten;
+  #imagesSubscription = new Subscription();
 
-  constructor(public raetselgruppenFacade: RaetselgruppenFacade, public dialog: MatDialog) { }
+  images?: GeneratedImages;
+  schluessel = '';
+
+  constructor(public raetselgruppenFacade: RaetselgruppenFacade,
+    public dialog: MatDialog,
+    private sharedHttpService: SharedHttpService) { }
 
   ngOnInit(): void {
 
@@ -29,6 +35,7 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
 
     this.#raetselgruppeSubscription.unsubscribe();
+    this.#imagesSubscription.unsubscribe();
   }
 
   getRaetselgruppeID(): string | undefined {
@@ -60,7 +67,14 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
   }
 
   onShowImagesElement($element: Raetselgruppenelement): void {
-    
+
+    this.schluessel = $element.raetselSchluessel;
+
+    this.#imagesSubscription.unsubscribe();
+    this.#imagesSubscription = this.sharedHttpService.loadRaetselPNGs($element.raetselSchluessel).pipe(
+      tap((images: GeneratedImages) => this.images = images)
+    ).subscribe();
+
   }
 
   onEditElement($element: Raetselgruppenelement): void {

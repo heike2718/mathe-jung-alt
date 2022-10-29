@@ -69,9 +69,18 @@
     <mja-raetselgruppenelemente (showImages)="onShowImagesElement($event)" (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
     </mja-raetselgruppenelemente>
 
+    <h2>Vorschau {{schluessel}}</h2>
+    <div *ngIf="images else imagesFehlen">
+        <mja-raetsel-images [images]="images"></mja-raetsel-images>
+    </div>
+
 </div>
 
 <ng-template #keineGruppe>
     <h2>Rätselgruppe Details</h2>
     <p>keine Gruppe ausgewählt</p>
+</ng-template>
+
+<ng-template #imagesFehlen>
+    <p>Entweder wurde die Vorschau nicht geladen oder sie existiert nicht</p>
 </ng-template>

@@ -6,8 +6,6 @@ import * as RaetselgruppenSelectors from '../+state/raetselgruppen.selectors';
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
-import { GeneratedImages, SharedHttpService } from "@mja-workspace/shared/ui-components";
-
 
 @Injectable({
     providedIn: 'root'
@@ -22,8 +20,7 @@ export class RaetselgruppenFacade {
     raetselgruppenelemente$ = this.store.pipe(select(RaetselgruppenSelectors.getRaetselgruppenelemente));
 
     constructor(private store: Store<fromRaetselgruppen.RaetselgruppenPartialState>,
-        private router: Router,
-        private sharedHttpService: SharedHttpService) { }
+        private router: Router) { }
 
     public setSuchparameter(suchparameter: RaetselgruppenSuchparameter): void {
         this.store.dispatch(RaetselgruppenActions.suchparameterChanged({ suchparameter }));
@@ -72,10 +69,5 @@ export class RaetselgruppenFacade {
 
     public deleteRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
         this.store.dispatch(RaetselgruppenActions.deleteRaetselgruppenelement({ raetselgruppeID, payload }));
-    }
-
-    public showImages(schluessel: string): Observable<GeneratedImages> {
-
-        return this.sharedHttpService.loadRaetselPNGs(schluessel);
     }
 }
