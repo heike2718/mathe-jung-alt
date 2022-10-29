@@ -42,10 +42,12 @@ public class QuizResource {
 	QuizService aufgabengruppenService;
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("{referenztyp}/{referenz}/{schwierigkeitsgrad}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@PermitAll
-	@Operation(operationId = "loadQuiz", summary = "Läd ein Quiz")
+	@Operation(
+		operationId = "generateQuizForUniqueKey",
+		summary = "Generiert ein JSON-Objekt mit allen Aufgaben und Lösungen der Rätselgruppe, die durch die fachlichen Parameter eindeutig bestimmt ist. Das ist eine Methode, um auf die Minikänguru-Wettbewerbe zuzugreifen, ohne deren ID zu kennen. Die API liefert nur Quiz mit dem Status FREIGEGEBEN zurück.")
 	@Parameters({
 		@Parameter(name = "referenztyp", description = "Kontext zur Interpretation der Referenz"),
 		@Parameter(name = "referenz", description = "ID im alten Aufgabenarchiv"),
@@ -68,7 +70,7 @@ public class QuizResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	public Response loadQuiz(@PathParam(
+	public Response generateQuizForUniqueKey(@PathParam(
 		value = "referenztyp") final Referenztyp referenztyp, @Pattern(
 			regexp = "^[\\w äöüß]{1,20}$", message = "referenz enthält ungültige Zeichen") @PathParam(
 				value = "referenz") final String referenz, @PathParam(

@@ -45,6 +45,19 @@ public class QuizService {
 	DeskriptorenService descriptorenService;
 
 	/**
+	 * Generiert aus der Rätselgruppe das Zeug zu Anzeigen eines Quiz.
+	 *
+	 * @param  raetselgruppeId
+	 * @param  forAdmin
+	 *                         boolean falls true, kann auch ein nicht freigegebenes Quiz zurückgegeben werden.
+	 * @return
+	 */
+	public Optional<Quiz> generateQuiz(final String raetselgruppeId, final boolean forAdmin) {
+
+		return Optional.empty();
+	}
+
+	/**
 	 * Sucht alle Aufgaben des durch die Parameter eindeutig bestimmten Quiz zur Präsentation im Browser. Es werden nur die
 	 * Gruppen mit Status FREIGEGEBEN gefunden.
 	 *
