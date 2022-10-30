@@ -296,7 +296,7 @@ public class RaetselResource {
 			description = "technische ID des Rätsels"),
 		@Parameter(
 			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)") })
+			description = "Payload: Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)") })
 	@APIResponse(
 		name = "GenerateImagesRaetselOKResponse",
 		responseCode = "200",
@@ -310,7 +310,7 @@ public class RaetselResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public Images raetselImagesGenerieren(@PathParam(
-		value = "raetselID") final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+		value = "raetselID") final String raetselUuid, @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		this.delayService.pause();
 
@@ -353,7 +353,7 @@ public class RaetselResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselID enthält ungültige Zeichen") @PathParam(
 			value = "raetselID") final String raetselUuid, @QueryParam(
-				value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
 
 		this.delayService.pause();
 

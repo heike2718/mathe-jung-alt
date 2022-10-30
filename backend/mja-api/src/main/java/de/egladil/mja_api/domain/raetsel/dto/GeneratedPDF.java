@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetsel.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class GeneratedPDF {
 
-	@JsonProperty
+	@JsonIgnore
 	private String url;
 
 	@JsonProperty
