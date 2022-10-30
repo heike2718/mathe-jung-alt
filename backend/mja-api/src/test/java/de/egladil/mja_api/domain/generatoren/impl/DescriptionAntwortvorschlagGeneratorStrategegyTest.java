@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.TestFileUtils;
-import de.egladil.mja_api.domain.generatoren.impl.DescriptionAntwortvorschlagGeneratorStrategegy;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
@@ -33,7 +32,7 @@ public class DescriptionAntwortvorschlagGeneratorStrategegyTest {
 		Raetsel raetsel = TestFileUtils.loadReaetsel();
 
 		// Act
-		String result = strategy.generateLaTeXAntwortvorschlaege(raetsel);
+		String result = strategy.generateLaTeXAntwortvorschlaege(raetsel.getAntwortvorschlaege());
 
 		// Assert
 		assertNotNull(result);
@@ -49,7 +48,7 @@ public class DescriptionAntwortvorschlagGeneratorStrategegyTest {
 		Raetsel raetsel = new Raetsel("bla");
 
 		// Act
-		String result = strategy.generateLaTeXAntwortvorschlaege(raetsel);
+		String result = strategy.generateLaTeXAntwortvorschlaege(raetsel.getAntwortvorschlaege());
 
 		// Assert
 		assertTrue(result.isEmpty());
@@ -64,7 +63,7 @@ public class DescriptionAntwortvorschlagGeneratorStrategegyTest {
 		raetsel.withAntwortvorschlaege(new Antwortvorschlag[0]);
 
 		// Act
-		String result = strategy.generateLaTeXAntwortvorschlaege(raetsel);
+		String result = strategy.generateLaTeXAntwortvorschlaege(raetsel.getAntwortvorschlaege());
 
 		// Assert
 		assertTrue(result.isEmpty());

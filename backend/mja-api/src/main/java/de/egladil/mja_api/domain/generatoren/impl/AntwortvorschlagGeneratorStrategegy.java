@@ -4,8 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
 
+import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mja_api.domain.raetsel.Raetsel;
 
 public interface AntwortvorschlagGeneratorStrategegy {
 
@@ -14,11 +14,11 @@ public interface AntwortvorschlagGeneratorStrategegy {
 	/**
 	 * Generiert den LaTeX-Code für die Antwortvorschläge zum gegebenen antwortvorschlaegeTyp
 	 *
-	 * @param  raetsel
-	 *                 Raetsel
-	 * @return         String LaTeX-Code
+	 * @param  antwortVorschlaege
+	 *                            Antwortvorschlag[]
+	 * @return                    String LaTeX-Code
 	 */
-	String generateLaTeXAntwortvorschlaege(Raetsel raetsel);
+	String generateLaTeXAntwortvorschlaege(Antwortvorschlag[] antwortVorschlaege);
 
 	public static AntwortvorschlagGeneratorStrategegy create(final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 

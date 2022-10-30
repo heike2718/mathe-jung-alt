@@ -8,12 +8,12 @@ import java.io.File;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
+import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -42,12 +42,12 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		File file = new File(path);
 
 		String antworten = AntwortvorschlagGeneratorStrategegy.create(layoutAntwortvorschlaege)
-			.generateLaTeXAntwortvorschlaege(raetsel);
+			.generateLaTeXAntwortvorschlaege(raetsel.getAntwortvorschlaege());
 
 		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PNG_TEX);
-		template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.getPlaceholder(), "");
-		template = template.replace(LaTeXPlaceholder.CONTENT.getPlaceholder(), raetsel.getFrage());
-		template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.getPlaceholder(), antworten);
+		template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
+		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), raetsel.getFrage());
+		template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), antworten);
 
 		writeOutput(raetsel, file, template);
 		LOGGER.debug("latex file generated: " + path);
@@ -63,9 +63,9 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		String textLoesungsbuchstabe = getTextLoesungsbuchstabe(raetsel.getAntwortvorschlaege());
 
 		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PNG_TEX);
-		template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.getPlaceholder(), textLoesungsbuchstabe);
-		template = template.replace(LaTeXPlaceholder.CONTENT.getPlaceholder(), raetsel.getLoesung());
-		template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.getPlaceholder(), "");
+		template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), textLoesungsbuchstabe);
+		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), raetsel.getLoesung());
+		template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), "");
 
 		writeOutput(raetsel, file, template);
 		LOGGER.debug("latex file generated: " + path);
@@ -78,20 +78,13 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + SUFFIX_PDF + ".tex";
 		File file = new File(path);
 
-		String antworten = AntwortvorschlagGeneratorStrategegy.create(layoutAntwortvorschlaege)
-			.generateLaTeXAntwortvorschlaege(raetsel);
+		RaetselGeneratorinput input = new RaetselGeneratorinput().withAntwortvorschlaege(raetsel.getAntwortvorschlaege())
+			.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung()).withLayoutAntwortvorschlaege(layoutAntwortvorschlaege);
+
+		String textRaetsel = new QuizitemLaTeXGenerator().generateLaTeX(input);
 
 		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PDF_TEX);
-		template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.getPlaceholder(), raetsel.getFrage());
-		template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.getPlaceholder(), antworten);
-
-		if (StringUtils.isNotBlank(raetsel.getLoesung())) {
-
-			String textLoesungsbuchstabe = getTextLoesungsbuchstabe(raetsel.getAntwortvorschlaege());
-			template = template.replace(LaTeXPlaceholder.PAR.getPlaceholder(), LaTeXConstants.VALUE_PAR);
-			template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.getPlaceholder(), textLoesungsbuchstabe);
-			template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.getPlaceholder(), raetsel.getLoesung());
-		}
+		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), textRaetsel);
 
 		writeOutput(raetsel, file, template);
 		LOGGER.debug("latex file generated: " + path);

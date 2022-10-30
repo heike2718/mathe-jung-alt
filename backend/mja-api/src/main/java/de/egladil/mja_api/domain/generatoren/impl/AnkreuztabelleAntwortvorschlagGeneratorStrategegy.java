@@ -5,7 +5,6 @@
 package de.egladil.mja_api.domain.generatoren.impl;
 
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
-import de.egladil.mja_api.domain.raetsel.Raetsel;
 
 /**
  * AnkreuztabelleAntwortvorschlagGeneratorStrategegy
@@ -13,16 +12,14 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 public class AnkreuztabelleAntwortvorschlagGeneratorStrategegy implements AntwortvorschlagGeneratorStrategegy {
 
 	@Override
-	public String generateLaTeXAntwortvorschlaege(final Raetsel raetsel) {
+	public String generateLaTeXAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
-		Antwortvorschlag[] antwortVorschlaege = raetsel.getAntwortvorschlaege();
-
-		if (antwortVorschlaege == null || antwortVorschlaege.length == 0) {
+		if (antwortvorschlaege == null || antwortvorschlaege.length == 0) {
 
 			return "";
 		}
 
-		String tableType = PATTERN_TABLETYPE.replace("#", "" + antwortVorschlaege.length);
+		String tableType = PATTERN_TABLETYPE.replace("#", "" + antwortvorschlaege.length);
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("\\begin{center}\n");
@@ -30,24 +27,24 @@ public class AnkreuztabelleAntwortvorschlagGeneratorStrategegy implements Antwor
 		sb.append(tableType);
 		sb.append("\n\\hline\n");
 
-		for (int i = 0; i < antwortVorschlaege.length; i++) {
+		for (int i = 0; i < antwortvorschlaege.length; i++) {
 
-			Antwortvorschlag antwortvorschlag = antwortVorschlaege[i];
+			Antwortvorschlag antwortvorschlag = antwortvorschlaege[i];
 
 			sb.append(antwortvorschlag.getText());
 
-			if (i < antwortVorschlaege.length - 1) {
+			if (i < antwortvorschlaege.length - 1) {
 
 				sb.append(" & ");
 			}
 		}
 		sb.append("\\\\\n\\hline\n");
 
-		for (int i = 0; i < antwortVorschlaege.length; i++) {
+		for (int i = 0; i < antwortvorschlaege.length; i++) {
 
 			sb.append("");
 
-			if (i < antwortVorschlaege.length - 1) {
+			if (i < antwortvorschlaege.length - 1) {
 
 				sb.append(" & ");
 			}

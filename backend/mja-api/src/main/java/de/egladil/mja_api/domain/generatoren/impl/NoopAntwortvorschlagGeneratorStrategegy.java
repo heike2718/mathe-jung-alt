@@ -4,7 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
 
-import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 
 /**
  * NoopAntwortvorschlagGeneratorStrategegy
@@ -12,7 +12,7 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 public class NoopAntwortvorschlagGeneratorStrategegy implements AntwortvorschlagGeneratorStrategegy {
 
 	@Override
-	public String generateLaTeXAntwortvorschlaege(final Raetsel raetsel) {
+	public String generateLaTeXAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
 		return "";
 	}

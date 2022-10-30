@@ -28,7 +28,7 @@ public enum LaTeXPlaceholder {
 		this.placeholder = placeholder;
 	}
 
-	public String getPlaceholder() {
+	public String placeholder() {
 
 		return placeholder;
 	}

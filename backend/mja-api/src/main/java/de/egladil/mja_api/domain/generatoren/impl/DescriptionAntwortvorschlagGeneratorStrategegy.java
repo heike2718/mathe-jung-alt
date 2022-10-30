@@ -5,7 +5,6 @@
 package de.egladil.mja_api.domain.generatoren.impl;
 
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
-import de.egladil.mja_api.domain.raetsel.Raetsel;
 
 /**
  * DescriptionAntwortvorschlagGeneratorStrategegy
@@ -13,11 +12,9 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 public class DescriptionAntwortvorschlagGeneratorStrategegy implements AntwortvorschlagGeneratorStrategegy {
 
 	@Override
-	public String generateLaTeXAntwortvorschlaege(final Raetsel raetsel) {
+	public String generateLaTeXAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
-		Antwortvorschlag[] antwortVorschlaege = raetsel.getAntwortvorschlaege();
-
-		if (antwortVorschlaege == null || antwortVorschlaege.length == 0) {
+		if (antwortvorschlaege == null || antwortvorschlaege.length == 0) {
 
 			return "";
 		}
@@ -28,7 +25,7 @@ public class DescriptionAntwortvorschlagGeneratorStrategegy implements Antwortvo
 		sb.append("\\begin{description}");
 		sb.append("\n");
 
-		for (Antwortvorschlag antwortvorschlag : antwortVorschlaege) {
+		for (Antwortvorschlag antwortvorschlag : antwortvorschlaege) {
 
 			sb.append("\\item[(");
 			sb.append(antwortvorschlag.getBuchstabe());
