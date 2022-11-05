@@ -93,4 +93,13 @@ public interface RaetselDao {
 	 * @return
 	 */
 	PersistentesRaetsel findWithSchluessel(String schluessel);
+
+	/**
+	 * Selectiert alle Raetsel, deren SCHLUESSEL in der gegebenen Collection enthalten ist.
+	 *
+	 * @param  schluessel
+	 *                    List
+	 * @return            List
+	 */
+	List<PersistentesRaetsel> findWithSchluessel(List<String> schluessel);
 }

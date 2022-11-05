@@ -30,6 +30,7 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
+import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 
@@ -275,7 +276,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 	String output2Url(final String filename) {
 
-		return "file://" + latexBaseDir + File.separator + filename;
+		return MjaFileUtils.output2Url(latexBaseDir + File.separator + filename);
 	}
 
 }

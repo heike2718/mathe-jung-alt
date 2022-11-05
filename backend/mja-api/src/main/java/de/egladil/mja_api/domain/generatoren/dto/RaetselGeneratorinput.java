@@ -63,5 +63,4 @@ public class RaetselGeneratorinput {
 		this.layoutAntwortvorschlaege = layoutAntwortvorschlaege;
 		return this;
 	}
-
 }

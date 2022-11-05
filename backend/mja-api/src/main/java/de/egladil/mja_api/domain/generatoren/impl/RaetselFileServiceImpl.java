@@ -26,9 +26,9 @@ import de.egladil.mja_api.domain.utils.MjaFileUtils;
 @ApplicationScoped
 public class RaetselFileServiceImpl implements RaetselFileService {
 
-	private static final String LATEX_TEMPLATE_PNG_TEX = "/latex/template-raetsel-png.tex";
+	private static final String LATEX_TEMPLATE_PNG = "/latex/template-raetsel-png.tex";
 
-	private static final String LATEX_TEMPLATE_PDF_TEX = "/latex/template-raetsel-pdf.tex";
+	private static final String LATEX_TEMPLATE_PDF = "/latex/template-raetsel-pdf.tex";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselFileServiceImpl.class);
 
@@ -44,7 +44,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		String antworten = AntwortvorschlagGeneratorStrategegy.create(layoutAntwortvorschlaege)
 			.generateLaTeXAntwortvorschlaege(raetsel.getAntwortvorschlaege());
 
-		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PNG_TEX);
+		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PNG);
 		template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), raetsel.getFrage());
 		template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), antworten);
@@ -62,7 +62,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 
 		String textLoesungsbuchstabe = getTextLoesungsbuchstabe(raetsel.getAntwortvorschlaege());
 
-		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PNG_TEX);
+		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PNG);
 		template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), textLoesungsbuchstabe);
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), raetsel.getLoesung());
 		template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), "");
@@ -81,9 +81,9 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		RaetselGeneratorinput input = new RaetselGeneratorinput().withAntwortvorschlaege(raetsel.getAntwortvorschlaege())
 			.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung()).withLayoutAntwortvorschlaege(layoutAntwortvorschlaege);
 
-		String textRaetsel = new QuizitemLaTeXGenerator().generateLaTeX(input);
+		String textRaetsel = new QuizitemLaTeXGenerator().generateLaTeXFrageLoesung(input);
 
-		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PDF_TEX);
+		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PDF);
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), textRaetsel);
 
 		writeOutput(raetsel, file, template);

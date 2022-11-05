@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.infrastructure.resources.QuizResource;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;

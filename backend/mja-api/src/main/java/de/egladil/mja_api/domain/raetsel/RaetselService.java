@@ -4,12 +4,14 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetsel;
 
+import java.util.List;
 import java.util.Optional;
 
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
+import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 
 /**
@@ -73,4 +75,13 @@ public interface RaetselService {
 	 * @return            Optional
 	 */
 	Images findImagesZuSchluessel(String schluessel);
+
+	/**
+	 * Läd das, was als Input für ein LaTeX-File erforderlich ist.
+	 *
+	 * @param  schluessel
+	 *                    List eine Liste von Schlüsseln.
+	 * @return            List
+	 */
+	List<RaetselLaTeXDto> findRaetselLaTeXwithSchluessel(List<String> schluessel);
 }

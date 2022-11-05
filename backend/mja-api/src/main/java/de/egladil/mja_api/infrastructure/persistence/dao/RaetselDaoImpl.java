@@ -152,4 +152,12 @@ public class RaetselDaoImpl implements RaetselDao {
 
 		return trefferliste.isEmpty() ? null : trefferliste.get(0);
 	}
+
+	@Override
+	public List<PersistentesRaetsel> findWithSchluessel(final List<String> schluessel) {
+
+		return entityManager.createNamedQuery(PersistentesRaetsel.FIND_WITH_SCHLUESSEL_LIST, PersistentesRaetsel.class)
+			.setParameter("schluessel", schluessel).getResultList();
+	}
+
 }

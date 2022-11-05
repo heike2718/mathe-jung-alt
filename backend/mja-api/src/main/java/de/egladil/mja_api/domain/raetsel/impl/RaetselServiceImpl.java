@@ -31,6 +31,7 @@ import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.GrafikInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
+import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
@@ -209,6 +210,15 @@ public class RaetselServiceImpl implements RaetselService {
 	public Images findImagesZuSchluessel(final String schluessel) {
 
 		return this.raetselFileService.findImages(schluessel);
+	}
+
+	@Override
+	public List<RaetselLaTeXDto> findRaetselLaTeXwithSchluessel(final List<String> schluessel) {
+
+		List<PersistentesRaetsel> trefferliste = raetselDao.findWithSchluessel(schluessel);
+
+		return trefferliste.stream().map(pr -> RaetselLaTeXDto.mapFromDB(pr)).toList();
+
 	}
 
 	List<GrafikInfo> getGrafikInfos(final List<String> pfade) {

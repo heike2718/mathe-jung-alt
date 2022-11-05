@@ -18,10 +18,12 @@ import javax.ws.rs.core.Response.Status;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
+import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.AntwortvorschlaegeMapper;
+import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenDao;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
@@ -48,6 +50,9 @@ public class QuizService {
 
 	@Inject
 	DeskriptorenService descriptorenService;
+
+	@Inject
+	RaetselgruppeGeneratorService raetselgruppeFileService;
 
 	/**
 	 * Sucht alle Aufgaben des durch die Parameter eindeutig bestimmten Quiz zur Präsentation im Browser. Es werden nur die
@@ -82,7 +87,7 @@ public class QuizService {
 	 * @param  raetselgruppeID
 	 * @return
 	 */
-	public GeneratedPDF printVorschau(final String raetselgruppeID) {
+	public GeneratedPDF printVorschau(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -92,7 +97,9 @@ public class QuizService {
 				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Rätselgruppe gibt es nicht.")).build());
 		}
 
-		return null;
+		List<Quizaufgabe> aufgaben = mapRaetselgruppeItems(raetselgruppeID);
+
+		return raetselgruppeFileService.generateVorschauPDFQuiz(dbResult, aufgaben, layoutAntwortvorschlaege);
 	}
 
 	List<Quizaufgabe> mapRaetselgruppeItems(final String raetselgruppeID) {

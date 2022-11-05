@@ -16,7 +16,8 @@ public enum LaTeXPlaceholder {
 	CONTENT_RAETSEL_FRAGE_LOESUNG("{content-raetsel-frage-loesung}"),
 	LOESUNGSBUCHSTABE("{loesungsbuchstabe}"),
 	NEWPAGE("{newpage}"),
-	PAR("{par}");
+	PAR("{par}"),
+	UEBERSCHRIFT("{ueberschrift}");
 
 	private final String placeholder;
 

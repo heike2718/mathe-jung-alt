@@ -105,4 +105,34 @@ public class MjaFileUtils {
 
 		return null;
 	}
+
+	public static String output2Url(final String path) {
+
+		return "file://" + path;
+	}
+
+	public static void deleteTemporaryFiles(final String... paths) {
+
+		for (String path : paths) {
+
+			boolean deleted = new File(path).delete();
+
+			if (!deleted) {
+
+				LOGGER.warn("File {} wurde nicht gelöscht", path);
+			}
+		}
+	}
+
+	public static String nameToFilenamePart(final String name) {
+
+		String result = name.toLowerCase().replaceAll(" ", "_");
+
+		result = result.replaceAll("ä", "ae");
+		result = result.replaceAll("ö", "oe");
+		result = result.replaceAll("ü", "ue");
+		result = result.replaceAll("ß", "ss");
+		return result;
+
+	}
 }

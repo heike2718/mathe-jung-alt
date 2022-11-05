@@ -121,7 +121,7 @@ public class QuizResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	@RolesAllowed({ "ADMIN", "LEHRER", "PRIVAT", "STANDARD" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
 	public GeneratedPDF printQuizArbeitsblaetter(@PathParam(
 		value = "raetselgruppeID") @Pattern(
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
@@ -160,14 +160,14 @@ public class QuizResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	@RolesAllowed({ "ADMIN" })
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	public GeneratedPDF printQuizVorschau(@PathParam(
 		value = "raetselgruppeID") @Pattern(
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
 			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
 				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		return null;
+		return quizService.printVorschau(raetselgruppeID, layoutAntwortvorschlaege);
 	}
 
 }

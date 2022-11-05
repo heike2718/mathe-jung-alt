@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
@@ -13,6 +15,7 @@ import de.egladil.mja_api.domain.utils.MjaFileUtils;
 /**
  * QuizitemLaTeXGenerator
  */
+@ApplicationScoped
 public class QuizitemLaTeXGenerator {
 
 	private static final String LATEX_QUIZITEM_FRAGE_LOESUNG = "/latex/template-quiz-frage-loesung.tex";
@@ -24,13 +27,15 @@ public class QuizitemLaTeXGenerator {
 	 *               RaetselGeneratorinput die Texte des Rätsels, die gedruckt werden sollen.
 	 * @return       String<br>
 	 *               <br>
-	 *               TODO: hier noch Flexibilität rein mit Lösunh auf nächste Seite oder so,
+	 *               TODO: hier noch Flexibilität rein mit Lösung auf nächste Seite oder so,
 	 */
-	public String generateLaTeX(final RaetselGeneratorinput input) {
+	public String generateLaTeXFrageLoesung(final RaetselGeneratorinput input) {
 
 		String template = MjaFileUtils.loadTemplate(LATEX_QUIZITEM_FRAGE_LOESUNG);
 
 		template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.placeholder(), input.getFrage());
+
+		template = template.replace(LaTeXPlaceholder.PAR.placeholder(), LaTeXConstants.VALUE_PAR);
 
 		String antworten = AntwortvorschlagGeneratorStrategegy.create(input.getLayoutAntwortvorschlaege())
 			.generateLaTeXAntwortvorschlaege(input.getAntwortvorschlaege());
