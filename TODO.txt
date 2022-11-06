@@ -21,3 +21,5 @@
 (/) Rätselgruppe Details: frontend -> tabelle select-event öffnet Details mit Liste der Elemente und einem Button zum Ändern
 (-) public API: Liste von fachlich eindeutigen Schluesseln der Rätselgruppen eines Referenztyps, um die verfügbaren Parameter für die Einzelabfrage zu erhalten?
 (-) type ahead suche nach SCHLUESSEL beim Erfassen von Raetselgruppenelementen
+(-) PDF-Vorschau Raetselgruppen hat viele technische Schulden
+(-) rest: siehe Issues
