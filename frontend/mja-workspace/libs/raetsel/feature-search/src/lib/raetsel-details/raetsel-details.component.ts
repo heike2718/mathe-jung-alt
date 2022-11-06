@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GrafikFacade } from '@mja-workspace/grafik/domain';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
-import { anzeigeAntwortvorschlaegeSelectInput, GrafikInfo, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselFacade } from '@mja-workspace/raetsel/domain';
+import { GrafikInfo, RaetselDetails, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
-import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-components';
+import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectPrintparametersDialogComponent, SelectPrintparametersDialogData } from '@mja-workspace/shared/ui-components';
 import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 import { Message } from '@mja-workspace/shared/util-mja';
 import { Subscription } from 'rxjs';
@@ -74,15 +74,15 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     return quelle.id === this.#raetselDetails.quelleId;
   }
 
-  private openPrintDialog(outputformat: LATEX_OUTPUTFORMAT): void {
+  private openPrintDialog(outputformat: OUTPUTFORMAT): void {
 
-    const dialogData: PrintRaetselDialogData = {
+    const dialogData: SelectPrintparametersDialogData = {
       titel: outputformat + ' generieren',
       layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
       selectedLayoutAntwortvorschlaege: undefined
     }
 
-    const dialogRef = this.dialog.open(PrintRaetselDialogComponent, {
+    const dialogRef = this.dialog.open(SelectPrintparametersDialogComponent, {
       height: '300px',
       width: '700px',
       data: dialogData

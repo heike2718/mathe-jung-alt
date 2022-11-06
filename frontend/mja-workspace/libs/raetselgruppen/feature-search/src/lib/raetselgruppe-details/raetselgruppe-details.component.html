@@ -60,13 +60,16 @@
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 (click)="startEdit()">bearbeiten</button></div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                (click)="openPrintVorschauDialog()">Vorschau (PDF)</button></div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 (click)="gotoUebersicht()">zur Übersicht</button>
         </div>
     </div>
 
     <h2>Elemente</h2>
 
-    <mja-raetselgruppenelemente (showImages)="onShowImagesElement($event)" (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
+    <mja-raetselgruppenelemente (showImages)="onShowImagesElement($event)" (editElement)="onEditElement($event)"
+        (deleteElement)="onDeleteElement($event)">
     </mja-raetselgruppenelemente>
 
     <h2>Vorschau {{schluessel}}</h2>

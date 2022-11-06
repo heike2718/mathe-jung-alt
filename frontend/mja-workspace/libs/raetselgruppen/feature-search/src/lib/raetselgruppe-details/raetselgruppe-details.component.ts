@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { EditRaetselgruppenelementPayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenFacade, RaetselgruppensucheTrefferItem } from '@mja-workspace/raetselgruppen/domain';
-import { GeneratedImages, JaNeinDialogComponent, JaNeinDialogData, SharedHttpService } from '@mja-workspace/shared/ui-components';
+import { EditRaetselgruppenelementPayload, RaetselgruppeBasisdaten, Raetselgruppenelement, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
+import { anzeigeAntwortvorschlaegeSelectInput, GeneratedImages, JaNeinDialogComponent, JaNeinDialogData, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, SelectPrintparametersDialogComponent, SelectPrintparametersDialogData, SharedHttpService } from '@mja-workspace/shared/ui-components';
 import { Subscription, tap } from 'rxjs';
 import { RaetselgruppenelementDialogComponent } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
 import { RaetselgruppenelementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
@@ -16,6 +16,7 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
   #raetselgruppeSubscription = new Subscription();
   #raetselgruppeBasidaten?: RaetselgruppeBasisdaten;
   #imagesSubscription = new Subscription();
+  #raetselgruppeID: string = '';
 
   images?: GeneratedImages;
   schluessel = '';
@@ -27,9 +28,15 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.#raetselgruppeSubscription = this.raetselgruppenFacade.raetselgruppeDetails$.pipe(
-      tap((gruppe) => this.#raetselgruppeBasidaten = gruppe)
+      tap((gruppe) => {
+        this.#raetselgruppeBasidaten = gruppe;
+        if(gruppe) {
+          this.#raetselgruppeID = gruppe.id;
+        } else {
+          this.#raetselgruppeID = '';
+        }
+      })
     ).subscribe();
-
   }
 
   ngOnDestroy(): void {
@@ -97,6 +104,40 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  openPrintVorschauDialog(): void {
+
+    if (this.#raetselgruppeID.length === 0) {
+      return;
+    }
+
+    const dialogData: SelectPrintparametersDialogData = {
+      titel: 'Vorschau generieren',
+      layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
+      selectedLayoutAntwortvorschlaege: undefined
+    }
+
+    const dialogRef = this.dialog.open(SelectPrintparametersDialogComponent, {
+      height: '300px',
+      width: '700px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
+
+        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        switch (dialogData.selectedLayoutAntwortvorschlaege) {
+          case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
+          case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
+          case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
+        }
+
+        this.raetselgruppenFacade.generiereVorschau(this.#raetselgruppeID, layout);
+      }
+    });
+  }
+
   #openConfirmLoeschenDialog(raetselgruppeID: string, element: Raetselgruppenelement): void {
 
     const dialogData: JaNeinDialogData = {
@@ -116,6 +157,8 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
 
   #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData): void {
     const dialogRef = this.dialog.open(RaetselgruppenelementDialogComponent, {

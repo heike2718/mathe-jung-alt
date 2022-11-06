@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Quelle } from '@mja-workspace/quellen/domain';
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT } from '@mja-workspace/shared/ui-components';
 import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { filterByKontext, PageDefinition, Suchfilter, SuchfilterFacade, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, tap } from 'rxjs';
-
 import * as RaetselActions from '../+state/raetsel/raetsel.actions';
 import * as fromRaetsel from '../+state/raetsel/raetsel.reducer';
 import * as RaetselSelectors from '../+state/raetsel/raetsel.selectors';
-import { EditRaetselPayload, GrafikInfo, initialRaetselDetails, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, Raetsel, RaetselDetails, RaetselDetailsContent } from '../entities/raetsel';
+import { EditRaetselPayload, GrafikInfo, initialRaetselDetails, Raetsel, RaetselDetails, RaetselDetailsContent } from '../entities/raetsel';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -74,7 +74,7 @@ export class RaetselFacade {
     this.store.dispatch(RaetselActions.raetselSelected({ raetsel }));
   }
 
-  generiereRaetselOutput(raetselID: string, outputFormat: LATEX_OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+  generiereRaetselOutput(raetselID: string, outputFormat: OUTPUTFORMAT, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
 
     switch(outputFormat) {
       case 'PNG': this.store.dispatch(RaetselActions.generateRaetselPNGs({ raetselID: raetselID, layoutAntwortvorschlaege })); break;

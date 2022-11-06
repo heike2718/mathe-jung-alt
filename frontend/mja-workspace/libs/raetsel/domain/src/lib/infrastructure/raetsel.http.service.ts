@@ -13,9 +13,9 @@ import {
   SuchfilterQueryParameterMapper,
   PageDefinition
 } from '@mja-workspace/suchfilter/domain';
-import { EditRaetselPayload, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
+import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
 import { LoadingIndicatorService } from '@mja-workspace/shared/util-mja';
-import { GeneratedImages } from '@mja-workspace/shared/ui-components';
+import { GeneratedImages, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mja-workspace/shared/ui-components';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselHttpService {
@@ -30,7 +30,7 @@ export class RaetselHttpService {
   loadPage(suchfilter: Suchfilter | undefined, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
 
     if (suchfilter === undefined) {
-      return of({trefferGesamt: 0, treffer: []});
+      return of({ trefferGesamt: 0, treffer: [] });
     }
 
     const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
@@ -62,7 +62,7 @@ export class RaetselHttpService {
     const headers = new HttpHeaders().set('Accept', 'application/json');
     return this.loadingService.showLoaderUntilCompleted(this.http.get<RaetselDetails>(url, { headers: headers }));
   }
-  
+
   generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
 
     const url = this.#url + '/PNG/' + raetselId;

@@ -3,17 +3,17 @@ import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } fr
 import { MatDialog } from '@angular/material/dialog';
 import { GrafikFacade } from '@mja-workspace/grafik/domain';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
-import { Antwortvorschlag,
-  anzeigeAntwortvorschlaegeSelectInput,
+import {
+  Antwortvorschlag,
   EditRaetselPayload,
   GrafikInfo,
-  LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
   RaetselDetails,
   RaetselDetailsContent,
-  RaetselFacade 
+  RaetselFacade
 } from '@mja-workspace/raetsel/domain';
 import { JaNeinDialogComponent, JaNeinDialogData, SelectItemsCompomentModel } from '@mja-workspace/shared/ui-components';
-import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-components';
+import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, SelectPrintparametersDialogComponent, SelectPrintparametersDialogData } from '@mja-workspace/shared/ui-components';
+
 import { Message, SelectableItem, STATUS } from '@mja-workspace/shared/util-mja';
 import { Deskriptor, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { combineLatest, Subscription } from 'rxjs';
@@ -206,13 +206,13 @@ export class RaetselEditComponent implements OnInit {
   }
 
   openPrintPNGDialog(): void {
-    const dialogData: PrintRaetselDialogData = {
+    const dialogData: SelectPrintparametersDialogData = {
       titel: 'PNG generieren',
       layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
       selectedLayoutAntwortvorschlaege: undefined
     }
 
-    const dialogRef = this.dialog.open(PrintRaetselDialogComponent, {
+    const dialogRef = this.dialog.open(SelectPrintparametersDialogComponent, {
       height: '300px',
       width: '700px',
       data: dialogData

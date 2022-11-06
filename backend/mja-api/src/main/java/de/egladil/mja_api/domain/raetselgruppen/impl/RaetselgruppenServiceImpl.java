@@ -21,7 +21,12 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
+import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
+import de.egladil.mja_api.domain.quiz.QuizService;
+import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
+import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenDao;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
@@ -49,6 +54,12 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	@Inject
 	RaetselService raetselService;
+
+	@Inject
+	QuizService quizService;
+
+	@Inject
+	RaetselgruppeGeneratorService raetselgruppeFileService;
 
 	@Override
 	public RaetselgruppensucheTreffer findRaetselgruppen(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
@@ -427,6 +438,22 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		}
 
 		return opt.get();
+	}
+
+	@Override
+	public GeneratedPDF printVorschau(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+
+		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
+
+		if (dbResult == null) {
+
+			throw new WebApplicationException(
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Rätselgruppe gibt es nicht.")).build());
+		}
+
+		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
+
+		return raetselgruppeFileService.generateVorschauPDFQuiz(dbResult, aufgaben, layoutAntwortvorschlaege);
 	}
 
 }

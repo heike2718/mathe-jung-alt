@@ -1,4 +1,4 @@
-import { GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/raetsel/domain";
+import { GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/shared/ui-components";
 import { createAction, props } from "@ngrx/store";
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 

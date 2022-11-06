@@ -10,7 +10,7 @@ import { SelectItemsComponent } from './select-items/select-items.component';
 import { FileUploadComponent } from './ui-file-upload/file-upload.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { RaetselImagesComponent } from './raetsel-image/raetsel-images.component';
-import { PrintRaetselDialogComponent } from './print-raetsel-dialog/print-raetsel-dialog.component';
+import { SelectPrintparametersDialogComponent } from './select-printparameters-dialog/select-printparameters-dialog.component';
 
 @NgModule({
   imports: [FormsModule, SharedUtilMjaModule, MaterialModule],
@@ -23,7 +23,7 @@ import { PrintRaetselDialogComponent } from './print-raetsel-dialog/print-raetse
     FileUploadComponent,
     LoadingIndicatorComponent,
     RaetselImagesComponent,
-    PrintRaetselDialogComponent
+    SelectPrintparametersDialogComponent
   ],
   exports: [
     MessageComponent,
@@ -36,7 +36,7 @@ import { PrintRaetselDialogComponent } from './print-raetsel-dialog/print-raetse
     FileUploadComponent,
     LoadingIndicatorComponent,
     RaetselImagesComponent,
-    PrintRaetselDialogComponent
+    SelectPrintparametersDialogComponent
   ],
 })
 export class SharedUiComponentsModule {}

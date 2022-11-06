@@ -2,13 +2,6 @@ import { GeneratedImages } from "@mja-workspace/shared/ui-components";
 import { STATUS } from "@mja-workspace/shared/util-mja";
 import { Deskriptor, Suchkontext } from "@mja-workspace/suchfilter/domain";
 
-export type LATEX_OUTPUTFORMAT = 'PDF' | 'PNG';
-export type LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
-
-export const anzeigeAntwortvorschlaegeSelectInput: string[] = [
-  'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
-];
-
 export interface Antwortvorschlag {
   readonly buchstabe: string;
   readonly text?: string;
@@ -60,12 +53,6 @@ export interface RaetselDetailsContent {
 export interface EditRaetselPayload {
   readonly latexHistorisieren: boolean;
   readonly raetsel: RaetselDetails;
-};
-
-export interface GeneratedPDF {
-  readonly url?: string,
-  readonly fileName: string,
-  readonly fileData: Blob
 };
 
 export const initialRaetselDetails: RaetselDetails = {

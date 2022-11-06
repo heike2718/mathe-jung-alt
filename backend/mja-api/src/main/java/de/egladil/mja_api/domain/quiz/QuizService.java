@@ -11,20 +11,14 @@ import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
-import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.AntwortvorschlaegeMapper;
-import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenDao;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
@@ -32,7 +26,6 @@ import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
-import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
  * QuizService
@@ -50,9 +43,6 @@ public class QuizService {
 
 	@Inject
 	DeskriptorenService descriptorenService;
-
-	@Inject
-	RaetselgruppeGeneratorService raetselgruppeFileService;
 
 	/**
 	 * Sucht alle Aufgaben des durch die Parameter eindeutig bestimmten Quiz zur Präsentation im Browser. Es werden nur die
@@ -72,7 +62,7 @@ public class QuizService {
 			return Optional.empty();
 		}
 
-		List<Quizaufgabe> aufgaben = mapRaetselgruppeItems(dbResult.uuid);
+		List<Quizaufgabe> aufgaben = getItemsAsQuizaufgaben(dbResult.uuid);
 
 		Quiz quiz = new Quiz().withKlassenstufe(dbResult.schwierigkeitsgrad.getLabel())
 			.withName(dbResult.name);
@@ -81,28 +71,7 @@ public class QuizService {
 		return Optional.of(quiz);
 	}
 
-	/**
-	 * Generiert die Vorschau des Quiz als PDF. Dabei werden Aufgaben und Lösungen gemischt.
-	 *
-	 * @param  raetselgruppeID
-	 * @return
-	 */
-	public GeneratedPDF printVorschau(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
-
-		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
-
-		if (dbResult == null) {
-
-			throw new WebApplicationException(
-				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Rätselgruppe gibt es nicht.")).build());
-		}
-
-		List<Quizaufgabe> aufgaben = mapRaetselgruppeItems(raetselgruppeID);
-
-		return raetselgruppeFileService.generateVorschauPDFQuiz(dbResult, aufgaben, layoutAntwortvorschlaege);
-	}
-
-	List<Quizaufgabe> mapRaetselgruppeItems(final String raetselgruppeID) {
+	public List<Quizaufgabe> getItemsAsQuizaufgaben(final String raetselgruppeID) {
 
 		List<PersistentesRaetselgruppenelement> elemente = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeID);
 		List<String> raetselUuids = elemente.stream().map(el -> el.raetselID).collect(Collectors.toList());

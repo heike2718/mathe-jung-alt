@@ -6,7 +6,7 @@ import * as RaetselgruppenSelectors from '../+state/raetselgruppen.selectors';
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
-import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/raetsel/domain";
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/shared/ui-components";
 
 @Injectable({
     providedIn: 'root'

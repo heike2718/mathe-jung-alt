@@ -97,7 +97,7 @@ public class QuizResource {
 	@Path("arbeitsblaetter/PDF/{raetselgruppeID}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
-		operationId = "printQuizArbeitsblaetter",
+		operationId = "printArbeitsblaetter",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API stellt nur die Rätselgruppen mit Status FREIGEGEBEN bereit. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt.")
 	@Parameters({
 		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
@@ -122,7 +122,7 @@ public class QuizResource {
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
-	public GeneratedPDF printQuizArbeitsblaetter(@PathParam(
+	public GeneratedPDF printArbeitsblaetter(@PathParam(
 		value = "raetselgruppeID") @Pattern(
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
 			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
@@ -130,44 +130,6 @@ public class QuizResource {
 
 		throw new WebApplicationException(
 			Response.status(501).entity(MessagePayload.warn("Die API ist noch nicht implementiert")).build());
-	}
-
-	@GET
-	@Path("vorschau/PDF/{raetselgruppeID}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Operation(
-		operationId = "printQuiz",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
-	@Parameters({
-		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
-		@Parameter(
-			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
-	})
-	@APIResponse(
-		name = "PrintQuizFreigegebenOKResponse",
-		description = "Quiz erfolgreich geladen",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = GeneratedPDF.class)))
-	@APIResponse(
-		name = "QuizNotFound",
-		description = "Gibt es nicht",
-		responseCode = "404")
-	@APIResponse(
-		name = "QuizServerError",
-		description = "Serverfehler",
-		responseCode = "500",
-		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	@RolesAllowed({ "ADMIN", "AUTOR" })
-	public GeneratedPDF printQuizVorschau(@PathParam(
-		value = "raetselgruppeID") @Pattern(
-			regexp = "^[a-fA-F\\d\\-]{1,36}$",
-			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
-				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
-
-		return quizService.printVorschau(raetselgruppeID, layoutAntwortvorschlaege);
 	}
 
 }

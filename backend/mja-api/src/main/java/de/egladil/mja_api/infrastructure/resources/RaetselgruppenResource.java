@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.ws.rs.Consumes;
@@ -42,6 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.dto.SortDirection;
+import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSortattribute;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
@@ -362,5 +365,43 @@ public class RaetselgruppenResource {
 			message = "raetselgruppeID enthält ungültige Zeichen") final String elementID) {
 
 		return raetselgruppenService.elementLoeschen(raetselgruppeID, elementID);
+	}
+
+	@GET
+	@Path("vorschau/{raetselgruppeID}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Operation(
+		operationId = "printQuiz",
+		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
+	@Parameters({
+		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
+	})
+	@APIResponse(
+		name = "PrintQuizFreigegebenOKResponse",
+		description = "Quiz erfolgreich geladen",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = GeneratedPDF.class)))
+	@APIResponse(
+		name = "QuizNotFound",
+		description = "Gibt es nicht",
+		responseCode = "404")
+	@APIResponse(
+		name = "QuizServerError",
+		description = "Serverfehler",
+		responseCode = "500",
+		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
+	@RolesAllowed({ "ADMIN", "AUTOR" })
+	public GeneratedPDF printQuizVorschau(@PathParam(
+		value = "raetselgruppeID") @Pattern(
+			regexp = "^[a-fA-F\\d\\-]{1,36}$",
+			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
+				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+
+		return raetselgruppenService.printVorschau(raetselgruppeID, layoutAntwortvorschlaege);
 	}
 }

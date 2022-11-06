@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.ws.rs.WebApplicationException;
 
+import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPayload;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
@@ -74,4 +76,12 @@ public interface RaetselgruppenService {
 	 * @return                 RaetselgruppeDetails
 	 */
 	RaetselgruppeDetails elementLoeschen(String raetselgruppeID, String elementID);
+
+	/**
+	 * Generiert die Vorschau des Quiz als PDF. Dabei werden Aufgaben und Lösungen gemischt.
+	 *
+	 * @param  raetselgruppeID
+	 * @return
+	 */
+	GeneratedPDF printVorschau(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 }

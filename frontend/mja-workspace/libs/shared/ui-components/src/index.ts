@@ -24,6 +24,6 @@ export { LoadingIndicatorComponent } from './lib/loading-indicator/loading-indic
 
 
 
-export * from './lib/print-raetsel-dialog/print-raetsel-dialog.data';
+export * from './lib/select-printparameters-dialog/select-printparameters-dialog.data';
 
-export { PrintRaetselDialogComponent } from './lib/print-raetsel-dialog/print-raetsel-dialog.component';
+export { SelectPrintparametersDialogComponent } from './lib/select-printparameters-dialog/select-printparameters-dialog.component';

@@ -1,8 +1,8 @@
-import { GeneratedImages } from '@mja-workspace/shared/ui-components';
+import { GeneratedImages, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mja-workspace/shared/ui-components';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
-import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, Raetsel, RaetselDetails, RaetselDetailsContent, EditRaetselPayload, RaetselsucheTreffer, GeneratedPDF } from '../../entities/raetsel';
+import { Raetsel, RaetselDetails, RaetselDetailsContent, EditRaetselPayload, RaetselsucheTreffer } from '../../entities/raetsel';
 
 export const setSuchfilter = createAction(
   '[Raetsel] setSuchfilter',

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
-import { GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/raetsel/domain";
+import { GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/shared/ui-components";
 import { Configuration, SharedConfigService } from "@mja-workspace/shared/util-configuration";
 import { LoadingIndicatorService } from "@mja-workspace/shared/util-mja";
 import { Observable, of } from "rxjs";
@@ -98,7 +98,12 @@ export class RaetselgruppenHttpService {
 
     public generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedPDF> {
 
-        return of();
+        const url = this.#url + '/vorschau/' + raetselgruppeID;
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+
+        const obs$ = this.http.get<GeneratedPDF>(url, { headers: headers, params: params });
+        return this.loadingService.showLoaderUntilCompleted(obs$);
     }
 
     #insertRaetselgruppenelement(url: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
