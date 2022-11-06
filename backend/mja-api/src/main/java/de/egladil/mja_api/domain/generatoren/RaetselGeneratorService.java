@@ -6,7 +6,7 @@ package de.egladil.mja_api.domain.generatoren;
 
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 
 /**
  * RaetselGeneratorService
@@ -29,8 +29,8 @@ public interface RaetselGeneratorService {
 	 *
 	 * @param  raetselUuid
 	 * @param  layoutAntwortvorschlaege
-	 * @return                          GeneratedPDF
+	 * @return                          GeneratedFile
 	 */
-	GeneratedPDF generatePDFRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	GeneratedFile generatePDFRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 }

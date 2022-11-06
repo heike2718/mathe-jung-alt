@@ -4,32 +4,18 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetsel.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * GeneratedPDF
+ * GeneratedFile
  */
-public class GeneratedPDF {
-
-	@JsonIgnore
-	private String url;
+public class GeneratedFile {
 
 	@JsonProperty
 	private String fileName;
 
 	@JsonProperty
 	private byte[] fileData;
-
-	public String getUrl() {
-
-		return url;
-	}
-
-	public void setUrl(final String url) {
-
-		this.url = url;
-	}
 
 	public String getFileName() {
 

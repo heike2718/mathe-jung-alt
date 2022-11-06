@@ -32,7 +32,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.web.mja_auth.dto.MessagePayload;
@@ -111,7 +111,7 @@ public class QuizResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = GeneratedPDF.class)))
+			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
 		name = "QuizNotFound",
 		description = "Gibt es nicht",
@@ -122,7 +122,7 @@ public class QuizResource {
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
-	public GeneratedPDF printArbeitsblaetter(@PathParam(
+	public GeneratedFile printArbeitsblaetter(@PathParam(
 		value = "raetselgruppeID") @Pattern(
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
 			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(

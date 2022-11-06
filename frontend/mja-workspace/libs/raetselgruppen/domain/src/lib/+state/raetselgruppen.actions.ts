@@ -1,4 +1,4 @@
-import { GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/shared/ui-components";
+import { GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/shared/ui-components";
 import { createAction, props } from "@ngrx/store";
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 
@@ -73,7 +73,7 @@ export const generiereVorschau = createAction(
 
 export const vorschauGenerated = createAction(
     '[Raetselgruppen] vorschauGenerated',
-    props<{ pdf: GeneratedPDF }>()
+    props<{ pdf: GeneratedFile }>()
 );
 
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 import javax.ws.rs.WebApplicationException;
 
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPayload;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
@@ -83,5 +83,5 @@ public interface RaetselgruppenService {
 	 * @param  raetselgruppeID
 	 * @return
 	 */
-	GeneratedPDF printVorschau(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	GeneratedFile printVorschau(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 }

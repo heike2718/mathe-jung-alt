@@ -20,6 +20,8 @@ public class QuizitemLaTeXGenerator {
 
 	private static final String LATEX_QUIZITEM_FRAGE_LOESUNG = "/latex/template-quiz-frage-loesung.tex";
 
+	private String templateFrageLoesung;
+
 	/**
 	 * Generiert ein Stück LaTeX, das in ein Dokument eingefügt werden kann.
 	 *
@@ -31,11 +33,9 @@ public class QuizitemLaTeXGenerator {
 	 */
 	public String generateLaTeXFrageLoesung(final RaetselGeneratorinput input) {
 
-		String template = MjaFileUtils.loadTemplate(LATEX_QUIZITEM_FRAGE_LOESUNG);
+		String template = new String(this.getTemplate());
 
 		template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.placeholder(), input.getFrage());
-
-		template = template.replace(LaTeXPlaceholder.PAR.placeholder(), LaTeXConstants.VALUE_PAR);
 
 		String antworten = AntwortvorschlagGeneratorStrategegy.create(input.getLayoutAntwortvorschlaege())
 			.generateLaTeXAntwortvorschlaege(input.getAntwortvorschlaege());
@@ -52,6 +52,9 @@ public class QuizitemLaTeXGenerator {
 		if (StringUtils.isNotBlank(input.getLoesung())) {
 
 			template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), input.getLoesung());
+		} else {
+
+			template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), "");
 		}
 
 		return template;
@@ -61,6 +64,15 @@ public class QuizitemLaTeXGenerator {
 
 		return new LoesungsbuchstabeTextGenerator().getTextLoesungsbuchstabe(antwortvorschlaege);
 
+	}
+
+	synchronized String getTemplate() {
+
+		if (templateFrageLoesung == null) {
+
+			templateFrageLoesung = MjaFileUtils.loadTemplate(LATEX_QUIZITEM_FRAGE_LOESUNG);
+		}
+		return templateFrageLoesung;
 	}
 
 }

@@ -1,4 +1,4 @@
-import { GeneratedImages, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mja-workspace/shared/ui-components';
+import { GeneratedImages, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mja-workspace/shared/ui-components';
 import { SelectableItem } from '@mja-workspace/shared/util-mja';
 import { PageDefinition, Suchfilter, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { createAction, props } from '@ngrx/store';
@@ -93,7 +93,7 @@ export const generateRaetselPDF = createAction(
 
 export const raetselPDFGenerated = createAction(
   '[Raetsel] raetsel PDF generated',
-  props<{ pdf: GeneratedPDF }>()
+  props<{ pdf: GeneratedFile }>()
 );
 
 export const generateOutputError = createAction(

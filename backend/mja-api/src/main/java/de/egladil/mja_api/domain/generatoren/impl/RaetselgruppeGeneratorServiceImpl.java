@@ -27,7 +27,7 @@ import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
@@ -49,6 +49,9 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
 
+	@ConfigProperty(name = "latex.generator.preserve.tempfiles")
+	boolean preserveTempFiles;
+
 	@RestClient
 	@Inject
 	LaTeXRestClient laTeXClient;
@@ -60,13 +63,13 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	RaetselService raetselService;
 
 	@Override
-	public GeneratedPDF generatePDFQuiz(final PersistenteRaetselgruppe raetselgruppe, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile generatePDFQuiz(final PersistenteRaetselgruppe raetselgruppe, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		return null;
 	}
 
 	@Override
-	public GeneratedPDF generateVorschauPDFQuiz(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile generateVorschauPDFQuiz(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
@@ -96,15 +99,20 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 				String aufgabeSchluessel = LaTeXConstants.HEADER_AUFGABE.replace("{0}", aufgabe.getSchluessel());
 
+				if (count > 0) {
+
+					sb.append("\\par \\vspace{1ex}");
+				}
+
 				sb.append(aufgabeSchluessel);
-				sb.append("\n");
+
 				String textFrageLoesung = quizitemLaTeXGenerator.generateLaTeXFrageLoesung(input);
 				sb.append(textFrageLoesung);
 
-				if (count < aufgaben.size() - 1) {
-
-					template += LaTeXConstants.VALUE_PAR;
-				}
+				// if (count < aufgaben.size() - 2) {
+				//
+				// sb.append(LaTeXConstants.VALUE_LINEBREAK);
+				// }
 				count++;
 
 			} else {
@@ -137,7 +145,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 	}
 
-	GeneratedPDF generatePdf(final String fileNameWithoutExtension, final String raetselgruppeID) {
+	GeneratedFile generatePdf(final String fileNameWithoutExtension, final String raetselgruppeID) {
 
 		Response response = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");
@@ -157,19 +165,16 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 				byte[] pdf = MjaFileUtils.loadBinaryFile(path, false);
 
-				String url = MjaFileUtils.output2Url(path);
-
 				if (pdf == null) {
 
-					String msg = "Das generierte PDF zu Raetsel [uuid=" + raetselgruppeID + "] konnte nicht geladen werden. Bitte "
-						+ url + " prüfen";
+					String msg = "Das generierte PDF zur Raetselgruppe [uuid=" + raetselgruppeID
+						+ "] konnte nicht geladen werden. Bitte mal das doc-Verzeichnis prüfen.";
 					LOGGER.error(msg);
 					throw new MjaRuntimeException(msg);
 				}
 
-				GeneratedPDF result = new GeneratedPDF();
+				GeneratedFile result = new GeneratedFile();
 				result.setFileData(pdf);
-				result.setUrl(url);
 				result.setFileName(filename);
 
 				this.deleteTemporaryFiles(fileNameWithoutExtension);
@@ -203,6 +208,11 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	}
 
 	void deleteTemporaryFiles(final String fileNameWithoutExtension) {
+
+		if (!preserveTempFiles) {
+
+			return;
+		}
 
 		final String path = latexBaseDir + File.separator + fileNameWithoutExtension;
 

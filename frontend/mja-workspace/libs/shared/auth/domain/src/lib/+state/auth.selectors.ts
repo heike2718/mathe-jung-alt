@@ -20,5 +20,5 @@ const getUserRoles = createSelector(getUser, (user: User | undefined) => user ==
 
 export const isSessionExpired = createSelector(getAuthState, (state: AuthState) => !state.session || isExpired(state.session.expiresAt));
 export const isAuthorized = createSelector(isLoggedIn, isSessionExpired, ((loggedIn, isExpired) => loggedIn && !isExpired));
-export const isAdmin = createSelector(getUserRoles, (roles: string[]) => findRole('ADMIN', roles));
+export const isAdmin = createSelector(getUserRoles, (roles: string[]) => findRole('ADMIN', roles) || findRole('AUTOR', roles));
 export const isOrdinaryUser = createSelector(isLoggedIn, isAdmin, (isLoggedIn: boolean, isAdmin: boolean) => isLoggedIn && !isAdmin);

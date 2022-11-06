@@ -45,7 +45,7 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.utils.DevDelayService;
@@ -342,14 +342,14 @@ public class RaetselResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = GeneratedPDF.class)))
+			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
 		name = "GeneratePDFRaetselServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public GeneratedPDF raetselPDFGenerieren(@Pattern(
+	public GeneratedFile raetselPDFGenerieren(@Pattern(
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselID enthält ungültige Zeichen") @PathParam(
 			value = "raetselID") final String raetselUuid, @QueryParam(
@@ -360,7 +360,7 @@ public class RaetselResource {
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
 		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
 
-		GeneratedPDF result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege);
+		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege);
 
 		LOGGER.info("Raetsel PDF generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(userUuid, 11));
 

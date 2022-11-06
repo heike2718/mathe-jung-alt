@@ -8,7 +8,7 @@ import java.util.List;
 
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 
 /**
@@ -23,9 +23,9 @@ public interface RaetselgruppeGeneratorService {
 	 * @param  raetselgruppe
 	 *                                  PersistenteRaetselgruppe
 	 * @param  layoutAntwortvorschlaege
-	 * @return                          GeneratedPDF
+	 * @return                          GeneratedFile
 	 */
-	GeneratedPDF generatePDFQuiz(PersistenteRaetselgruppe raetselgruppe, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	GeneratedFile generatePDFQuiz(PersistenteRaetselgruppe raetselgruppe, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 	/**
 	 * Generiert de Vorschau einer Rätselgruppe, unabhängig davon, ob sie bereits freigegeben ist. Aufgaben und Lösungen werden
@@ -36,8 +36,8 @@ public interface RaetselgruppeGeneratorService {
 	 * @param  aufgaben
 	 *                                  die Aufgaben zu diesem Quiz. Diese sind bereits sortiert.
 	 * @param  layoutAntwortvorschlaege
-	 * @return                          GeneratedPDF
+	 * @return                          GeneratedFile
 	 */
-	GeneratedPDF generateVorschauPDFQuiz(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	GeneratedFile generateVorschauPDFQuiz(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 }

@@ -44,7 +44,7 @@ export function isAdmin(user?: User): boolean {
     return false;
   }
 
-  return findRole('ADMIN', user.roles);
+  return findRole('ADMIN', user.roles) || findRole('AUTOR', user.roles);
 };
 
 export function isAnonymousSession(session: Session): boolean {

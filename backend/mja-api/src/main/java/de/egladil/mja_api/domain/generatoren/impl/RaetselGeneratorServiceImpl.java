@@ -4,7 +4,6 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
 
-import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,9 +27,8 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
-import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 
@@ -163,7 +161,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	}
 
 	@Override
-	public synchronized GeneratedPDF generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
@@ -187,20 +185,17 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 				byte[] pdf = this.raetselFileService.findPDF(raetsel.getSchluessel());
 
-				String url = output2Url(filename);
-
 				if (pdf == null) {
 
 					String msg = "Das generierte PDF zu Raetsel [schluessel="
 						+ raetsel.getSchluessel()
-						+ ", uuid=" + raetselUuid + "] konnte nicht geladen werden. Bitte " + url + " prüfen";
+						+ ", uuid=" + raetselUuid + "] konnte nicht geladen werden. Bitte mal das doc-Verzeichnis prüfen.";
 					LOGGER.error(msg);
 					throw new MjaRuntimeException(msg);
 				}
 
-				GeneratedPDF result = new GeneratedPDF();
+				GeneratedFile result = new GeneratedFile();
 				result.setFileData(pdf);
-				result.setUrl(url);
 				result.setFileName(filename);
 
 				raetselFileService
@@ -273,10 +268,4 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 		}
 		return raetsel;
 	}
-
-	String output2Url(final String filename) {
-
-		return MjaFileUtils.output2Url(latexBaseDir + File.separator + filename);
-	}
-
 }

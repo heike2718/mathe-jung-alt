@@ -13,6 +13,8 @@ public interface LaTeXConstants {
 
 	String VALUE_PAR = "\\par";
 
-	String HEADER_AUFGABE = "{\\bf Aufgabe - {0}}\\";
+	String VALUE_LINEBREAK = "\\\\";
+
+	String HEADER_AUFGABE = "{\\bf Aufgabe - {0}}\\\\";
 
 }

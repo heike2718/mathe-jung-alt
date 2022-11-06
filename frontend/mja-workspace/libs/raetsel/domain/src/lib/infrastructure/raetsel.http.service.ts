@@ -15,7 +15,7 @@ import {
 } from '@mja-workspace/suchfilter/domain';
 import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer } from '../entities/raetsel';
 import { LoadingIndicatorService } from '@mja-workspace/shared/util-mja';
-import { GeneratedImages, GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mja-workspace/shared/ui-components';
+import { GeneratedImages, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from '@mja-workspace/shared/ui-components';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselHttpService {
@@ -72,14 +72,14 @@ export class RaetselHttpService {
     return this.loadingService.showLoaderUntilCompleted(this.http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers }));
   }
 
-  generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedPDF> {
+  generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
     const url = this.#url + '/PDF/' + raetselId;
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
     const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
-    return this.loadingService.showLoaderUntilCompleted(this.http.get<GeneratedPDF>(url, { headers: headers, params: params }));
+    return this.loadingService.showLoaderUntilCompleted(this.http.get<GeneratedFile>(url, { headers: headers, params: params }));
   }
 
   saveRaetsel(editRaetselPayload: EditRaetselPayload, csrfToken: string | null): Observable<RaetselDetails> {

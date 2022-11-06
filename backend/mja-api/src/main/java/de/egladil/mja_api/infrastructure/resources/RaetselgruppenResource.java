@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mja_api.domain.raetsel.dto.GeneratedPDF;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSortattribute;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
@@ -385,7 +385,7 @@ public class RaetselgruppenResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = GeneratedPDF.class)))
+			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
 		name = "QuizNotFound",
 		description = "Gibt es nicht",
@@ -396,7 +396,7 @@ public class RaetselgruppenResource {
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	@RolesAllowed({ "ADMIN", "AUTOR" })
-	public GeneratedPDF printQuizVorschau(@PathParam(
+	public GeneratedFile printQuizVorschau(@PathParam(
 		value = "raetselgruppeID") @Pattern(
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
 			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
@@ -404,4 +404,7 @@ public class RaetselgruppenResource {
 
 		return raetselgruppenService.printVorschau(raetselgruppeID, layoutAntwortvorschlaege);
 	}
+
+
+
 }

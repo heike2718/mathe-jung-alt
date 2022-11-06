@@ -106,11 +106,6 @@ public class MjaFileUtils {
 		return null;
 	}
 
-	public static String output2Url(final String path) {
-
-		return "file://" + path;
-	}
-
 	public static void deleteTemporaryFiles(final String... paths) {
 
 		for (String path : paths) {

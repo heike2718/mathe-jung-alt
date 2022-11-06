@@ -40,9 +40,9 @@ public class LoesungsbuchstabeTextGenerator {
 
 		if (StringUtils.isNotBlank(korrekter.getText()) && !korrekter.getText().equals(korrekter.getBuchstabe())) {
 
-			return "{\\bf Lösung ist " + korrekter.getBuchstabe() + " (" + korrekter.getText() + ")}\\par \\vspace{1ex}";
+			return "{\\bf Lösung ist " + korrekter.getBuchstabe() + " (" + korrekter.getText() + ")}\\\\ \\vspace{1ex}";
 		}
 
-		return "{\\bf Lösung ist " + korrekter.getBuchstabe() + "}\\par \\vspace{1ex}";
+		return "{\\bf Lösung ist " + korrekter.getBuchstabe() + "}\\\\ \\vspace{1ex}";
 	}
 }

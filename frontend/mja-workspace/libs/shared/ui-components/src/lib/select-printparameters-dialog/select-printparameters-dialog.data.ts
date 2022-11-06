@@ -5,7 +5,7 @@ export const anzeigeAntwortvorschlaegeSelectInput: string[] = [
     'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
 ];
 
-export interface GeneratedPDF {
+export interface GeneratedFile {
     readonly fileName: string,
     readonly fileData: Blob
 };
