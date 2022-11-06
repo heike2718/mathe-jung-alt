@@ -1,6 +1,15 @@
 # Release-Notes
 
-__1.1.1__
+__1.2.0__
+
+* [Rätseleditor: bei einem Fehler darf nicht wegnavigiert werden.](https://github.com/heike2718/mathe-jung-alt/issues/41)
+* [Bessere Fehlermeldung bei UK-violation](https://github.com/heike2718/mathe-jung-alt/issues/47)
+* [Generischen http-wrapper erweitern, damit man bei einem Fehler im Editor bleibt.](https://github.com/heike2718/mathe-jung-alt/issues/48)
+* [Vorschau für Rästelsammlung generieren](https://github.com/heike2718/mathe-jung-alt/issues/50)
+* [in Rätselsammlung bei Klick auf ein Item die Details anzeigen](https://github.com/heike2718/mathe-jung-alt/issues/51)
+
+__1.1.2__
+
 * [DB: RAETSELSAMMLUNGEN.REFERENZ ist leider not nullable](https://github.com/heike2718/mathe-jung-alt/issues/46)
 
 __1.1.1__
