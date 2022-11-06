@@ -10,6 +10,7 @@ import { SelectItemsComponent } from './select-items/select-items.component';
 import { FileUploadComponent } from './ui-file-upload/file-upload.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { RaetselImagesComponent } from './raetsel-image/raetsel-images.component';
+import { PrintRaetselDialogComponent } from './print-raetsel-dialog/print-raetsel-dialog.component';
 
 @NgModule({
   imports: [FormsModule, SharedUtilMjaModule, MaterialModule],
@@ -21,7 +22,8 @@ import { RaetselImagesComponent } from './raetsel-image/raetsel-images.component
     SelectItemsComponent,
     FileUploadComponent,
     LoadingIndicatorComponent,
-    RaetselImagesComponent
+    RaetselImagesComponent,
+    PrintRaetselDialogComponent
   ],
   exports: [
     MessageComponent,
@@ -33,7 +35,8 @@ import { RaetselImagesComponent } from './raetsel-image/raetsel-images.component
     SelectItemsComponent, // keine Ahnung, warum der Export in index.ts bei dieser Komponente nicht reicht, bei den anderen Komponenten aber schon
     FileUploadComponent,
     LoadingIndicatorComponent,
-    RaetselImagesComponent
+    RaetselImagesComponent,
+    PrintRaetselDialogComponent
   ],
 })
 export class SharedUiComponentsModule {}

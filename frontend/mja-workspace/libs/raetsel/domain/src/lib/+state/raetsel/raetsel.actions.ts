@@ -78,7 +78,7 @@ export const raetselSaved = createAction(
 
 export const generateRaetselPNGs = createAction(
   '[Raetsel] generate PNGs',
-  props<{ raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>()
+  props<{ raetselID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>()
 );
 
 export const raetselPNGsGenerated = createAction(

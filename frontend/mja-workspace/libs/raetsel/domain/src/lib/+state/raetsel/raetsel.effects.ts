@@ -101,7 +101,7 @@ export class RaetselEffects {
     this.actions$.pipe(
       ofType(RaetselActions.generateRaetselPNGs),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.raetselHttpService.generateRaetselPNGs(action.raetselId, action.layoutAntwortvorschlaege).pipe(
+        this.raetselHttpService.generateRaetselPNGs(action.raetselID, action.layoutAntwortvorschlaege).pipe(
           map((images) =>
             RaetselActions.raetselPNGsGenerated({ images })
           )

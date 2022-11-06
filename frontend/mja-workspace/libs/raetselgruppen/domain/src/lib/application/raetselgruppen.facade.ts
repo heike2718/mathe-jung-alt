@@ -6,6 +6,7 @@ import * as RaetselgruppenSelectors from '../+state/raetselgruppen.selectors';
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/raetsel/domain";
 
 @Injectable({
     providedIn: 'root'
@@ -69,5 +70,9 @@ export class RaetselgruppenFacade {
 
     public deleteRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
         this.store.dispatch(RaetselgruppenActions.deleteRaetselgruppenelement({ raetselgruppeID, payload }));
+    }
+
+    public generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.store.dispatch(RaetselgruppenActions.generiereVorschau({raetselgruppeID, layoutAntwortvorschlaege}));
     }
 }

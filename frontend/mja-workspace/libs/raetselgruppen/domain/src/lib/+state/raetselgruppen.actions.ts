@@ -1,3 +1,4 @@
+import { GeneratedPDF, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-workspace/raetsel/domain";
 import { createAction, props } from "@ngrx/store";
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppensucheTreffer, RaetselgruppensucheTrefferItem, RaetselgruppenSuchparameter } from "../entities/raetselgruppen";
 
@@ -63,6 +64,16 @@ export const raetselgruppenelementeChanged = createAction(
 export const deleteRaetselgruppenelement = createAction(
     '[Raetselgruppen] deleteRaetselgruppenelement',
     props<{raetselgruppeID: string, payload: EditRaetselgruppenelementPayload}>()
+);
+
+export const generiereVorschau = createAction(
+    '[Raetselgruppen] generiereVorschau',
+    props<{raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>()
+);
+
+export const vorschauGenerated = createAction(
+    '[Raetselgruppen] vorschauGenerated',
+    props<{ pdf: GeneratedPDF }>()
 );
 
 

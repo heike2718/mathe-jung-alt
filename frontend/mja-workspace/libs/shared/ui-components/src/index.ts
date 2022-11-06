@@ -21,3 +21,9 @@ export { FileUploadComponent } from './lib/ui-file-upload/file-upload.component'
 export * from './lib/ui-file-upload/file-upload.service';
 
 export { LoadingIndicatorComponent } from './lib/loading-indicator/loading-indicator.component';
+
+
+
+export * from './lib/print-raetsel-dialog/print-raetsel-dialog.data';
+
+export { PrintRaetselDialogComponent } from './lib/print-raetsel-dialog/print-raetsel-dialog.component';

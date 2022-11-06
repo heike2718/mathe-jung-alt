@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthHttpService } from '@mja-workspace/shared/auth/domain';
-import { MessageService, noopAction, SafeNgrxService } from '@mja-workspace/shared/util-mja';
+import { FileService, MessageService, noopAction, SafeNgrxService } from '@mja-workspace/shared/util-mja';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { map, tap } from 'rxjs/operators';
 import { RaetselgruppenHttpService } from '../infrastructure/raetselgruppen.http.service';
@@ -13,9 +13,10 @@ export class RaetselgruppenEffects {
     constructor(
         private actions$: Actions,
         private authService: AuthHttpService,
-        private raetselHttpService: RaetselgruppenHttpService,
+        private httpService: RaetselgruppenHttpService,
         private safeNgrx: SafeNgrxService,
         private messageService: MessageService,
+        private fileService: FileService,
         private router: Router
     ) { }
 
@@ -33,7 +34,7 @@ export class RaetselgruppenEffects {
         this.actions$.pipe(
             ofType(RaetselgruppenActions.suchparameterChanged),
             this.safeNgrx.safeSwitchMap((action) =>
-                this.raetselHttpService.findGruppen(action.suchparameter).pipe(
+                this.httpService.findGruppen(action.suchparameter).pipe(
                     map((treffer) =>
                         RaetselgruppenActions.pageLoaded({ treffer: treffer })
                     )
@@ -46,7 +47,7 @@ export class RaetselgruppenEffects {
         this.actions$.pipe(
             ofType(RaetselgruppenActions.selectRaetselgruppe),
             this.safeNgrx.safeSwitchMap((action) =>
-                this.raetselHttpService.findById(action.raetselgruppe.id).pipe(
+                this.httpService.findById(action.raetselgruppe.id).pipe(
                     map((raetraetselgruppeDetails) =>
                         RaetselgruppenActions.raetselgruppeDetailsLoaded({ raetraetselgruppeDetails })
                     )
@@ -88,7 +89,7 @@ export class RaetselgruppenEffects {
             ofType(RaetselgruppenActions.saveRaetselgruppe),
             // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
             this.safeNgrx.safeSwitchMap((action) =>
-                this.raetselHttpService.saveRaetselgruppe(action.editRaetselgruppePayload, action.csrfToken).pipe(
+                this.httpService.saveRaetselgruppe(action.editRaetselgruppePayload, action.csrfToken).pipe(
                     tap((raetselgruppe) => this.messageService.info('Die Rätselgruppe wurde erfolgreich gespeichert: uuid=' + raetselgruppe.id)),
                     map((raetselgruppe) => RaetselgruppenActions.raetselgruppeSaved({ raetselgruppe }))
                 ), 'Ups, beim Speichern der Rätselgruppe ist etwas schiefgegangen', noopAction()
@@ -101,7 +102,7 @@ export class RaetselgruppenEffects {
             ofType(RaetselgruppenActions.saveRaetselgruppenelement),
             // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
             this.safeNgrx.safeSwitchMap((action) =>
-                this.raetselHttpService.saveRaetselgruppenelement(action.raetselgruppeID, action.payload).pipe(
+                this.httpService.saveRaetselgruppenelement(action.raetselgruppeID, action.payload).pipe(
                     tap(() => this.messageService.info('Das Rätselgruppenelement wurde erfolgreich gespeichert')),
                     map((raetraetselgruppeDetails) => RaetselgruppenActions.raetselgruppenelementeChanged({ raetraetselgruppeDetails }))
                 ), 'Ups, beim Speichern des Rätselgruppenelements ist etwas schiefgegangen', noopAction()
@@ -114,7 +115,7 @@ export class RaetselgruppenEffects {
             ofType(RaetselgruppenActions.deleteRaetselgruppenelement),
             // switchMap, damit spätere Sucheingaben gecanceled werden, sobald eine neue Eingabe emitted wird
             this.safeNgrx.safeSwitchMap((action) =>
-                this.raetselHttpService.deleteRaetselgruppenelement(action.raetselgruppeID, action.payload).pipe(
+                this.httpService.deleteRaetselgruppenelement(action.raetselgruppeID, action.payload).pipe(
                     tap(() => this.messageService.info('Das Rätselgruppenelement wurde erfolgreich gelöscht')),
                     map((raetraetselgruppeDetails) => RaetselgruppenActions.raetselgruppenelementeChanged({ raetraetselgruppeDetails }))
                 ), 'Ups, beim Löschen des Rätselgruppenelements ist etwas schiefgegangen', noopAction()
@@ -122,5 +123,23 @@ export class RaetselgruppenEffects {
         )
     );
 
+    generateVorschau$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(RaetselgruppenActions.generiereVorschau),
+            this.safeNgrx.safeSwitchMap((action) =>
+                this.httpService.generiereVorschau(action.raetselgruppeID, action.layoutAntwortvorschlaege).pipe(
+                    map((generatedPDF) =>
+                        RaetselgruppenActions.vorschauGenerated({ pdf: generatedPDF })
+                    )
+                ), 'Ups, beim Generieren der Vorschau ist etwas schiefgegangen', noopAction()
+            )
+        )
+    );
+
+    downloadPDF$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselgruppenActions.vorschauGenerated),
+      tap((action) => this.fileService.downloadPdf(action.pdf.fileData, action.pdf.fileName)),
+    ), { dispatch: false });
 
 }

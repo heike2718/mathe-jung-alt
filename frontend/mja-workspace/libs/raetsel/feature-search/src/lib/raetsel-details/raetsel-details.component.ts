@@ -5,7 +5,7 @@ import { GrafikFacade } from '@mja-workspace/grafik/domain';
 import { QuellenFacade } from '@mja-workspace/quellen/domain';
 import { anzeigeAntwortvorschlaegeSelectInput, GrafikInfo, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, LATEX_OUTPUTFORMAT, RaetselDetails, RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
-import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
+import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-components';
 import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 import { Message } from '@mja-workspace/shared/util-mja';
 import { Subscription } from 'rxjs';

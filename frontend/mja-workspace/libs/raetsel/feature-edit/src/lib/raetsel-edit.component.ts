@@ -13,7 +13,7 @@ import { Antwortvorschlag,
   RaetselFacade 
 } from '@mja-workspace/raetsel/domain';
 import { JaNeinDialogComponent, JaNeinDialogData, SelectItemsCompomentModel } from '@mja-workspace/shared/ui-components';
-import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-raetsel';
+import { PrintRaetselDialogComponent, PrintRaetselDialogData } from '@mja-workspace/shared/ui-components';
 import { Message, SelectableItem, STATUS } from '@mja-workspace/shared/util-mja';
 import { Deskriptor, Suchkontext } from '@mja-workspace/suchfilter/domain';
 import { combineLatest, Subscription } from 'rxjs';

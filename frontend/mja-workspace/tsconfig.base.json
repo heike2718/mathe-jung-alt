@@ -45,9 +45,6 @@
       "@mja-workspace/shared/ui-components": [
         "libs/shared/ui-components/src/index.ts"
       ],
-      "@mja-workspace/shared/ui-raetsel": [
-        "libs/shared/ui-raetsel/src/index.ts"
-      ],
       "@mja-workspace/shared/util-configuration": [
         "libs/shared/util-configuration/src/index.ts"
       ],
