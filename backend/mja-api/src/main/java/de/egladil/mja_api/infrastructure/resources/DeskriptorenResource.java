@@ -45,7 +45,7 @@ public class DeskriptorenResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(operationId = "loadDeskriptoren", summary = "Liefert die Liste aller Deskriptoren")
 	@Parameters({
 		@Parameter(name = "kontext", description = "Kontext, zu dem die Deskriptoren geladen werden") })
@@ -65,7 +65,7 @@ public class DeskriptorenResource {
 	@GET
 	@Path("ids")
 	@Produces(MediaType.TEXT_PLAIN)
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "transformToDeskriptorenOrdinal",
 		summary = "Wandelt Deskriptoren in eine kommaseparierte Liste ihrer IDs um")

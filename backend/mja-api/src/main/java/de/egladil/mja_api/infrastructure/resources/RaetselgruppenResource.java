@@ -86,7 +86,7 @@ public class RaetselgruppenResource {
 	private final CsrfTokenValidator csrfTokenValidator = new CsrfTokenValidator();
 
 	@GET
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findGruppen", summary = "Gibt alle Rätselgruppen zurück, die auf die gegebene Suchanfrage passen.")
 	@Parameters({
@@ -144,7 +144,7 @@ public class RaetselgruppenResource {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppeAnlegen",
 		summary = "neue Rätselgruppe anlegen")
@@ -179,7 +179,7 @@ public class RaetselgruppenResource {
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppeAendern",
 		summary = "neue Rätselgruppe anlegen")
@@ -214,7 +214,7 @@ public class RaetselgruppenResource {
 
 	@GET
 	@Path("{raetselgruppeID}")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppeDetailsLaden",
 		summary = "Läd die Details der Rätselgruppe mit der gegebenen ID")
@@ -249,7 +249,7 @@ public class RaetselgruppenResource {
 
 	@POST
 	@Path("{raetselgruppeID}/elemente")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementAnlegen",
 		summary = "Legt ein neues Element in einer Rätselgruppe an")
@@ -291,7 +291,7 @@ public class RaetselgruppenResource {
 
 	@PUT
 	@Path("{raetselgruppeID}/elemente")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementAendern",
 		summary = "Ändert das Element einer Rätselgruppe. Es können nur Nummer und Punkte geändert werden. Wenn der Schlüssel nicht stimmt, muss es gelöscht und neu angelegt werden.")
@@ -329,7 +329,7 @@ public class RaetselgruppenResource {
 
 	@DELETE
 	@Path("{raetselgruppeID}/elemente/{elementID}")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementLoeschen",
 		summary = "Löscht das Element einer Rätselgruppe")

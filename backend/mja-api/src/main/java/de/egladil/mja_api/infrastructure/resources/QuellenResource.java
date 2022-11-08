@@ -50,7 +50,7 @@ public class QuellenResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findQuellen", summary = "Gibt alle Quellen zurück, die auf die gegebene Suchanfrage passen.")
 	@Parameters({
@@ -84,7 +84,7 @@ public class QuellenResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("admin")
-	@RolesAllowed({ "ADMIN", "DEFAULT" })
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findQuelleByPerson",
 		summary = "Gibt die Quelle zurück, die 'Vorname Nachname' der eingeloggten Person gehört")
@@ -124,7 +124,7 @@ public class QuellenResource {
 	@GET
 	@Path("{quelleId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findQuelleById",
 		summary = "Gibt die Quelle mit der gegebenen ID zurück")

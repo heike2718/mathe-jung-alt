@@ -85,7 +85,7 @@ public class RaetselResource {
 	private final CsrfTokenValidator csrfTokenValidator = new CsrfTokenValidator();
 
 	@GET
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findRaetsel", summary = "Gibt alle Rätsel zurück, die auf die gegebene Suchanfrage passen.")
 	@Parameters({
@@ -140,7 +140,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("{raetselID}")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselDetailsLaden",
 		summary = "Läd die Details des Rätsels mit der gegebenen ID")
@@ -178,7 +178,7 @@ public class RaetselResource {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselAnlegen",
 		summary = "neues Rätsel anlegen")
@@ -219,7 +219,7 @@ public class RaetselResource {
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselAendern",
 		summary = "vorhandenes Rätsel ändern")
@@ -259,7 +259,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("PNG/{schluessel}")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselImagesLaden",
 		summary = "Läd die Vorschaubilder (png) des Rätsels")
@@ -286,7 +286,7 @@ public class RaetselResource {
 
 	@POST
 	@Path("PNG/{raetselID}")
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselImagesGenerieren",
 		summary = "generiert die Vorschaubilder (png) des Rätsels")
@@ -326,7 +326,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("PDF/{raetselID}")
-	@RolesAllowed({ "ADMIN", "LEHRER", "PRIVAT", "STANDARD" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
 	@Operation(
 		operationId = "raetselPDFGenerieren",
 		summary = "generiert ein PDF mit dem Rätsel")

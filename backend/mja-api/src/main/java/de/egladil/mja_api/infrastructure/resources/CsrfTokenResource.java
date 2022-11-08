@@ -30,7 +30,7 @@ public class CsrfTokenResource {
 	SecurityContext securityContext;
 
 	@GET
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(operationId = "getCsrfToken", summary = "Packt das CSRF-Token in den Header")
 	@APIResponse(
 		name = "GetCsrfTokenOKResponse",

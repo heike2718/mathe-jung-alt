@@ -40,7 +40,7 @@ public class GrafikResource {
 	GrafikService grafikService;
 
 	@GET
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findGrafik", summary = "liefert eine Grafikvorschau (png) für ein Image, das in LaTeX eingebunden wird.")
 	@Parameters({

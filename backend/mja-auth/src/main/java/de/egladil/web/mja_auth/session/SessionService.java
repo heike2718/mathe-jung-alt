@@ -15,13 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import de.egladil.web.mja_auth.exception.AuthException;
 import de.egladil.web.mja_auth.exception.SessionExpiredException;
@@ -62,7 +62,7 @@ public class SessionService {
 
 			if (needsToBeAdmin) {
 
-				Optional<String> optAdmin = Arrays.stream(groups).filter(g -> "ADMIN".equals(g)).findFirst();
+				Optional<String> optAdmin = Arrays.stream(groups).filter(g -> "ADMIN".equals(g) || "AUTOR".equals(g)).findFirst();
 
 				if (optAdmin.isEmpty()) {
 

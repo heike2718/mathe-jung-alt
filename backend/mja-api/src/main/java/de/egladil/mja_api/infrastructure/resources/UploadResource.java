@@ -76,7 +76,7 @@ public class UploadResource {
 
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@RolesAllowed("ADMIN")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "uploadFile",
 		summary = "Nimmt eine hochgeladene Datei des UploadTypes (eps) entgegen und speichert sie in dem gewünschten Unterverzeichnis des latex.base.dirs")
@@ -135,7 +135,7 @@ public class UploadResource {
 	// @POST
 	// @Path("swagger")
 	// @Consumes({ MediaType.MULTIPART_FORM_DATA })
-	// @RolesAllowed("ADMIN")
+	// @RolesAllowed({ "ADMIN", "AUTOR" })
 	Response grafikHochladenMitSwagger(@MultipartForm final MultipartBody body) {
 
 		// https://dev.to/felipewind/uploading-a-file-through-swagger-in-quarkus-3l8l
