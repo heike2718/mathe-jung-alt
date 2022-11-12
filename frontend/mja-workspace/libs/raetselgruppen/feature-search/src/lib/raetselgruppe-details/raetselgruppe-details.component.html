@@ -53,11 +53,11 @@
     </div>
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
-        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+        <div *ngIf="!(gruppe.schreibgeschuetzt)" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 [disabled]="!getRaetselgruppeID()" (click)="openNeuesRaetselgruppenelementDialog()">neues
                 Element</button>
         </div>
-        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+        <div *ngIf="!(gruppe.schreibgeschuetzt)" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 (click)="startEdit()">bearbeiten</button></div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 (click)="openPrintVorschauDialog()">Vorschau (PDF)</button></div>
@@ -68,7 +68,7 @@
 
     <h2>Elemente</h2>
 
-    <mja-raetselgruppenelemente (showImages)="onShowImagesElement($event)" (editElement)="onEditElement($event)"
+    <mja-raetselgruppenelemente [raetselgruppe]="gruppe" (showImages)="onShowImagesElement($event)" (editElement)="onEditElement($event)"
         (deleteElement)="onDeleteElement($event)">
     </mja-raetselgruppenelemente>
 

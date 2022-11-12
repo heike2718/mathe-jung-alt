@@ -57,6 +57,12 @@ public class RaetselgruppeDetails {
 	private DomainEntityStatus status;
 
 	@JsonProperty
+	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
+	private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird entschieden, ob es
+												// durch den User
+	// änderbar ist.
+
+	@JsonProperty
 	@Schema(description = "Teil der UUID der Person, die die Rätselgruppe angelegt oder geändert hat")
 	private String geaendertDurch;
 
@@ -131,5 +137,15 @@ public class RaetselgruppeDetails {
 	public List<Raetselgruppenelement> getElemente() {
 
 		return elemente;
+	}
+
+	public boolean isSchreibgeschuetzt() {
+
+		return schreibgeschuetzt;
+	}
+
+	public void markiereAlsAenderbar() {
+
+		this.schreibgeschuetzt = false;
 	}
 }

@@ -121,6 +121,7 @@ public class RaetselServiceImpl implements RaetselService {
 		PersistentesRaetsel neuesRaetsel = new PersistentesRaetsel();
 		String uuid = UUID.randomUUID().toString();
 		neuesRaetsel.setImportierteUuid(uuid);
+		neuesRaetsel.owner = userId;
 		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
 
 		PersistentesRaetsel.persist(neuesRaetsel);
@@ -130,7 +131,7 @@ public class RaetselServiceImpl implements RaetselService {
 
 		if (AuthorizationUtils.hasUserPermissionToChange(userId, neuesRaetsel.owner, isAdmin)) {
 
-			result.markiereAlsSchreibgeschuetzt();
+			result.markiereAlsAenderbar();
 		}
 
 		return result;
@@ -221,7 +222,7 @@ public class RaetselServiceImpl implements RaetselService {
 
 		if (AuthorizationUtils.hasUserPermissionToChange(userId, raetsel.owner, isAdmin)) {
 
-			result.markiereAlsSchreibgeschuetzt();
+			result.markiereAlsAenderbar();
 		}
 
 		return result;

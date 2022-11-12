@@ -29,53 +29,72 @@ public interface RaetselgruppenService {
 	 * WebApplicationException mit Status 409 - Conflict geworfen.
 	 *
 	 * @param  payload
-	 * @param  user
+	 * @param  userId
+	 *                 String die ID des eingeloggten Users
+	 * @param  isAdmin
+	 *                 boolean
 	 * @return         RaetselgruppensucheTrefferItem
 	 */
-	RaetselgruppensucheTrefferItem raetselgruppeAnlegen(EditRaetselgruppePayload payload, String user) throws WebApplicationException;
+	RaetselgruppensucheTrefferItem raetselgruppeAnlegen(EditRaetselgruppePayload payload, String userId, boolean isAdmin) throws WebApplicationException;
 
 	/**
 	 * Ändert die Basisdaten einer Rätselgruppe. Dabei wird geprüft, ob es eine mit den Keys oder dem Namen bereits gibt. In
 	 * diesem Fall wird eine WebApplicationException mit Status 409 - Conflict geworfen.
 	 *
 	 * @param  payload
-	 * @param  user
+	 * @param  userId
+	 *                 String die ID des eingeloggten Users
+	 * @param  isAdmin
+	 *                 boolean
 	 * @return         RaetselgruppensucheTrefferItem
 	 */
-	RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(EditRaetselgruppePayload payload, String user) throws WebApplicationException;
+	RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(EditRaetselgruppePayload payload, String userId, boolean isAdmin) throws WebApplicationException;
 
 	/**
 	 * @param  raetselgruppeID
-	 * @return
+	 * @param  userId
+	 *                         String die ID des eingeloggten Users
+	 * @param  isAdmin
+	 *                         boolean
+	 * @return                 Optional
 	 */
-	Optional<RaetselgruppeDetails> loadDetails(String raetselgruppeID);
+	Optional<RaetselgruppeDetails> loadDetails(String raetselgruppeID, String userId, boolean isAdmin);
 
 	/**
 	 * Legt ein neues Element an
 	 *
-	 * @param  raetselgruppeID
-	 * @param  payload
-	 * @return                 RaetselgruppeDetails
+	 * @param raetselgruppeID
+	 * @param payload
+	 * @param userId
+	 *                        String die ID des eingeloggten Users
+	 * @param isAdmin
+	 *                        boolean * @return RaetselgruppeDetails
 	 */
-	RaetselgruppeDetails elementAnlegen(String raetselgruppeID, EditRaetselgruppenelementPayload payload);
+	RaetselgruppeDetails elementAnlegen(String raetselgruppeID, EditRaetselgruppenelementPayload payload, String userId, boolean isAdmin);
 
 	/**
 	 * Ändert ein vorhandenes Element
 	 *
-	 * @param  raetselgruppeID
-	 * @param  payload
-	 * @return                 RaetselgruppeDetails
+	 * @param raetselgruppeID
+	 * @param payload
+	 * @param userId
+	 *                        String die ID des eingeloggten Users
+	 * @param isAdmin
+	 *                        boolean * @return RaetselgruppeDetails
 	 */
-	RaetselgruppeDetails elementAendern(String raetselgruppeID, EditRaetselgruppenelementPayload payload);
+	RaetselgruppeDetails elementAendern(String raetselgruppeID, EditRaetselgruppenelementPayload payload, String userId, boolean isAdmin);
 
 	/**
 	 * Löscht das gegebene Element der Rätselgruppe.
 	 *
-	 * @param  raetselgruppeID
-	 * @param  elementID
-	 * @return                 RaetselgruppeDetails
+	 * @param raetselgruppeID
+	 * @param elementID
+	 * @param userId
+	 *                        String die ID des eingeloggten Users
+	 * @param isAdmin
+	 *                        boolean * @return RaetselgruppeDetails
 	 */
-	RaetselgruppeDetails elementLoeschen(String raetselgruppeID, String elementID);
+	RaetselgruppeDetails elementLoeschen(String raetselgruppeID, String elementID, String userId, boolean isAdmin);
 
 	/**
 	 * Generiert die Vorschau des Quiz als PDF. Dabei werden Aufgaben und Lösungen gemischt.

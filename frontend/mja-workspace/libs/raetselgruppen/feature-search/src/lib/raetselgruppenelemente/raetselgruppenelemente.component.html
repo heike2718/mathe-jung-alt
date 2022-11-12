@@ -51,8 +51,8 @@
           (click)="deleteElementClicked(element)">löschen</button></td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+    <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
   </table>
 
   <!-- <mat-paginator #paginator [length]="dataSource.data.length" [pageIndex]="0" [pageSize]="5"

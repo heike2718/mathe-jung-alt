@@ -253,7 +253,7 @@ public class Raetsel extends AbstractDomainEntity {
 		return schreibgeschuetzt;
 	}
 
-	public void markiereAlsSchreibgeschuetzt() {
+	public void markiereAlsAenderbar() {
 
 		this.schreibgeschuetzt = false;
 	}

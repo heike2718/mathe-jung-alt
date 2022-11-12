@@ -17,7 +17,15 @@ export const initialRaetselgruppeBasisdaten: RaetselgruppeBasisdaten = {
     schwierigkeitsgrad: 'NOOP',
     referenztyp: 'NOOP'
 };
-export interface RaetselgruppensucheTrefferItem extends RaetselgruppeBasisdaten {
+export interface RaetselgruppensucheTrefferItem {
+    readonly id: string;
+    readonly name?: string;
+    readonly kommentar?: string;
+    readonly schwierigkeitsgrad: Schwierigkeitsgrad;
+    readonly referenztyp?: Referenztyp;
+    readonly referenz?: string;
+    readonly status: STATUS;
+    readonly geaendertDurch?: string;
     readonly anzahlElemente: number;
 };
 
@@ -73,4 +81,5 @@ export interface Raetselgruppenelement extends EditRaetselgruppenelementPayload 
 export interface RaetselgruppeDetails extends EditRaetselgruppePayload {
     readonly elemente: Raetselgruppenelement[];
     readonly geaendertDurch: string;
+    readonly schreibgeschuetzt: boolean;
 };

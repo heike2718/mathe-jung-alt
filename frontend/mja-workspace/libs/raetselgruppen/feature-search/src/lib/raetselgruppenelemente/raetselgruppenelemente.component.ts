@@ -1,9 +1,6 @@
-import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
-import { Raetselgruppenelement, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
-import { Subscription, tap } from 'rxjs';
+import { RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenFacade } from '@mja-workspace/raetselgruppen/domain';
 import { RaetselgruppenelementeDataSource } from './raetselgruppenelemente.datasource';
 
 @Component({
@@ -12,6 +9,9 @@ import { RaetselgruppenelementeDataSource } from './raetselgruppenelemente.datas
   styleUrls: ['./raetselgruppenelemente.component.scss']
 })
 export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit {
+
+  @Input()
+  raetselgruppe!: RaetselgruppeDetails;
 
   @ViewChild(MatTable) table!: MatTable<Raetselgruppenelement>;
   dataSource!: RaetselgruppenelementeDataSource;
@@ -25,8 +25,6 @@ export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit {
   @Output()
   deleteElement: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
 
-  displayedColumns = ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'show', 'edit', 'delete'];
-
   constructor(private raetselgruppenFacade: RaetselgruppenFacade) { }
 
   ngOnInit(): void {
@@ -35,6 +33,16 @@ export class RaetselgruppenelementeComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit(): void {
     this.table.dataSource = this.dataSource;
+  }
+
+  getDisplayedColumns(): string[] {
+
+    if (this.raetselgruppe.schreibgeschuetzt) {
+      return ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'show'];
+
+    } else {
+      return ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'show', 'edit', 'delete'];
+    }
   }
 
   showImagesClicked(element: Raetselgruppenelement): void {

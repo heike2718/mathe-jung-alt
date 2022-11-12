@@ -58,9 +58,6 @@ public class PersistenteAufgabeReadonly extends PanacheEntityBase {
 	@Column(name = "SEITE")
 	public String seite;
 
-	@Column(name = "HW")
-	public boolean hw;
-
 	@Column(name = "DESKRIPTOREN")
 	public String deskriptoren;
 

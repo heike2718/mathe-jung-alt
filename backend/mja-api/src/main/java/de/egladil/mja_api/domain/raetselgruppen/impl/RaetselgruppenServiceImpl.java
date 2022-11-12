@@ -36,6 +36,7 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPay
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
+import de.egladil.mja_api.domain.utils.AuthorizationUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
@@ -88,7 +89,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public Optional<RaetselgruppeDetails> loadDetails(final String raetselgruppeID) {
+	public Optional<RaetselgruppeDetails> loadDetails(final String raetselgruppeID, final String userId, final boolean isAdmin) {
 
 		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -98,6 +99,11 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		}
 
 		final RaetselgruppeDetails result = RaetselgruppeDetails.createFromDB(raetselgruppe);
+
+		if (AuthorizationUtils.hasUserPermissionToChange(userId, raetselgruppe.owner, isAdmin)) {
+
+			result.markiereAlsAenderbar();
+		}
 
 		List<PersistentesRaetselgruppenelement> elementeDB = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeID);
 		List<String> raetselIDs = elementeDB.stream().map(el -> el.raetselID).collect(Collectors.toList());
@@ -119,7 +125,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	@Override
 	@Transactional
-	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload, final String user) throws WebApplicationException {
+	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload, final String userId, final boolean isAdmin) throws WebApplicationException {
 
 		if (!AbstractDomainEntity.UUID_NEUE_ENTITY.equals(payload.getId())) {
 
@@ -148,20 +154,21 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		PersistenteRaetselgruppe raetselgruppe = new PersistenteRaetselgruppe();
 		mergeFromPayload(raetselgruppe, payload);
-		raetselgruppe.geaendertDurch = user;
+		raetselgruppe.geaendertDurch = userId;
 		raetselgruppe.status = DomainEntityStatus.ERFASST;
+		raetselgruppe.owner = userId;
 
 		PersistenteRaetselgruppe persistierte = speichern(raetselgruppe);
 		RaetselgruppensucheTrefferItem result = mapFromDB(persistierte);
 
-		LOGGER.info("Rätselgruppe angelegt: {}, user={}", result.getId(), StringUtils.abbreviate(user, 11));
+		LOGGER.info("Rätselgruppe angelegt: {}, user={}", result.getId(), StringUtils.abbreviate(userId, 11));
 
 		return result;
 	}
 
 	@Override
 	@Transactional
-	public RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(final EditRaetselgruppePayload payload, final String user) throws WebApplicationException {
+	public RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(final EditRaetselgruppePayload payload, final String userId, final boolean isAdmin) throws WebApplicationException {
 
 		if (dupletteNachKeysExistiert(payload)) {
 
@@ -189,8 +196,10 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 					.build());
 		}
 
+		checkPermission(userId, ausDB, isAdmin);
+
 		mergeFromPayload(ausDB, payload);
-		ausDB.geaendertDurch = user;
+		ausDB.geaendertDurch = userId;
 
 		PersistenteRaetselgruppe persistierte = speichern(ausDB);
 
@@ -199,7 +208,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		long anzahlElemente = raetselgruppenDao.countElementeRaetselgruppe(persistierte.uuid);
 		result.setAnzahlElemente(anzahlElemente);
 
-		LOGGER.info("Raetselgruppe geaendert: {}, user={}", result.getId(), StringUtils.abbreviate(user, 11));
+		LOGGER.info("Raetselgruppe geaendert: {}, user={}", result.getId(), StringUtils.abbreviate(userId, 11));
 
 		return result;
 	}
@@ -267,7 +276,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public RaetselgruppeDetails elementAnlegen(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
+	public RaetselgruppeDetails elementAnlegen(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload, final String userId, final boolean isAdmin) {
 
 		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -278,6 +287,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 				.build();
 			throw new WebApplicationException(response);
 		}
+
+		checkPermission(userId, raetselgruppe, isAdmin);
 
 		Optional<String> optRaetselId = raetselService.getRaetselIdWithSchluessel(payload.getRaetselSchluessel());
 
@@ -320,7 +331,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		this.createAndPersistNeuesRaetselgruppenelement(raetselgruppeID,
 			optRaetselId.get(), payload);
 
-		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
+		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID, userId, isAdmin);
 
 		if (opt.isEmpty()) {
 
@@ -350,7 +361,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	@Override
 	@Transactional
-	public RaetselgruppeDetails elementAendern(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
+	public RaetselgruppeDetails elementAendern(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload, final String userId, final boolean isAdmin) {
 
 		PersistentesRaetselgruppenelement persistentesElement = raetselgruppenDao.findElementById(payload.getId());
 
@@ -371,6 +382,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 				.build();
 			throw new WebApplicationException(response);
 		}
+
+		checkPermission(userId, raetselgruppe, isAdmin);
 
 		if (!raetselgruppeID.equals(persistentesElement.raetselgruppeID)) {
 
@@ -399,7 +412,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		mergeAndSaveRaetselgruppenelement(persistentesElement, payload);
 
-		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
+		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID, userId, isAdmin);
 
 		if (opt.isEmpty()) {
 
@@ -422,11 +435,18 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public RaetselgruppeDetails elementLoeschen(final String raetselgruppeID, final String elementID) {
+	public RaetselgruppeDetails elementLoeschen(final String raetselgruppeID, final String elementID, final String userId, final boolean isAdmin) {
+
+		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
+
+		if (raetselgruppe != null) {
+
+			checkPermission(userId, raetselgruppe, isAdmin);
+		}
 
 		raetselgruppenDao.deleteRaetselgruppenelement(elementID);
 
-		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
+		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID, userId, isAdmin);
 
 		if (opt.isEmpty()) {
 
@@ -454,6 +474,17 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
 
 		return raetselgruppeFileService.generateVorschauPDFQuiz(dbResult, aufgaben, layoutAntwortvorschlaege);
+	}
+
+	void checkPermission(final String userId, final PersistenteRaetselgruppe ausDB, final boolean isAdmin) {
+
+		if (!AuthorizationUtils.hasUserPermissionToChange(userId, ausDB.owner, isAdmin)) {
+
+			LOGGER.warn("User {} hat versucht, Raetselgruppe {} mit Owner {} zu aendern", userId, ausDB.uuid,
+				ausDB.owner);
+
+			throw new WebApplicationException(Status.UNAUTHORIZED);
+		}
 	}
 
 }

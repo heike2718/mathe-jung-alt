@@ -218,6 +218,7 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 	@Override
 	public List<PersistenteAufgabeReadonly> loadAufgabenByRaetselIds(final List<String> uuids) {
 
+		// Ersetzt select ... where ID IN ...
 		Session session = entityManager.unwrap(Session.class);
 
 		MultiIdentifierLoadAccess<PersistenteAufgabeReadonly> multiLoadAccess = session
