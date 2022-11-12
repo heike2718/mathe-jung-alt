@@ -37,31 +37,40 @@ public interface RaetselService {
 	 * Legt ein neues Rätsel an.
 	 *
 	 * @param  payload
-	 *                             EditRaetselPayload die Daten und Metainformationen
-	 * @param  uuidAendernderUser:
-	 *                             String
-	 * @return                     RaetselPayloadDaten mit einer generierten UUID.
+	 *                 EditRaetselPayload die Daten und Metainformationen
+	 * @param  userId
+	 *                 String die ID des eingeloggten Users
+	 * @param  isAdmin
+	 *                 boolean
+	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	Raetsel raetselAnlegen(EditRaetselPayload payload, String uuidAendernderUser);
+	Raetsel raetselAnlegen(EditRaetselPayload payload, String userId, boolean isAdmin);
 
 	/**
 	 * Ändert ein vorhandenes Raetsel
 	 *
 	 * @param  payload
-	 *                             EditRaetselPayload die Daten und Metainformationen
-	 * @param  uuidAendernderUser:
-	 *                             String
-	 * @return                     RaetselPayloadDaten mit einer generierten UUID.
+	 *                 EditRaetselPayload die Daten und Metainformationen
+	 * @param  userId
+	 *                 String die ID des eingeloggten Users
+	 * @param  isAdmin
+	 *                 boolean
+	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	Raetsel raetselAendern(EditRaetselPayload payload, String uuidAendernderUser);
+	Raetsel raetselAendern(EditRaetselPayload payload, String userId, boolean isAdmin);
 
 	/**
-	 * Holt die Details des Rätsels zu der gegebenen id.
+	 * Holt die Details des Rätsels zu der gegebenen id. Anhand des anfragenden Users wird entschieden, ob dieser das Rätsel ändern
+	 * darf.
 	 *
 	 * @param  id
-	 * @return    Raetsel oder null.
+	 * @param  userId
+	 *                 String die ID des eingeloggten Users
+	 * @param  isAdmin
+	 *                 boolean
+	 * @return         Raetsel oder null.
 	 */
-	Raetsel getRaetselZuId(String id);
+	Raetsel getRaetselZuId(String id, String userId, boolean isAdmin);
 
 	/**
 	 * @param  schluessel

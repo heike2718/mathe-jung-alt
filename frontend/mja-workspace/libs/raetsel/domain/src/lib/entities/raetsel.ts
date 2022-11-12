@@ -33,6 +33,7 @@ export interface RaetselDetails {
   readonly schluessel: string;
   readonly name: string;
   readonly status: STATUS;
+  readonly schreibgeschuetzt: boolean;
   readonly frage: string;
   readonly loesung?: string;
   readonly kommentar?: string;
@@ -60,6 +61,7 @@ export const initialRaetselDetails: RaetselDetails = {
   schluessel: '',
   name: '',
   status: 'ERFASST',
+  schreibgeschuetzt: true,
   frage: '',
   loesung: '',
   kommentar: '',

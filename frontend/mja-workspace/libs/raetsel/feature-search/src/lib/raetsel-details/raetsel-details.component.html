@@ -51,9 +51,9 @@
 
 
             <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
-                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                <div *ngIf="!raetsel.schreibgeschuetzt" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                         (click)="startEdit()">bearbeiten</button></div>
-                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                <div *ngIf="!raetsel.schreibgeschuetzt" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                         [disabled]="generierenDiabled()" (click)="openPrintPNGDialog()">PNG generieren</button></div>
                 <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                         [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF generieren</button></div>

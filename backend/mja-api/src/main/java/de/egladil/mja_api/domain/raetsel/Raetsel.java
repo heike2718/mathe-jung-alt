@@ -61,6 +61,11 @@ public class Raetsel extends AbstractDomainEntity {
 	private String quelleId;
 
 	@JsonProperty
+	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
+	private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird entschieden, ob es durch den User
+										// änderbar ist.
+
+	@JsonProperty
 	@Schema(
 		type = SchemaType.ARRAY, implementation = Antwortvorschlag.class,
 		description = "optionale Antwortvorschläge, wenn es für multiple choice genutzt werden kann")
@@ -241,5 +246,15 @@ public class Raetsel extends AbstractDomainEntity {
 	public void setGrafikInfos(final List<GrafikInfo> grafikInfos) {
 
 		this.grafikInfos = grafikInfos;
+	}
+
+	public boolean isSchreibgeschuetzt() {
+
+		return schreibgeschuetzt;
+	}
+
+	public void markiereAlsSchreibgeschuetzt() {
+
+		this.schreibgeschuetzt = false;
 	}
 }

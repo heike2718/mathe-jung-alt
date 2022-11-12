@@ -48,6 +48,7 @@ import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
+import de.egladil.mja_api.domain.utils.AuthorizationUtils;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.infrastructure.validation.CsrfTokenValidator;
 import de.egladil.web.mja_auth.dto.MessagePayload;
@@ -166,7 +167,8 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
+		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid, securityContext.getUserPrincipal().getName(),
+			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
 
 		if (raetsel == null) {
 
@@ -205,11 +207,12 @@ public class RaetselResource {
 		this.delayService.pause();
 
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
 		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
 		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
 
-		Raetsel raetsel = raetselService.raetselAnlegen(payload, userUuid);
+		String userUuid = userPrincipal.getUuid();
+		Raetsel raetsel = raetselService.raetselAnlegen(payload, userUuid,
+			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
 
 		LOGGER.info("Raetsel angelegt: [raetsel={}, user={}]", raetsel.getId(), StringUtils.abbreviate(userUuid, 11));
 
@@ -246,11 +249,12 @@ public class RaetselResource {
 		this.delayService.pause();
 
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
+		String userUuid = userPrincipal.getName();
 		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
 		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
 
-		Raetsel raetsel = raetselService.raetselAendern(payload, userUuid);
+		Raetsel raetsel = raetselService.raetselAendern(payload, userUuid,
+			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
 
 		LOGGER.info("Raetsel geaendert: [raetsel={}, user={}]", raetsel.getId(), StringUtils.abbreviate(userUuid, 11));
 
@@ -317,7 +321,8 @@ public class RaetselResource {
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
 		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
 
-		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege);
+		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege, userUuid,
+			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
 
 		LOGGER.info("Raetsel Images generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(userUuid, 11));
 
@@ -360,7 +365,8 @@ public class RaetselResource {
 		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
 		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
 
-		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege);
+		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege, userUuid,
+			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
 
 		LOGGER.info("Raetsel PDF generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(userUuid, 11));
 

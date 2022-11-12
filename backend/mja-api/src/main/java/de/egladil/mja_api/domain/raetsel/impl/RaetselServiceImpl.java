@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
+import de.egladil.mja_api.domain.utils.AuthorizationUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import de.egladil.web.mja_auth.dto.MessagePayload;
@@ -106,7 +108,7 @@ public class RaetselServiceImpl implements RaetselService {
 
 	@Override
 	@Transactional
-	public Raetsel raetselAnlegen(final EditRaetselPayload payload, final String uuidAendernderUser) {
+	public Raetsel raetselAnlegen(final EditRaetselPayload payload, final String userId, final boolean isAdmin) {
 
 		boolean schluesselExistiert = this.schluesselExists(payload);
 
@@ -119,19 +121,24 @@ public class RaetselServiceImpl implements RaetselService {
 		PersistentesRaetsel neuesRaetsel = new PersistentesRaetsel();
 		String uuid = UUID.randomUUID().toString();
 		neuesRaetsel.setImportierteUuid(uuid);
-		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), uuidAendernderUser);
+		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
 
 		PersistentesRaetsel.persist(neuesRaetsel);
 
 		Raetsel result = payload.getRaetsel();
 		result.setId(neuesRaetsel.uuid);
 
+		if (AuthorizationUtils.hasUserPermissionToChange(userId, neuesRaetsel.owner, isAdmin)) {
+
+			result.markiereAlsSchreibgeschuetzt();
+		}
+
 		return result;
 	}
 
 	@Override
 	@Transactional
-	public Raetsel raetselAendern(final EditRaetselPayload payload, final String uuidAendernderUser) {
+	public Raetsel raetselAendern(final EditRaetselPayload payload, final String userId, final boolean isAdmin) {
 
 		Raetsel raetsel = payload.getRaetsel();
 		String raetselId = raetsel.getId();
@@ -140,10 +147,18 @@ public class RaetselServiceImpl implements RaetselService {
 		if (persistentesRaetsel == null) {
 
 			LOGGER.error("Aendern raetsel mit UUID {}: raetsel existiert nicht. uuidAendernderUser={}", raetselId,
-				uuidAendernderUser);
+				userId);
 
 			throw new WebApplicationException(
 				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
+		}
+
+		if (!AuthorizationUtils.hasUserPermissionToChange(userId, persistentesRaetsel.owner, isAdmin)) {
+
+			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", userId, persistentesRaetsel.schluessel,
+				persistentesRaetsel.owner);
+
+			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
 		boolean schluesselExistiert = this.schluesselExists(payload);
@@ -160,16 +175,16 @@ public class RaetselServiceImpl implements RaetselService {
 			neuesHistorieItem.frage = persistentesRaetsel.frage;
 			neuesHistorieItem.loesung = persistentesRaetsel.loesung;
 			neuesHistorieItem.geaendertAm = new Date();
-			neuesHistorieItem.geaendertDurch = uuidAendernderUser;
+			neuesHistorieItem.geaendertDurch = userId;
 			neuesHistorieItem.raetsel = persistentesRaetsel;
 
 			PersistentesRaetselHistorieItem.persist(neuesHistorieItem);
 		}
 
-		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), uuidAendernderUser);
+		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
 		PersistentesRaetsel.persist(persistentesRaetsel);
 
-		return getRaetselZuId(raetselId);
+		return getRaetselZuId(raetselId, userId, isAdmin);
 	}
 
 	boolean schluesselExists(final EditRaetselPayload payload) {
@@ -185,7 +200,7 @@ public class RaetselServiceImpl implements RaetselService {
 	}
 
 	@Override
-	public Raetsel getRaetselZuId(final String id) {
+	public Raetsel getRaetselZuId(final String id, final String userId, final boolean isAdmin) {
 
 		PersistentesRaetsel raetsel = PersistentesRaetsel.findById(id);
 
@@ -203,6 +218,12 @@ public class RaetselServiceImpl implements RaetselService {
 		result.setImages(raetselFileService.findImages(result.getSchluessel()));
 
 		result.setGrafikInfos(grafikInfos);
+
+		if (AuthorizationUtils.hasUserPermissionToChange(userId, raetsel.owner, isAdmin)) {
+
+			result.markiereAlsSchreibgeschuetzt();
+		}
+
 		return result;
 	}
 
@@ -234,19 +255,19 @@ public class RaetselServiceImpl implements RaetselService {
 		return result;
 	}
 
-	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final Raetsel daten, final String uuidAendernderUser) {
+	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final Raetsel daten, final String userId) {
 
 		persistentesRaetsel.antwortvorschlaege = daten.antwortvorschlaegeAsJSON();
 		persistentesRaetsel.deskriptoren = deskriptorenService.sortAndStringifyIdsDeskriptoren(daten.getDeskriptoren());
 		persistentesRaetsel.frage = daten.getFrage();
-		persistentesRaetsel.geaendertDurch = uuidAendernderUser;
+		persistentesRaetsel.geaendertDurch = userId;
 		persistentesRaetsel.kommentar = daten.getKommentar();
 		persistentesRaetsel.loesung = daten.getLoesung();
 		persistentesRaetsel.quelle = daten.getQuelleId();
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
 		persistentesRaetsel.status = daten.getStatus();
-		persistentesRaetsel.owner = uuidAendernderUser;
+		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
 	}
 
 	Raetsel mapFromDB(final PersistentesRaetsel raetselDB) {

@@ -13,8 +13,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.domain.utils.SetOperationUtils;
-
 /**
  * SetOperationUtilsTest
  */

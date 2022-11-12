@@ -54,11 +54,16 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final String userId, final boolean isAdmin) {
 
 		LOGGER.debug("start generate output");
 
-		Raetsel raetsel = loadRaetsel(raetselUuid);
+		Raetsel raetsel = loadRaetsel(raetselUuid, userId, isAdmin);
+
+		if (raetsel.isSchreibgeschuetzt()) {
+
+			throw new WebApplicationException(Status.UNAUTHORIZED);
+		}
 
 		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege);
 
@@ -161,11 +166,11 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	}
 
 	@Override
-	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final String userId, final boolean isAdmin) {
 
 		LOGGER.debug("start generate output");
 
-		Raetsel raetsel = loadRaetsel(raetselUuid);
+		Raetsel raetsel = loadRaetsel(raetselUuid, userId, isAdmin);
 
 		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege);
 
@@ -237,9 +242,9 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	 *                                 wenn es keinen Eintrag mit der URI gibt oder noch nicht alle erforderlichen Grafikdateien
 	 *                                 vorhanden sind.
 	 */
-	Raetsel loadRaetsel(final String raetselUuid) throws WebApplicationException {
+	Raetsel loadRaetsel(final String raetselUuid, final String userId, final boolean isAdmin) throws WebApplicationException {
 
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
+		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid, userId, isAdmin);
 
 		if (raetsel == null) {
 
