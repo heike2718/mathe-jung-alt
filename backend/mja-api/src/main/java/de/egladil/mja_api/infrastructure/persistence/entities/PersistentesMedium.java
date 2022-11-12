@@ -57,6 +57,10 @@ public class PersistentesMedium extends PanacheEntityBase implements Persistente
 	@Column
 	public String kommentar;
 
+	@Column
+	@NotNull
+	public String owner;
+
 	@Column(name = "GEAENDERT_DURCH")
 	public String geaendertDurch;
 

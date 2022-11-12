@@ -62,13 +62,7 @@ export class QuellenFacade {
   }
 
   loadQuelleAdmin(): void {
-    const storedSession = localStorage.getItem(this.#storagePrefix + STORAGE_KEY_SESSION);
-    const session: Session = storedSession ? JSON.parse(storedSession) : anonymousSession;
-    const user: User | undefined = isAnonymousSession(session) ? undefined : session.user;
-
-    if (user) {
-      this.store.dispatch(QuellenActions.loadQuelleForUser({ user }));
-    }
+    this.store.dispatch(QuellenActions.loadQuelleLoggedInUser());
   }
 
   loadQuelle(uuid: string) {

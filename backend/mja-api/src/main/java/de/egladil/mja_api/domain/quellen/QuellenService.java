@@ -35,11 +35,10 @@ public interface QuellenService {
 	Optional<QuelleReadonly> sucheQuelleMitId(String id);
 
 	/**
-	 * Sucht die Quelle mit Quellenart PERSON und dem gegebenen Namen.
+	 * Sucht die Quelle mit der gegebenen userId.
 	 *
-	 * @param  name
-	 *              String muss vollständig sein
-	 * @return      Optional
+	 * @param  userId
+	 * @return        Optional
 	 */
-	Optional<QuelleReadonly> sucheAdministrator(String name);
+	Optional<QuelleReadonly> sucheQuelleMitUserID(String userId);
 }

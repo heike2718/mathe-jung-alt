@@ -38,7 +38,7 @@ public interface QuellenRepository {
 	 *              String
 	 * @return      Optional
 	 */
-	Optional<PersistenteQuelleReadonly> findQuelleWithPersonEqual(String name);
+	Optional<PersistenteQuelleReadonly> findQuelleWithUserId(String userId);
 
 	/**
 	 * @param  id
@@ -46,12 +46,4 @@ public interface QuellenRepository {
 	 * @return    Optional
 	 */
 	Optional<PersistenteQuelleReadonly> findById(String id);
-
-	/**
-	 * Die default-Quelle bin ich.
-	 *
-	 * @return Optional
-	 */
-	Optional<PersistenteQuelleReadonly> getDefaultQuelle();
-
 }

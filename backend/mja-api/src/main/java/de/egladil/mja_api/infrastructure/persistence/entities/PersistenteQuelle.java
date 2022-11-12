@@ -66,10 +66,14 @@ public class PersistenteQuelle extends PanacheEntityBase implements PersistenteM
 	public String person;
 
 	@Column(name = "HW")
-	public boolean hw;
+	public boolean _hw;
 
 	@Column(name = "DESKRIPTOREN")
 	public String deskriptoren;
+
+	@Column
+	@NotNull
+	public String owner;
 
 	@Column(name = "GEAENDERT_DURCH")
 	public String geaendertDurch;

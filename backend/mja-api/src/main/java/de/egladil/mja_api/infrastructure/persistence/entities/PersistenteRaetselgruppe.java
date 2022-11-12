@@ -77,6 +77,10 @@ public class PersistenteRaetselgruppe extends PanacheEntityBase implements Persi
 	@Column
 	public String kommentar;
 
+	@Column
+	@NotNull
+	public String owner;
+
 	@Column(name = "GEAENDERT_DURCH")
 	@NotNull
 	public String geaendertDurch;

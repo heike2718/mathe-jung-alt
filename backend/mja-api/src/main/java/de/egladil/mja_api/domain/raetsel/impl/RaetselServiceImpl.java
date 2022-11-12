@@ -246,6 +246,7 @@ public class RaetselServiceImpl implements RaetselService {
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
 		persistentesRaetsel.status = daten.getStatus();
+		persistentesRaetsel.owner = uuidAendernderUser;
 	}
 
 	Raetsel mapFromDB(final PersistentesRaetsel raetselDB) {

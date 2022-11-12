@@ -33,20 +33,11 @@ export class QuellenHttpService {
     return this.http.get<Quelle[]>(this.#url, { headers, params });
   }
 
-  loadQuelleAdmin(user: User | undefined): Observable<Quelle | undefined> {
+  loadQuelleAdmin(): Observable<Quelle> {
 
-    if (user && isAdmin(user)) {
-
-      const headers = new HttpHeaders().set('Accept', 'application/json');
-      const url = this.#url + '/admin';
-
-      let params = new HttpParams()
-        .set('person', user.fullName);
-
-      return this.http.get<Quelle>(url, { headers, params });
-    }
-
-    return of(undefined);
+    const headers = new HttpHeaders().set('Accept', 'application/json');
+    const url = this.#url + '/admin';
+    return this.http.get<Quelle>(url, { headers });
   }
 
   loadQuelle(id: string): Observable<Quelle> {

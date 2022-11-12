@@ -50,10 +50,10 @@ export class QuelleEffects {
   loadQuelleAfterAdminLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.sessionCreated),
-      this.safeNgrx.safeSwitchMap((action) =>
-        this.quellenHttpService.loadQuelleAdmin(action.session.user).pipe(
-          map((quelle: Quelle | undefined) =>
-            quelle ? QuelleActions.quelleAdminLoaded({ quelle }) : noopAction()
+      this.safeNgrx.safeSwitchMap((_action) =>
+        this.quellenHttpService.loadQuelleAdmin().pipe(
+          map((quelle: Quelle) =>
+          QuelleActions.quelleAdminLoaded({ quelle })
           )
         ), 'Ups, beim Laden der Admin-Quelle ist etwas schiefgegangen', noopAction()
       )
@@ -64,9 +64,9 @@ export class QuelleEffects {
     this.actions$.pipe(
       ofType(AuthActions.sessionRestored),
       this.safeNgrx.safeSwitchMap((action) =>
-        this.quellenHttpService.loadQuelleAdmin(action.session.user).pipe(
-          map((quelle: Quelle | undefined) =>
-            quelle ? QuelleActions.quelleFound({ quelle }) : noopAction()
+        this.quellenHttpService.loadQuelleAdmin().pipe(
+          map((quelle: Quelle) =>
+          QuelleActions.quelleFound({ quelle })
           )
         ), 'Ups, beim Laden der Admin-Quelle ist etwas schiefgegangen', noopAction()
       )

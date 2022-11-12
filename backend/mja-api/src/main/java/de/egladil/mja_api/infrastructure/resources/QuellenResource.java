@@ -16,9 +16,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -41,6 +43,9 @@ import de.egladil.web.mja_auth.dto.MessagePayload;
 @Path("/quellen/v1")
 @Tag(name = "Quellen")
 public class QuellenResource {
+
+	@Context
+	SecurityContext securityContext;
 
 	@Inject
 	DevDelayService delayService;
@@ -86,31 +91,27 @@ public class QuellenResource {
 	@Path("admin")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findQuelleByPerson",
-		summary = "Gibt die Quelle zurück, die 'Vorname Nachname' der eingeloggten Person gehört")
-	@Parameters({
-		@Parameter(
-			name = "person",
-			description = "Vorname Nachname einer Person, so wie sie nach dem Einloggen in der mja-admin-app angezeigt wird") })
+		operationId = "findOwnQuelle",
+		summary = "Gibt die Quelle zurück, die zu der eingeloggten Person gehört")
 	@APIResponse(
-		name = "FindQuelleByPersonOKResponse",
+		name = "FindOwnQuelleOKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = QuelleReadonly.class)))
 	@APIResponse(
-		name = "QuellePersonNotFound",
+		name = "OwnQuelleNotFound",
 		description = "Gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public QuelleReadonly findQuelleByPerson(@Pattern(
-		regexp = "[\\w äöüßÄÖÜ\\-@&,.()\"]*",
-		message = "person enthält ungültige Zeichen") @QueryParam(value = "person") final String person) {
+	public QuelleReadonly findOwnQuelle() {
 
 		this.delayService.pause();
 
-		Optional<QuelleReadonly> result = this.quellenService.sucheAdministrator(person);
+		String userId = securityContext.getUserPrincipal().getName();
+
+		Optional<QuelleReadonly> result = this.quellenService.sucheQuelleMitUserID(userId);
 
 		if (result.isEmpty()) {
 

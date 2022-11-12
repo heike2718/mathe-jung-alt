@@ -13,8 +13,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.Suchfilter;
@@ -33,8 +31,6 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleR
 @DomainService
 @ApplicationScoped
 public class QuellenServiceImpl implements QuellenService {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(QuellenServiceImpl.class);
 
 	@Inject
 	QuellenRepository quellenRepository;
@@ -91,10 +87,11 @@ public class QuellenServiceImpl implements QuellenService {
 	}
 
 	@Override
-	public Optional<QuelleReadonly> sucheAdministrator(final String name) {
+	public Optional<QuelleReadonly> sucheQuelleMitUserID(final String userId) {
 
-		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithPersonEqual(name);
+		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithUserId(userId);
 		return optAusDB.isEmpty() ? Optional.empty() : Optional.of(mapFromDB(optAusDB.get()));
+
 	}
 
 	@Override

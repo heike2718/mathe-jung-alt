@@ -32,15 +32,15 @@ public class QuellenRepositoryImpl implements QuellenRepository {
 	}
 
 	@Override
-	public Optional<PersistenteQuelleReadonly> findQuelleWithPersonEqual(final String name) {
+	public Optional<PersistenteQuelleReadonly> findQuelleWithUserId(final String userId) {
 
 		List<PersistenteQuelleReadonly> trefferliste = entityManager
-			.createNamedQuery(PersistenteQuelleReadonly.FIND_WITH_PERSON_EQUALS, PersistenteQuelleReadonly.class)
-			.setParameter("suchstring", name).getResultList();
+			.createNamedQuery(PersistenteQuelleReadonly.FIND_WITH_USER_ID, PersistenteQuelleReadonly.class)
+			.setParameter("userId", userId).getResultList();
 
 		if (trefferliste.size() > 1) {
 
-			LOGGER.warn("Es gibt mehr als eine Quelle mit person={} - es wird die erste zurückgegeben", name);
+			LOGGER.warn("Es gibt mehr als eine Quelle mit userId={} - es wird die erste zurückgegeben", userId);
 		}
 
 		return trefferliste.isEmpty() ? Optional.empty() : Optional.of(trefferliste.get(0));
@@ -67,21 +67,4 @@ public class QuellenRepositoryImpl implements QuellenRepository {
 
 		return result == null ? Optional.empty() : Optional.of(result);
 	}
-
-	@Override
-	public Optional<PersistenteQuelleReadonly> getDefaultQuelle() {
-
-		List<PersistenteQuelleReadonly> trefferliste = entityManager
-			.createNamedQuery(PersistenteQuelleReadonly.FIND_QUELLE_BY_FLAG_HW, PersistenteQuelleReadonly.class)
-			.setParameter("hw", true).getResultList();
-
-		if (trefferliste.size() > 1) {
-
-			LOGGER.warn("Blöd, da gibt es mehr als eine Quelle mit hw = 1");
-			return Optional.empty();
-		}
-
-		return trefferliste.isEmpty() ? Optional.empty() : Optional.of(trefferliste.get(0));
-	}
-
 }

@@ -30,9 +30,8 @@ export const loadQuelle = createAction(
   props<{uuid: string}>()
 );
 
-export const loadQuelleForUser = createAction(
-  '[Quelle] loadQuelleForUser',
-  props<{user: User}>()
+export const loadQuelleLoggedInUser = createAction(
+  '[Quelle] loadQuelleLoggedInUser'
 );
 
 export const quelleFound = createAction(

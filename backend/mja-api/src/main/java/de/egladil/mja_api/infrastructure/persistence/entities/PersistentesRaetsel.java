@@ -85,6 +85,10 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 	public String kommentar;
 
 	@Column
+	@NotNull
+	public String owner;
+
+	@Column
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	public DomainEntityStatus status;
