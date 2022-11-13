@@ -16,6 +16,8 @@ public class ConfigService {
 
 	public static final String STAGE_DEV = "dev";
 
+	public static final String STAGE_PROD = "prod";
+
 	public static final String DEFAULT_ENCODING = "UTF-8";
 
 	@ConfigProperty(name = "block.on.missing.origin.referer", defaultValue = "false")
@@ -38,6 +40,12 @@ public class ConfigService {
 
 	@ConfigProperty(name = "exposedHeaders")
 	String exposedHeaders;
+
+	@ConfigProperty(name = "mock.session")
+	boolean mockSession = false;
+
+	@ConfigProperty(name = "csrf.enabled")
+	boolean csrfEnabled = true;
 
 	/**
 	 * @return the blockOnMissingOriginReferer
@@ -93,6 +101,16 @@ public class ConfigService {
 	public String getExposedHeaders() {
 
 		return exposedHeaders;
+	}
+
+	public boolean isMockSession() {
+
+		return mockSession;
+	}
+
+	public boolean isCsrfEnabled() {
+
+		return csrfEnabled;
 	}
 
 }

@@ -126,6 +126,11 @@ public class SessionService {
 		return session;
 	}
 
+	public Session getSessionNullSave(final String sessionId) {
+
+		return sessionId == null ? null : sessions.get(sessionId);
+	}
+
 	public void invalidateSession(final String sessionId) {
 
 		if (sessionId == null) {

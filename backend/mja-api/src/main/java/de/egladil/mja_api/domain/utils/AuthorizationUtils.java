@@ -27,5 +27,4 @@ public final class AuthorizationUtils {
 
 		return userId.equals(ownerId);
 	}
-
 }

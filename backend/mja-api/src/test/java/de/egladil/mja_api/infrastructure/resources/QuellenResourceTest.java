@@ -95,7 +95,7 @@ public class QuellenResourceTest {
 	void testFindQuelleByPersonMitTreffer() throws Exception {
 
 		Response response = given()
-			.when().get("admin?person=Heike Winkelvoß");
+			.when().get("admin");
 
 		String responsePayload = response.asString();
 
@@ -104,32 +104,6 @@ public class QuellenResourceTest {
 		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
 
 		assertEquals(200, response.statusCode());
-
-	}
-
-	@Test
-	void testFindQuelleByPersonOhneTrefferWegenEqualsSuche() throws Exception {
-
-		String expected = "{\"level\":\"WARN\",\"message\":\"Es gibt noch keine Quelle für Sie als Autor:in. Bitte legen Sie eine an.\"}";
-
-		given()
-			.when().get("admin?person=Ponder")
-			.then()
-			.body(is(expected))
-			.statusCode(404);
-
-	}
-
-	@Test
-	void testFindQuelleByPersonOhneTrefferKomplettAnders() throws Exception {
-
-		String expected = "{\"level\":\"WARN\",\"message\":\"Es gibt noch keine Quelle für Sie als Autor:in. Bitte legen Sie eine an.\"}";
-
-		given()
-			.when().get("admin?person=Heike")
-			.then()
-			.body(is(expected))
-			.statusCode(404);
 
 	}
 

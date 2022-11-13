@@ -117,7 +117,8 @@ public class UploadResource {
 
 		uploadFileService.processFile(uploadData);
 
-		UploadRequestDto uploadRequest = new UploadRequestDto().withBenutzerUuid(securityContext.getUserPrincipal().getName())
+		UploadRequestDto uploadRequest = new UploadRequestDto()
+			.withBenutzerUuid(securityContext.getUserPrincipal().getName())
 			.withUploadData(uploadData).withUploadType(fileType);
 
 		uploadScanner.scanUpload(uploadRequest);

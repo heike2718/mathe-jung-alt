@@ -30,7 +30,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -57,9 +56,7 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.domain.utils.AuthorizationUtils;
 import de.egladil.mja_api.domain.utils.DevDelayService;
-import de.egladil.mja_api.infrastructure.validation.CsrfTokenValidator;
 import de.egladil.web.commons_validation.payload.MessagePayload;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 import de.egladil.web.mja_auth.session.Session;
 
 /**
@@ -72,9 +69,6 @@ public class RaetselgruppenResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenResource.class);
 
-	@ConfigProperty(name = "authorization.enabled")
-	boolean authorizationEnabled;
-
 	@Context
 	SecurityContext securityContext;
 
@@ -83,8 +77,6 @@ public class RaetselgruppenResource {
 
 	@Inject
 	RaetselgruppenService raetselgruppenService;
-
-	private final CsrfTokenValidator csrfTokenValidator = new CsrfTokenValidator();
 
 	@GET
 	@RolesAllowed({ "ADMIN", "AUTOR" })
@@ -149,6 +141,12 @@ public class RaetselgruppenResource {
 	@Operation(
 		operationId = "raetselgruppeAnlegen",
 		summary = "neue Rätselgruppe anlegen")
+	@Parameters({
+		@Parameter(name = "requestPayload", description = "Daten der Raetselgruppe."),
+		@Parameter(
+			name = "csrfHeader",
+			description = "CSRF-Token")
+	})
 	@APIResponse(
 		name = "CreateRaetselgruppeOKResponse",
 		responseCode = "201",
@@ -165,10 +163,7 @@ public class RaetselgruppenResource {
 
 		delayService.pause();
 
-		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		String userUuid = userPrincipal.getUuid();
-		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
-		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
+		String userUuid = this.securityContext.getUserPrincipal().getName();
 
 		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeAnlegen(requestPayload, userUuid, securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
 
@@ -184,6 +179,12 @@ public class RaetselgruppenResource {
 	@Operation(
 		operationId = "raetselgruppeAendern",
 		summary = "neue Rätselgruppe anlegen")
+	@Parameters({
+		@Parameter(name = "requestPayload", description = "Daten der Raetselgruppe."),
+		@Parameter(
+			name = "csrfHeader",
+			description = "CSRF-Token")
+	})
 	@APIResponse(
 		name = "UpdateRaetselgruppeOKResponse",
 		responseCode = "200",
@@ -200,10 +201,7 @@ public class RaetselgruppenResource {
 
 		delayService.pause();
 
-		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		String userUuid = userPrincipal.getName();
-		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
-		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
+		String userUuid = this.securityContext.getUserPrincipal().getName();
 
 		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeBasisdatenAendern(requestPayload, userUuid, securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
 
@@ -255,9 +253,11 @@ public class RaetselgruppenResource {
 		operationId = "raetselgruppenelementAnlegen",
 		summary = "Legt ein neues Element in einer Rätselgruppe an")
 	@Parameters({
+		@Parameter(name = "raetselgruppeID", description = "ID der Raetselgruppe."),
 		@Parameter(
-			name = "raetselgruppeID",
-			description = "technische ID der Rätselgruppe")})
+			name = "element",
+			description = "die Daten des Raetselgruppenelements")
+	})
 	@APIResponse(
 		name = "CreateRaetselgruppenelementOKResponse",
 		responseCode = "201",
@@ -297,12 +297,11 @@ public class RaetselgruppenResource {
 		operationId = "raetselgruppenelementAendern",
 		summary = "Ändert das Element einer Rätselgruppe. Es können nur Nummer und Punkte geändert werden. Wenn der Schlüssel nicht stimmt, muss es gelöscht und neu angelegt werden.")
 	@Parameters({
+		@Parameter(name = "raetselgruppeID", description = "ID der Raetselgruppe."),
 		@Parameter(
-			name = "raetselgruppeID",
-			description = "technische ID der Rätselgruppe"),
-		@Parameter(
-			name = "elementID",
-			description = "technische ID des Elements") })
+			name = "element",
+			description = "die Daten des Raetselgruppenelements")
+	})
 	@APIResponse(
 		name = "UpdateRaetselgruppenelementOKResponse",
 		responseCode = "200",
@@ -337,10 +336,10 @@ public class RaetselgruppenResource {
 	@Parameters({
 		@Parameter(
 			name = "raetselgruppeID",
-			description = "technische ID der Rätselgruppe"),
+			description = "ID der Rätselgruppe"),
 		@Parameter(
 			name = "elementID",
-			description = "technische ID des Elements") })
+			description = "ID des Elements") })
 	@APIResponse(
 		name = "DeleteRaetselgruppenelementOKResponse",
 		responseCode = "200",

@@ -110,7 +110,6 @@ public class QuellenResource {
 		this.delayService.pause();
 
 		String userId = securityContext.getUserPrincipal().getName();
-
 		Optional<QuelleReadonly> result = this.quellenService.sucheQuelleMitUserID(userId);
 
 		if (result.isEmpty()) {

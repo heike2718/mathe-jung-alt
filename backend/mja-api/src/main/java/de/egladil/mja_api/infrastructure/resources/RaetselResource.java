@@ -25,7 +25,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -50,9 +49,7 @@ import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.utils.AuthorizationUtils;
 import de.egladil.mja_api.domain.utils.DevDelayService;
-import de.egladil.mja_api.infrastructure.validation.CsrfTokenValidator;
 import de.egladil.web.mja_auth.dto.MessagePayload;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 import de.egladil.web.mja_auth.session.Session;
 
 /**
@@ -64,9 +61,6 @@ import de.egladil.web.mja_auth.session.Session;
 public class RaetselResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselResource.class);
-
-	@ConfigProperty(name = "authorization.enabled")
-	boolean authorizationEnabled;
 
 	@Context
 	SecurityContext securityContext;
@@ -82,8 +76,6 @@ public class RaetselResource {
 
 	@Inject
 	DeskriptorenService deskriptorenService;
-
-	private final CsrfTokenValidator csrfTokenValidator = new CsrfTokenValidator();
 
 	@GET
 	@RolesAllowed({ "ADMIN", "AUTOR" })
@@ -123,8 +115,6 @@ public class RaetselResource {
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
 		@QueryParam(value = "sortDirection")  @DefaultValue("asc") final SortDirection sortDirection) {
 		// @formatter:on
-
-		LOGGER.debug("authorizationEnabled=" + this.authorizationEnabled);
 
 		this.delayService.pause();
 
@@ -167,7 +157,7 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid, securityContext.getUserPrincipal().getName(),
+		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid, this.securityContext.getUserPrincipal().getName(),
 			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
 
 		if (raetsel == null) {
@@ -184,6 +174,12 @@ public class RaetselResource {
 	@Operation(
 		operationId = "raetselAnlegen",
 		summary = "neues Rätsel anlegen")
+	@Parameters({
+		@Parameter(name = "payload", description = "Attribute des Rätsels."),
+		@Parameter(
+			name = "csrfHeader",
+			description = "CSRF-Token")
+	})
 	@APIResponse(
 		name = "CreateRaetselOKResponse",
 		responseCode = "201",
@@ -206,11 +202,8 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
-		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
+		String userUuid = this.securityContext.getUserPrincipal().getName();
 
-		String userUuid = userPrincipal.getUuid();
 		Raetsel raetsel = raetselService.raetselAnlegen(payload, userUuid,
 			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
 
@@ -226,6 +219,12 @@ public class RaetselResource {
 	@Operation(
 		operationId = "raetselAendern",
 		summary = "vorhandenes Rätsel ändern")
+	@Parameters({
+		@Parameter(name = "payload", description = "Attribute des Rätsels."),
+		@Parameter(
+			name = "csrfHeader",
+			description = "CSRF-Token")
+	})
 	@APIResponse(
 		name = "UpdateRaetselOKResponse",
 		responseCode = "200",
@@ -248,10 +247,7 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		String userUuid = userPrincipal.getName();
-		String csrfToken = authorizationEnabled ? userPrincipal.getCsrfToken() : "anonym";
-		this.csrfTokenValidator.checkCsrfToken(csrfHeader, csrfToken, this.authorizationEnabled);
+		String userUuid = this.securityContext.getUserPrincipal().getName();
 
 		Raetsel raetsel = raetselService.raetselAendern(payload, userUuid,
 			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
@@ -294,13 +290,6 @@ public class RaetselResource {
 	@Operation(
 		operationId = "raetselImagesGenerieren",
 		summary = "generiert die Vorschaubilder (png) des Rätsels")
-	@Parameters({
-		@Parameter(
-			name = "raetselID",
-			description = "technische ID des Rätsels"),
-		@Parameter(
-			name = "layoutAntwortvorschlaege",
-			description = "Payload: Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)") })
 	@APIResponse(
 		name = "GenerateImagesRaetselOKResponse",
 		responseCode = "200",
@@ -318,8 +307,7 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
+		String userUuid = this.securityContext.getUserPrincipal().getName();
 
 		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege, userUuid,
 			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
@@ -362,8 +350,7 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		AuthenticatedUser userPrincipal = (AuthenticatedUser) this.securityContext.getUserPrincipal();
-		String userUuid = authorizationEnabled ? userPrincipal.getName() : "20721575-8c45-4201-a025-7a9fece1f2aa";
+		String userUuid = this.securityContext.getUserPrincipal().getName();
 
 		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege, userUuid,
 			securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
