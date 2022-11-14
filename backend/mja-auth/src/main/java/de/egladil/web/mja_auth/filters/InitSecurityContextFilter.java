@@ -50,7 +50,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 	@Override
 	public void filter(final ContainerRequestContext requestContext) throws IOException {
 
-		LOGGER.info("stage=" + configService.getStage() + ", mockSession=" + configService.isMockSession());
+		LOGGER.debug("stage=" + configService.getStage() + ", mockSession=" + configService.isMockSession());
 
 		String method = requestContext.getMethod();
 
