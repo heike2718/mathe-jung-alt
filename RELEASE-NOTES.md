@@ -2,6 +2,12 @@
 
 __1.2.0__
 
+* [Berechtigungen zum Ändern von Rätseln aufräumen](https://github.com/heike2718/mathe-jung-alt/issues/53)
+* [Superadmin soll alle Resourcen ändern dürfen](https://github.com/heike2718/mathe-jung-alt/issues/39)
+
+
+__1.2.0__
+
 * [Rätseleditor: bei einem Fehler darf nicht wegnavigiert werden.](https://github.com/heike2718/mathe-jung-alt/issues/41)
 * [Bessere Fehlermeldung bei UK-violation](https://github.com/heike2718/mathe-jung-alt/issues/47)
 * [Generischen http-wrapper erweitern, damit man bei einem Fehler im Editor bleibt.](https://github.com/heike2718/mathe-jung-alt/issues/48)
