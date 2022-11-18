@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'mja-workspace-not-authorized',
+  selector: 'mja-admin-not-authorized',
   templateUrl: './not-authorized.component.html',
   styleUrls: ['./not-authorized.component.scss'],
 })

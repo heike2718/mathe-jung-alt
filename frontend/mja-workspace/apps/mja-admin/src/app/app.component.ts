@@ -1,6 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { Component, OnInit } from '@angular/core';
 import { AuthFacade, AuthResult } from '@mja-workspace/shared/auth/domain';
 
 @Component({
@@ -8,11 +7,8 @@ import { AuthFacade, AuthResult } from '@mja-workspace/shared/auth/domain';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class AppComponent implements OnInit {
   title = 'mja-admin';
-
-  // @ViewChild(MatSidenav)
-  // sidenav!: MatSidenav;
 
   constructor(public authFacade: AuthFacade, private breakpointObserver: BreakpointObserver) { }
 
@@ -34,24 +30,5 @@ export class AppComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.authFacade.clearOrRestoreSession();
     }
 
-  }
-
-  ngAfterViewInit() {
-
-    // setTimeout(() => {
-    //   this.breakpointObserver.observe(['(max-width: 800px)']).subscribe((res) => {
-    //     if (res.matches) {
-    //       this.sidenav.mode = 'over';
-    //       this.sidenav.close();
-    //     } else {
-    //       this.sidenav.mode = 'side';
-    //       this.sidenav.open();
-    //     }
-    //   });
-    // }, 1);
-  }
-
-  ngAfterViewChecked(): void {
-      // console.log('AppComponent=>AfterViewChecked');
   }
 }

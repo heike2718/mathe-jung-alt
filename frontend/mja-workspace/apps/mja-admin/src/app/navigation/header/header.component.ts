@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 
 @Component({
@@ -7,7 +7,7 @@ import { AuthFacade } from '@mja-workspace/shared/auth/domain';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   @Output()
   sidenavToggle = new EventEmitter();
@@ -17,8 +17,6 @@ export class HeaderComponent implements OnInit {
   get isHandset(): boolean {
     return this.breakpointObserver.isMatched(Breakpoints.Handset);
   }
-
-  ngOnInit(): void { }
 
   public login(): void {
     this.authFacade.login();

@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 
@@ -9,7 +9,7 @@ import { AuthFacade } from '@mja-workspace/shared/auth/domain';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit, DoCheck {
 
   isMenuOpen = true;
 

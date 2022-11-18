@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
     this.#checkSessionState();
   }
 
-  onMenuStateChanged($event: any): void {
+  onMenuStateChanged($event: boolean): void {
     this.menuOpen = $event;
   }
 

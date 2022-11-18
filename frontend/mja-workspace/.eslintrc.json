@@ -13,19 +13,46 @@
             "allow": [],
             "depConstraints": [
               {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
-              },
-              {
-                "sourceTag": "type:util",
-                "onlyDependOnLibsWithTags": ["type:configuration"]
-              },
-              {
-                "sourceTag": "domain:auth",
+                "sourceTag": "type:app",
                 "onlyDependOnLibsWithTags": [
-                  "domain:auth",
-                  "type:util",
-                  "type:configuration"
+                  "type:feature",
+                  "type:shared:util-configuration",
+                  "type:shared:util-mja",
+                  "type:shared:ui-components",
+                  "type:shared:auth",
+                  "type:shared:suchfilter",
+                  "type:data"
+                ]
+              },
+              {
+                "sourceTag": "type:feature",
+                "onlyDependOnLibsWithTags": [
+                  "type:data",
+                  "type:ui",
+                  "type:model",
+                  "type:shared:util-configuration",
+                  "type:shared:util-mja",
+                  "type:shared:ui-components",
+                  "type:shared:auth",
+                  "type:data"
+                ]
+              },
+              {
+                "sourceTag": "type:data",
+                "onlyDependOnLibsWithTags": [
+                  "type:model",
+                  "type:shared:util-configuration",
+                  "type:shared:util-mja"
+                ]
+              },
+              {
+                "sourceTag": "type:ui",
+                "onlyDependOnLibsWithTags": [
+                  "type:data",
+                  "type:shared:form",
+                  "type:shared:util-mja",
+                  "type:shared:ui-components",
+                  "type:shared:auth"
                 ]
               },
               {
@@ -45,9 +72,11 @@
               {
                 "sourceTag": "type:ui",
                 "onlyDependOnLibsWithTags": [
-                  "type:configuration",
-                  "type:util",
-                  "domain:shared"
+                  "type:shared:util-configuration",
+                  "type:shared:ui-components",
+                  "type:shared:util-mja",
+                  "domain:shared",
+                  "domain:data"
                 ]
               },
               {

@@ -39,5 +39,5 @@
       }
     }
   },
-  "tags": ["domain:shared", "type:util"]
+  "tags": ["domain:shared", "type:shared:util-mja"]
 }

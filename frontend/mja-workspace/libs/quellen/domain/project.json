@@ -39,5 +39,5 @@
       }
     }
   },
-  "tags": ["domain:quellen", "type:domain-logic"]
+  "tags": ["domain:quellen", "type:data"]
 }

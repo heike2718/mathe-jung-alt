@@ -39,5 +39,5 @@
       }
     }
   },
-  "tags": ["domain:auth", "type:domain-logic"]
+  "tags": ["domain:shared", "type:shared:auth"]
 }

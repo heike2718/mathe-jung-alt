@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 
 @Component({
@@ -6,16 +6,13 @@ import { AuthFacade } from '@mja-workspace/shared/auth/domain';
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss'],
 })
-export class SidenavComponent implements OnInit {
+export class SidenavComponent {
 
 
   @Output()
   sidenavClose = new EventEmitter();
 
   constructor(public authFacade: AuthFacade) { }
-
-  ngOnInit(): void { }
-
   
   public login(): void {
     this.authFacade.login();

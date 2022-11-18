@@ -13,7 +13,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "suchfilter",
+            "prefix": "mja",
             "style": "camelCase"
           }
         ],
@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "suchfilter",
+            "prefix": "mja",
             "style": "kebab-case"
           }
         ]

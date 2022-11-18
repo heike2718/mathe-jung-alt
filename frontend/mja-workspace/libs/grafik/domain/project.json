@@ -39,5 +39,5 @@
       }
     }
   },
-  "tags": ["domain:grafik", "type:domain-logic"]
+  "tags": ["domain:grafik", "type:data"]
 }
