@@ -14,6 +14,7 @@ import { appRoutes } from './app/app.routes';
 import { provideRouter } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import { features } from 'process';
 
 if (environment.production) {
   enableProdMode();

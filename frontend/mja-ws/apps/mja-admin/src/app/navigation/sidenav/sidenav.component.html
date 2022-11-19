@@ -1,0 +1,17 @@
+<mat-nav-list (click)="onSidenavClose()">
+    <a mat-list-item routerLink="/">
+        <mat-icon>home</mat-icon>
+        <span class="nav-caption">Startseite</span>
+    </a>
+
+    <a *ngIf="true" mat-list-item (click)="login()">
+        <mat-icon>login</mat-icon>
+        <span class="nav-caption">einloggen</span>
+    </a>
+
+    <a *ngIf="false" mat-list-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span class="nav-caption">ausloggen</span>
+    </a>
+</mat-nav-list>
+

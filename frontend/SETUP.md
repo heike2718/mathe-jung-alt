@@ -43,6 +43,46 @@ apps/../src/styles.scss
 * welcome-component löschen
 * main.ts anpassen: startet AppComponent. Die Module werden über provider-Methoden importiert (oder wie immer man das nennt.)
 
+## HomeComponent als Anker für die route /
+
+```
+npx nx generate @nrwl/angular:component home --project=mja-admin --path=/apps/mja-admin/src/app --selector=mja-admin-home --standalone --no-interactive
+```
+
+wird in die imports in app.component.ts eingetragen
 
 
+## routing initialisiert
 
+Datei: app.routes.ts
+
+exportiert die Konstante appRoutes mit zunächst einer HomeComponent für den root-path
+
+wird in main.ts mittels provideRouter(appRoutes) provided
+
+
+## layout stylen
+
+* Verzeichnis navigation angelegt
+* header generiert:
+
+```
+npx nx generate @nrwl/angular:component header --project=mja-admin --path=/apps/mja-admin/src/app/navigation --selector=mja-admin-header --standalone --no-interactive
+```
+
+* sidenav generiert
+```
+npx nx generate @nrwl/angular:component sidenav --project=mja-admin --path=/apps/mja-admin/src/app/navigation --selector=mja-admin-sidenav --standalone --no-interactive
+```
+
+beide Komponenten in app.component.ts importieren (imports: [...])
+
+header und sidenav werden in layout projeziert.
+
+## Responiveness
+
+LayoutComponent bekommt einen BreakpointObserver injected und subscribed sich in ngInit auf Breakpoints.Handset.
+
+HeaderComponent bekommt ebenfalls den BreakpointObserver injected und eine get isHandset()- Methode entscheidet dann darüber, ob der Name angezeigt wird.
+
+HeaderComponent und SidenavComponent emitten ein sidenavToggle-Event, das im app.component.html ausgewertet wird. 
