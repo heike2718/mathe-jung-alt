@@ -13,8 +13,66 @@
             "allow": [],
             "depConstraints": [
               {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
+                "sourceTag": "type:app",
+                "onlyDependOnLibsWithTags": [
+                  "domain:core",
+                  "type:feature",
+                  "type:shared:config",
+                  "type:shared:http",
+                  "type:shared:auth",
+                  "type:shared:ui-messaging"
+                ]
+              },
+              {
+                "sourceTag": "domain:core",
+                "onlyDependsOnLibsWithTags": "domain:shared"
+              },
+              {
+                "sourceTag": "type:api",
+                "onlyDependOnLibWithTags": [
+                  "type:feature",
+                  "type:data",
+                  "type:ui",
+                  "type:model"
+                ]
+              },
+              {
+                "sourceTag": "type:feature",
+                "onlyDependOnLibsWithTags": [
+                  "type:api",
+                  "type:data",
+                  "type:ui",
+                  "type:model",
+                  "type:shared:config",
+                  "type:shared:ngrx-utils",
+                  "type:shared:auth",
+                  "type:shared:ui-messaging",
+                  "type:shared:util"
+                ]
+              },
+              {
+                "sourceTag": "type:data",
+                "onlyDependOnLibsWithTags": [
+                  "type:model",
+                  "type:shared:config",
+                  "type:shared:ui-messaging",
+                  "type:shared:ngrx-utils",
+                  "type:shared:testing",
+                  "type:shared:util"
+                ]
+              },
+              {
+                "sourceTag": "type:ui",
+                "onlyDependOnLibsWithTags": [
+                  "type:model",
+                  "type:shared:form",
+                  "type:shared:ui",
+                  "type:shared:util"
+                ]
+              },
+              {
+                "sourceTag": "type:ui",
+                "bannedExternalImports": ["@ngrx/**"]
               }
             ]
           }

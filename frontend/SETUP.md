@@ -85,4 +85,46 @@ LayoutComponent bekommt einen BreakpointObserver injected und subscribed sich in
 
 HeaderComponent bekommt ebenfalls den BreakpointObserver injected und eine get isHandset()- Methode entscheidet dann darüber, ob der Name angezeigt wird.
 
-HeaderComponent und SidenavComponent emitten ein sidenavToggle-Event, das im app.component.html ausgewertet wird. 
+HeaderComponent und SidenavComponent emitten ein sidenavToggle-Event, das im app.component.html ausgewertet wird.
+
+## Linting Rules für dependency restrictions
+
+Die erlaubten dependencies werden im globalen ./.eslintrc.json definiert und werten dabei tags aus, die den libraries oder apps in project.json gegeben werden.
+
+## Shared Libraries
+
+unter libs: Verzeichnis shared angelegt
+
+### Config
+
+```
+npx nx generate @nrwl/angular:library config --style=scss --directory=shared --skipModule --skipSelector --standalone --tags='domain:shared, type:shared:config' --no-interactive --dry-run 
+```
+
+Das legt leider gleich auch ein Unterverzeichnis shared-config mit einer Komponente an. Das Verzeichnis wurde komplett gelöscht.
+
+In einer configuration.ts wird eine Klasse mit public attribute baseUrl angelegt. Später können dort weitere Konfigurationen hinzukommen.
+
+index.ts wird angepasst: Komponente raus, Configuration rein.
+
+__Einbinden von Config:__
+
+in mja-admin/.../main.ts als provider wie folgt einbinden:
+
+```
+   {
+      provide: Configuration,
+      useFactory: () => new Configuration(environment.baseUrl),
+    },
+```
+
+Das hat den Vorteil, dass man in main.ts, wo man Zugriff auf environment hat, appspezifische Konfigurationen reinbasteln kann.
+
+
+## FAQ
+
+__Compilefehler Cannot parse tsconfig.base.json: PropertyNameExpected in JSON at position 891__
+
+Ursache ist ein Komma nach dem letzeten Item in der path-Liste 
+ 
+

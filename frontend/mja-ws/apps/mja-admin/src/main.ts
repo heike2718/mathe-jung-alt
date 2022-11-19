@@ -15,6 +15,7 @@ import { provideRouter } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { features } from 'process';
+import { Configuration } from '@mja-ws/shared/config';
 
 if (environment.production) {
   enableProdMode();
@@ -30,6 +31,11 @@ bootstrapApplication(AppComponent, {
     provideStore(),
     provideEffects([]),
     provideStoreDevtools(),
+
+    {
+      provide: Configuration,
+      useFactory: () => new Configuration(environment.baseUrl),
+    },
 
     {
       provide: MAT_DATE_LOCALE,

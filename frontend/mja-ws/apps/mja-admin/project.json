@@ -19,9 +19,7 @@
           "apps/mja-admin/src/favicon.ico",
           "apps/mja-admin/src/assets"
         ],
-        "styles": [
-          "apps/mja-admin/src/styles.scss"
-        ],
+        "styles": ["apps/mja-admin/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
