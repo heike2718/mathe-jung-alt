@@ -10,9 +10,9 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { appRoutes } from './app/app.routes';
 import { provideRouter } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
-
 import localeDe from '@angular/common/locales/de';
 
 if (environment.production) {
@@ -24,6 +24,7 @@ registerLocaleData(localeDe, 'de');
 bootstrapApplication(AppComponent, {
   providers: [
     provideAnimations(),
+    provideRouter(appRoutes),
 
     provideStore(),
     provideEffects([]),

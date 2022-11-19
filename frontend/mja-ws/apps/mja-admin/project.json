@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/mja-admin/src",
-  "prefix": "mja-ws",
+  "prefix": "mja-admin",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
