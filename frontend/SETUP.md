@@ -172,6 +172,14 @@ npx nx generate @nrwl/js:library util --directory=shared --tags='domain:shared, 
 npx nx generate @nrwl/js:library ngrx-utils --directory=shared --tags='domain:shared, type:shared:ngrx-utils' --no-interactive --dry-run
 ```
 
+### http
+
+hier residieren low level http utils wie Interceptors, die nahezu keine Abhängikeiten haben.
+
+```
+npx nx generate @nrwl/js:library http --directory=shared --tags='domain:shared, type:shared:http' --no-interactive --dry-run
+```
+
 ## FAQ
 
 __Compilefehler Cannot parse tsconfig.base.json: PropertyNameExpected in JSON at position 891__

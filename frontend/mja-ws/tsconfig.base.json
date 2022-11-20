@@ -20,6 +20,7 @@
       "@mja-ws/shared/auth/data": ["libs/shared/auth/data/src/index.ts"],
       "@mja-ws/shared/auth/model": ["libs/shared/auth/model/src/index.ts"],
       "@mja-ws/shared/config": ["libs/shared/config/src/index.ts"],
+      "@mja-ws/shared/http": ["libs/shared/http/src/index.ts"],
       "@mja-ws/shared/messaging/model": [
         "libs/shared/messaging/model/src/index.ts"
       ],

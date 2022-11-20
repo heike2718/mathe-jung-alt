@@ -24,7 +24,7 @@ export class AuthEffects {
 
         return this.#actions.pipe(
             ofType(authActions.requestLoginUrl),
-            switchMap(() => this.#httpClient.get<Message>(this.configuration.baseUrl + '/authurls/login/' + this.configuration.clientType)),
+            switchMap(() => this.#httpClient.get<Message>('/session/authurls/login/' + this.configuration.clientType)),
             map((message: Message) => authActions.redirectToAuthprovider({ authUrl: message.message }))
         );
 
@@ -44,9 +44,34 @@ export class AuthEffects {
         return this.#actions.pipe(
             ofType(authActions.initSession),
             switchMap(({ authResult }) =>
-                this.#httpClient.post<Session>(this.configuration.baseUrl + '/login/' + this.configuration.clientType, authResult)
+                this.#httpClient.post<Session>('/session/login/' + this.configuration.clientType, authResult)
             ),
             map((session: Session) => authActions.sessionCreated({ session }))
         );
     });
+
+    logOut$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(authActions.logOut),
+            switchMap(() =>
+                this.#httpClient.delete<Message>('/session/logout')
+            ),
+            map(() => authActions.loggedOut())
+        );
+    });
+
+    loggedOut$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(authActions.loggedOut),
+            tap(() => this.#clearSession()),
+            map(() => createNoopAction(() => {}))
+        );
+    })
+
+
+    #clearSession(): void {
+        console.log('local storage putzen');
+    }
 }

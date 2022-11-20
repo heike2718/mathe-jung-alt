@@ -13,7 +13,8 @@ export const authActions = createActionGroup({
         'Init Session': props<{ authResult: AuthResult }>(), // public
         'Session Created': props<{ session: Session }>(), // internal
         'Session Expired': props<{message: Message}>(), // public?
-        'logout': emptyProps() // public
+        'Log Out': emptyProps(), // public
+        'Logged Out': emptyProps() // internal
     }
 });
 

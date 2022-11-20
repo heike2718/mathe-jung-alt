@@ -21,5 +21,12 @@ export const authFeature = createFeature({
                 session: session
             })
         ),
+        on(
+            authActions.loggedOut,
+            (state, _action): AuthState => ({
+                ...state,
+                session: anonymousSession
+            })
+        )
     )
 });

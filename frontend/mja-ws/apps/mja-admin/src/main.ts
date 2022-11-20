@@ -15,7 +15,8 @@ import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { Configuration } from '@mja-ws/shared/config';
 import { authDataProvider } from '@mja-ws/shared/auth/api';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AddBaseUrlInterceptor } from 'libs/shared/http/src';
 
 if (environment.production) {
   enableProdMode();
@@ -52,5 +53,6 @@ bootstrapApplication(AppComponent, {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' },
     },
+    { provide: HTTP_INTERCEPTORS, multi: true, useClass: AddBaseUrlInterceptor },
   ],
 });

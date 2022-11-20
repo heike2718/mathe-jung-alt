@@ -19,7 +19,8 @@
                   "type:model",
                   "type:api",
                   "type:feature",
-                  "type:shared:config"
+                  "type:shared:config",
+                  "type:shared:http"
                 ]
               },
               {

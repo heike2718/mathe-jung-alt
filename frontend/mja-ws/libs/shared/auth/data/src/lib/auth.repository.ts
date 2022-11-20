@@ -29,7 +29,7 @@ export class AuthRepository {
     }    
 
     public logout(): void {
-        this.#store.dispatch(authActions.logout());
+        this.#store.dispatch(authActions.logOut());
     }
 
     public createSession(authResult: AuthResult): void {
