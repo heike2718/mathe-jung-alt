@@ -15,7 +15,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mja-ws/shared/config": ["libs/shared/config/src/index.ts"]
+      "@mja-ws/messaging/api": ["libs/shared/messaging/api/src/index.ts"],
+      "@mja-ws/shared/auth/api": ["libs/shared/auth/api/src/index.ts"],
+      "@mja-ws/shared/auth/data": ["libs/shared/auth/data/src/index.ts"],
+      "@mja-ws/shared/auth/model": ["libs/shared/auth/model/src/index.ts"],
+      "@mja-ws/shared/config": ["libs/shared/config/src/index.ts"],
+      "@mja-ws/shared/messaging/model": [
+        "libs/shared/messaging/model/src/index.ts"
+      ],
+      "@mja-ws/shared/ngrx-utils": ["libs/shared/ngrx-utils/src/index.ts"],
+      "@mja-ws/shared/util": ["libs/shared/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

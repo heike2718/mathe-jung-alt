@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'mja-admin-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  standalone: true
+  standalone: true,
+  imports: [CommonModule]
 })
 export class HomeComponent {
 
+  authFacade = inject(AuthFacade);
   version = "1.3.0";
 }

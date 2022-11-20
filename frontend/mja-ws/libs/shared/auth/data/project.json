@@ -1,0 +1,34 @@
+{
+  "name": "shared-auth-data",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/auth/data/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/auth/data",
+        "main": "libs/shared/auth/data/src/index.ts",
+        "tsConfig": "libs/shared/auth/data/tsconfig.lib.json",
+        "assets": ["libs/shared/auth/data/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/auth/data/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/auth/data"],
+      "options": {
+        "jestConfig": "libs/shared/auth/data/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:auth:data", "type:data"]
+}

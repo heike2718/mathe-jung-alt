@@ -1,0 +1,34 @@
+{
+  "name": "shared-auth-model",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/auth/model/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/auth/model",
+        "main": "libs/shared/auth/model/src/index.ts",
+        "tsConfig": "libs/shared/auth/model/tsconfig.lib.json",
+        "assets": ["libs/shared/auth/model/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/auth/model/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/auth/model"],
+      "options": {
+        "jestConfig": "libs/shared/auth/model/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:auth:model", "type:model"]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "shared-messaging-model",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/messaging/model/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/messaging/model",
+        "main": "libs/shared/messaging/model/src/index.ts",
+        "tsConfig": "libs/shared/messaging/model/tsconfig.lib.json",
+        "assets": ["libs/shared/messaging/model/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/messaging/model/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/messaging/model"],
+      "options": {
+        "jestConfig": "libs/shared/messaging/model/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:messaging:model", "type:model"]
+}

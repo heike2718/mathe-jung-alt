@@ -15,12 +15,11 @@
               {
                 "sourceTag": "type:app",
                 "onlyDependOnLibsWithTags": [
-                  "domain:core",
+                  "domain:auth:api",
+                  "type:model",
+                  "type:api",
                   "type:feature",
-                  "type:shared:config",
-                  "type:shared:http",
-                  "type:shared:auth",
-                  "type:shared:ui-messaging"
+                  "type:shared:config"
                 ]
               },
               {
@@ -55,10 +54,9 @@
                 "onlyDependOnLibsWithTags": [
                   "type:model",
                   "type:shared:config",
-                  "type:shared:ui-messaging",
                   "type:shared:ngrx-utils",
-                  "type:shared:testing",
-                  "type:shared:util"
+                  "type:shared:util",
+                  "type:shared:messaging"
                 ]
               },
               {
@@ -73,6 +71,10 @@
               {
                 "sourceTag": "type:ui",
                 "bannedExternalImports": ["@ngrx/**"]
+              },
+              {
+                "sourceTag": "type:shared:ngrx-utils",
+                "onlyDependOnLibsWithTags": ["type:shared:util"]
               }
             ]
           }

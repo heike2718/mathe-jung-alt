@@ -101,6 +101,13 @@ unter libs: Verzeichnis shared angelegt
 npx nx generate @nrwl/angular:library config --style=scss --directory=shared --skipModule --skipSelector --standalone --tags='domain:shared, type:shared:config' --no-interactive --dry-run 
 ```
 
+__ACHTUNG:__ ^^^ ist das falsche schematics. So wäre es richtig:
+
+```
+npx nx generate @nrwl/js:library config --directory=shared --tags='domain:shared, type:shared:config' --no-interactive --dry-run
+```
+Dann hätte man sich das Löschen von Zeug sparen können.
+
 Das legt leider gleich auch ein Unterverzeichnis shared-config mit einer Komponente an. Das Verzeichnis wurde komplett gelöscht.
 
 In einer configuration.ts wird eine Klasse mit public attribute baseUrl angelegt. Später können dort weitere Konfigurationen hinzukommen.
@@ -120,6 +127,50 @@ in mja-admin/.../main.ts als provider wie folgt einbinden:
 
 Das hat den Vorteil, dass man in main.ts, wo man Zugriff auf environment hat, appspezifische Konfigurationen reinbasteln kann.
 
+### auth
+
+```
+npx nx generate @nrwl/js:library auth --directory=shared --tags='domain:shared, type:shared:auth' --no-interactive --dry-run
+```
+
+auth wird nochmal aufgesplittet in eine api und einen internen Teil:
+
+```
+npx nx generate @nrwl/js:library api --directory=shared/auth --tags='domain:auth:api, type:api' --no-interactive --dry-run
+
+npx nx generate @nrwl/js:library data --directory=shared/auth --tags='domain:auth:data, type:data' --no-interactive --dry-run
+
+npx nx generate @nrwl/js:library model --directory=shared/auth --tags='domain:auth:model, type:model' --no-interactive --dry-run
+```
+
+Zwischendurch musste eine lib messaging angelegt werden, weil das Message-Interface erforderlich ist.
+
+auth.api stellt eine Facade mit 3 Methoden und 3 Observables zur Verfügung, die alles abdecken, was eine Anwendung braucht. Die interne Implementierung erfolgt in auth.data.
+
+### messaging
+
+```
+npx nx generate @nrwl/js:library api --directory=shared/messaging --tags='domain:messaging:api, type:model' --no-interactive --dry-run
+
+npx nx generate @nrwl/js:library model --directory=shared/messaging --tags='domain:messaging:model, type:model' --no-interactive --dry-run
+
+```
+
+und .eslintrc.json um dependency-definitionen erweitert
+
+### util
+
+Enthält Helferfunktionen, sie keinerlei dependencies haben
+
+```
+npx nx generate @nrwl/js:library util --directory=shared --tags='domain:shared, type:shared:util' --no-interactive --dry-run
+```
+
+### ngrx-utils
+
+```
+npx nx generate @nrwl/js:library ngrx-utils --directory=shared --tags='domain:shared, type:shared:ngrx-utils' --no-interactive --dry-run
+```
 
 ## FAQ
 

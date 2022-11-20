@@ -1,0 +1,34 @@
+{
+  "name": "shared-auth-api",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/auth/api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/auth/api",
+        "main": "libs/shared/auth/api/src/index.ts",
+        "tsConfig": "libs/shared/auth/api/tsconfig.lib.json",
+        "assets": ["libs/shared/auth/api/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/auth/api/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/auth/api"],
+      "options": {
+        "jestConfig": "libs/shared/auth/api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:auth:api", "tag:api"]
+}

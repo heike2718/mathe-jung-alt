@@ -4,7 +4,6 @@ import { environment } from './environments/environment';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
@@ -14,8 +13,9 @@ import { appRoutes } from './app/app.routes';
 import { provideRouter } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
-import { features } from 'process';
 import { Configuration } from '@mja-ws/shared/config';
+import { authDataProvider } from '@mja-ws/shared/auth/api';
+import { HttpClientModule } from '@angular/common/http';
 
 if (environment.production) {
   enableProdMode();
@@ -25,22 +25,28 @@ registerLocaleData(localeDe, 'de');
 
 bootstrapApplication(AppComponent, {
   providers: [
+    ...authDataProvider,
     provideAnimations(),
     provideRouter(appRoutes),
 
+    /** das muss so gemacht werden, weil ohne den Parameter {} nichts da ist, wohinein man den state hängen könnte */
     provideStore(),
     provideEffects([]),
     provideStoreDevtools(),
 
+    importProvidersFrom(
+      HttpClientModule      
+    ),
+
     {
       provide: Configuration,
-      useFactory: () => new Configuration(environment.baseUrl),
+      useFactory: () => new Configuration(environment.baseUrl, 'ADMIN'),
     },
 
     {
       provide: MAT_DATE_LOCALE,
       useValue: 'de',
-    },    
+    },
     { provide: LOCALE_ID, useValue: 'de' },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,

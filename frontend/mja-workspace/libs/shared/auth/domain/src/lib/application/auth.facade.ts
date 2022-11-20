@@ -17,7 +17,6 @@ export class AuthFacade {
     public isLoggedIn$ = this.store.pipe(select(AuthSelectors.isLoggedIn));
     public isLoggedOut$ = this.store.pipe(select(AuthSelectors.isLoggedOut));
     public getUser$: Observable<User | undefined> = this.store.pipe(select(AuthSelectors.getUser));
-    public isAuthorized$ = this.store.pipe(select(AuthSelectors.isAuthorized));
     public isSessionExpired$ = this.store.pipe(select(AuthSelectors.isSessionExpired));
     public isAdmin$ = this.store.pipe(select(AuthSelectors.isAdmin));
     public isOrdinaryUser$ = this.store.pipe(select(AuthSelectors.isOrdinaryUser));
