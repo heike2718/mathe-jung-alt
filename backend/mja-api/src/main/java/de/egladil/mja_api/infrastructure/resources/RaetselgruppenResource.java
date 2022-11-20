@@ -15,7 +15,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -57,7 +56,6 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferIt
 import de.egladil.mja_api.domain.utils.AuthorizationUtils;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.web.commons_validation.payload.MessagePayload;
-import de.egladil.web.mja_auth.session.Session;
 
 /**
  * RaetselgruppenResource
@@ -159,7 +157,7 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselgruppeAnlegen(final EditRaetselgruppePayload requestPayload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+	public Response raetselgruppeAnlegen(final EditRaetselgruppePayload requestPayload) {
 
 		delayService.pause();
 
@@ -197,7 +195,7 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselgruppeAendern(final EditRaetselgruppePayload requestPayload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+	public Response raetselgruppeAendern(final EditRaetselgruppePayload requestPayload) {
 
 		delayService.pause();
 

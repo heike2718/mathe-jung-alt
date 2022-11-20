@@ -180,6 +180,13 @@ hier residieren low level http utils wie Interceptors, die nahezu keine Abhängi
 npx nx generate @nrwl/js:library http --directory=shared --tags='domain:shared, type:shared:http' --no-interactive --dry-run
 ```
 
+## Deskriptoren
+
+```
+npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:deskriptoren, type:model' --no-interactive --dry-run
+```
+
+
 ## FAQ
 
 __Compilefehler Cannot parse tsconfig.base.json: PropertyNameExpected in JSON at position 891__

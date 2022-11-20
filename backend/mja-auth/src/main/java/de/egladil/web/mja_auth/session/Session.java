@@ -14,8 +14,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Session {
 
-	public static final String CSRF_HEADER_NAME = "X-XSRF-TOKEN";
-
 	@JsonProperty
 	private String sessionId;
 
@@ -122,20 +120,6 @@ public class Session {
 		}
 
 		this.user = user;
-		return this;
-	}
-
-	/**
-	 * @param  csrfToken
-	 * @return           Session
-	 */
-	public Session withCsrfToken(final String csrfToken) {
-
-		if (this.user != null) {
-
-			this.user.withCsrfToken(csrfToken);
-		}
-
 		return this;
 	}
 }

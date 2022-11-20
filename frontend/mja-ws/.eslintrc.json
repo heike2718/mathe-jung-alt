@@ -24,6 +24,12 @@
                 ]
               },
               {
+                "sourceTag": "domain:deskriptoren",
+                "onlyDependOnLibsWithTags": [
+                  "domain:shared"
+                ]
+              },
+              {
                 "sourceTag": "domain:core",
                 "onlyDependsOnLibsWithTags": "domain:shared"
               },

@@ -7,10 +7,10 @@ package de.egladil.web.mja_auth.session;
 import java.security.Principal;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * AuthenticatedUser
@@ -25,9 +25,6 @@ public class AuthenticatedUser implements Principal {
 
 	@JsonProperty
 	private final String fullName;
-
-	@JsonProperty
-	private String csrfToken;
 
 	@JsonIgnore
 	private final String uuid;
@@ -90,23 +87,4 @@ public class AuthenticatedUser implements Principal {
 
 		return roles;
 	}
-
-	/**
-	 * @return the csrfToken
-	 */
-	public String getCsrfToken() {
-
-		return csrfToken;
-	}
-
-	/**
-	 * @param csrfToken
-	 *                  the csrfToken to set
-	 */
-	public AuthenticatedUser withCsrfToken(final String csrfToken) {
-
-		this.csrfToken = csrfToken;
-		return this;
-	}
-
 }

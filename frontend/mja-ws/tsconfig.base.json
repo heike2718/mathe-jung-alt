@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@mja-ws/deskriptoren/model": ["libs/deskriptoren/model/src/index.ts"],
       "@mja-ws/messaging/api": ["libs/shared/messaging/api/src/index.ts"],
       "@mja-ws/shared/auth/api": ["libs/shared/auth/api/src/index.ts"],
       "@mja-ws/shared/auth/data": ["libs/shared/auth/data/src/index.ts"],

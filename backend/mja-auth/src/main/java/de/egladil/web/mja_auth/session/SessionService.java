@@ -8,7 +8,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,7 +26,7 @@ import de.egladil.web.mja_auth.exception.AuthException;
 import de.egladil.web.mja_auth.exception.SessionExpiredException;
 import de.egladil.web.mja_auth.jwt.JWTService;
 import de.egladil.web.mja_auth.jwt.impl.DecodedJWTReader;
-import de.egladil.web.mja_auth.util.SecUtils;
+import de.egladil.web.mja_auth.util.SecureTokenService;
 
 @ApplicationScoped
 public class SessionService {
@@ -40,6 +39,9 @@ public class SessionService {
 
 	@Inject
 	JWTService jwtService;
+
+	@Inject
+	SecureTokenService secureTokenService;
 
 	/**
 	 * Wenn das JWT sagt, ist kein Admin, dann wird eine anonyme Session angelegt.
@@ -73,10 +75,10 @@ public class SessionService {
 
 			String fullName = jwtReader.getFullName();
 
-			String userIdReference = uuid.substring(0, 8) + "_" + SecUtils.generateRandomString();
+			String userIdReference = uuid.substring(0, 8) + "_" + secureTokenService.createRandomToken();
 
 			AuthenticatedUser authenticatedUser = new AuthenticatedUser(userIdReference, groups, fullName,
-				uuid).withCsrfToken(SecUtils.generateRandomString());
+				uuid);
 
 			Session session = this.internalCreateAnonymousSession().withUser(authenticatedUser);
 			session.setExpiresAt(SessionUtils.getExpiresAt(SESSION_IDLE_TIMEOUT_MINUTES));
@@ -147,24 +149,9 @@ public class SessionService {
 		}
 	}
 
-	private String generateSessionId() {
-
-		String result = SecUtils.generateRandomString();
-
-		while (this.sessions.get(result) != null) {
-
-			result = SecUtils.generateRandomString();
-		}
-
-		return result;
-
-	}
-
 	private Session internalCreateAnonymousSession() {
 
-		byte[] sessionIdBase64 = Base64.getEncoder().encode(generateSessionId().getBytes());
-		String sessionId = new String(sessionIdBase64);
-
+		String sessionId = secureTokenService.createRandomToken();
 		return Session.createAnonymous(sessionId);
 	}
 }

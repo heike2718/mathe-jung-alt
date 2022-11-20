@@ -15,7 +15,7 @@ import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { Configuration } from '@mja-ws/shared/config';
 import { authDataProvider } from '@mja-ws/shared/auth/api';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddBaseUrlInterceptor } from 'libs/shared/http/src';
 
 if (environment.production) {
@@ -36,9 +36,12 @@ bootstrapApplication(AppComponent, {
     provideStoreDevtools(),
 
     importProvidersFrom(
-      HttpClientModule      
+      HttpClientModule,
+      HttpClientXsrfModule.withOptions({
+        cookieName: 'XSRF-TOKEN',
+        headerName: 'X-XSRF-TOKEN'
+      })      
     ),
-
     {
       provide: Configuration,
       useFactory: () => new Configuration(environment.baseUrl, 'ADMIN'),

@@ -26,6 +26,7 @@ import de.egladil.web.mja_auth.login.TokenExchangeService;
 import de.egladil.web.mja_auth.session.Session;
 import de.egladil.web.mja_auth.session.SessionService;
 import de.egladil.web.mja_auth.session.SessionUtils;
+import de.egladil.web.mja_auth.util.CsrfCookieService;
 
 /**
  * LoginLogoutServiceImpl
@@ -46,6 +47,9 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 	@Inject
 	ConfigService configService;
+
+	@Inject
+	CsrfCookieService csrfCookieService;
 
 	@Override
 	public Response login(final ClientType clientType, final AuthResult authResult, final boolean needsRoleAdmin) {
@@ -84,7 +88,7 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 			session.clearSessionIdInProd();
 		}
 
-		return Response.ok(session).cookie(sessionCookie).build();
+		return Response.ok(session).cookie(csrfCookieService.createCsrfTokenCookie()).cookie(sessionCookie).build();
 	}
 
 	@Override
@@ -92,9 +96,10 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 		this.sessionService.invalidateSession(sessionId);
 
-		NewCookie invalidatedCookie = SessionUtils.createSessionInvalidatedCookie();
+		NewCookie invalidatedSessionCookie = SessionUtils.createSessionInvalidatedCookie();
 
-		return Response.ok(MessagePayload.info("erfolgreich ausgeloggt")).cookie(invalidatedCookie).build();
+		return Response.ok(MessagePayload.info("erfolgreich ausgeloggt")).cookie(csrfCookieService.createCsrfTokenCookie())
+			.cookie(invalidatedSessionCookie).build();
 	}
 
 	@Override

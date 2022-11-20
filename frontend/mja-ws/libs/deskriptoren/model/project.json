@@ -1,0 +1,34 @@
+{
+  "name": "deskriptoren-model",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/deskriptoren/model/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/deskriptoren/model",
+        "main": "libs/deskriptoren/model/src/index.ts",
+        "tsConfig": "libs/deskriptoren/model/tsconfig.lib.json",
+        "assets": ["libs/deskriptoren/model/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/deskriptoren/model/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/deskriptoren/model"],
+      "options": {
+        "jestConfig": "libs/deskriptoren/model/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:deskriptoren", "type:model"]
+}

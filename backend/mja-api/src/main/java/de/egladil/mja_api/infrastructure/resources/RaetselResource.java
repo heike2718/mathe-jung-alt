@@ -12,7 +12,6 @@ import javax.validation.constraints.Pattern;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -50,7 +49,6 @@ import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.utils.AuthorizationUtils;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.web.mja_auth.dto.MessagePayload;
-import de.egladil.web.mja_auth.session.Session;
 
 /**
  * RaetselResource
@@ -198,7 +196,7 @@ public class RaetselResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselAnlegen(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+	public Response raetselAnlegen(final EditRaetselPayload payload) {
 
 		this.delayService.pause();
 
@@ -243,7 +241,7 @@ public class RaetselResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselAendern(final EditRaetselPayload payload, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+	public Response raetselAendern(final EditRaetselPayload payload) {
 
 		this.delayService.pause();
 
@@ -303,7 +301,7 @@ public class RaetselResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public Images raetselImagesGenerieren(@PathParam(
-		value = "raetselID") final String raetselUuid, @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+		value = "raetselID") final String raetselUuid, @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		this.delayService.pause();
 
@@ -346,7 +344,7 @@ public class RaetselResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselID enthält ungültige Zeichen") @PathParam(
 			value = "raetselID") final String raetselUuid, @QueryParam(
-				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @HeaderParam(Session.CSRF_HEADER_NAME) final String csrfHeader) {
+				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		this.delayService.pause();
 
