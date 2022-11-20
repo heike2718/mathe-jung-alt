@@ -17,6 +17,19 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetsel
 public interface RaetselgruppeGeneratorService {
 
 	/**
+	 * Generiert de Vorschau einer Rätselgruppe, unabhängig davon, ob sie bereits freigegeben ist. Aufgaben und Lösungen werden
+	 * zusammen gedruckt.
+	 *
+	 * @param  raetselgruppe
+	 *                                  PersistenteRaetselgruppe
+	 * @param  aufgaben
+	 *                                  die Aufgaben zu diesem Quiz. Diese sind bereits sortiert.
+	 * @param  layoutAntwortvorschlaege
+	 * @return                          GeneratedFile
+	 */
+	GeneratedFile downloadLaTeXSource(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+
+	/**
 	 * Generiert das PDF einer freigegebenen Rätselgruppe. Dabei werden die Lösungen mit einem newspace ans Ende gehängt, so dass
 	 * man es wie Arbeitsblätter verwenden kann.
 	 *
