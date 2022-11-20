@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AuthResult, UserFull } from './internal.model';
+import { UserFull } from './internal.model';
 import { authActions } from './auth.actions';
 import { Observable, of, switchMap } from 'rxjs';
 import { fromAuth } from './auth.selectors';
 import { filterDefined } from '@mja-ws/shared/ngrx-utils';
-import { User } from '@mja-ws/shared/auth/model';
+import { AuthResult, User } from '@mja-ws/shared/auth/model';
 
 @Injectable({
     providedIn: 'root'
