@@ -103,4 +103,14 @@ public interface RaetselgruppenService {
 	 * @return
 	 */
 	GeneratedFile printVorschau(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+
+	/**
+	 * Generiert das LaTeX-File für die Raetselgruppe. Die Grafiken muss man sowieso lokal haben. Sollte sich mit kleineren
+	 * Textreplacements lokal compilieren lassen.
+	 *
+	 * @param  raetselgruppeID
+	 * @param  layoutAntwortvorschlaege
+	 * @return GeneratedFile
+	 */
+	GeneratedFile downloadLaTeXSource(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 }
