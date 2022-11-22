@@ -136,10 +136,29 @@ export class RaetselgruppenEffects {
         )
     );
 
+    generateLaTeX$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(RaetselgruppenActions.generiereLaTeX),
+            this.safeNgrx.safeSwitchMap((action) =>
+                this.httpService.generiereLaTeX(action.raetselgruppeID).pipe(
+                    map((generatedFile) =>
+                        RaetselgruppenActions.laTeXGenerated({ tex: generatedFile })
+                    )
+                ), 'Ups, beim Generieren ist etwas schiefgegangen', noopAction()
+            )
+        )
+    );
+
     downloadPDF$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselgruppenActions.vorschauGenerated),
       tap((action) => this.fileService.downloadPdf(action.pdf.fileData, action.pdf.fileName)),
+    ), { dispatch: false });
+
+    downloadLaTeX$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RaetselgruppenActions.laTeXGenerated),
+      tap((action) => this.fileService.downloadPdf(action.tex.fileData, action.tex.fileName)),
     ), { dispatch: false });
 
 }
