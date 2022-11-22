@@ -1,6 +1,10 @@
 # Release-Notes
 
-__1.2.0__
+__1.3.1__
+
+* [Rätselgruppe Download LaTeX bereitstellen](https://github.com/heike2718/mathe-jung-alt/issues/54)
+
+__1.3.0__
 
 * [Berechtigungen zum Ändern von Rätseln aufräumen](https://github.com/heike2718/mathe-jung-alt/issues/53)
 * [Superadmin soll alle Resourcen ändern dürfen](https://github.com/heike2718/mathe-jung-alt/issues/39)

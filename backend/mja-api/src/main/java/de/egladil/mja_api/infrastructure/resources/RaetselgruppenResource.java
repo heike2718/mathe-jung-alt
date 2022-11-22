@@ -381,17 +381,17 @@ public class RaetselgruppenResource {
 	})
 	@APIResponse(
 		name = "PrintQuizFreigegebenOKResponse",
-		description = "Quiz erfolgreich geladen",
+		description = "PDF erfolgreich generiert",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
-		name = "QuizNotFound",
+		name = "RaetselgruppeNotFound",
 		description = "Gibt es nicht",
 		responseCode = "404")
 	@APIResponse(
-		name = "QuizServerError",
+		name = "RaetselgruppeServerError",
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
@@ -406,5 +406,41 @@ public class RaetselgruppenResource {
 	}
 
 
+	@GET
+	@Path("latex/{raetselgruppeID}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Operation(
+		operationId = "downloadLaTeXSource",
+		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein LaTeX. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
+	@Parameters({
+		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
+	})
+	@APIResponse(
+		name = "DownloadLaTeXSourceOKResponse",
+		description = "LaTeX erfolgreich generiert",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = GeneratedFile.class)))
+	@APIResponse(
+		name = "RaetselgruppeNotFound",
+		description = "Gibt es nicht",
+		responseCode = "404")
+	@APIResponse(
+		name = "RaetselgruppeNotFound",
+		description = "Serverfehler",
+		responseCode = "500",
+		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
+	@RolesAllowed({ "ADMIN", "AUTOR" })
+	public GeneratedFile downloadLaTeX(@PathParam(
+		value = "raetselgruppeID") @Pattern(
+			regexp = "^[a-fA-F\\d\\-]{1,36}$",
+			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
+				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
+		return raetselgruppenService.downloadLaTeXSource(raetselgruppeID, layoutAntwortvorschlaege);
+	}
 }

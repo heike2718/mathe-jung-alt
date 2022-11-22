@@ -476,6 +476,22 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return raetselgruppeFileService.generateVorschauPDFQuiz(dbResult, aufgaben, layoutAntwortvorschlaege);
 	}
 
+	@Override
+	public GeneratedFile downloadLaTeXSource(String raetselgruppeID, LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+
+		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
+
+		if (dbResult == null) {
+
+			throw new WebApplicationException(
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Rätselgruppe gibt es nicht.")).build());
+		}
+
+		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
+
+		return raetselgruppeFileService.downloadLaTeXSource(dbResult, aufgaben, layoutAntwortvorschlaege);
+	}
+
 	void checkPermission(final String userId, final PersistenteRaetselgruppe ausDB, final boolean isAdmin) {
 
 		if (!AuthorizationUtils.hasUserPermissionToChange(userId, ausDB.owner, isAdmin)) {

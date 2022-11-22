@@ -75,4 +75,8 @@ export class RaetselgruppenFacade {
     public generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
         this.store.dispatch(RaetselgruppenActions.generiereVorschau({raetselgruppeID, layoutAntwortvorschlaege}));
     }
+
+    public generiereLaTeX(raetselgruppeID: string): void {
+        this.store.dispatch(RaetselgruppenActions.generiereLaTeX({raetselgruppeID}));
+    }
 }

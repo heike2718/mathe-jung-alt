@@ -73,59 +73,20 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 		LOGGER.debug("start generate output");
 
-		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE);
-
-		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), raetselgruppe.name);
-
-		List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();
-		List<RaetselLaTeXDto> raetselLaTeX = raetselService.findRaetselLaTeXwithSchluessel(schluessel);
-
-		StringBuffer sb = new StringBuffer();
-
-		int count = 0;
-
-		for (Quizaufgabe aufgabe : aufgaben) {
-
-			Optional<RaetselLaTeXDto> opt = raetselLaTeX.stream().filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
-				.findFirst();
-
-			if (opt.isPresent()) {
-
-				RaetselLaTeXDto raetsel = opt.get();
-
-				RaetselGeneratorinput input = new RaetselGeneratorinput().withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
-					.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
-					.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege);
-
-				String aufgabeSchluessel = LaTeXConstants.HEADER_AUFGABE.replace("{0}", aufgabe.getSchluessel());
-
-				if (count > 0) {
-
-					sb.append("\\par \\vspace{1ex}");
-				}
-
-				sb.append(aufgabeSchluessel);
-
-				String textFrageLoesung = quizitemLaTeXGenerator.generateLaTeXFrageLoesung(input);
-				sb.append(textFrageLoesung);
-
-				// if (count < aufgaben.size() - 2) {
-				//
-				// sb.append(LaTeXConstants.VALUE_LINEBREAK);
-				// }
-				count++;
-
-			} else {
-
-				LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
-			}
-		}
-
-		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), sb.toString());
-
+		String template = generateLaTeX(raetselgruppe, aufgaben, layoutAntwortvorschlaege);
 		String fileNameWithoutExtension = writeToDoc(template, raetselgruppe.uuid, raetselgruppe.name);
-
 		return generatePdf(fileNameWithoutExtension, raetselgruppe.uuid);
+	}
+
+	@Override
+	public GeneratedFile downloadLaTeXSource(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+
+		String template = generateLaTeX(raetselgruppe, aufgaben, layoutAntwortvorschlaege);
+
+		GeneratedFile result = new GeneratedFile();
+		result.setFileData(template.getBytes());
+		result.setFileName(raetselgruppe.uuid + ".tex");
+		return result;
 	}
 
 	String writeToDoc(final String template, final String raetselgruppeID, final String raetselgruppeName) {
@@ -205,6 +166,66 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 				response.close();
 			}
 		}
+	}
+
+	/**
+	 * @param  raetselgruppe
+	 * @param  aufgaben
+	 * @param  layoutAntwortvorschlaege
+	 * @return
+	 */
+	private String generateLaTeX(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+
+		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE);
+
+		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), raetselgruppe.name);
+
+		List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();
+		List<RaetselLaTeXDto> raetselLaTeX = raetselService.findRaetselLaTeXwithSchluessel(schluessel);
+
+		StringBuffer sb = new StringBuffer();
+
+		int count = 0;
+
+		for (Quizaufgabe aufgabe : aufgaben) {
+
+			Optional<RaetselLaTeXDto> opt = raetselLaTeX.stream().filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
+				.findFirst();
+
+			if (opt.isPresent()) {
+
+				RaetselLaTeXDto raetsel = opt.get();
+
+				RaetselGeneratorinput input = new RaetselGeneratorinput().withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
+					.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
+					.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege);
+
+				String aufgabeSchluessel = LaTeXConstants.HEADER_AUFGABE.replace("{0}", aufgabe.getSchluessel());
+
+				if (count > 0) {
+
+					sb.append("\\par \\vspace{1ex}");
+				}
+
+				sb.append(aufgabeSchluessel);
+
+				String textFrageLoesung = quizitemLaTeXGenerator.generateLaTeXFrageLoesung(input);
+				sb.append(textFrageLoesung);
+
+				// if (count < aufgaben.size() - 2) {
+				//
+				// sb.append(LaTeXConstants.VALUE_LINEBREAK);
+				// }
+				count++;
+
+			} else {
+
+				LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
+			}
+		}
+
+		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), sb.toString());
+		return template;
 	}
 
 	void deleteTemporaryFiles(final String fileNameWithoutExtension) {

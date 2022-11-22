@@ -138,6 +138,10 @@ export class RaetselgruppeDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  generiereLaTeX(): void {
+    this.raetselgruppenFacade.generiereLaTeX(this.#raetselgruppeID);
+  }
+
   #openConfirmLoeschenDialog(raetselgruppeID: string, element: Raetselgruppenelement): void {
 
     const dialogData: JaNeinDialogData = {

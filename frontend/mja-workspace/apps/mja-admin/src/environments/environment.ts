@@ -8,7 +8,7 @@ export const environment = {
   apiUrl: 'http://localhost:9210',
   profileUrl: 'http://localhost:80/profil-app',
   storageKeyPrefix: 'mja_adm_',
-  version: '1.3.0',
+  version: '1.3.1',
   consoleLogActive: true,
   serverLogActive: false,
   loglevel: 1

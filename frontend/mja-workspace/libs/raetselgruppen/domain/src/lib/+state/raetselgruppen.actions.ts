@@ -76,6 +76,17 @@ export const vorschauGenerated = createAction(
     props<{ pdf: GeneratedFile }>()
 );
 
+export const generiereLaTeX = createAction(
+    '[Raetselgruppen] generiereLatEx',
+    props<{raetselgruppeID: string}>()
+);
+
+export const laTeXGenerated = createAction(
+    '[Raetselgruppen] laTeXGenerated',
+    props<{ tex: GeneratedFile }>()
+);
+
+
 
 
 
