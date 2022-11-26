@@ -12,5 +12,5 @@ import { AuthFacade } from '@mja-ws/shared/auth/api';
 export class HomeComponent {
 
   authFacade = inject(AuthFacade);
-  version = "1.3.0";
+  version = "1.4.0";
 }

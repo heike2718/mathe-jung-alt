@@ -1,4 +1,4 @@
-import { createFeature, createReducer, on, State } from '@ngrx/store';
+import { createFeature, createReducer, on } from '@ngrx/store';
 import { authActions } from './auth.actions';
 import { anonymousSession, Session } from './internal.model';
 
@@ -6,7 +6,7 @@ export interface AuthState {
     readonly session: Session;
 };
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
     session: anonymousSession
 };
 

@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'messaging-api',
-  preset: '../../../jest.preset.js',
+  preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -11,5 +11,5 @@ export default {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/libs/shared/messaging/api',
+  coverageDirectory: '../../../../coverage/libs/shared/messaging/api',
 };
