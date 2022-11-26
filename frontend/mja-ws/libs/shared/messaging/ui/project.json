@@ -1,0 +1,34 @@
+{
+  "name": "shared-messaging-ui",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/messaging/ui/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/messaging/ui",
+        "main": "libs/shared/messaging/ui/src/index.ts",
+        "tsConfig": "libs/shared/messaging/ui/tsconfig.lib.json",
+        "assets": ["libs/shared/messaging/ui/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/messaging/ui/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/messaging/ui"],
+      "options": {
+        "jestConfig": "libs/shared/messaging/ui/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:messaging:ui", "type:ui"]
+}
