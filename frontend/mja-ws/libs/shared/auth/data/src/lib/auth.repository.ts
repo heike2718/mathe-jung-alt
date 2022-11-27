@@ -25,15 +25,15 @@ export class AuthRepository {
 
     public login(): void {
         // Dies triggert einen SideEffect (siehe auth.effects.ts)
-        this.#store.dispatch(authActions.requestLoginUrl());
+        this.#store.dispatch(authActions.request_login_url());
     }    
 
     public logout(): void {
-        this.#store.dispatch(authActions.logOut());
+        this.#store.dispatch(authActions.log_out());
     }
 
     public createSession(authResult: AuthResult): void {
-        this.#store.dispatch(authActions.initSession({ authResult }));
+        this.#store.dispatch(authActions.init_session({ authResult }));
     }
 
     #isAdmin(user: UserFull): boolean {

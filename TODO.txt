@@ -1,3 +1,14 @@
+27.11.2022
+
+(-) Exception aus einem auth effect. Da mache ich noch irgendwas falsch. Keine Ahnung, was
+
+nächste Schritte:
+
+- safeXXXMap-Methoden
+- Loading Indicator
+- nochmal das Zeug mit den Deskriptoren aufräumen
+- ...
+
 (/) frontend: Generieren-Dialog fixen
 (-) Click auf "andere Quelle" im Rätsel-Editor: Kontext des Workflows speichern: globaler status action context, z.B. wollte neues Rätsel anlegen, editiere Rätsel => nach Quellensuche anhand dieses Kontexts zurücknavigieren
 (/) wenn in räetselsuche zurück aus Edit-Kontext, dann Suchparameter und Trefferliste nicht leeren
@@ -23,3 +34,7 @@
 (-) type ahead suche nach SCHLUESSEL beim Erfassen von Raetselgruppenelementen
 (-) PDF-Vorschau Raetselgruppen hat viele technische Schulden
 (-) rest: siehe Issues
+
+
+
+

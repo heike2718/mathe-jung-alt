@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom, LOCALE_ID } from '@angular/core';
+import { enableProdMode, ErrorHandler, importProvidersFrom, LOCALE_ID } from '@angular/core';
 
 import { environment } from './environments/environment';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -16,7 +16,8 @@ import localeDe from '@angular/common/locales/de';
 import { Configuration } from '@mja-ws/shared/config';
 import { authDataProvider } from '@mja-ws/shared/auth/api';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AddBaseUrlInterceptor } from '@mja-ws/shared/http';
+import { AddBaseUrlInterceptor, ErrorInterceptor } from '@mja-ws/shared/http';
+import { ErrorHandlerService } from './app/services/error-handler.service';
 
 if (environment.production) {
   enableProdMode();
@@ -56,6 +57,8 @@ bootstrapApplication(AppComponent, {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' },
     },
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: AddBaseUrlInterceptor },
+    { provide: HTTP_INTERCEPTORS, multi: true, useClass: ErrorInterceptor },
   ],
 });

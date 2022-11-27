@@ -29,15 +29,12 @@ export class AuthFacade {
       const authResult: AuthResult = this.#parseHash(hash);
 
       if (authResult.state) {
-        if (authResult.state === 'login') {
+        if (authResult.state === 'login') {          
           this.#authRepository.createSession(authResult);
-        } else {
-          window.location.hash = '';
-        }
+        }        
       }
-
     } else {
-      console.log('#authRepository.clearOrRestoreSession()');
+      console.log('TODO: new method #authRepository.clearOrRestoreSession()');      
     }
 
   }
@@ -72,6 +69,7 @@ export class AuthFacade {
         }
       );
     }
+    window.location.hash = '';
     return result;
   }
 }

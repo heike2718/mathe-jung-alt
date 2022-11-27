@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, inject, Injectable } from '@angular/core';
 import { Configuration } from '@mja-ws/shared/config';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
+import { of, pipe } from 'rxjs';
 import { concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { authActions } from './auth.actions';
 import { createNoopAction } from '@mja-ws/shared/ngrx-utils';
@@ -16,7 +16,6 @@ export class AuthEffects {
 
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);
-    #messageService = inject(MessageService);
 
     constructor(@Inject(Configuration) private configuration: Configuration) { }
 
@@ -24,9 +23,10 @@ export class AuthEffects {
     requestLoginUrl$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(authActions.requestLoginUrl),
-            switchMap(() => this.#httpClient.get<Message>('/session/authurls/login/' + this.configuration.clientType)),
-            map((message: Message) => authActions.redirectToAuthprovider({ authUrl: message.message }))
+            ofType(authActions.request_login_url),
+            tap(() => console.log('ofType(authActions.request_login_url)')),
+            concatMap(() => this.#httpClient.get<Message>('/session/authurls/login/' + this.configuration.clientType)),
+            map((message: Message) => authActions.redirect_to_auth({ authUrl: message.message }))
         );
 
     });
@@ -34,7 +34,8 @@ export class AuthEffects {
     redirectToLogin$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(authActions.redirectToAuthprovider),
+            ofType(authActions.redirect_to_auth),
+            tap(() => console.log('ofType(authActions.redirect_to_auth)')),
             concatMap((action) => of(action.authUrl)),
             tap((authUrl) => window.location.href = authUrl),
             map(() => createNoopAction())
@@ -44,33 +45,37 @@ export class AuthEffects {
     createSession$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(authActions.initSession),
-            switchMap(({ authResult }) =>
+            ofType(authActions.init_session),
+            tap(() => console.log('ofType(authActions.init_session)')),
+            concatMap(({ authResult }) =>
                 this.#httpClient.post<Session>('/session/login/' + this.configuration.clientType, authResult)
             ),
-            map((session: Session) => authActions.sessionCreated({ session }))
+            map((session: Session) => authActions.session_created({ session }))
         );
     });
 
     logOut$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(authActions.logOut),
-            switchMap(() =>
-                this.#httpClient.delete<Message>('/session/logout')
-            ),
-            map(() => authActions.loggedOut())
+            ofType(authActions.log_out),
+            tap((action) => console.log('ofType(authActions.log_out): ' + action)),
+            concatMap(() =>
+                this.#httpClient.delete<Message>('/session/logout')),
+            map(() => authActions.logged_out())
         );
     });
 
     loggedOut$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(authActions.loggedOut),
-            tap(() => this.#clearSession()),
+            ofType(authActions.logged_out),
+            tap((action) => {
+                console.log('ofType(authActions.logged_out: ' + action);
+                this.#clearSession();
+            }),
             map(() => createNoopAction())
         );
-    })
+    });
 
 
     #clearSession(): void {

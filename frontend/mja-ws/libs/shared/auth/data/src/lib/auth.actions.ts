@@ -6,15 +6,16 @@ import { Message } from '@mja-ws/shared/messaging/api';
 export const authActions = createActionGroup({
     source: 'Auth',
     events: {
-        'Log In': emptyProps(),  // public
-        'Request Login Url': emptyProps(), // internal
-        'Redirect To Authprovider': props<{ authUrl: string }>(), // internal
-        'Create Session': props<{hash: string}>(),
-        'Init Session': props<{ authResult: AuthResult }>(), // public
-        'Session Created': props<{ session: Session }>(), // internal
-        'Session Expired': props<{message: Message}>(), // public?
-        'Log Out': emptyProps(), // public
-        'Logged Out': emptyProps() // internal
+        'LOG_IN': emptyProps(),  // public
+        'REQUEST_LOGIN_URL': emptyProps(), // internal
+        'REDIRECT_TO_AUTH': props<{ authUrl: string }>(), // internal
+        'CREATE_SESSION': props<{hash: string}>(),
+        'INIT_SESSION': props<{ authResult: AuthResult }>(), // public
+        'SESSION_CREATED': props<{ session: Session }>(), // internal
+        'SESSION_EXPIRED': props<{message: Message}>(), // public?
+        'LOG_OUT': emptyProps(), // public
+        'LOGGED_OUT': emptyProps() // internal
     }
+    
 });
 

@@ -15,14 +15,14 @@ export const authFeature = createFeature({
     reducer: createReducer<AuthState>(
         initialState,
         on(
-            authActions.sessionCreated,
+            authActions.session_created,
             (state, { session: session }): AuthState => ({
                 ...state,
                 session: session
             })
         ),
         on(
-            authActions.loggedOut,
+            authActions.logged_out,
             (state, _action): AuthState => ({
                 ...state,
                 session: anonymousSession

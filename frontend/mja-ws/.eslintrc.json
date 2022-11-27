@@ -31,7 +31,9 @@
                   "type:feature",
                   "type:shared:config",
                   "type:shared:http",
-                  "type:shared:auth:api"
+                  "type:shared:auth:api",
+                  "type:shared:http",
+                  "type:shared:messaging:api"
                 ]
               },
               {
