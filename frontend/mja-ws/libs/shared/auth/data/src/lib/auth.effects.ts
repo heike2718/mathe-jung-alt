@@ -48,7 +48,6 @@ export class AuthEffects {
             switchMap(({ authResult }) =>
                 this.#httpClient.post<Session>('/session/login/' + this.configuration.clientType, authResult)
             ),
-            tap(() => this.#messageService.info('hat geklappt')),
             map((session: Session) => authActions.sessionCreated({ session }))
         );
     });
