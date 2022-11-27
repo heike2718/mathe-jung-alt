@@ -20,4 +20,8 @@ export class MessageComponent implements OnInit {
   ngOnInit(): void {
     this.#scrollService.scrollToTop();
   }
+
+  close(): void {
+    this.messageService.clear();
+  }
 }
