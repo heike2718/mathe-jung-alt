@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["domain:messaging:ui", "type:ui"]
+  "tags": ["domain:shared:messaging:ui", "type:ui"]
 }

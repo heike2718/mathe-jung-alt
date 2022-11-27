@@ -1,1 +1,1 @@
-export * from './lib/shared-messaging-ui';
+export { MessageComponent } from './lib/message/message.component';

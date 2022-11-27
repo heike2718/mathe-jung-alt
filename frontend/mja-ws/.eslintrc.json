@@ -1,10 +1,19 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "ignorePatterns": [
+    "**/*"
+  ],
+  "plugins": [
+    "@nrwl/nx"
+  ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
@@ -15,12 +24,39 @@
               {
                 "sourceTag": "type:app",
                 "onlyDependOnLibsWithTags": [
-                  "domain:auth:api",
+                  "domain:shared:messaging:ui",
                   "type:model",
+                  "type:ui",
                   "type:api",
                   "type:feature",
                   "type:shared:config",
-                  "type:shared:http"
+                  "type:shared:http",
+                  "type:shared:auth:api"
+                ]
+              },
+              {
+                "sourceTag": "type:feature",
+                "onlyDependOnLibsWithTags": [
+                  "type:api",
+                  "type:ui",
+                  "type:model"
+                ]
+              },
+              {
+                "sourceTag": "type:ui",
+                "onlyDependOnLibsWithTags": [
+                  "type:shared:messaging:api",
+                  "type:model",
+                  "type:api",
+                  "type:shared:util"
+                ],"bannedExternalImports": [
+                  "@ngrx/**"
+                ]
+              },
+              {
+                "sourceTag": "type:api",
+                "onlyDependOnLibWithTags": [
+                  "type:model"
                 ]
               },
               {
@@ -30,58 +66,41 @@
                 ]
               },
               {
-                "sourceTag": "domain:core",
-                "onlyDependsOnLibsWithTags": "domain:shared"
+                "sourceTag": "domain:shared:messaging:ui",
+                "onlyDependOnLibsWithTags": [
+                  "type:shared:messaging:api",
+                  "type:shared:util"
+                ]
               },
               {
-                "sourceTag": "type:api",
+                "sourceTag": "type:shared:http",
                 "onlyDependOnLibWithTags": [
-                  "type:feature",
-                  "type:data",
-                  "type:ui",
-                  "type:model"
+                  "type:shared:config",
+                  "type:shared:messaging:api"
                 ]
               },
+              { 
+                "sourceTag": "type:shared:auth:api",
+                "onlyDependOnLibWithTags": [
+                  "domain:shared:auth:model",
+                  "type:shared:auth:data"            
+                ]               
+              },
               {
-                "sourceTag": "type:feature",
+                "sourceTag": "type:shared:auth:data",
                 "onlyDependOnLibsWithTags": [
-                  "type:api",
-                  "type:data",
-                  "type:ui",
-                  "type:model",
+                  "domain:shared:auth:model",
+                  "type:shared:messaging:api",
                   "type:shared:config",
                   "type:shared:ngrx-utils",
-                  "type:shared:auth",
-                  "type:shared:ui-messaging",
                   "type:shared:util"
                 ]
-              },
-              {
-                "sourceTag": "type:data",
-                "onlyDependOnLibsWithTags": [
-                  "type:model",
-                  "type:shared:config",
-                  "type:shared:ngrx-utils",
-                  "type:shared:util",
-                  "type:shared:messaging"
-                ]
-              },
-              {
-                "sourceTag": "type:ui",
-                "onlyDependOnLibsWithTags": [
-                  "type:model",
-                  "type:shared:form",
-                  "type:shared:ui",
-                  "type:shared:util"
-                ]
-              },
-              {
-                "sourceTag": "type:ui",
-                "bannedExternalImports": ["@ngrx/**"]
               },
               {
                 "sourceTag": "type:shared:ngrx-utils",
-                "onlyDependOnLibsWithTags": ["type:shared:util"]
+                "onlyDependOnLibsWithTags": [
+                  "type:shared:util"
+                ]
               }
             ]
           }
@@ -89,17 +108,32 @@
       }
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/typescript"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
+      "files": [
+        "*.js",
+        "*.jsx"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/javascript"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
+      "files": [
+        "*.spec.ts",
+        "*.spec.tsx",
+        "*.spec.js",
+        "*.spec.jsx"
+      ],
       "env": {
         "jest": true
       },

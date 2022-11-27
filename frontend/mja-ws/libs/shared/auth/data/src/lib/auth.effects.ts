@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, inject, Injectable } from '@angular/core';
-import { Message } from '@mja-ws/shared/messaging/model';
 import { Configuration } from '@mja-ws/shared/config';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -8,6 +7,7 @@ import { concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { authActions } from './auth.actions';
 import { createNoopAction } from '@mja-ws/shared/ngrx-utils';
 import { Session } from './internal.model';
+import { MessageService, Message } from '@mja-ws/shared/messaging/api';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +16,7 @@ export class AuthEffects {
 
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);
+    #messageService = inject(MessageService);
 
     constructor(@Inject(Configuration) private configuration: Configuration) { }
 
@@ -35,7 +36,8 @@ export class AuthEffects {
         return this.#actions.pipe(
             ofType(authActions.redirectToAuthprovider),
             concatMap((action) => of(action.authUrl)),
-            map((authUrl) => createNoopAction(() => { window.location.href = authUrl }))
+            tap((authUrl) => window.location.href = authUrl),
+            map(() => createNoopAction())
         );
     });
 
@@ -46,6 +48,7 @@ export class AuthEffects {
             switchMap(({ authResult }) =>
                 this.#httpClient.post<Session>('/session/login/' + this.configuration.clientType, authResult)
             ),
+            tap(() => this.#messageService.info('hat geklappt')),
             map((session: Session) => authActions.sessionCreated({ session }))
         );
     });
@@ -66,7 +69,7 @@ export class AuthEffects {
         return this.#actions.pipe(
             ofType(authActions.loggedOut),
             tap(() => this.#clearSession()),
-            map(() => createNoopAction(() => {}))
+            map(() => createNoopAction())
         );
     })
 

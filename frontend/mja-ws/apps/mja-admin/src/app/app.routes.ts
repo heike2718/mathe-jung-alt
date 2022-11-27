@@ -1,5 +1,4 @@
 import { Routes } from "@angular/router";
-import { authDataProvider } from "@mja-ws/shared/auth/api";
 import { HomeComponent } from "./home/home.component";
 
 

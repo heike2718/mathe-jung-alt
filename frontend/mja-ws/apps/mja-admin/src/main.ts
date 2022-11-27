@@ -16,7 +16,7 @@ import localeDe from '@angular/common/locales/de';
 import { Configuration } from '@mja-ws/shared/config';
 import { authDataProvider } from '@mja-ws/shared/auth/api';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AddBaseUrlInterceptor } from 'libs/shared/http/src';
+import { AddBaseUrlInterceptor } from '@mja-ws/shared/http';
 
 if (environment.production) {
   enableProdMode();

@@ -6,6 +6,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavComponent } from './navigation/sidenav/sidenav.component';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { MessageComponent } from '@mja-ws/shared/messaging/ui';
 
 
 @Component({
@@ -19,7 +20,8 @@ import { AuthFacade } from '@mja-ws/shared/auth/api';
     MatSidenavModule,
     LayoutComponent,
     HeaderComponent,
-    SidenavComponent
+    SidenavComponent,
+    MessageComponent
   ]
 })
 export class AppComponent implements OnInit {

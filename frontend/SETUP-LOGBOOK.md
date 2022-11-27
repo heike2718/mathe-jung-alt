@@ -71,6 +71,7 @@ npx nx generate @nrwl/angular:component header --project=mja-admin --path=/apps/
 ```
 
 * sidenav generiert
+
 ```
 npx nx generate @nrwl/angular:component sidenav --project=mja-admin --path=/apps/mja-admin/src/app/navigation --selector=mja-admin-sidenav --standalone --no-interactive
 ```
@@ -97,18 +98,10 @@ unter libs: Verzeichnis shared angelegt
 
 ### Config
 
-```
-npx nx generate @nrwl/angular:library config --style=scss --directory=shared --skipModule --skipSelector --standalone --tags='domain:shared, type:shared:config' --no-interactive --dry-run 
-```
-
-__ACHTUNG:__ ^^^ ist das falsche schematics. So wäre es richtig:
 
 ```
-npx nx generate @nrwl/js:library config --directory=shared --tags='domain:shared, type:shared:config' --no-interactive --dry-run
+npx nx generate @nrwl/js:library config --directory=shared --tags='domain:shared, type:shared:config' --buildable --no-interactive --dry-run
 ```
-Dann hätte man sich das Löschen von Zeug sparen können.
-
-Das legt leider gleich auch ein Unterverzeichnis shared-config mit einer Komponente an. Das Verzeichnis wurde komplett gelöscht.
 
 In einer configuration.ts wird eine Klasse mit public attribute baseUrl angelegt. Später können dort weitere Konfigurationen hinzukommen.
 
@@ -129,18 +122,13 @@ Das hat den Vorteil, dass man in main.ts, wo man Zugriff auf environment hat, ap
 
 ### auth
 
-```
-npx nx generate @nrwl/js:library auth --directory=shared --tags='domain:shared, type:shared:auth' --no-interactive --dry-run
-```
-
-auth wird nochmal aufgesplittet in eine api und einen internen Teil:
 
 ```
-npx nx generate @nrwl/js:library api --directory=shared/auth --tags='domain:auth:api, type:api' --no-interactive --dry-run
+npx nx generate @nrwl/js:library api --directory=shared/auth --tags='domain:shared, type:shared:auth:api' --buildable --no-interactive --dry-run
 
-npx nx generate @nrwl/js:library data --directory=shared/auth --tags='domain:auth:data, type:data' --no-interactive --dry-run
+npx nx generate @nrwl/js:library data --directory=shared/auth --tags='domain:shared, type:type:shared:auth:data' --buildable --no-interactive --dry-run
 
-npx nx generate @nrwl/js:library model --directory=shared/auth --tags='domain:auth:model, type:model' --no-interactive --dry-run
+npx nx generate @nrwl/js:library model --directory=shared/auth --tags='domain:auth:model, type:model' --buildable --no-interactive --dry-run
 ```
 
 Zwischendurch musste eine lib messaging angelegt werden, weil das Message-Interface erforderlich ist.
@@ -150,9 +138,9 @@ auth.api stellt eine Facade mit 3 Methoden und 3 Observables zur Verfügung, die
 ### messaging
 
 ```
-npx nx generate @nrwl/js:library api --directory=shared/messaging --tags='domain:messaging:api, type:model' --no-interactive --dry-run
+npx nx generate @nrwl/js:library api --directory=shared/messaging --tags='domain:shared, type:shared:messaging:api' --buildable --no-interactive --dry-run
 
-npx nx generate @nrwl/js:library model --directory=shared/messaging --tags='domain:messaging:model, type:model' --no-interactive --dry-run
+npx nx generate @nrwl/js:library ui --directory=shared/messaging --tags='domain:shared:messaging:ui, type:ui' --buildable --no-interactive --dry-run
 
 ```
 
@@ -163,13 +151,13 @@ und .eslintrc.json um dependency-definitionen erweitert
 Enthält Helferfunktionen, sie keinerlei dependencies haben
 
 ```
-npx nx generate @nrwl/js:library util --directory=shared --tags='domain:shared, type:shared:util' --no-interactive --dry-run
+npx nx generate @nrwl/js:library util --directory=shared --tags='domain:shared, type:shared:util' --buildable --no-interactive --dry-run
 ```
 
 ### ngrx-utils
 
 ```
-npx nx generate @nrwl/js:library ngrx-utils --directory=shared --tags='domain:shared, type:shared:ngrx-utils' --no-interactive --dry-run
+npx nx generate @nrwl/js:library ngrx-utils --directory=shared --tags='domain:shared, type:shared:ngrx-utils' --buildable --no-interactive --dry-run
 ```
 
 ### http
@@ -177,13 +165,13 @@ npx nx generate @nrwl/js:library ngrx-utils --directory=shared --tags='domain:sh
 hier residieren low level http utils wie Interceptors, die nahezu keine Abhängikeiten haben.
 
 ```
-npx nx generate @nrwl/js:library http --directory=shared --tags='domain:shared, type:shared:http' --no-interactive --dry-run
+npx nx generate @nrwl/js:library http --directory=shared --tags='domain:shared, type:shared:http' --buildable --no-interactive --dry-run
 ```
 
 ## Deskriptoren
 
 ```
-npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:deskriptoren, type:model' --no-interactive --dry-run
+npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:deskriptoren, type:model' --buildable --no-interactive --dry-run
 ```
 
 
@@ -191,6 +179,34 @@ npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:d
 
 __Compilefehler Cannot parse tsconfig.base.json: PropertyNameExpected in JSON at position 891__
 
-Ursache ist ein Komma nach dem letzeten Item in der path-Liste 
+Ursache ist ein Komma nach dem letzeten Item in der path-Liste
+
+__Ist das generierte jest.config.ts korrekt?__
+
+Die generierten ibraries enthalten aktuell nicht die korrekte Implementierung in jest.config.ts. Hier muss transform wie folgt ersetzt weren:
+
+`''
+  transform: {
+    '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
+  },
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  snapshotSerializers: [
+    'jest-preset-angular/build/serializers/no-ng-attributes',
+    'jest-preset-angular/build/serializers/ng-snapshot',
+    'jest-preset-angular/build/serializers/html-comment',
+  ]
+```
+
+__Fehler beim Ausführen von jest-Tests__
+
+In den .spec-Dateien den angular compiler zu importieren, hat geholfen:
+
+```
+import '@angular/compiler';
+```
+
+__Fehlermeldung preset: '../../../../jest.preset.js' nicht gefunden oder so__
+
+Dann stimmt die Anzahl der ../ in der entprechenden jest.config.ts nicht.
  
 

@@ -1,4 +1,4 @@
-import "@angular/compiler";  // erforderlich weil man aktuell eine bescheuerte Fehlermeldung von jest bekommt, obwohl alles korrekt konfigiriert ist
+import '@angular/compiler';  // erforderlich weil man aktuell eine bescheuerte Fehlermeldung von jest bekommt, obwohl alles korrekt konfigiriert ist
 import { authFeature, initialState } from './auth.reducer';
 import { authActions } from './auth.actions';
 import { anonymousSession, Session } from './internal.model';

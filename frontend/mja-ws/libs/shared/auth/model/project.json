@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["domain:auth:model", "type:model"]
+  "tags": ["domain:shared:auth:model", "type:model"]
 }

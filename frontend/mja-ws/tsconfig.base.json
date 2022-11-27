@@ -16,7 +16,6 @@
     "baseUrl": ".",
     "paths": {
       "@mja-ws/deskriptoren/model": ["libs/deskriptoren/model/src/index.ts"],
-      "@mja-ws/messaging/api": ["libs/shared/messaging/api/src/index.ts"],
       "@mja-ws/shared/auth/api": ["libs/shared/auth/api/src/index.ts"],
       "@mja-ws/shared/auth/data": ["libs/shared/auth/data/src/index.ts"],
       "@mja-ws/shared/auth/model": ["libs/shared/auth/model/src/index.ts"],
@@ -24,9 +23,6 @@
       "@mja-ws/shared/http": ["libs/shared/http/src/index.ts"],
       "@mja-ws/shared/messaging/api": [
         "libs/shared/messaging/api/src/index.ts"
-      ],
-      "@mja-ws/shared/messaging/model": [
-        "libs/shared/messaging/model/src/index.ts"
       ],
       "@mja-ws/shared/messaging/ui": ["libs/shared/messaging/ui/src/index.ts"],
       "@mja-ws/shared/ngrx-utils": ["libs/shared/ngrx-utils/src/index.ts"],
