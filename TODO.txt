@@ -4,6 +4,10 @@
 
 nächste Schritte:
 
+- ErrorHandlerService nochmal etwas aufräumen
+- Zeug, das in app.component.ts in ngInit() passiert anschauen
+- session in localStorage packen
+- genau prüfen, wann der hash in der url gelöscht wird
 - safeXXXMap-Methoden
 - Loading Indicator
 - nochmal das Zeug mit den Deskriptoren aufräumen
