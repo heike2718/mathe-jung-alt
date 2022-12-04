@@ -16,6 +16,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +33,12 @@ import de.egladil.web.mja_auth.util.SecUtils;
 @ApplicationScoped
 public class SessionService {
 
-	public static final int SESSION_IDLE_TIMEOUT_MINUTES = 120;
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
 
 	private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
+
+	@ConfigProperty(name = "session.idle.timeout")
+	int sessionIdleTimeoutMinutes = 120;
 
 	@Inject
 	JWTService jwtService;
@@ -79,7 +81,7 @@ public class SessionService {
 				uuid).withCsrfToken(SecUtils.generateRandomString());
 
 			Session session = this.internalCreateAnonymousSession().withUser(authenticatedUser);
-			session.setExpiresAt(SessionUtils.getExpiresAt(SESSION_IDLE_TIMEOUT_MINUTES));
+			session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
 
 			sessions.put(session.getSessionId(), session);
 
@@ -121,7 +123,7 @@ public class SessionService {
 			throw new SessionExpiredException("Die Session ist abgelaufen. Bitte neu einloggen.");
 		}
 
-		session.setExpiresAt(SessionUtils.getExpiresAt(SESSION_IDLE_TIMEOUT_MINUTES));
+		session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
 
 		return session;
 	}
