@@ -1,5 +1,9 @@
 # Release-Notes
 
+__1.3.2__
+
+* [Rätselgruppen: Vorschau und Download Sortierung ändern](https://github.com/heike2718/mathe-jung-alt/issues/60)
+
 __1.3.1__
 
 * [Rätselgruppe Download LaTeX bereitstellen](https://github.com/heike2718/mathe-jung-alt/issues/54)

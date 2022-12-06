@@ -15,6 +15,8 @@ public interface LaTeXConstants {
 
 	String VALUE_LINEBREAK = "\\\\";
 
-	String HEADER_AUFGABE = "{\\bf Aufgabe - {0} - {1} - {2} Punkte}\\\\";
+	String HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE = "{\\bf {0} - {1} ({2})}\\\\";
+
+	String HEADER_AUFGABE_SCHLUESSEL_PUNKTE = "{\\bf Aufgabe {0} ({1})}\\\\";
 
 }

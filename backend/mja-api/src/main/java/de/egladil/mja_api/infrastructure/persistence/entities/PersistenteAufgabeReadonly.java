@@ -37,6 +37,9 @@ public class PersistenteAufgabeReadonly extends PanacheEntityBase {
 	public int punkte;
 
 	@Column
+	public String gruppe;
+
+	@Column
 	public String antwortvorschlaege;
 
 	@Column(name = "QUELLE_ART")

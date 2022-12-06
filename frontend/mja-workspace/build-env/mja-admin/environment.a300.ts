@@ -5,5 +5,5 @@ export const environment = {
         apiUrl: 'http://a300/mja-api',
         profileUrl: 'http://a300/profil-app',
         storageKeyPrefix: 'mja_adm_',
-        version: '1.3.1'
+        version: '1.3.2'
 };

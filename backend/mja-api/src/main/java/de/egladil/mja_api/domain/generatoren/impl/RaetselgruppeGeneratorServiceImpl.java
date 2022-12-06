@@ -204,9 +204,17 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 					.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
 					.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege);
 
-				String headerAufgabe = LaTeXConstants.HEADER_AUFGABE.replace("{0}", aufgabe.getNummer());
-				headerAufgabe = headerAufgabe.replace("{1}", aufgabe.getSchluessel());
-				headerAufgabe = headerAufgabe.replace("{2}", aufgabe.getPunkte() + "");
+				String headerAufgabe = null;
+
+				if (aufgabe.getNummer().equals(aufgabe.getSchluessel())) {
+
+					headerAufgabe = LaTeXConstants.HEADER_AUFGABE_SCHLUESSEL_PUNKTE.replace("{0}", aufgabe.getSchluessel());
+					headerAufgabe = headerAufgabe.replace("{1}", aufgabe.getPunkte() + "");
+				} else {
+					headerAufgabe = LaTeXConstants.HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE.replace("{0}", aufgabe.getNummer());
+					headerAufgabe = headerAufgabe.replace("{1}", aufgabe.getSchluessel());
+					headerAufgabe = headerAufgabe.replace("{2}", aufgabe.getPunkte() + "");
+				}
 
 				if (count > 0) {
 

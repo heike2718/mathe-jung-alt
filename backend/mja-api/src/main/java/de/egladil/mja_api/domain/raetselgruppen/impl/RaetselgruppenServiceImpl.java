@@ -106,8 +106,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		}
 
 		List<PersistentesRaetselgruppenelement> elementeDB = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeID);
-		List<String> raetselIDs = elementeDB.stream().map(el -> el.raetselID).collect(Collectors.toList());
-		List<PersistenteAufgabeReadonly> aufgaben = raetselgruppenDao.loadAufgabenByRaetselIds(raetselIDs);
+		List<PersistenteAufgabeReadonly> aufgaben = raetselgruppenDao.loadAufgabenByReaetselgruppe(raetselgruppeID);
 
 		elementeDB.forEach(r -> {
 
