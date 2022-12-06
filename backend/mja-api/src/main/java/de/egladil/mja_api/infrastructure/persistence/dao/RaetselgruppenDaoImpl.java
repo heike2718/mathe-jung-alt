@@ -17,8 +17,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.MultiIdentifierLoadAccess;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +28,7 @@ import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
+import io.quarkus.panache.common.Parameters;
 
 /**
  * RaetselgruppenDaoImpl
@@ -216,24 +215,18 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 	}
 
 	@Override
-	public List<PersistenteAufgabeReadonly> loadAufgabenByRaetselIds(final List<String> uuids) {
-
-		// Ersetzt select ... where ID IN ...
-		Session session = entityManager.unwrap(Session.class);
-
-		MultiIdentifierLoadAccess<PersistenteAufgabeReadonly> multiLoadAccess = session
-			.byMultipleIds(PersistenteAufgabeReadonly.class);
-		List<PersistenteAufgabeReadonly> trefferliste = multiLoadAccess.multiLoad(uuids);
-
-		return trefferliste;
-	}
-
-	@Override
 	public List<PersistentesRaetselgruppenelement> loadElementeRaetselgruppe(final String gruppeID) {
 
 		return entityManager
 			.createNamedQuery(PersistentesRaetselgruppenelement.LOAD_BY_GRUPPE, PersistentesRaetselgruppenelement.class)
 			.setParameter("raetselgruppeID", gruppeID).getResultList();
+	}
+
+	@Override
+	public List<PersistenteAufgabeReadonly> loadAufgabenByReaetselgruppe(String raetselgruppeId) {
+
+		return PersistenteAufgabeReadonly.list("select a from PersistenteAufgabeReadonly a where a.gruppe = :gruppe",
+			Parameters.with("gruppe", raetselgruppeId));
 	}
 
 	@Override

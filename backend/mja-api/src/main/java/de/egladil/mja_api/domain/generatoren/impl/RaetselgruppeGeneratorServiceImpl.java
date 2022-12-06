@@ -6,6 +6,7 @@ package de.egladil.mja_api.domain.generatoren.impl;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,6 +25,7 @@ import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
+import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
@@ -176,6 +178,8 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	 */
 	private String generateLaTeX(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
+		Collections.sort(aufgaben, new QuizaufgabeComparator());
+
 		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE);
 
 		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), raetselgruppe.name);
@@ -200,14 +204,24 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 					.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
 					.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege);
 
-				String aufgabeSchluessel = LaTeXConstants.HEADER_AUFGABE.replace("{0}", aufgabe.getSchluessel());
+				String headerAufgabe = null;
+
+				if (aufgabe.getNummer().equals(aufgabe.getSchluessel())) {
+
+					headerAufgabe = LaTeXConstants.HEADER_AUFGABE_SCHLUESSEL_PUNKTE.replace("{0}", aufgabe.getSchluessel());
+					headerAufgabe = headerAufgabe.replace("{1}", aufgabe.getPunkte() + "");
+				} else {
+					headerAufgabe = LaTeXConstants.HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE.replace("{0}", aufgabe.getNummer());
+					headerAufgabe = headerAufgabe.replace("{1}", aufgabe.getSchluessel());
+					headerAufgabe = headerAufgabe.replace("{2}", aufgabe.getPunkte() + "");
+				}
 
 				if (count > 0) {
 
 					sb.append("\\par \\vspace{1ex}");
 				}
 
-				sb.append(aufgabeSchluessel);
+				sb.append(headerAufgabe);
 
 				String textFrageLoesung = quizitemLaTeXGenerator.generateLaTeXFrageLoesung(input);
 				sb.append(textFrageLoesung);

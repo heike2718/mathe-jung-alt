@@ -73,18 +73,18 @@ public class QuizService {
 
 	public List<Quizaufgabe> getItemsAsQuizaufgaben(final String raetselgruppeID) {
 
-		List<PersistentesRaetselgruppenelement> elemente = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeID);
-		List<String> raetselUuids = elemente.stream().map(el -> el.raetselID).collect(Collectors.toList());
-		List<PersistenteAufgabeReadonly> aufgabenReadonly = raetselgruppenDao.loadAufgabenByRaetselIds(raetselUuids);
-
+		List<PersistenteAufgabeReadonly> aufgabenReadonly = raetselgruppenDao.loadAufgabenByReaetselgruppe(raetselgruppeID);
 		List<Quizaufgabe> aufgaben = new ArrayList<>();
+
 		aufgabenReadonly.forEach(aufgabeDB -> {
 
 			Quizaufgabe aufgabe = mapFromDB(aufgabeDB);
 			aufgaben.add(aufgabe);
 		});
 		aufgaben.sort(new QuizaufgabeComparator());
+
 		return aufgaben;
+
 	}
 
 	Quizaufgabe mapFromDB(final PersistenteAufgabeReadonly dbAufgabe) {
@@ -113,23 +113,23 @@ public class QuizService {
 
 		switch (dbAufgabe.quellenart) {
 
-			case PERSON: {
+		case PERSON: {
 
-				return dbAufgabe.person;
-			}
+			return dbAufgabe.person;
+		}
 
-			case BUCH: {
+		case BUCH: {
 
-				return dbAufgabe.mediumTitel + ", " + dbAufgabe.seite;
-			}
+			return dbAufgabe.mediumTitel + ", " + dbAufgabe.seite;
+		}
 
-			case ZEITSCHRIFT: {
+		case ZEITSCHRIFT: {
 
-				return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahrgang;
-			}
+			return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahrgang;
+		}
 
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + dbAufgabe.quellenart);
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + dbAufgabe.quellenart);
 		}
 	}
 

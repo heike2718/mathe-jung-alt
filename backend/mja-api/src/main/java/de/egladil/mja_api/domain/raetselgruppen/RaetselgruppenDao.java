@@ -69,12 +69,12 @@ public interface RaetselgruppenDao {
 	List<PersistentesRaetselgruppenelement> loadElementeRaetselgruppe(String gruppeID);
 
 	/**
-	 * Läd die Aufagben mit den gegebenen UUIDs
+	 * Läd alle Aufgaben der gegebenen Rätselgruppe.
 	 *
-	 * @param  uuids
-	 * @return
+	 * @param  raetselgruppeId
+	 * @return List
 	 */
-	List<PersistenteAufgabeReadonly> loadAufgabenByRaetselIds(List<String> uuids);
+	List<PersistenteAufgabeReadonly> loadAufgabenByReaetselgruppe(String raetselgruppeId);
 
 	/**
 	 * Speichert die gegebene Rätselgruppe und gibt die gespeicherte Entity zurück.

@@ -15,7 +15,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.web.mja_auth.session.SessionService;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.runtime.configuration.ProfileManager;
 
@@ -36,13 +35,16 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "delay.milliseconds", defaultValue = "0")
 	long delayMillis = 0;
 
+	@ConfigProperty(name = "session.idle.timeout")
+	int sessionIdleTimeoutMinutes = 120;
+
 	void onStartup(@Observes final StartupEvent ev) {
 
 		LOGGER.info(" ===========> The application is starting with profile " + ProfileManager.getActiveProfile());
 
 		checkLatexBaseDir();
 
-		LOGGER.info(" ===========>  session timeout nach {} min", SessionService.SESSION_IDLE_TIMEOUT_MINUTES);
+		LOGGER.info(" ===========>  session timeout nach {} min", sessionIdleTimeoutMinutes);
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
 

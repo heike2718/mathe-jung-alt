@@ -30,7 +30,7 @@ public interface RaetselgruppeGeneratorService {
 	GeneratedFile downloadLaTeXSource(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 	/**
-	 * Generiert das PDF einer freigegebenen Rätselgruppe. Dabei werden die Lösungen mit einem newspace ans Ende gehängt, so dass
+	 * Generiert das PDF einer freigegebenen Rätselgruppe. Dabei werden die Lösungen mit einem newpage ans Ende gehängt, so dass
 	 * man es wie Arbeitsblätter verwenden kann.
 	 *
 	 * @param  raetselgruppe
