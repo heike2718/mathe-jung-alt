@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { UserFull } from './internal.model';
+import { isAdmin } from './internal.model';
 import { authActions } from './auth.actions';
 import { Observable, of, switchMap } from 'rxjs';
 import { fromAuth } from './auth.selectors';
@@ -16,7 +16,7 @@ export class AuthRepository {
 
     readonly user$: Observable<User> = this.#store.select(fromAuth.user).pipe(
         filterDefined,
-        switchMap((user) => of({ fullName: user.fullName, isAdmin: this.#isAdmin(user) }))
+        switchMap((user) => of({ fullName: user.fullName, isAdmin: isAdmin(user) }))
     );
 
     readonly loggedIn$: Observable<boolean> = this.#store.select(fromAuth.user).pipe(
@@ -36,7 +36,5 @@ export class AuthRepository {
         this.#store.dispatch(authActions.init_session({ authResult }));
     }
 
-    #isAdmin(user: UserFull): boolean {
-        return user.roles.indexOf('ADMIN') + user.roles.indexOf('AUTOR') >= 0;
-    }
+    
 }

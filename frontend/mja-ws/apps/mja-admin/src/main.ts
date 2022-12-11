@@ -19,6 +19,7 @@ import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angu
 import { AddBaseUrlInterceptor, ErrorInterceptor } from '@mja-ws/shared/http';
 import { ErrorHandlerService } from './app/services/error-handler.service';
 import { LocalStorageEffects, localStorageReducer } from '@mja-ws/local-storage-state';
+import { LoadingInterceptor } from '@mja-ws/shared/messaging/api';
 
 if (environment.production) {
   enableProdMode();
@@ -64,6 +65,7 @@ bootstrapApplication(AppComponent, {
       useValue: { appearance: 'outline' },
     },
     { provide: ErrorHandler, useClass: ErrorHandlerService },
+    { provide: HTTP_INTERCEPTORS, multi: true, useClass: LoadingInterceptor },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: AddBaseUrlInterceptor },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: ErrorInterceptor },
   ],

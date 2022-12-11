@@ -6,7 +6,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavComponent } from './navigation/sidenav/sidenav.component';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
-import { MessageComponent } from '@mja-ws/shared/messaging/ui';
+import { LoadingIndicatorComponent, MessageComponent } from '@mja-ws/shared/messaging/ui';
 
 
 @Component({
@@ -21,7 +21,8 @@ import { MessageComponent } from '@mja-ws/shared/messaging/ui';
     LayoutComponent,
     HeaderComponent,
     SidenavComponent,
-    MessageComponent
+    MessageComponent,
+    LoadingIndicatorComponent
   ]
 })
 export class AppComponent implements OnInit {

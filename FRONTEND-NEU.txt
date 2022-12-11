@@ -1,5 +1,6 @@
 (/) exceptionhandling
-(-) localStorage einbinden
-(-) loading indicator
+(/) localStorage einbinden
+(/) loading indicator
+(-) Deskriptoren laden und speichern
 
 

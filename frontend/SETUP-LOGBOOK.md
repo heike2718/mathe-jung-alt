@@ -146,6 +146,12 @@ npx nx generate @nrwl/js:library ui --directory=shared/messaging --tags='domain:
 
 und .eslintrc.json um dependency-definitionen erweitert
 
+### loading indicator
+
+```
+npx nx generate @nrwl/angular:component loading-indicator --project=shared-messaging-ui --selector=mja-loader --standalone --no-interactive --dry-run
+```
+
 ### util
 
 Enthält Helferfunktionen, sie keinerlei dependencies haben
