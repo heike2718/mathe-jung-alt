@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@mja-ws/deskriptoren/model": ["libs/deskriptoren/model/src/index.ts"],
+      "@mja-ws/local-storage-state": ["libs/local-storage-state/src/index.ts"],
       "@mja-ws/shared/auth/api": ["libs/shared/auth/api/src/index.ts"],
       "@mja-ws/shared/auth/data": ["libs/shared/auth/data/src/index.ts"],
       "@mja-ws/shared/auth/model": ["libs/shared/auth/model/src/index.ts"],

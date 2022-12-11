@@ -1,5 +1,5 @@
-(-) exceptionhandling
-
+(/) exceptionhandling
+(-) localStorage einbinden
 (-) loading indicator
 
 

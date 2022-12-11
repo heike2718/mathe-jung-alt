@@ -174,8 +174,20 @@ npx nx generate @nrwl/js:library http --directory=shared --tags='domain:shared, 
 npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:deskriptoren, type:model' --buildable --no-interactive --dry-run
 ```
 
+## localStorage synchronisieren mittels ngrx local storage
+
+```
+npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --buildable --no-interactive --dry-run
+```
 
 ## FAQ
+
+__Laufzeitfehler aus auth.effects__
+
+Ich hatte statt der noopAction eine function zurückgegeben, die die noopAction generieren würde. Lösung vorerst: 
+
+kein return in actionCreator sondern mit {dispatch: false} beenden
+
 
 __Compilefehler Cannot parse tsconfig.base.json: PropertyNameExpected in JSON at position 891__
 

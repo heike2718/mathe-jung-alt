@@ -33,10 +33,7 @@ export class AuthFacade {
           this.#authRepository.createSession(authResult);
         }        
       }
-    } else {
-      console.log('TODO: new method #authRepository.clearOrRestoreSession()');      
     }
-
   }
 
   public logout(): void {
@@ -72,4 +69,4 @@ export class AuthFacade {
     window.location.hash = '';
     return result;
   }
-}
+};

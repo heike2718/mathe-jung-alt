@@ -18,6 +18,7 @@ import { authDataProvider } from '@mja-ws/shared/auth/api';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddBaseUrlInterceptor, ErrorInterceptor } from '@mja-ws/shared/http';
 import { ErrorHandlerService } from './app/services/error-handler.service';
+import { LocalStorageEffects, localStorageReducer } from '@mja-ws/local-storage-state';
 
 if (environment.production) {
   enableProdMode();
@@ -32,8 +33,13 @@ bootstrapApplication(AppComponent, {
     provideRouter(appRoutes),
 
     /** das muss so gemacht werden, weil ohne den Parameter {} nichts da ist, wohinein man den state hängen könnte */
-    provideStore(),
-    provideEffects([]),
+    provideStore(
+      {},
+      {
+        metaReducers: [localStorageReducer('auth')],  // <-- replace existing StoreModule
+      }
+    ),
+    provideEffects([LocalStorageEffects]),
     provideStoreDevtools(),
 
     importProvidersFrom(
