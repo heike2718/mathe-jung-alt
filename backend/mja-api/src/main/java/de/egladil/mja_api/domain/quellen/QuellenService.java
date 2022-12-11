@@ -23,7 +23,7 @@ public interface QuellenService {
 	 *                    Suchfilter
 	 * @return            List
 	 */
-	List<QuelleReadonly> sucheQuellen(Suchfilter suchfilter);
+	List<QuellenListItem> sucheQuellen(Suchfilter suchfilter);
 
 	/**
 	 * Sucht die Quelle mit der gegebenen id.
@@ -32,7 +32,7 @@ public interface QuellenService {
 	 *            String
 	 * @return    Optional
 	 */
-	Optional<QuelleReadonly> sucheQuelleMitId(String id);
+	Optional<QuellenListItem> sucheQuelleMitId(String id);
 
 	/**
 	 * Sucht die Quelle mit der gegebenen userId.
@@ -40,5 +40,14 @@ public interface QuellenService {
 	 * @param  userId
 	 * @return        Optional
 	 */
-	Optional<QuelleReadonly> sucheQuelleMitUserID(String userId);
+	@Deprecated
+	Optional<QuellenListItem> sucheQuelleMitUserID(String userId);
+
+	/**
+	 * Sucht die Quelle mit der gegebenen userId.
+	 *
+	 * @param  userId
+	 * @return        Optional
+	 */
+	Optional<QuelleMinimalDto> findQuelleForUser(String userId);
 }

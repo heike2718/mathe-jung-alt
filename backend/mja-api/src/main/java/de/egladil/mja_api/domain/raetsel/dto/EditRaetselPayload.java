@@ -40,5 +40,4 @@ public class EditRaetselPayload {
 
 		this.raetsel = raetsel;
 	}
-
 }

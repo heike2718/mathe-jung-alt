@@ -14,11 +14,11 @@ import de.egladil.mja_api.domain.semantik.AggregateRoot;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 
 /**
- * QuelleReadonly
+ * QuellenListItem
  */
 @AggregateRoot
 @Schema(name = "Quelle", description = "Quelle für ein Rätsel")
-public class QuelleReadonly extends AbstractDomainEntity {
+public class QuellenListItem extends AbstractDomainEntity {
 
 	@Schema(description = "Art der Quelle: Mensch, Buch, Zeitschrift")
 	private Quellenart quellenart;
@@ -38,14 +38,14 @@ public class QuelleReadonly extends AbstractDomainEntity {
 	/**
 	 *
 	 */
-	protected QuelleReadonly() {
+	protected QuellenListItem() {
 
 	}
 
 	/**
 	 * @param id
 	 */
-	public QuelleReadonly(final String uuid) {
+	public QuellenListItem(final String uuid) {
 
 		super(uuid);
 	}
@@ -59,7 +59,7 @@ public class QuelleReadonly extends AbstractDomainEntity {
 	@Override
 	public boolean equals(final Object obj) {
 
-		if (!(obj instanceof QuelleReadonly)) {
+		if (!(obj instanceof QuellenListItem)) {
 
 			return false;
 		}
@@ -72,7 +72,7 @@ public class QuelleReadonly extends AbstractDomainEntity {
 		return quellenart;
 	}
 
-	public QuelleReadonly withQuellenart(final Quellenart quellenart) {
+	public QuellenListItem withQuellenart(final Quellenart quellenart) {
 
 		this.quellenart = quellenart;
 		return this;
@@ -83,7 +83,7 @@ public class QuelleReadonly extends AbstractDomainEntity {
 		return sortNumber;
 	}
 
-	public QuelleReadonly withSortNumber(final long sortNumber) {
+	public QuellenListItem withSortNumber(final long sortNumber) {
 
 		this.sortNumber = sortNumber;
 		return this;
@@ -94,7 +94,7 @@ public class QuelleReadonly extends AbstractDomainEntity {
 		return name;
 	}
 
-	public QuelleReadonly withName(final String name) {
+	public QuellenListItem withName(final String name) {
 
 		this.name = name;
 		return this;
@@ -105,7 +105,7 @@ public class QuelleReadonly extends AbstractDomainEntity {
 		return mediumUuid;
 	}
 
-	public QuelleReadonly withMediumIdentifier(final String mediumUuid) {
+	public QuellenListItem withMediumIdentifier(final String mediumUuid) {
 
 		this.mediumUuid = mediumUuid;
 		return this;
@@ -116,7 +116,7 @@ public class QuelleReadonly extends AbstractDomainEntity {
 		return deskriptoren;
 	}
 
-	public QuelleReadonly withDeskriptoren(final List<Deskriptor> deskriptoren) {
+	public QuellenListItem withDeskriptoren(final List<Deskriptor> deskriptoren) {
 
 		this.deskriptoren = deskriptoren;
 		return this;

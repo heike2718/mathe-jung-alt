@@ -37,7 +37,7 @@ bootstrapApplication(AppComponent, {
     provideStore(
       {},
       {
-        metaReducers: [localStorageReducer('auth')],  // <-- replace existing StoreModule
+        metaReducers: [localStorageReducer('auth', 'coreQuelle')],  // <-- hält den User, das expirationDate sowie die die zum eingeloggten Benutzer gehörende quelle.
       }
     ),
     provideEffects([LocalStorageEffects]),
@@ -48,7 +48,7 @@ bootstrapApplication(AppComponent, {
       HttpClientXsrfModule.withOptions({
         cookieName: 'XSRF-TOKEN',
         headerName: 'X-XSRF-TOKEN'
-      })      
+      })
     ),
     {
       provide: Configuration,

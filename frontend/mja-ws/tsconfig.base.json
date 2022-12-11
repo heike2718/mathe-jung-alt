@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@mja-ws/core/api": ["libs/core/api/src/index.ts"],
+      "@mja-ws/core/data": ["libs/core/data/src/index.ts"],
+      "@mja-ws/core/model": ["libs/core/model/src/index.ts"],
       "@mja-ws/deskriptoren/model": ["libs/deskriptoren/model/src/index.ts"],
       "@mja-ws/local-storage-state": ["libs/local-storage-state/src/index.ts"],
       "@mja-ws/shared/auth/api": ["libs/shared/auth/api/src/index.ts"],

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mja_api.domain.quellen.QuelleReadonly;
+import de.egladil.mja_api.domain.quellen.QuellenListItem;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -99,7 +99,7 @@ public class QuellenResourceTest {
 
 		String responsePayload = response.asString();
 
-		QuelleReadonly quelle = new ObjectMapper().readValue(responsePayload, QuelleReadonly.class);
+		QuellenListItem quelle = new ObjectMapper().readValue(responsePayload, QuellenListItem.class);
 
 		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
 
@@ -115,7 +115,7 @@ public class QuellenResourceTest {
 
 		String responsePayload = response.asString();
 
-		QuelleReadonly quelle = new ObjectMapper().readValue(responsePayload, QuelleReadonly.class);
+		QuellenListItem quelle = new ObjectMapper().readValue(responsePayload, QuellenListItem.class);
 
 		assertEquals("Heike Winkelvoß", quelle.getName());
 

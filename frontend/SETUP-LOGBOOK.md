@@ -174,6 +174,16 @@ hier residieren low level http utils wie Interceptors, die nahezu keine Abhängi
 npx nx generate @nrwl/js:library http --directory=shared --tags='domain:shared, type:shared:http' --buildable --no-interactive --dry-run
 ```
 
+## core
+
+hier residieren die Model-Interfaces, Store, api, die in vielen Komponenten benötigt werden
+
+```
+npx nx generate @nrwl/js:library api --directory=core --tags='domain:core, type:core:api' --no-interactive --dry-run
+npx nx generate @nrwl/js:library data --directory=core --tags='domain:core, type:core:data' --no-interactive --dry-run
+npx nx generate @nrwl/js:library model --directory=core --tags='domain:core, type:core:model' --no-interactive --dry-run
+```
+
 ## Deskriptoren
 
 ```
@@ -185,6 +195,7 @@ npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:d
 ```
 npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --buildable --no-interactive --dry-run
 ```
+
 
 ## FAQ
 

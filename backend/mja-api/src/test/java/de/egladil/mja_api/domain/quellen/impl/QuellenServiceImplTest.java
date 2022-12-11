@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.Suchfilter;
-import de.egladil.mja_api.domain.quellen.QuelleReadonly;
+import de.egladil.mja_api.domain.quellen.QuellenListItem;
 import de.egladil.mja_api.domain.quellen.QuellenRepository;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.impl.QuellenServiceImpl;
@@ -94,11 +94,11 @@ public class QuellenServiceImplTest {
 			when(deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren())).thenReturn(deskriptoren);
 
 			// Act
-			List<QuelleReadonly> result = service.sucheQuellen(new Suchfilter(suchstring, ""));
+			List<QuellenListItem> result = service.sucheQuellen(new Suchfilter(suchstring, ""));
 
 			// Assert
 			assertEquals(1, result.size());
-			QuelleReadonly quelle = result.get(0);
+			QuellenListItem quelle = result.get(0);
 			verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
 			verify(deskriptorenService).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 
@@ -119,7 +119,7 @@ public class QuellenServiceImplTest {
 				.thenReturn(new ArrayList<>());
 
 			// Act
-			List<QuelleReadonly> result = service.sucheQuellen(new Suchfilter(suchstring, ""));
+			List<QuellenListItem> result = service.sucheQuellen(new Suchfilter(suchstring, ""));
 
 			// Assert
 			assertEquals(0, result.size());
@@ -136,7 +136,7 @@ public class QuellenServiceImplTest {
 				.thenReturn(null);
 
 			// Act
-			List<QuelleReadonly> result = service.sucheQuellen(new Suchfilter(suchstring, ""));
+			List<QuellenListItem> result = service.sucheQuellen(new Suchfilter(suchstring, ""));
 
 			// Assert
 			assertEquals(0, result.size());
@@ -168,11 +168,11 @@ public class QuellenServiceImplTest {
 			when(deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren())).thenReturn(deskriptoren);
 
 			// Act
-			List<QuelleReadonly> result = service.sucheQuellen(new Suchfilter(suchstring, null));
+			List<QuellenListItem> result = service.sucheQuellen(new Suchfilter(suchstring, null));
 
 			// Assert
 			assertEquals(1, result.size());
-			QuelleReadonly quelle = result.get(0);
+			QuellenListItem quelle = result.get(0);
 			verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
 			verify(deskriptorenService).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 
@@ -206,11 +206,11 @@ public class QuellenServiceImplTest {
 			when(deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren())).thenReturn(deskriptoren);
 
 			// Act
-			List<QuelleReadonly> result = service.sucheQuellen(new Suchfilter(suchstring, ""));
+			List<QuellenListItem> result = service.sucheQuellen(new Suchfilter(suchstring, ""));
 
 			// Assert
 			assertEquals(1, result.size());
-			QuelleReadonly quelle = result.get(0);
+			QuellenListItem quelle = result.get(0);
 			verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
 			verify(deskriptorenService).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 
@@ -250,11 +250,11 @@ public class QuellenServiceImplTest {
 			when(deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren())).thenReturn(deskriptoren);
 
 			// Act
-			List<QuelleReadonly> result = service.sucheQuellen(new Suchfilter(suchstring, "1,3"));
+			List<QuellenListItem> result = service.sucheQuellen(new Suchfilter(suchstring, "1,3"));
 
 			// Assert
 			assertEquals(1, result.size());
-			QuelleReadonly quelle = result.get(0);
+			QuellenListItem quelle = result.get(0);
 			verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
 			verify(deskriptorenService).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 
@@ -286,7 +286,7 @@ public class QuellenServiceImplTest {
 				.thenReturn(Collections.singletonList(persistenteQuelle));
 
 			// Act
-			List<QuelleReadonly> result = service.sucheQuellen(new Suchfilter(suchstring, "1,3,5"));
+			List<QuellenListItem> result = service.sucheQuellen(new Suchfilter(suchstring, "1,3,5"));
 
 			// Assert
 			assertEquals(0, result.size());

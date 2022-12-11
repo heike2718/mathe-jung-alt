@@ -6,7 +6,7 @@ export interface AuthState {
     readonly session: Session;
 };
 
-export const initialState: AuthState = {
+const initialState: AuthState = {
     session: anonymousSession
 };
 

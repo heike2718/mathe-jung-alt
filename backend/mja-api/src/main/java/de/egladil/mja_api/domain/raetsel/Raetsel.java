@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
+import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.raetsel.dto.GrafikInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
@@ -61,9 +62,14 @@ public class Raetsel extends AbstractDomainEntity {
 	private String quelleId;
 
 	@JsonProperty
+	@Schema(description = "Referenz auf die Quelle des Rätsels sowie ein Name zum Anzeigen")
+	private QuelleMinimalDto quelle;
+
+	@JsonProperty
 	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
-	private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird entschieden, ob es durch den User
-										// änderbar ist.
+	private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird entschieden, ob es
+												// durch den User
+	// änderbar ist.
 
 	@JsonProperty
 	@Schema(
@@ -256,5 +262,15 @@ public class Raetsel extends AbstractDomainEntity {
 	public void markiereAlsAenderbar() {
 
 		this.schreibgeschuetzt = false;
+	}
+
+	public QuelleMinimalDto getQuelle() {
+
+		return quelle;
+	}
+
+	public void setQuelle(final QuelleMinimalDto quelle) {
+
+		this.quelle = quelle;
 	}
 }

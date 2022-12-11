@@ -103,6 +103,23 @@
                   "type:shared:util"
                 ]
               },
+              { 
+                "sourceTag": "type:core:api",
+                "onlyDependOnLibWithTags": [
+                  "domain:core:model",
+                  "type:core:data"            
+                ]               
+              },
+              {
+                "sourceTag": "type:core:data",
+                "onlyDependOnLibsWithTags": [
+                  "domain:core:model",
+                  "type:shared:messaging:api",
+                  "type:shared:config",
+                  "type:shared:ngrx-utils",
+                  "type:shared:util"
+                ]
+              },
               {
                 "sourceTag": "type:shared:ngrx-utils",
                 "onlyDependOnLibsWithTags": [
