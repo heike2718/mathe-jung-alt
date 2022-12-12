@@ -72,7 +72,8 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 			initMockSecurityContext(requestContext);
 		} else {
 
-			String sessionId = SessionUtils.getSessionId(requestContext, configService.getStage());
+			// String sessionId = SessionUtils.getSessionId(requestContext, configService.getStage());
+			String sessionId = SessionUtils.getSessionIdFromCookie(requestContext);
 
 			if (sessionId != null) {
 

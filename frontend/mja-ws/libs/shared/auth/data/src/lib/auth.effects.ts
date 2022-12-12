@@ -7,6 +7,7 @@ import { concatMap, map, tap } from 'rxjs/operators';
 import { authActions } from './auth.actions';
 import { Session } from './internal.model';
 import { Message } from '@mja-ws/shared/messaging/api';
+import { CoreFacade } from '@mja-ws/core/api';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +16,7 @@ export class AuthEffects {
 
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);
+    #coreFacade = inject(CoreFacade);
 
     constructor(@Inject(Configuration) private configuration: Configuration) { }
 
@@ -29,7 +31,7 @@ export class AuthEffects {
 
     });
 
-    redirectToLogin$ = createEffect(() => 
+    redirectToLogin$ = createEffect(() =>
 
         this.#actions.pipe(
             ofType(authActions.redirect_to_auth),
@@ -48,6 +50,12 @@ export class AuthEffects {
         );
     });
 
+    sessionCreated$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(authActions.session_created),
+            tap(() => this.#coreFacade.loadQuelleAngemeldeterAdmin())
+        ), { dispatch: false });
+
     logOut$ = createEffect(() => {
 
         return this.#actions.pipe(
@@ -58,7 +66,7 @@ export class AuthEffects {
         );
     });
 
-    loggedOut$ = createEffect(() => 
+    loggedOut$ = createEffect(() =>
 
         this.#actions.pipe(
             ofType(authActions.logged_out),

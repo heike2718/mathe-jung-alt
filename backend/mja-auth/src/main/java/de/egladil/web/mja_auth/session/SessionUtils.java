@@ -33,7 +33,7 @@ import de.egladil.web.mja_auth.exception.MjaAuthRuntimeException;
  */
 public final class SessionUtils {
 
-	public static final String SESSION_COOKIE_NAME = "MJA_SESSIONID";
+	public static final String SESSION_COOKIE_NAME = "JSESSIONID";
 
 	private static final String SESSION_ID_HEADER = "X-SESSIONID";
 
@@ -151,7 +151,7 @@ public final class SessionUtils {
 	 * @param  clientPrefix
 	 * @return
 	 */
-	private static String getSessionIdFromCookie(final ContainerRequestContext requestContext) {
+	public static String getSessionIdFromCookie(final ContainerRequestContext requestContext) {
 
 		Map<String, Cookie> cookies = requestContext.getCookies();
 
