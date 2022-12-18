@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { CoreFacade } from '@mja-ws/core/api';
 
 @Component({
   selector: 'mja-admin-home',
@@ -12,5 +13,8 @@ import { AuthFacade } from '@mja-ws/shared/auth/api';
 export class HomeComponent {
 
   authFacade = inject(AuthFacade);
+
+  coreFacade = inject(CoreFacade);
+
   version = "1.4.0";
 }

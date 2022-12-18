@@ -1,11 +1,12 @@
 (/) exceptionhandling
 (/) localStorage einbinden
 (/) loading indicator
-(-) nach dem Einloggen die Quelle für den User laden und in den localStorage legen
-      (-) quelle.effects.ts füllen
-      (-) quelle.selectors.ts füllen
-      (-) core.facade.ts: method fetchQuelleAdmin. wird von auth.effect nach session.created getriggert oder?
-      (-) selector soll einen stream auf isQuelleAnonym zurückliefern (oder das Gegenteil davon)
+(/) nach dem Einloggen die Quelle für den User laden und in den localStorage legen
+      (/) quelle.effects.ts füllen
+      (/) quelle.selectors.ts füllen
+      (/) core.facade.ts: method fetchQuelleAdmin. wird von auth.effect nach session.created getriggert oder?
+      (/) selector soll einen stream auf exsitsQuelleAdmin sowie die quelleAdmin zurückliefern, die über die Facade erreichbar ist
+(-) nach dem Einloggen die Deskriptoren für eine Suche laden
 
 
 

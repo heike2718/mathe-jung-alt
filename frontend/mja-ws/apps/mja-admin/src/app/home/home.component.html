@@ -8,8 +8,15 @@
 
     <p *ngIf="authFacade.user$ | async as user">Hallo {{user.fullName}}</p>
 
-    <p *ngIf="authFacade.userIsLoggedIn$ | async">na dann mal los</p>
+    <div *ngIf="authFacade.userIsLoggedIn$ | async">
+        <p *ngIf="(coreFacade.existsQuelleAdmin$ | async)">na dann mal los :)
+        </p>
+        <p *ngIf="!(coreFacade.existsQuelleAdmin$ | async)">Es gibt noch keine Quelle für Dich als Autor:in. Lass bitte eine anlegen, damit Du Rätsel erstellen darfst.
+        </p>
+    </div>
     <p *ngIf="authFacade.userIsLoggedOut$ | async">bitte einloggen</p>
+
+
 
     <!-- hier noch einen login-Button falls handset - dann muss man nicht das hamburger menu aufklappen zum Einloggen -->
 </div>

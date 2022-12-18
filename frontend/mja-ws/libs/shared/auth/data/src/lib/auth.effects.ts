@@ -62,6 +62,7 @@ export class AuthEffects {
             ofType(authActions.log_out),
             concatMap(() =>
                 this.#httpClient.delete<Message>('/session/logout')),
+            tap(() => this.#coreFacade.removeQuelleAngemeldeterAdmin()),
             map(() => authActions.logged_out())
         );
     });

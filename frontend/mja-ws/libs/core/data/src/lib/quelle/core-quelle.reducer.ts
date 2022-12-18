@@ -24,6 +24,10 @@ export const coreQuelleFeature = createFeature({
                 quelleAdmin: quelle ? quelle : noopQuelle,
                 quelleAdminLoaded: true
             })
+        ),
+        on(
+            coreQuelleActions.core_quelle_admin_remove,
+            (_state, _action) => initialState
         )
     )
 });
