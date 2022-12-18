@@ -33,7 +33,7 @@ import de.egladil.web.mja_auth.exception.MjaAuthRuntimeException;
  */
 public final class SessionUtils {
 
-	public static final String SESSION_COOKIE_NAME = "JSESSIONID";
+	public static final String SESSION_COOKIE_NAME = "JSESSIONID_MJA_ADMIN";
 
 	private static final String SESSION_ID_HEADER = "X-SESSIONID";
 

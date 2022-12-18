@@ -199,6 +199,11 @@ npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --build
 
 ## FAQ
 
+__Sessionid-Cookie wird nicht in den Request gesetzt__
+
+Man muss den httpClient-Call mit {withCredentials: true} konfigurieren (wird bei mir in einem Interceptor gemacht) __und__ das Session-Cookie muss mit JSESSIONID beginnen.
+Habe das Session-Cookie jetzt JSESSIONID_MJA_ADMIN genannt.
+
 __Laufzeitfehler aus auth.effects__
 
 Ich hatte statt der noopAction eine function zurückgegeben, die die noopAction generieren würde. Lösung vorerst: 
