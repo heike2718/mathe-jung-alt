@@ -39,6 +39,7 @@ public class Deskriptor extends PanacheEntityBase {
 
 	@Column(name = "KONTEXT")
 	@Schema(description = "Kontext des Deskriptors")
+	@Deprecated
 	public String kontext;
 
 	/**

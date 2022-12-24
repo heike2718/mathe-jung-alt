@@ -6,8 +6,8 @@
       (/) quelle.selectors.ts füllen
       (/) core.facade.ts: method fetchQuelleAdmin. wird von auth.effect nach session.created getriggert oder?
       (/) selector soll einen stream auf exsitsQuelleAdmin sowie die quelleAdmin zurückliefern, die über die Facade erreichbar ist
-(-) nach dem Einloggen die Deskriptoren für eine Suche laden
-
+(-) exceptionhandling in higher order observables
+(-) feature rätselsuche
 
 
 

@@ -49,7 +49,7 @@ public class QuellenServiceImpl implements QuellenService {
 		if (suchfilterVariante == SuchfilterVariante.DESKRIPTOREN) {
 
 			trefferliste = quellenRepository.findWithDeskriptoren(suchfilter.getDeskriptorenIds());
-			List<QuellenListItem> result = trefferliste.stream().map(pq -> mapFromDB(pq)).toList();
+			List<QuellenListItem> result = trefferliste.stream().map(pq -> mapFromDBV1(pq)).toList();
 			return result;
 
 		}
@@ -82,7 +82,27 @@ public class QuellenServiceImpl implements QuellenService {
 			trefferlisteMitDeskriptoren.addAll(trefferliste);
 		}
 
-		List<QuellenListItem> result = trefferlisteMitDeskriptoren.stream().map(pq -> mapFromDB(pq)).toList();
+		List<QuellenListItem> result = trefferlisteMitDeskriptoren.stream().map(pq -> mapFromDBV1(pq)).toList();
+
+		return result;
+	}
+
+	@Override
+	public List<QuellenListItem> findQuellen(final String suchstring) {
+
+		if (StringUtils.isBlank(suchstring)) {
+
+			throw new IllegalArgumentException("suchstring erforderlich");
+		}
+
+		List<PersistenteQuelleReadonly> trefferliste = quellenRepository.findQuellenLikeMediumOrPerson(suchstring);
+
+		if (trefferliste == null || trefferliste.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		List<QuellenListItem> result = trefferliste.stream().map(pq -> mapFromDB(pq)).toList();
 
 		return result;
 	}
@@ -91,7 +111,7 @@ public class QuellenServiceImpl implements QuellenService {
 	public Optional<QuellenListItem> sucheQuelleMitUserID(final String userId) {
 
 		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithUserId(userId);
-		return optAusDB.isEmpty() ? Optional.empty() : Optional.of(mapFromDB(optAusDB.get()));
+		return optAusDB.isEmpty() ? Optional.empty() : Optional.of(mapFromDBV1(optAusDB.get()));
 
 	}
 
@@ -118,16 +138,26 @@ public class QuellenServiceImpl implements QuellenService {
 
 		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findById(id);
 
-		return optAusDB.isEmpty() ? Optional.empty() : Optional.of(mapFromDB(optAusDB.get()));
+		return optAusDB.isEmpty() ? Optional.empty() : Optional.of(mapFromDBV1(optAusDB.get()));
 	}
 
-	QuellenListItem mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
+	@Deprecated
+	QuellenListItem mapFromDBV1(final PersistenteQuelleReadonly persistenteQuelle) {
 
 		List<Deskriptor> deskriptoren = deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
 
 		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(persistenteQuelle.getQuellenart());
 
 		return new QuellenListItem(persistenteQuelle.getUuid()).withDeskriptoren(deskriptoren)
+			.withSortNumber(persistenteQuelle.getSortNumber()).withQuellenart(persistenteQuelle.getQuellenart())
+			.withName(nameStrategie.getName(persistenteQuelle)).withMediumIdentifier(persistenteQuelle.getMediumUuid());
+	}
+
+	QuellenListItem mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
+
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(persistenteQuelle.getQuellenart());
+
+		return new QuellenListItem(persistenteQuelle.getUuid())
 			.withSortNumber(persistenteQuelle.getSortNumber()).withQuellenart(persistenteQuelle.getQuellenart())
 			.withName(nameStrategie.getName(persistenteQuelle)).withMediumIdentifier(persistenteQuelle.getMediumUuid());
 	}

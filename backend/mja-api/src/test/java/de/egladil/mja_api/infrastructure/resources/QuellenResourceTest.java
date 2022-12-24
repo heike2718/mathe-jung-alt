@@ -7,6 +7,7 @@ package de.egladil.mja_api.infrastructure.resources;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,35 +31,9 @@ public class QuellenResourceTest {
 	@Test
 	void testSucheOhneDeskriptorenMitTreffer() {
 
-		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":40,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
+		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[]}]";
 		given()
-			.when().get("?suchstring=Winkelvoß")
-			.then()
-			.statusCode(200)
-			.body(is(expected));
-
-	}
-
-	@Test
-	void testSucheMitDeskriptorenMitTreffer() {
-
-		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":40,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
-
-		given()
-			.when().get("?suchstring=Heike&deskriptoren=40")
-			.then()
-			.statusCode(200)
-			.body(is(expected));
-
-	}
-
-	@Test
-	void testSucheMitDeskriptorenOhneTreffer() {
-
-		String expected = "[]";
-
-		given()
-			.when().get("?suchstring=2x3&deskriptoren=2,7")
+			.when().get("v2?suchstring=Winkelvoß")
 			.then()
 			.statusCode(200)
 			.body(is(expected));
@@ -68,42 +43,16 @@ public class QuellenResourceTest {
 	@Test
 	void testSucheMitInvalidSuchstring() {
 
-		String expected = "{\"title\":\"Constraint Violation\",\"status\":400,\"violations\":[{\"field\":\"findQuellen.suchstring\",\"message\":\"ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,\"}]}";
+		try {
 
-		given()
-			.when().get("?deskriptoren=5,7&suchstring=<böse>")
-			.then()
-			.statusCode(400)
-			.body(is(expected));
+			given()
+				.when().get("v2?&suchstring=bös'");
 
-	}
+			fail("keine IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
 
-	@Test
-	void testSucheMitInvalidDeskriptoren() {
-
-		String expected = "{\"title\":\"Constraint Violation\",\"status\":400,\"violations\":[{\"field\":\"findQuellen.deskriptoren\",\"message\":\"ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen und Komma\"}]}";
-
-		given()
-			.when().get("?deskriptoren=5,A,8&suchstring=2x3")
-			.then()
-			.statusCode(400)
-			.body(is(expected));
-
-	}
-
-	@Test
-	void testFindQuelleByPersonMitTreffer() throws Exception {
-
-		Response response = given()
-			.when().get("admin");
-
-		String responsePayload = response.asString();
-
-		QuellenListItem quelle = new ObjectMapper().readValue(responsePayload, QuellenListItem.class);
-
-		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
-
-		assertEquals(200, response.statusCode());
+			System.out.println(e.getMessage());
+		}
 
 	}
 
@@ -111,7 +60,7 @@ public class QuellenResourceTest {
 	void testFindQuelleByIdMitTreffer() throws Exception {
 
 		Response response = given()
-			.when().get("8ef4d9b8-62a6-4643-8674-73ebaec52d98");
+			.when().get("v1/8ef4d9b8-62a6-4643-8674-73ebaec52d98");
 
 		String responsePayload = response.asString();
 
@@ -129,10 +78,9 @@ public class QuellenResourceTest {
 		String expected = "{\"level\":\"ERROR\",\"message\":\"Es gibt keine Quelle mit dieser UUID\"}";
 
 		given()
-			.when().get("7a94e100-85e9-4ffb-903b-06835851063b")
-			.then()
-			.body(is(expected))
-			.statusCode(404);
+			.when().get("v1/7a94e100-85e9-4ffb-903b-06835851063b")
+			.then().statusCode(404).and()
+			.body(is(expected));
 
 	}
 

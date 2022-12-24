@@ -199,6 +199,14 @@ npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --build
 
 ## FAQ
 
+__refactor-> move in nrwl__
+
+Beispiel: module bookings soll sub-module von customers werden:
+
+```
+npx nx g mv bookings --project-name bookings --destination customers/bookings
+```
+
 __Sessionid-Cookie wird nicht in den Request gesetzt__
 
 Man muss den httpClient-Call mit {withCredentials: true} konfigurieren (wird bei mir in einem Interceptor gemacht) __und__ das Session-Cookie muss mit JSESSIONID beginnen.

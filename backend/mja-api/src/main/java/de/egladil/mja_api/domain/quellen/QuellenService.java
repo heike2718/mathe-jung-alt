@@ -17,12 +17,21 @@ import de.egladil.mja_api.domain.semantik.DomainService;
 public interface QuellenService {
 
 	/**
+	 * Sucht Quellen mitdem gegebenen Suchstring im Namen.
+	 *
+	 * @param  suchstring
+	 * @return            List
+	 */
+	List<QuellenListItem> findQuellen(String suchstring);
+
+	/**
 	 * Sucht quellen mit dem gegebenen suchfilter.
 	 *
 	 * @param  suchfilter
 	 *                    Suchfilter
 	 * @return            List
 	 */
+	@Deprecated
 	List<QuellenListItem> sucheQuellen(Suchfilter suchfilter);
 
 	/**

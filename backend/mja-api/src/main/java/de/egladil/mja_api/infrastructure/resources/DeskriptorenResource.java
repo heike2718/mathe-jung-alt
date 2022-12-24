@@ -33,7 +33,7 @@ import io.quarkus.panache.common.Sort;
 /**
  * DeskriptorenResource
  */
-@Path("/deskriptoren/v1")
+@Path("deskriptoren")
 @Tag(name = "Deskriptoren")
 public class DeskriptorenResource {
 
@@ -43,6 +43,29 @@ public class DeskriptorenResource {
 	@Inject
 	DeskriptorenService deskriptorenService;
 
+	@Path("v1")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Operation(
+		operationId = "loadDeskriptorenV1", summary = "Liefert die Liste aller Deskriptoren, die auf einen Kontext passen.",
+		deprecated = true)
+	@Parameters({
+		@Parameter(name = "kontext", description = "Kontext, zu dem die Deskriptoren geladen werden") })
+	@APIResponse(
+		name = "LadeDeskriptoren",
+		description = "Alle Deskriptoren erfolgreich gelesen.",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class)))
+	public List<Deskriptor> loadDeskriptorenV1(@QueryParam(value = "kontext") final DeskriptorSuchkontext suchkontext) {
+
+		List<Deskriptor> trefferliste = deskriptorenRepository.listAll(Sort.ascending("name"));
+		return deskriptorenService.filterByKontext(suchkontext, trefferliste);
+	}
+
+	@Path("v2")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
@@ -56,10 +79,9 @@ public class DeskriptorenResource {
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class)))
-	public List<Deskriptor> loadDeskriptoren(@QueryParam(value = "kontext") final DeskriptorSuchkontext suchkontext) {
+	public List<Deskriptor> loadDeskriptoren() {
 
-		List<Deskriptor> trefferliste = deskriptorenRepository.listAll(Sort.ascending("name"));
-		return deskriptorenService.filterByKontext(suchkontext, trefferliste);
+		return deskriptorenRepository.listAll(Sort.ascending("name"));
 	}
 
 	@GET

@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.quellen;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -33,7 +34,7 @@ public class QuellenListItem extends AbstractDomainEntity {
 	private String mediumUuid;
 
 	@Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class, description = "Deskriptoren, für die Quelle")
-	private List<Deskriptor> deskriptoren;
+	private List<Deskriptor> deskriptoren = new ArrayList<>();
 
 	/**
 	 *

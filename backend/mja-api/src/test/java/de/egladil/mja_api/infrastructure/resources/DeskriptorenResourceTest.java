@@ -27,10 +27,10 @@ import io.restassured.response.Response;
 public class DeskriptorenResourceTest {
 
 	@Test
-	public void testLoadDeskriptorenEndpoint() throws Exception {
+	public void testLoadDeskriptorenEndpointV1() throws Exception {
 
 		Response response = given()
-			.when().get("?kontext=RAETSEL");
+			.when().get("v1?kontext=RAETSEL");
 
 		String responsePayload = response.asString();
 		System.out.println(responsePayload);
@@ -54,6 +54,37 @@ public class DeskriptorenResourceTest {
 		}
 
 		assertEquals(55, anzahlAdmin);
+
+	}
+
+	@Test
+	public void testLoadDeskriptorenEndpoint() throws Exception {
+
+		Response response = given()
+			.when().get("v2");
+
+		String responsePayload = response.asString();
+		System.out.println(responsePayload);
+
+		Deskriptor[] deskriptoren = new ObjectMapper().readValue(responsePayload, Deskriptor[].class);
+
+		assertEquals(87, deskriptoren.length);
+
+		response
+			.then()
+			.statusCode(200);
+
+		int anzahlAdmin = 0;
+
+		for (Deskriptor d : deskriptoren) {
+
+			if (d.admin) {
+
+				anzahlAdmin++;
+			}
+		}
+
+		assertEquals(60, anzahlAdmin);
 
 	}
 

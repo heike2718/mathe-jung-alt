@@ -9,7 +9,7 @@ import { isAdmin, User } from '@mja-workspace/shared/auth/domain';
 @Injectable({ providedIn: 'root' })
 export class QuellenHttpService {
 
-  #url = this.configuration.baseUrl + '/quellen/v1';
+  #url = this.configuration.baseUrl + '/quellen';
 
   constructor(private http: HttpClient, @Inject(SharedConfigService) private configuration: Configuration) { }
 
@@ -30,20 +30,20 @@ export class QuellenHttpService {
     params = params.set(QUERY_PARAM_TYPE_DESKRIPTOREN, 'ORDINAL');
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    return this.http.get<Quelle[]>(this.#url, { headers, params });
+    return this.http.get<Quelle[]>(this.#url + '/v1', { headers, params });
   }
 
   loadQuelleAdmin(): Observable<Quelle> {
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    const url = this.#url + '/admin';
+    const url = this.#url + '/admin/v1';
     return this.http.get<Quelle>(url, { headers });
   }
 
   loadQuelle(id: string): Observable<Quelle> {
 
     const headers = new HttpHeaders().set('Accept', 'application/json');
-    const url = this.#url + '/' + id;
+    const url = this.#url + '/v1/' + id;
 
     return this.http.get<Quelle>(url, { headers });
   }

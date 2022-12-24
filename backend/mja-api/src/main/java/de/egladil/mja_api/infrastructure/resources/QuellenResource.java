@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -54,12 +55,13 @@ public class QuellenResource {
 	@Inject
 	QuellenService quellenService;
 
-	@GET
 	@Path("v1")
+	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findQuellen", summary = "Gibt alle Quellen zurück, die auf die gegebene Suchanfrage passen.")
+		operationId = "findQuellenV1", summary = "Gibt alle Quellen zurück, die auf die gegebene Suchanfrage passen.",
+		deprecated = true)
 	@Parameters({
 		@Parameter(
 			name = "suchstring",
@@ -72,7 +74,7 @@ public class QuellenResource {
 			mediaType = "application/json",
 			schema = @Schema(type = SchemaType.ARRAY, implementation = QuellenListItem.class)))
 	// @formatter:off
-	public List<QuellenListItem> findQuellen(
+	public List<QuellenListItem> findQuellenV1(
 		@QueryParam(value = "suchstring") @Pattern(
 		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{1,30}$",
 		message = "ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
@@ -89,12 +91,43 @@ public class QuellenResource {
 	}
 
 	@GET
+	@Path("v2")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Operation(
+		operationId = "findQuellen", summary = "Gibt alle Quellen zurück, die auf die gegebene Suchanfrage passen.")
+	@Parameters({
+		@Parameter(
+			name = "suchstring",
+			description = "Freitext zum suchen. Es wird mit like nach diesem Text gesucht") })
+	@APIResponse(
+		name = "FindQuellenOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(type = SchemaType.ARRAY, implementation = QuellenListItem.class)))
+	// @formatter:off
+	public List<QuellenListItem> findQuellenV2(
+		@QueryParam(value = "suchstring") @Pattern(
+		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{1,30}$",
+		message = "ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") @Valid final String suchstring) {
+		// @formatter:on
+
+		// TODO: pagination
+
+		this.delayService.pause();
+
+		return quellenService.findQuellen(suchstring);
+	}
+
+	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("admin/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findOwnQuelle",
-		summary = "Gibt die Quelle zurück, die zu der eingeloggten Person gehört")
+		summary = "Gibt die Quelle zurück, die zu der eingeloggten Person gehört",
+		deprecated = true)
 	@APIResponse(
 		name = "FindOwnQuelleOKResponse",
 		responseCode = "200",
@@ -118,7 +151,7 @@ public class QuellenResource {
 		if (result.isEmpty()) {
 
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.warn("Es gibt noch keine Quelle für Sie als Autor:in. Bitte legen Sie eine an.")).build());
+				.entity(MessagePayload.warn("Es gibt noch keine Quelle für Dich als Autor:in. Bitte lass eine anlegen.")).build());
 		}
 
 		return result.get();
@@ -153,7 +186,7 @@ public class QuellenResource {
 		if (result.isEmpty()) {
 
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.warn("Es gibt noch keine Quelle für Sie als Autor:in. Bitte legen Sie eine an.")).build());
+				.entity(MessagePayload.warn("Es gibt noch keine Quelle für Dich als Autor:in. Bitte lass eine anlegen.")).build());
 		}
 
 		return result.get();

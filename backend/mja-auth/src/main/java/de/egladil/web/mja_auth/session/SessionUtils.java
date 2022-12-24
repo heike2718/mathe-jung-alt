@@ -122,8 +122,14 @@ public final class SessionUtils {
 
 	public static String getSessionId(final ContainerRequestContext requestContext, final String stage) {
 
-		return !ConfigService.STAGE_DEV.equals(stage) ? getSessionIdFromCookie(requestContext)
-			: getSesssionIdFromHeader(requestContext);
+		String sessionIdFromHeader = getSesssionIdFromHeader(requestContext);
+
+		if (sessionIdFromHeader != null) {
+
+			return sessionIdFromHeader;
+		}
+
+		return getSessionIdFromCookie(requestContext);
 
 	}
 
@@ -151,7 +157,7 @@ public final class SessionUtils {
 	 * @param  clientPrefix
 	 * @return
 	 */
-	public static String getSessionIdFromCookie(final ContainerRequestContext requestContext) {
+	private static String getSessionIdFromCookie(final ContainerRequestContext requestContext) {
 
 		Map<String, Cookie> cookies = requestContext.getCookies();
 

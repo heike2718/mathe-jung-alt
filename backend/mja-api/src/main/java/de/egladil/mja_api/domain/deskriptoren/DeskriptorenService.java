@@ -38,6 +38,7 @@ public interface DeskriptorenService {
 	 * @param  deskriptoren
 	 * @return              List: leer bei NOOP und nicht admin, alle bei NOOP und admin
 	 */
+	@Deprecated
 	List<Deskriptor> filterByKontext(DeskriptorSuchkontext kontext, List<Deskriptor> deskriptoren);
 
 	/**
