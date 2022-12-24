@@ -8,6 +8,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
@@ -402,6 +404,65 @@ public class RaetselResourceTest {
 			assertEquals("Der Schlüssel ist bereits vergeben.", messagePayload.getMessage());
 		}
 
+	}
+
+	@Test
+	@Order(14)
+	void testGeneratePDF() {
+
+		given().accept(ContentType.JSON)
+			.get("v1/PDF/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(200);
+
+	}
+
+	@Test
+	@Order(15)
+	void testGeneratePNG() {
+
+		given().contentType(ContentType.JSON).accept(ContentType.JSON)
+			.post("v1/PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.then().statusCode(200);
+
+	}
+
+	@Test
+	@Order(16)
+	void testLoadImages() {
+
+		given().accept(ContentType.JSON).get("v1/PNG/02610").then().statusCode(200);
+	}
+
+	@Test
+	@Order(17)
+	void testGeneratePDFKeinTreffer() {
+
+		given().get("v1/PDF/2222222-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=BUCHSTABEN").then().statusCode(404);
+
+	}
+
+	@Test
+	@Order(18)
+	void testGeneratePNGKeinTreffer() {
+
+		given().contentType(ContentType.JSON).accept(ContentType.JSON)
+			.post("v1/PNG/2222222-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.then().statusCode(404);
+
+	}
+
+	@Test
+	@Order(19)
+	void testLoadImagesKeinTreffer() throws Exception {
+
+		Response response = given().accept(ContentType.JSON).get("v1/PNG/76767");
+
+		response.then().statusCode(200);
+
+		String responsePayload = response.asString();
+		Images dto = new ObjectMapper().readValue(responsePayload, Images.class);
+
+		assertNull(dto.getImageFrage());
+		assertNull(dto.getImageLoesung());
 	}
 
 }

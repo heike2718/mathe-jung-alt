@@ -282,6 +282,8 @@ public class RaetselResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	public Images raetselImagesLaden(@PathParam(value = "schluessel") final String schluessel) {
 
+		LOGGER.info("SCHLUESSEL=" + schluessel);
+
 		return this.raetselService.findImagesZuSchluessel(schluessel);
 	}
 
@@ -304,7 +306,8 @@ public class RaetselResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public Images raetselImagesGenerieren(@PathParam(
-		value = "raetselID") final String raetselUuid, @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+		value = "raetselID") final String raetselUuid, @QueryParam(
+			value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		this.delayService.pause();
 
