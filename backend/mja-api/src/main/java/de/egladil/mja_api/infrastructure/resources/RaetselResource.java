@@ -53,7 +53,7 @@ import de.egladil.web.mja_auth.dto.MessagePayload;
 /**
  * RaetselResource
  */
-@Path("/raetsel/v1")
+@Path("/raetsel")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Raetsel")
 public class RaetselResource {
@@ -75,6 +75,7 @@ public class RaetselResource {
 	@Inject
 	DeskriptorenService deskriptorenService;
 
+	@Path("v1")
 	@GET
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
@@ -128,7 +129,7 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("{raetselID}")
+	@Path("v1/{raetselID}")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselDetailsLaden",
@@ -166,6 +167,7 @@ public class RaetselResource {
 		return Response.status(200).entity(raetsel).build();
 	}
 
+	@Path("v1")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({ "ADMIN", "AUTOR" })
@@ -211,6 +213,7 @@ public class RaetselResource {
 
 	}
 
+	@Path("v1")
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({ "ADMIN", "AUTOR" })
@@ -256,7 +259,7 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("PNG/{schluessel}")
+	@Path("v1/PNG/{schluessel}")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselImagesLaden",
@@ -283,7 +286,7 @@ public class RaetselResource {
 	}
 
 	@POST
-	@Path("PNG/{raetselID}")
+	@Path("v1/PNG/{raetselID}")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselImagesGenerieren",
@@ -316,7 +319,7 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("PDF/{raetselID}")
+	@Path("v1/PDF/{raetselID}")
 	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
 	@Operation(
 		operationId = "raetselPDFGenerieren",

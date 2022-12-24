@@ -47,7 +47,7 @@ public class RaetselResourceTest {
 	void testFindRaetselMitDeskriptorenUndSuchstring() throws Exception {
 
 		Response response = given()
-			.when().get("?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING");
+			.when().get("v1?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING");
 		response
 			.then()
 			.statusCode(200);
@@ -76,7 +76,7 @@ public class RaetselResourceTest {
 		// Volltextsuche unterscheidet nicht zwischen zahlen und zählen!
 
 		Response response = given()
-			.when().get("?deskriptoren=2,9,13&suchstring=zählen&typeDeskriptoren=ORDINAL");
+			.when().get("v1?deskriptoren=2,9,13&suchstring=zählen&typeDeskriptoren=ORDINAL");
 
 		response
 			.then()
@@ -119,7 +119,7 @@ public class RaetselResourceTest {
 	void testFindRaetselMitSuchstring() throws Exception {
 
 		Response response = given()
-			.when().get("?suchstring=zählen&typeDeskriptoren=ORDINAL");
+			.when().get("v1?suchstring=zählen&typeDeskriptoren=ORDINAL");
 		response
 			.then()
 			.statusCode(200);
@@ -156,7 +156,7 @@ public class RaetselResourceTest {
 		String expected = "{\"trefferGesamt\":0,\"treffer\":[]}";
 
 		given()
-			.when().get("?suchstring=holleriedidudeldö&typeDeskriptoren=STRING")
+			.when().get("v1?suchstring=holleriedidudeldö&typeDeskriptoren=STRING")
 			.then()
 			.statusCode(200)
 			.body(is(expected));
@@ -166,7 +166,7 @@ public class RaetselResourceTest {
 	@Order(5)
 	void testFindFromMinikaenguruWithCoordinates() throws Exception {
 
-		Response response = given().when().get("?deskriptoren=2,6,47,78&typeDeskriptoren=ORDINAL");
+		Response response = given().when().get("v1?deskriptoren=2,6,47,78&typeDeskriptoren=ORDINAL");
 
 		String responsePayload = response.asString();
 		System.out.println(responsePayload);
@@ -187,7 +187,7 @@ public class RaetselResourceTest {
 	@Order(6)
 	void testFindWithSchluessel() throws Exception {
 
-		Response response = given().when().get("?suchstring=02790&typeDeskriptoren=ORDINAL");
+		Response response = given().when().get("v1?suchstring=02790&typeDeskriptoren=ORDINAL");
 
 		String responsePayload = response.asString();
 		System.out.println(responsePayload);
@@ -209,7 +209,7 @@ public class RaetselResourceTest {
 	void testRaetselDetailsLadenFound() throws Exception {
 
 		Response response = given()
-			.when().get("/cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866");
+			.when().get("v1/cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866");
 
 		String responsePayload = response.asString();
 		System.out.println(responsePayload);
@@ -226,7 +226,7 @@ public class RaetselResourceTest {
 	void testRaetselDetailsLadenNotFound() throws Exception {
 
 		given()
-			.when().get("/f4369b22")
+			.when().get("v1/f4369b22")
 			.then()
 			.statusCode(404)
 			.body(is(""));
@@ -250,7 +250,7 @@ public class RaetselResourceTest {
 				response = given()
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.post("");
+					.post("v1");
 			} catch (Exception e) {
 
 				e.printStackTrace();
@@ -287,7 +287,7 @@ public class RaetselResourceTest {
 				response = given()
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.put("");
+					.put("v1");
 			} catch (Exception e) {
 
 				e.printStackTrace();
@@ -324,7 +324,7 @@ public class RaetselResourceTest {
 				response = given()
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.put("");
+					.put("v1");
 			} catch (Exception e) {
 
 				e.printStackTrace();
@@ -353,7 +353,7 @@ public class RaetselResourceTest {
 				response = given()
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.post("");
+					.post("v1");
 			} catch (Exception e) {
 
 				e.printStackTrace();
@@ -388,7 +388,7 @@ public class RaetselResourceTest {
 				response = given()
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.put("");
+					.put("v1");
 			} catch (Exception e) {
 
 				e.printStackTrace();

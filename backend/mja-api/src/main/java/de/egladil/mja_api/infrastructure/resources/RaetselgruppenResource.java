@@ -60,7 +60,7 @@ import de.egladil.web.commons_validation.payload.MessagePayload;
 /**
  * RaetselgruppenResource
  */
-@Path("raetselgruppen/v1")
+@Path("raetselgruppen")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Raetselgruppen")
 public class RaetselgruppenResource {
@@ -76,6 +76,7 @@ public class RaetselgruppenResource {
 	@Inject
 	RaetselgruppenService raetselgruppenService;
 
+	@Path("v1")
 	@GET
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
@@ -133,6 +134,7 @@ public class RaetselgruppenResource {
 		return raetselgruppenService.findRaetselgruppen(suchparameter, limit, offset);
 	}
 
+	@Path("v1")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({ "ADMIN", "AUTOR" })
@@ -171,6 +173,7 @@ public class RaetselgruppenResource {
 		return Response.status(201).entity(raetselsammlung).build();
 	}
 
+	@Path("v1")
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({ "ADMIN", "AUTOR" })
@@ -210,7 +213,7 @@ public class RaetselgruppenResource {
 	}
 
 	@GET
-	@Path("{raetselgruppeID}")
+	@Path("v1/{raetselgruppeID}")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppeDetailsLaden",
@@ -245,7 +248,7 @@ public class RaetselgruppenResource {
 	}
 
 	@POST
-	@Path("{raetselgruppeID}/elemente")
+	@Path("v1/{raetselgruppeID}/elemente")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementAnlegen",
@@ -289,7 +292,7 @@ public class RaetselgruppenResource {
 
 
 	@PUT
-	@Path("{raetselgruppeID}/elemente")
+	@Path("v1/{raetselgruppeID}/elemente")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementAendern",
@@ -326,7 +329,7 @@ public class RaetselgruppenResource {
 	}
 
 	@DELETE
-	@Path("{raetselgruppeID}/elemente/{elementID}")
+	@Path("v1/{raetselgruppeID}/elemente/{elementID}")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementLoeschen",
@@ -366,7 +369,7 @@ public class RaetselgruppenResource {
 	}
 
 	@GET
-	@Path("vorschau/{raetselgruppeID}")
+	@Path("v1/vorschau/{raetselgruppeID}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printQuiz",
@@ -405,7 +408,7 @@ public class RaetselgruppenResource {
 
 
 	@GET
-	@Path("latex/{raetselgruppeID}")
+	@Path("v1/latex/{raetselgruppeID}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "downloadLaTeXSource",

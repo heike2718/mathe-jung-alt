@@ -52,7 +52,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.get(
-				"?limit=20&offset=0&referenz=2022&referenztyp=MINIKAENGURU&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc");
+				"v1?limit=20&offset=0&referenz=2022&referenztyp=MINIKAENGURU&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc");
 
 		String responsePayload = response.asString();
 
@@ -77,7 +77,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.get(
-				"?limit=20&offset=0&referenz=2022&referenztyp=SERIE&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc");
+				"v1?limit=20&offset=0&referenz=2022&referenztyp=SERIE&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc");
 
 		String responsePayload = response.asString();
 
@@ -101,7 +101,7 @@ public class RaetselgruppenResourceTest {
 
 		Response response = given()
 			.contentType(ContentType.JSON)
-			.get("/" + id);
+			.get("v1/" + id);
 
 		String responsePayload = response.asString();
 
@@ -124,7 +124,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.get(
-				"/" + id);
+				"v1/" + id);
 
 		String responsePayload = response.asString();
 
@@ -156,7 +156,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("");
+				.post("v1");
 
 			String responsePayload = response.asString();
 
@@ -186,7 +186,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("");
+				.post("v1");
 
 			String responsePayload = response.asString();
 
@@ -221,7 +221,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("");
+				.post("v1");
 
 			String responsePayload = response.asString();
 
@@ -240,7 +240,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.get(
-					"?limit=20&offset=0&referenz=2005&referenztyp=MINIKAENGURU&schwierigkeitsgrad=ZWEI&sortAttribute=name&sortDirection=asc");
+					"v1/?limit=20&offset=0&referenz=2005&referenztyp=MINIKAENGURU&schwierigkeitsgrad=ZWEI&sortAttribute=name&sortDirection=asc");
 
 			String responsePayload = response.asString();
 
@@ -271,7 +271,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.put("");
+				.put("v1");
 
 			String responsePayload = response.asString();
 
@@ -309,7 +309,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("");
+				.post("v1");
 
 			String responsePayload = response.asString();
 
@@ -344,7 +344,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("");
+				.post("v1");
 
 			String responsePayload = response.asString();
 
@@ -379,7 +379,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("");
+				.post("v1");
 
 			String responsePayload = response.asString();
 
@@ -414,7 +414,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.put("");
+				.put("v1");
 
 			String responsePayload = response.asString();
 
@@ -449,7 +449,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.put("");
+				.put("v1");
 
 			String responsePayload = response.asString();
 
@@ -484,7 +484,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.put("");
+				.put("v1");
 
 			String responsePayload = response.asString();
 
@@ -513,7 +513,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.get(
-					"/" + raetselgruppeUuid);
+					"v1/" + raetselgruppeUuid);
 
 			String responsePayload = response.asString();
 
@@ -542,7 +542,7 @@ public class RaetselgruppenResourceTest {
 			response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("/" + raetselgruppeUuid + "/elemente");
+				.post("v1/" + raetselgruppeUuid + "/elemente");
 
 			String responsePayload = response.asString();
 
@@ -579,7 +579,7 @@ public class RaetselgruppenResourceTest {
 				response = given()
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.put("/" + raetselgruppeUuid + "/elemente");
+					.put("v1/" + raetselgruppeUuid + "/elemente");
 
 				String responsePayload = response.asString();
 
@@ -610,7 +610,7 @@ public class RaetselgruppenResourceTest {
 
 				response = given()
 					.contentType(ContentType.JSON)
-					.delete("/" + raetselgruppeUuid + "/elemente/" + elementUuid);
+					.delete("v1/" + raetselgruppeUuid + "/elemente/" + elementUuid);
 
 				String responsePayload = response.asString();
 
@@ -642,7 +642,7 @@ public class RaetselgruppenResourceTest {
 
 		response = given()
 			.contentType(ContentType.JSON)
-			.delete("/abcdef-012345/elemente/98765-fedcba");
+			.delete("v1/abcdef-012345/elemente/98765-fedcba");
 
 		String responsePayload = response.asString();
 
@@ -665,7 +665,7 @@ public class RaetselgruppenResourceTest {
 
 		response = given()
 			.contentType(ContentType.JSON)
-			.delete("/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/98765-fedcba");
+			.delete("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/98765-fedcba");
 
 		String responsePayload = response.asString();
 
@@ -701,7 +701,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("/abcdef-987654/elemente");
+			.post("v1/abcdef-987654/elemente");
 
 		String responsePayload = response.asString();
 
@@ -731,7 +731,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
+			.post("v1/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
 
 		String responsePayload = response.asString();
 
@@ -761,7 +761,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
+			.post("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
 
 		String responsePayload = response.asString();
 
@@ -791,7 +791,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
+			.post("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
 
 		String responsePayload = response.asString();
 
@@ -821,7 +821,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.put("/abcdef-987654/elemente");
+			.put("v1/abcdef-987654/elemente");
 
 		String responsePayload = response.asString();
 
@@ -851,7 +851,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.put("/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
+			.put("v1/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
 
 		String responsePayload = response.asString();
 
@@ -881,7 +881,7 @@ public class RaetselgruppenResourceTest {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.put("/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
+			.put("v1/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
 
 		String responsePayload = response.asString();
 
@@ -917,7 +917,7 @@ public class RaetselgruppenResourceTest {
 			Response response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
+				.post("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
 
 			String responsePayload = response.asString();
 
@@ -947,7 +947,7 @@ public class RaetselgruppenResourceTest {
 			Response response = given()
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.put("/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
+				.put("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
 
 			String responsePayload = response.asString();
 
