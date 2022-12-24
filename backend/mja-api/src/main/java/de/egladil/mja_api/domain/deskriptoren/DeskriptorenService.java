@@ -42,6 +42,15 @@ public interface DeskriptorenService {
 	List<Deskriptor> filterByKontext(DeskriptorSuchkontext kontext, List<Deskriptor> deskriptoren);
 
 	/**
+	 * Läd die Deskriptoren für RAETSEL.
+	 *
+	 * @param  admin
+	 *               boolean
+	 * @return       List
+	 */
+	List<Deskriptor> loadDeskriptorenRaetsel(boolean admin);
+
+	/**
 	 * Sucht den Deskriptor anhand seines Namens.
 	 *
 	 * @param  name

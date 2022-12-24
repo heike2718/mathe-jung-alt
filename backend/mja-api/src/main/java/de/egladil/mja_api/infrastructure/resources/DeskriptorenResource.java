@@ -13,7 +13,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -36,6 +38,9 @@ import io.quarkus.panache.common.Sort;
 @Path("deskriptoren")
 @Tag(name = "Deskriptoren")
 public class DeskriptorenResource {
+
+	@Context
+	SecurityContext securityContext;
 
 	@Inject
 	DeskriptorenRepository deskriptorenRepository;
@@ -68,10 +73,10 @@ public class DeskriptorenResource {
 	@Path("v2")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Operation(operationId = "loadDeskriptoren", summary = "Liefert die Liste aller Deskriptoren")
-	@Parameters({
-		@Parameter(name = "kontext", description = "Kontext, zu dem die Deskriptoren geladen werden") })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
+	@Operation(
+		operationId = "loadDeskriptorenV2",
+		summary = "Liefert die Liste aller Deskriptoren. Je nach Rolle werden nur die public oder alle geladen.")
 	@APIResponse(
 		name = "LadeDeskriptoren",
 		description = "Alle Deskriptoren erfolgreich gelesen.",
@@ -79,9 +84,11 @@ public class DeskriptorenResource {
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class)))
-	public List<Deskriptor> loadDeskriptoren() {
+	public List<Deskriptor> loadDeskriptorenV2() {
 
-		return deskriptorenRepository.listAll(Sort.ascending("name"));
+		boolean admin = securityContext.isUserInRole("ADMIN") || securityContext.isUserInRole("AUTOR");
+
+		return deskriptorenService.loadDeskriptorenRaetsel(admin);
 	}
 
 	@GET

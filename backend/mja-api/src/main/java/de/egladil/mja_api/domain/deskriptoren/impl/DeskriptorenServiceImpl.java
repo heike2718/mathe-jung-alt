@@ -24,6 +24,7 @@ import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import io.quarkus.panache.common.Sort;
 
 /**
  * DeskriptorenServiceImpl
@@ -94,6 +95,18 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 		}
 
 		return deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).toList();
+	}
+
+	@Override
+	public List<Deskriptor> loadDeskriptorenRaetsel(final boolean admin) {
+
+		List<Deskriptor> alle = deskriptorenRepository.listAll(Sort.ascending("name"));
+
+		List<Deskriptor> nurRaetsel = filterByKontext(DeskriptorSuchkontext.RAETSEL, alle).stream().filter(d -> d.admin == admin)
+			.collect(Collectors.toList());
+
+		return nurRaetsel;
+
 	}
 
 	@Override
