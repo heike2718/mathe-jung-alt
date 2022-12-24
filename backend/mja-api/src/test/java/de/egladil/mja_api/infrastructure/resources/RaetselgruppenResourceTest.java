@@ -963,4 +963,48 @@ public class RaetselgruppenResourceTest {
 
 	}
 
+	@Test
+	@Order(28)
+	void testGetLaTeX() {
+
+		given()
+			.accept(ContentType.JSON)
+			.get(
+				"v1/latex/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+			.then().statusCode(200);
+	}
+
+	@Test
+	@Order(29)
+	void testGetLaTeXKeinTreffer() {
+
+		given()
+			.accept(ContentType.JSON)
+			.get(
+				"v1/latex/33333333-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+			.then().statusCode(404);
+	}
+
+	@Test
+	@Order(30)
+	void testGetVorschau() {
+
+		given()
+			.accept(ContentType.JSON)
+			.get(
+				"v1/vorschau/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+			.then().statusCode(200);
+	}
+
+	@Test
+	@Order(30)
+	void testGetVorschauKeinTreffer() {
+
+		given()
+			.accept(ContentType.JSON)
+			.get(
+				"v1/vorschau/33333333-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+			.then().statusCode(404);
+	}
+
 }
