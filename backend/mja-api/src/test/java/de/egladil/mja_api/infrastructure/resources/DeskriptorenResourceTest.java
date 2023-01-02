@@ -64,15 +64,15 @@ public class DeskriptorenResourceTest {
 			.when().get("v2");
 
 		String responsePayload = response.asString();
-		System.out.println(responsePayload);
-
-		Deskriptor[] deskriptoren = new ObjectMapper().readValue(responsePayload, Deskriptor[].class);
-
-		assertEquals(87, deskriptoren.length);
+		// System.out.println(responsePayload);
 
 		response
 			.then()
 			.statusCode(200);
+
+		Deskriptor[] deskriptoren = new ObjectMapper().readValue(responsePayload, Deskriptor[].class);
+
+		assertEquals(82, deskriptoren.length);
 
 		int anzahlAdmin = 0;
 
@@ -84,7 +84,7 @@ public class DeskriptorenResourceTest {
 			}
 		}
 
-		assertEquals(60, anzahlAdmin);
+		assertEquals(55, anzahlAdmin);
 
 	}
 

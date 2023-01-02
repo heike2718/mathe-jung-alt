@@ -1,7 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Session } from './internal.model';
 import { AuthResult } from '@mja-ws/shared/auth/model';
-import { Message } from '@mja-ws/shared/messaging/api';
 
 export const authActions = createActionGroup({
     source: 'Auth',
@@ -12,7 +11,7 @@ export const authActions = createActionGroup({
         'CREATE_SESSION': props<{hash: string}>(),
         'INIT_SESSION': props<{ authResult: AuthResult }>(), // public
         'SESSION_CREATED': props<{ session: Session }>(), // internal
-        'SESSION_EXPIRED': props<{message: Message}>(), // public?
+        'SESSION_EXPIRED': emptyProps(), // public
         'LOG_OUT': emptyProps(), // public
         'LOGGED_OUT': emptyProps() // internal
     }

@@ -7,5 +7,6 @@ export interface AuthResult {
 
 export interface User {
   readonly fullName: string,
-  readonly isAdmin: boolean
+  readonly isAdmin: boolean,
+  readonly anonym: boolean
 };

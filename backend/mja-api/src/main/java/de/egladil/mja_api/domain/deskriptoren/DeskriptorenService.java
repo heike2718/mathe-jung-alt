@@ -48,7 +48,7 @@ public interface DeskriptorenService {
 	 *               boolean
 	 * @return       List
 	 */
-	List<Deskriptor> loadDeskriptorenRaetsel(boolean admin);
+	List<DeskriptorUI> loadDeskriptorenRaetsel(boolean admin);
 
 	/**
 	 * Sucht den Deskriptor anhand seines Namens.

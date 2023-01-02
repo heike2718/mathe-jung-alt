@@ -27,6 +27,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
+import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
@@ -83,8 +84,8 @@ public class DeskriptorenResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class)))
-	public List<Deskriptor> loadDeskriptorenV2() {
+			schema = @Schema(type = SchemaType.ARRAY, implementation = DeskriptorUI.class)))
+	public List<DeskriptorUI> loadDeskriptorenV2() {
 
 		boolean admin = securityContext.isUserInRole("ADMIN") || securityContext.isUserInRole("AUTOR");
 

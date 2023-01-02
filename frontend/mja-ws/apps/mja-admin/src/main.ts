@@ -15,7 +15,7 @@ import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { Configuration } from '@mja-ws/shared/config';
 import { authDataProvider } from '@mja-ws/shared/auth/api';
-import { coreQuelleDataProvider } from '@mja-ws/core/data';
+import { coreDeskriptorenDataProvider, coreQuelleDataProvider } from '@mja-ws/core/data';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddBaseUrlInterceptor, ErrorInterceptor } from '@mja-ws/shared/http';
 import { ErrorHandlerService } from './app/services/error-handler.service';
@@ -32,6 +32,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     ...authDataProvider,
     coreQuelleDataProvider,
+    coreDeskriptorenDataProvider,
     provideAnimations(),
     provideRouter(appRoutes),
 
@@ -39,7 +40,7 @@ bootstrapApplication(AppComponent, {
     provideStore(
       {},
       {
-        metaReducers: [localStorageReducer('auth', 'coreQuelle')],  // <-- hält den User, das expirationDate sowie die die zum eingeloggten Benutzer gehörende quelle.
+        metaReducers: [localStorageReducer('auth', 'coreQuelle', 'coreDeskriptoren')],  // <-- synchronisiert diese Slices des Store mit localStorage wegen F5.
       }
     ),
     provideEffects([LocalStorageEffects]),

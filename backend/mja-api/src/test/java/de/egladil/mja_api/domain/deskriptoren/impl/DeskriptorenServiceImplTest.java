@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.generatoren.impl;
+package de.egladil.mja_api.domain.deskriptoren.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -22,8 +22,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
-import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
-import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl;
+import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.junit.QuarkusTest;
@@ -93,6 +92,20 @@ public class DeskriptorenServiceImplTest {
 			// Assert
 			assertEquals(0, deskriptoren.size());
 			verify(repository, never()).listAll();
+
+		}
+
+		@Test
+		void should_transformToDeskriptorenOrdinalWork() {
+
+			// Arrange
+			when(repository.listAll()).thenReturn(createAlleDeskriptoren());
+
+			// Act
+			String result = service.transformToDeskriptorenOrdinal("Minikänguru,Klasse 1,Mathe,unbekannt,Minikänguru");
+
+			// Assert
+			assertEquals("1,3,4", result);
 
 		}
 
@@ -294,6 +307,79 @@ public class DeskriptorenServiceImplTest {
 			// Assert
 			assertEquals(expected, result);
 
+		}
+
+	}
+
+	@Nested
+	class LoadTests {
+
+		@Test
+		void should_loadDeskriptorenRaetselReturnAllWithAdmin_when_adminTrue() {
+
+			// Arrange
+			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
+			assertEquals(8, alleDeskriptoren.size());
+			when(repository.listAll()).thenReturn(alleDeskriptoren);
+
+			// Act
+			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel(true);
+
+			// Assert
+			assertEquals(5, result.size());
+			verify(repository).listAll();
+
+		}
+
+		@Test
+		void should_loadDeskriptorenRaetselReturnPublic_when_adminFalse() {
+
+			// Arrange
+			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
+			assertEquals(8, alleDeskriptoren.size());
+			when(repository.listAll()).thenReturn(alleDeskriptoren);
+
+			// Act
+			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel(false);
+
+			// Assert
+			assertEquals(4, result.size());
+			verify(repository).listAll();
+
+		}
+
+		@Test
+		void should_findByNameReturnTheDeskriptor_when_exists() {
+
+			// Arrange
+			when(repository.listAll()).thenReturn(createAlleDeskriptoren());
+			String name = "Minikänguru";
+
+			// Act
+			Optional<Deskriptor> optTreffer = service.findByName(name);
+
+			// Assert
+			assertTrue(optTreffer.isPresent());
+
+			Deskriptor result = optTreffer.get();
+
+			assertEquals(name, result.name);
+			assertEquals(4L, result.id);
+
+		}
+
+		@Test
+		void should_findByNameReturnEmpty_when_notExists() {
+
+			// Arrange
+			when(repository.listAll()).thenReturn(createAlleDeskriptoren());
+			String name = "Grundschule";
+
+			// Act
+			Optional<Deskriptor> optTreffer = service.findByName(name);
+
+			// Assert
+			assertTrue(optTreffer.isEmpty());
 		}
 
 	}

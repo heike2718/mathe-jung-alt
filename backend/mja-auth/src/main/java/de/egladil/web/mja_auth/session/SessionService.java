@@ -37,7 +37,7 @@ public class SessionService {
 	private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
 	@ConfigProperty(name = "session.idle.timeout")
-	int sessionIdleTimeoutMinutes = 120;
+	int sessionIdleTimeoutMinutes;
 
 	@Inject
 	JWTService jwtService;
@@ -83,7 +83,15 @@ public class SessionService {
 				uuid);
 
 			Session session = this.internalCreateAnonymousSession().withUser(authenticatedUser);
-			session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
+
+			if (sessionIdleTimeoutMinutes == 0) {
+
+				LOGGER.warn("session.idle.timeout=0 => verwenden default 120 min");
+				session.setExpiresAt(SessionUtils.getExpiresAt(120));
+			} else {
+
+				session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
+			}
 
 			sessions.put(session.getSessionId(), session);
 

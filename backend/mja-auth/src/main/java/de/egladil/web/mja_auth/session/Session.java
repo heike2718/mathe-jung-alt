@@ -4,8 +4,6 @@
 // =====================================================
 package de.egladil.web.mja_auth.session;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -52,33 +50,6 @@ public class Session {
 		this.sessionId = null;
 	}
 
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(sessionId);
-	}
-
-	@Override
-	public boolean equals(final Object obj) {
-
-		if (this == obj) {
-
-			return true;
-		}
-
-		if (obj == null) {
-
-			return false;
-		}
-
-		if (getClass() != obj.getClass()) {
-
-			return false;
-		}
-		Session other = (Session) obj;
-		return Objects.equals(sessionId, other.sessionId);
-	}
-
 	/**
 	 * @return the expiresAt
 	 */
@@ -94,6 +65,42 @@ public class Session {
 	public void setExpiresAt(final long expiresAt) {
 
 		this.expiresAt = expiresAt;
+	}
+
+	@Override
+	public int hashCode() {
+
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (this == obj) {
+
+			return true;
+		}
+
+		if (!(obj instanceof Session)) {
+
+			return false;
+		}
+		Session other = (Session) obj;
+
+		if (sessionId == null) {
+
+			if (other.sessionId != null) {
+
+				return false;
+			}
+		} else if (!sessionId.equals(other.sessionId)) {
+
+			return false;
+		}
+		return true;
 	}
 
 	/**

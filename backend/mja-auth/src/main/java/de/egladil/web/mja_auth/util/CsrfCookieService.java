@@ -26,7 +26,7 @@ public class CsrfCookieService {
 	 */
 	public NewCookie createCsrfTokenCookie() {
 
-		String csrfToken = csrfTokenService.createRandomToken();
+		String csrfToken = csrfTokenService.createRandomToken().replaceAll("\"", "");
 
 		// httpOnly = false
 		// secure = true

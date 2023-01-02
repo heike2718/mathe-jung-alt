@@ -34,11 +34,11 @@ export class AuthFacade {
         }        
       }
     }
-  }
+  } 
 
   public logout(): void {
     this.#authRepository.logout();
-  }
+  }  
 
   #parseHash(hash: string): AuthResult {
 

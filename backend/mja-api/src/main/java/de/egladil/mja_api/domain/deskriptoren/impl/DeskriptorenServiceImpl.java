@@ -21,10 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
+import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
-import io.quarkus.panache.common.Sort;
 
 /**
  * DeskriptorenServiceImpl
@@ -32,6 +32,11 @@ import io.quarkus.panache.common.Sort;
 @DomainService
 @ApplicationScoped
 public class DeskriptorenServiceImpl implements DeskriptorenService {
+
+	/**
+	 *
+	 */
+	private static final DeskriptorenNameComparator DESKRIPTOREN_COMPARATOR = new DeskriptorenNameComparator();
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeskriptorenServiceImpl.class);
 
@@ -94,18 +99,24 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 			return deskriptoren;
 		}
 
-		return deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).toList();
+		List<Deskriptor> result = deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).toList();
+		return result;
 	}
 
 	@Override
-	public List<Deskriptor> loadDeskriptorenRaetsel(final boolean admin) {
+	public List<DeskriptorUI> loadDeskriptorenRaetsel(final boolean admin) {
 
-		List<Deskriptor> alle = deskriptorenRepository.listAll(Sort.ascending("name"));
+		List<Deskriptor> alle = deskriptorenRepository.listAll();
+		Collections.sort(alle, DESKRIPTOREN_COMPARATOR);
 
-		List<Deskriptor> nurRaetsel = filterByKontext(DeskriptorSuchkontext.RAETSEL, alle).stream().filter(d -> d.admin == admin)
-			.collect(Collectors.toList());
+		List<Deskriptor> nurRaetsel = filterByKontext(DeskriptorSuchkontext.RAETSEL, alle);
 
-		return nurRaetsel;
+		if (admin) {
+
+			return nurRaetsel.stream().map(d -> new DeskriptorUI(d.id, d.name)).toList();
+		}
+
+		return nurRaetsel.stream().filter(d -> !d.admin).map(d -> new DeskriptorUI(d.id, d.name)).toList();
 
 	}
 

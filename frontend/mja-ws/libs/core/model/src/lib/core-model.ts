@@ -12,3 +12,8 @@ export const noopQuelle: QuelleUI = {
   id: 'NOOP',
   name: ''
 };
+
+export interface DeskriptorUI {
+  readonly id: number;
+  readonly name: string;
+};

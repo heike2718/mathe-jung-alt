@@ -33,6 +33,11 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CsrfTokenValidationFilter.class);
 
+	private static final Response INVALID_CSRF_HEADER_RESPONSE = Response.status(Response.Status.BAD_REQUEST)
+		.entity("CSRF-Token-Validierung fehlgeschlagen. kein oder mehr als ein CSRF-Token-Header-Value: "
+			+ AuthConstants.CSRF_TOKEN_HEADER_NAME)
+		.build();
+
 	private static final Response INVALID_CSRF_TOKEN_RESPONSE = Response.status(Response.Status.BAD_REQUEST)
 		.entity("CSRF-Token-Validierung fehlgeschlagen. Brauchen CSRF-Token im Header: " + AuthConstants.CSRF_TOKEN_HEADER_NAME
 			+ " und cookie: " + AuthConstants.CSRF_TOKEN_COOKIE_NAME)
@@ -63,13 +68,34 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
 		Cookie csrfTokenCookie = requestContext.getCookies().get(AuthConstants.CSRF_TOKEN_COOKIE_NAME);
 		List<String> csrfTokenHeader = requestContext.getHeaders().get(AuthConstants.CSRF_TOKEN_HEADER_NAME);
 
-		if (csrfTokenCookie == null || csrfTokenHeader == null || csrfTokenHeader.size() != 1
-			|| !csrfTokenHeader.get(0).equals(csrfTokenCookie.getValue())) {
+		if (csrfTokenCookie == null || csrfTokenHeader == null || csrfTokenHeader.size() != 1) {
 
+			requestContext.abortWith(INVALID_CSRF_HEADER_RESPONSE);
+		}
+
+		String headerValue = csrfTokenHeader.get(0);
+		String cookieValue = csrfTokenCookie.getValue();
+
+		if (!identifyAsEquals(headerValue, cookieValue)) {
+
+			LOGGER.warn("[headerValue={}, cookieValue={}", headerValue, cookieValue);
 			requestContext.abortWith(INVALID_CSRF_TOKEN_RESPONSE);
 		}
 
 		return;
+	}
+
+	boolean identifyAsEquals(final String headerValue, final String cookieValue) {
+
+		String strippedHeaderValue = headerValue;
+
+		// ist irgendwie komisch, aber der headerValue kommt mit Anführungszeichen.
+		if (headerValue.contains("\"")) {
+
+			strippedHeaderValue = headerValue.replaceAll("\"", "");
+		}
+
+		return strippedHeaderValue.equals(cookieValue);
 	}
 
 }

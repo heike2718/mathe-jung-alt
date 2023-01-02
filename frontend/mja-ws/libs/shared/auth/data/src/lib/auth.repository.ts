@@ -16,7 +16,7 @@ export class AuthRepository {
 
     readonly user$: Observable<User> = this.#store.select(fromAuth.user).pipe(
         filterDefined,
-        switchMap((user) => of({ fullName: user.fullName, isAdmin: isAdmin(user) }))
+        switchMap((user) => of({ fullName: user.fullName, isAdmin: isAdmin(user), anonym: user.anonym }))
     );
 
     readonly loggedIn$: Observable<boolean> = this.#store.select(fromAuth.user).pipe(
@@ -26,7 +26,7 @@ export class AuthRepository {
     public login(): void {
         // Dies triggert einen SideEffect (siehe auth.effects.ts)
         this.#store.dispatch(authActions.request_login_url());
-    }    
+    }
 
     public logout(): void {
         this.#store.dispatch(authActions.log_out());
@@ -36,5 +36,5 @@ export class AuthRepository {
         this.#store.dispatch(authActions.init_session({ authResult }));
     }
 
-    
+
 }

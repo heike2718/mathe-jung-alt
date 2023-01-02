@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorHandler, Injectable, Injector } from "@angular/core";
+import { CoreFacade } from "@mja-ws/core/api";
 import { extractServerErrorMessage, getHttpErrorResponse } from "@mja-ws/shared/http";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 
@@ -25,12 +26,17 @@ export class ErrorHandlerService implements ErrorHandler {
     }
 
     #handleHttpError(httpErrorResponse: HttpErrorResponse, messageService: MessageService): void {
-        const message = extractServerErrorMessage(httpErrorResponse);
-        if (message.level === 'WARN') {
-            messageService.warn(message.message);
+
+        if (httpErrorResponse.status === 440) {
+            this.injector.get(CoreFacade).handleSessionExpired();
         } else {
-            messageService.error(message.message);
-        }
+            const message = extractServerErrorMessage(httpErrorResponse);
+            if (message.level === 'WARN') {
+                messageService.warn(message.message);
+            } else {
+                messageService.error(message.message);
+            }
+        }        
     }
 
     #handleAnyOtherError(error: any, messageService: MessageService): void {

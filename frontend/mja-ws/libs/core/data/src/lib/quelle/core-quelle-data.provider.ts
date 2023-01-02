@@ -7,4 +7,4 @@ import { coreQuelleFeature } from "./core-quelle.reducer";
 export const coreQuelleDataProvider = [
     provideState(coreQuelleFeature),
     provideEffects([CoreQuelleEffects])
-]
+];

@@ -6,8 +6,9 @@ import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 import { authActions } from './auth.actions';
 import { Session } from './internal.model';
-import { Message } from '@mja-ws/shared/messaging/api';
+import { Message, MessageService } from '@mja-ws/shared/messaging/api';
 import { CoreFacade } from '@mja-ws/core/api';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,8 @@ export class AuthEffects {
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);
     #coreFacade = inject(CoreFacade);
+    #messageService = inject(MessageService);
+    #router = inject(Router);
 
     constructor(@Inject(Configuration) private configuration: Configuration) { }
 
@@ -62,22 +65,8 @@ export class AuthEffects {
             ofType(authActions.log_out),
             concatMap(() =>
                 this.#httpClient.delete<Message>('/session/logout')),
-            tap(() => this.#coreFacade.removeQuelleAngemeldeterAdmin()),
+            tap(() => this.#coreFacade.handleLogout()),
             map(() => authActions.logged_out())
         );
     });
-
-    loggedOut$ = createEffect(() =>
-
-        this.#actions.pipe(
-            ofType(authActions.logged_out),
-            tap(() => {
-                this.#clearSession();
-            })
-        ), { dispatch: false });
-
-
-    #clearSession(): void {
-        console.log('local storage putzen');
-    }
 }

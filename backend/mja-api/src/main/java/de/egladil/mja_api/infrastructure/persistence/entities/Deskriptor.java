@@ -21,7 +21,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 @Entity
 @Table(name = "DESKRIPTOREN")
 @Schema(
-	name = "Deskriptor", description = "Deskriptor zur Kategorisierung von Domainobjekten. Mit Deskriptoren kann gesucht werden.")
+	name = "Deskriptor", description = "Deskriptor-Entity mit allen Attributen.")
 public class Deskriptor extends PanacheEntityBase {
 
 	@Id

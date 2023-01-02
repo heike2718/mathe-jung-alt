@@ -14,7 +14,7 @@ export class CoreQuelleEffects {
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);
 
-    createSession$ = createEffect(() => {
+    loadQuelleAdmin$ = createEffect(() => {
 
         return this.#actions.pipe(
             ofType(coreQuelleActions.load_quelle_admin),
