@@ -6,9 +6,8 @@ import { of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 import { authActions } from './auth.actions';
 import { Session } from './internal.model';
-import { Message, MessageService } from '@mja-ws/shared/messaging/api';
+import { Message } from '@mja-ws/shared/messaging/api';
 import { CoreFacade } from '@mja-ws/core/api';
-import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +17,6 @@ export class AuthEffects {
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);
     #coreFacade = inject(CoreFacade);
-    #messageService = inject(MessageService);
-    #router = inject(Router);
 
     constructor(@Inject(Configuration) private configuration: Configuration) { }
 

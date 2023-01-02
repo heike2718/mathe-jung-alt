@@ -1,7 +1,9 @@
 import { inject, Injectable } from '@angular/core';
+import { CoreFacade } from '@mja-ws/core/api';
 import { AuthRepository } from '@mja-ws/shared/auth/data';
 import { AuthResult, User } from '@mja-ws/shared/auth/model';
-import { Observable, of, switchMap } from 'rxjs';
+import { MessageService } from '@mja-ws/shared/messaging/api';
+import { Observable, of, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +11,25 @@ import { Observable, of, switchMap } from 'rxjs';
 export class AuthFacade {
 
   #authRepository = inject(AuthRepository);
+  #coreFacade = inject(CoreFacade);
+  #messageService = inject(MessageService);
 
   readonly user$: Observable<User> = this.#authRepository.user$;
   readonly userIsLoggedIn$: Observable<boolean> = this.#authRepository.loggedIn$;
   readonly userIsLoggedOut$: Observable<boolean> = this.#authRepository.loggedIn$.pipe(
     switchMap((li) => of(!li))
   );
+
+  constructor() {
+
+    this.user$.pipe(
+      tap((user) => {
+        if (!user.anonym) {
+          this.#coreFacade.loadDeskriptoren(user.isAdmin);
+        }
+      })
+    ).subscribe();
+  }
 
   public login(): void {
     this.#authRepository.login();
@@ -29,16 +44,21 @@ export class AuthFacade {
       const authResult: AuthResult = this.#parseHash(hash);
 
       if (authResult.state) {
-        if (authResult.state === 'login') {          
+        if (authResult.state === 'login') {
           this.#authRepository.createSession(authResult);
-        }        
+        }
       }
     }
-  } 
+  }
 
   public logout(): void {
     this.#authRepository.logout();
-  }  
+  }
+
+  public handleSessionExpired(): void {
+    this.#authRepository.handleSessionExpired();
+    this.#messageService.warn('Die Session ist abgelaufen. Bitte erneut einloggen.');
+  }
 
   #parseHash(hash: string): AuthResult {
 

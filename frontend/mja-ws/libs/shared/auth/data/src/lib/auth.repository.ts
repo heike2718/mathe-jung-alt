@@ -32,6 +32,10 @@ export class AuthRepository {
         this.#store.dispatch(authActions.log_out());
     }
 
+    public handleSessionExpired(): void {
+        this.#store.dispatch(authActions.logged_out());
+    }
+
     public createSession(authResult: AuthResult): void {
         this.#store.dispatch(authActions.init_session({ authResult }));
     }

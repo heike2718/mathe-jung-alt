@@ -90,6 +90,7 @@
                 "sourceTag": "type:shared:auth:api",
                 "onlyDependOnLibWithTags": [
                   "domain:shared:auth:model",
+                  "type:core:api",
                   "type:shared:auth:data"            
                 ]               
               },
@@ -100,20 +101,21 @@
                   "type:shared:messaging:api",
                   "type:shared:config",
                   "type:shared:ngrx-utils",
-                  "type:shared:util"
+                  "type:shared:util",
+                  "type:core:api"
                 ]
               },
               { 
                 "sourceTag": "type:core:api",
                 "onlyDependOnLibWithTags": [
-                  "domain:core:model",
+                  "type:core:model",
                   "type:core:data"            
                 ]               
               },
               {
                 "sourceTag": "type:core:data",
                 "onlyDependOnLibsWithTags": [
-                  "domain:core:model",
+                  "type:core:model",
                   "type:shared:messaging:api",
                   "type:shared:config",
                   "type:shared:ngrx-utils",

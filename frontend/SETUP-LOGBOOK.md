@@ -92,6 +92,18 @@ HeaderComponent und SidenavComponent emitten ein sidenavToggle-Event, das im app
 
 Die erlaubten dependencies werden im globalen ./.eslintrc.json definiert und werten dabei tags aus, die den libraries oder apps in project.json gegeben werden.
 
+Testen der linting rules:
+
+```
+npx nx run-many --target=lint --skip-nx-cache
+```
+
+Testen des graphs:
+
+```
+npx nx graph
+```
+
 ## Shared Libraries
 
 unter libs: Verzeichnis shared angelegt
@@ -194,6 +206,14 @@ npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:d
 
 ```
 npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --buildable --no-interactive --dry-run
+```
+
+## Rätsel
+
+```
+npx nx generate @nrwl/js:library model --directory=raetsel --tags='domain:raetsel, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library data --directory=raetsel --tags='domain:raetsel, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library api --directory=raetsel --tags='domain:raetsel, type:api' --buildable --no-interactive --dry-run
 ```
 
 

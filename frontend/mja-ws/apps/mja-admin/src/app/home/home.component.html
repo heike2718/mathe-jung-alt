@@ -11,7 +11,7 @@
     <div *ngIf="authFacade.userIsLoggedIn$ | async">
         <p *ngIf="(coreFacade.existsQuelleAdmin$ | async)">na dann mal los :)
         </p>
-        <p *ngIf="!(coreFacade.existsQuelleAdmin$ | async)">Es gibt noch keine Quelle für Dich als Autor:in. Lass bitte eine anlegen, damit Du Rätsel erstellen darfst.
+        <p *ngIf="coreFacade.notExistsQuelleAdmin$ | async">Es gibt noch keine Quelle für Dich als Autor:in. Lass bitte eine anlegen, damit Du Rätsel erstellen darfst.
         </p>
     </div>
     <p *ngIf="authFacade.userIsLoggedOut$ | async">bitte einloggen</p>

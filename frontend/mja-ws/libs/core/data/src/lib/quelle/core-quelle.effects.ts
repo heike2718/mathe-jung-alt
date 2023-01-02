@@ -1,8 +1,8 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { QuelleUI } from '@mja-ws/core/model';
+import { SILENT_LOAD_CONTEXT } from '@mja-ws/shared/messaging/api';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { SILENT_LOAD_CONTEXT } from 'libs/shared/messaging/api/src/lib/silent-load.context';
 import { concatMap, map } from 'rxjs';
 import { coreQuelleActions } from './core-quelle.actions';
 

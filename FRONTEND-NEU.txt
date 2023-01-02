@@ -7,6 +7,7 @@
       (/) core.facade.ts: method fetchQuelleAdmin. wird von auth.effect nach session.created getriggert oder?
       (/) selector soll einen stream auf exsitsQuelleAdmin sowie die quelleAdmin zurückliefern, die über die Facade erreichbar ist
 (-) exceptionhandling in higher order observables
+(-) backend: session expired + path /logout soll keine 440 mehr liefern. Ist im Moment praktisch weil es noch nix anderes gibt, mit dem man das session-Zeug testen kann.
 (-) feature rätselsuche
 
 

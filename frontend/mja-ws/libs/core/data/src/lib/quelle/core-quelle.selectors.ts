@@ -19,8 +19,15 @@ const existsQuelleAdmin = createSelector(
     (q, l) => l && q.id !== 'NOOP'
 );
 
+const notExistsQuelleAdmin = createSelector(
+    quelleAdmin,
+    isQuelleAdminLoaded,
+    (q, l) => l && q.id === 'NOOP'
+);
+
 export const fromCoreQuelle = {
     quelleAdmin,
-    existsQuelleAdmin
+    existsQuelleAdmin,
+    notExistsQuelleAdmin
 };
 

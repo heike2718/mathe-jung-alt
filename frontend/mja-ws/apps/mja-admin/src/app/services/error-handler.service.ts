@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorHandler, Injectable, Injector } from "@angular/core";
-import { CoreFacade } from "@mja-ws/core/api";
+import { AuthFacade } from "@mja-ws/shared/auth/api";
 import { extractServerErrorMessage, getHttpErrorResponse } from "@mja-ws/shared/http";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 
@@ -28,7 +28,7 @@ export class ErrorHandlerService implements ErrorHandler {
     #handleHttpError(httpErrorResponse: HttpErrorResponse, messageService: MessageService): void {
 
         if (httpErrorResponse.status === 440) {
-            this.injector.get(CoreFacade).handleSessionExpired();
+            this.injector.get(AuthFacade).handleSessionExpired();
         } else {
             const message = extractServerErrorMessage(httpErrorResponse);
             if (message.level === 'WARN') {
