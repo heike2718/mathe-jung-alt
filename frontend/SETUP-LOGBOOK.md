@@ -88,6 +88,7 @@ HeaderComponent bekommt ebenfalls den BreakpointObserver injected und eine get i
 
 HeaderComponent und SidenavComponent emitten ein sidenavToggle-Event, das im app.component.html ausgewertet wird.
 
+
 ## Linting Rules für dependency restrictions
 
 Die erlaubten dependencies werden im globalen ./.eslintrc.json definiert und werten dabei tags aus, die den libraries oder apps in project.json gegeben werden.

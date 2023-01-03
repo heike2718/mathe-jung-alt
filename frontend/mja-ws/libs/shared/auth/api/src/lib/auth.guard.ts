@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
-import { CanActivate } from "@angular/router";
-import { Observable } from "rxjs";
+import { CanActivate, Router } from "@angular/router";
+import { Observable, tap } from "rxjs";
 import { AuthFacade } from "./auth.facade";
 
 @Injectable({
@@ -9,9 +9,16 @@ import { AuthFacade } from "./auth.facade";
 export class AuthGuard implements CanActivate {
 
     #authFacade = inject(AuthFacade);
+    #router = inject(Router);
 
     canActivate(): Observable<boolean> | boolean {
 
-        return this.#authFacade.userIsLoggedIn$;
+        return this.#authFacade.userIsLoggedIn$.pipe(
+            tap((auth) => {
+                if (!auth) {
+                    this.#router.navigateByUrl('/')
+                }
+            })
+        );
     }
 }

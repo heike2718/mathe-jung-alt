@@ -15,7 +15,11 @@ export const appRoutes: Routes = [
             path: 'raetsel',
             loadChildren: () =>
               import('@mja-ws/raetsel/feature').then((m) => m.raetselRoutes),
-          },
+          },         
         ],
       },
+      {
+        path: '**',
+        component: HomeComponent
+      }
 ];

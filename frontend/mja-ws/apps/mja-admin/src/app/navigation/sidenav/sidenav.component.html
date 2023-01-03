@@ -4,7 +4,7 @@
         <span class="nav-caption">Startseite</span>
     </a>
 
-    <a mat-list-item routerLink="/raetsel">
+    <a *ngIf="authFacade.userIsLoggedIn$ | async" mat-list-item routerLink="/raetsel">
         <mat-icon>library_books</mat-icon>
         <span class="nav-caption">Rätsel</span>
     </a>
