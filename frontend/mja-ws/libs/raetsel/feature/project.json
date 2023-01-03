@@ -1,0 +1,34 @@
+{
+  "name": "raetsel-feature",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/raetsel/feature/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/raetsel/feature",
+        "main": "libs/raetsel/feature/src/index.ts",
+        "tsConfig": "libs/raetsel/feature/tsconfig.lib.json",
+        "assets": ["libs/raetsel/feature/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/raetsel/feature/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/raetsel/feature"],
+      "options": {
+        "jestConfig": "libs/raetsel/feature/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:raetsel", "type:feature"]
+}

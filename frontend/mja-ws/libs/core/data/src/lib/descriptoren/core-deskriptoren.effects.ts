@@ -23,6 +23,6 @@ export class CoreDeskriptorUIEffects {
             ),
             map((deskriptoren: DeskriptorUI[]) => coreDeskriptorenActions.core_deskriptoren_loaded({ deskriptoren }))
         )
-    })
+    });
 
 }

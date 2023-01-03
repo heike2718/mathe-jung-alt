@@ -11,6 +11,11 @@
         <span class="nav-caption">Startseite</span>
     </a>
 
+    <a *ngIf="isHandset === false" mat-button routerLink="/raetsel">
+        <mat-icon class="nav-item">library_books</mat-icon>
+        <span class="nav-caption">Rätsel</span>
+    </a>
+
     <span class="toolbar-spacer"></span>
 
     <ng-container *ngIf="authFacade.user$| async as user">

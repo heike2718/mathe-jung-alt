@@ -214,6 +214,13 @@ npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --build
 npx nx generate @nrwl/js:library model --directory=raetsel --tags='domain:raetsel, type:model' --buildable --no-interactive --dry-run
 npx nx generate @nrwl/js:library data --directory=raetsel --tags='domain:raetsel, type:data' --buildable --no-interactive --dry-run
 npx nx generate @nrwl/js:library api --directory=raetsel --tags='domain:raetsel, type:api' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library feature --directory=raetsel --tags='domain:raetsel, type:feature' --buildable --no-interactive --dry-run
+```
+
+### feature-search
+
+```
+npx nx generate @nrwl/angular:component raetsel-search --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-search --standalone --no-interactive --dry-run
 ```
 
 
@@ -270,5 +277,29 @@ import '@angular/compiler';
 __Fehlermeldung preset: '../../../../jest.preset.js' nicht gefunden oder so__
 
 Dann stimmt die Anzahl der ../ in der entprechenden jest.config.ts nicht.
+
+__Reducer createFeature({...}) wirft compilation error TS2345: Argument of type is not assignable to parameter of type 'FeatureConfig & "optional properties are not allowed in the feature state"'.__
+
+Nach stundenlanger Suche stellte sich heraus, dass die Syntax 
+
+```
+export interface RaetselState {
+    ...
+    readonly selectedId?: string;
+    ...
+};
+```
+
+nicht nicht mehr supported wird. Stattdessen muss man
+
+```
+export interface RaetselState {
+    ...
+    readonly selectedId: string | undefined;
+    ...
+};
+```
+
+verwenden. Menno, menno, menno.
  
 
