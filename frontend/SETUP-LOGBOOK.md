@@ -259,7 +259,7 @@ __Ist das generierte jest.config.ts korrekt?__
 
 Die generierten ibraries enthalten aktuell nicht die korrekte Implementierung in jest.config.ts. Hier muss transform wie folgt ersetzt weren:
 
-`''
+```
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },
