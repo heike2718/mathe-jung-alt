@@ -19,7 +19,7 @@ import { coreDeskriptorenDataProvider, coreQuelleDataProvider } from '@mja-ws/co
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddBaseUrlInterceptor, ErrorInterceptor } from '@mja-ws/shared/http';
 import { ErrorHandlerService } from './app/services/error-handler.service';
-import { LocalStorageEffects, localStorageReducer } from '@mja-ws/local-storage-state';
+import { LocalStorageEffects, localStorageReducer } from '@mja-ws/local-storage-data';
 import { LoadingInterceptor } from '@mja-ws/shared/messaging/api';
 
 if (environment.production) {

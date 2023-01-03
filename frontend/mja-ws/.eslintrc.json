@@ -36,6 +36,10 @@
                   "type:shared:http",
                   "type:shared:messaging:api"
                 ]
+              },              
+              {
+                "sourceTag": "domain:raetsel",
+                "onlyDependsOnLibsWithTags": "type:core:model"
               },
               {
                 "sourceTag": "domain:core",
@@ -62,6 +66,13 @@
               },
               {
                 "sourceTag": "type:api",
+                "onlyDependOnLibWithTags": [
+                  "type:model",
+                  "type:data"
+                ]
+              },
+              {
+                "sourceTag": "type:data",
                 "onlyDependOnLibWithTags": [
                   "type:model"
                 ]

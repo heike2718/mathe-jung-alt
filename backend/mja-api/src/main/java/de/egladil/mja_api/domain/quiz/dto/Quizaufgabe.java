@@ -4,8 +4,6 @@
 // =====================================================
 package de.egladil.mja_api.domain.quiz.dto;
 
-import java.util.Objects;
-
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -57,20 +55,37 @@ public class Quizaufgabe {
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(nummer);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((nummer == null) ? 0 : nummer.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
 
-		if (this == obj)
+		if (this == obj) {
+
 			return true;
-		if (obj == null)
+		}
+
+		if (!(obj instanceof Quizaufgabe)) {
+
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Quizaufgabe other = (Quizaufgabe) obj;
-		return Objects.equals(nummer, other.nummer);
+
+		if (nummer == null) {
+
+			if (other.nummer != null) {
+
+				return false;
+			}
+		} else if (!nummer.equals(other.nummer)) {
+
+			return false;
+		}
+		return true;
 	}
 
 	public String getNummer() {
