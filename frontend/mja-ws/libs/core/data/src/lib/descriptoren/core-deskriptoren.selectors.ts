@@ -5,15 +5,15 @@ const { selectCoreDeskriptorenState } = coreDeskriptorenUIFeature;
 
 const isDeskriptorenUILoaded = createSelector(
     selectCoreDeskriptorenState,
-    (deskriptorenLoaded) => deskriptorenLoaded
+    (state) => state.deskriptorenUILoaded
 );
 
 const deskriptorenUI = createSelector(
     selectCoreDeskriptorenState,
-    (deskriptoren) => deskriptoren
+    (state) => state.deskriptoren
 );
 
-export const fromCoreQuelle = {
+export const fromCoreDeskriptoren = {
     isDeskriptorenUILoaded,
     deskriptotrenUI: deskriptorenUI
 };

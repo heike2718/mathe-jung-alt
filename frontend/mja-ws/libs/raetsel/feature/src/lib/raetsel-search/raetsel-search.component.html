@@ -1,1 +1,8 @@
-<p>raetsel-search works!</p>
+<h1>Rätsel</h1>
+<button mat-raised-button color="primary" (click)="loadRaetsel()">Rätsel laden</button>
+
+<div *ngIf="raetselFacade.loaded$ | async">
+    <div *ngFor="let raetsel of (raetselFacade.page$ | async)">
+        <p>{{raetsel.schluessel}}</p>
+    </div>
+</div>

@@ -1,1 +1,2 @@
-export * from './lib/raetsel-api';
+
+export { RaetselFacade } from './lib/raetsel.facade';

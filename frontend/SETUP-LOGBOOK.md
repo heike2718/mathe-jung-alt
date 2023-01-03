@@ -218,11 +218,15 @@ npx nx generate @nrwl/js:library api --directory=raetsel --tags='domain:raetsel,
 npx nx generate @nrwl/js:library feature --directory=raetsel --tags='domain:raetsel, type:feature' --buildable --no-interactive --dry-run
 ```
 
-### feature-search
+### RaetselSearchComponent
 
 ```
 npx nx generate @nrwl/angular:component raetsel-search --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-search --standalone --no-interactive --dry-run
 ```
+
+
+
+
 
 
 ## FAQ
@@ -237,7 +241,7 @@ npx nx g mv bookings --project-name bookings --destination customers/bookings
 
 __Sessionid-Cookie wird nicht in den Request gesetzt__
 
-Man muss den httpClient-Call mit {withCredentials: true} konfigurieren (wird bei mir in einem Interceptor gemacht) __und__ das Session-Cookie muss mit JSESSIONID beginnen.
+Man muss den httpClient-Call mit {withCredentials: true} konfigurieren (wird bei mir im AddBaseUrlInterceptor gemacht) __und__ das Session-Cookie muss mit JSESSIONID beginnen.
 Habe das Session-Cookie jetzt JSESSIONID_MJA_ADMIN genannt.
 
 __Laufzeitfehler aus auth.effects__

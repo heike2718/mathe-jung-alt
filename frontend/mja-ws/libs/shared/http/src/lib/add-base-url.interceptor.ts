@@ -18,12 +18,17 @@ export class AddBaseUrlInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     if (!req.url.startsWith('/')) {
-      return next.handle(req);
+      return next.handle(
+        req.clone({
+          url: req.url,
+          withCredentials: this.#config.withCredentials,
+        })
+      );
     }
     return next.handle(
       req.clone({
         url: `${this.#config.baseUrl}${req.url}`,
-        withCredentials: true,
+        withCredentials: this.#config.withCredentials,
       })
     );
   }

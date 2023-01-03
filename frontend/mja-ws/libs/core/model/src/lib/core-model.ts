@@ -1,6 +1,13 @@
 export type STATUS = 'ERFASST' | 'FREIGEGEBEN';
 export type SortOrder = 'asc' | 'desc';
 
+export const QUERY_PARAM_SUCHSTRING = 'suchstring';
+export const QUERY_PARAM_DESKRIPTOREN = 'deskriptoren';
+export const QUERY_PARAM_TYPE_DESKRIPTOREN = 'typeDeskriptoren';
+export const QUERY_PARAM_LIMIT = 'limit';
+export const QUERY_PARAM_OFFSET = 'offset';
+export const QUERY_PARAM_SORT_DIRECTION = 'sortDirection';
+
 /** 
  * Ein angemeldeter ADMIN bzw. AUTOR ist selbst eine Quelle. Dies ist die zugeordnete Quelle.
  * Alle Raetsel und davon abgeleiteten Objekte referenzieren eine Quelle. Dies ist die zugeordnete Quelle 
@@ -28,16 +35,18 @@ export interface PageDefinition {
 
 export interface PaginationState {
   anzahlTreffer: number;
-  pageSize: number,
-  pageIndex: number,
-  sortDirection: string
+  pageDefinition: PageDefinition
+};
+
+export const initialPageDefinition: PageDefinition = {
+  pageSize: 20,
+  pageIndex: 0,
+  sortDirection: 'asc'
 };
 
 export const initialPaginationState: PaginationState = {
   anzahlTreffer: 0,
-  pageSize: 20,
-  pageIndex: 0,
-  sortDirection: 'asc'
+  pageDefinition: initialPageDefinition
 };
 
 export interface GeneratedImages {

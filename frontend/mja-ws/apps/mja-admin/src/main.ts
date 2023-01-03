@@ -55,7 +55,7 @@ bootstrapApplication(AppComponent, {
     ),
     {
       provide: Configuration,
-      useFactory: () => new Configuration(environment.baseUrl, 'ADMIN'),
+      useFactory: () => new Configuration(environment.baseUrl, 'ADMIN', environment.withCredentials),
     },
 
     {
