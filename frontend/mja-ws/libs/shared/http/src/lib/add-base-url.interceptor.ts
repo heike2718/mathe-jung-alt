@@ -10,24 +10,22 @@ import { Configuration } from '@mja-ws/shared/config';
 
 @Injectable()
 export class AddBaseUrlInterceptor implements HttpInterceptor {
-  
+
   #config = inject(Configuration);
 
   intercept(
     req: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    if (!req.url.startsWith('/')) {
-      return next.handle(
-        req.clone({
-          url: req.url,
-          withCredentials: this.#config.withCredentials,
-        })
-      );
+
+    let url = req.url;
+    if (url.startsWith('/')) {
+      url = `${this.#config.baseUrl}${req.url}`;
     }
+
     return next.handle(
       req.clone({
-        url: `${this.#config.baseUrl}${req.url}`,
+        url: url,
         withCredentials: this.#config.withCredentials,
       })
     );

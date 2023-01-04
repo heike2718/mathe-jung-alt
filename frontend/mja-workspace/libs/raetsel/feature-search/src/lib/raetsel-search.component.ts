@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnDestroy, O
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { Quelle, QuellenFacade } from '@mja-workspace/quellen/domain';
-import { Raetsel, RaetselDataSource, RaetselFacade } from '@mja-workspace/raetsel/domain';
+import { Raetsel, , RaetselFacade } from '@mja-workspace/raetsel/domain';
 import { AuthFacade } from '@mja-workspace/shared/auth/domain';
 import { STORAGE_KEY_QUELLE } from '@mja-workspace/shared/util-configuration';
 import { deskriptorenToString, PageDefinition, Suchfilter, SuchfilterFacade, Suchkontext, suchkriterienVorhanden } from '@mja-workspace/suchfilter/domain';

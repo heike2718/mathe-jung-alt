@@ -86,3 +86,25 @@ export interface SelectableDeskriptoren {
   readonly selected: boolean;
 };
 
+export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {
+
+  if (deskriptoren.length === 0) {
+      return '';
+  }
+
+  let result = '';
+
+  for (let index = 0; index < deskriptoren.length; index++) {
+
+      const deskriptor = deskriptoren[index];
+      if (index < deskriptoren.length - 1) {
+          result += deskriptor.name + ", ";
+      } else {
+          result += deskriptor.name;
+      }
+
+  }
+
+  return result;
+};
+

@@ -45,6 +45,8 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
 
 	private static final List<String> SECURE_HTTP_METHODS = Arrays.asList(new String[] { "OPTIONS", "GET", "HEAD" });
 
+	private static final List<String> SECURE_PATHS = Arrays.asList(new String[] { "/session/logout" });
+
 	@Inject
 	ConfigService configService;
 
@@ -60,15 +62,23 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
 			return;
 		}
 
-		if (SECURE_HTTP_METHODS.contains(requestContext.getMethod())) {
+		String path = requestContext.getUriInfo().getPath();
+
+		if (SECURE_HTTP_METHODS.contains(requestContext.getMethod()) || SECURE_PATHS.contains(path)) {
 
 			return;
 		}
 
 		Cookie csrfTokenCookie = requestContext.getCookies().get(AuthConstants.CSRF_TOKEN_COOKIE_NAME);
+
+		if (csrfTokenCookie == null) {
+
+			requestContext.abortWith(INVALID_CSRF_HEADER_RESPONSE);
+		}
+
 		List<String> csrfTokenHeader = requestContext.getHeaders().get(AuthConstants.CSRF_TOKEN_HEADER_NAME);
 
-		if (csrfTokenCookie == null || csrfTokenHeader == null || csrfTokenHeader.size() != 1) {
+		if (csrfTokenHeader == null || csrfTokenHeader.size() != 1) {
 
 			requestContext.abortWith(INVALID_CSRF_HEADER_RESPONSE);
 		}

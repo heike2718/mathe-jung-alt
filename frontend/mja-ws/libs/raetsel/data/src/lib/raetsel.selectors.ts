@@ -14,8 +14,14 @@ const page = createSelector(
     (state) => state.page
 );
 
+const paginationState = createSelector(
+    selectRaetselState,
+    (state) => state.paginationState
+);
+
 export const fromRaetsel = {
     isLoaded,
-    page
+    page,
+    paginationState
 };
 

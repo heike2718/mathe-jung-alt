@@ -1,0 +1,48 @@
+.mat-row .mat-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+
+.mat-row:hover .mat-cell {
+    border-color: black;
+    background-color: rgb(240, 239, 239);
+}
+
+.mat-header-cell__1,
+.mat-cell__1 {
+    flex: 0 1 5%;
+}
+
+.mat-header-cell__2,
+.mat-cell__2 {
+    flex: 0 1 10%;
+}
+
+.mat-header-cell__3,
+.mat-cell__3 {
+    flex: 0 1 30%;
+}
+
+.mat-header-cell__4,
+.mat-cell__4 {
+    flex: 0 1 55%;
+}
+
+@media(max-width: 959px) {
+
+    .mat-header-cell__1,
+    .mat-cell__1 {
+        flex: 0 1 10%;
+    }
+
+    .mat-header-cell__2,
+    .mat-cell__2 {
+        flex: 0 1 30%;
+    }
+
+    .mat-header-cell__3,
+    .mat-cell__3 {
+        flex: 0 1 60%;
+    }
+}

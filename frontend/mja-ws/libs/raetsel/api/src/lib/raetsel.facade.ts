@@ -11,6 +11,7 @@ export class RaetselFacade {
 
     loaded$ = this.#store.select(fromRaetsel.isLoaded);
     page$ = this.#store.select(fromRaetsel.page);
+    paginationState$ = this.#store.select(fromRaetsel.paginationState);
 
     public triggerSearch(suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
 
