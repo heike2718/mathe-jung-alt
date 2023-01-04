@@ -41,6 +41,12 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 		name = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC",
 		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren order by r.schluessel desc"),
 	@NamedQuery(
+		name = "PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN",
+		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren and r.status = :status order by r.schluessel"),
+	@NamedQuery(
+		name = "PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC",
+		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren and r.status = :status order by r.schluessel desc"),
+	@NamedQuery(
 		name = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL",
 		query = "select r from PersistentesRaetsel r where r.schluessel = :schluessel"),
 	@NamedQuery(
@@ -52,6 +58,10 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 	public static final String FIND_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN";
 
 	public static final String FIND_WITH_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC";
+
+	public static final String FIND_WITH_STATUS_AND_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN";
+
+	public static final String FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC";
 
 	public static final String FIND_WITH_SCHLUESSEL = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL";
 

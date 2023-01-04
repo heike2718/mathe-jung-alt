@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.raetsel.RaetselDao;
@@ -31,15 +32,31 @@ public class RaetselDaoImpl implements RaetselDao {
 	@Inject
 	EntityManager entityManager;
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public long countRaetselVolltext(final String suchstring) {
+	public long countRaetselVolltext(final String suchstring, final boolean nurFreigegebene) {
 
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring)";
 
-		@SuppressWarnings("unchecked")
-		List<BigInteger> trefferliste = entityManager.createNativeQuery(stmt)
-			.setParameter("suchstring", suchstring)
-			.getResultList();
+		if (nurFreigegebene) {
+
+			stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND STATUS = :status";
+		}
+
+		List<BigInteger> trefferliste = null;
+
+		if (nurFreigegebene) {
+
+			trefferliste = entityManager.createNativeQuery(stmt)
+				.setParameter("suchstring", suchstring)
+				.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString())
+				.getResultList();
+		} else {
+
+			trefferliste = entityManager.createNativeQuery(stmt)
+				.setParameter("suchstring", suchstring)
+				.getResultList();
+		}
 
 		int anzahl = trefferliste.get(0).intValue();
 
@@ -47,15 +64,31 @@ public class RaetselDaoImpl implements RaetselDao {
 	}
 
 	@Override
-	public long countWithDeskriptoren(final String deskriptorenIDs) {
+	@SuppressWarnings("unchecked")
+	public long countWithDeskriptoren(final String deskriptorenIDs, final boolean nurFreigegebene) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
 
-		@SuppressWarnings("unchecked")
-		List<BigInteger> trefferliste = entityManager.createNativeQuery(stmt)
-			.setParameter("deskriptoren", wrappedDeskriptorenIds)
-			.getResultList();
+		if (nurFreigegebene) {
+
+			stmt = "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren AND STATUS = :status";
+		}
+
+		List<BigInteger> trefferliste = null;
+
+		if (nurFreigegebene) {
+
+			trefferliste = entityManager.createNativeQuery(stmt)
+				.setParameter("deskriptoren", wrappedDeskriptorenIds)
+				.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString())
+				.getResultList();
+		} else {
+
+			trefferliste = entityManager.createNativeQuery(stmt)
+				.setParameter("deskriptoren", wrappedDeskriptorenIds)
+				.getResultList();
+		}
 
 		int anzahl = trefferliste.get(0).intValue();
 
@@ -63,19 +96,37 @@ public class RaetselDaoImpl implements RaetselDao {
 	}
 
 	@Override
-	public long countRaetselWithFilter(final String suchstring, final String deskriptorenIDs) {
+	@SuppressWarnings("unchecked")
+	public long countRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final boolean nurFregegebene) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
 
+		if (nurFregegebene) {
+
+			stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND STATUS = :status AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
+
+		}
+
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
 
-		@SuppressWarnings("unchecked")
-		List<BigInteger> trefferliste = entityManager.createNativeQuery(stmt)
-			.setParameter("suchstring", suchstring)
-			.setParameter("deskriptoren", wrappedDeskriptorenIds)
-			.getResultList();
+		List<BigInteger> trefferliste = null;
+
+		if (nurFregegebene) {
+
+			trefferliste = entityManager.createNativeQuery(stmt)
+				.setParameter("suchstring", suchstring)
+				.setParameter("deskriptoren", wrappedDeskriptorenIds)
+				.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString())
+				.getResultList();
+		} else {
+
+			trefferliste = entityManager.createNativeQuery(stmt)
+				.setParameter("suchstring", suchstring)
+				.setParameter("deskriptoren", wrappedDeskriptorenIds)
+				.getResultList();
+		}
 
 		int anzahl = trefferliste.get(0).intValue();
 
@@ -84,14 +135,31 @@ public class RaetselDaoImpl implements RaetselDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<PersistentesRaetsel> findRaetselVolltext(final String suchstring, final int limit, final int offset, final SortDirection sortDirection) {
+	public List<PersistentesRaetsel> findRaetselVolltext(final String suchstring, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
 
 		String stmt = sortDirection == SortDirection.desc
 			? "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) ORDER BY SCHLUESSEL desc"
 			: "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) ORDER BY SCHLUESSEL";
 
+		if (nurFreigegebene) {
+
+			stmt = sortDirection == SortDirection.desc
+				? "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND STATUS = :status ORDER BY SCHLUESSEL desc"
+				: "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND STATUS = :status ORDER BY SCHLUESSEL";
+		}
+
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + "]");
+
+		if (nurFreigegebene) {
+
+			return entityManager.createNativeQuery(stmt, PersistentesRaetsel.class)
+				.setParameter("suchstring", suchstring)
+				.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString())
+				.setFirstResult(offset)
+				.setMaxResults(limit)
+				.getResultList();
+		}
 
 		return entityManager.createNativeQuery(stmt, PersistentesRaetsel.class)
 			.setParameter("suchstring", suchstring)
@@ -101,14 +169,33 @@ public class RaetselDaoImpl implements RaetselDao {
 	}
 
 	@Override
-	public List<PersistentesRaetsel> findWithDeskriptoren(final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection) {
+	public List<PersistentesRaetsel> findWithDeskriptoren(final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
 
 		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
 		LOGGER.debug("[deskriptoren=" + wrappedDeskriptoren + "]");
 
-		String queryId = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC
-			: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN;
+		String queryId = null;
+
+		if (nurFreigegebene) {
+
+			queryId = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC
+				: PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN;
+		} else {
+
+			queryId = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC
+				: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN;
+		}
+
+		if (nurFreigegebene) {
+
+			return entityManager.createNamedQuery(queryId, PersistentesRaetsel.class)
+				.setParameter("deskriptoren", wrappedDeskriptoren)
+				.setParameter("status", DomainEntityStatus.FREIGEGEBEN)
+				.setFirstResult(offset)
+				.setMaxResults(limit)
+				.getResultList();
+		}
 
 		return entityManager.createNamedQuery(queryId, PersistentesRaetsel.class)
 			.setParameter("deskriptoren", wrappedDeskriptoren)
@@ -119,7 +206,7 @@ public class RaetselDaoImpl implements RaetselDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<PersistentesRaetsel> findRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection) {
+	public List<PersistentesRaetsel> findRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
@@ -127,8 +214,26 @@ public class RaetselDaoImpl implements RaetselDao {
 			? "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL desc"
 			: "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL";
 
+		if (nurFreigegebene) {
+
+			stmt = sortDirection == SortDirection.desc
+				? "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND STATUS = :status AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL desc"
+				: "select * from RAETSEL WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND STATUS = :status AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren ORDER BY SCHLUESSEL";
+		}
+
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
+
+		if (nurFreigegebene) {
+
+			return entityManager.createNativeQuery(stmt, PersistentesRaetsel.class)
+				.setParameter("suchstring", suchstring)
+				.setParameter("deskriptoren", wrappedDeskriptorenIds)
+				.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString())
+				.setFirstResult(offset)
+				.setMaxResults(limit)
+				.getResultList();
+		}
 
 		return entityManager.createNativeQuery(stmt, PersistentesRaetsel.class)
 			.setParameter("suchstring", suchstring)

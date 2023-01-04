@@ -24,6 +24,7 @@ import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.dto.SuchfilterVariante;
+import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.raetsel.AntwortvorschlaegeMapper;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -35,10 +36,11 @@ import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
-import de.egladil.mja_api.domain.utils.AuthorizationUtils;
+import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import de.egladil.web.mja_auth.dto.MessagePayload;
+import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselServiceImpl
@@ -60,7 +62,7 @@ public class RaetselServiceImpl implements RaetselService {
 	private final FindPathsGrafikParser findPathsGrafikParser = new FindPathsGrafikParser();
 
 	@Override
-	public RaetselsucheTreffer sucheRaetsel(final Suchfilter suchfilter, final int limit, final int offset, final SortDirection sortDirection) {
+	public RaetselsucheTreffer sucheRaetsel(final Suchfilter suchfilter, final int limit, final int offset, final SortDirection sortDirection, final AuthenticatedUser user) {
 
 		SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
 
@@ -69,12 +71,14 @@ public class RaetselServiceImpl implements RaetselService {
 		List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
 		long anzahlGesamt = 0L;
 
+		boolean nurFreigegebene = !(PermissionUtils.isUserAdmin(user) && PermissionUtils.isUserAutor(user));
+
 		switch (suchfilterVariante) {
 
 			case COMPLETE -> anzahlGesamt = raetselDao.countRaetselWithFilter(suchfilter.getSuchstring(),
-				suchfilter.getDeskriptorenIds());
-			case DESKRIPTOREN -> anzahlGesamt = raetselDao.countWithDeskriptoren(suchfilter.getDeskriptorenIds());
-			case VOLLTEXT -> anzahlGesamt = raetselDao.countRaetselVolltext(suchfilter.getSuchstring());
+				suchfilter.getDeskriptorenIds(), nurFreigegebene);
+			case DESKRIPTOREN -> anzahlGesamt = raetselDao.countWithDeskriptoren(suchfilter.getDeskriptorenIds(), nurFreigegebene);
+			case VOLLTEXT -> anzahlGesamt = raetselDao.countRaetselVolltext(suchfilter.getSuchstring(), nurFreigegebene);
 			default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
 		}
 
@@ -88,16 +92,16 @@ public class RaetselServiceImpl implements RaetselService {
 			case COMPLETE -> trefferliste = raetselDao.findRaetselWithFilter(suchfilter.getSuchstring(),
 				suchfilter.getDeskriptorenIds(),
 				limit,
-				offset, sortDirection);
+				offset, sortDirection, nurFreigegebene);
 			case DESKRIPTOREN -> trefferliste = raetselDao.findWithDeskriptoren(suchfilter.getDeskriptorenIds(), limit, offset,
-				sortDirection);
+				sortDirection, nurFreigegebene);
 			case VOLLTEXT -> trefferliste = raetselDao.findRaetselVolltext(suchfilter.getSuchstring(), limit, offset,
-				sortDirection);
+				sortDirection, nurFreigegebene);
 
 			default -> new IllegalArgumentException("Unexpected value: " + suchfilterVariante);
 		}
 
-		treffer = trefferliste.stream().map(pr -> mapToSucheTrefferFromDB(pr)).toList();
+		treffer = trefferliste.stream().map(pr -> mapToSucheTrefferFromDB(pr, user)).toList();
 
 		RaetselsucheTreffer result = new RaetselsucheTreffer();
 		result.setTreffer(treffer);
@@ -108,7 +112,13 @@ public class RaetselServiceImpl implements RaetselService {
 
 	@Override
 	@Transactional
-	public Raetsel raetselAnlegen(final EditRaetselPayload payload, final String userId, final boolean isAdmin) {
+	public Raetsel raetselAnlegen(final EditRaetselPayload payload, final AuthenticatedUser user) {
+
+		if (user == null) {
+
+			LOGGER.error("an dieser Stelle darf der user nicht null sein!!!");
+			throw new MjaRuntimeException("AuthenticatedUser ist null");
+		}
 
 		boolean schluesselExistiert = this.schluesselExists(payload);
 
@@ -121,25 +131,29 @@ public class RaetselServiceImpl implements RaetselService {
 		PersistentesRaetsel neuesRaetsel = new PersistentesRaetsel();
 		String uuid = UUID.randomUUID().toString();
 		neuesRaetsel.setImportierteUuid(uuid);
+		String userId = user.getUuid();
+
 		neuesRaetsel.owner = userId;
+		neuesRaetsel.geaendertDurch = userId;
 		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
 
 		PersistentesRaetsel.persist(neuesRaetsel);
 
 		Raetsel result = payload.getRaetsel();
 		result.setId(neuesRaetsel.uuid);
-
-		if (AuthorizationUtils.hasUserPermissionToChange(userId, neuesRaetsel.owner, isAdmin)) {
-
-			result.markiereAlsAenderbar();
-		}
-
+		result.markiereAlsAenderbar();
 		return result;
 	}
 
 	@Override
 	@Transactional
-	public Raetsel raetselAendern(final EditRaetselPayload payload, final String userId, final boolean isAdmin) {
+	public Raetsel raetselAendern(final EditRaetselPayload payload, final AuthenticatedUser user) {
+
+		if (user == null) {
+
+			LOGGER.error("an dieser Stelle darf der user nicht null sein!!!");
+			throw new MjaRuntimeException("AuthenticatedUser ist null");
+		}
 
 		Raetsel raetsel = payload.getRaetsel();
 		String raetselId = raetsel.getId();
@@ -148,15 +162,15 @@ public class RaetselServiceImpl implements RaetselService {
 		if (persistentesRaetsel == null) {
 
 			LOGGER.error("Aendern raetsel mit UUID {}: raetsel existiert nicht. uuidAendernderUser={}", raetselId,
-				userId);
+				user.getUuid());
 
 			throw new WebApplicationException(
 				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
-		if (!AuthorizationUtils.hasUserPermissionToChange(userId, persistentesRaetsel.owner, isAdmin)) {
+		if (!PermissionUtils.hasWritePermission(user, persistentesRaetsel.owner)) {
 
-			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", userId, persistentesRaetsel.schluessel,
+			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", user.getUuid(), persistentesRaetsel.schluessel,
 				persistentesRaetsel.owner);
 
 			throw new WebApplicationException(Status.UNAUTHORIZED);
@@ -176,16 +190,16 @@ public class RaetselServiceImpl implements RaetselService {
 			neuesHistorieItem.frage = persistentesRaetsel.frage;
 			neuesHistorieItem.loesung = persistentesRaetsel.loesung;
 			neuesHistorieItem.geaendertAm = new Date();
-			neuesHistorieItem.geaendertDurch = userId;
+			neuesHistorieItem.geaendertDurch = user.getUuid();
 			neuesHistorieItem.raetsel = persistentesRaetsel;
 
 			PersistentesRaetselHistorieItem.persist(neuesHistorieItem);
 		}
 
-		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
+		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), user.getUuid());
 		PersistentesRaetsel.persist(persistentesRaetsel);
 
-		return getRaetselZuId(raetselId, userId, isAdmin);
+		return getRaetselZuId(raetselId, user);
 	}
 
 	boolean schluesselExists(final EditRaetselPayload payload) {
@@ -201,7 +215,7 @@ public class RaetselServiceImpl implements RaetselService {
 	}
 
 	@Override
-	public Raetsel getRaetselZuId(final String id, final String userId, final boolean isAdmin) {
+	public Raetsel getRaetselZuId(final String id, final AuthenticatedUser user) {
 
 		PersistentesRaetsel raetsel = PersistentesRaetsel.findById(id);
 
@@ -210,7 +224,7 @@ public class RaetselServiceImpl implements RaetselService {
 			return null;
 		}
 
-		Raetsel result = mapFromDB(raetsel);
+		Raetsel result = mapFromDB(raetsel, user);
 
 		List<String> grafikLinks = findPathsGrafikParser.findPaths(raetsel.frage);
 		grafikLinks.addAll(findPathsGrafikParser.findPaths(raetsel.loesung));
@@ -219,11 +233,6 @@ public class RaetselServiceImpl implements RaetselService {
 		result.setImages(raetselFileService.findImages(result.getSchluessel()));
 
 		result.setGrafikInfos(grafikInfos);
-
-		if (AuthorizationUtils.hasUserPermissionToChange(userId, raetsel.owner, isAdmin)) {
-
-			result.markiereAlsAenderbar();
-		}
 
 		return result;
 	}
@@ -271,11 +280,11 @@ public class RaetselServiceImpl implements RaetselService {
 		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
 	}
 
-	Raetsel mapFromDB(final PersistentesRaetsel raetselDB) {
+	Raetsel mapFromDB(final PersistentesRaetsel raetselDB, final AuthenticatedUser user) {
 
 		Raetsel result = new Raetsel(raetselDB.uuid)
 			.withAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(raetselDB.antwortvorschlaege))
-			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
+			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren, user))
 			.withFrage(raetselDB.frage)
 			.withKommentar(raetselDB.kommentar)
 			.withLoesung(raetselDB.loesung)
@@ -283,13 +292,19 @@ public class RaetselServiceImpl implements RaetselService {
 			.withSchluessel(raetselDB.schluessel)
 			.withStatus(raetselDB.status)
 			.withName(raetselDB.name);
+
+		if (PermissionUtils.hasWritePermission(user, raetselDB.owner)) {
+
+			result.markiereAlsAenderbar();
+		}
+
 		return result;
 	}
 
-	RaetselsucheTrefferItem mapToSucheTrefferFromDB(final PersistentesRaetsel raetselDB) {
+	RaetselsucheTrefferItem mapToSucheTrefferFromDB(final PersistentesRaetsel raetselDB, final AuthenticatedUser user) {
 
 		RaetselsucheTrefferItem result = new RaetselsucheTrefferItem()
-			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
+			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren, user))
 			.withId(raetselDB.uuid)
 			.withName(raetselDB.name)
 			.withStatus(raetselDB.status)

@@ -7,7 +7,6 @@ package de.egladil.mja_api.domain.quiz;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -25,7 +24,6 @@ import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
 
 /**
  * QuizService
@@ -103,7 +101,7 @@ public class QuizService {
 
 	String mapQuelle(final PersistenteAufgabeReadonly dbAufgabe) {
 
-		List<Deskriptor> deskriptoren = descriptorenService.mapToDeskriptoren(dbAufgabe.deskriptoren);
+		List<Deskriptor> deskriptoren = descriptorenService.mapToDeskriptoren(dbAufgabe.deskriptoren, null);
 		Optional<Deskriptor> optAdaptiert = deskriptoren.stream().filter(d -> "adaptiert".equalsIgnoreCase(d.name)).findFirst();
 
 		if (optAdaptiert.isPresent()) {
@@ -113,23 +111,23 @@ public class QuizService {
 
 		switch (dbAufgabe.quellenart) {
 
-		case PERSON: {
+			case PERSON: {
 
-			return dbAufgabe.person;
-		}
+				return dbAufgabe.person;
+			}
 
-		case BUCH: {
+			case BUCH: {
 
-			return dbAufgabe.mediumTitel + ", " + dbAufgabe.seite;
-		}
+				return dbAufgabe.mediumTitel + ", " + dbAufgabe.seite;
+			}
 
-		case ZEITSCHRIFT: {
+			case ZEITSCHRIFT: {
 
-			return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahrgang;
-		}
+				return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahrgang;
+			}
 
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + dbAufgabe.quellenart);
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + dbAufgabe.quellenart);
 		}
 	}
 

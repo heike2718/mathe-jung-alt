@@ -25,6 +25,7 @@ import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.web.mja_auth.session.AuthenticatedUser;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -46,7 +47,7 @@ public class DeskriptorenServiceImplTest {
 	class MappingTests {
 
 		@Test
-		void should_mapToDeskriptorenReturnDeskriptoren() {
+		void should_mapToDeskriptorenReturnDeskriptoren_whenAutor() {
 
 			// Arrange
 			String deskriptorenIds = ",1,,4,,5,";
@@ -54,8 +55,10 @@ public class DeskriptorenServiceImplTest {
 
 			when(repository.listAll()).thenReturn(alleDeskriptoren);
 
+			AuthenticatedUser user = new AuthenticatedUser("idReference", new String[] { "AUTOR" }, "Augist Autor", "gqgu");
+
 			// Act
-			List<Deskriptor> deskriptoren = service.mapToDeskriptoren(deskriptorenIds);
+			List<Deskriptor> deskriptoren = service.mapToDeskriptoren(deskriptorenIds, user);
 
 			// Assert
 			assertEquals(3, deskriptoren.size());
@@ -84,10 +87,38 @@ public class DeskriptorenServiceImplTest {
 		}
 
 		@Test
-		void should_mapToDeskriptorenReturnEmptyList_when_parameterNull() {
+		void should_mapToDeskriptorenReturnDeskriptoren_whenOrdinaryUser() {
+
+			// Arrange
+			String deskriptorenIds = ",1,,4,,5,";
+			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
+
+			when(repository.listAll()).thenReturn(alleDeskriptoren);
+
+			AuthenticatedUser user = new AuthenticatedUser("idReference", new String[] { "STANDARD" }, "Augist Autor", "gqgu");
 
 			// Act
-			List<Deskriptor> deskriptoren = service.mapToDeskriptoren(null);
+			List<Deskriptor> deskriptoren = service.mapToDeskriptoren(deskriptorenIds, user);
+
+			// Assert
+			assertEquals(1, deskriptoren.size());
+			verify(repository).listAll();
+
+			{
+
+				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(1).equals(d.id)).findFirst();
+				assertTrue(optDesk.isPresent());
+				assertEquals("Mathe", optDesk.get().name);
+			}
+		}
+
+		@Test
+		void should_mapToDeskriptorenReturnEmptyList_when_parameterNull() {
+
+			AuthenticatedUser user = new AuthenticatedUser("idReference", new String[] { "AUTOR" }, "Augist Autor", "gqgu");
+
+			// Act
+			List<Deskriptor> deskriptoren = service.mapToDeskriptoren(null, user);
 
 			// Assert
 			assertEquals(0, deskriptoren.size());
@@ -343,7 +374,7 @@ public class DeskriptorenServiceImplTest {
 			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel(false);
 
 			// Assert
-			assertEquals(4, result.size());
+			assertEquals(3, result.size());
 			verify(repository).listAll();
 
 		}
@@ -414,14 +445,14 @@ public class DeskriptorenServiceImplTest {
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Minikänguru", false, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Minikänguru", true, "RAETSEL");
 			deskriptor.id = 4l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Zeitschrift", false, "MEDIEN,QUELLEN");
+			Deskriptor deskriptor = new Deskriptor("Zeitschrift", true, "MEDIEN,QUELLEN");
 			deskriptor.id = 5l;
 			alleDeskriptoren.add(deskriptor);
 		}

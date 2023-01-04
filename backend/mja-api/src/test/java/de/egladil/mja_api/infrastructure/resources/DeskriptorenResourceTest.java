@@ -56,36 +56,4 @@ public class DeskriptorenResourceTest {
 		assertEquals(55, anzahlAdmin);
 
 	}
-
-	@Test
-	public void testLoadDeskriptorenEndpoint() throws Exception {
-
-		Response response = given()
-			.when().get("v2");
-
-		String responsePayload = response.asString();
-		// System.out.println(responsePayload);
-
-		response
-			.then()
-			.statusCode(200);
-
-		Deskriptor[] deskriptoren = new ObjectMapper().readValue(responsePayload, Deskriptor[].class);
-
-		assertEquals(82, deskriptoren.length);
-
-		int anzahlAdmin = 0;
-
-		for (Deskriptor d : deskriptoren) {
-
-			if (d.admin) {
-
-				anzahlAdmin++;
-			}
-		}
-
-		assertEquals(55, anzahlAdmin);
-
-	}
-
 }

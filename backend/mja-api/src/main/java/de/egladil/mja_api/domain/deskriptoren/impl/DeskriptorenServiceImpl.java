@@ -24,7 +24,9 @@ import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.semantik.DomainService;
+import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * DeskriptorenServiceImpl
@@ -44,7 +46,7 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 	DeskriptorenRepository deskriptorenRepository;
 
 	@Override
-	public List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds) {
+	public List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds, final AuthenticatedUser user) {
 
 		if (StringUtils.isBlank(deskriptorenIds)) {
 
@@ -59,7 +61,12 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 
 		List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).toList();
 
-		return result;
+		if (PermissionUtils.isUserAdmin(user) || PermissionUtils.isUserAutor(user)) {
+
+			return result;
+		}
+
+		return result.stream().filter(d -> !d.admin).toList();
 	}
 
 	@Override

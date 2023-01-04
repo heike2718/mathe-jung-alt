@@ -39,7 +39,7 @@ export class RaetselHttpService {
 
         params = params.set(QUERY_PARAM_TYPE_DESKRIPTOREN, 'ORDINAL');
 
-        const url = this.#url + '/v1';
+        const url = this.#url + '/admin/v2';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.get<RaetselsucheTreffer>(url, { headers, params });
     }

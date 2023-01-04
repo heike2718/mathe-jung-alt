@@ -53,9 +53,10 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPay
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
-import de.egladil.mja_api.domain.utils.AuthorizationUtils;
 import de.egladil.mja_api.domain.utils.DevDelayService;
+import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.web.commons_validation.payload.MessagePayload;
+import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselgruppenResource
@@ -164,8 +165,9 @@ public class RaetselgruppenResource {
 		delayService.pause();
 
 		String userUuid = this.securityContext.getUserPrincipal().getName();
+		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
 
-		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeAnlegen(requestPayload, userUuid, securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
+		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeAnlegen(requestPayload, user);
 
 		LOGGER.info("Raetselgruppe angelegt: [raetselgruppe={}, user={}]", raetselsammlung.getId(),
 			StringUtils.abbreviate(userUuid, 11));
@@ -203,8 +205,9 @@ public class RaetselgruppenResource {
 		delayService.pause();
 
 		String userUuid = this.securityContext.getUserPrincipal().getName();
+		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
 
-		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeBasisdatenAendern(requestPayload, userUuid, securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
+		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeBasisdatenAendern(requestPayload, user);
 
 		LOGGER.info("Raetselgruppe angelegt: [raetselgruppe={}, user={}]", raetselsammlung.getId(),
 			StringUtils.abbreviate(userUuid, 11));
@@ -238,7 +241,9 @@ public class RaetselgruppenResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID) {
 
-			Optional<RaetselgruppeDetails> optDetails = raetselgruppenService.loadDetails(raetselgruppeID, securityContext.getUserPrincipal().getName(), securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
+		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
+
+		Optional<RaetselgruppeDetails> optDetails = raetselgruppenService.loadDetails(raetselgruppeID, user);
 
 		if (optDetails.isEmpty()) {
 			throw new WebApplicationException(Response.status(404).entity(MessagePayload.error("kein Treffer")).build());
@@ -287,7 +292,7 @@ public class RaetselgruppenResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
-		return this.raetselgruppenService.elementAnlegen(raetselgruppeID, element, securityContext.getUserPrincipal().getName(), securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
+		return this.raetselgruppenService.elementAnlegen(raetselgruppeID, element, PermissionUtils.getAuthenticatedUser(securityContext));
 	}
 
 
@@ -325,7 +330,7 @@ public class RaetselgruppenResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
-		return this.raetselgruppenService.elementAendern(raetselgruppeID, element,securityContext.getUserPrincipal().getName(), securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
+		return this.raetselgruppenService.elementAendern(raetselgruppeID, element, PermissionUtils.getAuthenticatedUser(securityContext));
 	}
 
 	@DELETE
@@ -365,12 +370,13 @@ public class RaetselgruppenResource {
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
 			message = "raetselgruppeID enthält ungültige Zeichen") final String elementID) {
 
-		return raetselgruppenService.elementLoeschen(raetselgruppeID, elementID,securityContext.getUserPrincipal().getName(), securityContext.isUserInRole(AuthorizationUtils.ROLE_ADMIN));
+		return raetselgruppenService.elementLoeschen(raetselgruppeID, elementID, PermissionUtils.getAuthenticatedUser(securityContext));
 	}
 
 	@GET
 	@Path("v1/vorschau/{raetselgruppeID}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "printQuiz",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
@@ -396,7 +402,6 @@ public class RaetselgruppenResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	@RolesAllowed({ "ADMIN", "AUTOR" })
 	public GeneratedFile printQuizVorschau(@PathParam(
 		value = "raetselgruppeID") @Pattern(
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
@@ -410,6 +415,7 @@ public class RaetselgruppenResource {
 	@GET
 	@Path("v1/latex/{raetselgruppeID}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "downloadLaTeXSource",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein LaTeX. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
@@ -435,7 +441,6 @@ public class RaetselgruppenResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	@RolesAllowed({ "ADMIN", "AUTOR" })
 	public GeneratedFile downloadLaTeX(@PathParam(
 		value = "raetselgruppeID") @Pattern(
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",

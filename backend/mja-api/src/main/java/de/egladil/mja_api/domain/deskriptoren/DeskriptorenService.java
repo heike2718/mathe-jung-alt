@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * DeskriptorenService
@@ -20,7 +21,7 @@ public interface DeskriptorenService {
 	 * @param  deskriptorenIds
 	 * @return
 	 */
-	List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds);
+	List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds, AuthenticatedUser user);
 
 	/**
 	 * Gibt alle Ids sortiert als kommaseparierten String zurück. Dubletten werden zuvor entfernt.

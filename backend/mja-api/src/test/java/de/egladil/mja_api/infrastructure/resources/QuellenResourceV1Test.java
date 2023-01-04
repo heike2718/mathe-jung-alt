@@ -30,7 +30,7 @@ public class QuellenResourceV1Test {
 	@Test
 	void testSucheOhneDeskriptorenMitTreffer() {
 
-		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":40,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
+		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[]}]";
 		given()
 			.when().get("v1?suchstring=Winkelvoß")
 			.then()
@@ -42,8 +42,7 @@ public class QuellenResourceV1Test {
 	@Test
 	void testSucheMitDeskriptorenMitTreffer() {
 
-		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[{\"id\":40,\"name\":\"Person\",\"admin\":true,\"kontext\":\"QUELLEN\"}]}]";
-
+		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[]}]";
 		given()
 			.when().get("v1?suchstring=Heike&deskriptoren=40")
 			.then()

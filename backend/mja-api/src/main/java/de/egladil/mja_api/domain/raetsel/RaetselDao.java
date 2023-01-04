@@ -20,7 +20,7 @@ public interface RaetselDao {
 	 * @param  suchstring
 	 * @return            List
 	 */
-	long countRaetselVolltext(String suchstring);
+	long countRaetselVolltext(String suchstring, boolean nurFreigegebene);
 
 	/**
 	 * Sucht alle Raetsel, deren Deskriptoren die deskriptorenIDs als Teilmenge enthalten.
@@ -29,7 +29,7 @@ public interface RaetselDao {
 	 *                         String die IDs der Deskriptoren
 	 * @return                 List
 	 */
-	long countWithDeskriptoren(String deskriptorenIDs);
+	long countWithDeskriptoren(String deskriptorenIDs, boolean nurFreigegebene);
 
 	/**
 	 * Volltextsuche mit Deskriptoren in RAETSEL mit dem gegebenen Suchstring.
@@ -40,7 +40,7 @@ public interface RaetselDao {
 	 *                         String die IDs der Deskriptoren, kommasepariert
 	 * @return                 List
 	 */
-	long countRaetselWithFilter(String suchstring, String deskriptorenIDs);
+	long countRaetselWithFilter(String suchstring, String deskriptorenIDs, boolean nurFreigegebene);
 
 	/**
 	 * Volltextsuche in RAETSEL mit dem gegebenen Suchstring.
@@ -54,7 +54,7 @@ public interface RaetselDao {
 	 *                       SortDirection asc/desc
 	 * @return               List
 	 */
-	List<PersistentesRaetsel> findRaetselVolltext(String suchstring, int limit, int offset, SortDirection sortDirection);
+	List<PersistentesRaetsel> findRaetselVolltext(String suchstring, int limit, int offset, SortDirection sortDirection, boolean nurFreigegebene);
 
 	/**
 	 * Sucht alle Raetsel, deren Deskriptoren die deskriptorenIDs als Teilmenge enthalten.
@@ -69,7 +69,7 @@ public interface RaetselDao {
 	 *                         SortDirection asc/desc
 	 * @return                 List
 	 */
-	List<PersistentesRaetsel> findWithDeskriptoren(String deskriptorenIDs, int limit, int offset, SortDirection sortDirection);
+	List<PersistentesRaetsel> findWithDeskriptoren(String deskriptorenIDs, int limit, int offset, SortDirection sortDirection, boolean nurFreigegebene);
 
 	/**
 	 * Volltextsuche mit Deskriptoren in RAETSEL mit dem gegebenen Suchstring.
@@ -86,7 +86,7 @@ public interface RaetselDao {
 	 *                         SortDirection asc/desc
 	 * @return                 List
 	 */
-	List<PersistentesRaetsel> findRaetselWithFilter(String suchstring, String deskriptorenIDs, int limit, int offset, SortDirection sortDirection);
+	List<PersistentesRaetsel> findRaetselWithFilter(String suchstring, String deskriptorenIDs, int limit, int offset, SortDirection sortDirection, boolean nurFreigegebene);
 
 	/**
 	 * @param  schluessel

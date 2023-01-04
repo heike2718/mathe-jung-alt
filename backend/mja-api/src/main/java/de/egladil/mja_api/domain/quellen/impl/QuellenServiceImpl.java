@@ -144,7 +144,7 @@ public class QuellenServiceImpl implements QuellenService {
 	@Deprecated
 	QuellenListItem mapFromDBV1(final PersistenteQuelleReadonly persistenteQuelle) {
 
-		List<Deskriptor> deskriptoren = deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
+		List<Deskriptor> deskriptoren = deskriptorenService.mapToDeskriptoren(persistenteQuelle.getDeskriptoren(), null);
 
 		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(persistenteQuelle.getQuellenart());
 

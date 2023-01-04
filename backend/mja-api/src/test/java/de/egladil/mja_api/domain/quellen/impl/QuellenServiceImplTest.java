@@ -64,7 +64,7 @@ public class QuellenServiceImplTest {
 
 		// Assert
 		verify(quellenRepository, never()).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(any());
+		verify(deskriptorenService, never()).mapToDeskriptoren(any(), any());
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class QuellenServiceImplTest {
 		assertEquals(1, result.size());
 		QuellenListItem quelle = result.get(0);
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
+		verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren(), null);
 
 		assertEquals(0, quelle.getDeskriptoren().size());
 		assertEquals("q-uuid-1", quelle.getId());
@@ -113,7 +113,7 @@ public class QuellenServiceImplTest {
 		// Assert
 		assertEquals(0, result.size());
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(any());
+		verify(deskriptorenService, never()).mapToDeskriptoren(any(), any());
 	}
 
 	@Test
@@ -130,7 +130,7 @@ public class QuellenServiceImplTest {
 		// Assert
 		assertEquals(0, result.size());
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(any());
+		verify(deskriptorenService, never()).mapToDeskriptoren(any(), any());
 	}
 
 	@Test
@@ -159,7 +159,7 @@ public class QuellenServiceImplTest {
 		assertEquals(1, result.size());
 		QuellenListItem quelle = result.get(0);
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
+		verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren(), null);
 
 		assertEquals(0, quelle.getDeskriptoren().size());
 		assertEquals("q-uuid-2", quelle.getId());
@@ -193,7 +193,7 @@ public class QuellenServiceImplTest {
 		assertEquals(1, result.size());
 		QuellenListItem quelle = result.get(0);
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
+		verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren(), null);
 
 		assertEquals(0, quelle.getDeskriptoren().size());
 		assertEquals("q-uuid-3", quelle.getId());

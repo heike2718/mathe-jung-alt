@@ -15,6 +15,7 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPay
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
+import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselgruppenService
@@ -35,7 +36,7 @@ public interface RaetselgruppenService {
 	 *                 boolean
 	 * @return         RaetselgruppensucheTrefferItem
 	 */
-	RaetselgruppensucheTrefferItem raetselgruppeAnlegen(EditRaetselgruppePayload payload, String userId, boolean isAdmin) throws WebApplicationException;
+	RaetselgruppensucheTrefferItem raetselgruppeAnlegen(EditRaetselgruppePayload payload, AuthenticatedUser user) throws WebApplicationException;
 
 	/**
 	 * Ändert die Basisdaten einer Rätselgruppe. Dabei wird geprüft, ob es eine mit den Keys oder dem Namen bereits gibt. In
@@ -48,7 +49,7 @@ public interface RaetselgruppenService {
 	 *                 boolean
 	 * @return         RaetselgruppensucheTrefferItem
 	 */
-	RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(EditRaetselgruppePayload payload, String userId, boolean isAdmin) throws WebApplicationException;
+	RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(EditRaetselgruppePayload payload, AuthenticatedUser user) throws WebApplicationException;
 
 	/**
 	 * @param  raetselgruppeID
@@ -58,7 +59,7 @@ public interface RaetselgruppenService {
 	 *                         boolean
 	 * @return                 Optional
 	 */
-	Optional<RaetselgruppeDetails> loadDetails(String raetselgruppeID, String userId, boolean isAdmin);
+	Optional<RaetselgruppeDetails> loadDetails(String raetselgruppeID, AuthenticatedUser user);
 
 	/**
 	 * Legt ein neues Element an
@@ -70,7 +71,7 @@ public interface RaetselgruppenService {
 	 * @param isAdmin
 	 *                        boolean * @return RaetselgruppeDetails
 	 */
-	RaetselgruppeDetails elementAnlegen(String raetselgruppeID, EditRaetselgruppenelementPayload payload, String userId, boolean isAdmin);
+	RaetselgruppeDetails elementAnlegen(String raetselgruppeID, EditRaetselgruppenelementPayload payload, AuthenticatedUser user);
 
 	/**
 	 * Ändert ein vorhandenes Element
@@ -82,7 +83,7 @@ public interface RaetselgruppenService {
 	 * @param isAdmin
 	 *                        boolean * @return RaetselgruppeDetails
 	 */
-	RaetselgruppeDetails elementAendern(String raetselgruppeID, EditRaetselgruppenelementPayload payload, String userId, boolean isAdmin);
+	RaetselgruppeDetails elementAendern(String raetselgruppeID, EditRaetselgruppenelementPayload payload, AuthenticatedUser user);
 
 	/**
 	 * Löscht das gegebene Element der Rätselgruppe.
@@ -94,7 +95,7 @@ public interface RaetselgruppenService {
 	 * @param isAdmin
 	 *                        boolean * @return RaetselgruppeDetails
 	 */
-	RaetselgruppeDetails elementLoeschen(String raetselgruppeID, String elementID, String userId, boolean isAdmin);
+	RaetselgruppeDetails elementLoeschen(String raetselgruppeID, String elementID, AuthenticatedUser user);
 
 	/**
 	 * Generiert die Vorschau des Quiz als PDF. Dabei werden Aufgaben und Lösungen gemischt.
@@ -110,7 +111,7 @@ public interface RaetselgruppenService {
 	 *
 	 * @param  raetselgruppeID
 	 * @param  layoutAntwortvorschlaege
-	 * @return GeneratedFile
+	 * @return                          GeneratedFile
 	 */
 	GeneratedFile downloadLaTeXSource(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 }

@@ -29,8 +29,10 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
+import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
 import de.egladil.web.mja_auth.dto.MessagePayload;
+import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselGeneratorServiceImpl
@@ -54,13 +56,18 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final String userId, final boolean isAdmin) {
+	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final AuthenticatedUser user) {
 
 		LOGGER.debug("start generate output");
 
-		Raetsel raetsel = loadRaetsel(raetselUuid, userId, isAdmin);
+		Raetsel raetsel = loadRaetsel(raetselUuid, user);
 
 		if (raetsel.isSchreibgeschuetzt()) {
+
+			String userId = user == null ? "null" : user.getUuid();
+
+			LOGGER.warn("user {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
+				raetsel.getSchluessel());
 
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
@@ -166,11 +173,21 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	}
 
 	@Override
-	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final String userId, final boolean isAdmin) {
+	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final AuthenticatedUser user) {
 
 		LOGGER.debug("start generate output");
 
-		Raetsel raetsel = loadRaetsel(raetselUuid, userId, isAdmin);
+		Raetsel raetsel = loadRaetsel(raetselUuid, user);
+
+		if (!PermissionUtils.hasReadPermission(user, raetsel.getStatus())) {
+
+			String userId = user == null ? "null" : user.getUuid();
+
+			LOGGER.warn("user {} nicht berechtigt, PDF fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
+				raetsel.getSchluessel());
+
+			throw new WebApplicationException(Status.UNAUTHORIZED);
+		}
 
 		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege);
 
@@ -242,9 +259,9 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	 *                                 wenn es keinen Eintrag mit der URI gibt oder noch nicht alle erforderlichen Grafikdateien
 	 *                                 vorhanden sind.
 	 */
-	Raetsel loadRaetsel(final String raetselUuid, final String userId, final boolean isAdmin) throws WebApplicationException {
+	Raetsel loadRaetsel(final String raetselUuid, final AuthenticatedUser user) throws WebApplicationException {
 
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid, userId, isAdmin);
+		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid, user);
 
 		if (raetsel == null) {
 

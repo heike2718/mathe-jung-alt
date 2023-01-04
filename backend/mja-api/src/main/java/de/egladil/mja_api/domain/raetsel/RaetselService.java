@@ -13,6 +13,7 @@ import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
+import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselService
@@ -20,7 +21,7 @@ import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 public interface RaetselService {
 
 	/**
-	 * Sucht alle Rätsel, die zum Suchfilter passen.
+	 * Sucht alle Rätsel, die zum Suchfilter passen und gibt sie der Permission enstprechend zurück.
 	 *
 	 * @param  suchfilter
 	 * @param  limit
@@ -29,48 +30,44 @@ public interface RaetselService {
 	 *                       int Aufsetzpunkt für page
 	 * @param  sortDirection
 	 *                       SortDirection nach schluessel
-	 * @return               List
+	 * @param  user
+	 *                       AuthenticatedUser
+	 * @return               RaetselsucheTreffer
 	 */
-	RaetselsucheTreffer sucheRaetsel(Suchfilter suchfilter, final int limit, final int offset, SortDirection sortDirection);
+	RaetselsucheTreffer sucheRaetsel(Suchfilter suchfilter, final int limit, final int offset, SortDirection sortDirection, AuthenticatedUser user);
 
 	/**
-	 * Legt ein neues Rätsel an.
+	 * Legt ein neues Rätsel an. Durfen nur Autoren und Admins.
 	 *
 	 * @param  payload
 	 *                 EditRaetselPayload die Daten und Metainformationen
-	 * @param  userId
-	 *                 String die ID des eingeloggten Users
-	 * @param  isAdmin
-	 *                 boolean
+	 * @param  user
 	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	Raetsel raetselAnlegen(EditRaetselPayload payload, String userId, boolean isAdmin);
+	Raetsel raetselAnlegen(EditRaetselPayload payload, AuthenticatedUser user);
 
 	/**
 	 * Ändert ein vorhandenes Raetsel
 	 *
 	 * @param  payload
 	 *                 EditRaetselPayload die Daten und Metainformationen
-	 * @param  userId
-	 *                 String die ID des eingeloggten Users
-	 * @param  isAdmin
-	 *                 boolean
+	 * @param  user
+	 *                 AuthenticatedUser
+	 *                 AuthenticatedUser
 	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	Raetsel raetselAendern(EditRaetselPayload payload, String userId, boolean isAdmin);
+	Raetsel raetselAendern(EditRaetselPayload payload, AuthenticatedUser user);
 
 	/**
-	 * Holt die Details des Rätsels zu der gegebenen id. Anhand des anfragenden Users wird entschieden, ob dieser das Rätsel ändern
-	 * darf.
+	 * Holt die Details des Rätsels zu der gegebenen id. Falls das Rätsel existiert, wird der Schreibschutz anhand der Permissions
+	 * für den User aufgehoben.
 	 *
 	 * @param  id
-	 * @param  userId
-	 *                 String die ID des eingeloggten Users
-	 * @param  isAdmin
-	 *                 boolean
-	 * @return         Raetsel oder null.
+	 * @param  user
+	 *              AuthenticatedUser
+	 * @return      Raetsel oder null.
 	 */
-	Raetsel getRaetselZuId(String id, String userId, boolean isAdmin);
+	Raetsel getRaetselZuId(String id, AuthenticatedUser user);
 
 	/**
 	 * @param  schluessel
