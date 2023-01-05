@@ -59,4 +59,12 @@ public interface QuellenService {
 	 * @return        Optional
 	 */
 	Optional<QuelleMinimalDto> findQuelleForUser(String userId);
+
+	/**
+	 * Läd die minimalen Attribute einer Quelle.
+	 *
+	 * @param  quelleId
+	 * @return          QuelleMinimalDto
+	 */
+	Optional<QuelleMinimalDto> loadQuelleMinimal(String quelleId);
 }

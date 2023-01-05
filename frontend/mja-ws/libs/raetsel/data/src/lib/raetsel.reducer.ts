@@ -1,24 +1,24 @@
 import { initialPaginationState, PaginationState } from "@mja-ws/core/model";
-import { Raetsel, SelectableDeskriptoren } from "@mja-ws/raetsel/model";
+import { Raetsel, RaetselDetails, SelectableDeskriptoren } from "@mja-ws/raetsel/model";
 import { Action, ActionReducer, createFeature, createReducer, FeatureConfig, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
 
 export interface RaetselState {
     readonly loaded: boolean;
-    readonly selectedId: string | undefined;
     readonly page: Raetsel[];
     readonly paginationState: PaginationState;
     readonly selectableDeskriptoren: SelectableDeskriptoren[];
     readonly saveSuccessMessage: string | undefined;
+    readonly raetselDetails: RaetselDetails | undefined;
 };
 
 const initialState: RaetselState = {
     loaded: false,
-    selectedId: undefined,
     page: [],
     paginationState: initialPaginationState,
     selectableDeskriptoren: [],
-    saveSuccessMessage: undefined
+    saveSuccessMessage: undefined,
+    raetselDetails: undefined
 };
 
 export const raetselFeature = createFeature({
@@ -37,6 +37,12 @@ export const raetselFeature = createFeature({
                 loaded: true,
                 page: action.treffer.treffer,
                 paginationState: {...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt}                
+            }
+        }),
+        on(raetselActions.raetsel_details_loaded, (state, action) => {
+            return {
+                ...state,
+                raetselDetails: action.raetselDetails
             }
         }),
         on(raetselActions.raetselliste_cleared, (state, action): RaetselState => {

@@ -26,6 +26,8 @@ import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
+import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
+import de.egladil.mja_api.domain.quellen.QuellenService;
 import de.egladil.mja_api.domain.raetsel.AntwortvorschlaegeMapper;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselDao;
@@ -57,6 +59,9 @@ public class RaetselServiceImpl implements RaetselService {
 	RaetselFileService raetselFileService;
 
 	@Inject
+	QuellenService quellenServive;
+
+	@Inject
 	RaetselDao raetselDao;
 
 	private final FindPathsGrafikParser findPathsGrafikParser = new FindPathsGrafikParser();
@@ -71,7 +76,7 @@ public class RaetselServiceImpl implements RaetselService {
 		List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
 		long anzahlGesamt = 0L;
 
-		boolean nurFreigegebene = !(PermissionUtils.isUserAdmin(user) && PermissionUtils.isUserAutor(user));
+		boolean nurFreigegebene = PermissionUtils.restrictSucheToFreigegeben(user);
 
 		switch (suchfilterVariante) {
 
@@ -233,6 +238,12 @@ public class RaetselServiceImpl implements RaetselService {
 		result.setImages(raetselFileService.findImages(result.getSchluessel()));
 
 		result.setGrafikInfos(grafikInfos);
+		Optional<QuelleMinimalDto> optQuelle = quellenServive.loadQuelleMinimal(raetsel.quelle);
+
+		if (optQuelle.isPresent()) {
+
+			result.setQuelle(optQuelle.get());
+		}
 
 		return result;
 	}

@@ -162,4 +162,21 @@ public class QuellenServiceImpl implements QuellenService {
 			.withName(nameStrategie.getName(persistenteQuelle)).withMediumIdentifier(persistenteQuelle.getMediumUuid());
 	}
 
+	@Override
+	public Optional<QuelleMinimalDto> loadQuelleMinimal(final String quelleId) {
+
+		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findById(quelleId);
+
+		if (optAusDB.isEmpty()) {
+
+			return Optional.empty();
+		}
+
+		PersistenteQuelleReadonly quelle = optAusDB.get();
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(quelle.getQuellenart());
+
+		QuelleMinimalDto result = new QuelleMinimalDto().withId(quelle.uuid).withName(nameStrategie.getName(quelle));
+		return Optional.of(result);
+	}
+
 }

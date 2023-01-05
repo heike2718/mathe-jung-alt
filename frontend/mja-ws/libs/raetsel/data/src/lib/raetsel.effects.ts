@@ -22,6 +22,15 @@ export class RaetselEffects {
         )
     });
 
+    raetselSelected$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(raetselActions.raetsel_selected),
+            concatMap((action) => this.#raetselHttpService.loadRaetselDetails(action.raetsel)),
+            map((raetselDetails) => raetselActions.raetsel_details_loaded({ raetselDetails }))
+        )
+    });
+
     raetsellisteCleared$ = createEffect(() => {
 
         return this.#actions.pipe(

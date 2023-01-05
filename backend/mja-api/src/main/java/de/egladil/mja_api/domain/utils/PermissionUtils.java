@@ -130,4 +130,23 @@ public final class PermissionUtils {
 
 		return roles.contains(ROLE_AUTOR);
 	}
+
+	/**
+	 * Checkt, ob die Suche auf Entities mit DomainEntityStatus.FREIGEGEBEN eingeschränkt werden muss.
+	 *
+	 * @param  user
+	 *              AuthenticatedUser
+	 * @return      boolen
+	 */
+	public static boolean restrictSucheToFreigegeben(final AuthenticatedUser user) {
+
+		boolean nurFreigegebene = true;
+
+		if (PermissionUtils.isUserAdmin(user) || PermissionUtils.isUserAutor(user)) {
+
+			nurFreigegebene = false;
+		}
+
+		return nurFreigegebene;
+	}
 }

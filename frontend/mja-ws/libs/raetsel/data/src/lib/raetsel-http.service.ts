@@ -9,9 +9,9 @@ import { DeskriptorUI,
     QUERY_PARAM_SUCHSTRING,
     QUERY_PARAM_TYPE_DESKRIPTOREN 
 } from "@mja-ws/core/model";
-import { RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
+import { Raetsel, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
 import { Configuration } from "@mja-ws/shared/config";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class RaetselHttpService {
@@ -42,6 +42,14 @@ export class RaetselHttpService {
         const url = this.#url + '/admin/v2';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.get<RaetselsucheTreffer>(url, { headers, params });
+    }
+
+    public loadRaetselDetails(raetsel: Raetsel): Observable<RaetselDetails> {
+
+        const url = this.#url + '/v1/' + raetsel.id;
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+
+        return this.#http.get<RaetselDetails>(url, {headers: headers});        
     }
 
 

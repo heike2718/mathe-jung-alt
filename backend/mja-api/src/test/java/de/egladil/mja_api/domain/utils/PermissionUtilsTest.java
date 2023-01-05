@@ -170,6 +170,43 @@ public class PermissionUtilsTest {
 			assertTrue(result);
 		}
 
+		@Test
+		void should_restrictSucheToFreigegebenReturnFalse_when_userIsAutor() {
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser("hallo", new String[] { "AUTOR", "STANDARD" }, null, "bladi");
+
+			// Act + Assert
+			assertFalse(PermissionUtils.restrictSucheToFreigegeben(user));
+		}
+
+		@Test
+		void should_restrictSucheToFreigegebenReturnFalse_when_userIsAdmin() {
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser("hallo", new String[] { "ADMIN", "STANDARD" }, null, "bladi");
+
+			// Act + Assert
+			assertFalse(PermissionUtils.restrictSucheToFreigegeben(user));
+		}
+
+		@Test
+		void should_restrictSucheToFreigegebenReturnTrue_when_userIsStandard() {
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser("hallo", new String[] { "PRIVAT", "STANDARD" }, null, "bladi");
+
+			// Act + Assert
+			assertTrue(PermissionUtils.restrictSucheToFreigegeben(user));
+		}
+
+		@Test
+		void should_restrictSucheToFreigegebenReturnTrue_when_userIsNull() {
+
+			// Act + Assert
+			assertTrue(PermissionUtils.restrictSucheToFreigegeben(null));
+		}
+
 	}
 
 	@Nested

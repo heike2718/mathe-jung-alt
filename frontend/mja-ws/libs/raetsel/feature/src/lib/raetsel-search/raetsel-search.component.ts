@@ -145,7 +145,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   onRowClicked(row: any): void {
 
     const raetsel: Raetsel = <Raetsel>row;
-    // this.raetselFacade.selectRaetsel(raetsel);
+    this.raetselFacade.selectRaetsel(raetsel);
   }
 
   loadRaetsel(): void {

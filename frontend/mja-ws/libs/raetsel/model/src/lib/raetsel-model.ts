@@ -1,4 +1,4 @@
-import { DeskriptorUI, GeneratedImages, STATUS } from "@mja-ws/core/model";
+import { DeskriptorUI, GeneratedImages, noopQuelle, QuelleUI, STATUS } from "@mja-ws/core/model";
 
 export interface RaetselSuchfilter {
   readonly suchstring: string;
@@ -44,19 +44,14 @@ export interface RaetselDetails {
   readonly status: STATUS;
   readonly schreibgeschuetzt: boolean;
   readonly frage: string;
-  readonly loesung?: string;
-  readonly kommentar?: string;
-  readonly quelleId: string;
+  readonly loesung: string | undefined;
+  readonly kommentar: string | undefined;
+  readonly quelle: QuelleUI;
   readonly antwortvorschlaege: Antwortvorschlag[];
   readonly deskriptoren: DeskriptorUI[];
   readonly images: GeneratedImages | null;
   readonly raetselPDF: Blob | null;
   readonly grafikInfos: GrafikInfo[];
-};
-
-export interface RaetselDetailsContent {
-  readonly raetsel: RaetselDetails;
-  readonly quelleId?: string;
 };
 
 export interface EditRaetselPayload {
@@ -73,7 +68,7 @@ export const initialRaetselDetails: RaetselDetails = {
   frage: '',
   loesung: '',
   kommentar: '',
-  quelleId: '',
+  quelle: noopQuelle,
   antwortvorschlaege: [],
   deskriptoren: [],
   images: null,
