@@ -225,7 +225,11 @@ npx nx generate @nrwl/angular:component raetsel-search --project=raetsel-feature
 ```
 
 
+### RaetselDetailsComponent
 
+```
+npx nx generate @nrwl/angular:component raetsel-details --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-details --standalone --no-interactive --dry-run
+```
 
 
 
@@ -306,5 +310,31 @@ export interface RaetselState {
 ```
 
 verwenden. Menno, menno, menno.
- 
+
+__metareducer zum Synchronisieren des localStorage und zum Leeren des stores beim logout__
+
+
+werden in main.ts so eingebunden:
+
+```
+...
+const localStorageMetaReducer = localStorageReducer('auth', 'coreQuelle', 'coreDeskriptoren'); // <-- synchronisiert diese Slices des Store mit localStorage wegen F5.
+const clearStoreMetaReducer = loggedOutMetaReducer;
+
+const allMetaReducers = environment.production ? [localStorageMetaReducer] : [localStorageMetaReducer, clearStoreMetaReducer];
+
+...
+    /** das muss so gemacht werden, weil ohne den Parameter {} nichts da ist, wohinein man den state hängen könnte */
+    provideStore(
+      {},
+      {
+        metaReducers: allMetaReducers
+      }
+    ),
+    provideEffects([LocalStorageEffects]),
+    provideStoreDevtools(),
+
+...
+...
+```
 

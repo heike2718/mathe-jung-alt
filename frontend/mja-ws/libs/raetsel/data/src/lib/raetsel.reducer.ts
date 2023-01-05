@@ -49,8 +49,9 @@ export const raetselFeature = createFeature({
             return {
                 ...state,
                 loaded: false,
-                page: []
+                page: [],
+                raetselDetails: undefined
             };
-        }),
+        })
     )
 });

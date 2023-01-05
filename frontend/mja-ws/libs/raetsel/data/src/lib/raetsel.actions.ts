@@ -9,7 +9,7 @@ export const raetselActions = createActionGroup({
         'FIND_RAETSEL': props<{suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition}>(),
         'RAETSEL_FOUND': props<{treffer: RaetselsucheTreffer}>(),
         'RAETSEL_SELECTED': props<{raetsel: Raetsel}>(),
-        'RAETSEL_DETAILS_LOADED': props<{raetselDetails: RaetselDetails}>(),
-        'RAETSELLISTE_CLEARED': emptyProps(),
+        'RAETSEL_DETAILS_LOADED': props<{raetselDetails: RaetselDetails, navigateTo: string}>(),
+        'RAETSELLISTE_CLEARED': emptyProps()
     }
 });

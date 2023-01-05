@@ -6,7 +6,7 @@ import { AppComponent } from './app/app.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideStore } from '@ngrx/store';
+import { provideStore, StoreModule } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { appRoutes } from './app/app.routes';
@@ -21,10 +21,16 @@ import { AddBaseUrlInterceptor, ErrorInterceptor } from '@mja-ws/shared/http';
 import { ErrorHandlerService } from './app/services/error-handler.service';
 import { LocalStorageEffects, localStorageReducer } from '@mja-ws/local-storage-data';
 import { LoadingInterceptor } from '@mja-ws/shared/messaging/api';
+import { loggedOutMetaReducer } from './app/+state/logout-meta-reducer';
 
 if (environment.production) {
   enableProdMode();
 }
+
+const localStorageMetaReducer = localStorageReducer('auth', 'coreQuelle', 'coreDeskriptoren'); // <-- synchronisiert diese Slices des Store mit localStorage wegen F5.
+const clearStoreMetaReducer = loggedOutMetaReducer;
+
+const allMetaReducers = environment.production ? [localStorageMetaReducer] : [localStorageMetaReducer, clearStoreMetaReducer];
 
 registerLocaleData(localeDe, 'de');
 
@@ -40,7 +46,7 @@ bootstrapApplication(AppComponent, {
     provideStore(
       {},
       {
-        metaReducers: [localStorageReducer('auth', 'coreQuelle', 'coreDeskriptoren')],  // <-- synchronisiert diese Slices des Store mit localStorage wegen F5.
+        metaReducers: allMetaReducers
       }
     ),
     provideEffects([LocalStorageEffects]),

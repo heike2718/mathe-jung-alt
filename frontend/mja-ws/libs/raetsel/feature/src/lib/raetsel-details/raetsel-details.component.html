@@ -1,0 +1,5 @@
+<p>raetsel-details works!</p>
+
+<div *ngIf="raetselFacade.raetselDetails$ | async as raetsel">
+    <p>Rätsel {{raetsel.schluessel}} geladen</p>
+</div>
