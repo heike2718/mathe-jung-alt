@@ -1,3 +1,4 @@
+import { User } from '@mja-ws/shared/auth/model';
 import { createSelector } from '@ngrx/store';
 import { authFeature } from './auth.reducer';
 

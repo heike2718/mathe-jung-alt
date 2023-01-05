@@ -110,20 +110,29 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.loadRaetsel();
   }
 
+  // getDisplayedColumns(): string[] {
+
+  //   if (this.isAdmin) {
+  //     if (this.#scrWidth > 959) {
+  //       return ['status', 'schluessel', 'name', 'kommentar'];
+  //     } else {
+  //       return ['status', 'schluessel', 'name', 'kommentar'];
+  //     }
+  //   } else {
+  //     if (this.#scrWidth > 959) {
+  //       return ['schluessel', 'name', 'deskriptoren'];
+  //     } else {
+  //       return ['schluessel', 'name'];
+  //     }
+  //   }
+  // }
+
   getDisplayedColumns(): string[] {
 
     if (this.isAdmin) {
-      if (this.#scrWidth > 959) {
-        return ['status', 'schluessel', 'name', 'kommentar'];
-      } else {
-        return ['status', 'schluessel', 'name'];
-      }
+      return ['status', 'schluessel', 'name', 'kommentar'];
     } else {
-      if (this.#scrWidth > 959) {
-        return ['schluessel', 'name', 'deskriptoren'];
-      } else {
-        return ['schluessel', 'name'];
-      }
+      return ['schluessel', 'name', 'deskriptoren'];
     }
   }
 

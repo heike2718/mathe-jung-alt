@@ -36,7 +36,8 @@ export const raetselFeature = createFeature({
                 ...state,
                 loaded: true,
                 page: action.treffer.treffer,
-                paginationState: {...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt}                
+                paginationState: {...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt},
+                raetselDetails: undefined              
             }
         }),
         on(raetselActions.raetsel_details_loaded, (state, action) => {
