@@ -24,6 +24,16 @@
             </mat-accordion>
         </div>
 
+        <div *ngIf="!user.isAdmin">
+            <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                        [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF generieren</button></div>
+                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                        (click)="gotoRaetselUebersicht()">Suche</button>
+                </div>
+            </div>
+        </div>
+
         <div *ngIf="user.isAdmin">
             <h2>Metadaten und LaTeX</h2>
 
