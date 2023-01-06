@@ -9,8 +9,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { Router } from '@angular/router';
-import { GrafikInfo, initialRaetselDetails, RaetselDetails } from '@mja-ws/raetsel/model';
+import { GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
+import { FrageLoesungImagesComponent } from '@mja-ws/shared/components';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -22,7 +23,8 @@ import { Subscription, tap } from 'rxjs';
     MatExpansionModule,
     MatButtonModule,
     MatFormFieldModule,
-    TextFieldModule
+    TextFieldModule,
+    FrageLoesungImagesComponent
   ],
   templateUrl: './raetsel-details.component.html',
   styleUrls: ['./raetsel-details.component.scss'],

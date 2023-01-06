@@ -1,1 +1,1 @@
-export * from './lib/shared-components';
+export { FrageLoesungImagesComponent } from './lib/frage-loesung-images/frage-loesung-images.component';

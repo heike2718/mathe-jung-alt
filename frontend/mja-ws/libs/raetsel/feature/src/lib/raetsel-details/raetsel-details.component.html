@@ -3,6 +3,8 @@
         fxLayoutGap="20px">
         <h1>Rätsel {{raetsel.schluessel}}</h1>
 
+        <mja-frage-loesung-images *ngIf="raetsel.images" [images]="raetsel.images"></mja-frage-loesung-images>
+
         <div *ngIf="raetsel.antwortvorschlaege.length > 0">
             <mat-accordion>
                 <mat-expansion-panel>
