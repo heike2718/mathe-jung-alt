@@ -1,0 +1,34 @@
+{
+  "name": "grafik-model",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/grafik/model/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/grafik/model",
+        "main": "libs/grafik/model/src/index.ts",
+        "tsConfig": "libs/grafik/model/tsconfig.lib.json",
+        "assets": ["libs/grafik/model/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/grafik/model/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/grafik/model"],
+      "options": {
+        "jestConfig": "libs/grafik/model/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:grafik", "type:model"]
+}

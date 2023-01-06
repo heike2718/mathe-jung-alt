@@ -40,7 +40,21 @@
               },              
               {
                 "sourceTag": "domain:raetsel",
-                "onlyDependsOnLibsWithTags": "type:core:model"
+                "onlyDependsOnLibsWithTags": [
+                  "type:core:model",
+                  "type:model",
+                  "type:api"
+                ]
+              },
+              {
+                "sourceTag": "domain:grafik",
+                "onlyDependOnLibsWithTags": [
+                  "type:shared:messaging:api",
+                  "type:model",
+                  "type:api",
+                  "type:data",
+                  "type:shared:ngrx-utils"
+                ]
               },
               {
                 "sourceTag": "domain:core",
@@ -55,7 +69,8 @@
                   "type:shared:ui",
                   "type:shared:auth:api",
                   "type:core:model",
-                  "type:core:api"
+                  "type:core:api",
+                  "type:shared:messaging:api"
                 ]
               },
               {
@@ -125,7 +140,8 @@
               {
                 "sourceTag": "type:shared:ui",
                 "onlyDependOnLibsWithTags": [
-                  "type:core:model"
+                  "type:core:model",
+                  "type:shared:messaging:api"
                 ]
               },
               {

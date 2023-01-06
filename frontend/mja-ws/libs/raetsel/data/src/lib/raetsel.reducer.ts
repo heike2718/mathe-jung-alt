@@ -1,6 +1,6 @@
 import { initialPaginationState, PaginationState } from "@mja-ws/core/model";
 import { Raetsel, RaetselDetails, SelectableDeskriptoren } from "@mja-ws/raetsel/model";
-import { Action, ActionReducer, createFeature, createReducer, FeatureConfig, on } from "@ngrx/store";
+import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
 
 export interface RaetselState {

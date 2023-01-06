@@ -84,6 +84,25 @@
 
             <mat-accordion>
 
+                <mat-expansion-panel *ngIf="raetsel.grafikInfos.length !== 0">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Grafiken
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <mat-nav-list>
+                        <mat-list-item *ngFor="let grafikInfo of raetsel.grafikInfos">
+                            {{ grafikInfo.pfad }}
+                            <button mat-icon-button (click)="grafikLaden(grafikInfo.pfad)">
+                                <mat-icon>info</mat-icon>
+                            </button>
+                        </mat-list-item>
+                    </mat-nav-list>
+
+                    <mja-grafik (responsePayload)="onGrafikHochgeladen($event)"></mja-grafik>
+                </mat-expansion-panel>
+
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                         <mat-panel-title>

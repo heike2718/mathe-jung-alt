@@ -1,0 +1,34 @@
+{
+  "name": "grafik-data",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/grafik/data/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/grafik/data",
+        "main": "libs/grafik/data/src/index.ts",
+        "tsConfig": "libs/grafik/data/tsconfig.lib.json",
+        "assets": ["libs/grafik/data/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/grafik/data/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/grafik/data"],
+      "options": {
+        "jestConfig": "libs/grafik/data/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:grafik", "type:data"]
+}

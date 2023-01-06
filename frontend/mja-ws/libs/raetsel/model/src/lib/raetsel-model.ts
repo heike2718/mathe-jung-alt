@@ -1,4 +1,5 @@
 import { DeskriptorUI, GeneratedImages, noopQuelle, QuelleUI, STATUS } from "@mja-ws/core/model";
+import { Message } from "@mja-ws/shared/messaging/api";
 
 export interface RaetselSuchfilter {
   readonly suchstring: string;
@@ -25,6 +26,15 @@ export interface GrafikInfo {
   readonly pfad: string;
   readonly existiert: boolean;
 };
+
+export interface GrafikSearchResult {
+  readonly pfad: string;
+  readonly messagePayload: Message;
+  readonly image?: string;
+};
+
+export const nullGraphicSearchResult: GrafikSearchResult = {pfad: '', messagePayload: {level: 'INFO', message: ''}};
+
 
 
 /** Minimalset an Attributen, die bei einer Suche geladen werden sollen */

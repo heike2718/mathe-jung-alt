@@ -209,6 +209,19 @@ npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:d
 npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --buildable --no-interactive --dry-run
 ```
 
+### Grafik
+
+ist eine library, die für das Hochladen von Grafikdateien für Rätsel benötigt wird. Sie existiert also eigentlich nicht als selbständige Library, aber ich will die Grafik-Aktionen von der raetsel-library trennen, weil sonst alles zu sehr vermisch ist.
+Es ist sinnvoll, dafür ein eigenes Store-Feature zu haben, weil anderenfalls das Raetsel-Feature zu aufgebläht ist. 
+
+Store/raetsel kann ohne Store/grafik auskommen. Und die meiste Zeit benötigt man libs/grafik nicht für die Raetsel.
+
+```
+npx nx generate @nrwl/js:library model --directory=grafik --tags='domain:grafik, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library data --directory=grafik --tags='domain:grafik, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library api --directory=grafik --tags='domain:grafik, type:api' --buildable --no-interactive --dry-run
+```
+
 ## Rätsel
 
 ```
@@ -233,6 +246,18 @@ npx nx generate @nrwl/angular:component raetsel-details --project=raetsel-featur
 
 ### Component antwortvorschlag
 
+```
+npx nx generate @nrwl/angular:component antwortvorschlag --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-antwortvorschlag --standalone --no-interactive --dry-run
+```
+
+### Component grafik-details
+
+Das ist die Komponente, mit der Grafiken für die Rätsel hochgeladen werden können.
+
+
+```
+npx nx generate @nrwl/angular:component grafik-details --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-grafik --standalone --no-interactive --dry-run
+```
 
 
 ## Shared Componensts library
@@ -250,6 +275,11 @@ Linting-Rules erweitert. Man kommt mit der Grafik jetzt leider nicht mehr hinter
 npx nx generate @nrwl/angular:component frage-loesung-images --project=shared-components --selector=mja-frage-loesung-images --standalone --no-interactive --dry-run
 ```
 
+### Component file-upload
+
+```
+npx nx generate @nrwl/angular:component file-upload --project=shared-components --selector=mja-file-upload --standalone --no-interactive --dry-run
+```
 
 
 ## FAQ

@@ -2,6 +2,8 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -11,8 +13,11 @@ import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { Router } from '@angular/router';
 import { GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
-import { FrageLoesungImagesComponent } from '@mja-ws/shared/components';
+import { FileUploadComponent, FrageLoesungImagesComponent } from '@mja-ws/shared/components';
 import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
+import { Message } from '@mja-ws/shared/messaging/api';
+import { GrafikFacade } from '@mja-ws/grafik/api';
+import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -23,10 +28,14 @@ import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.
     FlexLayoutModule,
     MatExpansionModule,
     MatButtonModule,
+    MatIconModule,
     MatFormFieldModule,
+    MatListModule,
     TextFieldModule,
     FrageLoesungImagesComponent,
-    AntwortvorschlagComponent
+    AntwortvorschlagComponent,
+    FileUploadComponent,
+    GrafikDetailsComponent
   ],
   templateUrl: './raetsel-details.component.html',
   styleUrls: ['./raetsel-details.component.scss'],
@@ -35,6 +44,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   public raetselFacade = inject(RaetselFacade);
   public authFacade = inject(AuthFacade);
+  public grafikFacade = inject(GrafikFacade);
 
   #router = inject(Router);
 
@@ -71,5 +81,15 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   generierenDiabled(): boolean {
     const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.grafikInfos.filter(gi => !gi.existiert);
     return grafikInfosOhneFile.length > 0;
+  }
+
+  grafikLaden(link: string): void {
+    this.grafikFacade.grafikPruefen(link);
+  }
+
+  onGrafikHochgeladen($event: Message): void {
+    if ($event.level === 'INFO') {
+      this.raetselFacade.selectRaetsel(this.#raetselDetails);
+    }
   }
 }

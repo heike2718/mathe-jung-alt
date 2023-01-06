@@ -1,0 +1,34 @@
+{
+  "name": "grafik-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/grafik/api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/grafik/api",
+        "main": "libs/grafik/api/src/index.ts",
+        "tsConfig": "libs/grafik/api/tsconfig.lib.json",
+        "assets": ["libs/grafik/api/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/grafik/api/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/grafik/api"],
+      "options": {
+        "jestConfig": "libs/grafik/api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:grafik", "type:api"]
+}

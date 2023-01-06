@@ -1,0 +1,28 @@
+<div *ngIf="grafikSelected" else grafikNichtGeladen>
+    <ng-container *ngIf="grafikFacade.grafikSearchResult$ | async as selectedGrafik">
+        <div *ngIf="selectedGrafik.messagePayload.level !=='INFO'" class="bordered bg-white">
+            {{selectedGrafik.pfad}}: {{selectedGrafik.messagePayload.message}}
+        </div>
+        <div *ngIf="selectedGrafik.messagePayload.level ==='INFO'" class="bordered bg-white">
+            {{selectedGrafik.pfad}}: Alles gut: Grafik ist schon hochgeladen.
+
+            <div *ngIf="selectedGrafik.image !== null" class="bg-white mt-1">
+                <img src="data:image/png;base64,{{selectedGrafik.image}}" />
+            </div>
+        </div>
+        
+        <mja-file-upload [uploadModel]="uploadModel" (dateiAusgewaehlt)="onDateiAusgewaehlt($event)"
+            (responsePayload)="onResponse($event)"></mja-file-upload>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
+
+            <div fxFlex="0 1 calc(25%-20px)">
+                <button mat-raised-button color="primary" (click)="reset()">leeren</button>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #grafikNichtGeladen>
+    <p>zum Prüfen auf info klicken</p>
+</ng-template>
