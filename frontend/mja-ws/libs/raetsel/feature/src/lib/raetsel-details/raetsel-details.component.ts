@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
 import { FrageLoesungImagesComponent } from '@mja-ws/shared/components';
+import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -24,7 +25,8 @@ import { FrageLoesungImagesComponent } from '@mja-ws/shared/components';
     MatButtonModule,
     MatFormFieldModule,
     TextFieldModule,
-    FrageLoesungImagesComponent
+    FrageLoesungImagesComponent,
+    AntwortvorschlagComponent
   ],
   templateUrl: './raetsel-details.component.html',
   styleUrls: ['./raetsel-details.component.scss'],
