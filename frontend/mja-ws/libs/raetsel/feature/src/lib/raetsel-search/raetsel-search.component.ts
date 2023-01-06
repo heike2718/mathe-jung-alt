@@ -34,7 +34,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
   isAdmin = false;
-  anzahlRaetsel: number = 0;
+  anzahlRaetsel = 0;
 
   // Declare height and width variables
   // #scrHeight: number;
@@ -151,7 +151,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   }
 
-  onRowClicked(row: any): void {
+  onRowClicked(row: Raetsel): void {
 
     const raetsel: Raetsel = <Raetsel>row;
     this.raetselFacade.selectRaetsel(raetsel);

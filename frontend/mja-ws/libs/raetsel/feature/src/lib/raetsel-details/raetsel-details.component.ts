@@ -9,7 +9,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { Router } from '@angular/router';
-import { GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
+import { GrafikInfo, initialRaetselDetails, RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
 
 @Component({
@@ -34,9 +34,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   #router = inject(Router);
 
-  #raetselDetails!: RaetselDetails;
-
   #raetselDetailsSubscription = new Subscription();
+  #raetselDetails!: RaetselDetails;
 
   ngOnInit(): void {
 
@@ -50,7 +49,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   startEdit(): void {
-
+    console.log('start edit');
   }
 
   openPrintPNGDialog(): void {

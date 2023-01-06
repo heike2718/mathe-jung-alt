@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router";
 import { RaetselSearchComponent } from "./raetsel-search/raetsel-search.component";
-import { raetselDataProvider } from '@mja-ws/raetsel/data';
+import { raetselDataProvider } from '@mja-ws/raetsel/api';
 import { AuthGuard } from '@mja-ws/shared/auth/api';
 import { RaetselDetailsComponent } from "./raetsel-details/raetsel-details.component";
 

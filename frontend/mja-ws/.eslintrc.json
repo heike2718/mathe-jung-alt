@@ -34,7 +34,8 @@
                   "type:shared:http",
                   "type:shared:auth:api",
                   "type:shared:http",
-                  "type:shared:messaging:api"
+                  "type:shared:messaging:api",
+                  "type:shared:local-storage"
                 ]
               },              
               {
@@ -50,7 +51,11 @@
                 "onlyDependOnLibsWithTags": [
                   "type:api",
                   "type:ui",
-                  "type:model"
+                  "type:model",
+                  "type:shared:ui",
+                  "type:shared:auth:api",
+                  "type:core:model",
+                  "type:core:api"
                 ]
               },
               {
@@ -59,7 +64,8 @@
                   "type:shared:messaging:api",
                   "type:model",
                   "type:api",
-                  "type:shared:util"
+                  "type:shared:util",
+                  "type:shared:ui"
                 ],"bannedExternalImports": [
                   "@ngrx/**"
                 ]
@@ -114,6 +120,19 @@
                   "type:shared:ngrx-utils",
                   "type:shared:util",
                   "type:core:api"
+                ]
+              },
+              {
+                "sourceTag": "type:shared:ui",
+                "onlyDependOnLibsWithTags": [
+                  "type:core:model"
+                ]
+              },
+              {
+                "sourceTag": "type:shared:local-storage",
+                "onlyDependOnLibsWithTags": [
+                  "type:shared:auth:data",
+                  "type:shared:ngrx-utils"
                 ]
               },
               { 

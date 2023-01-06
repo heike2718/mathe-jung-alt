@@ -231,6 +231,20 @@ npx nx generate @nrwl/angular:component raetsel-search --project=raetsel-feature
 npx nx generate @nrwl/angular:component raetsel-details --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-details --standalone --no-interactive --dry-run
 ```
 
+## Shared Componensts library
+
+```
+npx nx generate @nrwl/js:library components --directory=shared --tags='domain:shared, type:shared:ui' --buildable --no-interactive --dry-run
+```
+
+Linting-Rules erweitert: type:ui und type:feature depends on type:shared:ui 
+
+### Component frage-loesung-images
+
+
+```
+npx nx generate @nrwl/angular:component frage-loesung-images --project=shared-components --selector=mja-frage-loesung-images --standalone --no-interactive --dry-run
+```
 
 
 ## FAQ
