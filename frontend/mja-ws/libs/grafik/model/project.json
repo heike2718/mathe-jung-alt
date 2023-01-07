@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["domain:grafik", "type:model"]
+  "tags": ["domain:grafik:model", "type:model"]
 }

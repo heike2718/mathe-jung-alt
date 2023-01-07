@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["domain:raetsel", "type:feature"]
+  "tags": ["domain:raetsel:feature", "type:feature"]
 }

@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["domain:shared","type:shared:local-storage"]
+  "tags": ["domain:shared","type:local-storage"]
 }

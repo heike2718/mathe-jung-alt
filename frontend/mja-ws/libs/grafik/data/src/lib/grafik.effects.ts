@@ -1,4 +1,3 @@
-import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 import { Actions, createEffect, ofType } from "@ngrx/effects";

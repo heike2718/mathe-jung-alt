@@ -10,8 +10,7 @@ import { DeskriptorUI,
     QUERY_PARAM_TYPE_DESKRIPTOREN 
 } from "@mja-ws/core/model";
 import { Raetsel, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
-import { Configuration } from "@mja-ws/shared/config";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class RaetselHttpService {

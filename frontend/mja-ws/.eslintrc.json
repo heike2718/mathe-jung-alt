@@ -30,25 +30,57 @@
                   "type:feature",
                   "type:shared:config",
                   "type:shared:http",
-                  "type:shared:auth:api",
-                  "type:shared:http",
-                  "type:shared:local-storage"
+                  "type:local-storage"
                 ]
               },              
               {
-                "sourceTag": "domain:raetsel",
+                "sourceTag": "domain:raetsel:model",
                 "onlyDependsOnLibsWithTags": [
                   "type:model",
-                  "type:api"
+                  "type:core:model"
                 ]
               },
               {
-                "sourceTag": "domain:grafik",
-                "onlyDependOnLibsWithTags": [
+                "sourceTag": "domain:raetsel:data",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:raetsel:model"
+                ]
+              },
+              {
+                "sourceTag": "domain:raetsel:api",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:raetsel:model",
+                  "domain:raetsel:data",
+                  "type:core:api"
+                ]
+              },
+              {
+                "sourceTag": "domain:raetsel:feature",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:raetsel:model",
+                  "domain:raetsel:api",
+                  "domain:grafik:api",
+                  "domain:grafik:model"
+                ]
+              },{
+                "sourceTag": "domain:grafik:model",
+                "onlyDependsOnLibsWithTags": [
                   "type:model",
-                  "type:api",
-                  "type:data",
-                  "type:shared:ngrx-utils"
+                  "type:core:model"
+                ]
+              },
+              {
+                "sourceTag": "domain:grafik:data",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:grafik:model",
+                  "type:shared:messaging:api"
+                ]
+              },
+              {
+                "sourceTag": "domain:grafik:api",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:grafik:model",
+                  "domain:grafik:data"
                 ]
               },
               {
@@ -87,12 +119,6 @@
                 "sourceTag": "type:data",
                 "onlyDependOnLibWithTags": [
                   "type:model"
-                ]
-              },
-              {
-                "sourceTag": "domain:deskriptoren",
-                "onlyDependOnLibsWithTags": [
-                  "domain:shared"
                 ]
               },
               {
@@ -137,7 +163,7 @@
                 ]
               },
               {
-                "sourceTag": "type:shared:local-storage",
+                "sourceTag": "type:local-storage",
                 "onlyDependOnLibsWithTags": [
                   "type:shared:auth:data",
                   "type:shared:ngrx-utils"
@@ -154,10 +180,7 @@
                 "sourceTag": "type:core:data",
                 "onlyDependOnLibsWithTags": [
                   "type:core:model",
-                  "type:shared:messaging:api",
-                  "type:shared:config",
-                  "type:shared:ngrx-utils",
-                  "type:shared:util"
+                  "type:shared:messaging:api"
                 ]
               },
               {
