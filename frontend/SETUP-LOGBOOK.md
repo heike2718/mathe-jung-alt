@@ -218,9 +218,8 @@ Store/raetsel kann ohne Store/grafik auskommen. Und die meiste Zeit benötigt ma
 
 ```
 npx nx generate @nrwl/js:library model --directory=grafik --tags='domain:grafik, type:model' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library data --directory=raetsel --tags='domain:raetsel, type:data' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library api --directory=raetsel --tags='domain:raetsel, type:api' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library feature --directory=raetsel --tags='domain:raetsel, type:feature' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library data --directory=grafik --tags='domain:grafik, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library api --directory=grafik --tags='domain:grafik, type:api' --buildable --no-interactive --dry-run
 ```
 
 ## Rätsel

@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["domain:core", "type:core:api"]
+  "tags": ["domain:core", "type:core:api", "type:api"]
 }

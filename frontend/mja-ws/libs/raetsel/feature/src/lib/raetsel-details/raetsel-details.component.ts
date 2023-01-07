@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -28,6 +29,7 @@ import { GrafikDetailsComponent } from '../grafik-details/grafik-details.compone
     FlexLayoutModule,
     MatExpansionModule,
     MatButtonModule,
+    MatDialogModule,
     MatIconModule,
     MatFormFieldModule,
     MatListModule,
@@ -45,6 +47,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   public raetselFacade = inject(RaetselFacade);
   public authFacade = inject(AuthFacade);
   public grafikFacade = inject(GrafikFacade);
+  public dialog = inject(MatDialog);
 
   #router = inject(Router);
 

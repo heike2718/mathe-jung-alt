@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["domain:shared", "type:shared:auth:api"]
+  "tags": ["domain:shared", "type:shared:auth:api", "type:api"]
 }

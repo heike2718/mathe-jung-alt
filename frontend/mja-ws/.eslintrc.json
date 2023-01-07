@@ -24,8 +24,6 @@
               {
                 "sourceTag": "type:app",
                 "onlyDependOnLibsWithTags": [
-                  "domain:core",
-                  "domain:shared:messaging:ui",
                   "type:model",
                   "type:ui",
                   "type:api",
@@ -34,14 +32,12 @@
                   "type:shared:http",
                   "type:shared:auth:api",
                   "type:shared:http",
-                  "type:shared:messaging:api",
                   "type:shared:local-storage"
                 ]
               },              
               {
                 "sourceTag": "domain:raetsel",
                 "onlyDependsOnLibsWithTags": [
-                  "type:core:model",
                   "type:model",
                   "type:api"
                 ]
@@ -49,7 +45,6 @@
               {
                 "sourceTag": "domain:grafik",
                 "onlyDependOnLibsWithTags": [
-                  "type:shared:messaging:api",
                   "type:model",
                   "type:api",
                   "type:data",
@@ -65,18 +60,14 @@
                 "onlyDependOnLibsWithTags": [
                   "type:api",
                   "type:ui",
-                  "type:model",
-                  "type:shared:ui",
-                  "type:shared:auth:api",
-                  "type:core:model",
-                  "type:core:api",
-                  "type:shared:messaging:api"
+                  "type:model"
+                ],"bannedExternalImports": [
+                  "@ngrx/**"
                 ]
               },
               {
                 "sourceTag": "type:ui",
                 "onlyDependOnLibsWithTags": [
-                  "type:shared:messaging:api",
                   "type:model",
                   "type:api",
                   "type:shared:util",
@@ -141,6 +132,7 @@
                 "sourceTag": "type:shared:ui",
                 "onlyDependOnLibsWithTags": [
                   "type:core:model",
+                  "type:shared:util",
                   "type:shared:messaging:api"
                 ]
               },

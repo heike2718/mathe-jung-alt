@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["domain:core", "type:core:model"]
+  "tags": ["domain:core", "type:core:model", "type:model"]
 }
