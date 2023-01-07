@@ -3,6 +3,16 @@
         fxLayoutGap="20px">
         <h1>Rätsel {{raetsel.schluessel}}</h1>
 
+        <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column">
+                <mat-chip-list>
+                    <div *ngFor="let deskriptor of raetsel.deskriptoren">
+                        <mat-chip>{{deskriptor.name}}</mat-chip>
+                    </div>
+                </mat-chip-list>
+            </div>
+        </div>
+
         <mja-frage-loesung-images *ngIf="raetsel.images" [images]="raetsel.images"></mja-frage-loesung-images>
 
         <div *ngIf="raetsel.antwortvorschlaege.length > 0">
