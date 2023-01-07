@@ -1,4 +1,4 @@
-import { initialPaginationState, PaginationState } from "@mja-ws/core/model";
+import { GeneratedImages, initialPaginationState, PaginationState } from "@mja-ws/core/model";
 import { Raetsel, RaetselDetails, SelectableDeskriptoren } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
@@ -28,7 +28,7 @@ export const raetselFeature = createFeature({
         on(raetselActions.select_page, (state, action): RaetselState => {
             return {
                 ...state,
-                paginationState: { ...state.paginationState, pageDefinition: {pageIndex: action.pageDefinition.pageIndex, pageSize: action.pageDefinition.pageSize, sortDirection: action.pageDefinition.sortDirection} }
+                paginationState: { ...state.paginationState, pageDefinition: { pageIndex: action.pageDefinition.pageIndex, pageSize: action.pageDefinition.pageSize, sortDirection: action.pageDefinition.sortDirection } }
             };
         }),
         on(raetselActions.raetsel_found, (state, action): RaetselState => {
@@ -36,8 +36,8 @@ export const raetselFeature = createFeature({
                 ...state,
                 loaded: true,
                 page: action.treffer.treffer,
-                paginationState: {...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt},
-                raetselDetails: undefined              
+                paginationState: { ...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt },
+                raetselDetails: undefined
             }
         }),
         on(raetselActions.raetsel_details_loaded, (state, action) => {
@@ -46,7 +46,17 @@ export const raetselFeature = createFeature({
                 raetselDetails: action.raetselDetails
             }
         }),
-        on(raetselActions.raetselliste_cleared, (state, action): RaetselState => {
+        on(raetselActions.raetsel_png_generated, (state, action) => {
+
+            if (state.raetselDetails) {
+                const images: GeneratedImages = { imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung };
+                const neueDetails: RaetselDetails = { ...state.raetselDetails, images: images };
+                return { ...state, raetselDetails: neueDetails, generatingOutput: false };
+            }
+
+            return { ...state };
+        }),
+        on(raetselActions.raetselliste_cleared, (state, _action): RaetselState => {
             return {
                 ...state,
                 loaded: false,

@@ -281,6 +281,12 @@ npx nx generate @nrwl/angular:component frage-loesung-images --project=shared-co
 npx nx generate @nrwl/angular:component file-upload --project=shared-components --selector=mja-file-upload --standalone --no-interactive --dry-run
 ```
 
+### Component select-printparameters-dialog
+
+```
+npx nx generate @nrwl/angular:component select-printparameters-dialog --project=shared-components --selector=mja-select-printparameters-dialog --standalone --no-interactive --dry-run
+```
+
 
 ## FAQ
 

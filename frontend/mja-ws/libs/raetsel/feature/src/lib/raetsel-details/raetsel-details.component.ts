@@ -14,11 +14,12 @@ import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { Router } from '@angular/router';
 import { GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
-import { FileUploadComponent, FrageLoesungImagesComponent } from '@mja-ws/shared/components';
+import { FileUploadComponent, FrageLoesungImagesComponent, SelectPrintparametersDialogComponent } from '@mja-ws/shared/components';
 import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { GrafikFacade } from '@mja-ws/grafik/api';
 import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
+import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectPrintparametersDialogData } from '@mja-ws/core/model';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -37,7 +38,8 @@ import { GrafikDetailsComponent } from '../grafik-details/grafik-details.compone
     FrageLoesungImagesComponent,
     AntwortvorschlagComponent,
     FileUploadComponent,
-    GrafikDetailsComponent
+    GrafikDetailsComponent,
+    SelectPrintparametersDialogComponent
   ],
   templateUrl: './raetsel-details.component.html',
   styleUrls: ['./raetsel-details.component.scss'],
@@ -57,7 +59,10 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.pipe(
-      tap((details) => this.#raetselDetails = details)
+      tap((details) => {
+        console.log('raetselDetails changed');
+        this.#raetselDetails = details;
+      })
     ).subscribe();
   }
 
@@ -70,11 +75,11 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   openPrintPNGDialog(): void {
-    // this.openPrintDialog('PNG');
+    this.#openPrintDialog('PNG');
   }
 
   openPrintPDFDialog(): void {
-    // this.openPrintDialog('PDF');
+    this.#openPrintDialog('PDF');
   }
 
   gotoRaetselUebersicht(): void {
@@ -94,5 +99,35 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     if ($event.level === 'INFO') {
       this.raetselFacade.selectRaetsel(this.#raetselDetails);
     }
+  }
+
+  #openPrintDialog(outputformat: OUTPUTFORMAT): void {
+
+    const dialogData: SelectPrintparametersDialogData = {
+      titel: outputformat + ' generieren',
+      layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
+      selectedLayoutAntwortvorschlaege: undefined
+    }
+
+    const dialogRef = this.dialog.open(SelectPrintparametersDialogComponent, {
+      height: '300px',
+      width: '700px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
+
+        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        switch (dialogData.selectedLayoutAntwortvorschlaege) {
+          case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
+          case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
+          case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
+        }
+
+        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, layout);
+      }
+    });
   }
 }

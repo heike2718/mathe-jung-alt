@@ -1,4 +1,4 @@
-import { PageDefinition } from '@mja-ws/core/model';
+import { GeneratedFile, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition } from '@mja-ws/core/model';
 import { Raetsel, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
@@ -10,6 +10,10 @@ export const raetselActions = createActionGroup({
         'RAETSEL_FOUND': props<{treffer: RaetselsucheTreffer}>(),
         'RAETSEL_SELECTED': props<{raetsel: Raetsel}>(),
         'RAETSEL_DETAILS_LOADED': props<{raetselDetails: RaetselDetails, navigateTo: string}>(),
+        'GENERATE_RAETSEL_PNG': props<{ raetselID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>(),
+        'RAETSEL_PNG_GENERATED': props<{ images: GeneratedImages }>(),
+        'GENERATE_RAETSEL_PDF': props<{ raetselID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>(),
+        'RAETSEL_PDF_GENERATED':props<{ pdf: GeneratedFile }>(),
         'RAETSELLISTE_CLEARED': emptyProps()
     }
 });

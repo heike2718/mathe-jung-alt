@@ -1,4 +1,4 @@
-<ng-container *ngIf="authFacade.user$ | async as user">
+<div *ngIf="authFacade.user$ | async as user">
     <div *ngIf="raetselFacade.raetselDetails$ | async as raetsel; else keinRaetsel" fxLayout="column"
         fxLayoutGap="20px">
         <h1>Rätsel {{raetsel.schluessel}}</h1>
@@ -142,7 +142,7 @@
     </div>
 
 
-</ng-container>
+</div>
 
 
 

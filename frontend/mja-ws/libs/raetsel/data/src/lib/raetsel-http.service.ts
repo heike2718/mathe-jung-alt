@@ -1,6 +1,9 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { DeskriptorUI,
+    GeneratedFile,
+    GeneratedImages,
+    LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
     PageDefinition,
     QUERY_PARAM_DESKRIPTOREN,
     QUERY_PARAM_LIMIT,
@@ -50,6 +53,26 @@ export class RaetselHttpService {
 
         return this.#http.get<RaetselDetails>(url, {headers: headers});        
     }
+
+    public generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
+
+        const url = this.#url + '/v1/PNG/' + raetselId;
+    
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+    
+        return this.#http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers, params: params });
+      }
+    
+    public generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    
+        const url = this.#url + '/v1/PDF/' + raetselId;
+    
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+    
+        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
+      }
 
 
     #getDeskriptoren(suchfilter: RaetselSuchfilter): string {

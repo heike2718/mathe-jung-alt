@@ -1,6 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { noopAction } from "@mja-ws/shared/ngrx-utils";
+import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatMap, map, tap } from "rxjs";
 import { RaetselHttpService } from "./raetsel-http.service";
@@ -14,6 +15,7 @@ export class RaetselEffects {
     #actions = inject(Actions);
     #raetselHttpService = inject(RaetselHttpService);
     #router = inject(Router);
+    #fileDownloadService = inject(FileDownloadService);
 
     findRaetsel$ = createEffect(() => {
 
@@ -39,6 +41,34 @@ export class RaetselEffects {
             ofType(raetselActions.raetsel_details_loaded),
             tap((action) => {
                 this.#router.navigateByUrl(action.navigateTo);
+            }),
+        ), { dispatch: false });
+
+    generateRaetselPng$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(raetselActions.generate_raetsel_png),
+            concatMap((action) => this.#raetselHttpService.generateRaetselPNGs(action.raetselID, action.layoutAntwortvorschlaege)),
+            map((generatedImages) => raetselActions.raetsel_png_generated({ images: generatedImages }))
+        );
+    });
+
+    generateRaetselPDF$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(raetselActions.generate_raetsel_pdf),
+            concatMap((action) => this.#raetselHttpService.generateRaetselPDF(action.raetselID, action.layoutAntwortvorschlaege)),
+            map((file) => raetselActions.raetsel_pdf_generated({ pdf: file }))
+        );
+
+    });
+
+    downloadPDF$ = createEffect(() =>
+
+        this.#actions.pipe(
+            ofType(raetselActions.raetsel_pdf_generated),
+            tap((action) => {
+                this.#fileDownloadService.downloadPdf(action.pdf.fileData, action.pdf.fileName);
             }),
         ), { dispatch: false });
 

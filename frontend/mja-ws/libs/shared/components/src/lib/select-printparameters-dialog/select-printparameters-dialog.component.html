@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>{{data.titel}}</h1>
+<mat-dialog-content class="mat-typography">
+    <mat-form-field class="form-box" appearance="fill" fxFlex="100">
+        <mat-label>Layout Antwortvorschläge*</mat-label>
+        <select matNativeControl name="antowrtvorschlaegeTyp" id="antowrtvorschlaegeTyp"
+            [(ngModel)]="data.selectedLayoutAntwortvorschlaege">
+            <option selected="" value=""></option>
+            <option [ngValue]="c" *ngFor="let c of data.layoutsAntwortvorschlaegeInput">
+                {{c}}
+            </option>
+        </select>
+        <mat-hint>NOOP, falls es keine Antwortvorschläge gibt oder die Antwortvorschläge bereits Teil des Aufgabentextes sind
+        </mat-hint>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" [disabled]="!data.selectedLayoutAntwortvorschlaege" [mat-dialog-close]="true">generieren</button>
+    <button mat-raised-button color="secondary" mat-dialog-close cdkFocusInitial>doch nicht</button>    
+</mat-dialog-actions>
+
