@@ -29,7 +29,8 @@ public interface RaetselGeneratorService {
 	Images generatePNGsRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final AuthenticatedUser user);
 
 	/**
-	 * Generiert das Rätsel als 2seitiges PDF. Minderprivilegierte User bekommen nur bei freigegebenen Rätseln ein PDF.
+	 * Generiert das Rätsel als 2seitiges PDF: Frage auf Seite 1, Lösung auf Seite 2. Minderprivilegierte User bekommen nur bei
+	 * freigegebenen Rätseln ein PDF.
 	 *
 	 * @param  raetselUuid
 	 * @param  layoutAntwortvorschlaege

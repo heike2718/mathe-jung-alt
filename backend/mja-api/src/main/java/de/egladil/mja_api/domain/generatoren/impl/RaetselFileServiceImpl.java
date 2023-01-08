@@ -73,13 +73,14 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	}
 
 	@Override
-	public String generateFrageUndLoesung(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public String generateFrageUndLoesung(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final boolean zweiseitig) {
 
 		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + SUFFIX_PDF + ".tex";
 		File file = new File(path);
 
 		RaetselGeneratorinput input = new RaetselGeneratorinput().withAntwortvorschlaege(raetsel.getAntwortvorschlaege())
-			.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung()).withLayoutAntwortvorschlaege(layoutAntwortvorschlaege);
+			.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung()).withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
+			.withZweiseitig(zweiseitig);
 
 		String textRaetsel = new QuizitemLaTeXGenerator().generateLaTeXFrageLoesung(input);
 

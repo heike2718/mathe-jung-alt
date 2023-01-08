@@ -27,9 +27,7 @@ public class QuizitemLaTeXGenerator {
 	 *
 	 * @param  input
 	 *               RaetselGeneratorinput die Texte des Rätsels, die gedruckt werden sollen.
-	 * @return       String<br>
-	 *               <br>
-	 *               TODO: hier noch Flexibilität rein mit Lösung auf nächste Seite oder so,
+	 * @return       String
 	 */
 	public String generateLaTeXFrageLoesung(final RaetselGeneratorinput input) {
 
@@ -46,10 +44,26 @@ public class QuizitemLaTeXGenerator {
 
 		if (StringUtils.isNotBlank(loesungsbuchstabe)) {
 
+			if (input.isZweiseitig()) {
+
+				template = template.replace(LaTeXPlaceholder.NEWPAGE.placeholder(), LaTeXConstants.VALUE_NEWPAGE);
+			} else {
+
+				template = template.replace(LaTeXPlaceholder.NEWPAGE.placeholder(), "");
+			}
+
 			template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), loesungsbuchstabe);
 		}
 
 		if (StringUtils.isNotBlank(input.getLoesung())) {
+
+			if (input.isZweiseitig()) {
+
+				template = template.replace(LaTeXPlaceholder.NEWPAGE.placeholder(), LaTeXConstants.VALUE_NEWPAGE);
+			} else {
+
+				template = template.replace(LaTeXPlaceholder.NEWPAGE.placeholder(), "");
+			}
 
 			template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), input.getLoesung());
 		} else {

@@ -45,9 +45,11 @@ public interface RaetselFileService {
 	 *                                  Der Name des Files ist der Schlüssel des Raetsels mit angehängtem _x.
 	 * @param  layoutAntwortvorschlaege
 	 *                                  LayoutAntwortvorschlaege
+	 * @param  zweiseitig
+	 *                                  boolean bei true wird die Lösung, falls vorhanden, auf die nächste Seite gedruckt.
 	 * @return                          String
 	 */
-	String generateFrageUndLoesung(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	String generateFrageUndLoesung(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, boolean zweiseitig);
 
 	/**
 	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.

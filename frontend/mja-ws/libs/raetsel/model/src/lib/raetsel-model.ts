@@ -86,11 +86,6 @@ export const initialRaetselDetails: RaetselDetails = {
   grafikInfos: []  
 };
 
-export interface SelectableDeskriptoren {
-  readonly deskriptor: DeskriptorUI;
-  readonly selected: boolean;
-};
-
 export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {
 
   if (deskriptoren.length === 0) {

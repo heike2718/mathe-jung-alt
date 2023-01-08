@@ -14,6 +14,7 @@ export class AuthFacade {
   #coreFacade = inject(CoreFacade);
   #messageService = inject(MessageService);
 
+  readonly userIsAdmin$: Observable<boolean> = this.#authRepository.userIsAdmin$;
   readonly user$: Observable<User> = this.#authRepository.user$;
   readonly userIsLoggedIn$: Observable<boolean> = this.#authRepository.loggedIn$;
   readonly userIsLoggedOut$: Observable<boolean> = this.#authRepository.loggedIn$.pipe(

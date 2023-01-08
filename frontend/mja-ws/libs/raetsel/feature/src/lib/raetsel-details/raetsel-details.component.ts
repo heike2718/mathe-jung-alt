@@ -73,7 +73,9 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   startEdit(): void {
-    console.log('start edit');
+    if (this.#raetselDetails) {
+      this.raetselFacade.editRaetsel();
+    }
   }
 
   openPrintPNGDialog(): void {

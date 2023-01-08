@@ -189,7 +189,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
-		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege);
+		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege, PermissionUtils.isUserOrdinary(user));
 
 		Response response = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");

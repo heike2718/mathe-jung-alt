@@ -131,6 +131,21 @@ public final class PermissionUtils {
 		return roles.contains(ROLE_AUTOR);
 	}
 
+	public static boolean isUserOrdinary(final AuthenticatedUser user) {
+
+		if (isUserAdmin(user)) {
+
+			return false;
+		}
+
+		if (isUserAutor(user)) {
+
+			return false;
+		}
+
+		return true;
+	}
+
 	/**
 	 * Checkt, ob die Suche auf Entities mit DomainEntityStatus.FREIGEGEBEN eingeschränkt werden muss.
 	 *

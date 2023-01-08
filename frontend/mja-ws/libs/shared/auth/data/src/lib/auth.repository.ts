@@ -14,6 +14,11 @@ export class AuthRepository {
 
     #store = inject(Store);
 
+    readonly userIsAdmin$: Observable<boolean> = this.#store.select(fromAuth.user).pipe(
+        filterDefined,
+        switchMap((user) => of(isAdmin(user)))
+    );
+
     readonly user$: Observable<User> = this.#store.select(fromAuth.user).pipe(
         filterDefined,
         switchMap((user) => of({ fullName: user.fullName, isAdmin: isAdmin(user), anonym: user.anonym }))

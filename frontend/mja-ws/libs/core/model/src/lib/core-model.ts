@@ -8,6 +8,16 @@ export const QUERY_PARAM_LIMIT = 'limit';
 export const QUERY_PARAM_OFFSET = 'offset';
 export const QUERY_PARAM_SORT_DIRECTION = 'sortDirection';
 
+export interface MjaEntity {
+  id: string | number
+};
+
+export interface SelectableItem extends MjaEntity {
+  readonly id: string | number;
+  readonly name: string;
+  readonly selected: boolean;
+};
+
 /** 
  * Ein angemeldeter ADMIN bzw. AUTOR ist selbst eine Quelle. Dies ist die zugeordnete Quelle.
  * Alle Raetsel und davon abgeleiteten Objekte referenzieren eine Quelle. Dies ist die zugeordnete Quelle 

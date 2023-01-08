@@ -20,6 +20,8 @@ public class RaetselGeneratorinput {
 
 	private LayoutAntwortvorschlaege layoutAntwortvorschlaege;
 
+	private boolean zweiseitig = false;
+
 	public String getFrage() {
 
 		return frage;
@@ -61,6 +63,17 @@ public class RaetselGeneratorinput {
 	public RaetselGeneratorinput withLayoutAntwortvorschlaege(final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		this.layoutAntwortvorschlaege = layoutAntwortvorschlaege;
+		return this;
+	}
+
+	public boolean isZweiseitig() {
+
+		return zweiseitig;
+	}
+
+	public RaetselGeneratorinput withZweiseitig(final boolean zweiseitig) {
+
+		this.zweiseitig = zweiseitig;
 		return this;
 	}
 }

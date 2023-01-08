@@ -1,5 +1,5 @@
-import { GeneratedImages, initialPaginationState, PaginationState } from "@mja-ws/core/model";
-import { Raetsel, RaetselDetails, SelectableDeskriptoren } from "@mja-ws/raetsel/model";
+import { GeneratedImages, initialPaginationState, PaginationState, SelectableItem } from "@mja-ws/core/model";
+import { Raetsel, RaetselDetails } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
 
@@ -7,7 +7,7 @@ export interface RaetselState {
     readonly loaded: boolean;
     readonly page: Raetsel[];
     readonly paginationState: PaginationState;
-    readonly selectableDeskriptoren: SelectableDeskriptoren[];
+    readonly selectableDeskriptoren: SelectableItem[];
     readonly saveSuccessMessage: string | undefined;
     readonly raetselDetails: RaetselDetails | undefined;
 };
@@ -41,10 +41,21 @@ export const raetselFeature = createFeature({
             }
         }),
         on(raetselActions.raetsel_details_loaded, (state, action) => {
+
+            const selectableDeskriptoren: SelectableItem[] = [];
+            action.raetselDetails.deskriptoren.forEach(d => {
+                selectableDeskriptoren.push({
+                    id: d.id,
+                    name: d.name,
+                    selected: true
+                })
+            });
+
             return {
                 ...state,
-                raetselDetails: action.raetselDetails
-            }
+                raetselDetails: action.raetselDetails,
+                selectableDeskriptoren: selectableDeskriptoren
+            };
         }),
         on(raetselActions.raetsel_png_generated, (state, action) => {
 
