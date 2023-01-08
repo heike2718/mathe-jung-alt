@@ -262,7 +262,7 @@ npx nx generate @nrwl/angular:component grafik-details --project=raetsel-feature
 ### RaetselEditorComponent
 
 ```
-npx nx generate @nrwl/angular:component raetsel-details --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-details --standalone --no-interactive --dry-run
+npx nx generate @nrwl/angular:component raetsel-editor --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-editor --standalone --no-interactive --dry-run
 ```
 
 
