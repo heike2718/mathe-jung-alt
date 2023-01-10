@@ -90,7 +90,6 @@ export class RaetselEffects {
       }),
     ), { dispatch: false });
 
-
   cancelEdit$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RaetselActions.cancelEdit),

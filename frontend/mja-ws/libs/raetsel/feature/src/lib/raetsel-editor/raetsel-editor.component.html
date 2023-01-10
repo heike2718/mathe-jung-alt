@@ -117,7 +117,8 @@
                 </div>
 
                 <div class="mb-2">
-                    <mat-slide-toggle formControlName="korrekt" #korrektInput color="primary"> korrekt (nein/ja)</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="korrekt" #korrektInput color="primary"> korrekt
+                        (nein/ja)</mat-slide-toggle>
                 </div>
             </div>
         </div>
@@ -134,9 +135,12 @@
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 [disabled]="!form.valid || antwortvorschlaegeErrors()" (click)="submit()">speichern</button></div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                [disabled]="generierenDiabled()" (click)="openPrintPNGDialog()">PNG generieren</button></div>
-        <div fxLayoutAlign="left center" fxFlex="20"><button  fxFlexFill mat-raised-button color="primary"
-                (click)="cancelEdit()">zurück zu Details</button>
+                [disabled]="generierenDiabled()" matTooltip="PNG Frage und Lösung generieren"  (click)="openPrintPNGDialog()">PNG generieren</button></div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                matTooltip="zurück zur Detailansicht" (click)="cancelEdit()">Abbruch/Details</button>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+            matTooltip="zurück zur Suche" (click)="gotoSuche()">Rätselsuche</button>
         </div>
     </div>
 

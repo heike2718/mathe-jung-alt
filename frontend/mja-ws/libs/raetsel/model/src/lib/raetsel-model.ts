@@ -107,4 +107,3 @@ export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {
 
   return result;
 };
-

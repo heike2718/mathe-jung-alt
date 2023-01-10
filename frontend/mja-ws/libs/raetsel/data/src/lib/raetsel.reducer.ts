@@ -67,6 +67,23 @@ export const raetselFeature = createFeature({
 
             return { ...state };
         }),
+        on(raetselActions.raetsel_saved, (state, action) => {
+
+            const selectableDeskriptoren: SelectableItem[] = [];
+            action.raetselDetails.deskriptoren.forEach(d => {
+                selectableDeskriptoren.push({
+                    id: d.id,
+                    name: d.name,
+                    selected: true
+                })
+            });
+
+            return {
+                ...state,
+                raetselDetails: action.raetselDetails,
+                selectableDeskriptoren: selectableDeskriptoren
+            };
+        }),
         on(raetselActions.raetselliste_cleared, (state, _action): RaetselState => {
             return {
                 ...state,
@@ -74,6 +91,9 @@ export const raetselFeature = createFeature({
                 page: [],
                 raetselDetails: undefined
             };
+        }),
+        on(raetselActions.raetsel_cancel_selection, (state, _action) => {
+            return {...state, raetselDetails: undefined, selectableDeskriptoren: []}
         })
     )
 });

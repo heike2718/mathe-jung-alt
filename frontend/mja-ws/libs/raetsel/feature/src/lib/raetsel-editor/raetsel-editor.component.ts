@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -41,6 +42,7 @@ interface AntwortvorschlagFormValue {
     MatFormFieldModule,
     MatListModule,
     MatSlideToggleModule,
+    MatTooltipModule,
     CdkAccordionModule,
     TextFieldModule,
     FlexLayoutModule,
@@ -183,12 +185,15 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
-    // if (this.raetselDetailsContent && this.raetselDetailsContent.raetsel.id !== 'neu') {
-    //   this.raetselFacade.selectRaetsel(this.raetselDetailsContent.raetsel);
-    // } else {
-    //   this.raetselFacade.cancelEditRaetsel();
-    // }
-    console.log('dinge zum abbrechen tun');
+    if (this.#raetselDetails && this.#raetselDetails.id !== 'neu') {
+      this.raetselFacade.selectRaetsel(this.#raetselDetails);
+    } else {
+      this.raetselFacade.cancelSelection();
+    }
+  }
+
+  gotoSuche(): void {
+    this.raetselFacade.cancelSelection();
   }
 
   openPrintPNGDialog(): void {

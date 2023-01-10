@@ -44,6 +44,10 @@ export class RaetselFacade {
 
   }
 
+  public cancelSelection(): void {
+    this.#store.dispatch(raetselActions.raetsel_cancel_selection());
+  }
+
   public initSelectItemsCompomentModel(raetselDetails: RaetselDetails, alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
 
     const gewaehlteItems: SelectableItem[] = [];
@@ -70,7 +74,7 @@ export class RaetselFacade {
   }
 
   public saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
-    console.log('jetzt speichern');
+    this.#store.dispatch(raetselActions.save_raetsel({ editRaetselPayload }));
   }
 
 }

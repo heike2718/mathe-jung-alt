@@ -52,11 +52,11 @@
                         mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button></div>
                 <div *ngIf="!raetsel.schreibgeschuetzt" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill
                         mat-raised-button color="primary" [disabled]="generierenDiabled()"
-                        (click)="openPrintPNGDialog()">PNG generieren</button></div>
+                        matTooltip="PNG Frage und Lösung generieren" (click)="openPrintPNGDialog()">PNG generieren</button></div>
                 <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                        [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF generieren</button></div>
+                    matTooltip="PDF generieren" [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF generieren</button></div>
                 <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                        (click)="gotoRaetselUebersicht()">Suche</button>
+                    matTooltip="zurück zur Suche" (click)="gotoRaetselUebersicht()">Rätselsuche</button>
                 </div>
             </div>
 

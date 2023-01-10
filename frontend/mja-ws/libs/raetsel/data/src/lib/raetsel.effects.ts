@@ -1,5 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { RaetselDetails } from "@mja-ws/raetsel/model";
+import { MessageService } from "@mja-ws/shared/messaging/api";
 import { noopAction } from "@mja-ws/shared/ngrx-utils";
 import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
@@ -16,6 +18,7 @@ export class RaetselEffects {
     #raetselHttpService = inject(RaetselHttpService);
     #router = inject(Router);
     #fileDownloadService = inject(FileDownloadService);
+    #messageService = inject(MessageService);
 
     findRaetsel$ = createEffect(() => {
 
@@ -72,6 +75,27 @@ export class RaetselEffects {
             }),
         ), { dispatch: false });
 
+    cancelSelectiont$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(raetselActions.raetsel_cancel_selection),
+            tap(() => this.#router.navigateByUrl('raetsel/uebersicht')),
+        ), { dispatch: false });
+
+    saveRaetsel$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(raetselActions.save_raetsel),
+            concatMap((action) => this.#raetselHttpService.saveRaetsel(action.editRaetselPayload)),
+            map((raetselDetails) => raetselActions.raetsel_saved({ raetselDetails }))
+        );
+    });
+
+    raetselSaved$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(raetselActions.raetsel_saved),
+            tap(() => this.#messageService.info('Rätsel erfolgreich gespeichert')),
+        ), { dispatch: false });
+
     raetsellisteCleared$ = createEffect(() => {
 
         return this.#actions.pipe(
@@ -80,4 +104,6 @@ export class RaetselEffects {
             map(() => noopAction())
         );
     });
+
+
 }

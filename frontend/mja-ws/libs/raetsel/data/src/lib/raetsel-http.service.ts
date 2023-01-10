@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { DeskriptorUI,
+import {
+    DeskriptorUI,
     GeneratedFile,
     GeneratedImages,
     LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
@@ -10,15 +11,15 @@ import { DeskriptorUI,
     QUERY_PARAM_OFFSET,
     QUERY_PARAM_SORT_DIRECTION,
     QUERY_PARAM_SUCHSTRING,
-    QUERY_PARAM_TYPE_DESKRIPTOREN 
+    QUERY_PARAM_TYPE_DESKRIPTOREN
 } from "@mja-ws/core/model";
-import { Raetsel, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
+import { EditRaetselPayload, Raetsel, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class RaetselHttpService {
 
-   #http = inject(HttpClient);
+    #http = inject(HttpClient);
 
     #url = '/raetsel';
 
@@ -51,28 +52,41 @@ export class RaetselHttpService {
         const url = this.#url + '/v1/' + raetsel.id;
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        return this.#http.get<RaetselDetails>(url, {headers: headers});        
+        return this.#http.get<RaetselDetails>(url, { headers: headers });
     }
 
     public generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
 
         const url = this.#url + '/v1/PNG/' + raetselId;
-    
+
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
-    
+
         return this.#http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers, params: params });
-      }
-    
+    }
+
     public generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
-    
+
         const url = this.#url + '/v1/PDF/' + raetselId;
-    
+
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
-    
+
         return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
-      }
+    }
+
+    public saveRaetsel(editRaetselPayload: EditRaetselPayload): Observable<RaetselDetails> {
+
+        const url = this.#url + '/v1';
+
+        let headers = new HttpHeaders().set('Accept', 'application/json');
+        
+        if ('neu' === editRaetselPayload.raetsel.id) {
+            return this.#http.post<RaetselDetails>(url, editRaetselPayload, { headers });
+        }
+
+        return this.#http.put<RaetselDetails>(url, editRaetselPayload, { headers })
+    }
 
 
     #getDeskriptoren(suchfilter: RaetselSuchfilter): string {

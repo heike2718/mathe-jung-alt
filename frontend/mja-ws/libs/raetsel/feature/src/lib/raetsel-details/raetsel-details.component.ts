@@ -6,6 +6,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -36,6 +37,7 @@ import { anzeigeAntwortvorschlaegeSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, 
     MatIconModule,
     MatFormFieldModule,
     MatListModule,
+    MatTooltipModule,
     TextFieldModule,
     FrageLoesungImagesComponent,
     AntwortvorschlagComponent,
