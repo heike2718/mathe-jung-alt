@@ -125,6 +125,26 @@
             korrekt sein.</mat-error>
     </form>
 
+    <div *ngIf="selectDeskriptorenComponentModel">
+        <mja-select-items [model]="selectDeskriptorenComponentModel"
+            (selectedItemsChanged)="onSelectedDesktiptorenChanged($event)"></mja-select-items>
+    </div>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                [disabled]="!form.valid || antwortvorschlaegeErrors()" (click)="submit()">speichern</button></div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                [disabled]="generierenDiabled()" (click)="openPrintPNGDialog()">PNG generieren</button></div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button  fxFlexFill mat-raised-button color="primary"
+                (click)="cancelEdit()">zurück zu Details</button>
+        </div>
+    </div>
+
+    <div *ngIf="!form.valid || antwortvorschlaegeErrors()" class="hint-red mt-1 mb-2">
+        Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
+        Pflichtangaben und so.
+    </div>
+
 </div>
 
 

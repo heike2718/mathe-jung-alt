@@ -18,6 +18,20 @@ export interface SelectableItem extends MjaEntity {
   readonly selected: boolean;
 };
 
+export interface SelectItemsCompomentModel {
+  ueberschriftAuswahlliste: string;
+  ueberschriftGewaehlteItems: string;
+  vorrat: SelectableItem[];
+  gewaehlteItems: SelectableItem[];
+};
+
+export const initialSelectItemsComponentModel: SelectItemsCompomentModel = {
+  ueberschriftAuswahlliste: '',
+  ueberschriftGewaehlteItems: 'gewählt:',
+  vorrat: [],
+  gewaehlteItems: []
+};
+
 /** 
  * Ein angemeldeter ADMIN bzw. AUTOR ist selbst eine Quelle. Dies ist die zugeordnete Quelle.
  * Alle Raetsel und davon abgeleiteten Objekte referenzieren eine Quelle. Dies ist die zugeordnete Quelle 
@@ -69,18 +83,16 @@ export type OUTPUTFORMAT = 'PDF' | 'PNG' | 'LATEX';
 export type LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
 
 export const anzeigeAntwortvorschlaegeSelectInput: string[] = [
-    'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
+  'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
 ];
 
 export interface GeneratedFile {
-    readonly fileName: string,
-    readonly fileData: Blob
+  readonly fileName: string,
+  readonly fileData: Blob
 };
 
 export interface SelectPrintparametersDialogData {
-    titel: string;
-    layoutsAntwortvorschlaegeInput: string[];
-    selectedLayoutAntwortvorschlaege?: string;
+  titel: string;
+  layoutsAntwortvorschlaegeInput: string[];
+  selectedLayoutAntwortvorschlaege?: string;
 };
-
-

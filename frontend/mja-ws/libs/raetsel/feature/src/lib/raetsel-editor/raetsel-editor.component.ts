@@ -13,11 +13,15 @@ import { TextFieldModule } from '@angular/cdk/text-field';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { Antwortvorschlag, GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
-import { Subscription, tap } from 'rxjs';
+import { Antwortvorschlag, EditRaetselPayload, GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
+import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { DeskriptorUI, STATUS } from '@mja-ws/core/model';
-import { FrageLoesungImagesComponent } from '@mja-ws/shared/components';
+import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, SelectableItem, SelectItemsCompomentModel, SelectPrintparametersDialogData, STATUS } from '@mja-ws/core/model';
+import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, SelectPrintparametersDialogComponent } from '@mja-ws/shared/components';
+import { CoreFacade } from '@mja-ws/core/api';
+import { GrafikFacade } from '@mja-ws/grafik/api';
+import { Message } from '@mja-ws/shared/messaging/api';
+import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -42,7 +46,11 @@ interface AntwortvorschlagFormValue {
     FlexLayoutModule,
     MatExpansionModule,
     ReactiveFormsModule,
-    FrageLoesungImagesComponent
+    FrageLoesungImagesComponent,
+    SelectItemsComponent,
+    JaNeinDialogComponent,
+    GrafikDetailsComponent,
+    SelectPrintparametersDialogComponent
   ],
   templateUrl: './raetsel-editor.component.html',
   styleUrls: ['./raetsel-editor.component.scss'],
@@ -53,6 +61,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   #raetselDetails!: RaetselDetails;
   #fb = inject(UntypedFormBuilder);
 
+  #coreFacade = inject(CoreFacade);
+
   #raetselDetailsSubscription = new Subscription();
 
   #selectedDeskriptoren: DeskriptorUI[] = [];
@@ -61,7 +71,11 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
 
+  selectDeskriptorenComponentModel!: SelectItemsCompomentModel;
+  dialog = inject(MatDialog);
+
   raetselFacade = inject(RaetselFacade);
+  grafikFacade = inject(GrafikFacade);
   form!: UntypedFormGroup;
 
   constructor() {
@@ -81,12 +95,16 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.pipe(
-      tap((details) => {
-        this.#raetselDetails = details;
+
+    this.#raetselDetailsSubscription = combineLatest([this.raetselFacade.raetselDetails$, this.#coreFacade.alleDeskriptoren$])
+      .subscribe(([raetselDetails, alleDeskriptoren]) => {
+
+        this.#raetselDetails = { ...raetselDetails };
+        this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
+        this.selectDeskriptorenComponentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails, alleDeskriptoren);
+
         this.#initForm();
-      })
-    ).subscribe();
+      });
   }
 
   ngOnDestroy(): void {
@@ -151,6 +169,100 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.#addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
+  onSelectedDesktiptorenChanged($event: any) {
+
+    if ($event) {
+      const selectedItems: SelectableItem[] = (<SelectItemsCompomentModel>$event).gewaehlteItems;
+      this.#selectedDeskriptoren = [];
+      selectedItems.forEach(item => this.#selectedDeskriptoren.push(
+        {
+          id: item.id as number,
+          name: item.name
+        }));
+    }
+  }
+
+  cancelEdit() {
+    // if (this.raetselDetailsContent && this.raetselDetailsContent.raetsel.id !== 'neu') {
+    //   this.raetselFacade.selectRaetsel(this.raetselDetailsContent.raetsel);
+    // } else {
+    //   this.raetselFacade.cancelEditRaetsel();
+    // }
+    console.log('dinge zum abbrechen tun');
+  }
+
+  openPrintPNGDialog(): void {
+    const dialogData: SelectPrintparametersDialogData = {
+      titel: 'PNG generieren',
+      layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
+      selectedLayoutAntwortvorschlaege: undefined
+    }
+
+    const dialogRef = this.dialog.open(SelectPrintparametersDialogComponent, {
+      height: '300px',
+      width: '700px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
+
+        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        switch (dialogData.selectedLayoutAntwortvorschlaege) {
+          case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
+          case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
+          case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
+        }
+
+        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, 'PNG', layout);
+      }
+    });
+  }
+
+  openHistorieLaTeXSpeichernDialog(raetsel: RaetselDetails): void {
+
+    const dialogData: JaNeinDialogData = {
+      frage: 'Soll Historie gespeichert werden?',
+      hinweis: 'Bitte nur bei inhaltlichen Korrekturen. Das spart Speicherplatz'
+    }
+
+    const dialogRef = this.dialog.open(JaNeinDialogComponent, {
+      height: '300px',
+      width: '700px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.#doSubmit(raetsel, result);
+    });
+  }
+
+  submit() {
+
+    const raetsel: RaetselDetails = this.#readFormValues();
+
+    const laTeXChanged = this.#latexChanged(raetsel);
+
+    if (laTeXChanged) {
+      this.openHistorieLaTeXSpeichernDialog(raetsel);
+    } else {
+      this.#doSubmit(raetsel, false);
+    }
+  }
+
+  grafikLaden(link: string): void {
+    this.grafikFacade.grafikPruefen(link);
+  }
+
+  onGrafikHochgeladen($event: Message): void {
+    if ($event.level === 'INFO') {
+      const pfad = $event.message;
+      // this.raetselFacade.grafikHochgeladen(this.raetselDetailsContent.raetsel, pfad);
+      // TODO
+    }
+  }
+
   #initForm() {
 
     const raetsel = this.#raetselDetails;
@@ -206,7 +318,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       frage: formValue['frage'] !== null ? formValue['frage'].trim() : '',
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
       antwortvorschlaege: antwortvorschlaegeNeu,
-      // deskriptoren: this.#selectedDeskriptoren,
+      deskriptoren: this.#selectedDeskriptoren,
       images: null
     };
 
@@ -232,5 +344,15 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     return this.#raetselDetails.id !== 'neu' &&
       (raetsel.frage !== this.#raetselDetails.frage || raetsel.loesung !== this.#raetselDetails.loesung);
+  }
+
+  #doSubmit(raetsel: RaetselDetails, latexHistorisieren: boolean) {
+
+    const editRaetselPayload: EditRaetselPayload = {
+      latexHistorisieren: latexHistorisieren,
+      raetsel: raetsel
+    };
+
+    this.raetselFacade.saveRaetsel(editRaetselPayload);
   }
 }

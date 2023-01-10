@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { coreDeskriptorenActions, coreQuelleActions, fromCoreQuelle, fromCoreDeskriptoren } from "@mja-ws/core/data";
-import { QuelleUI } from "@mja-ws/core/model";
+import { DeskriptorUI, QuelleUI } from "@mja-ws/core/model";
 import { Store } from "@ngrx/store";
 import { Observable, tap } from "rxjs";
 
@@ -20,6 +20,7 @@ export class CoreFacade {
     quelleAdmin$: Observable<QuelleUI> = this.#store.select(fromCoreQuelle.quelleAdmin);
     
     deskriptorenUILoaded$: Observable<boolean> = this.#store.select(fromCoreDeskriptoren.isDeskriptorenUILoaded);
+    alleDeskriptoren$: Observable<DeskriptorUI[]> = this.#store.select(fromCoreDeskriptoren.deskriptotrenUI);
 
     constructor() {
         this.deskriptorenUILoaded$.pipe(

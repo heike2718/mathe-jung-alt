@@ -295,6 +295,18 @@ npx nx generate @nrwl/angular:component file-upload --project=shared-components 
 npx nx generate @nrwl/angular:component select-printparameters-dialog --project=shared-components --selector=mja-select-printparameters-dialog --standalone --no-interactive --dry-run
 ```
 
+### Component select-items
+
+```
+npx nx generate @nrwl/angular:component select-items --project=shared-components --selector=mja-select-items --standalone --no-interactive --dry-run
+```
+
+### JaNeinDialog
+
+```
+npx nx generate @nrwl/angular:component ja-nein-dialog --project=shared-components --selector=mja-ja-nein --standalone --no-interactive --dry-run
+```
+
 
 ## FAQ
 

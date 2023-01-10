@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, PageDefinition, PaginationState } from '@mja-ws/core/model';
+import { DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, PageDefinition, PaginationState, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
-import { Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { EditRaetselPayload, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { deepClone, filterDefined } from '@mja-ws/shared/ngrx-utils';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { findIndex, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -42,6 +42,35 @@ export class RaetselFacade {
 
     this.#router.navigateByUrl('raetsel/editor');
 
+  }
+
+  public initSelectItemsCompomentModel(raetselDetails: RaetselDetails, alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
+
+    const gewaehlteItems: SelectableItem[] = [];
+    raetselDetails.deskriptoren.forEach(d => gewaehlteItems.push({ id: d.id, name: d.name, selected: true }));
+
+    const vorrat: SelectableItem[] = [];
+    alleDeskriptoren.forEach(d => {
+
+      const found = raetselDetails.deskriptoren.find((descr) => { return descr.id === d.id});
+      if (!found) {
+        vorrat.push({ id: d.id, name: d.name, selected: false })
+      }
+    });
+
+    const selectDeskriptorenComponentModel = {
+      ueberschriftAuswahlliste: 'Deskriptoren',
+      ueberschriftGewaehlteItems: 'gewählt:',
+      vorrat: vorrat,
+      gewaehlteItems: gewaehlteItems
+    };
+
+    return selectDeskriptorenComponentModel;
+
+  }
+
+  public saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
+    console.log('jetzt speichern');
   }
 
 }
