@@ -8,7 +8,8 @@ import { filterDefined } from '@mja-ws/shared/ngrx-utils';
 export class LocalStorageEffects {
   storageEvent = createEffect(() => {
     return fromEvent<StorageEvent>(window, 'storage').pipe(
-      pluck('key'),
+      map(x => x?'key':''),
+      // pluck('key'),
       filterDefined,
       map((featureState) => syncLocalStorage({ featureState }))
     );
