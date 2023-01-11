@@ -1,5 +1,5 @@
 import { GeneratedImages, initialPaginationState, PaginationState, SelectableItem } from "@mja-ws/core/model";
-import { Raetsel, RaetselDetails } from "@mja-ws/raetsel/model";
+import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
 
@@ -10,6 +10,7 @@ export interface RaetselState {
     readonly selectableDeskriptoren: SelectableItem[];
     readonly saveSuccessMessage: string | undefined;
     readonly raetselDetails: RaetselDetails | undefined;
+    readonly raetselSuchfilter: RaetselSuchfilter;
 };
 
 const initialState: RaetselState = {
@@ -18,7 +19,8 @@ const initialState: RaetselState = {
     paginationState: initialPaginationState,
     selectableDeskriptoren: [],
     saveSuccessMessage: undefined,
-    raetselDetails: undefined
+    raetselDetails: undefined,
+    raetselSuchfilter: initialRaetselSuchfilter
 };
 
 export const raetselFeature = createFeature({
@@ -30,6 +32,10 @@ export const raetselFeature = createFeature({
                 ...state,
                 paginationState: { ...state.paginationState, pageDefinition: { pageIndex: action.pageDefinition.pageIndex, pageSize: action.pageDefinition.pageSize, sortDirection: action.pageDefinition.sortDirection } }
             };
+        }),
+        on(raetselActions.raetselsuchfilter_changed, (state, action) => {
+
+            return {...state, raetselSuchfilter: action.suchfilter};
         }),
         on(raetselActions.raetsel_found, (state, action): RaetselState => {
             return {
@@ -84,12 +90,13 @@ export const raetselFeature = createFeature({
                 selectableDeskriptoren: selectableDeskriptoren
             };
         }),
-        on(raetselActions.raetselliste_cleared, (state, _action): RaetselState => {
+        on(raetselActions.reset_raetselsuchfilter, (state, _action): RaetselState => {
             return {
                 ...state,
                 loaded: false,
                 page: [],
-                raetselDetails: undefined
+                raetselDetails: undefined,
+                raetselSuchfilter: initialRaetselSuchfilter
             };
         }),
         on(raetselActions.raetsel_cancel_selection, (state, _action) => {

@@ -5,44 +5,53 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { RaetselDataSource, RaetselFacade } from '@mja-ws/raetsel/api';
-import { deskriptorenToString, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
-import { initialPageDefinition, PaginationState } from '@mja-ws/core/model';
-import { merge, Subscription, tap } from 'rxjs';
+import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { initialSelectItemsComponentModel, PageDefinition, PaginationState, QuelleUI, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
+import { combineLatest, debounceTime, merge, Subscription, tap } from 'rxjs';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { CoreFacade } from '@mja-ws/core/api';
+import { RaetselSuchfilterAdminComponent } from '../raetsel-suchfilter-admin/raetsel-suchfilter-admin.component';
+import { SelectItemsComponent } from '@mja-ws/shared/components';
 
 @Component({
   selector: 'mja-raetsel-search',
   standalone: true,
   imports: [
     CommonModule,
+    FlexLayoutModule,
     MatTableModule,
     MatButtonModule,
     MatPaginatorModule,
     MatSortModule,
-    MatIconModule
+    MatIconModule,
+    RaetselSuchfilterAdminComponent,
+    SelectItemsComponent
   ],
   templateUrl: './raetsel-search.component.html',
   styleUrls: ['./raetsel-search.component.scss']
 })
 export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  suchfilter: RaetselSuchfilter = initialRaetselSuchfilter;
+  dataSource = inject(RaetselDataSource);
 
-  public authFacade = inject(AuthFacade);
-  public raetselFacade = inject(RaetselFacade);
-  public dataSource = inject(RaetselDataSource);
-
+  coreFacade = inject(CoreFacade);
 
   isAdmin = false;
   anzahlRaetsel = 0;
 
+  selectItemsCompomentModel: SelectItemsCompomentModel = initialSelectItemsComponentModel;
+
+  #raetselFacade = inject(RaetselFacade);
+  #authFacade = inject(AuthFacade);
+
   // Declare height and width variables
-  // #scrHeight: number;
   #scrWidth!: number;
 
   @HostListener('window:resize', ['$event'])
   getScreenSize() {
-    // this.#scrHeight = window.innerHeight;
     this.#scrWidth = window.innerWidth;
   }
 
@@ -53,20 +62,24 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   #matSortChangedSubscription: Subscription = new Subscription();
   #matPaginatorSubscription: Subscription = new Subscription();
   #paginationStateSubscription: Subscription = new Subscription();
+  #deskriptorenSubscription: Subscription = new Subscription();
+  #suchfilterSubscription: Subscription = new Subscription();
+  #quelleSubscription: Subscription = new Subscription();
 
 
   #pageIndex = 0;
   #sortDirection: SortDirection = 'asc';
+  #quelle: QuelleUI | undefined;
 
   constructor(private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
 
-    this.#userSubscription = this.authFacade.user$.pipe(
+    this.#userSubscription = this.#authFacade.user$.pipe(
       tap((user) => this.isAdmin = user.isAdmin)
     ).subscribe();
 
-    this.#paginationStateSubscription = this.raetselFacade.paginationState$.subscribe(
+    this.#paginationStateSubscription = this.#raetselFacade.paginationState$.subscribe(
       (state: PaginationState) => {
         this.anzahlRaetsel = state.anzahlTreffer;
         this.#pageIndex = state.pageDefinition.pageIndex;
@@ -74,6 +87,31 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       }
     );
 
+    this.#deskriptorenSubscription = combineLatest([this.#raetselFacade.suchfilter$, this.coreFacade.alleDeskriptoren$]).subscribe(
+
+      ([selectedSuchfilter, alleDeskriptoren]) => {
+        if (selectedSuchfilter) {
+          this.selectItemsCompomentModel = this.#raetselFacade.initSelectItemsCompomentModel(selectedSuchfilter.deskriptoren, alleDeskriptoren);
+        }
+      }
+    );
+
+    this.#suchfilterSubscription = this.#raetselFacade.suchfilter$.pipe(
+
+      tap((suchfilter) => this.suchfilter = suchfilter),
+      debounceTime(500),
+      tap(() => {
+        if (this.paginator && this.sort) {
+          this.#triggerSuche();
+        }
+      })
+    ).subscribe();
+
+    this.#quelleSubscription = this.coreFacade.quelleAdmin$.subscribe(
+      (q) => {
+        this.#quelle = q
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -82,6 +120,9 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.#paginationStateSubscription.unsubscribe();
     this.#matPaginatorSubscription.unsubscribe();
     this.#matSortChangedSubscription.unsubscribe();
+    this.#deskriptorenSubscription.unsubscribe();
+    this.#suchfilterSubscription.unsubscribe();
+    this.#quelleSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -99,15 +140,15 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
     this.#matPaginatorSubscription = merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => {
-        // if (this.suchfilter !== undefined) {
-        //   this.#triggerSuche();
-        // }
+        if (!isSuchfilterEmpty(this.suchfilter)) {
+          this.#triggerSuche();
+        }
       })
     ).subscribe();
 
     this.changeDetector.detectChanges();
 
-    this.loadRaetsel();
+    // this.loadRaetsel();
   }
 
   // getDisplayedColumns(): string[] {
@@ -151,22 +192,36 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   }
 
+  neueSuche(): void {
+    this.#raetselFacade.neueRaetselsuche();
+  }
+
+  neuesRaetsel(): void {
+    this.#raetselFacade.createAndEditRaetsel(this.#quelle);
+  }
+
+  buttonNeueSucheDisabled(): boolean {
+    return isSuchfilterEmpty(this.suchfilter);
+  }
+
   onRowClicked(row: Raetsel): void {
 
     const raetsel: Raetsel = <Raetsel>row;
-    this.raetselFacade.selectRaetsel(raetsel);
+    this.#raetselFacade.selectRaetsel(raetsel);
   }
 
-  loadRaetsel(): void {
+  onSuchfilterSuchstringChanged(suchstring: string): void {
+    if (suchstring.length >= 4) {
+      this.#raetselFacade.changeSuchfilterWithDeskriptoren(this.suchfilter.deskriptoren, suchstring);
+    }
+  }
 
+  onSelectItemsCompomentModelChanged(model: SelectItemsCompomentModel): void {
 
-    const suchfilter: RaetselSuchfilter = {
-      deskriptoren: [],
-      suchstring: 'zählen'
-    };
+    if (model.gewaehlteItems.length > 0) {
 
-    this.raetselFacade.triggerSearch(suchfilter, initialPageDefinition);
-
+      this.#raetselFacade.changeSuchfilterWithSelectableItems(model.gewaehlteItems, this.suchfilter.suchstring);
+    }
   }
 
 
@@ -177,4 +232,17 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     // reset Paginator when sort changed
     this.#matSortChangedSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
   }
+
+  #triggerSuche(): void {
+
+    const pageDefinition: PageDefinition = {
+      pageIndex: this.paginator ? this.paginator.pageIndex : this.#pageIndex,
+      pageSize: this.paginator ? this.paginator.pageSize : 20,
+      sortDirection: this.sort ? this.sort.direction : this.#sortDirection
+    }
+
+    this.#raetselFacade.triggerSearch(this.suchfilter, pageDefinition);
+  }
+
+
 }

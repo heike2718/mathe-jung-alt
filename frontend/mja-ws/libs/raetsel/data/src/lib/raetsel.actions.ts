@@ -14,8 +14,9 @@ export const raetselActions = createActionGroup({
         'RAETSEL_PNG_GENERATED': props<{ images: GeneratedImages }>(),
         'GENERATE_RAETSEL_PDF': props<{ raetselID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>(),
         'RAETSEL_PDF_GENERATED':props<{ pdf: GeneratedFile }>(),
+        'RAETSELSUCHFILTER_CHANGED': props<{suchfilter: RaetselSuchfilter}>(),
         'RAETSEL_CANCEL_SELECTION': emptyProps(),
-        'RAETSELLISTE_CLEARED': emptyProps(),
+        'RESET_RAETSELSUCHFILTER': emptyProps(),
         'SAVE_RAETSEL': props<{editRaetselPayload: EditRaetselPayload}>(),
         'RAETSEL_SAVED': props<{raetselDetails: RaetselDetails}>(),
     }

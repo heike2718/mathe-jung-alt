@@ -192,7 +192,7 @@ public class Raetsel extends AbstractDomainEntity {
 
 	public String getQuelleId() {
 
-		return quelleId;
+		return quelle.getId();
 	}
 
 	public Raetsel withQuelleId(final String quelleId) {

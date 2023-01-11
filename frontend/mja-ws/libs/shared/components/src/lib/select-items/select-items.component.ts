@@ -27,13 +27,13 @@ export class SelectItemsComponent implements OnInit, OnDestroy {
   model!: SelectItemsCompomentModel;
 
   @Output()
-  private selectedItemsChanged: EventEmitter<SelectItemsCompomentModel> = new EventEmitter<SelectItemsCompomentModel>();
+  modelChanged: EventEmitter<SelectItemsCompomentModel> = new EventEmitter<SelectItemsCompomentModel>();
 
   ngOnInit(): void {
 
     this.selectItemsFacade.init(this.model);
     this.#modelSubscription = this.selectItemsFacade.selectableItemsModel$.subscribe(
-      model => this.selectedItemsChanged.emit(model)
+      model => this.modelChanged.emit(model)
     );
   }
 

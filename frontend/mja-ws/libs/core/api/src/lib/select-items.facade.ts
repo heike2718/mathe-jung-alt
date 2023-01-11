@@ -11,11 +11,19 @@ export class SelectItemsFacade {
     #model: SelectItemsCompomentModel = initialSelectItemsComponentModel;
     #selectableItemsModelSubject = new BehaviorSubject<SelectItemsCompomentModel>(initialSelectItemsComponentModel);
 
+    #initialVorrat: SelectableItem[] = [];
+
     selectableItemsModel$: Observable<SelectItemsCompomentModel> = this.#selectableItemsModelSubject.asObservable();
 
     init(model: SelectItemsCompomentModel): void {
+        this.#initialVorrat = model.vorrat;
         const restliste: SelectableItem[] = this.#getDifferenzmenge(model.vorrat, model.gewaehlteItems);
         this.#model = { ...model, vorrat: restliste };
+        this.#fireModelChanged(this.#model);
+    }
+
+    resetSelection(): void {
+        this.#model = {...initialSelectItemsComponentModel, vorrat: this.#initialVorrat};
         this.#fireModelChanged(this.#model);
     }
 

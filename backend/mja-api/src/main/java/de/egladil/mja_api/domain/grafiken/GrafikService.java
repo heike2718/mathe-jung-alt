@@ -28,5 +28,4 @@ public interface GrafikService {
 	 * @return
 	 */
 	MessagePayload grafikSpeichern(String relativerPfad, UploadRequestDto dto);
-
 }

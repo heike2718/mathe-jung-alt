@@ -33,7 +33,7 @@ export interface GrafikSearchResult {
   readonly image?: string;
 };
 
-export const nullGraphicSearchResult: GrafikSearchResult = {pfad: '', messagePayload: {level: 'INFO', message: ''}};
+export const nullGraphicSearchResult: GrafikSearchResult = { pfad: '', messagePayload: { level: 'INFO', message: '' } };
 
 
 
@@ -83,27 +83,34 @@ export const initialRaetselDetails: RaetselDetails = {
   deskriptoren: [],
   images: null,
   raetselPDF: null,
-  grafikInfos: []  
+  grafikInfos: []
 };
 
 export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {
 
   if (deskriptoren.length === 0) {
-      return '';
+    return '';
   }
 
   let result = '';
 
   for (let index = 0; index < deskriptoren.length; index++) {
 
-      const deskriptor = deskriptoren[index];
-      if (index < deskriptoren.length - 1) {
-          result += deskriptor.name + ", ";
-      } else {
-          result += deskriptor.name;
-      }
+    const deskriptor = deskriptoren[index];
+    if (index < deskriptoren.length - 1) {
+      result += deskriptor.name + ", ";
+    } else {
+      result += deskriptor.name;
+    }
 
   }
 
   return result;
 };
+
+export function isSuchfilterEmpty(suchfilter: RaetselSuchfilter): boolean {
+
+  return suchfilter.suchstring === '' && suchfilter.deskriptoren.length === 0;
+
+
+}

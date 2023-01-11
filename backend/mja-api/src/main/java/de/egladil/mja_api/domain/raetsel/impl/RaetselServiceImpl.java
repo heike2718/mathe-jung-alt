@@ -284,7 +284,7 @@ public class RaetselServiceImpl implements RaetselService {
 		persistentesRaetsel.geaendertDurch = userId;
 		persistentesRaetsel.kommentar = daten.getKommentar();
 		persistentesRaetsel.loesung = daten.getLoesung();
-		persistentesRaetsel.quelle = daten.getQuelleId();
+		persistentesRaetsel.quelle = daten.getQuelle().getId();
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
 		persistentesRaetsel.status = daten.getStatus();

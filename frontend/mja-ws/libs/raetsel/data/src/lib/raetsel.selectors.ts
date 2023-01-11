@@ -24,10 +24,16 @@ const raetselDetails = createSelector(
     (state) => state.raetselDetails
 );
 
+const suchfilter = createSelector(
+    selectRaetselState,
+    (state) => state.raetselSuchfilter
+);
+
 export const fromRaetsel = {
     isLoaded,
     page,
     paginationState,
-    raetselDetails
+    raetselDetails,
+    suchfilter
 };
 

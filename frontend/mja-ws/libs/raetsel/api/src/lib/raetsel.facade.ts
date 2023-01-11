@@ -1,11 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, PageDefinition, PaginationState, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
+import { SelectItemsFacade } from '@mja-ws/core/api';
+import { DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, PageDefinition, PaginationState, QuelleUI, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
-import { EditRaetselPayload, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { EditRaetselPayload, initialRaetselDetails, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { deepClone, filterDefined } from '@mja-ws/shared/ngrx-utils';
 import { Store } from '@ngrx/store';
-import { findIndex, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { initialSelectItemsComponentModel } from '@mja-ws/core/model';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -18,6 +20,9 @@ export class RaetselFacade {
   paginationState$: Observable<PaginationState> = this.#store.select(fromRaetsel.paginationState);
 
   raetselDetails$: Observable<RaetselDetails> = this.#store.select(fromRaetsel.raetselDetails).pipe(filterDefined, deepClone);
+  suchfilter$: Observable<RaetselSuchfilter> = this.#store.select(fromRaetsel.suchfilter);
+
+  #selectItemsFacade = inject(SelectItemsFacade);
 
   public triggerSearch(suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
 
@@ -44,19 +49,54 @@ export class RaetselFacade {
 
   }
 
+  public changeSuchfilterWithDeskriptoren(deskriptoren: DeskriptorUI[], suchstring: string) {
+    this.#store.dispatch(raetselActions.raetselsuchfilter_changed({ suchfilter: { deskriptoren, suchstring } }));
+  }
+
+  public changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string): void {
+
+    const deskriptoren: DeskriptorUI[] = [];
+    selectedItems.forEach(item => {
+      const theId = item.id as number;
+      deskriptoren.push({ id: theId, name: item.name });
+    });
+
+    const suchfilter: RaetselSuchfilter = {
+      suchstring: suchstring,
+      deskriptoren: deskriptoren
+    };
+
+    this.#store.dispatch(raetselActions.raetselsuchfilter_changed({ suchfilter }));
+  }
+
+  public neueRaetselsuche(): void {
+    this.#store.dispatch(raetselActions.reset_raetselsuchfilter());
+    this.#selectItemsFacade.resetSelection();
+  }
+
   public cancelSelection(): void {
     this.#store.dispatch(raetselActions.raetsel_cancel_selection());
   }
 
-  public initSelectItemsCompomentModel(raetselDetails: RaetselDetails, alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
+  public createAndEditRaetsel(quelle: QuelleUI | undefined): void {
+
+    if (quelle === undefined) {
+      // Exception werfen!!!
+      return;
+    }
+    const raetselDetails: RaetselDetails = {...initialRaetselDetails, quelle: quelle};
+    this.#store.dispatch(raetselActions.raetsel_details_loaded({raetselDetails: raetselDetails, navigateTo: 'raetsel/editor'}));
+  }
+
+  public initSelectItemsCompomentModel(selectedDeskriptoren: DeskriptorUI[], alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
 
     const gewaehlteItems: SelectableItem[] = [];
-    raetselDetails.deskriptoren.forEach(d => gewaehlteItems.push({ id: d.id, name: d.name, selected: true }));
+    selectedDeskriptoren.forEach(d => gewaehlteItems.push({ id: d.id, name: d.name, selected: true }));
 
     const vorrat: SelectableItem[] = [];
     alleDeskriptoren.forEach(d => {
 
-      const found = raetselDetails.deskriptoren.find((descr) => { return descr.id === d.id});
+      const found = selectedDeskriptoren.find((descr) => { return descr.id === d.id });
       if (!found) {
         vorrat.push({ id: d.id, name: d.name, selected: false })
       }
@@ -76,5 +116,4 @@ export class RaetselFacade {
   public saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
     this.#store.dispatch(raetselActions.save_raetsel({ editRaetselPayload }));
   }
-
 }

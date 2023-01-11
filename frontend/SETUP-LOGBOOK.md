@@ -265,6 +265,19 @@ npx nx generate @nrwl/angular:component grafik-details --project=raetsel-feature
 npx nx generate @nrwl/angular:component raetsel-editor --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-editor --standalone --no-interactive --dry-run
 ```
 
+### raetsel-suchfilter-public
+
+
+```
+npx nx generate @nrwl/angular:component raetsel-suchfilter-public --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-suchfilter-pub --standalone --no-interactive --dry-run
+```
+
+### raetsel-suchfilter-admin
+
+
+```
+npx nx generate @nrwl/angular:component raetsel-suchfilter-admin --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-suchfilter-admin --standalone --no-interactive --dry-run
+```
 
 
 

@@ -1,8 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { RaetselDetails } from "@mja-ws/raetsel/model";
 import { MessageService } from "@mja-ws/shared/messaging/api";
-import { noopAction } from "@mja-ws/shared/ngrx-utils";
 import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatMap, map, tap } from "rxjs";
@@ -95,15 +93,4 @@ export class RaetselEffects {
             ofType(raetselActions.raetsel_saved),
             tap(() => this.#messageService.info('Rätsel erfolgreich gespeichert')),
         ), { dispatch: false });
-
-    raetsellisteCleared$ = createEffect(() => {
-
-        return this.#actions.pipe(
-            ofType(raetselActions.raetselliste_cleared),
-            tap(() => console.log('raetsellisteCleared')),
-            map(() => noopAction())
-        );
-    });
-
-
 }

@@ -1,5 +1,30 @@
 <h1>Rätsel</h1>
 
+<ng-container *ngIf="isAdmin">
+    <mja-raetsel-suchfilter-admin [selectItemsCompomentModel]="selectItemsCompomentModel"
+        (inputChanged)="onSuchfilterSuchstringChanged($event)"
+        (selectableItemsChanged)="onSelectItemsCompomentModelChanged($event)"></mja-raetsel-suchfilter-admin>
+
+    <p>Suchkriterien: {{suchfilter | json}}</p>
+</ng-container>
+
+<ng-container *ngIf="!isAdmin">
+    <mja-select-items [model]="selectItemsCompomentModel"
+        (modelChanged)="onSelectItemsCompomentModelChanged($event)"></mja-select-items>
+
+    <p>Suchkriterien: {{suchfilter.deskriptoren | json}}</p>
+</ng-container>
+
+<div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column" class="mb-2">
+    <div fxLayoutAlign="left center" fxFlex="10"><button mat-raised-button color="primary" (click)="neueSuche()"
+            [disabled]="buttonNeueSucheDisabled()">neue
+            Suche</button></div>
+
+    <div *ngIf="coreFacade.existsQuelleAdmin$ | async; else keineQuelle" fxLayoutAlign="left center" fxFlex="10"><button
+            mat-raised-button color="primary" (click)="neuesRaetsel()">neues
+            Rätsel</button></div>
+</div>
+
 <mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
 
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortActive="schluessel" matSortDirection="asc"
@@ -41,3 +66,13 @@
     <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)"></mat-row>
 
 </mat-table>
+
+
+<ng-template #keineQuelle>
+    <div fxLayout="column m-1">
+        <div fxFlex="0 1 calc(80%-20px)">
+            Quelle: zuerst als Autor:in eintragen lassen, dann
+            neues Rätsel anlegen
+        </div>
+    </div>
+</ng-template>

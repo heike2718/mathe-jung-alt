@@ -73,7 +73,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
 
-  selectDeskriptorenComponentModel!: SelectItemsCompomentModel;
+  selectItemsCompomentModel!: SelectItemsCompomentModel;
   dialog = inject(MatDialog);
 
   raetselFacade = inject(RaetselFacade);
@@ -103,7 +103,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
         this.#raetselDetails = { ...raetselDetails };
         this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
-        this.selectDeskriptorenComponentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails, alleDeskriptoren);
+        this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails.deskriptoren, alleDeskriptoren);
 
         this.#initForm();
       });
@@ -171,10 +171,10 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.#addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
-  onSelectedDesktiptorenChanged($event: any) {
+  onSelectItemsCompomentModelChanged($event: SelectItemsCompomentModel) {
 
     if ($event) {
-      const selectedItems: SelectableItem[] = (<SelectItemsCompomentModel>$event).gewaehlteItems;
+      const selectedItems: SelectableItem[] = $event.gewaehlteItems;
       this.#selectedDeskriptoren = [];
       selectedItems.forEach(item => this.#selectedDeskriptoren.push(
         {

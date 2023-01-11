@@ -49,7 +49,7 @@ import io.vertx.core.eventbus.EventBus;
 /**
  * UploadResource
  */
-@Path("/uploads/v1")
+@Path("/uploads")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Upload")
 public class UploadResource {
@@ -75,6 +75,7 @@ public class UploadResource {
 	SecurityContext securityContext;
 
 	@POST
+	@Path("v1")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
@@ -104,6 +105,7 @@ public class UploadResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 
+	@Deprecated
 	public Response uploadFile(@QueryParam(value = "type") final UploadType fileType, @Pattern(
 		regexp = "^(/[\\da-zA-Z_\\-/]*\\.[\\da-zA-Z_\\-/]*)$", message = "pfad enthält ungültige Zeichen") @QueryParam(
 			value = "pfad") final String relativerPfad, @MultipartForm final FormData body) {
