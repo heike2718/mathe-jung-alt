@@ -158,6 +158,7 @@
                 "sourceTag": "type:shared:ui",
                 "onlyDependOnLibsWithTags": [
                   "type:core:model",
+                  "type:core:api",
                   "type:shared:util",
                   "type:shared:messaging:api"
                 ]

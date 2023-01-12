@@ -43,9 +43,9 @@ export class MessageService {
     }
 
     #scrollToTop() {
-        let document = this.document;
+        const document = this.document;
         (function smoothscroll() {
-            var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
             // console.log('currentScroll=' + currentScroll);
             if (currentScroll > 0) {
                 window.requestAnimationFrame(smoothscroll);
