@@ -1,0 +1,34 @@
+{
+  "name": "raetselgruppen-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/raetselgruppen/api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/raetselgruppen/api",
+        "main": "libs/raetselgruppen/api/src/index.ts",
+        "tsConfig": "libs/raetselgruppen/api/tsconfig.lib.json",
+        "assets": ["libs/raetselgruppen/api/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/raetselgruppen/api/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/raetselgruppen/api"],
+      "options": {
+        "jestConfig": "libs/raetselgruppen/api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:raetselgruppen:api", "type:api"]
+}

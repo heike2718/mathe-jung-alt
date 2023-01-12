@@ -225,10 +225,10 @@ npx nx generate @nrwl/js:library api --directory=grafik --tags='domain:grafik, t
 ## Rätsel
 
 ```
-npx nx generate @nrwl/js:library model --directory=raetsel --tags='domain:raetsel, type:model' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library data --directory=raetsel --tags='domain:raetsel, type:data' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library api --directory=raetsel --tags='domain:raetsel, type:api' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library feature --directory=raetsel --tags='domain:raetsel, type:feature' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library model --directory=raetsel --tags='domain:raetsel:model, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library data --directory=raetsel --tags='domain:raetsel:data, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library api --directory=raetsel --tags='domain:raetsel:api, type:api' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library feature --directory=raetsel --tags='domain:raetsel:feature, type:feature' --buildable --no-interactive --dry-run
 ```
 
 ### RaetselSearchComponent
@@ -279,6 +279,14 @@ npx nx generate @nrwl/angular:component raetsel-suchfilter-public --project=raet
 npx nx generate @nrwl/angular:component raetsel-suchfilter-admin --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-raetsel-suchfilter-admin --standalone --no-interactive --dry-run
 ```
 
+## Raetselgruppen
+
+```
+npx nx generate @nrwl/js:library model --directory=raetselgruppen --tags='domain:raetselgruppen:model, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library data --directory=raetselgruppen --tags='domain:raetselgruppen:data, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library api --directory=raetselgruppen --tags='domain:raetselgruppen:api, type:api' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library feature --directory=raetselgruppen --tags='domain:raetselgruppen:feature, type:feature' --buildable --no-interactive --dry-run
+```
 
 
 ## Shared Componensts library

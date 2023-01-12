@@ -32,7 +32,36 @@
                   "type:shared:http",
                   "type:local-storage"
                 ]
-              },              
+              }, 
+              {
+                "sourceTag": "domain:raetselgruppen:model",
+                "onlyDependsOnLibsWithTags": [
+                  "type:model",
+                  "type:core:model"
+                ]
+              },
+              {
+                "sourceTag": "domain:raetselgruppen:data",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:raetselgruppen:model"
+                ]
+              },
+              {
+                "sourceTag": "domain:raetselgruppen:api",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:raetselgruppen:model",
+                  "domain:raetselgruppen:data",
+                  "type:core:api"
+                ]
+              },
+              {
+                "sourceTag": "domain:raetselgruppen:feature",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:raetselgruppen:model",
+                  "domain:raetselgruppen:api",
+                  "domain:raetsel:api"
+                ]
+              },             
               {
                 "sourceTag": "domain:raetsel:model",
                 "onlyDependsOnLibsWithTags": [
@@ -62,7 +91,8 @@
                   "domain:grafik:api",
                   "domain:grafik:model"
                 ]
-              },{
+              },
+              {
                 "sourceTag": "domain:grafik:model",
                 "onlyDependsOnLibsWithTags": [
                   "type:model",

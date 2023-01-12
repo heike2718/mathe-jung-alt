@@ -1,0 +1,34 @@
+{
+  "name": "raetselgruppen-model",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/raetselgruppen/model/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/raetselgruppen/model",
+        "main": "libs/raetselgruppen/model/src/index.ts",
+        "tsConfig": "libs/raetselgruppen/model/tsconfig.lib.json",
+        "assets": ["libs/raetselgruppen/model/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/raetselgruppen/model/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/raetselgruppen/model"],
+      "options": {
+        "jestConfig": "libs/raetselgruppen/model/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:raetselgruppen:model", "type:model"]
+}

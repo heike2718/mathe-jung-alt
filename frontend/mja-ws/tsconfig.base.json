@@ -27,6 +27,14 @@
       "@mja-ws/raetsel/data": ["libs/raetsel/data/src/index.ts"],
       "@mja-ws/raetsel/feature": ["libs/raetsel/feature/src/index.ts"],
       "@mja-ws/raetsel/model": ["libs/raetsel/model/src/index.ts"],
+      "@mja-ws/raetselgruppen/api": ["libs/raetselgruppen/api/src/index.ts"],
+      "@mja-ws/raetselgruppen/data": ["libs/raetselgruppen/data/src/index.ts"],
+      "@mja-ws/raetselgruppen/feature": [
+        "libs/raetselgruppen/feature/src/index.ts"
+      ],
+      "@mja-ws/raetselgruppen/model": [
+        "libs/raetselgruppen/model/src/index.ts"
+      ],
       "@mja-ws/shared/auth/api": ["libs/shared/auth/api/src/index.ts"],
       "@mja-ws/shared/auth/data": ["libs/shared/auth/data/src/index.ts"],
       "@mja-ws/shared/auth/model": ["libs/shared/auth/model/src/index.ts"],

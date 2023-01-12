@@ -1,0 +1,34 @@
+{
+  "name": "raetselgruppen-feature",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/raetselgruppen/feature/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/raetselgruppen/feature",
+        "main": "libs/raetselgruppen/feature/src/index.ts",
+        "tsConfig": "libs/raetselgruppen/feature/tsconfig.lib.json",
+        "assets": ["libs/raetselgruppen/feature/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/raetselgruppen/feature/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/raetselgruppen/feature"],
+      "options": {
+        "jestConfig": "libs/raetselgruppen/feature/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:raetselgruppen:feature", "type:feature"]
+}
