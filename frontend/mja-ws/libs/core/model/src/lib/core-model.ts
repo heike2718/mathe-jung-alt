@@ -8,6 +8,7 @@ export const QUERY_PARAM_TYPE_DESKRIPTOREN = 'typeDeskriptoren';
 export const QUERY_PARAM_LIMIT = 'limit';
 export const QUERY_PARAM_OFFSET = 'offset';
 export const QUERY_PARAM_SORT_DIRECTION = 'sortDirection';
+export const QUERY_PARAM_SORT_ATTRIBUTE = 'sortAttribute';
 
 export type Schwierigkeitsgrad =
     'NOOP' |
