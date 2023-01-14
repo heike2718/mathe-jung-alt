@@ -288,6 +288,14 @@ npx nx generate @nrwl/js:library api --directory=raetselgruppen --tags='domain:r
 npx nx generate @nrwl/js:library feature --directory=raetselgruppen --tags='domain:raetselgruppen:feature, type:feature' --buildable --no-interactive --dry-run
 ```
 
+### RaetselgruppenSearchComponent
+
+```
+npx nx generate @nrwl/angular:component raetselgruppen-search --project=raetselgruppen-feature --path=/libs/raetselgruppen/feature/src/lib --selector=mja-raetselgruppen-search --standalone --no-interactive --dry-run
+```
+
+
+
 
 ## Shared Componensts library
 
