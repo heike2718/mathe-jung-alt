@@ -9,7 +9,7 @@ import { Referenztyp, Schwierigkeitsgrad, SortOrder, STATUS } from '@mja-ws/core
 //   readonly status: STATUS;
 // };
 
-export interface RaetselgruppensucheTrefferItem {
+export interface RaetselgruppenTrefferItem {
   readonly id: string;
   readonly name: string;
   readonly schwierigkeitsgrad: Schwierigkeitsgrad;
@@ -18,9 +18,9 @@ export interface RaetselgruppensucheTrefferItem {
   readonly status: STATUS;
 };
 
-export interface RaetselgruppensucheTreffer {
+export interface RaetselgruppenTreffer {
   readonly trefferGesamt: number;
-  readonly items: RaetselgruppensucheTrefferItem[];
+  readonly items: RaetselgruppenTrefferItem[];
 };
 
 export interface RaetselgruppenSuchparameter {

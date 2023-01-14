@@ -1,11 +1,11 @@
 import { initialPaginationState, PaginationState } from "@mja-ws/core/model";
-import { RaetselgruppensucheTrefferItem } from "@mja-ws/raetselgruppen/model";
+import { RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
 
 export interface RaetselgruppenState {
     readonly loaded: boolean;
-    readonly page: RaetselgruppensucheTrefferItem[];
+    readonly page: RaetselgruppenTrefferItem[];
     readonly paginationState: PaginationState;
 };
 

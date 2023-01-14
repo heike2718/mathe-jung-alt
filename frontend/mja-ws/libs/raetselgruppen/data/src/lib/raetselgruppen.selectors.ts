@@ -1,0 +1,26 @@
+import { createSelector } from "@ngrx/store";
+import { raetselgruppenFeature } from "./raetselgruppen.reducer";
+
+const { selectRaetselgruppenState } = raetselgruppenFeature;
+
+const isLoaded = createSelector(
+    selectRaetselgruppenState,
+    (state) => state.loaded
+);
+
+const page = createSelector(
+    selectRaetselgruppenState,
+    (state) => state.page
+);
+
+const paginationState = createSelector(
+    selectRaetselgruppenState,
+    (state) => state.paginationState
+);
+
+export const fromRaetselgruppen = {
+    isLoaded,
+    page,
+    paginationState
+};
+

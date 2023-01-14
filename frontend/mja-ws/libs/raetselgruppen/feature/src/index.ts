@@ -1,1 +1,1 @@
-export * from './lib/raetselgruppen-feature';
+export { raetselgruppenRoutes } from './lib/raetselgruppen.routes';
