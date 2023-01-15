@@ -39,6 +39,34 @@ export const initialRaetselgruppenSuchparameter: RaetselgruppenSuchparameter = {
   sortAttribute: 'name',  
 };
 
+export interface EditRaetselgruppePayload {
+  readonly id: string;
+    readonly name: string;
+    readonly kommentar: string | undefined;
+    readonly schwierigkeitsgrad: Schwierigkeitsgrad;
+    readonly referenztyp: Referenztyp | undefined;
+    readonly referenz: string | undefined;
+    readonly status: STATUS;
+};
+
+export interface EditRaetselgruppenelementPayload {
+  readonly id: string;
+  readonly nummer: string;
+  readonly punkte: number;
+  readonly raetselSchluessel: string;
+};
+
+export interface Raetselgruppenelement extends EditRaetselgruppenelementPayload {
+  readonly name: string;
+  readonly loesungsbuchstabe?: string;
+};
+
+export interface RaetselgruppeDetails extends EditRaetselgruppePayload {
+  readonly elemente: Raetselgruppenelement[];
+  readonly geaendertDurch: string;
+  readonly schreibgeschuetzt: boolean;
+};
+
 export function isInitialRaetselgruppenSuchparameter(raetselgruppenSuchparameter: RaetselgruppenSuchparameter): boolean {
 
 

@@ -44,7 +44,6 @@ const REFERENZ = 'referenz';
 export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   dataSource = inject(RaetselgruppenDataSource);
-  raetselgruppenFacade = inject(RaetselgruppenFacade);
   anzahlRaetselgruppen = 0;
 
   suchparameterStr = '';
@@ -67,6 +66,9 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  #raetselgruppenFacade = inject(RaetselgruppenFacade);
+  
 
   #nameFilterSubscription = new Subscription();
   #schwierigkeitsgradFilterSubscription = new Subscription();
@@ -99,7 +101,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
 
   ngOnInit(): void {
 
-    this.#paginationStateSubscription = this.raetselgruppenFacade.paginationState$.subscribe(
+    this.#paginationStateSubscription = this.#raetselgruppenFacade.paginationState$.subscribe(
       (state: PaginationState) => {
         this.anzahlRaetselgruppen = state.anzahlTreffer;
         this.#pageIndex = state.pageDefinition.pageIndex;
@@ -251,8 +253,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   }
 
   onRowClicked(raetselgruppe: RaetselgruppenTrefferItem): void {
-    console.log('item ' + raetselgruppe.id + ' selected')
-    // this.raetselgruppenFacade.selectRaetselgruppe(raetselgruppe);
+    this.#raetselgruppenFacade.selectRaetselgruppe(raetselgruppe);
   }
 
   clearFilter(filterFormControl: FormControl): void {
@@ -292,6 +293,6 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
       sortDirection: this.sort ? this.sort.direction : this.#sortDirection
     }
 
-    this.raetselgruppenFacade.triggerSearch(this.#suchparameter, pageDefinition)
+    this.#raetselgruppenFacade.triggerSearch(this.#suchparameter, pageDefinition)
   }
 }

@@ -1,5 +1,5 @@
 import { initialPaginationState, PaginationState } from "@mja-ws/core/model";
-import { RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
+import { RaetselgruppeDetails, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
 
@@ -8,13 +8,15 @@ export interface RaetselgruppenState {
     readonly anzahlTrefferGesamt: number;
     readonly page: RaetselgruppenTrefferItem[];
     readonly paginationState: PaginationState;
+    readonly raetselgruppeDetails: RaetselgruppeDetails | undefined;
 };
 
 const initialRaetselgruppenState: RaetselgruppenState = {
     loaded: false,
     anzahlTrefferGesamt: 0,
     page: [],
-    paginationState: initialPaginationState
+    paginationState: initialPaginationState,
+    raetselgruppeDetails: undefined
 };
 
 export const raetselgruppenFeature = createFeature({
@@ -40,6 +42,12 @@ export const raetselgruppenFeature = createFeature({
                     } 
                 }
             };
+        }),
+        on(raetselgruppenActions.raetselgruppedetails_loaded, (state, action) => {
+            return {...state, raetselgruppeDetails: action.raetselgruppeDetails};
+        }),
+        on(raetselgruppenActions.unselect_raetselgruppe, (state, _action) => {
+            return {...state, raetselgruppeDetails: undefined}
         })
     )
 });

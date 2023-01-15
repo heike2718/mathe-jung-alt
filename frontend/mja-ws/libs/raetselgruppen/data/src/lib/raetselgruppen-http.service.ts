@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { RaetselgruppenTreffer, RaetselgruppenSuchparameter } from "@mja-ws/raetselgruppen/model";
+import { RaetselgruppenTreffer, RaetselgruppenSuchparameter, RaetselgruppeDetails } from "@mja-ws/raetselgruppen/model";
 import { Observable } from "rxjs";
 import { PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION } from "@mja-ws/core/model";
 
@@ -41,5 +41,11 @@ export class RaetselgruppenHttpService {
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
         return this.#http.get<RaetselgruppenTreffer>(url, { headers, params });
+    }
+
+    public findById(uuid: string): Observable<RaetselgruppeDetails> {
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const url = this.#url + '/v1/' + uuid;
+        return this.#http.get<RaetselgruppeDetails>(url, { headers });
     }
 }

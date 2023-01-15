@@ -1,16 +1,18 @@
 import { Routes } from "@angular/router";
 import { RaetselSearchComponent } from "./raetsel-search/raetsel-search.component";
 import { raetselDataProvider } from '@mja-ws/raetsel/api';
-import { AdminGuard, AuthGuard } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { RaetselDetailsComponent } from "./raetsel-details/raetsel-details.component";
 import { grafikDataProvider } from "@mja-ws/grafik/api";
 import { RaetselEditorComponent } from "./raetsel-editor/raetsel-editor.component";
+import { inject } from "@angular/core";
 
+// siehe https://www.angulararchitects.io/en/aktuelles/modern-and-lightweight-angular-architectures-with-angulars-latest-innovations/
 
 export const raetselRoutes: Routes = [
   {
     path: 'uebersicht',
-    canActivate: [AuthGuard],
+    canActivate: [() => inject(AuthFacade).userIsLoggedIn$],
     component: RaetselSearchComponent,
     providers: [
       raetselDataProvider,
@@ -19,7 +21,7 @@ export const raetselRoutes: Routes = [
   },
   {
     path: 'details',
-    canActivate: [AuthGuard],
+    canActivate: [() => inject(AuthFacade).userIsLoggedIn$],
     component: RaetselDetailsComponent,
     providers: [
       raetselDataProvider,
@@ -28,7 +30,7 @@ export const raetselRoutes: Routes = [
   },
   {
     path: 'editor',
-    canActivate: [AdminGuard], // TODO: ReaetselDetailsLoadedGuard
+    canActivate: [() => inject(AuthFacade).userIsAdmin$], // TODO: ReaetselDetailsLoadedGuard
     component: RaetselEditorComponent,
     providers: [
       raetselDataProvider,
@@ -38,7 +40,7 @@ export const raetselRoutes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    canActivate: [AuthGuard],
+    canActivate: [() => inject(AuthFacade).userIsLoggedIn$],
     component: RaetselSearchComponent,
     providers: [
       raetselDataProvider,

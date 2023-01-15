@@ -1,0 +1,76 @@
+<div *ngIf="raetselgruppenFacade.raetselgruppeDetails$ | async as gruppe else keineGruppe" fxLayout="column"
+    fxLayoutGap="20px">
+
+    <h2>Rätselgruppe {{gruppe.name}}</h2>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20">
+            <mat-label>ID:</mat-label>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.id}}</div>
+    </div>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20">
+            <mat-label>Anzahl Elemente:</mat-label>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.elemente.length}}</div>
+    </div>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20">
+            <mat-label>Kommentar:</mat-label>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.kommentar}}</div>
+    </div>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20">
+            <mat-label>geändert durch:</mat-label>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.geaendertDurch}}</div>
+    </div>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20">
+            <mat-label>Status:</mat-label>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.status}}</div>
+    </div>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20">
+            <mat-label>Referenztyp:</mat-label>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.referenztyp}}</div>
+    </div>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div fxLayoutAlign="left center" fxFlex="20">
+            <mat-label>Referenz:</mat-label>
+        </div>
+        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.referenz}}</div>
+    </div>
+
+    <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
+        <div *ngIf="!(gruppe.schreibgeschuetzt)" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill
+                mat-raised-button color="primary" [disabled]="!getRaetselgruppeID()"
+                (click)="openNeuesRaetselgruppenelementDialog()">neues
+                Element</button>
+        </div>
+        <div *ngIf="!(gruppe.schreibgeschuetzt)" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill
+                mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button></div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                (click)="generiereLaTeX()" [disabled]="buttonsGenerierenDisabled()">LaTeX herunterladen</button></div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                (click)="openPrintVorschauDialog()" [disabled]="buttonsGenerierenDisabled()">Vorschau (PDF)</button></div>
+        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                (click)="gotoUebersicht()">zur Übersicht</button>
+        </div>
+    </div>
+</div>
+
+<ng-template #keineGruppe>
+    <h2>Rätselgruppe Details</h2>
+    <p>keine Gruppe ausgewählt</p>
+</ng-template>

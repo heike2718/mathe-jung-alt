@@ -23,10 +23,16 @@ const paginationState = createSelector(
     (state) => state.paginationState
 );
 
+const raetselgruppeDetails = createSelector(
+    selectRaetselgruppenState,
+    (state) => state.raetselgruppeDetails
+)
+
 export const fromRaetselgruppen = {
     isLoaded,
     anzahlTrefferGesamt,
     page,
-    paginationState
+    paginationState,
+    raetselgruppeDetails
 };
 
