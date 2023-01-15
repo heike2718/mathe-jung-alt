@@ -1,11 +1,11 @@
 import { CollectionViewer, DataSource } from "@angular/cdk/collections";
-import { inject } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { Observable } from "rxjs";
 import { RaetselgruppenFacade } from "./raetselgruppen.facade";
 
-
-export class RaetselgruppenDatasource implements DataSource<RaetselgruppenTrefferItem> {
+@Injectable({providedIn: 'root'})
+export class RaetselgruppenDataSource implements DataSource<RaetselgruppenTrefferItem> {
 
 
     #raetselgruppenFacade = inject(RaetselgruppenFacade);

@@ -78,3 +78,21 @@ bootstrapApplication(AppComponent, {
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: ErrorInterceptor },
   ],
 });
+
+
+/** 
+ * 
+ * bootstrapApplication(AppComponent, {
+  providers: [
+    provideHttpClient(
+      withInterceptors([authInterceptor]),
+    ),
+    provideRouter(APP_ROUTES, 
+      withPreloading(PreloadAllModules),
+    ),
+    provideLogger({ debug: true }, 
+          CustomLogFormatter);
+  ]
+}
+ * 
+*/

@@ -1,13 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SelectItemsFacade } from '@mja-ws/core/api';
-import { DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, PageDefinition, PaginationState, QuelleUI, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
+import { DeskriptorUI,
+  LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
+  OUTPUTFORMAT,
+  PageDefinition,
+  PaginationState,
+  QuelleUI,
+  SelectableItem,
+  SelectItemsCompomentModel 
+} from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
 import { EditRaetselPayload, initialRaetselDetails, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { deepClone, filterDefined } from '@mja-ws/shared/ngrx-utils';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { initialSelectItemsComponentModel } from '@mja-ws/core/model';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -26,7 +33,7 @@ export class RaetselFacade {
 
   public triggerSearch(suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
 
-    this.#store.dispatch(raetselActions.select_page({ pageDefinition }));
+    this.#store.dispatch(raetselActions.raetsel_select_page({ pageDefinition }));
     this.#store.dispatch(raetselActions.find_raetsel({ suchfilter, pageDefinition }));
   }
 

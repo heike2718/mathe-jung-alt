@@ -59,8 +59,6 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     referenz: ''
   };
 
-
-
   nameFilterControl = new FormControl('');
   referenzFilterControl = new FormControl('');
 

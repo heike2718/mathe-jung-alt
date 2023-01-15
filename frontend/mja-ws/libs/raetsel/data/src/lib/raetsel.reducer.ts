@@ -27,7 +27,7 @@ export const raetselFeature = createFeature({
     name: 'raetsel',
     reducer: createReducer(
         initialState,
-        on(raetselActions.select_page, (state, action): RaetselState => {
+        on(raetselActions.raetsel_select_page, (state, action): RaetselState => {
             return {
                 ...state,
                 paginationState: { ...state.paginationState, pageDefinition: { pageIndex: action.pageDefinition.pageIndex, pageSize: action.pageDefinition.pageSize, sortDirection: action.pageDefinition.sortDirection } }

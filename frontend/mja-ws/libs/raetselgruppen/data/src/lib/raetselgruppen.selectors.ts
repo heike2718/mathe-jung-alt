@@ -8,6 +8,11 @@ const isLoaded = createSelector(
     (state) => state.loaded
 );
 
+const anzahlTrefferGesamt = createSelector(
+    selectRaetselgruppenState,
+    (state) => state.anzahlTrefferGesamt
+)
+
 const page = createSelector(
     selectRaetselgruppenState,
     (state) => state.page
@@ -20,6 +25,7 @@ const paginationState = createSelector(
 
 export const fromRaetselgruppen = {
     isLoaded,
+    anzahlTrefferGesamt,
     page,
     paginationState
 };

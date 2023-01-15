@@ -147,8 +147,6 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     ).subscribe();
 
     this.changeDetector.detectChanges();
-
-    // this.loadRaetsel();
   }
 
   // getDisplayedColumns(): string[] {

@@ -11,7 +11,6 @@ export class RaetselgruppenEffects {
     #raetselgruppenHttpService = inject(RaetselgruppenHttpService);
 
     findRaetselgruppen$ = createEffect(() => {
-
         return this.#actions.pipe(
             ofType(raetselgruppenActions.find_raetselgruppen),
             concatMap((action) => this.#raetselgruppenHttpService.findRaetselgruppen(action.raetselgruppenSuchparameter, action.pageDefinition)),

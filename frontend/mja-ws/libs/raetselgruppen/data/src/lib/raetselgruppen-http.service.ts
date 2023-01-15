@@ -15,12 +15,27 @@ export class RaetselgruppenHttpService {
 
         const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
-        const params = new HttpParams()
+        let params = new HttpParams()
             .set(QUERY_PARAM_LIMIT, pageDefinition.pageSize)
             .set(QUERY_PARAM_OFFSET, offset)
             .set(QUERY_PARAM_SORT_DIRECTION, pageDefinition.sortDirection)
-            .set(QUERY_PARAM_SORT_DIRECTION, suchparameter.sortOrder)
             .set(QUERY_PARAM_SORT_ATTRIBUTE, suchparameter.sortAttribute);
+
+        if (suchparameter.name && suchparameter.name.trim().length > 0) {
+            params = params.set('name', suchparameter.name.trim());
+        }
+
+        if (suchparameter.schwierigkeitsgrad) {
+            params = params.set('schwierigkeitsgrad', suchparameter.schwierigkeitsgrad);
+        }
+
+        if (suchparameter.referenztyp) {
+            params = params.set('referenztyp', suchparameter.referenztyp);
+        }
+
+        if (suchparameter.referenz && suchparameter.referenz.trim().length > 0) {
+            params = params.set('referenz', suchparameter.referenz.trim());
+        }
 
         const url = this.#url + '/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');

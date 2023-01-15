@@ -24,15 +24,17 @@ export interface RaetselgruppenTreffer {
 };
 
 export interface RaetselgruppenSuchparameter {
+  name: string | null;
+  schwierigkeitsgrad: Schwierigkeitsgrad | null;
+  referenztyp: Referenztyp | null;
+  referenz: string | null;
   sortAttribute: string;
-  sortOrder: SortOrder;
-  pageSize: number;
-  pageIndex: number;
 };
 
 export const initialRaetselgruppenSuchparameter: RaetselgruppenSuchparameter = {
-  sortAttribute: 'name',
-  sortOrder: 'asc',
-  pageSize: 20,
-  pageIndex: 0
+  name: null,
+  schwierigkeitsgrad: null,
+  referenztyp: null,
+  referenz: null,
+  sortAttribute: 'name',  
 };
