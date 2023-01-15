@@ -1,5 +1,14 @@
 <h1>Rätselgruppen</h1>
 
+<div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column" class="mb-2">
+  <div fxLayoutAlign="left center" fxFlex="10"><button mat-raised-button color="primary" (click)="resetAllFilters()"
+          [disabled]="buttonResetAllFiltersDisabled()">Filter zurücksetzen</button></div>
+
+  <div fxLayoutAlign="left center" fxFlex="10"><button
+          mat-raised-button color="primary" (click)="neueRaetselgruppe()">neues
+          Rätsel</button></div>
+</div>
+
 <p>Suchparameter: {{suchparameterStr}}</p>
 
 <mat-paginator [length]="anzahlRaetselgruppen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>

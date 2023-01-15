@@ -38,3 +38,22 @@ export const initialRaetselgruppenSuchparameter: RaetselgruppenSuchparameter = {
   referenz: null,
   sortAttribute: 'name',  
 };
+
+export function isInitialRaetselgruppenSuchparameter(raetselgruppenSuchparameter: RaetselgruppenSuchparameter): boolean {
+
+
+  if (raetselgruppenSuchparameter.name !== initialRaetselgruppenSuchparameter.name) {
+    return false;
+  }
+  if (raetselgruppenSuchparameter.referenz !== initialRaetselgruppenSuchparameter.referenz) {
+    return false;
+  }
+  if (raetselgruppenSuchparameter.referenztyp !== initialRaetselgruppenSuchparameter.referenztyp) {
+    return false;
+  }
+  if (raetselgruppenSuchparameter.schwierigkeitsgrad !== initialRaetselgruppenSuchparameter.schwierigkeitsgrad) {
+    return false;
+  }
+
+  return true;
+}

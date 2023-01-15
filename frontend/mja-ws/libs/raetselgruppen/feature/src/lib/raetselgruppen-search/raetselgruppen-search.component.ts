@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GuiReferenztypenMap, GuiRefereztyp, GuiSchwierigkeitsgrad, GuiSchwierigkeitsgradeMap, initialGuiReferenztyp, initialGuiSchwierigkeitsgrad, initialPaginationState, PageDefinition, PaginationState, Referenztyp, Schwierigkeitsgrad, SortOrder } from '@mja-ws/core/model';
-import { initialRaetselgruppenSuchparameter, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from '@mja-ws/raetselgruppen/model';
+import { initialRaetselgruppenSuchparameter, isInitialRaetselgruppenSuchparameter, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from '@mja-ws/raetselgruppen/model';
 import { MatSelectModule } from '@angular/material/select';
 
 const STATUS = 'status';
@@ -81,6 +81,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   #paginationState: PaginationState = initialPaginationState;
   #pageIndex = 0;
   #sortDirection: SortDirection = 'asc';
+  #adjusting = false;
 
   // Declare height and width variables
   #scrWidth = window.innerWidth;
@@ -106,7 +107,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
       }
     );
 
-    this.#loadRaetselgruppen();
+    this.#triggerSearch();
   }
 
   ngAfterViewInit(): void {
@@ -124,14 +125,14 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
 
     this.#matPaginatorSubscription = merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => {
-        this.#loadRaetselgruppen();
+        this.#triggerSearch();
       })
     ).subscribe();
 
     merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => {
         this.#paginationState = { ...this.#paginationState, pageDefinition: { ...this.#paginationState.pageDefinition, sortDirection: this.#sortDirection } };
-        this.#loadRaetselgruppen();
+        this.#triggerSearch();
       })
     ).subscribe();
 
@@ -150,10 +151,10 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
           this.#suchparameter = { ...this.#suchparameter, name: null };
         }
 
-        this.suchparameterStr = JSON.stringify(this.#suchparameter);
         // reset Paginator
         this.paginator.pageIndex = 0;
-        this.#loadRaetselgruppen();
+        this.suchparameterStr = JSON.stringify(this.#suchparameter);
+        this.#triggerSearch();
       })
     ).subscribe();
 
@@ -168,10 +169,10 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
         } else {
           this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: null };
         }
-        this.suchparameterStr = JSON.stringify(this.#suchparameter);
         // reset Paginator
         this.paginator.pageIndex = 0;
-        this.#loadRaetselgruppen();
+        this.suchparameterStr = JSON.stringify(this.#suchparameter);
+        this.#triggerSearch();
       })
     ).subscribe();
 
@@ -184,10 +185,10 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
         } else {
           this.#suchparameter = { ...this.#suchparameter, referenztyp: null }
         }
-        this.suchparameterStr = JSON.stringify(this.#suchparameter);
         // reset Paginator
         this.paginator.pageIndex = 0;
-        this.#loadRaetselgruppen();
+        this.suchparameterStr = JSON.stringify(this.#suchparameter);
+        this.#triggerSearch();
       })
     ).subscribe();
 
@@ -209,9 +210,8 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
 
         // reset Paginator
         this.paginator.pageIndex = 0;
-        referenz ? this.#suchparameter = { ...this.#suchparameter, referenz: referenz } : { ...this.#suchparameter, referenz: null };
         this.suchparameterStr = JSON.stringify(this.#suchparameter);
-        this.#loadRaetselgruppen();
+        this.#triggerSearch();
       })
     ).subscribe();
 
@@ -237,6 +237,19 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     }
   }
 
+  buttonResetAllFiltersDisabled(): boolean {
+
+    if (isInitialRaetselgruppenSuchparameter(this.#suchparameter)) {
+      return true;
+    }
+
+    return this.paginator === undefined;
+  }
+
+  neueRaetselgruppe(): void {
+    console.log('jetzt Rätselgruppeneditor mit "neu" öffnen');
+  }
+
   onRowClicked(raetselgruppe: RaetselgruppenTrefferItem): void {
     console.log('item ' + raetselgruppe.id + ' selected')
     // this.raetselgruppenFacade.selectRaetselgruppe(raetselgruppe);
@@ -244,6 +257,19 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
 
   clearFilter(filterFormControl: FormControl): void {
     filterFormControl.patchValue('');
+  }
+
+  resetAllFilters(): void {
+
+    this.#adjusting = true;
+
+    this.nameFilterControl.patchValue('');
+    this.referenzFilterControl.patchValue('');
+    this.schwierigkeitsgradSelectFilterControl.patchValue('NOOP');
+
+    this.#adjusting = false;
+
+    this.referenztypSelectFilterControl.patchValue('NOOP');
   }
 
   #initPaginator(): void {
@@ -254,7 +280,11 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     this.#matSortChangedSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
   }
 
-  #loadRaetselgruppen(): void {
+  #triggerSearch(): void {
+
+    if (this.#adjusting) {
+      return;
+    }
 
     const pageDefinition: PageDefinition = {
       pageIndex: this.paginator ? this.paginator.pageIndex : this.#pageIndex,
