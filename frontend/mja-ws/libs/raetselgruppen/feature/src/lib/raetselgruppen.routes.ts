@@ -4,6 +4,7 @@ import { RaetselgruppenSearchComponent } from "./raetselgruppen-search/raetselgr
 import { raetselgruppenDataProvider } from '@mja-ws/raetselgruppen/api';
 import { RaetselgruppenDetailsComponent } from "./raetselgruppen-details/raetselgruppen-details.component";
 import { inject } from "@angular/core";
+import { RaetselgruppeEditComponent } from "./raetselgruppe-edit/raetselgruppe-edit.component";
 
 // siehe https://www.angulararchitects.io/en/aktuelles/modern-and-lightweight-angular-architectures-with-angulars-latest-innovations/
 
@@ -20,6 +21,11 @@ export const raetselgruppenRoutes: Routes = [
         path: 'details',
         canActivate: [() => inject(AuthFacade).userIsAdmin$],
         component: RaetselgruppenDetailsComponent
+    }, 
+    {
+        path: 'edit',
+        canActivate: [() => inject(AuthFacade).userIsAdmin$],
+        component: RaetselgruppeEditComponent
     },
     {
         path: '',

@@ -1,6 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { create } from "domain";
 import { concatMap, map, tap } from "rxjs";
 import { RaetselgruppenHttpService } from "./raetselgruppen-http.service";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
@@ -48,6 +49,23 @@ export class RaetselgruppenEffects {
             }),
         ), { dispatch: false });
 
+    editRaetselgruppe$ = createEffect(() =>
+
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.edit_raetselguppe),
+            tap(() => {
+                this.#router.navigateByUrl('raetselgruppen/edit');
+            }),
+        ), { dispatch: false });
+
+    saveRaetselgruppe$ = createEffect(() =>
+
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.save_raetselgruppe),
+            concatMap((action) => this.#raetselgruppenHttpService.saveRaetselgruppe(action.editRaetselgruppePayload)),
+            map((raetselgruppe) => raetselgruppenActions.raetselgruppe_saved({ raetselgruppe }))
+        )
+    );
 
     saveRaetselgruppenelement$ = createEffect(() =>
 

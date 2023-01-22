@@ -3,10 +3,21 @@ import { Referenztyp, Schwierigkeitsgrad, STATUS } from '@mja-ws/core/model';
 export interface RaetselgruppeBasisdaten {
   readonly id: string;
   readonly name: string;
+  readonly kommentar: string | undefined;
   readonly schwierigkeitsgrad: Schwierigkeitsgrad;
   readonly referenztyp: Referenztyp | undefined;
   readonly referenz: string | undefined;
   readonly status: STATUS;
+};
+
+export const initialRaetselgruppeBasisdaten: RaetselgruppeBasisdaten = {
+  id: 'neu',
+  name: '',
+  status: 'ERFASST',
+  kommentar: undefined,
+  schwierigkeitsgrad: 'NOOP',
+  referenztyp: 'NOOP',
+  referenz: undefined
 };
 
 export interface RaetselgruppenTrefferItem {

@@ -249,7 +249,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   }
 
   neueRaetselgruppe(): void {
-    console.log('jetzt Rätselgruppeneditor mit "neu" öffnen');
+    this.#raetselgruppenFacade.createAndEditRaetselgruppe();
   }
 
   onRowClicked(raetselgruppe: RaetselgruppenTrefferItem): void {

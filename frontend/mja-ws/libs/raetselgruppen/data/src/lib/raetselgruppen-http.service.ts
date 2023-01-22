@@ -1,6 +1,15 @@
 import { inject, Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { RaetselgruppenTreffer, RaetselgruppenSuchparameter, RaetselgruppeDetails, EditRaetselgruppenelementPayload, Raetselgruppenelement } from "@mja-ws/raetselgruppen/model";
+import {
+    RaetselgruppenTreffer,
+    RaetselgruppenSuchparameter,
+    RaetselgruppeDetails,
+    EditRaetselgruppenelementPayload,
+    Raetselgruppenelement,
+    RaetselgruppenTrefferItem,
+    EditRaetselgruppePayload,
+    RaetselgruppeBasisdaten
+} from "@mja-ws/raetselgruppen/model";
 import { Observable } from "rxjs";
 import { PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION } from "@mja-ws/core/model";
 
@@ -11,7 +20,7 @@ export class RaetselgruppenHttpService {
     #http = inject(HttpClient);
     #url = '/raetselgruppen';
 
-    public findRaetselgruppen(suchparameter: RaetselgruppenSuchparameter, pageDefinition: PageDefinition): Observable<RaetselgruppenTreffer> {
+    findRaetselgruppen(suchparameter: RaetselgruppenSuchparameter, pageDefinition: PageDefinition): Observable<RaetselgruppenTreffer> {
 
         const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
@@ -43,13 +52,24 @@ export class RaetselgruppenHttpService {
         return this.#http.get<RaetselgruppenTreffer>(url, { headers, params });
     }
 
-    public findById(uuid: string): Observable<RaetselgruppeDetails> {
+    findById(uuid: string): Observable<RaetselgruppeDetails> {
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const url = this.#url + '/v1/' + uuid;
         return this.#http.get<RaetselgruppeDetails>(url, { headers });
     }
 
-    public saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+    saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
+
+       const url = this.#url + '/v1';
+
+        if ('neu' === editRaetselgruppePayload.id) {
+            return this.#insertRaetselgruppe(url, editRaetselgruppePayload);
+        } else {
+            return this.#updateRaetselgruppe(url, editRaetselgruppePayload);
+        }
+    }
+
+    saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
 
         const url = this.#url + '/v1/' + raetselgruppeID + '/elemente';
 
@@ -60,11 +80,25 @@ export class RaetselgruppenHttpService {
         }
     }
 
-    public deleteRaetselgruppenelement(raetselgruppeID: string, payload: Raetselgruppenelement): Observable<RaetselgruppeDetails> {
+    deleteRaetselgruppenelement(raetselgruppeID: string, payload: Raetselgruppenelement): Observable<RaetselgruppeDetails> {
         const url = this.#url + '/v1/' + raetselgruppeID + '/elemente/' + payload.id;
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.delete<RaetselgruppeDetails>(url, { headers });
+    }
+
+    #insertRaetselgruppe(url: string, payload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        return this.#http.post<RaetselgruppeBasisdaten>(url, payload, { headers });
+
+    }
+
+    #updateRaetselgruppe(url: string, payload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        return this.#http.put<RaetselgruppeBasisdaten>(url, payload, { headers });
+
     }
 
     #insertRaetselgruppenelement(url: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {

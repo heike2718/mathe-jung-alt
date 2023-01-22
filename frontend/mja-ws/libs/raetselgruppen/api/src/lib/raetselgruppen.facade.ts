@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState } from "@mja-ws/core/model";
 import { fromRaetselgruppen, raetselgruppenActions } from "@mja-ws/raetselgruppen/data";
-import { EditRaetselgruppenelementPayload, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
+import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/ngrx-utils";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -33,18 +33,47 @@ export class RaetselgruppenFacade {
     }
 
     generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-        this.#store.dispatch(raetselgruppenActions.generiere_vorschau({raetselgruppeID, layoutAntwortvorschlaege}));
+        this.#store.dispatch(raetselgruppenActions.generiere_vorschau({ raetselgruppeID, layoutAntwortvorschlaege }));
     }
 
     generiereLaTeX(raetselgruppeID: string): void {
-        this.#store.dispatch(raetselgruppenActions.generiere_latex({raetselgruppeID}));
+        this.#store.dispatch(raetselgruppenActions.generiere_latex({ raetselgruppeID }));
+    }
+
+    createAndEditRaetselgruppe(): void {
+        this.editRaetselgruppe(initialRaetselgruppeBasisdaten);
+    }
+
+    editRaetselgruppe(raetselgruppeBasisdaten: RaetselgruppeBasisdaten): void {
+        this.#store.dispatch(raetselgruppenActions.edit_raetselguppe({ raetselgruppeBasisdaten }));
+    }
+
+    saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): void {
+        this.#store.dispatch(raetselgruppenActions.save_raetselgruppe({editRaetselgruppePayload}));        
+    }
+
+    cancelEdit(raetselgruppe: RaetselgruppeBasisdaten): void {
+
+        if (raetselgruppe.id === 'neu') {
+            this.#store.dispatch(raetselgruppenActions.unselect_raetselgruppe());
+        } else {
+            const rg: RaetselgruppenTrefferItem = {
+                id: raetselgruppe.id,
+                name: '',
+                schwierigkeitsgrad: raetselgruppe.schwierigkeitsgrad,
+                status: raetselgruppe.status,
+                referenztyp: raetselgruppe.referenztyp,
+                referenz: raetselgruppe.referenz
+            };
+            this.#store.dispatch(raetselgruppenActions.select_raetselgruppe({ raetselgruppe: rg }));
+        }
     }
 
     saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
-        this.#store.dispatch(raetselgruppenActions.save_raetselgruppenelement({raetselgruppeID, payload}));
+        this.#store.dispatch(raetselgruppenActions.save_raetselgruppenelement({ raetselgruppeID, payload }));
     }
 
     deleteRaetselgruppenelement(raetselgruppeID: string, payload: Raetselgruppenelement): void {
-        this.#store.dispatch(raetselgruppenActions.delete_raetselgruppenelement({raetselgruppeID, payload}));
+        this.#store.dispatch(raetselgruppenActions.delete_raetselgruppenelement({ raetselgruppeID, payload }));
     }
 }

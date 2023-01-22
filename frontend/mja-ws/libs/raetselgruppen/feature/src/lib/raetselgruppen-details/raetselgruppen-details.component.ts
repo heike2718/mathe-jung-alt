@@ -15,6 +15,7 @@ import { RaetselgruppenelementDialogData } from '../raetselgruppenelement-dialog
 import { RaetselgruppenelementDialogComponent } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
 import { RaetselgruppenelementeComponent } from '../raetselgruppenelemente/raetselgruppenelemente.component';
 import { CoreFacade } from '@mja-ws/core/api';
+import { RaetselgruppeEditComponent } from '../raetselgruppe-edit/raetselgruppe-edit.component';
 
 @Component({
   selector: 'mja-raetselgruppen-details',
@@ -26,11 +27,12 @@ import { CoreFacade } from '@mja-ws/core/api';
     MatDialogModule,
     MatInputModule,
     MatListModule,
-    MatFormFieldModule,
+    MatFormFieldModule,    
     FrageLoesungImagesComponent,
     SelectPrintparametersDialogComponent,
     RaetselgruppenelementDialogComponent,
-    RaetselgruppenelementeComponent
+    RaetselgruppenelementeComponent,
+    RaetselgruppeEditComponent
   ],
   templateUrl: './raetselgruppen-details.component.html',
   styleUrls: ['./raetselgruppen-details.component.scss'],
@@ -111,11 +113,11 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   }
 
   startEdit(): void {
-    console.log('jetzt Editorkomponente aufmachen');
+    this.raetselgruppenFacade.editRaetselgruppe(this.#raetselgruppeBasisdaten);
   }
 
   openNeuesRaetselgruppenelementDialog(): void {
-    
+
     const dialogData: RaetselgruppenelementDialogData = {
       titel: 'Neues Element',
       id: 'neu',
