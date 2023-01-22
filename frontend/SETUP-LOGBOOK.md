@@ -301,6 +301,17 @@ npx nx generate @nrwl/angular:component raetselgruppen-search --project=raetselg
 npx nx generate @nrwl/angular:component raetselgruppen-details --project=raetselgruppen-feature --path=/libs/raetselgruppen/feature/src/lib --selector=mja-raetselgruppen-details --standalone --no-interactive --dry-run
 ```
 
+### RaetselgruppenelementeComponent
+
+```
+npx nx generate @nrwl/angular:component raetselgruppenelemente --project=raetselgruppen-feature --path=/libs/raetselgruppen/feature/src/lib --selector=mja-raetselgruppenelemente --standalone --no-interactive --dry-run
+```
+
+### RaetselgruppenelementDialogComponent
+
+```
+npx nx generate @nrwl/angular:component raetselgruppenelement-dialog --project=raetselgruppen-feature --path=/libs/raetselgruppen/feature/src/lib --selector=mja-raetselgruppenelement --standalone --no-interactive --dry-run
+```
 
 
 ## Shared Componensts library

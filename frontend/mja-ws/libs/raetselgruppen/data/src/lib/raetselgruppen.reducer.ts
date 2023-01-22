@@ -48,6 +48,7 @@ export const raetselgruppenFeature = createFeature({
         }),
         on(raetselgruppenActions.unselect_raetselgruppe, (state, _action) => {
             return {...state, raetselgruppeDetails: undefined}
-        })
+        }),
+        on(raetselgruppenActions.raetselgruppenelemente_changed, (state, action) => ({ ...state, raetselgruppeDetails: action.raetselgruppenDetails })),
     )
 });

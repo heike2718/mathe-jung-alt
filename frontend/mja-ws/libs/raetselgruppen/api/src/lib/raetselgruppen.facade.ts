@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState } from "@mja-ws/core/model";
 import { fromRaetselgruppen, raetselgruppenActions } from "@mja-ws/raetselgruppen/data";
-import { RaetselgruppeDetails, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
+import { EditRaetselgruppenelementPayload, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/ngrx-utils";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -16,6 +16,7 @@ export class RaetselgruppenFacade {
     anzahlTrefferGesamt$: Observable<number> = this.#store.select(fromRaetselgruppen.anzahlTrefferGesamt);
     paginationState$: Observable<PaginationState> = this.#store.select(fromRaetselgruppen.paginationState);
     raetselgruppeDetails$: Observable<RaetselgruppeDetails> = this.#store.select(fromRaetselgruppen.raetselgruppeDetails).pipe(filterDefined, deepClone);
+    raetselgruppenelemente$: Observable<Raetselgruppenelement[]> = this.#store.select(fromRaetselgruppen.raetselgruppenelemente);
 
     triggerSearch(raetselgruppenSuchparameter: RaetselgruppenSuchparameter, pageDefinition: PageDefinition): void {
         this.#store.dispatch(raetselgruppenActions.raetselgruppen_select_page({ pageDefinition }));
@@ -31,11 +32,19 @@ export class RaetselgruppenFacade {
         this.#store.dispatch(raetselgruppenActions.unselect_raetselgruppe());
     }
 
-    public generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+    generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
         this.#store.dispatch(raetselgruppenActions.generiere_vorschau({raetselgruppeID, layoutAntwortvorschlaege}));
     }
 
-    public generiereLaTeX(raetselgruppeID: string): void {
+    generiereLaTeX(raetselgruppeID: string): void {
         this.#store.dispatch(raetselgruppenActions.generiere_latex({raetselgruppeID}));
+    }
+
+    saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
+        this.#store.dispatch(raetselgruppenActions.save_raetselgruppenelement({raetselgruppeID, payload}));
+    }
+
+    deleteRaetselgruppenelement(raetselgruppeID: string, payload: Raetselgruppenelement): void {
+        this.#store.dispatch(raetselgruppenActions.delete_raetselgruppenelement({raetselgruppeID, payload}));
     }
 }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { coreDeskriptorenActions, coreQuelleActions, fromCoreQuelle, fromCoreDeskriptoren } from "@mja-ws/core/data";
-import { DeskriptorUI, QuelleUI } from "@mja-ws/core/model";
+import { coreDeskriptorenActions, coreQuelleActions, fromCoreQuelle, fromCoreDeskriptoren, ImagesHttpService } from "@mja-ws/core/data";
+import { DeskriptorUI, GeneratedImages, QuelleUI } from "@mja-ws/core/model";
 import { Store } from "@ngrx/store";
 import { Observable, tap } from "rxjs";
 
@@ -11,7 +11,8 @@ import { Observable, tap } from "rxjs";
 export class CoreFacade {
 
     #store = inject(Store);
-    #router = inject(Router);  
+    #router = inject(Router); 
+    #imagesHttpService = inject(ImagesHttpService); 
     
     #deskriptorenLoaded = false;   
 
@@ -43,6 +44,10 @@ export class CoreFacade {
        this.#removeCoreDeskriptoren();
         this.#removeQuelleAngemeldeterAdmin;
         this.#router.navigateByUrl('/');
+    }
+
+    public loadRaetselPNGs(schluessel: string): Observable<GeneratedImages> {
+        return this.#imagesHttpService.loadRaetselPNGs(schluessel);
     }
 
     #removeQuelleAngemeldeterAdmin(): void {

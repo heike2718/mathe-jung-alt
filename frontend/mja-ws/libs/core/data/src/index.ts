@@ -8,3 +8,5 @@ export { coreDeskriptorenActions } from './lib/descriptoren/core-deskriptoren.ac
 export { fromCoreDeskriptoren } from './lib/descriptoren/core-deskriptoren.selectors' 
 export { CoreDeskriptorUIEffects } from "./lib/descriptoren/core-deskriptoren.effects";
 export { coreDeskriptorenUIFeature } from "./lib/descriptoren/core-deskriptoren.reducer";
+
+export { ImagesHttpService } from './lib/images/images-http.service';

@@ -47,4 +47,23 @@ export class RaetselgruppenEffects {
                 this.#router.navigateByUrl('raetselgruppen');
             }),
         ), { dispatch: false });
+
+
+    saveRaetselgruppenelement$ = createEffect(() =>
+
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.save_raetselgruppenelement),
+            concatMap((action) => this.#raetselgruppenHttpService.saveRaetselgruppenelement(action.raetselgruppeID, action.payload)),
+            map((raetselgruppenDetails) => raetselgruppenActions.raetselgruppenelemente_changed({ raetselgruppenDetails }))
+        )
+    );
+
+    deleteRaetselgruppenelement$ = createEffect(() =>
+
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.delete_raetselgruppenelement),
+            concatMap((action) => this.#raetselgruppenHttpService.deleteRaetselgruppenelement(action.raetselgruppeID, action.payload)),
+            map((raetselgruppenDetails) => raetselgruppenActions.raetselgruppenelemente_changed({ raetselgruppenDetails }))
+        )
+    );
 }
