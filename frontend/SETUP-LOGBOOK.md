@@ -313,6 +313,12 @@ npx nx generate @nrwl/angular:component raetselgruppenelemente --project=raetsel
 npx nx generate @nrwl/angular:component raetselgruppenelement-dialog --project=raetselgruppen-feature --path=/libs/raetselgruppen/feature/src/lib --selector=mja-raetselgruppenelement --standalone --no-interactive --dry-run
 ```
 
+### RaetselgruppeEditComponent
+
+```
+npx nx generate @nrwl/angular:component raetselgruppe-edit --project=raetselgruppen-feature --path=/libs/raetselgruppen/feature/src/lib --selector=mja-raetselgruppe-edit --standalone --no-interactive --dry-run
+```
+
 
 ## Shared Componensts library
 
