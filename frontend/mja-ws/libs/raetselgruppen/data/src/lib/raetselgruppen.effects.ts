@@ -1,7 +1,8 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { GeneratedFile } from "@mja-ws/core/model";
+import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { create } from "domain";
 import { concatMap, map, tap } from "rxjs";
 import { RaetselgruppenHttpService } from "./raetselgruppen-http.service";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
@@ -12,6 +13,7 @@ export class RaetselgruppenEffects {
     #actions = inject(Actions);
     #raetselgruppenHttpService = inject(RaetselgruppenHttpService);
     #router = inject(Router);
+    #downloadService = inject(FileDownloadService);
 
     findRaetselgruppen$ = createEffect(() => {
         return this.#actions.pipe(
@@ -84,4 +86,18 @@ export class RaetselgruppenEffects {
             map((raetselgruppenDetails) => raetselgruppenActions.raetselgruppenelemente_changed({ raetselgruppenDetails }))
         )
     );
+
+    generiereVorschau$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.generiere_vorschau),
+            concatMap((action) => this.#raetselgruppenHttpService.generiereVorschau(action.raetselgruppeID, action.layoutAntwortvorschlaege)),
+            map((genaratedFile: GeneratedFile) => raetselgruppenActions.vorschau_generated({ pdf: genaratedFile }))
+        )
+    );
+
+    downloadPDF$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.vorschau_generated),
+            tap((action) => this.#downloadService.downloadPdf(action.pdf.fileData, action.pdf.fileName)),
+        ), { dispatch: false });
 }

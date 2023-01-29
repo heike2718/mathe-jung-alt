@@ -11,7 +11,7 @@ import {
     RaetselgruppeBasisdaten
 } from "@mja-ws/raetselgruppen/model";
 import { Observable } from "rxjs";
-import { PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION } from "@mja-ws/core/model";
+import { GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION } from "@mja-ws/core/model";
 
 
 @Injectable({ providedIn: 'root' })
@@ -85,6 +85,17 @@ export class RaetselgruppenHttpService {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.delete<RaetselgruppeDetails>(url, { headers });
+    }
+
+    generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+
+
+        const url = this.#url + '/v1/vorschau/' + raetselgruppeID;
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+
+        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
+
     }
 
     #insertRaetselgruppe(url: string, payload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
