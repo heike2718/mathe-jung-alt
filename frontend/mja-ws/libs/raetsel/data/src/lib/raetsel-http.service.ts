@@ -23,7 +23,7 @@ export class RaetselHttpService {
 
     #url = '/raetsel';
 
-    public findRaetsel(suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
+    findRaetsel(suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
 
         const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
@@ -47,7 +47,7 @@ export class RaetselHttpService {
         return this.#http.get<RaetselsucheTreffer>(url, { headers, params });
     }
 
-    public loadRaetselDetails(raetsel: Raetsel): Observable<RaetselDetails> {
+    loadRaetselDetails(raetsel: Raetsel): Observable<RaetselDetails> {
 
         const url = this.#url + '/v1/' + raetsel.id;
         const headers = new HttpHeaders().set('Accept', 'application/json');
@@ -55,7 +55,7 @@ export class RaetselHttpService {
         return this.#http.get<RaetselDetails>(url, { headers: headers });
     }
 
-    public generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
+    generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
 
         const url = this.#url + '/v1/PNG/' + raetselId;
 
@@ -65,7 +65,7 @@ export class RaetselHttpService {
         return this.#http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers, params: params });
     }
 
-    public generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
         const url = this.#url + '/v1/PDF/' + raetselId;
 
@@ -75,7 +75,7 @@ export class RaetselHttpService {
         return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
     }
 
-    public saveRaetsel(editRaetselPayload: EditRaetselPayload): Observable<RaetselDetails> {
+    saveRaetsel(editRaetselPayload: EditRaetselPayload): Observable<RaetselDetails> {
 
         const url = this.#url + '/v1';
 

@@ -73,7 +73,7 @@ export interface EditRaetselgruppenelementPayload {
 
 export interface Raetselgruppenelement extends EditRaetselgruppenelementPayload {
   readonly name: string;
-  readonly loesungsbuchstabe?: string;
+  readonly loesungsbuchstabe: string | undefined;
 };
 
 export interface RaetselgruppeDetails extends EditRaetselgruppePayload {

@@ -6,7 +6,7 @@ export interface UserFull {
 };
 
 export interface Session {
-  readonly sessionId?: string;
+  readonly sessionId: string | undefined;
   readonly expiresAt: number;
   readonly user: UserFull
 };
@@ -19,6 +19,7 @@ const anonymousUser: UserFull = {
 };
 
 export const anonymousSession: Session = {
+  sessionId: undefined,
   expiresAt: 0,
   user: anonymousUser
 };
@@ -29,7 +30,7 @@ export function findRole(role: string, roles: string[]): boolean {
 
 };
 
-export function isAdmin(user?: UserFull): boolean {
+export function isAdmin(user: UserFull | undefined): boolean {
 
   if (user === undefined) {
     return false;

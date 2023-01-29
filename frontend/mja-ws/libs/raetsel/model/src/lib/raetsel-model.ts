@@ -13,7 +13,7 @@ export const initialRaetselSuchfilter: RaetselSuchfilter = {
 
 export interface Antwortvorschlag {
   readonly buchstabe: string;
-  readonly text?: string;
+  readonly text: string | undefined;
   readonly korrekt: boolean;
 };
 
@@ -30,10 +30,10 @@ export interface GrafikInfo {
 export interface GrafikSearchResult {
   readonly pfad: string;
   readonly messagePayload: Message;
-  readonly image?: string;
+  readonly image: string | undefined;
 };
 
-export const nullGraphicSearchResult: GrafikSearchResult = { pfad: '', messagePayload: { level: 'INFO', message: '' } };
+export const nullGraphicSearchResult: GrafikSearchResult = { pfad: '', messagePayload: { level: 'INFO', message: '' }, image: undefined };
 
 
 
@@ -43,7 +43,7 @@ export interface Raetsel {
   readonly schluessel: string;
   readonly name: string;
   readonly status: STATUS;
-  readonly kommentar?: string;
+  readonly kommentar: string | undefined;
   readonly deskriptoren: DeskriptorUI[];
 };
 

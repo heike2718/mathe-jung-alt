@@ -117,7 +117,7 @@ export interface GeneratedFile {
 export interface SelectPrintparametersDialogData {
   titel: string;
   layoutsAntwortvorschlaegeInput: string[];
-  selectedLayoutAntwortvorschlaege?: string;
+  selectedLayoutAntwortvorschlaege: string | undefined;
 };
 
 export class GuiReferenztypenMap {

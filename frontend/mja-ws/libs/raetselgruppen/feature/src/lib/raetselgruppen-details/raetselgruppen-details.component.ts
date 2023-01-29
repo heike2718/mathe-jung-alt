@@ -42,7 +42,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   raetselgruppenFacade = inject(RaetselgruppenFacade);
   dialog = inject(MatDialog);
 
-  images?: GeneratedImages;
+  images: GeneratedImages | undefined;
   schluessel = '';
 
   #coreFacade = inject(CoreFacade);

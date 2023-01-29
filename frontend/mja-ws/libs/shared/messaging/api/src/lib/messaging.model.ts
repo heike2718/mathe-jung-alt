@@ -5,5 +5,5 @@ export interface Message {
 
 export interface ResponsePayload {
   readonly message: Message;
-  readonly data?: any;
+  readonly data: any | undefined;
 };

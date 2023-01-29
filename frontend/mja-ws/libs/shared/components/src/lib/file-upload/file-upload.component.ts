@@ -31,8 +31,8 @@ export class FileUploadComponent implements OnInit {
   dateiAusgewaehlt: EventEmitter<string> = new EventEmitter<string>();
 
   fileName = '';
-  selectedFiles?: FileList;
-  currentFile?: File;
+  selectedFiles: FileList | undefined;
+  currentFile: File | undefined;
 
   maxFileSizeInfo!: string;
   fileSize = '';

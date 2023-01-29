@@ -10,25 +10,26 @@
     "loesung": "Dennis ist am ältesten. Danach kommen Beate, Anton und Carola.",
     "kommentar": "Serie Serie-1, 1, Serie-65, 65",
     "quelleId": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+    "quelle": {
+      "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+      "name": "Ponder Stibbons"
+    },
     "antwortvorschlaege": [],
     "deskriptoren": [
       {
         "id": 1,
         "name": "Mathematik",
-        "admin": false,
-        "kontext": "RAETSEL"
+        "admin": false
       },
       {
         "id": 4,
         "name": "Klasse 1",
-        "admin": false,
-        "kontext": "RAETSEL"
+        "admin": false
       },
       {
         "id": 14,
         "name": "Logik",
-        "admin": false,
-        "kontext": "RAETSEL"
+        "admin": false
       }
     ]
   }

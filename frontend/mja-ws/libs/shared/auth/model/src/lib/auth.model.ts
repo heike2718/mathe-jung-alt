@@ -1,8 +1,8 @@
 export interface AuthResult {
-  expiresAt?: number;
-  state?: string;
-  nonce?: string;
-  idToken?: string;
+  expiresAt: number | undefined;
+  state: string | undefined;
+  nonce: string | undefined;
+  idToken: string | undefined;
 };
 
 export interface User {
