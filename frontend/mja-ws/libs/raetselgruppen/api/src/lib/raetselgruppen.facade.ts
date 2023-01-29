@@ -15,7 +15,9 @@ export class RaetselgruppenFacade {
     page$: Observable<RaetselgruppenTrefferItem[]> = this.#store.select(fromRaetselgruppen.page);
     anzahlTrefferGesamt$: Observable<number> = this.#store.select(fromRaetselgruppen.anzahlTrefferGesamt);
     paginationState$: Observable<PaginationState> = this.#store.select(fromRaetselgruppen.paginationState);
+    editorContent$: Observable<RaetselgruppeBasisdaten> = this.#store.select(fromRaetselgruppen.raetselgruppeBasisdaten).pipe(filterDefined, deepClone);
     raetselgruppeDetails$: Observable<RaetselgruppeDetails> = this.#store.select(fromRaetselgruppen.raetselgruppeDetails).pipe(filterDefined, deepClone);
+    raetselgruppeBasisdaten$: Observable<RaetselgruppeBasisdaten> = this.#store.select(fromRaetselgruppen.raetselgruppeBasisdaten).pipe(filterDefined, deepClone);
     raetselgruppenelemente$: Observable<Raetselgruppenelement[]> = this.#store.select(fromRaetselgruppen.raetselgruppenelemente);
 
     triggerSearch(raetselgruppenSuchparameter: RaetselgruppenSuchparameter, pageDefinition: PageDefinition): void {
@@ -49,7 +51,7 @@ export class RaetselgruppenFacade {
     }
 
     saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): void {
-        this.#store.dispatch(raetselgruppenActions.save_raetselgruppe({editRaetselgruppePayload}));        
+        this.#store.dispatch(raetselgruppenActions.save_raetselgruppe({ editRaetselgruppePayload }));
     }
 
     cancelEdit(raetselgruppe: RaetselgruppeBasisdaten): void {
@@ -63,7 +65,9 @@ export class RaetselgruppenFacade {
                 schwierigkeitsgrad: raetselgruppe.schwierigkeitsgrad,
                 status: raetselgruppe.status,
                 referenztyp: raetselgruppe.referenztyp,
-                referenz: raetselgruppe.referenz
+                referenz: raetselgruppe.referenz,
+                geaendertDurch: raetselgruppe.geaendertDurch,
+                anzahlElemente: 0
             };
             this.#store.dispatch(raetselgruppenActions.select_raetselgruppe({ raetselgruppe: rg }));
         }

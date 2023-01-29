@@ -56,10 +56,10 @@ export const raetselgruppenFeature = createFeature({
             return { ...state, raetselgruppeBasisdaten: raetselgruppeBasisdaten };
         }),
         on(raetselgruppenActions.raetselgruppedetails_loaded, (state, action) => {
-            return {...state, raetselgruppeDetails: action.raetselgruppeDetails};
+            return {...state, raetselgruppeDetails: action.raetselgruppeDetails, raetselgruppeBasisdaten: undefined};
         }),
         on(raetselgruppenActions.unselect_raetselgruppe, (state, _action) => {
-            return {...state, raetselgruppeDetails: undefined}
+            return {...state, raetselgruppeDetails: undefined, raetselgruppeBasisdaten: undefined}
         }),
         on(raetselgruppenActions.raetselgruppenelemente_changed, (state, action) => ({ ...state, raetselgruppeDetails: action.raetselgruppenDetails })),
     )

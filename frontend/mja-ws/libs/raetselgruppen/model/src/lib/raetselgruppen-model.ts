@@ -8,6 +8,7 @@ export interface RaetselgruppeBasisdaten {
   readonly referenztyp: Referenztyp | undefined;
   readonly referenz: string | undefined;
   readonly status: STATUS;
+  readonly geaendertDurch: string | undefined;
 };
 
 export const initialRaetselgruppeBasisdaten: RaetselgruppeBasisdaten = {
@@ -17,7 +18,8 @@ export const initialRaetselgruppeBasisdaten: RaetselgruppeBasisdaten = {
   kommentar: undefined,
   schwierigkeitsgrad: 'NOOP',
   referenztyp: 'NOOP',
-  referenz: undefined
+  referenz: undefined,
+  geaendertDurch: undefined
 };
 
 export interface RaetselgruppenTrefferItem {
@@ -27,6 +29,8 @@ export interface RaetselgruppenTrefferItem {
   readonly referenztyp: Referenztyp | undefined;
   readonly referenz: string | undefined;
   readonly status: STATUS;
+  readonly geaendertDurch: string | undefined;
+  readonly anzahlElemente: number;
 };
 
 export interface RaetselgruppenTreffer {

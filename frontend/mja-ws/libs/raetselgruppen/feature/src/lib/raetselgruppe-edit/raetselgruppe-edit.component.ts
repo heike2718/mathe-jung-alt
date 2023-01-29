@@ -52,12 +52,9 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
     this.#createForm();
   }
 
-
-
-
   ngOnInit(): void {
 
-    this.#raetselgruppeBasisdatenSubscription = this.raetselgruppenFacade.raetselgruppeDetails$.subscribe((basisdaten) => {
+    this.#raetselgruppeBasisdatenSubscription = this.raetselgruppenFacade.raetselgruppeBasisdaten$.subscribe((basisdaten) => {
 
       this.#raetselgruppeBasisdaten = basisdaten;
       this.#initForm();

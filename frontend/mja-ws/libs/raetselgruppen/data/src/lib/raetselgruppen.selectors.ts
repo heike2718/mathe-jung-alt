@@ -28,6 +28,11 @@ const raetselgruppeDetails = createSelector(
     (state) => state.raetselgruppeDetails
 );
 
+const raetselgruppeBasisdaten = createSelector(
+    selectRaetselgruppenState,
+    (state) => state.raetselgruppeBasisdaten
+);
+
 const raetselgruppenelemente = createSelector(
     raetselgruppeDetails,
     (details) => details ? details.elemente : []
@@ -38,6 +43,7 @@ export const fromRaetselgruppen = {
     anzahlTrefferGesamt,
     page,
     paginationState,
+    raetselgruppeBasisdaten,
     raetselgruppeDetails,
     raetselgruppenelemente
 };
