@@ -98,6 +98,15 @@ export class RaetselgruppenHttpService {
 
     }
 
+    generiereLaTeX(raetselgruppeID: string): Observable<GeneratedFile> {
+
+        const url = this.#url + '/v1/latex/' + raetselgruppeID;
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const params = new HttpParams().set('layoutAntwortvorschlaege', 'ANKREUZTABELLE');
+
+        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
+    }
+
     #insertRaetselgruppe(url: string, payload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');

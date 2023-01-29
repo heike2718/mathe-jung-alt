@@ -91,13 +91,23 @@ export class RaetselgruppenEffects {
         this.#actions.pipe(
             ofType(raetselgruppenActions.generiere_vorschau),
             concatMap((action) => this.#raetselgruppenHttpService.generiereVorschau(action.raetselgruppeID, action.layoutAntwortvorschlaege)),
-            map((genaratedFile: GeneratedFile) => raetselgruppenActions.vorschau_generated({ pdf: genaratedFile }))
+            map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
+        )
+    );
+
+
+
+    generiereLaTeX$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.generiere_latex),
+            concatMap((action) => this.#raetselgruppenHttpService.generiereLaTeX(action.raetselgruppeID)),
+            map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
         )
     );
 
     downloadPDF$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.vorschau_generated),
+            ofType(raetselgruppenActions.file_generated),
             tap((action) => this.#downloadService.downloadPdf(action.pdf.fileData, action.pdf.fileName)),
         ), { dispatch: false });
 }
