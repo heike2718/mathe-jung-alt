@@ -8,7 +8,7 @@ export interface UserFull {
 export interface Session {
   readonly sessionId: string | undefined;
   readonly expiresAt: number;
-  readonly user: UserFull
+  readonly user: UserFull;
 };
 
 const anonymousUser: UserFull = {

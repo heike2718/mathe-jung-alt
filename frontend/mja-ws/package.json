@@ -34,6 +34,7 @@
     "@ngx-formly/material": "5.12.7",
     "@nrwl/angular": "14.8.6",
     "@ungap/structured-clone": "^1.0.1",
+    "angular2-uuid": "^1.1.1",
     "ngrx-store-localstorage": "^14.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

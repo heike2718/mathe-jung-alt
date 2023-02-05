@@ -29,16 +29,16 @@ public class ConfigService {
 	@ConfigProperty(name = "stage")
 	String stage;
 
-	@ConfigProperty(name = "allowedOrigin")
+	@ConfigProperty(name = "quarkus.http.cors.origins")
 	String allowedOrigin;
 
-	@ConfigProperty(name = "allowedMethods")
+	@ConfigProperty(name = "quarkus.http.cors.methods")
 	String allowedMethods;
 
-	@ConfigProperty(name = "allowedHeaders")
+	@ConfigProperty(name = "quarkus.http.cors.headers")
 	String allowedHeaders;
 
-	@ConfigProperty(name = "exposedHeaders")
+	@ConfigProperty(name = "quarkus.http.cors.exposed-headers")
 	String exposedHeaders;
 
 	@ConfigProperty(name = "mock.session")

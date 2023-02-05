@@ -51,7 +51,7 @@ bootstrapApplication(AppComponent, {
     provideEffects([LocalStorageEffects]),
     provideStoreDevtools(),
 
-    importProvidersFrom(
+    importProvidersFrom(      
       HttpClientModule,
       HttpClientXsrfModule.withOptions({
         cookieName: 'XSRF-TOKEN',
@@ -60,7 +60,7 @@ bootstrapApplication(AppComponent, {
     ),
     {
       provide: Configuration,
-      useFactory: () => new Configuration(environment.baseUrl, 'ADMIN', environment.withCredentials),
+      useFactory: () => new Configuration(environment.baseUrl, 'ADMIN', environment.withCredentials, 'mja-admin'),
     },
 
     {
