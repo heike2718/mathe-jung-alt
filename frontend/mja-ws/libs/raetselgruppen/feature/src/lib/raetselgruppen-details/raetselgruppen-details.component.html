@@ -75,7 +75,7 @@
         (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
     </mja-raetselgruppenelemente>
 
-    <h2>Vorschau {{schluessel}}</h2>
+    <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
     <div *ngIf="images else imagesFehlen">
         <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
     </div>

@@ -8,6 +8,7 @@ import { authActions } from './auth.actions';
 import { Session } from './internal.model';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { CoreFacade } from '@mja-ws/core/api';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,7 @@ export class AuthEffects {
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);
     #coreFacade = inject(CoreFacade);
+    #router = inject(Router);
 
     constructor(@Inject(Configuration) private configuration: Configuration) { }
 
@@ -66,4 +68,10 @@ export class AuthEffects {
             map(() => authActions.logged_out())
         );
     });
+
+    loggedOut$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(authActions.logged_out),
+            tap(() => this.#router.navigateByUrl('/'))
+        ), { dispatch: false });
 }

@@ -44,6 +44,8 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
   images: GeneratedImages | undefined;
   schluessel = '';
+  nummer = '';
+  punkte = '';
 
   #coreFacade = inject(CoreFacade);
 
@@ -206,6 +208,8 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   onShowImagesElement($element: Raetselgruppenelement): void {
 
     this.schluessel = $element.raetselSchluessel;
+    this.nummer = $element.nummer;
+    this.punkte = '' + $element.punkte;
 
     this.#imagesSubscription.unsubscribe();
     this.#imagesSubscription = this.#coreFacade.loadRaetselPNGs($element.raetselSchluessel).pipe(
