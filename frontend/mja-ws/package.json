@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "ng": "nx",
+    "ng": "npx nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2020 browser module main",
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "nx test",
+    "start": "npx nx serve",
+    "build": "npx nx build",
+    "test": "npx nx test",
     "test:all": "npx nx run-many --target=test --all",
     "lint:all": "npx nx run-many --target=lint --all",
     "full-check": "npx nx run-s lint:all test:all build"

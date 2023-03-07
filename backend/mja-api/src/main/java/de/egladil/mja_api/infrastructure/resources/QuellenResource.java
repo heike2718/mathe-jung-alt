@@ -162,10 +162,10 @@ public class QuellenResource {
 	@Path("admin/v2")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findOwnQuelle",
+		operationId = "getQuelleEingeloggterAdmin",
 		summary = "Gibt die Quelle zurück, die zu der eingeloggten Person gehört")
 	@APIResponse(
-		name = "FindOwnQuelleOKResponse",
+		name = "GetQuelleEingeloggterAdminOKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",

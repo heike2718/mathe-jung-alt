@@ -189,7 +189,7 @@ paths:
       tags:
       - Quellen
       summary: "Gibt die Quelle zurück, die zu der eingeloggten Person gehört"
-      operationId: findOwnQuelle
+      operationId: getQuelleEingeloggterAdmin
       responses:
         "200":
           description: OK
@@ -1555,9 +1555,10 @@ components:
             \ Ist nur bei inhaltlichen Änderungen sinnvoll."
           type: boolean
         raetsel:
+          description: die zu speichernden Daten des Rätsels
+          type: object
           allOf:
           - $ref: '#/components/schemas/Raetsel'
-          - description: die zu speichernden Daten des Rätsels
     EditRaetselgruppePayload:
       description: Payload zum Anlegen und Ändern einer Rätselgruppe ohne Elemente.
       required:
@@ -1582,15 +1583,17 @@ components:
           pattern: "[\\w äöüß\\:\\-\\.\\,]*"
           type: string
         schwierigkeitsgrad:
+          description: "Schwierigkeitsgrad, für den diese Rätselgruppe gedacht ist.\
+            \ (enum Schwierigkeitsgrad)"
+          type: string
           allOf:
           - $ref: '#/components/schemas/Schwierigkeitsgrad'
-          - description: "Schwierigkeitsgrad, für den diese Rätselgruppe gedacht ist.\
-              \ (enum Schwierigkeitsgrad)"
         referenztyp:
+          description: "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext\
+            \ zur Interpretation des Attributs referenz"
+          type: string
           allOf:
           - $ref: '#/components/schemas/Referenztyp'
-          - description: "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext\
-              \ zur Interpretation des Attributs referenz"
         referenz:
           description: ID einers Wettbwerbs oder einer Serie im alten Aufgabenarchiv
           maxLength: 36
@@ -1598,10 +1601,11 @@ components:
           pattern: "^[\\w äöüß]{1,20}$"
           type: string
         status:
+          description: Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene
+            sind über die Open-Data-API abrufbar
+          type: string
           allOf:
           - $ref: '#/components/schemas/DomainEntityStatus'
-          - description: Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene
-              sind über die Open-Data-API abrufbar
     EditRaetselgruppenelementPayload:
       description: Daten zum Anlegen und Ändern eines Rätselgruppenelements
       required:
@@ -1646,9 +1650,10 @@ components:
       type: object
       properties:
         messagePayload:
+          description: "Info, ob die Grafik bereits da ist"
+          type: object
           allOf:
           - $ref: '#/components/schemas/MessagePayload'
-          - description: "Info, ob die Grafik bereits da ist"
         pfad:
           description: der relative Pfad im LaTeX
           type: string
@@ -1749,9 +1754,10 @@ components:
           description: "technische ID, 'neu' für neue Rätsel"
           type: string
         quellenart:
+          description: "Art der Quelle: Mensch, Buch, Zeitschrift"
+          type: string
           allOf:
           - $ref: '#/components/schemas/Quellenart'
-          - description: "Art der Quelle: Mensch, Buch, Zeitschrift"
         sortNumber:
           format: int64
           description: Zahl zum Sortieren
@@ -1867,9 +1873,10 @@ components:
                 description: "Flag, ob dies die korrekte Antwort ist."
                 type: boolean
         images:
+          description: "Images, die angezeigt werden können"
+          type: object
           allOf:
           - $ref: '#/components/schemas/Images'
-          - description: "Images, die angezeigt werden können"
     Raetsel:
       description: Stammdaten eines Rätsels
       type: object
@@ -1895,18 +1902,20 @@ components:
           description: "Kommentar, volltextsuchfähig"
           type: string
         status:
+          description: "Veröffentlichungsstatus des Rätsels, nur freigegebene können\
+            \ in der mja-app gefunden werden."
+          type: string
           allOf:
           - $ref: '#/components/schemas/DomainEntityStatus'
-          - description: "Veröffentlichungsstatus des Rätsels, nur freigegebene kö\
-              nnen in der mja-app gefunden werden."
         quelleId:
           description: Referenz auf die Quelle des Rätsels
           pattern: "^[a-fA-F\\d\\-]{1,36}$"
           type: string
         quelle:
+          description: Referenz auf die Quelle des Rätsels sowie ein Name zum Anzeigen
+          type: object
           allOf:
           - $ref: '#/components/schemas/QuelleMinimalDto'
-          - description: Referenz auf die Quelle des Rätsels sowie ein Name zum Anzeigen
         schreibgeschuetzt:
           description: "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt\
             \ ist."
@@ -1968,9 +1977,10 @@ components:
                   \ lässt sich das Rätsel generieren."
                 type: boolean
         images:
+          description: "Images, die angezeigt werden können"
+          type: object
           allOf:
           - $ref: '#/components/schemas/Images'
-          - description: "Images, die angezeigt werden können"
         raetselPDF:
           format: binary
           description: PDF
@@ -1992,22 +2002,25 @@ components:
           description: optionaler Kommentar
           type: string
         schwierigkeitsgrad:
+          description: "Schwierigkeitsgrad, für das diese Rätselgruppe gedacht ist"
+          type: string
           allOf:
           - $ref: '#/components/schemas/Schwierigkeitsgrad'
-          - description: "Schwierigkeitsgrad, für das diese Rätselgruppe gedacht ist"
         referenztyp:
+          description: "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext\
+            \ zur Interpretation des Attributs referenz"
+          type: string
           allOf:
           - $ref: '#/components/schemas/Referenztyp'
-          - description: "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext\
-              \ zur Interpretation des Attributs referenz"
         referenz:
           description: ID einers Wettbwerbs oder einer Serie im alten Aufgabenarchiv
           type: string
         status:
+          description: Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene
+            sind über die Open-Data-API abrufbar
+          type: string
           allOf:
           - $ref: '#/components/schemas/DomainEntityStatus'
-          - description: Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene
-              sind über die Open-Data-API abrufbar
         schreibgeschuetzt:
           description: "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt\
             \ ist."
@@ -2080,22 +2093,25 @@ components:
                 description: poptionaler Kommentar
                 type: string
               schwierigkeitsgrad:
+                description: "Klassenstufe, für die die Rätselgruppe gedacht ist"
+                type: string
                 allOf:
                 - $ref: '#/components/schemas/Schwierigkeitsgrad'
-                - description: "Klassenstufe, für die die Rätselgruppe gedacht ist"
               referenztyp:
+                description: "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext\
+                  \ zur Interpretation des Attributs referenz"
+                type: string
                 allOf:
                 - $ref: '#/components/schemas/Referenztyp'
-                - description: "Refernztyp - Verbindung zum alten Aufgabenarchiv,\
-                    \ Kontext zur Interpretation des Attributs referenz"
               referenz:
                 description: ID einers Wettbwerbs oder einer Serie im alten Aufgabenarchiv
                 type: string
               status:
+                description: Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene
+                  sind über die Open-Data-API abrufbar
+                type: string
                 allOf:
                 - $ref: '#/components/schemas/DomainEntityStatus'
-                - description: Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene
-                    sind über die Open-Data-API abrufbar
               geaendertDurch:
                 description: ID des Änderers
                 type: string
@@ -2116,22 +2132,25 @@ components:
           description: poptionaler Kommentar
           type: string
         schwierigkeitsgrad:
+          description: "Klassenstufe, für die die Rätselgruppe gedacht ist"
+          type: string
           allOf:
           - $ref: '#/components/schemas/Schwierigkeitsgrad'
-          - description: "Klassenstufe, für die die Rätselgruppe gedacht ist"
         referenztyp:
+          description: "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext\
+            \ zur Interpretation des Attributs referenz"
+          type: string
           allOf:
           - $ref: '#/components/schemas/Referenztyp'
-          - description: "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext\
-              \ zur Interpretation des Attributs referenz"
         referenz:
           description: ID einers Wettbwerbs oder einer Serie im alten Aufgabenarchiv
           type: string
         status:
+          description: Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene
+            sind über die Open-Data-API abrufbar
+          type: string
           allOf:
           - $ref: '#/components/schemas/DomainEntityStatus'
-          - description: Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene
-              sind über die Open-Data-API abrufbar
         geaendertDurch:
           description: ID des Änderers
           type: string
@@ -2180,9 +2199,10 @@ components:
       type: object
       properties:
         message:
+          description: das MessagePayload
+          type: object
           allOf:
           - $ref: '#/components/schemas/MessagePayload'
-          - description: das MessagePayload
         data:
           description: daten die als JSON mitgegeben werden. Kann null sein
           type: object

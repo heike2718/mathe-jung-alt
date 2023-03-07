@@ -237,7 +237,7 @@
       "get" : {
         "tags" : [ "Quellen" ],
         "summary" : "Gibt die Quelle zurück, die zu der eingeloggten Person gehört",
-        "operationId" : "findOwnQuelle",
+        "operationId" : "getQuelleEingeloggterAdmin",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -2006,10 +2006,10 @@
             "type" : "boolean"
           },
           "raetsel" : {
+            "description" : "die zu speichernden Daten des Rätsels",
+            "type" : "object",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Raetsel"
-            }, {
-              "description" : "die zu speichernden Daten des Rätsels"
             } ]
           }
         }
@@ -2037,17 +2037,17 @@
             "type" : "string"
           },
           "schwierigkeitsgrad" : {
+            "description" : "Schwierigkeitsgrad, für den diese Rätselgruppe gedacht ist. (enum Schwierigkeitsgrad)",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Schwierigkeitsgrad"
-            }, {
-              "description" : "Schwierigkeitsgrad, für den diese Rätselgruppe gedacht ist. (enum Schwierigkeitsgrad)"
             } ]
           },
           "referenztyp" : {
+            "description" : "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Referenztyp"
-            }, {
-              "description" : "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz"
             } ]
           },
           "referenz" : {
@@ -2058,10 +2058,10 @@
             "type" : "string"
           },
           "status" : {
+            "description" : "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/DomainEntityStatus"
-            }, {
-              "description" : "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar"
             } ]
           }
         }
@@ -2117,10 +2117,10 @@
         "type" : "object",
         "properties" : {
           "messagePayload" : {
+            "description" : "Info, ob die Grafik bereits da ist",
+            "type" : "object",
             "allOf" : [ {
               "$ref" : "#/components/schemas/MessagePayload"
-            }, {
-              "description" : "Info, ob die Grafik bereits da ist"
             } ]
           },
           "pfad" : {
@@ -2234,10 +2234,10 @@
             "type" : "string"
           },
           "quellenart" : {
+            "description" : "Art der Quelle: Mensch, Buch, Zeitschrift",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Quellenart"
-            }, {
-              "description" : "Art der Quelle: Mensch, Buch, Zeitschrift"
             } ]
           },
           "sortNumber" : {
@@ -2375,10 +2375,10 @@
             }
           },
           "images" : {
+            "description" : "Images, die angezeigt werden können",
+            "type" : "object",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Images"
-            }, {
-              "description" : "Images, die angezeigt werden können"
             } ]
           }
         }
@@ -2413,10 +2413,10 @@
             "type" : "string"
           },
           "status" : {
+            "description" : "Veröffentlichungsstatus des Rätsels, nur freigegebene können in der mja-app gefunden werden.",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/DomainEntityStatus"
-            }, {
-              "description" : "Veröffentlichungsstatus des Rätsels, nur freigegebene können in der mja-app gefunden werden."
             } ]
           },
           "quelleId" : {
@@ -2425,10 +2425,10 @@
             "type" : "string"
           },
           "quelle" : {
+            "description" : "Referenz auf die Quelle des Rätsels sowie ein Name zum Anzeigen",
+            "type" : "object",
             "allOf" : [ {
               "$ref" : "#/components/schemas/QuelleMinimalDto"
-            }, {
-              "description" : "Referenz auf die Quelle des Rätsels sowie ein Name zum Anzeigen"
             } ]
           },
           "schreibgeschuetzt" : {
@@ -2504,10 +2504,10 @@
             }
           },
           "images" : {
+            "description" : "Images, die angezeigt werden können",
+            "type" : "object",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Images"
-            }, {
-              "description" : "Images, die angezeigt werden können"
             } ]
           },
           "raetselPDF" : {
@@ -2534,17 +2534,17 @@
             "type" : "string"
           },
           "schwierigkeitsgrad" : {
+            "description" : "Schwierigkeitsgrad, für das diese Rätselgruppe gedacht ist",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Schwierigkeitsgrad"
-            }, {
-              "description" : "Schwierigkeitsgrad, für das diese Rätselgruppe gedacht ist"
             } ]
           },
           "referenztyp" : {
+            "description" : "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Referenztyp"
-            }, {
-              "description" : "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz"
             } ]
           },
           "referenz" : {
@@ -2552,10 +2552,10 @@
             "type" : "string"
           },
           "status" : {
+            "description" : "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/DomainEntityStatus"
-            }, {
-              "description" : "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar"
             } ]
           },
           "schreibgeschuetzt" : {
@@ -2639,17 +2639,17 @@
                   "type" : "string"
                 },
                 "schwierigkeitsgrad" : {
+                  "description" : "Klassenstufe, für die die Rätselgruppe gedacht ist",
+                  "type" : "string",
                   "allOf" : [ {
                     "$ref" : "#/components/schemas/Schwierigkeitsgrad"
-                  }, {
-                    "description" : "Klassenstufe, für die die Rätselgruppe gedacht ist"
                   } ]
                 },
                 "referenztyp" : {
+                  "description" : "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz",
+                  "type" : "string",
                   "allOf" : [ {
                     "$ref" : "#/components/schemas/Referenztyp"
-                  }, {
-                    "description" : "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz"
                   } ]
                 },
                 "referenz" : {
@@ -2657,10 +2657,10 @@
                   "type" : "string"
                 },
                 "status" : {
+                  "description" : "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar",
+                  "type" : "string",
                   "allOf" : [ {
                     "$ref" : "#/components/schemas/DomainEntityStatus"
-                  }, {
-                    "description" : "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar"
                   } ]
                 },
                 "geaendertDurch" : {
@@ -2693,17 +2693,17 @@
             "type" : "string"
           },
           "schwierigkeitsgrad" : {
+            "description" : "Klassenstufe, für die die Rätselgruppe gedacht ist",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Schwierigkeitsgrad"
-            }, {
-              "description" : "Klassenstufe, für die die Rätselgruppe gedacht ist"
             } ]
           },
           "referenztyp" : {
+            "description" : "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/Referenztyp"
-            }, {
-              "description" : "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz"
             } ]
           },
           "referenz" : {
@@ -2711,10 +2711,10 @@
             "type" : "string"
           },
           "status" : {
+            "description" : "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar",
+            "type" : "string",
             "allOf" : [ {
               "$ref" : "#/components/schemas/DomainEntityStatus"
-            }, {
-              "description" : "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar"
             } ]
           },
           "geaendertDurch" : {
@@ -2779,10 +2779,10 @@
         "type" : "object",
         "properties" : {
           "message" : {
+            "description" : "das MessagePayload",
+            "type" : "object",
             "allOf" : [ {
               "$ref" : "#/components/schemas/MessagePayload"
-            }, {
-              "description" : "das MessagePayload"
             } ]
           },
           "data" : {

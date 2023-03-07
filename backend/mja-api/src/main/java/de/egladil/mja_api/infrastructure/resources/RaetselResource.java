@@ -137,7 +137,7 @@ public class RaetselResource {
 	@GET
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findRaetsel", summary = "Gibt alle Rätsel zurück, die auf die gegebene Suchanfrage passen.")
+		operationId = "findRaetselAdmin", summary = "Gibt alle Rätsel zurück, die auf die gegebene Suchanfrage passen.")
 	@Parameters({
 		@Parameter(
 			name = "suchstring",
@@ -154,7 +154,7 @@ public class RaetselResource {
 			name = "sortDirection",
 			description = "Sortierung. Es wird nach SCHLUESSEL sortiert.") })
 	@APIResponse(
-		name = "FindRaetselOKResponse",
+		name = "FindRaetselAdminOKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
