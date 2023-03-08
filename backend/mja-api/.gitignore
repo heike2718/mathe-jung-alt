@@ -42,3 +42,6 @@ nb-configuration.xml
 .java-version
 /.apt_generated/
 /.apt_generated_tests/
+
+# generated
+src/main/resources/META-INF/openapi/openapi.*
