@@ -5,12 +5,10 @@ import { anonymousSession, Session } from './internal.model';
 
 export interface AuthState {
     readonly session: Session;
-    readonly correlationId: string | undefined
 };
 
 const initialState: AuthState = {
-    session: anonymousSession,
-    correlationId: undefined
+    session: anonymousSession
 };
 
 export const authFeature = createFeature({
@@ -23,11 +21,12 @@ export const authFeature = createFeature({
 
                 const correlationId = generateUUID();
 
+                localStorage.setItem('corellationId', correlationId);
+
 
                 return {
                     ...state,
-                    session: session,
-                    correlationId: correlationId
+                    session: session
                 };
             }
         ),
@@ -35,8 +34,7 @@ export const authFeature = createFeature({
             authActions.logged_out,
             (state, _action): AuthState => ({
                 ...state,
-                session: anonymousSession,
-                correlationId: undefined
+                session: anonymousSession
             })
         )
     )
