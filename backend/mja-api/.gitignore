@@ -7,6 +7,8 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 release.properties
 
+.env
+
 # Eclipse
 .project
 .classpath
@@ -44,4 +46,6 @@ nb-configuration.xml
 /.apt_generated_tests/
 
 # generated
-src/main/resources/META-INF/openapi/openapi.*
+/src/main/resources/META-INF/openapi
+
+/src/main/resources/META-INF/resources/apps/mja-admin

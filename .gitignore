@@ -22,10 +22,3 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# angular
-backend/mja-api/src/main/resources/META-INF/resources/mja-admin/*.js
-backend/mja-api/src/main/resources/META-INF/resources/mja-admin/*.txt
-backend/mja-api/src/main/resources/META-INF/resources/mja-admin/*.css
-backend/mja-api/src/main/resources/META-INF/resources/mja-admin/index.html
-backend/mja-api/src/main/resources/META-INF/resources/mja-admin/favicon.ico
-backend/mja-api/src/main/resources/META-INF/resources/mja-admin/assets/*.png

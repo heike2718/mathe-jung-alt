@@ -25,7 +25,7 @@ export class AddBaseUrlInterceptor implements HttpInterceptor {
       url = `${this.#config.baseUrl}${req.url}`;
     }
 
-    const auth = localStorage.getItem('correlationId');
+    const auth = localStorage.getItem('corellationId');
     
     const correlationId = auth ? auth : generateUUID();
 

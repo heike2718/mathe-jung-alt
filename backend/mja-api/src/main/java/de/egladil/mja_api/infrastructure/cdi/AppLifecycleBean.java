@@ -38,6 +38,9 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "session.idle.timeout")
 	int sessionIdleTimeoutMinutes = 120;
 
+	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.web.mja_auth.restclient.InitAccessTokenRestClient\".url")
+	String oidcUrl;
+
 	void onStartup(@Observes final StartupEvent ev) {
 
 		LOGGER.info(" ===========> The application is starting with profile " + ProfileManager.getActiveProfile());
@@ -47,6 +50,7 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  session timeout nach {} min", sessionIdleTimeoutMinutes);
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
+		LOGGER.info(" ===========>  oidcUrl={}", oidcUrl);
 
 		if (delayMillis > 0) {
 

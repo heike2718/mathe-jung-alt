@@ -1,0 +1,29 @@
+ENV=dev
+STAGE=dev
+
+LATEX_GENERATOR_PRESERVE_TEMPFILES=true
+TARGET_ORIGIN = heikedeb,heikedeb:4200,heikedeb:4300,localhost:4200,localhost:4300,heikedeb:9600,https://opa-wetterwachs.de
+
+QUARKUS_HTTP_CORS_ORIGINS = http://localhost:9210,http://localhost:4200,http://heikedeb:9000,https://opa-wetterwachs.de,https://mathe-jung-alt.de
+
+QUARKUS_LOG_FILE_PATH = /home/heike/quarkus/log/mja-api/server.log
+QUARKUS_HTTP_ACCESS_LOG_LOG_DIRECTORy = /home/heike/quarkus/log/mja-api
+QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE=true
+QUARKUS_SWAGGER_UI_PATH=/swagger-ui
+LATEX_BASE_DIR= /home/heike/test
+IMAGES_BASE_DIR= /home/heike/test
+
+AUTHPROVIDER_URL=http://heikedeb:9000/authprovider
+AUTH_APP_URL=http://heikedeb:80/auth-app
+ADMIN_REDIRECT_URL_LOGIN=http://localhost:9210/mja-admin/
+PUBLIC_REDIRECT_URL_LOGIN=http://localhost:9210/mja-app/
+
+CLAMAV_HOST = 192.168.10.176
+CLAMAV_PORT = 3310
+ZIP_MAX_EXPECTED_COMPRESSION_RATIO = 100
+
+EMAIL_CREDENTIALS_SOURCE_FILE=true
+EMAIL_CREDENTIALS_PATH=/home/heike/git/konfigurationen/commons-mailer/mailprovider.properties
+
+CSRF_ENABLED=true
+MOCK_SESSION = false
