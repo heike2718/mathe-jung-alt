@@ -1,0 +1,11 @@
+\DeclareFontFamily{T1}{fbls}{}%
+\DeclareFontShape{T1}{fbls}{b}{n}{<->ecfblsb}{}%
+\DeclareFontShape{T1}{fbls}{b}{it}{<-> ecfblsbi}{}%
+%% bold extended (bx) are simply bold
+\DeclareFontShape{T1}{fbls}{bx}{n}{<->ssub * fbls/b/n}{}%
+\DeclareFontShape{T1}{fbls}{bx}{it}{<->ssub * fbls/b/it}{}%
+\DeclareFontShape{T1}{fbls}{m}{n}{<-> ecfbls}{}%
+\DeclareFontShape{T1}{fbls}{m}{it}{<-> ecfblsi}{}%
+\usepackage[T1]{fontenc}%
+\renewcommand{\rmdefault}{fbls}%
+\renewcommand{\sfdefault}{fbls}%
