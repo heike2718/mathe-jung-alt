@@ -15,14 +15,10 @@ MAINTAINER heike2718 <public@egladil.de>
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# install openjdk-11-jre-headless
-#RUN apt-get update &&\
-#    apt-get install -y openjdk-11-jre-headless
-
 RUN echo "Initial update." &&\
     apt-get update &&\
-# install  openjdk-11-jre-headless
-    apt-get install -y openjdk-11-jre-headless &&\
+# install  openjdk-17-jre-headless
+    sudo apt -y install openjdk-17-jre-headless &&\
 # prevent doc and man pages from being installed
 # the idea is based on https://askubuntu.com/questions/129566
     echo "Preventing doc and man pages from being installed." &&\
