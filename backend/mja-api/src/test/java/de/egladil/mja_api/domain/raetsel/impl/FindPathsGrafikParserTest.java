@@ -14,8 +14,6 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.domain.raetsel.impl.FindPathsGrafikParser;
-
 /**
  * FindPathsGrafikParserTest
  */

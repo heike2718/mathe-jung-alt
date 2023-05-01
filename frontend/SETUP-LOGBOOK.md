@@ -6,6 +6,16 @@
  npx create-nx-workspace@14.8.6
  ```
 
+Interaktiv: 
+
+* monorepo
+* angular
+* name
+* app-name
+* standalone components yes/no? => yes
+* add routing => yes
+* default stylesheet format => scss
+ 
 ## weitere dependencies hinzufügen
 
 (package.json)
