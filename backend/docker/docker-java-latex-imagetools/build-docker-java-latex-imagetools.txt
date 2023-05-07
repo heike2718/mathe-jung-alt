@@ -1,1 +1,0 @@
-DOCKER_BUILDKIT=1 docker image build -t heike2718/docker-java-latex-imagetools .

@@ -1,5 +1,17 @@
 # syntax=docker/dockerfile:experimental
-FROM heike2718/docker-java-latex-imagetools:latest
+FROM heike2718/docker-java-latex:latest
+
+# install image manipulation program
+COPY deb/*.deb /tmp/
+COPY deb/*.sh /tmp/
+
+ RUN echo "install package netbpm" &&\
+ . /tmp/install-packages.sh
+
+# cleanup packages and install-script
+RUN echo "cleanup packages and install-script." &&\
+   rm /tmp/*.deb &&\
+   rm /tmp/install-packages.sh
 
 # copy fonts fondsmap etc to /usr/local/share/texmf/
 COPY ./usr/local/share/texmf/ /usr/local/share/texmf/
