@@ -7,10 +7,10 @@ umwandeln von LaTeX- Files anstoßen kann.
 
 ### Image heike2718/docker-java-latex
 
-Muss zuerst gebau werden.
+Muss zuerst gebaut werden.
 
 Es basiert auf einer TexLive-full- Installation von
-[Thomas Weise](http://github.com/thomasWeise/docker-texlive-full) und erweitert diese um ein Open-JDK-11
+[Thomas Weise](http://github.com/thomasWeise/docker-texlive-full) und erweitert diese um ein Open-JDK-17
 
 __Achtung:__ Ich habe keine halben Sachen gemacht, damit später nicht irgendwelche LaTeX-Packages fehlen. Die full-installation dauert eine ganze Weile.
 
@@ -41,3 +41,8 @@ heike2718/docker-java-latex-imagetools stellt eine sehr einfache API für die Ko
 Shell-Script zum Umwandeln von ps in pngs.
 
 Der Java-Client ist ein Docker-Image, das diese API aus Java heraus ansprechen kann.
+
+### Testen des docker-latex-clients
+
+Ist [hier](../../documentation/usage/latex-mircroservice.adoc) beschrieben.
+

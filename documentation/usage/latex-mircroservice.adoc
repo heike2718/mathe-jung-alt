@@ -57,6 +57,8 @@ Der Austausch der Files erfolgt über ein gemountetes docker volume. In diesem m
 
 Der java-Service kann bei Bedarf angepasst oder ersetzt werden, um latex2pdf.sh bzw latex2png.sh anderweitig aufzurufen.
 
+*Am 07.05.2023 sind außerdem Fibel-Fonts hinzugekommen.*
+
 
 Bauen der Images
 ----------------

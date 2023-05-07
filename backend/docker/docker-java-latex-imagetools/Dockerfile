@@ -2,8 +2,7 @@
 FROM heike2718/docker-java-latex:latest
 
 COPY deb/*.deb /tmp/
-COPY --chmod=766 bin/*.sh /bin/
-COPY --chmod=766 deb/*.sh /tmp/
+COPY deb/*.sh /tmp/
 
 # install image manipulation program
  RUN echo "install package netbpm" &&\

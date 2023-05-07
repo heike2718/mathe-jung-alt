@@ -1,20 +1,23 @@
-version: "3.3"
-
+version: '2'
+networks:
+  mja-network:
 services:
-
   docker-latex-client:
     image: heike2718/docker-latex-client
-    networks:
-      - mja-network
+    mem_limit: 512M
+    mem_reservation: 128M
+    container_name: docker-latex-client
     ports:
       - 9200:8080
-    volumes:
-      - /home/drpwzrd/docker-volumes/latex/doc:/doc
+    # The DB_USER/DB_PASSWORD/DB_HOST variables are used in the hibernate.cfg.xml file.
     environment:
       - TZ=Europe/Berlin
+      - JAVA_OPTS=-Xmx1024m
+    # Provide a name instead of an auto-generated id for the xwiki permanent directory configured in the Dockerfile,
+    # to make it simpler to identify in 'docker volume ls'.
     restart: on-failure:3
+    volumes:
+      - /home/drpwzrd/docker-volumes/latex/doc:/doc
+    networks:
+      - mja-network
     command: ["java","-jar","/opt/latex-client.jar"]
-
-networks:
-   mja-network:
-

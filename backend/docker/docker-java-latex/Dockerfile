@@ -18,7 +18,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN echo "Initial update." &&\
     apt-get update &&\
 # install  openjdk-17-jre-headless
-    sudo apt -y install openjdk-17-jre-headless &&\
+    apt-get install -y openjdk-17-jre-headless &&\
 # prevent doc and man pages from being installed
 # the idea is based on https://askubuntu.com/questions/129566
     echo "Preventing doc and man pages from being installed." &&\
