@@ -6,6 +6,7 @@ TARGET_ORIGIN = heikedeb,heikedeb:4200,heikedeb:4300,localhost:4200,localhost:43
 
 QUARKUS_HTTP_CORS_ORIGINS = http://localhost:9210,http://localhost:4200,http://heikedeb:9000,https://opa-wetterwachs.de,https://mathe-jung-alt.de
 
+QUARKUS_HTTP_ROOT_PATH=/
 QUARKUS_LOG_FILE_PATH = /home/heike/quarkus/log/mja-api/server.log
 QUARKUS_HTTP_ACCESS_LOG_LOG_DIRECTORy = /home/heike/quarkus/log/mja-api
 QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE=true
@@ -15,7 +16,8 @@ IMAGES_BASE_DIR= /home/heike/test
 
 AUTHPROVIDER_URL=http://heikedeb:9000/authprovider
 AUTH_APP_URL=http://heikedeb:80/auth-app
-ADMIN_REDIRECT_URL_LOGIN=http://localhost:9210/mja-admin/
+#ADMIN_REDIRECT_URL_LOGIN=http://localhost:9210/mja-admin/
+ADMIN_REDIRECT_URL_LOGIN=http://localhost:4200
 PUBLIC_REDIRECT_URL_LOGIN=http://localhost:9210/mja-app/
 
 CLAMAV_HOST = 192.168.10.176

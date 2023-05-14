@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
+import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import de.egladil.web.mja_auth.exception.AuthException;
@@ -78,6 +79,12 @@ public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
 		}
 
 		LOGGER.error(exception.getMessage(), exception);
+
+		if (exception instanceof MjaRuntimeException) {
+
+			return Response.status(500).entity(MessagePayload.error(exception.getMessage()))
+				.build();
+		}
 
 		return Response.status(500).entity(MessagePayload.error(applicationMessages.getString("general.internalServerError")))
 			.build();

@@ -21,8 +21,6 @@ export class GrafikEffects {
         );
     });
 
-
-
     grafikHochgeladen$ = createEffect(() =>
         this.#actions.pipe(
             ofType(grafikActions.grafik_hochgeladen),
