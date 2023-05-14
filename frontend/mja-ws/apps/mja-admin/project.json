@@ -36,7 +36,11 @@
               "maximumError": "4kb"
             }
           ],
-          "fileReplacements": [
+          "index": {
+            "input": "build-env/mja-admin/index.prod.html",
+            "output": "index.html"
+          },
+           "fileReplacements": [
             {
               "replace": "apps/mja-admin/src/environments/environment.ts",
               "with": "apps/mja-admin/src/environments/environment.prod.ts"
@@ -57,6 +61,10 @@
               "maximumError": "4kb"
             }
           ],
+          "index": {
+            "input": "build-env/mja-admin/index.a300.html",
+            "output": "index.html"
+          },
           "fileReplacements": [
             {
               "replace": "apps/mja-admin/src/environments/environment.ts",
