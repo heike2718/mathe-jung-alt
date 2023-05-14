@@ -1,8 +1,5 @@
-export type FILE_UPLOAD_TYPE = 'GRAFIK';
-
 export interface UploadComponentModel {
-    readonly typ: FILE_UPLOAD_TYPE;
-	readonly pfad: string;
+    readonly pfad: string;
 	readonly titel: string;
 	readonly maxSizeBytes: number;
 	readonly errorMessageSize: string;

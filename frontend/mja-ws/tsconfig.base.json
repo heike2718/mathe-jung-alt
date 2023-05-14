@@ -46,6 +46,9 @@
       ],
       "@mja-ws/shared/messaging/ui": ["libs/shared/messaging/ui/src/index.ts"],
       "@mja-ws/shared/ngrx-utils": ["libs/shared/ngrx-utils/src/index.ts"],
+      "@mja-ws/shared/upload/api": ["libs/shared/upload/api/src/index.ts"],
+      "@mja-ws/shared/upload/data": ["libs/shared/upload/data/src/index.ts"],
+      "@mja-ws/shared/upload/model": ["libs/shared/upload/model/src/index.ts"],
       "@mja-ws/shared/util": ["libs/shared/util/src/index.ts"]
     }
   },

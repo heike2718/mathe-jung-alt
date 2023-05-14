@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Message } from "@mja-ws/shared/messaging/api";
-import { Observable } from "rxjs";
+import { Observable, catchError } from "rxjs";
 import { UploadComponentModel } from "./file-upload.model";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class FileUploadService {
 
     #url = '/uploads/v1';
@@ -17,15 +17,13 @@ export class FileUploadService {
         formData.append('uploadedFile', file);
 
         const params = new HttpParams()
-            .set('pfad', uploadModel.pfad)
-            .set('type', uploadModel.typ);
+            .set('pfad', uploadModel.pfad);
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        return this.#http.post<Message> (this.#url, formData, {
+        return this.#http.post<Message>(this.#url, formData, {
             headers: headers,
             params: params
         });
     }
-
 }

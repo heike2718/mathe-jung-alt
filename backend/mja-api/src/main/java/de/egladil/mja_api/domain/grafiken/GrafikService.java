@@ -22,10 +22,9 @@ public interface GrafikService {
 
 	/**
 	 * Speichert die Grafik-Datei, sofern sie virenfrei ist und alle anderen Validierungen passen.
-	 *
-	 * @param  relativerPfad
+	 * 
 	 * @param  dto
-	 * @return
+	 * @return     MessagePayload
 	 */
-	MessagePayload grafikSpeichern(String relativerPfad, UploadRequestDto dto);
+	MessagePayload grafikSpeichern(UploadRequestDto dto);
 }

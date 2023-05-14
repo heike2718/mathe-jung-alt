@@ -23,6 +23,10 @@ export class GrafikFacade {
         this.#store.dispatch(grafikActions.grafik_hochgeladen({message}));
     }
 
+    public handleUploadError(message: Message): void {
+        
+    }
+
     public clearVorschau(): void {
         this.#store.dispatch(grafikActions.clear_vorschau());
     }

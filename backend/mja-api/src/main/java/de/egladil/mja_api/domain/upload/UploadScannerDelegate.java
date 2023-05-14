@@ -41,7 +41,7 @@ public class UploadScannerDelegate {
 	@Inject
 	ScanService scanService;
 
-	public ScanResult scanUpload(final UploadRequestDto uploadPayload) {
+	public ScanResult scanUpload(final UploadRequestDto uploadPayload) throws UploadFormatException {
 
 		String fileOwnerId = uploadPayload.getBenutzerUuid();
 		int maxBytes = Integer.valueOf(maxFilesizeBytes);

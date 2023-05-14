@@ -20,15 +20,15 @@ import de.egladil.mja_api.domain.dto.UploadData;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 
 /**
- * UploadFileService
+ * ProcessUploadService
  */
 @ApplicationScoped
-public class UploadFileService {
+public class ProcessUploadService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UploadFileService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessUploadService.class);
 
 	// @ConsumeEvent(blocking = true, value = "upload-file-service")
-	public void processFile(final UploadData uploadData) {
+	public void processFile(final UploadData uploadData) throws MjaRuntimeException {
 
 		File file = uploadData.getFile();
 

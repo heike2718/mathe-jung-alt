@@ -23,7 +23,6 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy{
   responsePayload: EventEmitter<Message> = new EventEmitter<Message>();
 
   uploadModel: UploadComponentModel = {
-    typ: 'GRAFIK',
     pfad: '',
     titel: 'Grafik hochladen',
     maxSizeBytes: 2097152,
@@ -63,6 +62,15 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy{
     if (messagePayload) {
       const message = this.uploadModel.pfad + ': ' + messagePayload.message;
       const mp: Message = { ...messagePayload, message: message };
+
+      if (mp.level === 'INFO') {
+        this.#grafikFacade.grafikHochgeladen(mp);
+        this.#grafikFacade.grafikPruefen(this.uploadModel.pfad);
+      } else {
+        
+      }
+
+
       this.#grafikFacade.grafikHochgeladen(mp);
       this.#grafikFacade.grafikPruefen(this.uploadModel.pfad);
       this.responsePayload.emit({level: messagePayload.level, message: this.uploadModel.pfad});

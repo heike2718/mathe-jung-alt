@@ -219,9 +219,20 @@ npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:d
 npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --buildable --no-interactive --dry-run
 ```
 
-### Grafik
+## File upload
 
-ist eine library, die für das Hochladen von Grafikdateien für Rätsel benötigt wird. Sie existiert also eigentlich nicht als selbständige Library, aber ich will die Grafik-Aktionen von der raetsel-library trennen, weil sonst alles zu sehr vermisch ist.
+ist eine library, die für das Hochladen von Files zuständig ist.
+
+```
+npx nx generate @nrwl/js:library model --directory=shared/upload --tags='domain:upload, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library data --directory=shared/upload --tags='domain:upload, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nrwl/js:library api --directory=shared/upload --tags='domain:upload, type:api' --buildable --no-interactive --dry-run
+```
+
+
+## Grafik
+
+ist eine library, die Grafiken für Rätsel zur Verfügung stellt.
 Es ist sinnvoll, dafür ein eigenes Store-Feature zu haben, weil anderenfalls das Raetsel-Feature zu aufgebläht ist. 
 
 Store/raetsel kann ohne Store/grafik auskommen. Und die meiste Zeit benötigt man libs/grafik nicht für die Raetsel.

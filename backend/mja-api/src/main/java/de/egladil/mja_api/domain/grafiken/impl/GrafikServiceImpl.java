@@ -97,21 +97,21 @@ public class GrafikServiceImpl implements GrafikService {
 	}
 
 	@Override
-	public MessagePayload grafikSpeichern(final String relativerPfad, final UploadRequestDto uploadRequestDto) {
+	public MessagePayload grafikSpeichern(final UploadRequestDto uploadRequestDto) {
 
-		if (relativerPfad == null) {
+		if (uploadRequestDto.getRelativerPfad() == null) {
 
 			LOGGER.error("Aufruf ohne relativen Pfad");
 			return MessagePayload.error("Aufruf ohne Pfad");
 		}
 
-		if (!validPath(relativerPfad)) {
+		if (!validPath(uploadRequestDto.getRelativerPfad())) {
 
 			LOGGER.error("Aufruf mit ungültigem relativen Pfad!");
 			return MessagePayload.error("Aufruf mit ungültigem Pfad");
 		}
 
-		File file = new File(latexBaseDir + relativerPfad);
+		File file = new File(latexBaseDir + uploadRequestDto.getRelativerPfad());
 
 		File uploadDir = new File(file.getParent());
 

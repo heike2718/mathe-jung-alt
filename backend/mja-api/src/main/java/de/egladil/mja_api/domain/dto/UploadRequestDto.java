@@ -13,7 +13,7 @@ public class UploadRequestDto {
 
 	private UploadData uploadData;
 
-	private UploadType uploadType;
+	private String relativerPfad;
 
 	public String getBenutzerUuid() {
 
@@ -37,14 +37,14 @@ public class UploadRequestDto {
 		return this;
 	}
 
-	public UploadType getUploadType() {
+	public String getRelativerPfad() {
 
-		return uploadType;
+		return relativerPfad;
 	}
 
-	public UploadRequestDto withUploadType(final UploadType uploadType) {
+	public UploadRequestDto withRelativerPfad(final String relativerPfad) {
 
-		this.uploadType = uploadType;
+		this.relativerPfad = relativerPfad;
 		return this;
 	}
 

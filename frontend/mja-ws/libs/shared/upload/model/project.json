@@ -1,0 +1,34 @@
+{
+  "name": "shared-upload-model",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/upload/model/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/upload/model",
+        "main": "libs/shared/upload/model/src/index.ts",
+        "tsConfig": "libs/shared/upload/model/tsconfig.lib.json",
+        "assets": ["libs/shared/upload/model/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/upload/model/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/upload/model"],
+      "options": {
+        "jestConfig": "libs/shared/upload/model/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["domain:upload", "type:model"]
+}

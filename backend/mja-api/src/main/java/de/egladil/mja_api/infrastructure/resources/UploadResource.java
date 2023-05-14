@@ -14,11 +14,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.SecurityContext;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -36,12 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.dto.UploadData;
-import de.egladil.mja_api.domain.dto.UploadRequestDto;
-import de.egladil.mja_api.domain.dto.UploadType;
-import de.egladil.mja_api.domain.grafiken.GrafikService;
+import de.egladil.mja_api.domain.upload.FileUplodService;
 import de.egladil.mja_api.domain.upload.FormData;
-import de.egladil.mja_api.domain.upload.UploadFileService;
-import de.egladil.mja_api.domain.upload.UploadScannerDelegate;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.web.mja_auth.dto.MessagePayload;
 import io.vertx.core.eventbus.EventBus;
@@ -63,17 +56,9 @@ public class UploadResource {
 	DevDelayService delayService;
 
 	@Inject
-	UploadFileService uploadFileService;
+	FileUplodService fileUploadService;
 
-	@Inject
-	GrafikService grafikService;
-
-	@Inject
-	UploadScannerDelegate uploadScanner;
-
-	@Context
-	SecurityContext securityContext;
-
+	@SuppressWarnings("removal")
 	@POST
 	@Path("v1")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -105,8 +90,7 @@ public class UploadResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 
-	@Deprecated
-	public Response uploadFile(@QueryParam(value = "type") final UploadType fileType, @Pattern(
+	public Response uploadFile(@Pattern(
 		regexp = "^(/[\\da-zA-Z_\\-/]*\\.[\\da-zA-Z_\\-/]*)$", message = "pfad enthält ungültige Zeichen") @QueryParam(
 			value = "pfad") final String relativerPfad, @MultipartForm final FormData body) {
 
@@ -117,22 +101,15 @@ public class UploadResource {
 		File theFile = file.filePath().toFile();
 		UploadData uploadData = new UploadData(relativerPfad, theFile);
 
-		uploadFileService.processFile(uploadData);
+		MessagePayload messagePayload = this.fileUploadService.saveTheUpload(uploadData, relativerPfad);
 
-		UploadRequestDto uploadRequest = new UploadRequestDto()
-			.withBenutzerUuid(securityContext.getUserPrincipal().getName())
-			.withUploadData(uploadData).withUploadType(fileType);
+		if (messagePayload.isOk()) {
 
-		uploadScanner.scanUpload(uploadRequest);
-
-		if (UploadType.GRAFIK == fileType) {
-
-			MessagePayload payload = grafikService.grafikSpeichern(relativerPfad, uploadRequest);
-			return Response.ok(payload).build();
+			return Response.ok(messagePayload).build();
 		}
 
-		LOGGER.error("unbekannter UploadType {}", fileType);
-		return Response.status(Status.NOT_FOUND).build();
+		return Response.serverError().entity(messagePayload).build();
+
 	}
 
 	// @POST
