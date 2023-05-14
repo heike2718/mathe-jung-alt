@@ -29,35 +29,32 @@ Das Transformieren der LaTeX-Datei ist nicht threadsafe, d.h. die Anwendung, die
 Dockerimages
 ------------
 
-Es werden 3 Dockerimages zur Verfügung gestellt.
+Es werden 2 Dockerimages zur Verfügung gestellt.
 
 docker-java-latex
 ~~~~~~~~~~~~~~~~~
 
 Dieses Image ist eina Adaption von <https://github.com/thomasWeise/docker-texlive-full>.
 
-Es verwendet (anders als das aktuelle Image) ubuntu:20.04 als Basis und erweitert dieses um *openjdk-11-jre-headless*, so dass neben LaTeX auch eine Java-Runtime zur Verfügung steht.
+Es verwendet (anders als das aktuelle Image) ubuntu:20.04 als Basis und erweitert dieses um *openjdk-17-jre-headless*, so dass neben LaTeX auch eine Java-Runtime zur Verfügung steht.
 
 Falls jemand eine andere Java-Version benötigt, muss er das Image anpassen.
 
 Leider dauert das Bauen des images sehr lange, weil ein Haufen Tex-Zeug installiert werden muss.
 
-
-docker-java-latex-imagetools
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Dieses Image erweitert heike2718/docker-java-latex um netbpm, damit im container das command pnm zur Verfügung steht, um aus ps-Files png-Files herauszuschneiden.
-
 docker-latex-client
 ~~~~~~~~~~~~~~~~~~~
 
-Dieses Image erweitert heike2718/docker-java-latex-imagetools um shellscripts latex2png.sh sowie latex2pdf.sh und eine Java-Anwendung, die diese scripte mit einem LaTeX-File als Argument aufruft, um dieses in das gewünschte Format zu tranformieren. Der Aufruf wird mittels undertow als http-Service zur Verfügung gestellt.
+Dieses Image erweitert heike2718/docker-java-latex um 
 
-Der Austausch der Files erfolgt über ein gemountetes docker volume. In diesem müssen sich alle Ressourcen befinden, die der LaTeX-Compiler benötigt, beispielsweise Files, die per include importiert wwerden oder eps-Dateien, die als Grafiken eingebunden werden.
+* netbpm, damit im container das command pnm zur Verfügung steht, um aus ps-Files png-Files herauszuschneiden.
+* die Fonts fblnord (Fibelschrift Nord) und fblsued (Fibelschrit Süd)
+* shellscripts latex2png.sh sowie latex2pdf.sh 
+* eine Java-Anwendung, die diese scripte mit einem LaTeX-File als Argument aufruft, um dieses in das gewünschte Format zu tranformieren. Der Aufruf wird mittels undertow als http-Service zur Verfügung gestellt.
+
+Der Austausch der Files (.tex bwz. .png) erfolgt über ein gemountetes docker volume. In diesem müssen sich alle Ressourcen befinden, die der LaTeX-Compiler benötigt, beispielsweise Files, die per include importiert wwerden oder eps-Dateien, die als Grafiken eingebunden werden.
 
 Der java-Service kann bei Bedarf angepasst oder ersetzt werden, um latex2pdf.sh bzw latex2png.sh anderweitig aufzurufen.
-
-*Am 07.05.2023 sind außerdem Fibel-Fonts hinzugekommen.*
 
 
 Bauen der Images
@@ -66,31 +63,33 @@ Bauen der Images
 docker-java-latex
 ~~~~~~~~~~~~~~~~~
 
+```
 docker image build -t heike2718/docker-java-latex .
-
-docker-java-latex-imagetools
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-DOCKER_BUILDKIT=1 docker image build -t heike2718/docker-java-latex-imagetools .
-
-
-(Der präfix vor docker image... ist erforderlich, weil anderenfalls chmod und chown beim Bauen des Images nicht zur Verfügung stehen).
-
-*Achtung:* wenn der Name des docker-java-latex-Images geändert werden soll, muss das Dockerfile im Verzeichnis docker-latex-client angepasst werden.
+```
 
 docker-latex-client
 ~~~~~~~~~~~~~~~~~~~
 
 Zuerst muss mittels mvn package die latex-client.jar gebaut und ins Verzeichnis docker/docker-latex-client/deployment kopiert werden.
 
+```
+DOCKER_BUILDKIT=1 docker image build -t heike2718/docker-java-client .
+```
+
 Testen des Images
 ~~~~~~~~~~~~~~~~~
 
+```
 docker container run -it -v /home/heike/git/mathe-jung-alt/backend/testfiles:/doc --name latex --entrypoint=/bin/bash heike2718/docker-latex-client
+```
 
+```
 docker container exec -it latex /bin/latex2png.sh test1
+```
 
+```
 docker container exec -it latex /bin/latex2pdf.sh test1
+```
 
 Das File test1.tex muss dazu in dem docker-volume liegen, das beim Starten des containers gemounted wird. Dort liegt anschließend auch das Ergebnisfile test1.pdf oder test1.png
 
@@ -106,7 +105,13 @@ Architekturidee und Sicherheitshinweise
 
 Die REST-API ist minimalistisch und verwendet *nicht* https, da in der Regel der Java-LaTeX-Client-Microservice nicht nach außen propagiert werden sollte. Außerdem gibt es lediglich 2 REST-Endpoints, die keine sensiblen Daten transportieren, sondern Commands im Container triggern, die auf LaTeX-Files arbeiten.
 
-Die Architekturidee ist, den Java-LaTeX-Client-Microservice in ein Dockernetzwerk zu integrieren, von wo aus er durch einen nach außen sichtbarern Service aufgerufen werden kann.
+Die Architekturidee ist, den Java-LaTeX-Client-Microservice mittels docker compose in ein docker network zu integrieren, in dem er mit 
+
+```
+http://docker-latex-client:8080
+```
+
+aufgerufen werden kann (docker-latex-client ist der Name des service in der docker-compose.yml)
 
 *Achtung:* Für die Input-Validierung des LaTeX-Codes ist der nach außen sichtbare Service zuständig. Dieser muss LaTeX-Injection zuverlässig abwehren, damit durch den Aufruf des Java-LaTeX-Client-Microservice kein Sicherheitsrisiko besteht.
 
