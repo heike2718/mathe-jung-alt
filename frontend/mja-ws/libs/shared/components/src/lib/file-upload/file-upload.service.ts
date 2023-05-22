@@ -15,15 +15,12 @@ export class FileUploadService {
 
         const formData = new FormData();
         formData.append('uploadedFile', file);
-
-        const params = new HttpParams()
-            .set('pfad', uploadModel.pfad);
+        formData.append('pfad', uploadModel.pfad);
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
         return this.#http.post<Message>(this.#url, formData, {
-            headers: headers,
-            params: params
+            headers: headers
         });
     }
 }

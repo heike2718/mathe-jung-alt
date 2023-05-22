@@ -26,6 +26,9 @@ public class AppLifecycleBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AppLifecycleBean.class);
 
+	@ConfigProperty(name = "quarkus.http.port")
+	String port;
+
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
 
@@ -41,6 +44,12 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.web.mja_auth.restclient.InitAccessTokenRestClient\".url")
 	String oidcUrl;
 
+	@ConfigProperty(name = "clamav.host")
+	String clamAVHost;
+
+	@ConfigProperty(name = "clamav.port")
+	String clamAVPort;
+
 	void onStartup(@Observes final StartupEvent ev) {
 
 		LOGGER.info(" ===========> The application is starting with profile " + ProfileManager.getActiveProfile());
@@ -51,6 +60,8 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
 		LOGGER.info(" ===========>  oidcUrl={}", oidcUrl);
+		LOGGER.info(" ===========>  port={}", port);
+		LOGGER.info(" ===========>  ClamAV: host={},port={}", clamAVHost, clamAVPort);
 
 		if (delayMillis > 0) {
 
