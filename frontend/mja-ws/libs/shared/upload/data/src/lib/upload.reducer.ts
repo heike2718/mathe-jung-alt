@@ -33,7 +33,7 @@ export const uploadFeature = createFeature({
             const maxFileSizeInMB = maxFileSizeInKB / 1024;
             const maxFileSizeInfo = 'Maximale erlaubte Größe: ' + maxFileSizeInKB + ' kB bzw. ' + maxFileSizeInMB + ' MB';
 
-            return { ...state };
+            return { ...state, maxFileSizeInfo: maxFileSizeInfo };
         }),
         on(uploadActions.file_selected, (state, action) => {
 
@@ -42,11 +42,23 @@ export const uploadFeature = createFeature({
             const fileSize = calculateFileSize(size);
 
             if (size > state.uiModel.maxSizeBytes) {
-
+                return {...state, maxFilesizeExceeded: true, maxFileSizeInfo: 'Die Datei ist zu groß: ' + fileSize + '. ' +  state.maxFileSizeInfo}
             }
 
             return { ...state, selectedFiles: action.files };
         }),
+        on(uploadActions.upload_file, (state, _action) => {
+
+            return {...state, uploading: true};
+        }),
+        on(uploadActions.upload_success, (state, _action) => {
+
+            return {...state, uploading: false, selectedFiles: undefined, currentFile: undefined};
+        }),
+        on(uploadActions.upload_error, (state, _action, ) => {
+
+            return {...state, uploading: false, selectedFiles: undefined, currentFile: undefined};
+        })
     )
 });
 

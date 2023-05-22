@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { concatMap, map, tap } from "rxjs";
+import { map, switchMap, tap } from "rxjs";
 import { RaetselHttpService } from "./raetsel-http.service";
 import { raetselActions } from "./raetsel.actions";
 
@@ -22,7 +22,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.find_raetsel),
-            concatMap((action) => this.#raetselHttpService.findRaetsel(action.suchfilter, action.pageDefinition)),
+            switchMap((action) => this.#raetselHttpService.findRaetsel(action.suchfilter, action.pageDefinition)),
             map((treffer) => raetselActions.raetsel_found({ treffer }))
         );
     });
@@ -31,7 +31,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.raetsel_selected),
-            concatMap((action) => this.#raetselHttpService.loadRaetselDetails(action.raetsel)),
+            switchMap((action) => this.#raetselHttpService.loadRaetselDetails(action.raetsel)),
             map((raetselDetails) => raetselActions.raetsel_details_loaded({ raetselDetails: raetselDetails, navigateTo: 'raetsel/details' }))
         );
     });
@@ -49,7 +49,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.generate_raetsel_png),
-            concatMap((action) => this.#raetselHttpService.generateRaetselPNGs(action.raetselID, action.layoutAntwortvorschlaege)),
+            switchMap((action) => this.#raetselHttpService.generateRaetselPNGs(action.raetselID, action.layoutAntwortvorschlaege)),
             map((generatedImages) => raetselActions.raetsel_png_generated({ images: generatedImages }))
         );
     });
@@ -58,7 +58,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.generate_raetsel_pdf),
-            concatMap((action) => this.#raetselHttpService.generateRaetselPDF(action.raetselID, action.layoutAntwortvorschlaege)),
+            switchMap((action) => this.#raetselHttpService.generateRaetselPDF(action.raetselID, action.layoutAntwortvorschlaege)),
             map((file) => raetselActions.raetsel_pdf_generated({ pdf: file }))
         );
 
@@ -83,7 +83,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.save_raetsel),
-            concatMap((action) => this.#raetselHttpService.saveRaetsel(action.editRaetselPayload)),
+            switchMap((action) => this.#raetselHttpService.saveRaetsel(action.editRaetselPayload)),
             map((raetselDetails) => raetselActions.raetsel_saved({ raetselDetails }))
         );
     });

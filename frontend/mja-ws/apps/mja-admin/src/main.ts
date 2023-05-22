@@ -6,8 +6,9 @@ import { AppComponent } from './app/app.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideStore, StoreModule } from '@ngrx/store';
+import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
+import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { appRoutes } from './app/app.routes';
 import { provideRouter } from '@angular/router';
@@ -40,10 +41,13 @@ bootstrapApplication(AppComponent, {
     coreDeskriptorenDataProvider,
     provideAnimations(),
     provideRouter(appRoutes),
+    provideRouterStore(),
 
     /** das muss so gemacht werden, weil ohne den Parameter {} nichts da ist, wohinein man den state hängen könnte */
     provideStore(
-      {},
+      {
+        router: routerReducer,
+      },      
       {
         metaReducers: allMetaReducers
       }
@@ -51,7 +55,7 @@ bootstrapApplication(AppComponent, {
     provideEffects([LocalStorageEffects]),
     provideStoreDevtools(),
 
-    importProvidersFrom(      
+    importProvidersFrom(
       HttpClientModule,
       HttpClientXsrfModule.withOptions({
         cookieName: 'XSRF-TOKEN',
@@ -65,9 +69,9 @@ bootstrapApplication(AppComponent, {
 
     {
       provide: MAT_DATE_LOCALE,
-      useValue: 'de',
+      useValue: 'de-DE',
     },
-    { provide: LOCALE_ID, useValue: 'de' },
+    { provide: LOCALE_ID, useValue: 'de-DE' },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' },

@@ -11,12 +11,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.quarkus.runtime.StartupEvent;
-import io.quarkus.runtime.configuration.ProfileManager;
+import io.quarkus.runtime.configuration.ConfigUtils;
 
 /**
  * AppLifecycleBean
@@ -52,7 +53,7 @@ public class AppLifecycleBean {
 
 	void onStartup(@Observes final StartupEvent ev) {
 
-		LOGGER.info(" ===========> The application is starting with profile " + ProfileManager.getActiveProfile());
+		LOGGER.info(" ===========> The application is starting with profiles" + StringUtils.join(ConfigUtils.getProfiles()));
 
 		checkLatexBaseDir();
 
