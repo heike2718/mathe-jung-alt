@@ -14,6 +14,7 @@ export class GrafikFacade {
 
     public isLoaded$: Observable<boolean> = this.#store.select(fromGrafik.isLoaded);
     public grafikSearchResult$: Observable<GrafikSearchResult> = filterDefined(this.#store.select(fromGrafik.selectedGrafikSearchResult));
+    // public grafikSearchResult$: Observable<GrafikSearchResult | undefined> = this.#store.select(fromGrafik.selectedGrafikSearchResult);
 
     public grafikPruefen(relativerPfad: string): void {
         this.#store.dispatch(grafikActions.pruefe_grafik({pfad: relativerPfad}));

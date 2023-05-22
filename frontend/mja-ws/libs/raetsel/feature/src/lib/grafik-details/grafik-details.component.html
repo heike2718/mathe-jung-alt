@@ -10,10 +10,12 @@
                 <img src="data:image/png;base64,{{selectedGrafik.image}}" />
             </div>
         </div>
-        
-        <mja-file-upload [uploadModel]="uploadModel" (dateiAusgewaehlt)="onDateiAusgewaehlt($event)"
-            (responsePayload)="onResponse($event)"></mja-file-upload>
 
+        <div *ngIf="uploadModel.pfad !== ''">
+            <mja-file-upload [uploadModel]="uploadModel" (dateiAusgewaehlt)="onDateiAusgewaehlt($event)"
+                (responsePayload)="onResponse($event)"></mja-file-upload>
+        </div>
+        
         <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
 
             <div fxFlex="0 1 calc(25%-20px)">

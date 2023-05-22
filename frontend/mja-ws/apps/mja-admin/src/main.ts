@@ -46,7 +46,7 @@ bootstrapApplication(AppComponent, {
     /** das muss so gemacht werden, weil ohne den Parameter {} nichts da ist, wohinein man den state hängen könnte */
     provideStore(
       {
-        router: routerReducer,
+        // router: routerReducer,
       },      
       {
         metaReducers: allMetaReducers

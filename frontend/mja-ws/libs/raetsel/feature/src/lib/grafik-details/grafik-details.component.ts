@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, OnDestroy, OnInit, Output } from '@ang
 import { CommonModule } from '@angular/common';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { FileUploadComponent, UploadComponentModel } from '@mja-ws/shared/components';
+import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 import { GrafikFacade } from '@mja-ws/grafik/api';
 
@@ -10,12 +11,13 @@ import { GrafikFacade } from '@mja-ws/grafik/api';
   standalone: true,
   imports: [
     CommonModule,
-    FileUploadComponent
+    FileUploadComponent,
+    MatButtonModule
   ],
   templateUrl: './grafik-details.component.html',
   styleUrls: ['./grafik-details.component.scss'],
 })
-export class GrafikDetailsComponent implements OnInit, OnDestroy{ 
+export class GrafikDetailsComponent implements OnInit, OnDestroy {
 
   grafikFacade = inject(GrafikFacade);
 
@@ -43,14 +45,13 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy{
         if (selectedGrafik) {
           this.uploadModel = { ...this.uploadModel, pfad: selectedGrafik.pfad };
           this.grafikSelected = true;
-        } else {
-          this.grafikSelected = false;
         }
       });
   }
 
   ngOnDestroy(): void {
-      this.#selectedGrafikSubscription.unsubscribe();
+    this.#grafikFacade.clearVorschau();
+    this.#selectedGrafikSubscription.unsubscribe();
   }
 
   onDateiAusgewaehlt(_event: string): void {
@@ -66,18 +67,18 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy{
       if (mp.level === 'INFO') {
         this.#grafikFacade.grafikHochgeladen(mp);
         this.#grafikFacade.grafikPruefen(this.uploadModel.pfad);
-      } else {
-        
       }
 
 
       this.#grafikFacade.grafikHochgeladen(mp);
       this.#grafikFacade.grafikPruefen(this.uploadModel.pfad);
-      this.responsePayload.emit({level: messagePayload.level, message: this.uploadModel.pfad});
+      this.responsePayload.emit({ level: messagePayload.level, message: this.uploadModel.pfad });
     }
   }
 
   reset(): void {
+    this.grafikSelected = false;
+    this.uploadModel = {...this.uploadModel, pfad: ''};
     this.#grafikFacade.clearVorschau();
   }
 }
