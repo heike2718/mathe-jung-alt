@@ -17,6 +17,8 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.ext.Provider;
 
 import org.jboss.logging.MDC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * MDCHeaderFilter
@@ -25,6 +27,8 @@ import org.jboss.logging.MDC;
 @PreMatching
 @Priority(Priorities.AUTHENTICATION)
 public class MDCHeaderFilter implements ContainerRequestFilter, ContainerResponseFilter {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MDCHeaderFilter.class);
 
 	private static final String X_CORRELATION_ID_HEADER_NAME = "X-CORRELATION-ID";
 
@@ -42,6 +46,9 @@ public class MDCHeaderFilter implements ContainerRequestFilter, ContainerRespons
 		String method = requestContext.getMethod();
 
 		if (!"OPTIONS".equals(method)) {
+
+			String path = requestContext.getUriInfo().getPath();
+			LOGGER.info("request.path={}", path);
 
 			String correlationId = getOrCreateCorrelationId(requestContext);
 			String clientId = getClientId(requestContext);

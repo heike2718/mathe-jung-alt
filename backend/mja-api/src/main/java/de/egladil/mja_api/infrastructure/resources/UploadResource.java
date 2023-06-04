@@ -93,5 +93,7 @@ public class UploadResource {
 		}
 
 		return Response.serverError().entity(messagePayload).build();
+
+		// return Response.serverError().entity(MessagePayload.error("absichtlicher Error")).build();
 	}
 }

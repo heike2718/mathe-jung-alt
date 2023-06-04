@@ -34,6 +34,8 @@ public class MjaFileUtils {
 	 */
 	public static void writeOutput(final File file, final String template, final String errorMessage) {
 
+		LOGGER.debug("file={}", file.getAbsolutePath());
+
 		try (Reader reader = new StringReader(template); FileOutputStream fos = new FileOutputStream(file)) {
 
 			IOUtils.copy(reader, fos, Charset.forName("UTF-8"));
@@ -80,6 +82,8 @@ public class MjaFileUtils {
 	 * @return                 byte[] oder null
 	 */
 	public static byte[] loadBinaryFile(final String path, final boolean isTemporaryFile) {
+
+		LOGGER.debug("path={}", path);
 
 		File file = new File(path);
 

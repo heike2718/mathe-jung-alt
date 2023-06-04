@@ -27,6 +27,12 @@ public class AppLifecycleBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AppLifecycleBean.class);
 
+	@ConfigProperty(name = "quarkus.http.root-path")
+	String quarkusRootPath;
+
+	@ConfigProperty(name = "admin-redirect-url.login")
+	String loginRedirectUrl;
+
 	@ConfigProperty(name = "quarkus.http.port")
 	String port;
 
@@ -63,6 +69,8 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  oidcUrl={}", oidcUrl);
 		LOGGER.info(" ===========>  port={}", port);
 		LOGGER.info(" ===========>  ClamAV: host={},port={}", clamAVHost, clamAVPort);
+		LOGGER.info(" ===========>  quarkusRootPath={}", quarkusRootPath);
+		LOGGER.info(" ===========>  loginRedirectUrl={}", loginRedirectUrl);
 
 		if (delayMillis > 0) {
 

@@ -3,7 +3,7 @@ import { Inject, inject, Injectable } from '@angular/core';
 import { Configuration } from '@mja-ws/shared/config';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { catchError, concatMap, map, tap } from 'rxjs/operators';
 import { authActions } from './auth.actions';
 import { Session } from './internal.model';
 import { Message } from '@mja-ws/shared/messaging/api';
@@ -65,7 +65,8 @@ export class AuthEffects {
             concatMap(() =>
                 this.#httpClient.delete<Message>('/session/logout')),
             tap(() => this.#coreFacade.handleLogout()),
-            map(() => authActions.logged_out())
+            map(() => authActions.logged_out()),
+            catchError(() => of(authActions.logged_out()))
         );
     });
 
@@ -74,4 +75,5 @@ export class AuthEffects {
             ofType(authActions.logged_out),
             tap(() => this.#router.navigateByUrl('/'))
         ), { dispatch: false });
+
 }

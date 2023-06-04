@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { CoreFacade } from '@mja-ws/core/api';
+import { Configuration } from '@mja-ws/shared/config';
 
 @Component({
   selector: 'mja-admin-home',
@@ -10,11 +11,21 @@ import { CoreFacade } from '@mja-ws/core/api';
   standalone: true,
   imports: [CommonModule]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   authFacade = inject(AuthFacade);
 
   coreFacade = inject(CoreFacade);
 
-  version = "1.4.0";
+  #configService = inject(Configuration);
+
+  version = "1.4.1";
+
+  imageSourceLogo = '';
+
+  ngOnInit(): void {
+
+    this.imageSourceLogo = this.#configService.assetsPath + 'mja_logo_2.svg';
+      
+  }
 }

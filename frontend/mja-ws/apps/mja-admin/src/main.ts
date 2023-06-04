@@ -64,7 +64,7 @@ bootstrapApplication(AppComponent, {
     ),
     {
       provide: Configuration,
-      useFactory: () => new Configuration(environment.baseUrl, 'ADMIN', environment.withCredentials, 'mja-admin'),
+      useFactory: () => new Configuration(environment.baseUrl, environment.assetsPath, 'ADMIN', environment.withCredentials, 'mja-admin'),
     },
 
     {

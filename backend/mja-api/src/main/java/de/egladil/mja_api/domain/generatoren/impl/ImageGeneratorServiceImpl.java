@@ -46,23 +46,30 @@ public class ImageGeneratorServiceImpl implements ImageGeneratorService {
 
 		String filenameOhneSuffix = UUID.randomUUID().toString();
 		String path = latexBaseDir + File.separator + filenameOhneSuffix + ".tex";
+		String pathImage = latexBaseDir + File.separator + filenameOhneSuffix + ".png";
+
+		LOGGER.debug("===> relativerPfad={}, path={}, pathImage={}", relativerPfad, path, pathImage);
 		File file = new File(path);
 
 		this.writeOutput(relativerPfad, file, template);
 
 		Response response = null;
-		LOGGER.debug("vor Aufruf LaTeXRestClient");
 
 		response = laTeXClient.latex2PNG(filenameOhneSuffix);
 		MessagePayload message = response.readEntity(MessagePayload.class);
-
 		file.delete();
 
 		if (message.isOk()) {
 
-			String pathImage = path.replaceAll(".tex", ".png");
 			byte[] image = MjaFileUtils.loadBinaryFile(pathImage, true);
-			// System.out.println(new String(Base64.getEncoder().encode(image)));
+
+			if (image == null) {
+
+				LOGGER.warn("{}: image ist null", relativerPfad);
+			} else {
+
+				LOGGER.info("Grafikvorschau generiert: {}", relativerPfad);
+			}
 
 			return image;
 		}
@@ -77,6 +84,8 @@ public class ImageGeneratorServiceImpl implements ImageGeneratorService {
 	 * @return          String
 	 */
 	private void writeOutput(final String relativerPfad, final File file, final String template) {
+
+		LOGGER.debug("relativerPfad={}, file={}", relativerPfad, file.getAbsolutePath());
 
 		String errorMessage = "konnte kein LaTex-File schreiben Grafik: [relativerPfad=" + relativerPfad + "]";
 

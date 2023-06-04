@@ -84,7 +84,6 @@ public class GrafikServiceImpl implements GrafikService {
 		try {
 
 			byte[] image = imageGeneratorService.generiereGrafikvorschau(relativerPfad);
-			LOGGER.info("Grafikvorschau generiert: {}", relativerPfad);
 			return new Grafik().withMessagePayload(MessagePayload.ok()).withPfad(relativerPfad).withImage(image);
 		} catch (Exception e) {
 
