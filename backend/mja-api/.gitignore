@@ -48,5 +48,3 @@ nb-configuration.xml
 # generated
 /src/main/resources/META-INF/openapi
 
-/src/main/resources/META-INF/resources/apps/mja-admin/
-/src/main/resources/META-INF/resources/apps/bla/
