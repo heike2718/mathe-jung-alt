@@ -1,18 +1,31 @@
 ENV=dev
 STAGE=dev
 
+ADMIN-CLIENT-ID=4O2UEGhpdGvhJt0Fk3aHkxS078jBsLlBf6XZ6BgR31cj
+ADMIN-CLIENT-SECRET=start123
+
+PUBLIC-CLIENT-ID=4O2UEGhpdGvhJt0Fk3aHkxS078jBsLlBf6XZ6BgR31cj
+PUBLIC-CLIENT-SECRET=start123
+
+QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_LATEXRESTCLIENT__URL=http://localhost:9200
+QUARKUS_REST-CLIENT__DE_EGLADIL_WEB_MJA_AUTH_RESTCLIENT_INITACCESSTOKENRESTCLIENT__URL=http://heikedeb:9000/authprovider
+QUARKUS_REST-CLIENT__DE.EGLADIL_WEB_MJA_AUTH_RESTCLIENT_TOKENEXCHANGERESTCLIENT__URL=http://heikedeb:9000/authprovider
+
 LATEX_GENERATOR_PRESERVE_TEMPFILES=true
 TARGET_ORIGIN = heikedeb,heikedeb:4200,heikedeb:4300,localhost:4200,localhost:4300,heikedeb:9600,https://opa-wetterwachs.de
 
 QUARKUS_HTTP_CORS_ORIGINS = http://localhost:9210,http://localhost:4200,http://heikedeb:9000,https://opa-wetterwachs.de,https://mathe-jung-alt.de
 
-QUARKUS_HTTP_ROOT_PATH=/
+#QUARKUS_HTTP_ROOT_PATH=/mja-api
 QUARKUS_LOG_FILE_PATH = /home/heike/quarkus/log/mja-api/server.log
 QUARKUS_HTTP_ACCESS_LOG_LOG_DIRECTORy = /home/heike/quarkus/log/mja-api
 QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE=true
 QUARKUS_SWAGGER_UI_PATH=/swagger-ui
+
 LATEX_BASE_DIR= /home/heike/test
-IMAGES_BASE_DIR= /home/heike/test
+
+QUARKUS_DATASOURCE_JDBC_URL=jdbc:mariadb://172.21.0.2:3306/mathe_jung_alt
+QUARKUS_DATASOURCE_PASSWORD=hwinkel
 
 AUTHPROVIDER_URL=http://heikedeb:9000/authprovider
 AUTH_APP_URL=http://heikedeb:80/auth-app
