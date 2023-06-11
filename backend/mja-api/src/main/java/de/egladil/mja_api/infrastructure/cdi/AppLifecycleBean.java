@@ -27,6 +27,16 @@ public class AppLifecycleBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AppLifecycleBean.class);
 
+	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient\".url")
+	String latexRestClientUrl;
+
+	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.InitAccessTokenRestClient\".url")
+
+	String initAccesstokenUrl;
+
+	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.TokenExchangeRestClient\".url")
+	String tokenExchangeRestClientUrl;
+
 	@ConfigProperty(name = "quarkus.http.root-path")
 	String quarkusRootPath;
 
@@ -48,7 +58,7 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "session.idle.timeout")
 	int sessionIdleTimeoutMinutes = 120;
 
-	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.web.mja_auth.restclient.InitAccessTokenRestClient\".url")
+	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.InitAccessTokenRestClient\".url")
 	String oidcUrl;
 
 	@ConfigProperty(name = "clamav.host")
@@ -67,6 +77,9 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
 		LOGGER.info(" ===========>  oidcUrl={}", oidcUrl);
+		LOGGER.info(" ===========>  latexRestClientUrl={}", latexRestClientUrl);
+		LOGGER.info(" ===========>  initAccesstokenUrl={}", initAccesstokenUrl);
+		LOGGER.info(" ===========>  tokenExchangeRestClientUrl={}", tokenExchangeRestClientUrl);
 		LOGGER.info(" ===========>  port={}", port);
 		LOGGER.info(" ===========>  ClamAV: host={},port={}", clamAVHost, clamAVPort);
 		LOGGER.info(" ===========>  quarkusRootPath={}", quarkusRootPath);

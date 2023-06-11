@@ -15,11 +15,11 @@ import javax.ws.rs.core.SecurityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.dto.UploadData;
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
-import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
  * FileUplodService

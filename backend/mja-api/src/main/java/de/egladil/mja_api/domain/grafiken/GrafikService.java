@@ -4,8 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.grafiken;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
-import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
  * GrafikService

@@ -23,15 +23,17 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.egladil.mja_api.domain.auth.config.AuthConstants;
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
-import de.egladil.web.mja_auth.dto.MessagePayload;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -44,12 +46,15 @@ import io.restassured.response.Response;
 @TestMethodOrder(OrderAnnotation.class)
 public class RaetselResourceTest {
 
+	private static final String CSRF_TOKEN = "lqhidhqio";
+
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(1)
 	void testFindRaetselMitDeskriptorenUndSuchstring() throws Exception {
 
 		Response response = given()
-			.when().get("v1?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING");
+			.when().get("admin/v2?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING");
 		response
 			.then()
 			.statusCode(200);
@@ -72,13 +77,14 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(2)
 	void testFindRaetselMitDeskriptorenNumerischUndSuchstring() throws Exception {
 
 		// Volltextsuche unterscheidet nicht zwischen zahlen und zählen!
 
 		Response response = given()
-			.when().get("v1?deskriptoren=2,9,13&suchstring=zählen&typeDeskriptoren=ORDINAL");
+			.when().get("admin/v2?deskriptoren=2,9,13&suchstring=zählen&typeDeskriptoren=ORDINAL");
 
 		response
 			.then()
@@ -117,11 +123,12 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(3)
 	void testFindRaetselMitSuchstring() throws Exception {
 
 		Response response = given()
-			.when().get("v1?suchstring=zählen&typeDeskriptoren=ORDINAL");
+			.when().get("admin/v2?suchstring=zählen&typeDeskriptoren=ORDINAL");
 		response
 			.then()
 			.statusCode(200);
@@ -152,23 +159,25 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(4)
 	void testFindRaetselMitSuchstringKeinTreffer() {
 
 		String expected = "{\"trefferGesamt\":0,\"treffer\":[]}";
 
 		given()
-			.when().get("v1?suchstring=holleriedidudeldö&typeDeskriptoren=STRING")
+			.when().get("admin/v2?suchstring=holleriedidudeldö&typeDeskriptoren=STRING")
 			.then()
 			.statusCode(200)
 			.body(is(expected));
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(5)
 	void testFindFromMinikaenguruWithCoordinates() throws Exception {
 
-		Response response = given().when().get("v1?deskriptoren=2,6,47,78&typeDeskriptoren=ORDINAL");
+		Response response = given().when().get("admin/v2?deskriptoren=2,6,47,78&typeDeskriptoren=ORDINAL");
 
 		String responsePayload = response.asString();
 		System.out.println(responsePayload);
@@ -186,10 +195,11 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(6)
 	void testFindWithSchluessel() throws Exception {
 
-		Response response = given().when().get("v1?suchstring=02790&typeDeskriptoren=ORDINAL");
+		Response response = given().when().get("admin/v2?suchstring=02790&typeDeskriptoren=ORDINAL");
 
 		String responsePayload = response.asString();
 		System.out.println(responsePayload);
@@ -207,6 +217,7 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR", "STANDARD" })
 	@Order(7)
 	void testRaetselDetailsLadenFound() throws Exception {
 
@@ -224,6 +235,7 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(8)
 	void testRaetselDetailsLadenNotFound() throws Exception {
 
@@ -235,6 +247,7 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(9)
 	void testRaetselAnlegen() throws Exception {
 
@@ -250,6 +263,8 @@ public class RaetselResourceTest {
 			try {
 
 				response = given()
+					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
 					.post("v1");
@@ -272,6 +287,7 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(10)
 	void testRaetselAendern() throws Exception {
 
@@ -287,6 +303,8 @@ public class RaetselResourceTest {
 			try {
 
 				response = given()
+					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
 					.put("v1");
@@ -309,6 +327,7 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(11)
 	void testRaetselAendern404() throws Exception {
 
@@ -324,6 +343,8 @@ public class RaetselResourceTest {
 			try {
 
 				response = given()
+					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
 					.put("v1");
@@ -338,6 +359,7 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(12)
 	void testRaetselAnlegen409() throws Exception {
 
@@ -353,6 +375,8 @@ public class RaetselResourceTest {
 			try {
 
 				response = given()
+					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
 					.post("v1");
@@ -373,6 +397,7 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(13)
 	void testRaetselAendern409() throws Exception {
 
@@ -388,6 +413,8 @@ public class RaetselResourceTest {
 			try {
 
 				response = given()
+					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
 					.put("v1");
@@ -407,6 +434,7 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "standard", roles = { "STANDARD" })
 	@Order(14)
 	void testGeneratePDF() {
 
@@ -416,23 +444,47 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(15)
+	void testGeneratePNGAutorAndOtherOwner() {
+
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+			.post("v1/PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.then()
+			.statusCode(401);
+
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(15)
 	void testGeneratePNG() {
 
-		given().contentType(ContentType.JSON).accept(ContentType.JSON)
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
 			.post("v1/PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
-			.then().statusCode(200);
+			.then()
+			.statusCode(200);
 
 	}
 
 	@Test
 	@Order(16)
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	void testLoadImages() {
 
 		given().accept(ContentType.JSON).get("v1/PNG/02610").then().statusCode(200);
 	}
 
 	@Test
+	@TestSecurity(user = "lehrer", roles = { "LEHRER" })
 	@Order(17)
 	void testGeneratePDFKeinTreffer() {
 
@@ -441,16 +493,21 @@ public class RaetselResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(18)
 	void testGeneratePNGKeinTreffer() {
 
-		given().contentType(ContentType.JSON).accept(ContentType.JSON)
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
 			.post("v1/PNG/2222222-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
 			.then().statusCode(404);
-
 	}
 
 	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(19)
 	void testLoadImagesKeinTreffer() throws Exception {
 

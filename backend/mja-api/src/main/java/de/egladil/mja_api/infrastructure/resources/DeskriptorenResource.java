@@ -26,12 +26,9 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
-import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
-import io.quarkus.panache.common.Sort;
 
 /**
  * DeskriptorenResource
@@ -48,28 +45,6 @@ public class DeskriptorenResource {
 
 	@Inject
 	DeskriptorenService deskriptorenService;
-
-	@Path("v1")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Operation(
-		operationId = "loadDeskriptorenV1", summary = "Liefert die Liste aller Deskriptoren, die auf einen Kontext passen.",
-		deprecated = true)
-	@Parameters({
-		@Parameter(name = "kontext", description = "Kontext, zu dem die Deskriptoren geladen werden") })
-	@APIResponse(
-		name = "LadeDeskriptoren",
-		description = "Alle Deskriptoren erfolgreich gelesen.",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class)))
-	public List<Deskriptor> loadDeskriptorenV1(@QueryParam(value = "kontext") final DeskriptorSuchkontext suchkontext) {
-
-		List<Deskriptor> trefferliste = deskriptorenRepository.listAll(Sort.ascending("name"));
-		return deskriptorenService.filterByKontext(suchkontext, trefferliste);
-	}
 
 	@Path("v2")
 	@GET

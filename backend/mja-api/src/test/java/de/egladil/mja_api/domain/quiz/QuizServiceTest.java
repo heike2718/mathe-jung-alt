@@ -9,9 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import io.quarkus.test.junit.QuarkusTest;
+
 /**
  * QuizServiceTest
  */
+@QuarkusTest
 public class QuizServiceTest {
 
 	QuizService service = new QuizService();

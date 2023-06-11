@@ -8,7 +8,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.web.mja_auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 
 /**
  * Grafik

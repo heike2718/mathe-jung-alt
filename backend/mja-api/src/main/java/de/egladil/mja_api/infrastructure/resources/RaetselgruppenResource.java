@@ -54,9 +54,7 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.domain.utils.DevDelayService;
-import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.web.commons_validation.payload.MessagePayload;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselgruppenResource
@@ -165,9 +163,8 @@ public class RaetselgruppenResource {
 		delayService.pause();
 
 		String userUuid = this.securityContext.getUserPrincipal().getName();
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
 
-		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeAnlegen(requestPayload, user);
+		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeAnlegen(requestPayload);
 
 		LOGGER.info("Raetselgruppe angelegt: [raetselgruppe={}, user={}]", raetselsammlung.getId(),
 			StringUtils.abbreviate(userUuid, 11));
@@ -205,9 +202,8 @@ public class RaetselgruppenResource {
 		delayService.pause();
 
 		String userUuid = this.securityContext.getUserPrincipal().getName();
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
 
-		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeBasisdatenAendern(requestPayload, user);
+		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeBasisdatenAendern(requestPayload);
 
 		LOGGER.info("Raetselgruppe angelegt: [raetselgruppe={}, user={}]", raetselsammlung.getId(),
 			StringUtils.abbreviate(userUuid, 11));
@@ -241,9 +237,7 @@ public class RaetselgruppenResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID) {
 
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
-
-		Optional<RaetselgruppeDetails> optDetails = raetselgruppenService.loadDetails(raetselgruppeID, user);
+		Optional<RaetselgruppeDetails> optDetails = raetselgruppenService.loadDetails(raetselgruppeID);
 
 		if (optDetails.isEmpty()) {
 			throw new WebApplicationException(Response.status(404).entity(MessagePayload.error("kein Treffer")).build());
@@ -292,7 +286,7 @@ public class RaetselgruppenResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
-		return this.raetselgruppenService.elementAnlegen(raetselgruppeID, element, PermissionUtils.getAuthenticatedUser(securityContext));
+		return this.raetselgruppenService.elementAnlegen(raetselgruppeID, element);
 	}
 
 
@@ -330,7 +324,7 @@ public class RaetselgruppenResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
-		return this.raetselgruppenService.elementAendern(raetselgruppeID, element, PermissionUtils.getAuthenticatedUser(securityContext));
+		return this.raetselgruppenService.elementAendern(raetselgruppeID, element);
 	}
 
 	@DELETE
@@ -370,7 +364,7 @@ public class RaetselgruppenResource {
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
 			message = "raetselgruppeID enthält ungültige Zeichen") final String elementID) {
 
-		return raetselgruppenService.elementLoeschen(raetselgruppeID, elementID, PermissionUtils.getAuthenticatedUser(securityContext));
+		return raetselgruppenService.elementLoeschen(raetselgruppeID, elementID);
 	}
 
 	@GET

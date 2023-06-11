@@ -5,7 +5,6 @@
 package de.egladil.mja_api.domain.deskriptoren.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.never;
@@ -21,14 +20,13 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.junit.mockito.InjectMock;
+import io.quarkus.test.security.TestSecurity;
 
 /**
  * DeskriptorenServiceImplTest
@@ -47,78 +45,10 @@ public class DeskriptorenServiceImplTest {
 	class MappingTests {
 
 		@Test
-		void should_mapToDeskriptorenReturnDeskriptoren_whenAutor() {
-
-			// Arrange
-			String deskriptorenIds = ",1,,4,,5,";
-			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
-
-			when(repository.listAll()).thenReturn(alleDeskriptoren);
-
-			AuthenticatedUser user = new AuthenticatedUser("idReference", new String[] { "AUTOR" }, "Augist Autor", "gqgu");
-
-			// Act
-			List<Deskriptor> deskriptoren = service.mapToDeskriptoren(deskriptorenIds, user);
-
-			// Assert
-			assertEquals(3, deskriptoren.size());
-			verify(repository).listAll();
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(1).equals(d.id)).findFirst();
-				assertTrue(optDesk.isPresent());
-				assertEquals("Mathe", optDesk.get().name);
-			}
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(4).equals(d.id)).findFirst();
-				assertTrue(optDesk.isPresent());
-				assertEquals("Minikänguru", optDesk.get().name);
-			}
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(5).equals(d.id)).findFirst();
-				assertTrue(optDesk.isPresent());
-				assertEquals("Zeitschrift", optDesk.get().name);
-			}
-		}
-
-		@Test
-		void should_mapToDeskriptorenReturnDeskriptoren_whenOrdinaryUser() {
-
-			// Arrange
-			String deskriptorenIds = ",1,,4,,5,";
-			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
-
-			when(repository.listAll()).thenReturn(alleDeskriptoren);
-
-			AuthenticatedUser user = new AuthenticatedUser("idReference", new String[] { "STANDARD" }, "Augist Autor", "gqgu");
-
-			// Act
-			List<Deskriptor> deskriptoren = service.mapToDeskriptoren(deskriptorenIds, user);
-
-			// Assert
-			assertEquals(1, deskriptoren.size());
-			verify(repository).listAll();
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(1).equals(d.id)).findFirst();
-				assertTrue(optDesk.isPresent());
-				assertEquals("Mathe", optDesk.get().name);
-			}
-		}
-
-		@Test
 		void should_mapToDeskriptorenReturnEmptyList_when_parameterNull() {
 
-			AuthenticatedUser user = new AuthenticatedUser("idReference", new String[] { "AUTOR" }, "Augist Autor", "gqgu");
-
 			// Act
-			List<Deskriptor> deskriptoren = service.mapToDeskriptoren(null, user);
+			List<Deskriptor> deskriptoren = service.mapToDeskriptoren(null);
 
 			// Assert
 			assertEquals(0, deskriptoren.size());
@@ -140,139 +70,6 @@ public class DeskriptorenServiceImplTest {
 
 		}
 
-	}
-
-	@Nested
-	class FilterTests {
-
-		@Test
-		void should_filterReturnAll_when_KontextNoop() {
-
-			// Arrange
-			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.NOOP;
-			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
-
-			// Act
-			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren);
-
-			// Assert
-			assertEquals(8, result.size());
-			verify(repository, never()).listAll();
-		}
-
-		@Test
-		void should_filterReturnNone_when_KontextBilder() {
-
-			// Arrange
-			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.BILDER;
-			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
-
-			// Act
-			List<Deskriptor> result = service.filterByKontext(kontext, alleDeskriptoren);
-
-			// Assert
-			assertEquals(0, result.size());
-			verify(repository, never()).listAll();
-		}
-
-		@Test
-		void should_filterReturnNurMitQuelle_when_KontextQuellen() {
-
-			// Arrange
-			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.QUELLEN;
-			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
-
-			// Act
-			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren);
-
-			// Assert
-			assertEquals(3, deskriptoren.size());
-			verify(repository, never()).listAll();
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(5).equals(d.id)).findFirst();
-				assertTrue(optDesk.isPresent());
-				assertEquals("Zeitschrift", optDesk.get().name);
-			}
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(7).equals(d.id)).findFirst();
-				assertTrue(optDesk.isPresent());
-				assertEquals("Person", optDesk.get().name);
-			}
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(8).equals(d.id)).findFirst();
-				assertTrue(optDesk.isPresent());
-				assertEquals("Buch", optDesk.get().name);
-			}
-		}
-
-		@Test
-		void should_filterReturnNurMitMedium_when_KontextMedien() {
-
-			// Arrange
-			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.MEDIEN;
-			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
-
-			// Act
-			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren);
-
-			// Assert
-			assertEquals(2, deskriptoren.size());
-			verify(repository, never()).listAll();
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(5).equals(d.id)).findFirst();
-				assertTrue(optDesk.isPresent());
-				assertEquals("Zeitschrift", optDesk.get().name);
-			}
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(8).equals(d.id)).findFirst();
-				assertTrue(optDesk.isPresent());
-				assertEquals("Buch", optDesk.get().name);
-			}
-		}
-
-		@Test
-		void should_filterReturnOhneQuelleUndMedium_when_KontextRaetsel() {
-
-			// Arrange
-			DeskriptorSuchkontext kontext = DeskriptorSuchkontext.RAETSEL;
-			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
-
-			// Act
-			List<Deskriptor> deskriptoren = service.filterByKontext(kontext, alleDeskriptoren);
-
-			// Assert
-			assertEquals(5, deskriptoren.size());
-			verify(repository, never()).listAll();
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(5).equals(d.id)).findFirst();
-				assertFalse(optDesk.isPresent());
-
-			}
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(7).equals(d.id)).findFirst();
-				assertFalse(optDesk.isPresent());
-			}
-
-			{
-
-				Optional<Deskriptor> optDesk = deskriptoren.stream().filter(d -> Long.valueOf(8).equals(d.id)).findFirst();
-				assertFalse(optDesk.isPresent());
-			}
-		}
 	}
 
 	@Nested
@@ -346,6 +143,7 @@ public class DeskriptorenServiceImplTest {
 	class LoadTests {
 
 		@Test
+		@TestSecurity(authorizationEnabled = false)
 		void should_loadDeskriptorenRaetselReturnAllWithAdmin_when_adminTrue() {
 
 			// Arrange

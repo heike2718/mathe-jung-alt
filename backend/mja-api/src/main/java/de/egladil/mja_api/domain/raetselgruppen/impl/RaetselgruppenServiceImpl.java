@@ -11,8 +11,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
-import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
@@ -40,8 +42,6 @@ import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
-import de.egladil.web.mja_auth.dto.MessagePayload;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselgruppenServiceImpl
@@ -50,6 +50,9 @@ import de.egladil.web.mja_auth.session.AuthenticatedUser;
 public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenServiceImpl.class);
+
+	@Context
+	SecurityContext securityContext;
 
 	@Inject
 	RaetselgruppenDao raetselgruppenDao;
@@ -90,7 +93,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public Optional<RaetselgruppeDetails> loadDetails(final String raetselgruppeID, final AuthenticatedUser user) {
+	public Optional<RaetselgruppeDetails> loadDetails(final String raetselgruppeID) {
 
 		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -101,7 +104,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		final RaetselgruppeDetails result = RaetselgruppeDetails.createFromDB(raetselgruppe);
 
-		if (PermissionUtils.hasWritePermission(user, raetselgruppe.owner)) {
+		if (PermissionUtils.hasWritePermission(securityContext.getUserPrincipal().getName(),
+			PermissionUtils.getRelevantRoles(securityContext), raetselgruppe.owner)) {
 
 			result.markiereAlsAenderbar();
 		}
@@ -125,15 +129,9 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	@Override
 	@Transactional
-	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload, final AuthenticatedUser user) throws WebApplicationException {
+	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload) throws WebApplicationException {
 
-		if (user == null) {
-
-			LOGGER.error("an dieser Stelle darf der user nicht null sein!!!");
-			throw new MjaRuntimeException("AuthenticatedUser ist null");
-		}
-
-		String userId = user.getUuid();
+		String userId = securityContext.getUserPrincipal().getName();
 
 		if (!AbstractDomainEntity.UUID_NEUE_ENTITY.equals(payload.getId())) {
 
@@ -176,15 +174,9 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	@Override
 	@Transactional
-	public RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(final EditRaetselgruppePayload payload, final AuthenticatedUser user) throws WebApplicationException {
+	public RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(final EditRaetselgruppePayload payload) throws WebApplicationException {
 
-		if (user == null) {
-
-			LOGGER.error("an dieser Stelle darf der user nicht null sein!!!");
-			throw new MjaRuntimeException("AuthenticatedUser ist null");
-		}
-
-		String userId = user.getUuid();
+		String userId = securityContext.getUserPrincipal().getName();
 
 		if (dupletteNachKeysExistiert(payload)) {
 
@@ -212,7 +204,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 					.build());
 		}
 
-		checkPermission(ausDB, user);
+		checkPermission(ausDB);
 
 		mergeFromPayload(ausDB, payload);
 		ausDB.geaendertDurch = userId;
@@ -292,13 +284,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public RaetselgruppeDetails elementAnlegen(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload, final AuthenticatedUser user) {
-
-		if (user == null) {
-
-			LOGGER.error("an dieser Stelle darf der user nicht null sein!!!");
-			throw new MjaRuntimeException("AuthenticatedUser ist null");
-		}
+	public RaetselgruppeDetails elementAnlegen(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
 
 		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -310,7 +296,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 			throw new WebApplicationException(response);
 		}
 
-		checkPermission(raetselgruppe, user);
+		checkPermission(raetselgruppe);
 
 		Optional<String> optRaetselId = raetselService.getRaetselIdWithSchluessel(payload.getRaetselSchluessel());
 
@@ -353,7 +339,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		this.createAndPersistNeuesRaetselgruppenelement(raetselgruppeID,
 			optRaetselId.get(), payload);
 
-		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID, user);
+		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
 
 		if (opt.isEmpty()) {
 
@@ -383,13 +369,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	@Override
 	@Transactional
-	public RaetselgruppeDetails elementAendern(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload, final AuthenticatedUser user) {
-
-		if (user == null) {
-
-			LOGGER.error("an dieser Stelle darf der user nicht null sein!!!");
-			throw new MjaRuntimeException("AuthenticatedUser ist null");
-		}
+	public RaetselgruppeDetails elementAendern(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
 
 		PersistentesRaetselgruppenelement persistentesElement = raetselgruppenDao.findElementById(payload.getId());
 
@@ -411,7 +391,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 			throw new WebApplicationException(response);
 		}
 
-		checkPermission(raetselgruppe, user);
+		checkPermission(raetselgruppe);
 
 		if (!raetselgruppeID.equals(persistentesElement.raetselgruppeID)) {
 
@@ -440,7 +420,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		mergeAndSaveRaetselgruppenelement(persistentesElement, payload);
 
-		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID, user);
+		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
 
 		if (opt.isEmpty()) {
 
@@ -463,18 +443,18 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public RaetselgruppeDetails elementLoeschen(final String raetselgruppeID, final String elementID, final AuthenticatedUser user) {
+	public RaetselgruppeDetails elementLoeschen(final String raetselgruppeID, final String elementID) {
 
 		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
 
 		if (raetselgruppe != null) {
 
-			checkPermission(raetselgruppe, user);
+			checkPermission(raetselgruppe);
 		}
 
 		raetselgruppenDao.deleteRaetselgruppenelement(elementID);
 
-		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID, user);
+		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
 
 		if (opt.isEmpty()) {
 
@@ -520,11 +500,13 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return raetselgruppeFileService.downloadLaTeXSource(dbResult, aufgaben, layoutAntwortvorschlaege);
 	}
 
-	void checkPermission(final PersistenteRaetselgruppe ausDB, final AuthenticatedUser user) {
+	void checkPermission(final PersistenteRaetselgruppe ausDB) {
 
-		if (!PermissionUtils.hasWritePermission(user, ausDB.owner)) {
+		if (!PermissionUtils.hasWritePermission(securityContext.getUserPrincipal().getName(),
+			PermissionUtils.getRelevantRoles(securityContext), ausDB.owner)) {
 
-			LOGGER.warn("User {} hat versucht, Raetselgruppe {} mit Owner {} zu aendern", user.getUuid(), ausDB.uuid,
+			LOGGER.warn("User {} hat versucht, Raetselgruppe {} mit Owner {} zu aendern",
+				securityContext.getUserPrincipal().getName(), ausDB.uuid,
 				ausDB.owner);
 
 			throw new WebApplicationException(Status.UNAUTHORIZED);

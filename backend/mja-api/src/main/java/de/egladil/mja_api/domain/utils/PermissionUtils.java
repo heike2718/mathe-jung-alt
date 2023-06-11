@@ -4,14 +4,12 @@
 // =====================================================
 package de.egladil.mja_api.domain.utils;
 
-import java.security.Principal;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.SecurityContext;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * PermissionUtils
@@ -22,84 +20,41 @@ public final class PermissionUtils {
 
 	public static final String ROLE_AUTOR = "AUTOR";
 
-	/**
-	 * Sammelt den User aus dem SecurityContext. Er kann null sein.
-	 *
-	 * @param  securityContext
-	 * @return                 AuthenticatedUser oder null!
-	 */
-	public static AuthenticatedUser getAuthenticatedUser(final SecurityContext securityContext) {
+	public static List<String> getRelevantRoles(final SecurityContext securityContext) {
 
-		Principal userPrincipal = securityContext.getUserPrincipal();
+		List<String> roles = new ArrayList<>();
 
-		if (userPrincipal == null) {
+		if (securityContext.isUserInRole(ROLE_ADMIN)) {
 
-			return null;
+			roles.add(ROLE_ADMIN);
 		}
 
-		return (AuthenticatedUser) userPrincipal;
+		if (securityContext.isUserInRole(ROLE_AUTOR)) {
+
+			roles.add(ROLE_AUTOR);
+		}
+
+		return roles;
+
 	}
 
 	/**
-	 * Entscheidet, ob der user Änderungsrecht auf die Entity mit dem Owner ownerId hat.
+	 * Ermittelt, ob der user leseberechtigt für die Entity mit dem gegebenen Status ist.
 	 *
-	 * @param  user
-	 * @param  ownerId
-	 * @return         boolean
+	 * @param  roles
+	 *                List<String> relevante Rollen
+	 * @param  status
+	 *                DomainEntityStatus
+	 * @return        boolean
 	 */
-	@Deprecated
-	public static boolean hasUserPermissionToChange(final String userId, final String ownerId, final boolean isAdmin) {
+	public static boolean hasReadPermission(final List<String> roles, final DomainEntityStatus status) {
 
-		if (isAdmin) {
-
-			return true;
-		}
-
-		return userId.equals(ownerId);
-	}
-
-	/**
-	 * Ermittelt, ob der user schreibberechtigt eine Entity mit der gegebenen ownerId ist.
-	 *
-	 * @param  user
-	 * @param  ownerId
-	 * @return
-	 */
-	public static boolean hasWritePermission(final AuthenticatedUser user, final String ownerId) {
-
-		if (user == null) {
+		if (roles == null) {
 
 			return false;
 		}
 
-		if (isUserAdmin(user)) {
-
-			return true;
-		}
-
-		if (!isUserAutor(user)) {
-
-			return false;
-		}
-
-		return user.getUuid().equals(ownerId);
-	}
-
-	/**
-	 * Ermittelt, ob der user leseberechtigt für eine Entity mit dem gegebenen Status ist.
-	 *
-	 * @param  user
-	 * @param  ownerId
-	 * @return
-	 */
-	public static boolean hasReadPermission(final AuthenticatedUser user, final DomainEntityStatus status) {
-
-		if (user == null) {
-
-			return false;
-		}
-
-		if (isUserAdmin(user) || isUserAutor(user)) {
+		if (isUserAdmin(roles) || isUserAutor(roles)) {
 
 			return true;
 		}
@@ -107,38 +62,65 @@ public final class PermissionUtils {
 		return status == DomainEntityStatus.FREIGEGEBEN;
 	}
 
-	public static boolean isUserAdmin(final AuthenticatedUser user) {
+	/**
+	 * Ermittelt, ob der user leseberechtigt für die Entity mit der gegebenen ownerId ist.
+	 *
+	 * @param  userId
+	 *                 String UUID des angemeldeten Users
+	 * @param  roles
+	 *                 List<String> relevante Rollen
+	 * @param  ownerId
+	 *                 String ID des Objekteigentümers
+	 * @return         boolean
+	 */
+	public static boolean hasWritePermission(final String userId, final List<String> roles, final String ownerId) {
 
-		if (user == null) {
+		if (isUserAdmin(roles)) {
+
+			return true;
+		}
+
+		if (!isUserAutor(roles)) {
 
 			return false;
 		}
 
-		List<String> roles = Arrays.asList(user.getRoles());
+		if (ownerId == null) {
+
+			return false;
+		}
+
+		return ownerId.equals(userId);
+	}
+
+	public static boolean isUserAdmin(final List<String> roles) {
+
+		if (roles == null) {
+
+			return false;
+		}
 
 		return roles.contains(ROLE_ADMIN);
 	}
 
-	public static boolean isUserAutor(final AuthenticatedUser user) {
+	public static boolean isUserAutor(final List<String> roles) {
 
-		if (user == null) {
+		if (roles == null) {
 
 			return false;
 		}
-
-		List<String> roles = Arrays.asList(user.getRoles());
 
 		return roles.contains(ROLE_AUTOR);
 	}
 
-	public static boolean isUserOrdinary(final AuthenticatedUser user) {
+	public static boolean isUserOrdinary(final List<String> roles) {
 
-		if (isUserAdmin(user)) {
+		if (isUserAdmin(roles)) {
 
 			return false;
 		}
 
-		if (isUserAutor(user)) {
+		if (isUserAutor(roles)) {
 
 			return false;
 		}
@@ -153,11 +135,11 @@ public final class PermissionUtils {
 	 *              AuthenticatedUser
 	 * @return      boolen
 	 */
-	public static boolean restrictSucheToFreigegeben(final AuthenticatedUser user) {
+	public static boolean restrictSucheToFreigegeben(final List<String> roles) {
 
 		boolean nurFreigegebene = true;
 
-		if (PermissionUtils.isUserAdmin(user) || PermissionUtils.isUserAutor(user)) {
+		if (PermissionUtils.isUserAdmin(roles) || PermissionUtils.isUserAutor(roles)) {
 
 			nurFreigegebene = false;
 		}

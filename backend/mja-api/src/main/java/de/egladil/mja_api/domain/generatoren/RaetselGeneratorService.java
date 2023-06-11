@@ -7,7 +7,6 @@ package de.egladil.mja_api.domain.generatoren;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselGeneratorService
@@ -22,11 +21,9 @@ public interface RaetselGeneratorService {
 	 *                                  String
 	 * @param  layoutAntwortvorschlaege
 	 *                                  AnzeigeAntwortvorschlaegeTyp
-	 * @param  user
-	 *                                  AuthenticatedUser
 	 * @return
 	 */
-	Images generatePNGsRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final AuthenticatedUser user);
+	Images generatePNGsRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 	/**
 	 * Generiert das Rätsel als 2seitiges PDF: Frage auf Seite 1, Lösung auf Seite 2. Minderprivilegierte User bekommen nur bei
@@ -34,9 +31,8 @@ public interface RaetselGeneratorService {
 	 *
 	 * @param  raetselUuid
 	 * @param  layoutAntwortvorschlaege
-	 * @param  user
 	 * @return                          GeneratedFile
 	 */
-	GeneratedFile generatePDFRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final AuthenticatedUser user);
+	GeneratedFile generatePDFRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 }

@@ -14,9 +14,12 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
+import io.quarkus.test.junit.QuarkusTest;
+
 /**
  * FindPathsGrafikParserTest
  */
+@QuarkusTest
 public class FindPathsGrafikParserTest {
 
 	@Test

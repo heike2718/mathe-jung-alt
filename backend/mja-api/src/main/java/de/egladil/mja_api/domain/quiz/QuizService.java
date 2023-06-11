@@ -101,7 +101,7 @@ public class QuizService {
 
 	String mapQuelle(final PersistenteAufgabeReadonly dbAufgabe) {
 
-		List<Deskriptor> deskriptoren = descriptorenService.mapToDeskriptoren(dbAufgabe.deskriptoren, null);
+		List<Deskriptor> deskriptoren = descriptorenService.mapToDeskriptoren(dbAufgabe.deskriptoren);
 		Optional<Deskriptor> optAdaptiert = deskriptoren.stream().filter(d -> "adaptiert".equalsIgnoreCase(d.name)).findFirst();
 
 		if (optAdaptiert.isPresent()) {

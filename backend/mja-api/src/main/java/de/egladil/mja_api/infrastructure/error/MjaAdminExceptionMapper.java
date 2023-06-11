@@ -17,12 +17,12 @@ import javax.ws.rs.ext.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.exceptions.AuthException;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.exceptions.SessionExpiredException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
-import de.egladil.web.mja_auth.dto.MessagePayload;
-import de.egladil.web.mja_auth.exception.AuthException;
-import de.egladil.web.mja_auth.exception.SessionExpiredException;
 
 /**
  * MjaAdminExceptionMapper

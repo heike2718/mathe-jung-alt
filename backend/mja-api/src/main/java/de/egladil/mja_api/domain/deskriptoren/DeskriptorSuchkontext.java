@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * DeskriptorSuchkontext
  */
-@Deprecated
 public enum DeskriptorSuchkontext {
 
 	BILDER,

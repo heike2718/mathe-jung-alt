@@ -20,10 +20,12 @@ import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * EditRaetselPayloadTest
  */
+@QuarkusTest
 public class EditRaetselPayloadTest {
 
 	@Nested

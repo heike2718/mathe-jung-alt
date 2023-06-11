@@ -26,10 +26,10 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.dto.UploadData;
 import de.egladil.mja_api.domain.upload.FileUplodService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
-import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
  * UploadResource

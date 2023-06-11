@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.domain.dto.Suchfilter;
-import de.egladil.mja_api.domain.dto.SuchfilterVariante;
+import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * SuchfilterTest
  */
+@QuarkusTest
 public class SuchfilterTest {
 
 	@Test

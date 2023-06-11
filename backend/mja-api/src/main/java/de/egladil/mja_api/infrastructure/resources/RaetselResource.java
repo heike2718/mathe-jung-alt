@@ -35,6 +35,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
@@ -47,9 +48,6 @@ import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.utils.DevDelayService;
-import de.egladil.mja_api.domain.utils.PermissionUtils;
-import de.egladil.web.mja_auth.dto.MessagePayload;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselResource
@@ -75,63 +73,6 @@ public class RaetselResource {
 
 	@Inject
 	DeskriptorenService deskriptorenService;
-
-	@Path("v1")
-	@GET
-	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Operation(
-		operationId = "findRaetsel",
-		summary = "Gibt alle Rätsel zurück, die auf die gegebene Suchanfrage passen. Wird mit dem nächsten PROD-Release gestrichen.")
-	@Parameters({
-		@Parameter(
-			name = "suchstring",
-			description = "Freitext zum suchen. Es erfolgt eine Volltextsuche über Schlüssel, Name, Kommentar, Frage und Lösung"),
-		@Parameter(name = "deskriptoren", description = "kommaseparierte Liste von Deskriptoren-Identifizierern"),
-		@Parameter(name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
-		@Parameter(
-			name = "limit",
-			description = "Pagination: pageSize"),
-		@Parameter(
-			name = "offset",
-			description = "Pagination: pageIndex"),
-		@Parameter(
-			name = "sortDirection",
-			description = "Sortierung. Es wird nach SCHLUESSEL sortiert.") })
-	@APIResponse(
-		name = "FindRaetselOKResponse",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(type = SchemaType.ARRAY, implementation = RaetselsucheTreffer.class)))
-	// @formatter:off
-	@Deprecated
-	public RaetselsucheTreffer findRaetsel(
-		@QueryParam(value = "suchstring") @Pattern(
-		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{4,30}$",
-		message = "ungültige Eingabe: mindestens 4 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
-		@QueryParam(value = "deskriptoren") @Pattern(
-			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
-			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
-		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren,
-		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
-		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
-		@QueryParam(value = "sortDirection")  @DefaultValue("asc") final SortDirection sortDirection) {
-		// @formatter:on
-
-		this.delayService.pause();
-
-		String deskriptorenOrdinal = checkAndTransformDeskriptoren(deskriptoren, typeDeskriptoren);
-
-		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
-
-			return new RaetselsucheTreffer();
-		}
-
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
-
-		return raetselService.sucheRaetsel(new Suchfilter(suchstring, deskriptorenOrdinal), limit, offset,
-			sortDirection, user);
-	}
 
 	@Path("admin/v2")
 	@GET
@@ -182,10 +123,8 @@ public class RaetselResource {
 			return new RaetselsucheTreffer();
 		}
 
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
-
 		return raetselService.sucheRaetsel(new Suchfilter(suchstring, deskriptorenOrdinal), limit, offset,
-			sortDirection, user);
+			sortDirection);
 	}
 
 	@Path("v2")
@@ -235,10 +174,8 @@ public class RaetselResource {
 			return new RaetselsucheTreffer();
 		}
 
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
-
 		return raetselService.sucheRaetsel(new Suchfilter(null, deskriptorenOrdinal), limit, offset,
-			sortDirection, user);
+			sortDirection);
 	}
 
 	@GET
@@ -269,9 +206,7 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
-
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid, user);
+		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
 
 		if (raetsel == null) {
 
@@ -316,13 +251,10 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
+		Raetsel raetsel = raetselService.raetselAnlegen(payload);
 
-		String userUuid = user == null ? "null" : user.getUuid();
-
-		Raetsel raetsel = raetselService.raetselAnlegen(payload, user);
-
-		LOGGER.info("Raetsel angelegt: [raetsel={}, user={}]", raetsel.getId(), StringUtils.abbreviate(userUuid, 11));
+		LOGGER.info("Raetsel angelegt: [raetsel={}, user={}]", raetsel.getId(),
+			StringUtils.abbreviate(securityContext.getUserPrincipal().getName(), 11));
 
 		return Response.status(201).entity(raetsel).build();
 
@@ -363,13 +295,10 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
+		Raetsel raetsel = raetselService.raetselAendern(payload);
 
-		String userUuid = user == null ? "null" : user.getUuid();
-
-		Raetsel raetsel = raetselService.raetselAendern(payload, user);
-
-		LOGGER.info("Raetsel geaendert: [raetsel={}, user={}]", raetsel.getId(), StringUtils.abbreviate(userUuid, 11));
+		LOGGER.info("Raetsel geaendert: [raetsel={}, user={}]", raetsel.getId(),
+			StringUtils.abbreviate(securityContext.getUserPrincipal().getName(), 11));
 
 		return Response.status(200).entity(raetsel).build();
 	}
@@ -427,14 +356,10 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
+		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege);
 
-		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege, user);
-
-		if (user != null) {
-
-			LOGGER.info("Raetsel Images generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(user.getUuid(), 11));
-		}
+		LOGGER.info("Raetsel Images generiert: [raetsel={}, user={}]", raetselUuid,
+			StringUtils.abbreviate(securityContext.getUserPrincipal().getName(), 11));
 
 		return result;
 	}
@@ -473,9 +398,8 @@ public class RaetselResource {
 		this.delayService.pause();
 
 		String userUuid = this.securityContext.getUserPrincipal().getName();
-		AuthenticatedUser user = PermissionUtils.getAuthenticatedUser(securityContext);
 
-		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege, user);
+		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege);
 
 		LOGGER.info("Raetsel PDF generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(userUuid, 11));
 

@@ -13,10 +13,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
+import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * EditRaetselgruppePayloadTest
  */
+@QuarkusTest
 public class EditRaetselgruppePayloadTest {
 
 	@Nested

@@ -7,7 +7,6 @@ package de.egladil.mja_api.domain.quellen;
 import java.util.List;
 import java.util.Optional;
 
-import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.semantik.DomainService;
 
 /**
@@ -25,16 +24,6 @@ public interface QuellenService {
 	List<QuellenListItem> findQuellen(String suchstring);
 
 	/**
-	 * Sucht quellen mit dem gegebenen suchfilter.
-	 *
-	 * @param  suchfilter
-	 *                    Suchfilter
-	 * @return            List
-	 */
-	@Deprecated
-	List<QuellenListItem> sucheQuellen(Suchfilter suchfilter);
-
-	/**
 	 * Sucht die Quelle mit der gegebenen id.
 	 *
 	 * @param  id
@@ -42,15 +31,6 @@ public interface QuellenService {
 	 * @return    Optional
 	 */
 	Optional<QuellenListItem> sucheQuelleMitId(String id);
-
-	/**
-	 * Sucht die Quelle mit der gegebenen userId.
-	 *
-	 * @param  userId
-	 * @return        Optional
-	 */
-	@Deprecated
-	Optional<QuellenListItem> sucheQuelleMitUserID(String userId);
 
 	/**
 	 * Sucht die Quelle mit der gegebenen userId.

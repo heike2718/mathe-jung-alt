@@ -13,7 +13,6 @@ import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselService
@@ -30,44 +29,36 @@ public interface RaetselService {
 	 *                       int Aufsetzpunkt für page
 	 * @param  sortDirection
 	 *                       SortDirection nach schluessel
-	 * @param  user
-	 *                       AuthenticatedUser
 	 * @return               RaetselsucheTreffer
 	 */
-	RaetselsucheTreffer sucheRaetsel(Suchfilter suchfilter, final int limit, final int offset, SortDirection sortDirection, AuthenticatedUser user);
+	RaetselsucheTreffer sucheRaetsel(Suchfilter suchfilter, final int limit, final int offset, SortDirection sortDirection);
 
 	/**
 	 * Legt ein neues Rätsel an. Durfen nur Autoren und Admins.
 	 *
 	 * @param  payload
 	 *                 EditRaetselPayload die Daten und Metainformationen
-	 * @param  user
 	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	Raetsel raetselAnlegen(EditRaetselPayload payload, AuthenticatedUser user);
+	Raetsel raetselAnlegen(EditRaetselPayload payload);
 
 	/**
 	 * Ändert ein vorhandenes Raetsel
 	 *
 	 * @param  payload
 	 *                 EditRaetselPayload die Daten und Metainformationen
-	 * @param  user
-	 *                 AuthenticatedUser
-	 *                 AuthenticatedUser
 	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	Raetsel raetselAendern(EditRaetselPayload payload, AuthenticatedUser user);
+	Raetsel raetselAendern(EditRaetselPayload payload);
 
 	/**
 	 * Holt die Details des Rätsels zu der gegebenen id. Falls das Rätsel existiert, wird der Schreibschutz anhand der Permissions
 	 * für den User aufgehoben.
 	 *
 	 * @param  id
-	 * @param  user
-	 *              AuthenticatedUser
 	 * @return      Raetsel oder null.
 	 */
-	Raetsel getRaetselZuId(String id, AuthenticatedUser user);
+	Raetsel getRaetselZuId(String id);
 
 	/**
 	 * @param  schluessel

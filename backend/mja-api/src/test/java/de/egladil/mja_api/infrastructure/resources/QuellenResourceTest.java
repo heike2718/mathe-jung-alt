@@ -18,6 +18,7 @@ import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.response.Response;
 
 /**
@@ -29,7 +30,40 @@ import io.restassured.response.Response;
 public class QuellenResourceTest {
 
 	@Test
-	void testSucheOhneDeskriptorenMitTreffer() {
+	void testSucheMitSuchstringNoAuthorization() {
+
+		given()
+			.when().get("v2?suchstring=Winkelvoß")
+			.then()
+			.statusCode(401);
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void testSucheMitSuchstringUnauthorized() {
+
+		given()
+			.when().get("v2?suchstring=Winkelvoß")
+			.then()
+			.statusCode(403);
+	}
+
+	@Test
+	@TestSecurity(user = "testUser", roles = { "ADMIN" })
+	void testSucheOhneDeskriptorenUserADMINMitTreffer() {
+
+		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[]}]";
+		given()
+			.when().get("v2?suchstring=Winkelvoß")
+			.then()
+			.statusCode(200)
+			.body(is(expected));
+
+	}
+
+	@Test
+	@TestSecurity(user = "testUser", roles = { "AUTOR" })
+	void testSucheOhneDeskriptorenUserAUTORMitTreffer() {
 
 		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[]}]";
 		given()
@@ -57,6 +91,30 @@ public class QuellenResourceTest {
 	}
 
 	@Test
+	void testFindQuelleByIdUnauthorized() throws Exception {
+
+		given()
+			.when()
+			.get("v1/8ef4d9b8-62a6-4643-8674-73ebaec52d98")
+			.then()
+			.statusCode(401);
+
+	}
+
+	@Test
+	@TestSecurity(user = "testUser", roles = { "STANDARD" })
+	void testFindQuelleByIdForbidden() throws Exception {
+
+		given()
+			.when()
+			.get("v1/8ef4d9b8-62a6-4643-8674-73ebaec52d98")
+			.then()
+			.statusCode(403);
+
+	}
+
+	@Test
+	@TestSecurity(user = "testUser", roles = { "ADMIN" })
 	void testFindQuelleByIdMitTreffer() throws Exception {
 
 		Response response = given()
@@ -73,7 +131,21 @@ public class QuellenResourceTest {
 	}
 
 	@Test
-	void testFindQuelleByIdOhneTreffer() throws Exception {
+	@TestSecurity(user = "testUser", roles = { "ADMIN" })
+	void testFindQuelleByIdADMINOhneTreffer() throws Exception {
+
+		String expected = "{\"level\":\"ERROR\",\"message\":\"Es gibt keine Quelle mit dieser UUID\"}";
+
+		given()
+			.when().get("v1/7a94e100-85e9-4ffb-903b-06835851063b")
+			.then().statusCode(404).and()
+			.body(is(expected));
+
+	}
+
+	@Test
+	@TestSecurity(user = "testUser", roles = { "AUTOR" })
+	void testFindQuelleByIdAUTOROhneTreffer() throws Exception {
 
 		String expected = "{\"level\":\"ERROR\",\"message\":\"Es gibt keine Quelle mit dieser UUID\"}";
 

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * DeskriptorenService
@@ -21,7 +20,7 @@ public interface DeskriptorenService {
 	 * @param  deskriptorenIds
 	 * @return
 	 */
-	List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds, AuthenticatedUser user);
+	List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds);
 
 	/**
 	 * Gibt alle Ids sortiert als kommaseparierten String zurück. Dubletten werden zuvor entfernt.
@@ -30,17 +29,6 @@ public interface DeskriptorenService {
 	 * @return              String oder null, wenn leere oder null-Liste
 	 */
 	String sortAndStringifyIdsDeskriptoren(List<Deskriptor> deskriptoren);
-
-	/**
-	 * Filtert die gegebenen Deskriptoren nach ihrem Kontext.
-	 *
-	 * @param  kontext
-	 *                      DeskriptorSuchkontext
-	 * @param  deskriptoren
-	 * @return              List: leer bei NOOP und nicht admin, alle bei NOOP und admin
-	 */
-	@Deprecated
-	List<Deskriptor> filterByKontext(DeskriptorSuchkontext kontext, List<Deskriptor> deskriptoren);
 
 	/**
 	 * Läd die Deskriptoren für RAETSEL.

@@ -26,13 +26,13 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
+import de.egladil.mja_api.domain.auth.ClientType;
+import de.egladil.mja_api.domain.auth.dto.AuthResult;
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.login.LoginLogoutService;
+import de.egladil.mja_api.domain.auth.login.LoginUrlService;
+import de.egladil.mja_api.domain.auth.session.SessionUtils;
 import de.egladil.mja_api.domain.utils.DevDelayService;
-import de.egladil.web.mja_auth.ClientType;
-import de.egladil.web.mja_auth.dto.AuthResult;
-import de.egladil.web.mja_auth.dto.MessagePayload;
-import de.egladil.web.mja_auth.login.LoginLogoutService;
-import de.egladil.web.mja_auth.login.LoginUrlService;
-import de.egladil.web.mja_auth.session.SessionUtils;
 
 /**
  * SessionResource

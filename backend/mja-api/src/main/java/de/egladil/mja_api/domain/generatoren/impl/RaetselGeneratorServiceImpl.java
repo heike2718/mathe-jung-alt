@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -19,6 +20,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
@@ -31,8 +33,6 @@ import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
-import de.egladil.web.mja_auth.dto.MessagePayload;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * RaetselGeneratorServiceImpl
@@ -45,6 +45,9 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
 
+	@Inject
+	SecurityContext securityContext;
+
 	@RestClient
 	@Inject
 	LaTeXRestClient laTeXClient;
@@ -56,15 +59,15 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final AuthenticatedUser user) {
+	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
-		Raetsel raetsel = loadRaetsel(raetselUuid, user);
+		Raetsel raetsel = loadRaetsel(raetselUuid);
 
 		if (raetsel.isSchreibgeschuetzt()) {
 
-			String userId = user == null ? "null" : user.getUuid();
+			String userId = securityContext.getUserPrincipal().getName();
 
 			LOGGER.warn("user {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
 				raetsel.getSchluessel());
@@ -173,23 +176,28 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	}
 
 	@Override
-	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final AuthenticatedUser user) {
+	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
-		Raetsel raetsel = loadRaetsel(raetselUuid, user);
+		Raetsel raetsel = loadRaetsel(raetselUuid);
 
-		if (!PermissionUtils.hasReadPermission(user, raetsel.getStatus())) {
+		List<String> relevantRoles = PermissionUtils.getRelevantRoles(securityContext);
+		boolean hasReadPermission = PermissionUtils.hasReadPermission(relevantRoles,
+			raetsel.getStatus());
 
-			String userId = user == null ? "null" : user.getUuid();
+		if (!hasReadPermission) {
 
-			LOGGER.warn("user {} nicht berechtigt, PDF fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
+			LOGGER.warn("user {} nicht berechtigt, PDF fuer Raetsel mit SCHLUESSEL={} zu generieren",
+				securityContext.getUserPrincipal().getName(),
 				raetsel.getSchluessel());
 
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
-		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege, PermissionUtils.isUserOrdinary(user));
+		boolean isOrdinaryUser = PermissionUtils.isUserOrdinary(relevantRoles);
+
+		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege, isOrdinaryUser);
 
 		Response response = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");
@@ -259,9 +267,9 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	 *                                 wenn es keinen Eintrag mit der URI gibt oder noch nicht alle erforderlichen Grafikdateien
 	 *                                 vorhanden sind.
 	 */
-	Raetsel loadRaetsel(final String raetselUuid, final AuthenticatedUser user) throws WebApplicationException {
+	Raetsel loadRaetsel(final String raetselUuid) throws WebApplicationException {
 
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid, user);
+		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
 
 		if (raetsel == null) {
 

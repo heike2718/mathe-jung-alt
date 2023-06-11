@@ -18,10 +18,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * RaetselTest
  */
+@QuarkusTest
 public class RaetselTest {
 
 	@Nested

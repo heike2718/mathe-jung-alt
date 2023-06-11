@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,7 +28,6 @@ import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.web.mja_auth.session.AuthenticatedUser;
 
 /**
  * DeskriptorenServiceImpl
@@ -35,18 +36,18 @@ import de.egladil.web.mja_auth.session.AuthenticatedUser;
 @ApplicationScoped
 public class DeskriptorenServiceImpl implements DeskriptorenService {
 
-	/**
-	 *
-	 */
 	private static final DeskriptorenNameComparator DESKRIPTOREN_COMPARATOR = new DeskriptorenNameComparator();
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeskriptorenServiceImpl.class);
+
+	@Context
+	SecurityContext securityContext;
 
 	@Inject
 	DeskriptorenRepository deskriptorenRepository;
 
 	@Override
-	public List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds, final AuthenticatedUser user) {
+	public List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds) {
 
 		if (StringUtils.isBlank(deskriptorenIds)) {
 
@@ -61,7 +62,9 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 
 		List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).toList();
 
-		if (PermissionUtils.isUserAdmin(user) || PermissionUtils.isUserAutor(user)) {
+		List<String> roles = PermissionUtils.getRelevantRoles(securityContext);
+
+		if (PermissionUtils.isUserAdmin(roles) || PermissionUtils.isUserAutor(roles)) {
 
 			return result;
 		}
@@ -99,24 +102,13 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 	}
 
 	@Override
-	public List<Deskriptor> filterByKontext(final DeskriptorSuchkontext kontext, final List<Deskriptor> deskriptoren) {
-
-		if (DeskriptorSuchkontext.NOOP == kontext) {
-
-			return deskriptoren;
-		}
-
-		List<Deskriptor> result = deskriptoren.stream().filter(d -> d.kontext.contains(kontext.toString())).toList();
-		return result;
-	}
-
-	@Override
 	public List<DeskriptorUI> loadDeskriptorenRaetsel(final boolean admin) {
 
 		List<Deskriptor> alle = deskriptorenRepository.listAll();
 		Collections.sort(alle, DESKRIPTOREN_COMPARATOR);
 
-		List<Deskriptor> nurRaetsel = filterByKontext(DeskriptorSuchkontext.RAETSEL, alle);
+		List<Deskriptor> nurRaetsel = alle.stream().filter(d -> d.kontext.contains(DeskriptorSuchkontext.RAETSEL.toString()))
+			.toList();
 
 		if (admin) {
 

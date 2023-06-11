@@ -20,6 +20,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
+import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
@@ -33,6 +34,7 @@ import de.egladil.web.commons_validation.payload.MessagePayload;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -45,8 +47,14 @@ import io.restassured.response.Response;
 @TestMethodOrder(OrderAnnotation.class)
 public class RaetselgruppenResourceTest {
 
+	/**
+	 *
+	 */
+	private static final String CSRF_TOKEN = "lqhidhqio";
+
 	@Test
 	@Order(1)
+	@TestSecurity(user = "testuser", roles = { "AUTOR" })
 	void testFindRaetselgruppen() throws Exception {
 
 		Response response = given()
@@ -71,6 +79,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(2)
 	void testFindRaetselgruppenKeinTreffer() throws Exception {
 
@@ -95,11 +104,14 @@ public class RaetselgruppenResourceTest {
 
 	@Test
 	@Order(3)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	void testLoadDetails() throws Exception {
 
 		String id = "13c62cfb-cfdd-41f1-b8a9-6c866e087718";
 
 		Response response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.get("v1/" + id);
 
@@ -116,12 +128,15 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(4)
 	void testLoadDetailsKeinTreffer() throws Exception {
 
 		String id = "07c62cfb-cfdd-41f1-b8a9-6c866e087718";
 
 		Response response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.get(
 				"v1/" + id);
@@ -138,7 +153,8 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
-	@Order(8)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	@Order(5)
 	void testRaetselgruppeAnlegenOhneReferenz() throws Exception {
 
 		Response response = null;
@@ -154,6 +170,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.post("v1");
@@ -168,7 +186,8 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
-	@Order(9)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	@Order(6)
 	void testRaetselgruppeAnlegenOhneReferenzGleicherNameAnderesLevel() throws Exception {
 
 		Response response = null;
@@ -184,6 +203,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.post("v1");
@@ -199,7 +220,8 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
-	@Order(10)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	@Order(7)
 	void testRaetselgruppeAnlegenUndAendern() throws Exception {
 
 		Response response = null;
@@ -219,6 +241,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.post("v1");
@@ -269,6 +293,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.put("v1");
@@ -289,7 +315,8 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
-	@Order(11)
+	@TestSecurity(user = "testuser", roles = { "AUTOR" })
+	@Order(8)
 	void testRaetselgruppeAnlegenGleicherName() throws Exception {
 
 		Response response = null;
@@ -307,6 +334,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.post("v1");
@@ -324,7 +353,8 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
-	@Order(12)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	@Order(9)
 	void testRaetselgruppeAnlegenGleicheReferenz() throws Exception {
 
 		Response response = null;
@@ -342,6 +372,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.post("v1");
@@ -359,7 +391,8 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
-	@Order(13)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	@Order(10)
 	void testRaetselgruppeAnlegenIdNichtNeu() throws Exception {
 
 		Response response = null;
@@ -377,6 +410,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.post("v1");
@@ -394,7 +429,8 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
-	@Order(14)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	@Order(11)
 	void testRaetselgruppeAendernReferenzdublette() throws Exception {
 
 		Response response = null;
@@ -412,6 +448,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.put("v1");
@@ -429,7 +467,8 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
-	@Order(15)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	@Order(12)
 	void testRaetselgruppeAendernNamendublette() throws Exception {
 
 		Response response = null;
@@ -447,6 +486,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.put("v1");
@@ -464,7 +505,8 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
-	@Order(16)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	@Order(13)
 	void testRaetselgruppeAendernUnbekannt() throws Exception {
 
 		Response response = null;
@@ -482,6 +524,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.put("v1");
@@ -499,6 +543,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(20)
 	void raetselgruppenelementAnlegenAendernLoeschen() throws Exception {
 
@@ -511,6 +556,8 @@ public class RaetselgruppenResourceTest {
 			System.out.println("Details laden");
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.get(
 					"v1/" + raetselgruppeUuid);
@@ -540,6 +587,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.post("v1/" + raetselgruppeUuid + "/elemente");
@@ -577,6 +626,8 @@ public class RaetselgruppenResourceTest {
 
 				String requestBody = new ObjectMapper().writeValueAsString(payload);
 				response = given()
+					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
 					.put("v1/" + raetselgruppeUuid + "/elemente");
@@ -609,6 +660,8 @@ public class RaetselgruppenResourceTest {
 			if (elementUuid != null) {
 
 				response = given()
+					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.delete("v1/" + raetselgruppeUuid + "/elemente/" + elementUuid);
 
@@ -635,12 +688,15 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "AUTOR", "STANDARD" })
 	@Order(21)
 	void raetselgruppenelementLoeschenGruppeExistiertNicht() throws Exception {
 
 		Response response = null;
 
 		response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.delete("v1/abcdef-012345/elemente/98765-fedcba");
 
@@ -658,12 +714,15 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(22)
 	void raetselgruppenelementLoeschenElementExistiertNicht() throws Exception {
 
 		Response response = null;
 
 		response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.delete("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/98765-fedcba");
 
@@ -687,6 +746,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "AUTOR", "STANDARD" })
 	@Order(23)
 	void elementAnlegenGruppeExistiertNicht() throws Exception {
 
@@ -699,6 +759,8 @@ public class RaetselgruppenResourceTest {
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 		Response response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
 			.post("v1/abcdef-987654/elemente");
@@ -717,6 +779,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(24)
 	void elementAnlegenRaetselExistiertNicht() throws Exception {
 
@@ -729,6 +792,8 @@ public class RaetselgruppenResourceTest {
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 		Response response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
 			.post("v1/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
@@ -747,6 +812,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(24)
 	void elementAnlegenNummerSchonEnthalten() throws Exception {
 
@@ -759,6 +825,8 @@ public class RaetselgruppenResourceTest {
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 		Response response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
 			.post("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
@@ -777,6 +845,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(25)
 	void elementAnlegenRaetselSchonEnthalten() throws Exception {
 
@@ -789,6 +858,8 @@ public class RaetselgruppenResourceTest {
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 		Response response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
 			.post("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
@@ -807,6 +878,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(26)
 	void elementAendernGruppeExistiertNicht() throws Exception {
 
@@ -819,6 +891,8 @@ public class RaetselgruppenResourceTest {
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 		Response response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
 			.put("v1/abcdef-987654/elemente");
@@ -837,6 +911,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(27)
 	void elementAendernElementExistiertNicht() throws Exception {
 
@@ -849,6 +924,8 @@ public class RaetselgruppenResourceTest {
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 		Response response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
 			.put("v1/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
@@ -867,6 +944,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(28)
 	void elementAendernRaetselgruppenkonflikt() throws Exception {
 
@@ -879,6 +957,8 @@ public class RaetselgruppenResourceTest {
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 		Response response = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
 			.put("v1/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
@@ -897,6 +977,7 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(28)
 	void elementAendernNummerExistiert() throws Exception {
 
@@ -915,6 +996,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			Response response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.post("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
@@ -945,6 +1028,8 @@ public class RaetselgruppenResourceTest {
 			String requestBody = new ObjectMapper().writeValueAsString(payload);
 
 			Response response = given()
+				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
 				.put("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
@@ -964,10 +1049,14 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "AUTOR" })
 	@Order(28)
 	void testGetLaTeX() {
 
 		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
 				"v1/latex/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
@@ -975,36 +1064,51 @@ public class RaetselgruppenResourceTest {
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(29)
 	void testGetLaTeXKeinTreffer() {
 
 		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
 				"v1/latex/33333333-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
-			.then().statusCode(404);
+			.then()
+			.statusCode(404);
 	}
 
 	@Test
 	@Order(30)
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	void testGetVorschau() {
 
 		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
 				"v1/vorschau/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
-			.then().statusCode(200);
+			.then()
+			.statusCode(200);
 	}
 
 	@Test
+	@TestSecurity(user = "testuser", roles = { "AUTOR" })
 	@Order(30)
 	void testGetVorschauKeinTreffer() {
 
 		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
 				"v1/vorschau/33333333-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
-			.then().statusCode(404);
+			.then()
+			.statusCode(404);
 	}
 
 }

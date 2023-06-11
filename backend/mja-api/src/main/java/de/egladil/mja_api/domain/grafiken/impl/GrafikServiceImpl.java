@@ -20,6 +20,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.ImageGeneratorService;
@@ -27,7 +28,6 @@ import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.grafiken.Grafik;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
 import de.egladil.mja_api.domain.raetsel.impl.FindPathsGrafikParser;
-import de.egladil.web.mja_auth.dto.MessagePayload;
 
 /**
  * GrafikServiceImpl
