@@ -1,0 +1,656 @@
+2023-06-18 17:42:03,550 ERROR [io.qua.dep.dev.IsolatedDevModeMain] (main) Failed to start quarkus: java.lang.RuntimeException: io.quarkus.builder.BuildException: Build failure: Build failed due to errors
+	[error]: Build step io.quarkus.arc.deployment.ArcProcessor#validate threw an exception: jakarta.enterprise.inject.spi.DeploymentException: Found 13 deployment problems: 
+[1] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl, de.egladil.mja_api.domain.deskriptoren.DeskriptorenService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[2] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.QuellenResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.QuellenResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.QuellenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[3] Ambiguous dependencies for type jakarta.ws.rs.container.ResourceInfo and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter#resourceInfo
+	- declared on CLASS bean [types=[jakarta.ws.rs.container.ContainerRequestFilter, java.lang.Object, de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+[4] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.FileUplodService#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.FileUplodService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.FileUplodService]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[5] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl, java.lang.Object, de.egladil.mja_api.domain.generatoren.RaetselGeneratorService], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[6] Ambiguous dependencies for type jakarta.ws.rs.ext.Providers and qualifiers [@Default]
+	- java member: io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter():providers
+	- declared on CLASS bean [types=[jakarta.ws.rs.ext.MessageBodyWriter<java.lang.Object>, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter$AllWriteableMessageBodyWriter, org.jboss.resteasy.reactive.common.types.AllWriteableMarker, io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter<java.lang.Object>, java.lang.Object], qualifiers=[@Default, @Any], target=io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=io.quarkus.resteasy.reactive.server.runtime.QuarkusContextProducers]
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+[7] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl, de.egladil.mja_api.domain.raetsel.RaetselService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[8] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.DeskriptorenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.DeskriptorenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.DeskriptorenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecucurityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[9] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService, de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[10] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[11] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.RaetselResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[12] Unsatisfied dependency for type de.egladil.web.filescanner_service.clamav.ClamAVService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck#clamAVService
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck, org.eclipse.microprofile.health.HealthCheck, java.lang.Object], qualifiers=[@Any, @Readiness], target=de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck]
+[13] Unsatisfied dependency for type de.egladil.web.filescanner_service.scan.ScanService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.UploadScannerDelegate#scanService
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.UploadScannerDelegate, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.UploadScannerDelegate]
+	at io.quarkus.arc.processor.BeanDeployment.processErrors(BeanDeployment.java:1403)
+	at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:305)
+	at io.quarkus.arc.processor.BeanProcessor.initialize(BeanProcessor.java:156)
+	at io.quarkus.arc.deployment.ArcProcessor.validate(ArcProcessor.java:526)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at io.quarkus.deployment.ExtensionLoader$3.execute(ExtensionLoader.java:909)
+	at io.quarkus.builder.BuildContext.run(BuildContext.java:282)
+	at org.jboss.threads.ContextHandler$1.runWith(ContextHandler.java:18)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2513)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1538)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+	at org.jboss.threads.JBossThread.run(JBossThread.java:501)
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl, de.egladil.mja_api.domain.deskriptoren.DeskriptorenService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.QuellenResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.QuellenResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.QuellenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.container.ResourceInfo and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter#resourceInfo
+	- declared on CLASS bean [types=[jakarta.ws.rs.container.ContainerRequestFilter, java.lang.Object, de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastru                                                                                                                                                            cture.filters.InitSecurityContextFilter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.FileUplodService#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.FileUplodService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.FileUplodService]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl, java.lang.Object, de.egladil.mja_api.domain.generatoren.RaetselGeneratorService], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.ext.Providers and qualifiers [@Default]
+	- java member: io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter():providers
+	- declared on CLASS bean [types=[jakarta.ws.rs.ext.MessageBodyWriter<java.lang.Object>, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter$AllWriteableMessageBodyWriter, org.jboss.resteasy.reactive.common.types.AllWriteableMarker, io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter<java.lang.Object>, java.lang.Object], qualifiers=[@Default, @Any], target=io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=io.quarkus.resteasy.reactive.server.runtime.QuarkusContextProducers]
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl, de.egladil.mja_api.domain.raetsel.RaetselService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.DeskriptorenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.DeskriptorenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.DeskriptorenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService, de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualit, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.RaetselResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.UnsatisfiedResolutionException: Unsatisfied dependency for type de.egladil.web.filescanner_service.clamav.ClamAVService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck#clamAVService
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck, org.eclipse.microprofile.health.HealthCheck, java.lang.Object], qualifiers=[@Any, @Readiness], target=de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:482)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.UnsatisfiedResolutionException: Unsatisfied dependency for type de.egladil.web.filescanner_service.scan.ScanService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.UploadScannerDelegate#scanService
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.UploadScannerDelegate, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.UploadScannerDelegate]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:482)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+
+	at io.quarkus.runner.bootstrap.AugmentActionImpl.runAugment(AugmentActionImpl.java:335)
+	at io.quarkus.runner.bootstrap.AugmentActionImpl.createInitialRuntimeApplication(AugmentActionImpl.java:252)
+	at io.quarkus.runner.bootstrap.AugmentActionImpl.createInitialRuntimeApplication(AugmentActionImpl.java:60)
+	at io.quarkus.deployment.dev.IsolatedDevModeMain.firstStart(IsolatedDevModeMain.java:86)
+	at io.quarkus.deployment.dev.IsolatedDevModeMain.accept(IsolatedDevModeMain.java:447)
+	at io.quarkus.deployment.dev.IsolatedDevModeMain.accept(IsolatedDevModeMain.java:59)
+	at io.quarkus.bootstrap.app.CuratedApplication.runInCl(CuratedApplication.java:149)
+	at io.quarkus.bootstrap.app.CuratedApplication.runInAugmentClassLoader(CuratedApplication.java:104)
+	at io.quarkus.deployment.dev.DevModeMain.start(DevModeMain.java:131)
+	at io.quarkus.deployment.dev.DevModeMain.main(DevModeMain.java:62)
+Caused by: io.quarkus.builder.BuildException: Build failure: Build failed due to errors
+	[error]: Build step io.quarkus.arc.deployment.ArcProcessor#validate threw an exception: jakarta.enterprise.inject.spi.DeploymentException: Found 13 deployment problems: 
+[1] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl, de.egladil.mja_api.domain.deskriptoren.DeskriptorenService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[2] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.QuellenResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.QuellenResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.QuellenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[3] Ambiguous dependencies for type jakarta.ws.rs.container.ResourceInfo and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter#resourceInfo
+	- declared on CLASS bean [types=[jakarta.ws.rs.container.ContainerRequestFilter, java.lang.Object, de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jontainer.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+[4] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.FileUplodService#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.FileUplodService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.FileUplodService]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[5] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl, java.lang.Object, de.egladil.mja_api.domain.generatoren.RaetselGeneratorService], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[6] Ambiguous dependencies for type jakarta.ws.rs.ext.Providers and qualifiers [@Default]
+	- java member: io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter():providers
+	- declared on CLASS bean [types=[jakarta.ws.rs.ext.MessageBodyWriter<java.lang.Object>, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter$AllWriteableMessageBodyWriter, org.jboss.resteasy.reactive.common.types.AllWriteableMarker, io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter<java.lang.Object>, java.lang.Object], qualifiers=[@Default, @Any], target=io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=io.quarkus.resteasy.reactive.server.runtime.QuarkusContextProducers]
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+[7] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl, de.egladil.mja_api.domain.raetsel.RaetselService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[8] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.DeskriptorenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.DeskriptorenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.DeskriptorenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[9] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService, de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[10] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[11] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.RaetselResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[12] Unsatisfied dependency for type de.egladil.web.filescanner_service.clamav.ClamAVService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck#clamAVService
+      lared on CLASS bean [types=[de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck, org.eclipse.microprofile.health.HealthCheck, java.lang.Object], qualifiers=[@Any, @Readiness], target=de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck]
+[13] Unsatisfied dependency for type de.egladil.web.filescanner_service.scan.ScanService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.UploadScannerDelegate#scanService
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.UploadScannerDelegate, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.UploadScannerDelegate]
+	at io.quarkus.arc.processor.BeanDeployment.processErrors(BeanDeployment.java:1403)
+	at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:305)
+	at io.quarkus.arc.processor.BeanProcessor.initialize(BeanProcessor.java:156)
+	at io.quarkus.arc.deployment.ArcProcessor.validate(ArcProcessor.java:526)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at io.quarkus.deployment.ExtensionLoader$3.execute(ExtensionLoader.java:909)
+	at io.quarkus.builder.BuildContext.run(BuildContext.java:282)
+	at org.jboss.threads.ContextHandler$1.runWith(ContextHandler.java:18)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2513)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1538)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+	at org.jboss.threads.JBossThread.run(JBossThread.java:501)
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl, de.egladil.mja_api.domain.deskriptoren.DeskriptorenService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.QuellenResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.QuellenResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.QuellenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.container.ResourceInfo and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter#resourceInfo
+	- declared on CLASS bean [types=[jakarta.ws.rs.container.ContainerRequestFilter, java.lang.Object, de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.FileUplodService#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.FileUplodService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.FileUplodService]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl, java.lang.Object, de.egladil.mja_api.domain.generatoren.RaetselGeneratorService], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.ext.Providers and qualifiersult]efa
+	- java member: io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter():providers
+	- declared on CLASS bean [types=[jakarta.ws.rs.ext.MessageBodyWriter<java.lang.Object>, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter$AllWriteableMessageBodyWriter, org.jboss.resteasy.reactive.common.types.AllWriteableMarker, io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter<java.lang.Object>, java.lang.Object], qualifiers=[@Default, @Any], target=io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=io.quarkus.resteasy.reactive.server.runtime.QuarkusContextProducers]
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl, de.egladil.mja_api.domain.raetsel.RaetselService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.DeskriptorenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.DeskriptorenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.DeskriptorenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService, de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.RaetselResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.UnsatisfiedResolutionException: Unsatisfied dependency for type de.egladil.web.filescanner_service.clamav.ClamAVService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck#clamAVService
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck, org.eclipse.microprofile.health.HealthCheck, java.lang.Object], qualifiers=[@Any, @Readiness], target=de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck]
+		at io.quarkus.arc.processor.Beans.resolveIneans.java:482)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.UnsatisfiedResolutionException: Unsatisfied dependency for type de.egladil.web.filescanner_service.scan.ScanService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.UploadScannerDelegate#scanService
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.UploadScannerDelegate, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.UploadScannerDelegate]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:482)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+
+	at io.quarkus.builder.Execution.run(Execution.java:123)
+	at io.quarkus.builder.BuildExecutionBuilder.execute(BuildExecutionBuilder.java:79)
+	at io.quarkus.deployment.QuarkusAugmentor.run(QuarkusAugmentor.java:160)
+	at io.quarkus.runner.bootstrap.AugmentActionImpl.runAugment(AugmentActionImpl.java:331)
+	... 9 more
+Caused by: jakarta.enterprise.inject.spi.DeploymentException: Found 13 deployment problems: 
+[1] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl, de.egladil.mja_api.domain.deskriptoren.DeskriptorenService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[2] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.QuellenResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.QuellenResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.QuellenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[3] Ambiguous dependencies for type jakarta.ws.rs.container.ResourceInfo and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter#resourceInfo
+	- declared on CLASS bean [types=[jakarta.ws.rs.container.ContainerRequestFilter, java.lang.Object, de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+[4] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.FileUplodService#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.FileUplodService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.FileUplodService]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[5] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl, java.lang.Object, de.egladil.mja_api.domain.generatoren.RaetselGeneratorService], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[6] Ambiguous dependencies for type jakarta.ws.rs.ext.Providers and qualifiers [@Default]
+	- java member: io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter():providers
+	- declared on CLASS bean [types=[jakarta.ws.rs.ext.MessageBodyWriter<java.lang.Object>, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter$AllWriteableMessageBodyWriter, org.jboss.resteasy.reactive.common.types.AllWriteableMarker, io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter<java.lang.Object>, java.lang.Object], qualifiers=[@Default, @Any], target=io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=io.quarkus.resteasy.reactive.server.runtime.QuarkusContextProducers]
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+[7] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl, de.egladil.mja_api.domain.raetsel.RaetselService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declarin                                                                                                                                                                              gBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[8] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.DeskriptorenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.DeskriptorenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.DeskriptorenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[9] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService, de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[10] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[11] Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.RaetselResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+[12] Unsatisfied dependency for type de.egladil.web.filescanner_service.clamav.ClamAVService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck#clamAVService
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck, org.eclipse.microprofile.health.HealthCheck, java.lang.Object], qualifiers=[@Any, @Readiness], target=de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck]
+[13] Unsatisfied dependency for type de.egladil.web.filescanner_service.scan.ScanService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.UploadScannerDelegate#scanService
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.UploadScannerDelegate, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.UploadScannerDelegate]
+	at io.quarkus.arc.processor.BeanDeployment.processErrors(BeanDeployment.java:1403)
+	at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:305)
+	at io.quarkus.arc.processor.BeanProcessor.initialize(BeanProcessor.java:156)
+	at io.quarkus.arc.deployment.ArcProcessor.validate(ArcProcessor.java:526)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at io.quarkus.deployment.ExtensionLoader$3.execute(ExtensionLoader.java:909)
+	at io.quarkus.builder.BuildContext.run(BuildContext.java:282)
+	at org.jboss.threads.ContextHandler$1.runWith(ContextHandler.java:18)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2513)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1538)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+	at org.jboss.threads.JBossThread.run(JBossThread.java:501)
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl, de.egladil.mja_api.domain.deskriptoren.DeskriptorenService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.QuellenResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.QuellenResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.QuellenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolvt(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.container.ResourceInfo and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter#resourceInfo
+	- declared on CLASS bean [types=[jakarta.ws.rs.container.ContainerRequestFilter, java.lang.Object, de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.container.ResourceInfo, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.container.ResourceInfo resourceInfo(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.FileUplodService#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.FileUplodService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.FileUplodService]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl, java.lang.Object, de.egladil.mja_api.domain.generatoren.RaetselGeneratorService], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.ext.Providers and qualifiers [@Default]
+	- java member: io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter():providers
+	- declared on CLASS bean [types=[jakarta.ws.rs.ext.MessageBodyWriter<java.lang.Object>, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter$AllWriteableMessageBodyWriter, org.jboss.resteasy.reactive.common.types.AllWriteableMarker, io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter, org.jboss.resteasy.reactive.server.spi.ServerMessageBodyWriter<java.lang.Object>, java.lang.Object], qualifiers=[@Default, @Any], target=io.quarkus.resteasy.reactive.jackson.runtime.serialisers.FullyFeaturedServerJacksonMessageBodyWriter]
+	- available beans:
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=io.quarkus.resteasy.reactive.server.runtime.QuarkusContextProducers]
+		- PRODUCER METHOD bean [types=[java.lang.Object, jakarta.ws.rs.ext.Providers], qualifiers=[@Default, @Any], target=jakarta.ws.rs.ext.Providers providers(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl, de.egladil.mja_api.domain.raetsel.RaetselService, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.DeskriptorenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.DeskriptorenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.DeskriptorenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl#secntextCo
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService, de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenServiceImpl]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource#securityContext
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselgruppenResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.AmbiguousResolutionException: Ambiguous dependencies for type jakarta.ws.rs.core.SecurityContext and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.resources.RaetselResource#securityContext
+	- declared on CLASS bean [types=[java.lang.Object, de.egladil.mja_api.infrastructure.resources.RaetselResource], qualifiers=[@Default, @Any], target=de.egladil.mja_api.infrastructure.resources.RaetselResource]
+	- available beans:
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.cdi.ContextProducers]
+		- PRODUCER METHOD bean [types=[jakarta.ws.rs.core.SecurityContext, java.lang.Object], qualifiers=[@Default, @Any], target=jakarta.ws.rs.core.SecurityContext securityContext(), declaringBean=org.jboss.resteasy.reactive.server.injection.ContextProducers]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:491)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.UnsatisfiedResolutionException: Unsatisfied dependency for type de.egladil.web.filescanner_service.clamav.ClamAVService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck#clamAVService
+	- declared on CLASS bean [types=[de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck, org.eclipse.microprofile.health.HealthCheck, java.lang.Object], qualifiers=[@Any, @Readiness], target=de.egladil.mja_api.infrastructure.health.ClamAVReadinessCheck]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:482)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+	Suppressed: jakarta.enterprise.inject.UnsatisfiedResolutionException: Unsatisfied dependency for type de.egladil.web.filescanner_service.scan.ScanService and qualifiers [@Default]
+	- java member: de.egladil.mja_api.domain.upload.UploadScannerDelegate#scanService
+	- declared on CLASS bean [types=[de.egladil.mja_api.domain.upload.UploadScannerDelegate, java.lang.Object], qualifiers=[@Default, @Any], target=de.egladil.mja_api.domain.upload.UploadScannerDelegate]
+		at io.quarkus.arc.processor.Beans.resolveInjectionPoint(Beans.java:482)
+		at io.quarkus.arc.processor.BeanInfo.init(BeanInfo.java:573)
+		at io.quarkus.arc.processor.BeanDeployment.init(BeanDeployment.java:293)
+		... 13 more
+
