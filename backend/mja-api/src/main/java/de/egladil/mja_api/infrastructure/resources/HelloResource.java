@@ -14,7 +14,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 /**
  * HelloResource
  */
-@Path("/hello")
+@Path("mja-api/hello")
 @Tag(name = "Hello", description = "Funktionstest")
 public class HelloResource {
 

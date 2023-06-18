@@ -30,7 +30,7 @@ import de.egladil.mja_api.domain.utils.DevDelayService;
 /**
  * GrafikResource
  */
-@Path("/grafiken/v1")
+@Path("mja-api/grafiken/v1")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Grafikvorschau")
 public class GrafikResource {

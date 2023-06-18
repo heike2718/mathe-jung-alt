@@ -41,7 +41,7 @@ import de.egladil.mja_api.domain.utils.DevDelayService;
 /**
  * QuellenResource
  */
-@Path("quellen")
+@Path("mja-api/quellen")
 @Tag(name = "Quellen")
 public class QuellenResource {
 

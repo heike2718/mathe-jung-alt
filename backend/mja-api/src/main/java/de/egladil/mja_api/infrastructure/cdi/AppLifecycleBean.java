@@ -31,7 +31,6 @@ public class AppLifecycleBean {
 	String latexRestClientUrl;
 
 	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.InitAccessTokenRestClient\".url")
-
 	String initAccesstokenUrl;
 
 	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.TokenExchangeRestClient\".url")
@@ -49,23 +48,26 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
 
-	@ConfigProperty(name = "quarkus.http.cors.origins", defaultValue = "")
+	@ConfigProperty(name = "quarkus.http.cors.origins")
 	String corsAllowedOrigins;
 
-	@ConfigProperty(name = "delay.milliseconds", defaultValue = "0")
+	@ConfigProperty(name = "delay.milliseconds")
 	long delayMillis = 0;
 
 	@ConfigProperty(name = "session.idle.timeout")
 	int sessionIdleTimeoutMinutes = 120;
-
-	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.InitAccessTokenRestClient\".url")
-	String oidcUrl;
 
 	@ConfigProperty(name = "clamav.host")
 	String clamAVHost;
 
 	@ConfigProperty(name = "clamav.port")
 	String clamAVPort;
+
+	@ConfigProperty(name = "csrf.enabled")
+	String csrfEnabled;
+
+	@ConfigProperty(name = "target.origin")
+	String targetOrigin;
 
 	void onStartup(@Observes final StartupEvent ev) {
 
@@ -76,14 +78,15 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  session timeout nach {} min", sessionIdleTimeoutMinutes);
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
-		LOGGER.info(" ===========>  oidcUrl={}", oidcUrl);
 		LOGGER.info(" ===========>  latexRestClientUrl={}", latexRestClientUrl);
 		LOGGER.info(" ===========>  initAccesstokenUrl={}", initAccesstokenUrl);
 		LOGGER.info(" ===========>  tokenExchangeRestClientUrl={}", tokenExchangeRestClientUrl);
-		LOGGER.info(" ===========>  port={}", port);
+		LOGGER.info(" ===========>  targetOrigin={}", targetOrigin);
 		LOGGER.info(" ===========>  ClamAV: host={},port={}", clamAVHost, clamAVPort);
-		LOGGER.info(" ===========>  quarkusRootPath={}", quarkusRootPath);
 		LOGGER.info(" ===========>  loginRedirectUrl={}", loginRedirectUrl);
+		LOGGER.info(" ===========>  csrfEnabled={}", csrfEnabled);
+		LOGGER.info(" ===========>  quarkusRootPath={}", quarkusRootPath);
+		LOGGER.info(" ===========>  port={}", port);
 
 		if (delayMillis > 0) {
 

@@ -33,7 +33,7 @@ import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
 /**
  * DeskriptorenResource
  */
-@Path("deskriptoren")
+@Path("mja-api/deskriptoren")
 @Tag(name = "Deskriptoren")
 public class DeskriptorenResource {
 

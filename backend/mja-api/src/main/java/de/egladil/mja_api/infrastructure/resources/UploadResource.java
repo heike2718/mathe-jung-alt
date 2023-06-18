@@ -34,7 +34,7 @@ import de.egladil.mja_api.domain.utils.DevDelayService;
 /**
  * UploadResource
  */
-@Path("/uploads")
+@Path("mja-api/uploads")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Upload")
 public class UploadResource {

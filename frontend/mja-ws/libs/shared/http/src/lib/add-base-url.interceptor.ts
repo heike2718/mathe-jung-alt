@@ -21,8 +21,8 @@ export class AddBaseUrlInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
 
     let url = req.url;
-    if (url.startsWith('/')) {
-      url = `${this.#config.baseUrl}${req.url}`;
+    if (!url.startsWith('/mja-api')) {
+      url =  '/mja-api' + req.url;// `${this.#config.baseUrl}${req.url}`;
     }
 
     const auth = localStorage.getItem('corellationId');

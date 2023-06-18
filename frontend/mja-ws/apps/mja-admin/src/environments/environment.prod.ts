@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://opa-wetterwachs.de/mja-api',
+  baseUrl: '',
   withCredentials: false,
   assetsPath: '/mja-admin/assets/'
 };

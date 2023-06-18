@@ -29,7 +29,7 @@ import io.vertx.core.eventbus.EventBus;
 /**
  * SwaggerResource
  */
-@Path("/swagger")
+@Path("mja-api/swagger")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 public class SwaggerResource {
 

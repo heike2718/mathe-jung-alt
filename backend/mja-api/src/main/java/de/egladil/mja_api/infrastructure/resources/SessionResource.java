@@ -38,7 +38,7 @@ import de.egladil.mja_api.domain.utils.DevDelayService;
  * SessionResource
  */
 @RequestScoped
-@Path("session")
+@Path("mja-api/session")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Session")

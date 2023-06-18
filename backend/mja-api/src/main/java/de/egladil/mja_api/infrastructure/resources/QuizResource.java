@@ -40,7 +40,7 @@ import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 /**
  * QuizResource
  */
-@Path("/quiz/v1")
+@Path("mja-api/quiz/v1")
 @Tag(name = "Quiz", description = "Stellt Aufgaben von Rätselgruppen in verschiedenen Formen als Quiz zur Verfügung.")
 public class QuizResource {
 

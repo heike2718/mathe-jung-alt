@@ -17,7 +17,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 /**
  * LaTeXRestClient
  */
-@RegisterRestClient
+@RegisterRestClient(configKey = "latex-api")
 @Path("")
 @Consumes(MediaType.TEXT_PLAIN)
 @Produces(MediaType.APPLICATION_JSON)

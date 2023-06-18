@@ -59,7 +59,7 @@ import de.egladil.web.commons_validation.payload.MessagePayload;
 /**
  * RaetselgruppenResource
  */
-@Path("raetselgruppen")
+@Path("mja-api/raetselgruppen")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Raetselgruppen")
 public class RaetselgruppenResource {

@@ -52,7 +52,7 @@ import de.egladil.mja_api.domain.utils.DevDelayService;
 /**
  * RaetselResource
  */
-@Path("/raetsel")
+@Path("mja-api/raetsel")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Raetsel")
 public class RaetselResource {

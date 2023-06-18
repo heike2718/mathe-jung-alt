@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:9210',
+  baseUrl: 'http://localhost:9210/',
   withCredentials: true,
   assetsPath: '/assets/'
 };
