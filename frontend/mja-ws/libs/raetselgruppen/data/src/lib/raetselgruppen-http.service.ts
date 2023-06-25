@@ -18,7 +18,7 @@ import { GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, QUERY_P
 export class RaetselgruppenHttpService {
 
     #http = inject(HttpClient);
-    #url = '/raetselgruppen';
+    #url = '/mja-api/raetselgruppen';
 
     findRaetselgruppen(suchparameter: RaetselgruppenSuchparameter, pageDefinition: PageDefinition): Observable<RaetselgruppenTreffer> {
 

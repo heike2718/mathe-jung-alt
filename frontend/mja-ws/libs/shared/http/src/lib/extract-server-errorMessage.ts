@@ -40,8 +40,8 @@ export function extractServerErrorMessage(error: HttpErrorResponse): Message {
     } else {
         const payload: Message = errorResponse.error;
 
-        if (payload) {
-            return payload;
+        if (payload && payload.level && payload.message) {
+            return {message: payload.message, level: payload.level};
         }
     }
 
@@ -51,15 +51,15 @@ export function extractServerErrorMessage(error: HttpErrorResponse): Message {
 
 function getGenericMessageForStatus(status: number): Message {
 
-    let result = 'status: ';
+    let result = '';
 
     switch (status) {
-        case 400: result += 'Payload oder Queryparameter haben Fehler'; break;
-        case 401: result += 'keine Berechtigung'; break;
-        case 403: result += 'unerlaubte Aktion'; break;
-        case 404: result += 'Das Objekt existiert nicht'; break;
-        case 409: result += 'Speichern wegen eines Datenkonflikts nicht möglich'; break;
-        default: result += 'Im Backend ist ein unerwarteter Fehler aufgetreten.';
+        case 400: result = 'Payload oder Queryparameter haben Fehler'; break;
+        case 401: result = 'keine Berechtigung (401)'; break;
+        case 403: result = 'unerlaubte Aktion (403)'; break;
+        case 404: result = 'Das Objekt existiert nicht (404)'; break;
+        case 409: result = 'Speichern wegen eines Datenkonflikts nicht möglich'; break;
+        default: result = 'Im Backend ist ein unerwarteter Fehler aufgetreten.';
     }
 
     return { level: 'ERROR', message: result };

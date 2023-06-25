@@ -21,7 +21,7 @@ export class RaetselHttpService {
 
     #http = inject(HttpClient);
 
-    #url = '/raetsel';
+    #url = '/mja-api/raetsel';
 
     findRaetsel(suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
 

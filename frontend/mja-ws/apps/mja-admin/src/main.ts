@@ -17,7 +17,7 @@ import localeDe from '@angular/common/locales/de';
 import { Configuration } from '@mja-ws/shared/config';
 import { authDataProvider } from '@mja-ws/shared/auth/api';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AddBaseUrlInterceptor, ErrorInterceptor } from '@mja-ws/shared/http';
+import { MjaAPIHttpInterceptor, ErrorInterceptor } from '@mja-ws/shared/http';
 import { ErrorHandlerService } from './app/services/error-handler.service';
 import { LocalStorageEffects, localStorageReducer, loggedOutMetaReducer } from '@mja-ws/local-storage-data';
 import { LoadingInterceptor } from '@mja-ws/shared/messaging/api';
@@ -78,7 +78,7 @@ bootstrapApplication(AppComponent, {
     },
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: LoadingInterceptor },
-    { provide: HTTP_INTERCEPTORS, multi: true, useClass: AddBaseUrlInterceptor },
+    { provide: HTTP_INTERCEPTORS, multi: true, useClass: MjaAPIHttpInterceptor },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: ErrorInterceptor },
   ],
 });

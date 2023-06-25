@@ -7,7 +7,7 @@ import { UploadComponentModel } from "./file-upload.model";
 @Injectable({ providedIn: 'root' })
 export class FileUploadService {
 
-    #url = '/uploads/v1';
+    #url = '/mja-api/uploads/v1';
 
     #http = inject(HttpClient);
 

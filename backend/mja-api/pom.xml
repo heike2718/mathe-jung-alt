@@ -8,7 +8,7 @@
 
 	<groupId>de.egladil</groupId>
 	<artifactId>mja-api</artifactId>
-	<version>1.5.0</version>
+	<version>1.5.1</version>
 
 	<description>Webservice für "Mathe für jung und alt"- Administration</description>
 
@@ -56,7 +56,7 @@
 		<!-- START quarkus dependencies -->
 		<dependency>
 			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-rest-client-reactive</artifactId>
+			<artifactId>quarkus-rest-client</artifactId>
 		</dependency>
 
 		<dependency>

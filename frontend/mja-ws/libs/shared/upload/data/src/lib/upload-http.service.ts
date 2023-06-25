@@ -9,7 +9,7 @@ import { Message } from "@mja-ws/shared/messaging/api";
 })
 export class UploadHttpService {
 
-    #url = '/uploads/v1';
+    #url = '/mja-api/uploads/v1';
 
     #http = inject(HttpClient);
 

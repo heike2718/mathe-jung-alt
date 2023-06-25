@@ -11,7 +11,7 @@ import { Configuration } from '@mja-ws/shared/config';
 import { generateUUID } from '@mja-ws/shared/util';
 
 @Injectable()
-export class AddBaseUrlInterceptor implements HttpInterceptor {
+export class MjaAPIHttpInterceptor implements HttpInterceptor {
 
   #config = inject(Configuration);
 
@@ -20,10 +20,7 @@ export class AddBaseUrlInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
 
-    let url = req.url;
-    if (!url.startsWith('/mja-api')) {
-      url =  '/mja-api' + req.url;// `${this.#config.baseUrl}${req.url}`;
-    }
+    const url = this.#config.baseUrl + req.url;
 
     const auth = localStorage.getItem('corellationId');
     

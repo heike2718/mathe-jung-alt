@@ -18,7 +18,7 @@ import de.egladil.mja_api.domain.auth.dto.OAuthClientCredentials;
 /**
  * InitAccessTokenRestClient
  */
-@RegisterRestClient(configKey = "access-token-api")
+@RegisterRestClient
 @Path("clients")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)

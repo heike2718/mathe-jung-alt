@@ -19,7 +19,7 @@ export class CoreQuelleEffects {
         return this.#actions.pipe(
             ofType(coreQuelleActions.load_quelle_admin),
             concatMap(() =>
-                this.#httpClient.get<QuelleUI>('/quellen/admin/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
+                this.#httpClient.get<QuelleUI>('/mja-api/quellen/admin/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
             ),
             map((quelle: QuelleUI) => coreQuelleActions.core_quelle_admin_loaded({ quelle }))
         );

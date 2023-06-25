@@ -27,7 +27,7 @@ export class AuthEffects {
 
         return this.#actions.pipe(
             ofType(authActions.request_login_url),
-            concatMap(() => this.#httpClient.get<Message>('/session/authurls/login/' + this.configuration.clientType)),
+            concatMap(() => this.#httpClient.get<Message>('/mja-api/session/authurls/login/' + this.configuration.clientType)),
             map((message: Message) => authActions.redirect_to_auth({ authUrl: message.message }))
         );
 
@@ -46,7 +46,7 @@ export class AuthEffects {
         return this.#actions.pipe(
             ofType(authActions.init_session),
             concatMap(({ authResult }) =>
-                this.#httpClient.post<Session>('/session/login/' + this.configuration.clientType, authResult)
+                this.#httpClient.post<Session>('/mja-api/session/login/' + this.configuration.clientType, authResult)
             ),
             map((session: Session) => authActions.session_created({ session }))
         );
@@ -63,7 +63,7 @@ export class AuthEffects {
         return this.#actions.pipe(
             ofType(authActions.log_out),
             concatMap(() =>
-                this.#httpClient.delete<Message>('/session/logout')),
+                this.#httpClient.delete<Message>('/mja-api/session/logout')),
             tap(() => this.#coreFacade.handleLogout()),
             map(() => authActions.logged_out()),
             catchError(() => of(authActions.logged_out()))

@@ -1,24 +1,30 @@
 import {
-    HttpEvent,
-    HttpHandler,
-    HttpInterceptor,
-    HttpRequest,
-  } from '@angular/common/http';
-  import { Injectable } from '@angular/core';
-  import { catchError, Observable, throwError } from 'rxjs';
-  
-  @Injectable()
-  export class ErrorInterceptor implements HttpInterceptor {
-  
-   intercept(
-      req: HttpRequest<unknown>,
-      next: HttpHandler
-    ): Observable<HttpEvent<unknown>> {
-      return next.handle(req).pipe(
-        catchError((err) => {          
-          return throwError(() => err);
-        })
-      );
-    }
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { MessageService } from '@mja-ws/shared/messaging/api';
+import { catchError, Observable, throwError } from 'rxjs';
+import { ERROR_MESSAGE_CONTEXT } from './http.context';
+
+@Injectable()
+export class ErrorInterceptor implements HttpInterceptor {
+
+  #messageService = inject(MessageService);
+
+  intercept(
+    req: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    return next.handle(req).pipe(
+      catchError((err) => {        
+        const errorMessageContext = req.context.get(ERROR_MESSAGE_CONTEXT);
+        this.#messageService.error(errorMessageContext);
+        err['message'] = errorMessageContext;
+        return throwError(() => err);
+      })
+    );
   }
-  
+}

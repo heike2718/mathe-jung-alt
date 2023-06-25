@@ -1,4 +1,4 @@
-export { AddBaseUrlInterceptor } from './lib/add-base-url.interceptor';
+export { MjaAPIHttpInterceptor } from './lib/mja-api-http.interceptor';
 
 export { OPEN_API_HTTP_TOKEN, ERROR_MESSAGE_CONTEXT } from './lib/http.context';
 
