@@ -6,6 +6,7 @@ package de.egladil.mja_api.domain.generatoren;
 
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 
 /**
@@ -82,6 +83,14 @@ public interface RaetselFileService {
 	 * @return            byte[]
 	 */
 	byte[] findPDF(String schluessel);
+
+	/**
+	 * Falls es schluessel.log oder schluessel_l.log gibt, werden sie in das Array verpackt zum Downloaden.
+	 *
+	 * @param  schluessel
+	 * @return
+	 */
+	GeneratedFile[] getLaTeXLogs(String schluessel);
 
 	/**
 	 * Prüft, ob die Datei existiert.

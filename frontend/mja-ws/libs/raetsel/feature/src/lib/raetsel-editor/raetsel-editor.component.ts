@@ -268,6 +268,12 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     }
   }
 
+  downloadLatexLogs(): void {
+    if (this.#raetselDetails && this.#raetselDetails.schluessel) {
+      this.raetselFacade.downloadLatexLogs(this.#raetselDetails.schluessel)
+    }
+  }
+
   #initForm() {
 
     const raetsel = this.#raetselDetails;

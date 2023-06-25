@@ -1,3 +1,3 @@
 import { createAction } from '@ngrx/store';
 
-export const noopAction = createAction('NOOP');
+export const noopAction = createAction('[Util] NOOP');

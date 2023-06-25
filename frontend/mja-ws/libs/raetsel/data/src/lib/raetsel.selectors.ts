@@ -29,11 +29,17 @@ const suchfilter = createSelector(
     (state) => state.raetselSuchfilter
 );
 
+const generateLatexError = createSelector(
+    selectRaetselState,
+    (state) => state.generateLatexError
+);
+
 export const fromRaetsel = {
     isLoaded,
     page,
     paginationState,
     raetselDetails,
-    suchfilter
+    suchfilter,
+    generateLatexError
 };
 

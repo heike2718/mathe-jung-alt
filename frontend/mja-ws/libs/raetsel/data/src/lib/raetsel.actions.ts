@@ -13,11 +13,14 @@ export const raetselActions = createActionGroup({
         'GENERATE_RAETSEL_PNG': props<{ raetselID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>(),
         'RAETSEL_PNG_GENERATED': props<{ images: GeneratedImages }>(),
         'GENERATE_RAETSEL_PDF': props<{ raetselID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>(),
+        'LATEX_ERRORS_DETECTED': emptyProps(),
         'RAETSEL_PDF_GENERATED':props<{ pdf: GeneratedFile }>(),
         'RAETSELSUCHFILTER_CHANGED': props<{suchfilter: RaetselSuchfilter}>(),
         'RAETSEL_CANCEL_SELECTION': emptyProps(),
         'RESET_RAETSELSUCHFILTER': emptyProps(),
         'SAVE_RAETSEL': props<{editRaetselPayload: EditRaetselPayload}>(),
         'RAETSEL_SAVED': props<{raetselDetails: RaetselDetails}>(),
+        'FIND_LATEXLOGS': props<{schluessel: string}>(),
+        'LATEXLOGS_FOUND':props<{ files: GeneratedFile[] }>(),
     }
 });

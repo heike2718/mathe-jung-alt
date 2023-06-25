@@ -107,6 +107,12 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  downloadLatexLogs(): void {
+    if (this.#raetselDetails) {
+      this.raetselFacade.downloadLatexLogs(this.#raetselDetails.schluessel)
+    }
+  }
+
   #openPrintDialog(outputformat: OUTPUTFORMAT): void {
 
     const dialogData: SelectPrintparametersDialogData = {

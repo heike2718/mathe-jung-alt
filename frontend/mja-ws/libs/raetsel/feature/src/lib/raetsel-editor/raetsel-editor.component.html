@@ -135,12 +135,17 @@
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 [disabled]="!form.valid || antwortvorschlaegeErrors()" (click)="submit()">speichern</button></div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                [disabled]="generierenDiabled()" matTooltip="PNG Frage und Lösung generieren"  (click)="openPrintPNGDialog()">PNG generieren</button></div>
-        <div *ngIf="raetselDetails.id !== 'neu'" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                matTooltip="zurück zur Detailansicht" (click)="cancelEdit()">Abbruch/Details</button>
+                [disabled]="generierenDiabled()" matTooltip="PNG Frage und Lösung generieren"
+                (click)="openPrintPNGDialog()">PNG generieren</button></div>
+        <div *ngIf="raetselFacade.generateLatexError$ | async" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                matTooltip="Logdateien herunterladen"
+                (click)="downloadLatexLogs()">LaTeX-Logs</button></div>
+        <div *ngIf="raetselDetails.id !== 'neu'" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill
+                mat-raised-button color="primary" matTooltip="zurück zur Detailansicht"
+                (click)="cancelEdit()">Abbruch/Details</button>
         </div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-            matTooltip="zurück zur Suche" (click)="gotoSuche()">Rätselsuche</button>
+                matTooltip="zurück zur Suche" (click)="gotoSuche()">Rätselsuche</button>
         </div>
     </div>
 

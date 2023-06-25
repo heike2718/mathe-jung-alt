@@ -17,6 +17,7 @@ import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 
@@ -133,6 +134,45 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		String path = latexBaseDir + File.separator + schluessel + SUFFIX_PDF + ".pdf";
 		return MjaFileUtils.loadBinaryFile(path, true);
 
+	}
+
+	byte[] findLaTeXLogAufgabe(final String schluessel) {
+
+		String path = latexBaseDir + File.separator + schluessel + ".log";
+		return MjaFileUtils.loadBinaryFile(path, false);
+	}
+
+	byte[] findLaTeXLogLoesung(final String schluessel) {
+
+		String path = latexBaseDir + File.separator + schluessel + SUFFIX_LOESUNGEN + ".log";
+		return MjaFileUtils.loadBinaryFile(path, false);
+	}
+
+	@Override
+	public GeneratedFile[] getLaTeXLogs(final String schluessel) {
+
+		byte[] aufgabeLog = this.findLaTeXLogAufgabe(schluessel);
+		byte[] loesungLog = this.findLaTeXLogLoesung(schluessel);
+
+		if (aufgabeLog != null && loesungLog != null) {
+
+			GeneratedFile[] result = new GeneratedFile[2];
+			result[0] = new GeneratedFile(schluessel + ".log", aufgabeLog);
+			result[1] = new GeneratedFile(schluessel + SUFFIX_LOESUNGEN + ".log", loesungLog);
+			return result;
+		}
+
+		if (aufgabeLog != null) {
+
+			return new GeneratedFile[] { new GeneratedFile(schluessel + ".log", aufgabeLog) };
+		}
+
+		if (loesungLog != null) {
+
+			return new GeneratedFile[] { new GeneratedFile(schluessel + SUFFIX_LOESUNGEN + ".log", loesungLog) };
+		}
+
+		return new GeneratedFile[0];
 	}
 
 	@Override

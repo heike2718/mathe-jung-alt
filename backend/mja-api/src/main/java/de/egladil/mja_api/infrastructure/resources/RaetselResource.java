@@ -39,6 +39,7 @@ import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
+import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.RaetselGeneratorService;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -67,6 +68,9 @@ public class RaetselResource {
 
 	@Inject
 	RaetselService raetselService;
+
+	@Inject
+	RaetselFileService raetselFileService;
 
 	@Inject
 	RaetselGeneratorService generatorService;
@@ -404,6 +408,29 @@ public class RaetselResource {
 		LOGGER.info("Raetsel PDF generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(userUuid, 11));
 
 		return result;
+	}
+
+	@GET
+	@Path("latexlogs/v1/{schluessel}")
+	// @RolesAllowed({ "ADMIN", "AUTOR" })
+	@Operation(
+		operationId = "downloadLatexLogFiles",
+		summary = "Läd aus dem LaTeX-Verzeichnis die Dateien schluessel.log und schluessel_l.log herunter, wenn sie existieren.")
+	@Parameters({
+		@Parameter(
+			name = "schluessel",
+			description = "5stelliger SCHLUESSEL eines Rätsels") })
+	@APIResponse(
+		name = "DownloadLatexLogFilesOK-Response",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = GeneratedFile[].class)))
+	public GeneratedFile[] downloadLatexLogFiles(@Pattern(
+		regexp = "^[\\d]{5}$",
+		message = "schluessel muss aus genau 5 Ziffern bestehen") @PathParam(value = "schluessel") final String schluessel) {
+
+		return raetselFileService.getLaTeXLogs(schluessel);
 	}
 
 	/**

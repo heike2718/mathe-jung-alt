@@ -17,6 +17,26 @@ public class GeneratedFile {
 	@JsonProperty
 	private byte[] fileData;
 
+	/**
+	 *
+	 */
+	public GeneratedFile() {
+
+		super();
+
+	}
+
+	/**
+	 * @param fileName
+	 * @param fileData
+	 */
+	public GeneratedFile(final String fileName, final byte[] fileData) {
+
+		super();
+		this.fileName = fileName;
+		this.fileData = fileData;
+	}
+
 	public String getFileName() {
 
 		return fileName;

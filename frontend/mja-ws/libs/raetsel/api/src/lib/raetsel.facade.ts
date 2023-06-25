@@ -1,14 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SelectItemsFacade } from '@mja-ws/core/api';
-import { DeskriptorUI,
+import {
+  DeskriptorUI,
   LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
   OUTPUTFORMAT,
   PageDefinition,
   PaginationState,
   QuelleUI,
   SelectableItem,
-  SelectItemsCompomentModel 
+  SelectItemsCompomentModel
 } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
 import { EditRaetselPayload, initialRaetselDetails, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
@@ -28,6 +29,7 @@ export class RaetselFacade {
 
   raetselDetails$: Observable<RaetselDetails> = this.#store.select(fromRaetsel.raetselDetails).pipe(filterDefined, deepClone);
   suchfilter$: Observable<RaetselSuchfilter> = this.#store.select(fromRaetsel.suchfilter);
+  generateLatexError$: Observable<boolean> = this.#store.select(fromRaetsel.generateLatexError);
 
   #selectItemsFacade = inject(SelectItemsFacade);
 
@@ -91,8 +93,8 @@ export class RaetselFacade {
       // Exception werfen!!!
       return;
     }
-    const raetselDetails: RaetselDetails = {...initialRaetselDetails, quelle: quelle};
-    this.#store.dispatch(raetselActions.raetsel_details_loaded({raetselDetails: raetselDetails, navigateTo: 'raetsel/editor'}));
+    const raetselDetails: RaetselDetails = { ...initialRaetselDetails, quelle: quelle };
+    this.#store.dispatch(raetselActions.raetsel_details_loaded({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
   }
 
   public initSelectItemsCompomentModel(selectedDeskriptoren: DeskriptorUI[], alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
@@ -122,5 +124,10 @@ export class RaetselFacade {
 
   public saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
     this.#store.dispatch(raetselActions.save_raetsel({ editRaetselPayload }));
+  }
+
+
+  public downloadLatexLogs(schluessel: string): void {
+    this.#store.dispatch(raetselActions.find_latexlogs({ schluessel: schluessel }));
   }
 }

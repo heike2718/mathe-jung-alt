@@ -62,6 +62,8 @@ export class RaetselHttpService {
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
+        const obs$ = this.#http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers, params: params });
+
         return this.#http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers, params: params });
     }
 
@@ -75,12 +77,22 @@ export class RaetselHttpService {
         return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
     }
 
+    findLatexLogs(schluessel: string): Observable<GeneratedFile[]> {
+
+        const url = this.#url + '/latexlogs/v1/' + schluessel;
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+
+        return this.#http.get<GeneratedFile[]>(url, { headers: headers });
+    }
+
+
     saveRaetsel(editRaetselPayload: EditRaetselPayload): Observable<RaetselDetails> {
 
         const url = this.#url + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        
+
         if ('neu' === editRaetselPayload.raetsel.id) {
             return this.#http.post<RaetselDetails>(url, editRaetselPayload, { headers });
         }

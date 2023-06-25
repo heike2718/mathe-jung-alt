@@ -12,4 +12,14 @@ export class FileDownloadService {
         link.download = `${fileName}`
         link.click();
     }
+
+    downloadText(fileData: Blob, fileName: string) {
+        const source = `data:text/plain;base64,${fileData}`;
+        const link = document.createElement("a");
+        link.href = source;
+        link.download = `${fileName}`
+        link.click();
+    }
+
+    
 }
