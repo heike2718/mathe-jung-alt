@@ -81,7 +81,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	}
 
 	@Override
-	public GeneratedFile downloadLaTeXSource(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile downloadLaTeXSource(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		String template = generateLaTeX(raetselgruppe, aufgaben, layoutAntwortvorschlaege);
 
@@ -211,6 +211,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 					headerAufgabe = LaTeXConstants.HEADER_AUFGABE_SCHLUESSEL_PUNKTE.replace("{0}", aufgabe.getSchluessel());
 					headerAufgabe = headerAufgabe.replace("{1}", aufgabe.getPunkte() + "");
 				} else {
+
 					headerAufgabe = LaTeXConstants.HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE.replace("{0}", aufgabe.getNummer());
 					headerAufgabe = headerAufgabe.replace("{1}", aufgabe.getSchluessel());
 					headerAufgabe = headerAufgabe.replace("{2}", aufgabe.getPunkte() + "");
