@@ -20,8 +20,6 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.grafiken.Grafik;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
@@ -34,8 +32,6 @@ import de.egladil.mja_api.domain.utils.DevDelayService;
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Grafikvorschau")
 public class GrafikResource {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(GrafikResource.class);
 
 	@Inject
 	DevDelayService delayService;

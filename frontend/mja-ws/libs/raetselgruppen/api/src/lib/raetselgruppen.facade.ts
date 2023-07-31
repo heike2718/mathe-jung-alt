@@ -1,7 +1,8 @@
 import { inject, Injectable } from "@angular/core";
-import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState } from "@mja-ws/core/model";
+import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, STATUS } from "@mja-ws/core/model";
 import { fromRaetselgruppen, raetselgruppenActions } from "@mja-ws/raetselgruppen/data";
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
+import { FrageLoesungImagesComponent } from "@mja-ws/shared/components";
 import { deepClone, filterDefined } from "@mja-ws/shared/ngrx-utils";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -48,6 +49,37 @@ export class RaetselgruppenFacade {
 
     editRaetselgruppe(raetselgruppeBasisdaten: RaetselgruppeBasisdaten): void {
         this.#store.dispatch(raetselgruppenActions.edit_raetselguppe({ raetselgruppeBasisdaten }));
+    }
+
+    reloadRaetselgruppe(raetselgruppeBasisdaten: RaetselgruppeBasisdaten, anzahlElemente: number): void {
+
+        const raetselgruppe: RaetselgruppenTrefferItem = {
+            anzahlElemente: anzahlElemente,
+            geaendertDurch: raetselgruppeBasisdaten.geaendertDurch,
+            id: raetselgruppeBasisdaten.id,
+            name: raetselgruppeBasisdaten.name,
+            referenz: raetselgruppeBasisdaten.referenz,
+            referenztyp: raetselgruppeBasisdaten.referenztyp,
+            schwierigkeitsgrad: raetselgruppeBasisdaten.schwierigkeitsgrad,
+            status: raetselgruppeBasisdaten.status
+        };
+
+        this.selectRaetselgruppe(raetselgruppe);
+    }
+
+    toggleStatus(raetselgruppeBasisdaten: RaetselgruppeBasisdaten): void {
+
+        const editRaetselgruppePayload: EditRaetselgruppePayload = {
+            id:raetselgruppeBasisdaten.id,
+            kommentar: raetselgruppeBasisdaten.kommentar,
+            name: raetselgruppeBasisdaten.name,
+            referenz: raetselgruppeBasisdaten.referenz,
+            referenztyp: raetselgruppeBasisdaten.referenztyp,
+            schwierigkeitsgrad: raetselgruppeBasisdaten.schwierigkeitsgrad,
+            status: raetselgruppeBasisdaten.status === "ERFASST" ? "FREIGEGEBEN" : "ERFASST"
+        };
+
+        this.saveRaetselgruppe(editRaetselgruppePayload);
     }
 
     saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): void {

@@ -7,7 +7,9 @@
         <div fxLayoutAlign="left center" fxFlex="20">
             <mat-label>ID:</mat-label>
         </div>
-        <div fxLayoutAlign="left center" fxFlex="80">{{gruppe.id}}</div>
+        <div fxLayoutAlign="left center" fxFlex="30">{{gruppe.id}}</div>
+        <div fxLayoutAlign="left center" fxFlex="10"><button mat-raised-button color="primary"
+                (click)="reload()">reload</button></div>
     </div>
 
     <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
@@ -63,7 +65,8 @@
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 (click)="generiereLaTeX()" [disabled]="buttonsGenerierenDisabled()">LaTeX herunterladen</button></div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                (click)="openPrintVorschauDialog()" [disabled]="buttonsGenerierenDisabled()">Vorschau (PDF)</button></div>
+                (click)="openPrintVorschauDialog()" [disabled]="buttonsGenerierenDisabled()">Vorschau (PDF)</button>
+        </div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 (click)="gotoUebersicht()">zur Übersicht</button>
         </div>

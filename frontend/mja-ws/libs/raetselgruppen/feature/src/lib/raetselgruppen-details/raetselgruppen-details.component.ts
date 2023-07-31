@@ -27,7 +27,7 @@ import { RaetselgruppeEditComponent } from '../raetselgruppe-edit/raetselgruppe-
     MatDialogModule,
     MatInputModule,
     MatListModule,
-    MatFormFieldModule,    
+    MatFormFieldModule,
     FrageLoesungImagesComponent,
     SelectPrintparametersDialogComponent,
     RaetselgruppenelementDialogComponent,
@@ -118,6 +118,22 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
     this.raetselgruppenFacade.editRaetselgruppe(this.#raetselgruppeBasisdaten);
   }
 
+  reloadDisabled(): boolean {
+    return !this.#basisdatenLoaded();
+  }
+
+  reload(): void {
+    this.raetselgruppenFacade.reloadRaetselgruppe(this.#raetselgruppeBasisdaten, this.#anzahlElemente);
+  }
+
+  toggleStatusDisabled(): boolean {
+    return !this.#basisdatenLoaded();
+  }
+
+  toggleStatus(): void {
+    this.raetselgruppenFacade.toggleStatus(this.#raetselgruppeBasisdaten);
+  }
+
   openNeuesRaetselgruppenelementDialog(): void {
 
     const dialogData: RaetselgruppenelementDialogData = {
@@ -155,6 +171,21 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
       this.#openConfirmLoeschenDialog($element);
     }
   }
+
+  onShowImagesElement($element: Raetselgruppenelement): void {
+
+    this.schluessel = $element.raetselSchluessel;
+    this.nummer = $element.nummer;
+    this.punkte = '' + $element.punkte;
+
+    this.#imagesSubscription.unsubscribe();
+    this.#imagesSubscription = this.#coreFacade.loadRaetselPNGs($element.raetselSchluessel).pipe(
+      tap((images: GeneratedImages) => this.images = images)
+    ).subscribe();
+
+  }
+  
+  
 
   #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData): void {
     const dialogRef = this.dialog.open(RaetselgruppenelementDialogComponent, {
@@ -205,16 +236,14 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  onShowImagesElement($element: Raetselgruppenelement): void {
+  #basisdatenLoaded(): boolean {
 
-    this.schluessel = $element.raetselSchluessel;
-    this.nummer = $element.nummer;
-    this.punkte = '' + $element.punkte;
+    if (this.#raetselgruppeBasisdaten) {
+      return true;
+    }
 
-    this.#imagesSubscription.unsubscribe();
-    this.#imagesSubscription = this.#coreFacade.loadRaetselPNGs($element.raetselSchluessel).pipe(
-      tap((images: GeneratedImages) => this.images = images)
-    ).subscribe();
-
+    return false;
   }
+
+
 }
