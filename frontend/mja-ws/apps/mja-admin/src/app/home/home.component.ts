@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
 
   #configService = inject(Configuration);
 
-  version = "1.5.2";
+  version = "1.5.3";
 
   imageSourceLogo = '';
 

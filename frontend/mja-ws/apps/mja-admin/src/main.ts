@@ -1,4 +1,4 @@
-import { enableProdMode, ErrorHandler, importProvidersFrom, LOCALE_ID } from '@angular/core';
+import { enableProdMode, ErrorHandler, importProvidersFrom, isDevMode, LOCALE_ID } from '@angular/core';
 
 import { environment } from './environments/environment';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -8,7 +8,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
-import { provideRouterStore, routerReducer } from '@ngrx/router-store';
+import { provideRouterStore }  from '@ngrx/router-store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { appRoutes } from './app/app.routes';
 import { provideRouter } from '@angular/router';
@@ -53,7 +53,11 @@ bootstrapApplication(AppComponent, {
       }
     ),
     provideEffects([LocalStorageEffects]),
-    provideStoreDevtools(),
+    provideStoreDevtools({
+      maxAge: 25,
+      logOnly: !isDevMode(),
+      autoPause: true
+    }),
 
     importProvidersFrom(
       HttpClientModule,
