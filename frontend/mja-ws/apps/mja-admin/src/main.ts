@@ -55,7 +55,7 @@ bootstrapApplication(AppComponent, {
     provideEffects([LocalStorageEffects]),
     provideStoreDevtools({
       maxAge: 25,
-      logOnly: !isDevMode(),
+      logOnly: !environment.production,
       autoPause: true
     }),
 
