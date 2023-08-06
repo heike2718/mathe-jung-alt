@@ -57,19 +57,13 @@ public class RaetselgruppenResourceTest {
 	@TestSecurity(user = "testuser", roles = { "AUTOR" })
 	void testFindRaetselgruppen() throws Exception {
 
-		Response response = given()
+		RaetselgruppensucheTreffer treffer = given()
 			.contentType(ContentType.JSON)
 			.get(
-				"v1?limit=20&offset=0&referenz=2022&referenztyp=MINIKAENGURU&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc");
-
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(200, response.getStatusCode());
-
-		RaetselgruppensucheTreffer treffer = new ObjectMapper().readValue(responsePayload,
-			RaetselgruppensucheTreffer.class);
+				"v1?limit=20&offset=0&referenz=2022&referenztyp=MINIKAENGURU&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc")
+			.then()
+			.extract()
+			.as(RaetselgruppensucheTreffer.class);
 
 		assertEquals(1, treffer.getItems().size());
 		assertEquals(1l, treffer.getTrefferGesamt());

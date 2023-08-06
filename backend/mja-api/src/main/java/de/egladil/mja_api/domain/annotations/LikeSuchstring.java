@@ -15,10 +15,9 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
-
 import de.egladil.mja_api.infrastructure.validation.LikeSuchstringValidator;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 /**
  * LikeSuchstring

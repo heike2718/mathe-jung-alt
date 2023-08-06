@@ -6,28 +6,6 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import java.util.Optional;
 
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.SecurityContext;
-
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -40,6 +18,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
@@ -55,6 +34,25 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.web.commons_validation.payload.MessagePayload;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * RaetselgruppenResource
@@ -66,8 +64,8 @@ public class RaetselgruppenResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenResource.class);
 
-	@Context
-	SecurityContext securityContext;
+	@Inject
+	SessionService sessionService;
 
 	@Inject
 	DevDelayService delayService;
@@ -162,7 +160,7 @@ public class RaetselgruppenResource {
 
 		delayService.pause();
 
-		String userUuid = this.securityContext.getUserPrincipal().getName();
+		String userUuid = this.sessionService.getUser().getName();
 
 		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeAnlegen(requestPayload);
 
@@ -201,7 +199,7 @@ public class RaetselgruppenResource {
 
 		delayService.pause();
 
-		String userUuid = this.securityContext.getUserPrincipal().getName();
+		String userUuid = this.sessionService.getUser().getName();
 
 		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeBasisdatenAendern(requestPayload);
 

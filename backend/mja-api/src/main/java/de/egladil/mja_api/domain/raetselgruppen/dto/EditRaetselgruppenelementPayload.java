@@ -4,8 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetselgruppen.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 

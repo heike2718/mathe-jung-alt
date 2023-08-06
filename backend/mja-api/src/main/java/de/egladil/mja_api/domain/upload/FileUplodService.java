@@ -7,19 +7,17 @@ package de.egladil.mja_api.domain.upload;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.dto.UploadData;
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * FileUplodService
@@ -40,8 +38,8 @@ public class FileUplodService {
 	@Inject
 	UploadScannerDelegate uploadScanner;
 
-	@Context
-	SecurityContext securityContext;
+	@Inject
+	SessionService sessionService;
 
 	public MessagePayload saveTheUpload(final UploadData uploadData, final String relativerPfad) {
 
@@ -50,7 +48,7 @@ public class FileUplodService {
 			processUploadService.processFile(uploadData);
 
 			UploadRequestDto uploadRequest = new UploadRequestDto()
-				.withBenutzerUuid(securityContext.getUserPrincipal().getName())
+				.withBenutzerUuid(sessionService.getUser().getName())
 				.withUploadData(uploadData).withRelativerPfad(relativerPfad);
 
 			uploadScanner.scanUpload(uploadRequest);

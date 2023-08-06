@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,9 +23,9 @@ import org.junit.jupiter.api.Test;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
-import io.quarkus.test.junit.mockito.InjectMock;
 import io.quarkus.test.security.TestSecurity;
 
 /**

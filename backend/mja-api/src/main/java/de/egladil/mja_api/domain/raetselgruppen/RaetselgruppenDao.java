@@ -6,8 +6,8 @@ package de.egladil.mja_api.domain.raetselgruppen;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;

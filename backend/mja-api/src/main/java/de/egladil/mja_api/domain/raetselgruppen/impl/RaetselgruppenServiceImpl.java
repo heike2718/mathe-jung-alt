@@ -7,15 +7,6 @@ package de.egladil.mja_api.domain.raetselgruppen.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.SecurityContext;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
@@ -42,6 +34,12 @@ import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * RaetselgruppenServiceImpl
@@ -51,8 +49,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenServiceImpl.class);
 
-	@Context
-	SecurityContext securityContext;
+	@Inject
+	SessionService sessionService;
 
 	@Inject
 	RaetselgruppenDao raetselgruppenDao;
@@ -104,8 +102,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		final RaetselgruppeDetails result = RaetselgruppeDetails.createFromDB(raetselgruppe);
 
-		if (PermissionUtils.hasWritePermission(securityContext.getUserPrincipal().getName(),
-			PermissionUtils.getRelevantRoles(securityContext), raetselgruppe.owner)) {
+		if (PermissionUtils.hasWritePermission(sessionService.getUser().getName(),
+			PermissionUtils.getRelevantRoles(sessionService), raetselgruppe.owner)) {
 
 			result.markiereAlsAenderbar();
 		}
@@ -131,7 +129,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	@Transactional
 	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload) throws WebApplicationException {
 
-		String userId = securityContext.getUserPrincipal().getName();
+		String userId = sessionService.getUser().getName();
 
 		if (!AbstractDomainEntity.UUID_NEUE_ENTITY.equals(payload.getId())) {
 
@@ -176,7 +174,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	@Transactional
 	public RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(final EditRaetselgruppePayload payload) throws WebApplicationException {
 
-		String userId = securityContext.getUserPrincipal().getName();
+		String userId = sessionService.getUser().getName();
 
 		if (dupletteNachKeysExistiert(payload)) {
 
@@ -502,11 +500,11 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	void checkPermission(final PersistenteRaetselgruppe ausDB) {
 
-		if (!PermissionUtils.hasWritePermission(securityContext.getUserPrincipal().getName(),
-			PermissionUtils.getRelevantRoles(securityContext), ausDB.owner)) {
+		if (!PermissionUtils.hasWritePermission(sessionService.getUser().getName(),
+			PermissionUtils.getRelevantRoles(sessionService), ausDB.owner)) {
 
 			LOGGER.warn("User {} hat versucht, Raetselgruppe {} mit Owner {} zu aendern",
-				securityContext.getUserPrincipal().getName(), ausDB.uuid,
+				sessionService.getUser().getName(), ausDB.uuid,
 				ausDB.owner);
 
 			throw new WebApplicationException(Status.UNAUTHORIZED);

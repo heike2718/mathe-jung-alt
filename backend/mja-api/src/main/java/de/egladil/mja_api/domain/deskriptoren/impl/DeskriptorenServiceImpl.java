@@ -13,21 +13,19 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * DeskriptorenServiceImpl
@@ -40,8 +38,8 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeskriptorenServiceImpl.class);
 
-	@Context
-	SecurityContext securityContext;
+	@Inject
+	SessionService sessionService;
 
 	@Inject
 	DeskriptorenRepository deskriptorenRepository;
@@ -62,7 +60,7 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 
 		List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).toList();
 
-		List<String> roles = PermissionUtils.getRelevantRoles(securityContext);
+		List<String> roles = PermissionUtils.getRelevantRoles(sessionService);
 
 		if (PermissionUtils.isUserAdmin(roles) || PermissionUtils.isUserAutor(roles)) {
 

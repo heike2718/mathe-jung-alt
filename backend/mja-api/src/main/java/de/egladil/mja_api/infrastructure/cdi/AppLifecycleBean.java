@@ -7,8 +7,8 @@ package de.egladil.mja_api.infrastructure.cdi;
 import java.io.File;
 import java.io.IOException;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;

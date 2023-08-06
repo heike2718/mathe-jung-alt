@@ -6,7 +6,7 @@ package de.egladil.mja_api.domain.raetselgruppen;
 
 import java.util.Optional;
 
-import javax.ws.rs.WebApplicationException;
+import jakarta.ws.rs.WebApplicationException;
 
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;

@@ -17,9 +17,9 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.NewCookie;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Cookie;
+import jakarta.ws.rs.core.NewCookie;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;

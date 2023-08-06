@@ -4,7 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.quellen;
 
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 

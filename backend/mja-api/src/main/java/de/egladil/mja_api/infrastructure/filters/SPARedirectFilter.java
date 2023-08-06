@@ -7,21 +7,18 @@ package de.egladil.mja_api.infrastructure.filters;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.vertx.ext.web.Router;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 
 /**
  * SPARedirectFilter
  */
 @ApplicationScoped
 public class SPARedirectFilter {
-
-	private static final String[] PATH_PREFIXES = { "/mja-api/" };
 
 	private static final Predicate<String> FILE_NAME_PREDICATE = Pattern.compile(".*[.][a-zA-Z\\d]+").asMatchPredicate();
 

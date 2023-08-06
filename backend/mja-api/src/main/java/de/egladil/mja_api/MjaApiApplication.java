@@ -4,12 +4,12 @@
 // =====================================================
 package de.egladil.mja_api;
 
-import javax.ws.rs.core.Application;
+import jakarta.ws.rs.core.Application;
 
 /**
  * MjaApiApplication
  */
 public class MjaApiApplication extends Application {
 
-	// bleibt leer
+	public static final String USER = "USER";
 }

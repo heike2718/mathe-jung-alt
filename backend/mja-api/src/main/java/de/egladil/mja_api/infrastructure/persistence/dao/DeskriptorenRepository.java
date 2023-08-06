@@ -4,7 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.persistence.dao;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;

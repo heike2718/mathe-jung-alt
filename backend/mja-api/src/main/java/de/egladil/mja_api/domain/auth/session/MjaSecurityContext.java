@@ -8,29 +8,30 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.Optional;
 
-import javax.ws.rs.core.SecurityContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * MjaSecurityContext
  */
-public class MjaSecurityContext implements SecurityContext {
+@Deprecated
+public class MjaSecurityContext {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(MjaSecurityContext.class);
 
-	private final Session session;
+	private Session session;
 
-	private final boolean secure;
+	private boolean secure;
 
-	public MjaSecurityContext(final Session session, final boolean secure) {
+	/**
+	 *
+	 */
+	public MjaSecurityContext() {
 
-		this.session = session;
-		this.secure = secure;
+		super();
+
 	}
 
-	@Override
 	public Principal getUserPrincipal() {
 
 		if (session == null || session.isAnonym()) {
@@ -41,7 +42,6 @@ public class MjaSecurityContext implements SecurityContext {
 		return session.getUser();
 	}
 
-	@Override
 	public boolean isUserInRole(final String role) {
 
 		if (session == null || session.isAnonym()) {
@@ -63,15 +63,25 @@ public class MjaSecurityContext implements SecurityContext {
 		return optRole.isPresent();
 	}
 
-	@Override
 	public boolean isSecure() {
 
 		return this.secure;
 	}
 
-	@Override
 	public String getAuthenticationScheme() {
 
 		return "Bearer";
+	}
+
+	public MjaSecurityContext withSession(final Session session) {
+
+		this.session = session;
+		return this;
+	}
+
+	public MjaSecurityContext withSecure(final boolean secure) {
+
+		this.secure = secure;
+		return this;
 	}
 }

@@ -26,6 +26,14 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 	@JsonProperty
 	private String fullName;
 
+	public static AuthenticatedUser createAnonymousUser() {
+
+		AuthenticatedUser result = new AuthenticatedUser("Anonym");
+		result.roles = new String[0];
+		result.fullName = "Gast";
+		return result;
+	}
+
 	/**
 	 * @param name
 	 */

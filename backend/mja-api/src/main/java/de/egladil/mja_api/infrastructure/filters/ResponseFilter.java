@@ -6,19 +6,17 @@ package de.egladil.mja_api.infrastructure.filters;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.Provider;
-
 import de.egladil.mja_api.domain.auth.config.ConfigService;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerResponseContext;
+import jakarta.ws.rs.container.ContainerResponseFilter;
+import jakarta.ws.rs.core.MultivaluedMap;
 
 /**
  * ResponseFilter
  */
-@Provider
+// @Provider
 public class ResponseFilter implements ContainerResponseFilter {
 
 	private static final String CONTENT_SECURITY_POLICY = "Content-Security-Policy";

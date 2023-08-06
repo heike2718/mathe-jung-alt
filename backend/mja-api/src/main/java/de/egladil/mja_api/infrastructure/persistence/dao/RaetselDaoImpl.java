@@ -7,10 +7,6 @@ package de.egladil.mja_api.infrastructure.persistence.dao;
 import java.math.BigInteger;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +16,9 @@ import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_api.domain.utils.SetOperationUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
 /**
  * RaetselDaoImpl
@@ -43,7 +42,7 @@ public class RaetselDaoImpl implements RaetselDao {
 			stmt = "SELECT count(*) FROM RAETSEL r WHERE MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring) AND STATUS = :status";
 		}
 
-		List<BigInteger> trefferliste = null;
+		List<Long> trefferliste = null;
 
 		if (nurFreigegebene) {
 
@@ -75,7 +74,7 @@ public class RaetselDaoImpl implements RaetselDao {
 			stmt = "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren AND STATUS = :status";
 		}
 
-		List<BigInteger> trefferliste = null;
+		List<Long> trefferliste = null;
 
 		if (nurFreigegebene) {
 

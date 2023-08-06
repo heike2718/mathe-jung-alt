@@ -4,7 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 

@@ -4,17 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.persistence.dao;
 
-import java.math.BigInteger;
 import java.util.List;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,6 +19,14 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabe
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
 import io.quarkus.panache.common.Parameters;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * RaetselgruppenDaoImpl
@@ -223,7 +221,7 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 	}
 
 	@Override
-	public List<PersistenteAufgabeReadonly> loadAufgabenByReaetselgruppe(String raetselgruppeId) {
+	public List<PersistenteAufgabeReadonly> loadAufgabenByReaetselgruppe(final String raetselgruppeId) {
 
 		return PersistenteAufgabeReadonly.list("select a from PersistenteAufgabeReadonly a where a.gruppe = :gruppe",
 			Parameters.with("gruppe", raetselgruppeId));
@@ -248,7 +246,7 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		String stmt = "SELECT COUNT(*) from RAETSELGRUPPENELEMENTE e WHERE e.GRUPPE = :gruppe";
 
 		@SuppressWarnings("unchecked")
-		List<BigInteger> trefferliste = entityManager.createNativeQuery(stmt).setParameter("gruppe", uuid).getResultList();
+		List<Long> trefferliste = entityManager.createNativeQuery(stmt).setParameter("gruppe", uuid).getResultList();
 
 		return trefferliste.get(0).longValue();
 	}

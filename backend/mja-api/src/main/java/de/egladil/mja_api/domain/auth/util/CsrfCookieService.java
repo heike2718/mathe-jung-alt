@@ -4,9 +4,9 @@
 // =====================================================
 package de.egladil.mja_api.domain.auth.util;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.core.NewCookie;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.NewCookie;
 
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 

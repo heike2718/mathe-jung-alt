@@ -7,13 +7,6 @@ package de.egladil.mja_api.domain.generatoren.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.SecurityContext;
-
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -21,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
@@ -33,6 +27,11 @@ import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * RaetselGeneratorServiceImpl
@@ -46,7 +45,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	String latexBaseDir;
 
 	@Inject
-	SecurityContext securityContext;
+	SessionService sessionService;
 
 	@RestClient
 	@Inject
@@ -67,7 +66,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 		if (raetsel.isSchreibgeschuetzt()) {
 
-			String userId = securityContext.getUserPrincipal().getName();
+			String userId = sessionService.getUser().getName();
 
 			LOGGER.warn("user {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
 				raetsel.getSchluessel());
@@ -182,14 +181,14 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 		Raetsel raetsel = loadRaetsel(raetselUuid);
 
-		List<String> relevantRoles = PermissionUtils.getRelevantRoles(securityContext);
+		List<String> relevantRoles = PermissionUtils.getRelevantRoles(sessionService);
 		boolean hasReadPermission = PermissionUtils.hasReadPermission(relevantRoles,
 			raetsel.getStatus());
 
 		if (!hasReadPermission) {
 
 			LOGGER.warn("user {} nicht berechtigt, PDF fuer Raetsel mit SCHLUESSEL={} zu generieren",
-				securityContext.getUserPrincipal().getName(),
+				sessionService.getUser().getName(),
 				raetsel.getSchluessel());
 
 			throw new WebApplicationException(Status.UNAUTHORIZED);

@@ -7,7 +7,7 @@ package de.egladil.mja_api.domain.raetsel;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern;
 
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;

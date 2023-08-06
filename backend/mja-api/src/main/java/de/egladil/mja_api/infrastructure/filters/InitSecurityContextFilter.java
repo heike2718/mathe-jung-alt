@@ -6,26 +6,23 @@ package de.egladil.mja_api.infrastructure.filters;
 
 import java.io.IOException;
 
-import javax.annotation.Priority;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.Priorities;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.PreMatching;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.ext.Provider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.MjaApiApplication;
 import de.egladil.mja_api.domain.auth.config.ConfigService;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
-import de.egladil.mja_api.domain.auth.session.MjaSecurityContext;
 import de.egladil.mja_api.domain.auth.session.Session;
 import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.auth.session.SessionUtils;
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Priorities;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.PreMatching;
+import jakarta.ws.rs.ext.Provider;
 
 /**
  * InitSecurityContextFilter
@@ -43,9 +40,6 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 	@Inject
 	SessionService sessionService;
-
-	@Context
-	ResourceInfo resourceInfo;
 
 	@Override
 	public void filter(final ContainerRequestContext requestContext) throws IOException {
@@ -80,9 +74,9 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 				if (session != null) {
 
-					boolean secure = !configService.getStage().equals(ConfigService.STAGE_DEV);
-					requestContext.setSecurityContext(new MjaSecurityContext(session, secure));
-					LOGGER.debug("securityContext set");
+					// Packen den User in die Session.
+					requestContext.setProperty(MjaApiApplication.USER, session.getUser());
+					LOGGER.debug("user set");
 
 				}
 			}
@@ -94,9 +88,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 		AuthenticatedUser user = new AuthenticatedUser("b865fc75-1bcf-40c7-96c3-33744826e49f").withFullName("Heike Winkelvoß")
 			.withIdReference("bla").withRoles(new String[] { "ADMIN" });
 
-		Session session = new Session().withUser(user);
-		boolean secure = !configService.getStage().equals(ConfigService.STAGE_DEV);
-		requestContext.setSecurityContext(new MjaSecurityContext(session, secure));
+		requestContext.setProperty(MjaApiApplication.USER, user);
 		LOGGER.warn("config property 'mock.session' is true => SecurityContext with mocker user: ");
 	}
 }

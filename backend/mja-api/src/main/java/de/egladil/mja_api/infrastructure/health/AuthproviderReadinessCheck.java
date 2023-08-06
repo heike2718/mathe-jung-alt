@@ -4,8 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.health;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.HttpMethod;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.HttpMethod;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
