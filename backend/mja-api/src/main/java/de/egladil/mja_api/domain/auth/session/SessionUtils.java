@@ -17,16 +17,15 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.core.Cookie;
-import jakarta.ws.rs.core.NewCookie;
-
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.config.ConfigService;
 import de.egladil.mja_api.domain.exceptions.MjaAuthRuntimeException;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Cookie;
+import jakarta.ws.rs.core.NewCookie;
 
 /**
  * SessionUtils
@@ -84,20 +83,15 @@ public final class SessionUtils {
 	public static NewCookie createSessionCookie(final String sessionId) {
 
 		// @formatter:off
-		NewCookie sessionCookie = new NewCookie(SESSION_COOKIE_NAME,
-			sessionId,
-			"/", // path
-			null, // domain muss null sein, wird vom Browser anhand des restlichen Responses abgeleitet. Sonst wird das Cookie nicht gesetzt.
-			1,  // version
-			null, // comment
-			7200, // expires (minutes)
-			null,
-			true, // secure
-			true  // httpOnly
-			);
+		return new NewCookie.Builder(SESSION_COOKIE_NAME)
+			.value(sessionId)
+			.path("/")
+			.domain(null)
+			.comment(null)
+			.maxAge(360000) // maximum age of the cookie in seconds
+			.httpOnly(true)
+			.secure(true).build();
 		// @formatter:on
-
-		return sessionCookie;
 	}
 
 	public static NewCookie createSessionInvalidatedCookie() {
@@ -105,19 +99,13 @@ public final class SessionUtils {
 		long dateInThePast = LocalDateTime.now(ZoneId.systemDefault()).minus(10, ChronoUnit.YEARS).toEpochSecond(ZoneOffset.UTC);
 
 		// @formatter:off
-		NewCookie invalidationCookie = new NewCookie(SESSION_COOKIE_NAME,
-			null,
-			null,
-			null,
-			1,
-			null,
-			0,
-			new Date(dateInThePast),
-			true,
-			true);
-		//@formatter:on
-
-		return invalidationCookie;
+		return new NewCookie.Builder(SESSION_COOKIE_NAME)
+			.maxAge(0) // maximum age of the cookie in seconds
+			.expiry(new Date(dateInThePast))
+			.version(1)
+			.httpOnly(true)
+			.secure(true).build();
+			// @formatter:on
 	}
 
 	public static String getSessionId(final ContainerRequestContext requestContext, final String stage) {
@@ -126,10 +114,15 @@ public final class SessionUtils {
 
 		if (sessionIdFromHeader != null) {
 
+			LOGGER.info("sessionIdFromHeader={}", sessionIdFromHeader);
 			return sessionIdFromHeader;
 		}
 
-		return getSessionIdFromCookie(requestContext);
+		LOGGER.info("sessionIdFromHeader was null, try to get SessionId from Cookie");
+		String sessionIdFromCookie = getSessionIdFromCookie(requestContext);
+		LOGGER.info("sessionIdFromCookie={}", sessionIdFromCookie);
+
+		return sessionIdFromCookie;
 
 	}
 

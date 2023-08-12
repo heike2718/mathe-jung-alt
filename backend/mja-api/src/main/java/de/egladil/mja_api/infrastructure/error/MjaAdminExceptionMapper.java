@@ -8,12 +8,6 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
-import jakarta.ws.rs.ext.ExceptionMapper;
-import jakarta.ws.rs.ext.Provider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +17,11 @@ import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.exceptions.SessionExpiredException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
 
 /**
  * MjaAdminExceptionMapper
@@ -36,6 +35,8 @@ public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
 
 	@Override
 	public Response toResponse(final Throwable exception) {
+
+		LOGGER.info(exception.getMessage(), exception);
 
 		if (exception instanceof LaTeXCompileException) {
 

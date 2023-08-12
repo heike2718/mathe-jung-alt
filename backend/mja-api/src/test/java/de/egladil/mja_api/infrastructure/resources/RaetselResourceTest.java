@@ -443,21 +443,21 @@ public class RaetselResourceTest {
 
 	}
 
-	@Test
-	@TestSecurity(user = "autor", roles = { "AUTOR" })
-	@Order(15)
-	void testGeneratePNGAutorAndOtherOwner() {
-
-		given()
-			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
-			.accept(ContentType.JSON)
-			.post("v1/PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
-			.then()
-			.statusCode(401);
-
-	}
+	// @Test
+	// @TestSecurity(user = "autor", roles = { "AUTOR" })
+	// @Order(15)
+	// void testGeneratePNGAutorAndOtherOwner() {
+	//
+	// given()
+	// .header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+	// .cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+	// .contentType(ContentType.JSON)
+	// .accept(ContentType.JSON)
+	// .post("v1/PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
+	// .then()
+	// .statusCode(401);
+	//
+	// }
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })

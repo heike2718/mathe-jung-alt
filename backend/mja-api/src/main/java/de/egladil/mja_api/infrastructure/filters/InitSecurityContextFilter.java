@@ -9,12 +9,12 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.MjaApiApplication;
 import de.egladil.mja_api.domain.auth.config.ConfigService;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.auth.session.Session;
 import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.auth.session.SessionUtils;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContextImpl;
 import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -41,8 +41,13 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 	@Inject
 	SessionService sessionService;
 
+	@Inject
+	AuthenticationContextImpl authCtx; // Injecting the implementation, not the interface!!!
+
 	@Override
 	public void filter(final ContainerRequestContext requestContext) throws IOException {
+
+		// https://quarkus.io/guides/context-propagation
 
 		LOGGER.debug("stage=" + configService.getStage() + ", mockSession=" + configService.isMockSession());
 
@@ -68,14 +73,16 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 			String sessionId = SessionUtils.getSessionId(requestContext, configService.getStage());
 
+			LOGGER.debug("sessionId={}", sessionId);
+
 			if (sessionId != null) {
 
 				Session session = sessionService.getAndRefreshSessionIfValid(sessionId);
 
 				if (session != null) {
 
-					// Packen den User in die Session.
-					requestContext.setProperty(MjaApiApplication.USER, session.getUser());
+					// Packen den User in den authenticationContext.
+					authCtx.setUser(session.getUser());
 					LOGGER.debug("user set");
 
 				}
@@ -88,7 +95,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 		AuthenticatedUser user = new AuthenticatedUser("b865fc75-1bcf-40c7-96c3-33744826e49f").withFullName("Heike Winkelvoß")
 			.withIdReference("bla").withRoles(new String[] { "ADMIN" });
 
-		requestContext.setProperty(MjaApiApplication.USER, user);
-		LOGGER.warn("config property 'mock.session' is true => SecurityContext with mocker user: ");
+		authCtx.setUser(user);
+		LOGGER.warn("config property 'mock.session' is true => authCtx with mocked user: ");
 	}
 }

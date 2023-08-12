@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
 import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
@@ -19,7 +16,10 @@ import de.egladil.mja_api.domain.quellen.QuellenListItem;
 import de.egladil.mja_api.domain.quellen.QuellenRepository;
 import de.egladil.mja_api.domain.quellen.QuellenService;
 import de.egladil.mja_api.domain.semantik.DomainService;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * QuellenServiceImpl
@@ -27,6 +27,9 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleR
 @DomainService
 @ApplicationScoped
 public class QuellenServiceImpl implements QuellenService {
+
+	@Inject
+	AuthenticationContext authCtx;
 
 	@Inject
 	QuellenRepository quellenRepository;
@@ -55,8 +58,9 @@ public class QuellenServiceImpl implements QuellenService {
 	}
 
 	@Override
-	public Optional<QuelleMinimalDto> findQuelleForUser(final String userId) {
+	public Optional<QuelleMinimalDto> findQuelleForUser() {
 
+		String userId = authCtx.getUser().getUuid();
 		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithUserId(userId);
 
 		if (optAusDB.isEmpty()) {

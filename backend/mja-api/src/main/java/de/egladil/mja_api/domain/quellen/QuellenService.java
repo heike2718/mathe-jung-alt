@@ -35,10 +35,9 @@ public interface QuellenService {
 	/**
 	 * Sucht die Quelle mit der gegebenen userId.
 	 *
-	 * @param  userId
-	 * @return        Optional
+	 * @return Optional
 	 */
-	Optional<QuelleMinimalDto> findQuelleForUser(String userId);
+	Optional<QuelleMinimalDto> findQuelleForUser();
 
 	/**
 	 * Läd die minimalen Attribute einer Quelle.

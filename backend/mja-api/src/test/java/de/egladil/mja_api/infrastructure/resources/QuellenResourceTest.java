@@ -11,15 +11,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.egladil.mja_api.domain.quellen.QuellenListItem;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.security.TestSecurity;
-import io.restassured.response.Response;
 
 /**
  * QuellenResourceTest
@@ -117,17 +114,13 @@ public class QuellenResourceTest {
 	@TestSecurity(user = "testUser", roles = { "ADMIN" })
 	void testFindQuelleByIdMitTreffer() throws Exception {
 
-		Response response = given()
-			.when().get("v1/8ef4d9b8-62a6-4643-8674-73ebaec52d98");
+		// Arrange
+		String quelleId = "8ef4d9b8-62a6-4643-8674-73ebaec52d98";
 
-		String responsePayload = response.asString();
+		QuellenListItem responsePayload = given()
+			.when().get("v1/" + quelleId).then().statusCode(200).and().extract().as(QuellenListItem.class);
 
-		QuellenListItem quelle = new ObjectMapper().readValue(responsePayload, QuellenListItem.class);
-
-		assertEquals("Heike Winkelvoß", quelle.getName());
-
-		assertEquals(200, response.statusCode());
-
+		assertEquals("Heike Winkelvoß", responsePayload.getName());
 	}
 
 	@Test

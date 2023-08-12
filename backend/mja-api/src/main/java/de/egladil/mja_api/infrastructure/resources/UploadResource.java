@@ -6,21 +6,9 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import java.io.File;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Pattern;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
-import jakarta.annotation.security.RolesAllowed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.RestForm;
@@ -30,6 +18,15 @@ import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.dto.UploadData;
 import de.egladil.mja_api.domain.upload.FileUplodService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  * UploadResource
@@ -51,13 +48,7 @@ public class UploadResource {
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "uploadFile",
-		summary = "Nimmt eine hochgeladene Datei des UploadTypes (eps) entgegen und speichert sie in dem gewünschten Unterverzeichnis des latex.base.dirs")
-	@Parameters({
-		@Parameter(
-			name = "pfad",
-			description = "Pfad des Zielverzeichnisses relativ zum konfigurierten latex.base.dir. Der Wert des Parameters muss mit einem / beginnen"),
-		@Parameter(name = "image", description = "Die Image-Datei, die hochgeladen wird"),
-	})
+		summary = "Nimmt eine hochgeladene Datei des UploadTypes (eps) entgegen und speichert sie in dem gewünschten Unterverzeichnis des latex.base.dirs. Form-Parameters=pfad (Pfad des Zielverzeichnisses relativ zum konfigurierten latex.base.dir. Der Wert des Parameters muss mit einem / beginnen), image (Image-Datei)")
 	@APIResponse(
 		name = "UploadFileOKResponse",
 		description = "Datei erfolgreich hochgeladen",

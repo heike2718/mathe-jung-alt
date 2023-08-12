@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
-import de.egladil.mja_api.domain.auth.session.SessionService;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 
 /**
  * PermissionUtils
@@ -19,16 +19,16 @@ public final class PermissionUtils {
 
 	public static final String ROLE_AUTOR = "AUTOR";
 
-	public static List<String> getRelevantRoles(final SessionService sessionService) {
+	public static List<String> getRelevantRoles(final AuthenticationContext authContext) {
 
 		List<String> roles = new ArrayList<>();
 
-		if (sessionService.isUserInRole(ROLE_ADMIN)) {
+		if (authContext.isUserInRole(ROLE_ADMIN)) {
 
 			roles.add(ROLE_ADMIN);
 		}
 
-		if (sessionService.isUserInRole(ROLE_AUTOR)) {
+		if (authContext.isUserInRole(ROLE_AUTOR)) {
 
 			roles.add(ROLE_AUTOR);
 		}

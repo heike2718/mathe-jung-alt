@@ -11,11 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.dto.UploadData;
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -39,7 +39,7 @@ public class FileUplodService {
 	UploadScannerDelegate uploadScanner;
 
 	@Inject
-	SessionService sessionService;
+	AuthenticationContext authCtx;
 
 	public MessagePayload saveTheUpload(final UploadData uploadData, final String relativerPfad) {
 
@@ -48,7 +48,7 @@ public class FileUplodService {
 			processUploadService.processFile(uploadData);
 
 			UploadRequestDto uploadRequest = new UploadRequestDto()
-				.withBenutzerUuid(sessionService.getUser().getName())
+				.withBenutzerUuid(authCtx.getUser().getName())
 				.withUploadData(uploadData).withRelativerPfad(relativerPfad);
 
 			uploadScanner.scanUpload(uploadRequest);

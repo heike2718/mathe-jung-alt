@@ -1,6 +1,6 @@
 {
   "name": "mja-ws",
-  "version": "1.5.3",
+  "version": "2.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "nx",
@@ -8,7 +8,7 @@
     "start": "nx serve",
     "build:mja-admin:local": "npx nx build mja-admin -c local --output-hashing=all --base-href /mja-admin/ --skip-nx-cache",
     "build:mja-admin:a300": "npx nx build mja-admin -c a300 --output-hashing=all --base-href /mja-admin/ --skip-nx-cache",
-    "build:mja-admin:production": "npx nx run mja-admin:build:production --output-hashing=all --base-href /mja-admin/ --skip-nx-cache",
+    "build:mja-admin:prod": "npx nx run mja-admin:build:production --output-hashing=all --base-href /mja-admin/ --skip-nx-cache",
     "test": "npx nx test",
     "test:all": "npx nx run-many --target=test --all",
     "lint:all": "npx nx run-many --target=lint --all",

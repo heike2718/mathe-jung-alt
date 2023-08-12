@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
@@ -31,6 +30,7 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
@@ -50,7 +50,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenServiceImpl.class);
 
 	@Inject
-	SessionService sessionService;
+	AuthenticationContext authCtx;
 
 	@Inject
 	RaetselgruppenDao raetselgruppenDao;
@@ -102,8 +102,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		final RaetselgruppeDetails result = RaetselgruppeDetails.createFromDB(raetselgruppe);
 
-		if (PermissionUtils.hasWritePermission(sessionService.getUser().getName(),
-			PermissionUtils.getRelevantRoles(sessionService), raetselgruppe.owner)) {
+		if (PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
+			PermissionUtils.getRelevantRoles(authCtx), raetselgruppe.owner)) {
 
 			result.markiereAlsAenderbar();
 		}
@@ -129,7 +129,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	@Transactional
 	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload) throws WebApplicationException {
 
-		String userId = sessionService.getUser().getName();
+		String userId = authCtx.getUser().getName();
 
 		if (!AbstractDomainEntity.UUID_NEUE_ENTITY.equals(payload.getId())) {
 
@@ -174,7 +174,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	@Transactional
 	public RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(final EditRaetselgruppePayload payload) throws WebApplicationException {
 
-		String userId = sessionService.getUser().getName();
+		String userId = authCtx.getUser().getName();
 
 		if (dupletteNachKeysExistiert(payload)) {
 
@@ -500,11 +500,11 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 	void checkPermission(final PersistenteRaetselgruppe ausDB) {
 
-		if (!PermissionUtils.hasWritePermission(sessionService.getUser().getName(),
-			PermissionUtils.getRelevantRoles(sessionService), ausDB.owner)) {
+		if (!PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
+			PermissionUtils.getRelevantRoles(authCtx), ausDB.owner)) {
 
 			LOGGER.warn("User {} hat versucht, Raetselgruppe {} mit Owner {} zu aendern",
-				sessionService.getUser().getName(), ausDB.uuid,
+				authCtx.getUser().getName(), ausDB.uuid,
 				ausDB.owner);
 
 			throw new WebApplicationException(Status.UNAUTHORIZED);

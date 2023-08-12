@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
@@ -26,6 +25,7 @@ import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -45,7 +45,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	String latexBaseDir;
 
 	@Inject
-	SessionService sessionService;
+	AuthenticationContext authCtx;
 
 	@RestClient
 	@Inject
@@ -66,7 +66,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 		if (raetsel.isSchreibgeschuetzt()) {
 
-			String userId = sessionService.getUser().getName();
+			String userId = authCtx.getUser().getName();
 
 			LOGGER.warn("user {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
 				raetsel.getSchluessel());
@@ -140,6 +140,9 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 							new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN + ".tex" });
 				}
 
+				LOGGER.info("Raetsel Images generiert: [raetsel={}, user={}]", raetselUuid,
+					StringUtils.abbreviate(authCtx.getUser().getName(), 11));
+
 				return result;
 
 			}
@@ -181,14 +184,14 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 		Raetsel raetsel = loadRaetsel(raetselUuid);
 
-		List<String> relevantRoles = PermissionUtils.getRelevantRoles(sessionService);
+		List<String> relevantRoles = PermissionUtils.getRelevantRoles(authCtx);
 		boolean hasReadPermission = PermissionUtils.hasReadPermission(relevantRoles,
 			raetsel.getStatus());
 
 		if (!hasReadPermission) {
 
 			LOGGER.warn("user {} nicht berechtigt, PDF fuer Raetsel mit SCHLUESSEL={} zu generieren",
-				sessionService.getUser().getName(),
+				authCtx.getUser().getName(),
 				raetsel.getSchluessel());
 
 			throw new WebApplicationException(Status.UNAUTHORIZED);
@@ -229,6 +232,9 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 				raetselFileService
 					.deleteTemporaryFiles(new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_PDF + ".tex" });
+
+				LOGGER.info("Raetsel PDF generiert: [raetsel={}, user={}]", raetselUuid,
+					StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
 
 				return result;
 			}

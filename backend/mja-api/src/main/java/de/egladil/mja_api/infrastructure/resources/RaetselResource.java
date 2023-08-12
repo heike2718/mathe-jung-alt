@@ -6,6 +6,7 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -25,11 +26,11 @@ import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.RaetselGeneratorService;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
-import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
+import de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -65,7 +66,7 @@ public class RaetselResource {
 	DevDelayService delayService;
 
 	@Inject
-	RaetselService raetselService;
+	RaetselServiceImpl raetselService;
 
 	@Inject
 	RaetselFileService raetselFileService;
@@ -83,17 +84,25 @@ public class RaetselResource {
 		operationId = "findRaetselAdmin", summary = "Gibt alle Rätsel zurück, die auf die gegebene Suchanfrage passen.")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "suchstring",
 			description = "Freitext zum suchen. Es erfolgt eine Volltextsuche über Schlüssel, Name, Kommentar, Frage und Lösung"),
-		@Parameter(name = "deskriptoren", description = "kommaseparierte Liste von Deskriptoren-Identifizierern"),
-		@Parameter(name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
 		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "deskriptoren", description = "kommaseparierte Liste von Deskriptoren-Identifizierern"),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
+		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "limit",
 			description = "Pagination: pageSize"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "offset",
 			description = "Pagination: pageIndex"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "sortDirection",
 			description = "Sortierung. Es wird nach SCHLUESSEL sortiert.") })
 	@APIResponse(
@@ -135,15 +144,22 @@ public class RaetselResource {
 	@Operation(
 		operationId = "findRaetselPublic", summary = "Gibt alle Rätsel mit den gegebenen Deskriptoren zurück")
 	@Parameters({
-		@Parameter(name = "deskriptoren", description = "kommaseparierte Liste von Deskriptoren-Identifizierern"),
-		@Parameter(name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
 		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "deskriptoren", description = "kommaseparierte Liste von Deskriptoren-Identifizierern"),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
+		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "limit",
 			description = "Pagination: pageSize"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "offset",
 			description = "Pagination: pageIndex"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "sortDirection",
 			description = "Sortierung. Es wird nach SCHLUESSEL sortiert.") })
 	@APIResponse(
@@ -188,6 +204,7 @@ public class RaetselResource {
 		summary = "Läd die Details des Rätsels mit der gegebenen ID")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.PATH,
 			name = "raetselID",
 			description = "technische ID des Rätsels") })
 	@APIResponse(
@@ -225,12 +242,6 @@ public class RaetselResource {
 	@Operation(
 		operationId = "raetselAnlegen",
 		summary = "neues Rätsel anlegen")
-	@Parameters({
-		@Parameter(name = "payload", description = "Attribute des Rätsels."),
-		@Parameter(
-			name = "csrfHeader",
-			description = "CSRF-Token")
-	})
 	@APIResponse(
 		name = "CreateRaetselOKResponse",
 		responseCode = "201",
@@ -254,10 +265,6 @@ public class RaetselResource {
 		this.delayService.pause();
 
 		Raetsel raetsel = raetselService.raetselAnlegen(payload);
-
-		LOGGER.info("Raetsel angelegt: [raetsel={}, user={}]", raetsel.getId(),
-			StringUtils.abbreviate(sessionService.getUser().getName(), 11));
-
 		return Response.status(201).entity(raetsel).build();
 
 	}
@@ -269,12 +276,6 @@ public class RaetselResource {
 	@Operation(
 		operationId = "raetselAendern",
 		summary = "vorhandenes Rätsel ändern")
-	@Parameters({
-		@Parameter(name = "payload", description = "Attribute des Rätsels."),
-		@Parameter(
-			name = "csrfHeader",
-			description = "CSRF-Token")
-	})
 	@APIResponse(
 		name = "UpdateRaetselOKResponse",
 		responseCode = "200",
@@ -298,10 +299,6 @@ public class RaetselResource {
 		this.delayService.pause();
 
 		Raetsel raetsel = raetselService.raetselAendern(payload);
-
-		LOGGER.info("Raetsel geaendert: [raetsel={}, user={}]", raetsel.getId(),
-			StringUtils.abbreviate(sessionService.getUser().getName(), 11));
-
 		return Response.status(200).entity(raetsel).build();
 	}
 
@@ -313,6 +310,7 @@ public class RaetselResource {
 		summary = "Läd die Vorschaubilder (png) des Rätsels")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.PATH,
 			name = "schluessel",
 			description = "Fachlicher Schlüssel des Rätsels") })
 	@APIResponse(
@@ -340,6 +338,15 @@ public class RaetselResource {
 	@Operation(
 		operationId = "raetselImagesGenerieren",
 		summary = "generiert die Vorschaubilder (png) des Rätsels")
+	@Parameters({
+		@Parameter(
+			in = ParameterIn.PATH,
+			name = "raetselID",
+			description = "technische ID des Rätsels"),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)") })
 	@APIResponse(
 		name = "GenerateImagesRaetselOKResponse",
 		responseCode = "200",
@@ -360,9 +367,6 @@ public class RaetselResource {
 
 		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege);
 
-		LOGGER.info("Raetsel Images generiert: [raetsel={}, user={}]", raetselUuid,
-			StringUtils.abbreviate(sessionService.getUser().getName(), 11));
-
 		return result;
 	}
 
@@ -374,9 +378,11 @@ public class RaetselResource {
 		summary = "generiert ein PDF mit dem Rätsel")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.PATH,
 			name = "raetselID",
 			description = "technische ID des Rätsels"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
 			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)") })
 	@APIResponse(
@@ -399,12 +405,7 @@ public class RaetselResource {
 
 		this.delayService.pause();
 
-		String userUuid = this.sessionService.getUser().getName();
-
 		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege);
-
-		LOGGER.info("Raetsel PDF generiert: [raetsel={}, user={}]", raetselUuid, StringUtils.abbreviate(userUuid, 11));
-
 		return result;
 	}
 
@@ -416,6 +417,7 @@ public class RaetselResource {
 		summary = "Läd aus dem LaTeX-Verzeichnis die Dateien schluessel.log und schluessel_l.log herunter, wenn sie existieren.")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.PATH,
 			name = "schluessel",
 			description = "5stelliger SCHLUESSEL eines Rätsels") })
 	@APIResponse(

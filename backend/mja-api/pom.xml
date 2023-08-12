@@ -21,7 +21,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-		<quarkus.platform.version>3.2.3.Final</quarkus.platform.version>
+		<quarkus.platform.version>3.2.4.Final</quarkus.platform.version>
 		<jjwt.version>0.11.5</jjwt.version>
 		<com.auth0.java.jwt.version>3.17.0</com.auth0.java.jwt.version>
 		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
@@ -50,10 +50,12 @@
 
 		<!-- START quarkus dependencies -->
 
+		<!--
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-undertow</artifactId>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-rest-client-reactive</artifactId>
@@ -72,6 +74,11 @@
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-resteasy-reactive-jackson</artifactId>
+		</dependency>
+
+		<dependency>
+    		<groupId>io.quarkus</groupId>
+    		<artifactId>quarkus-smallrye-context-propagation</artifactId>
 		</dependency>
 
 		<dependency>

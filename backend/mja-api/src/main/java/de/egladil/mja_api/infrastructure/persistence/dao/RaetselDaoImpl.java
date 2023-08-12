@@ -4,7 +4,6 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.persistence.dao;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -110,7 +109,7 @@ public class RaetselDaoImpl implements RaetselDao {
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
 
-		List<BigInteger> trefferliste = null;
+		List<Long> trefferliste = null;
 
 		if (nurFregegebene) {
 

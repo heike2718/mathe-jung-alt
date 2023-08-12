@@ -21,7 +21,7 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 	private String idReference;
 
 	@JsonProperty
-	private String[] roles;
+	private String[] roles = new String[0];
 
 	@JsonProperty
 	private String fullName;
@@ -62,6 +62,12 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 	public String toString() {
 
 		return "AuthenticatedUser [uuid=" + StringUtils.abbreviate(getName(), 11) + ", roles=" + Arrays.toString(roles) + "]";
+	}
+
+	public boolean isAdmin() {
+
+		return Arrays.stream(roles).filter(r -> ("ADMIN".equals(r) || "AUTOR".equals(r))).findFirst().isPresent();
+
 	}
 
 	/**

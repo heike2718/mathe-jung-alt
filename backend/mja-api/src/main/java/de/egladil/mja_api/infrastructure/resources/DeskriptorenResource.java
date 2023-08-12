@@ -4,8 +4,6 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
 
-import java.util.List;
-
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -15,10 +13,10 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Pattern;
@@ -27,6 +25,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  * DeskriptorenResource
@@ -36,7 +35,7 @@ import jakarta.ws.rs.core.MediaType;
 public class DeskriptorenResource {
 
 	@Inject
-	SessionService sessionService;
+	AuthenticationContext authCtx;
 
 	@Inject
 	DeskriptorenRepository deskriptorenRepository;
@@ -58,11 +57,10 @@ public class DeskriptorenResource {
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(type = SchemaType.ARRAY, implementation = DeskriptorUI.class)))
-	public List<DeskriptorUI> loadDeskriptorenV2() {
+	public Response loadDeskriptorenV2() {
 
-		boolean admin = sessionService.isUserInRole("ADMIN") || sessionService.isUserInRole("AUTOR");
-
-		return deskriptorenService.loadDeskriptorenRaetsel(admin);
+		boolean admin = authCtx.getUser().isAdmin();
+		return Response.ok(deskriptorenService.loadDeskriptorenRaetsel(admin)).build();
 	}
 
 	@GET
@@ -81,10 +79,10 @@ public class DeskriptorenResource {
 		content = @Content(
 			mediaType = "text/plain",
 			schema = @Schema(implementation = String.class)))
-	public String transformDeskriptorenStringToOrdinal(@QueryParam(value = "deskriptoren") @Pattern(
+	public Response transformDeskriptorenStringToOrdinal(@QueryParam(value = "deskriptoren") @Pattern(
 		regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 		message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren) {
 
-		return deskriptorenService.transformToDeskriptorenOrdinal(deskriptoren);
+		return Response.ok(deskriptorenService.transformToDeskriptorenOrdinal(deskriptoren)).build();
 	}
 }

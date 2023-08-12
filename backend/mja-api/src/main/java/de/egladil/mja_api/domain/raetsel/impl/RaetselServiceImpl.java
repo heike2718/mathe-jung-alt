@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
@@ -33,6 +33,7 @@ import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -51,7 +52,7 @@ public class RaetselServiceImpl implements RaetselService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselServiceImpl.class);
 
 	@Inject
-	SessionService sessopnService;
+	AuthenticationContext authCtx;
 
 	@Inject
 	DeskriptorenService deskriptorenService;
@@ -77,7 +78,7 @@ public class RaetselServiceImpl implements RaetselService {
 		List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
 		long anzahlGesamt = 0L;
 
-		boolean nurFreigegebene = PermissionUtils.restrictSucheToFreigegeben(PermissionUtils.getRelevantRoles(sessopnService));
+		boolean nurFreigegebene = PermissionUtils.restrictSucheToFreigegeben(PermissionUtils.getRelevantRoles(authCtx));
 
 		switch (suchfilterVariante) {
 
@@ -131,7 +132,7 @@ public class RaetselServiceImpl implements RaetselService {
 		PersistentesRaetsel neuesRaetsel = new PersistentesRaetsel();
 		String uuid = UUID.randomUUID().toString();
 		neuesRaetsel.setImportierteUuid(uuid);
-		String userId = sessopnService.getUser().getName();
+		String userId = authCtx.getUser().getName();
 
 		neuesRaetsel.owner = userId;
 		neuesRaetsel.geaendertDurch = userId;
@@ -142,6 +143,10 @@ public class RaetselServiceImpl implements RaetselService {
 		Raetsel result = payload.getRaetsel();
 		result.setId(neuesRaetsel.uuid);
 		result.markiereAlsAenderbar();
+
+		LOGGER.info("Raetsel angelegt: [raetsel={}, user={}]", result.getId(),
+			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
+
 		return result;
 	}
 
@@ -152,7 +157,7 @@ public class RaetselServiceImpl implements RaetselService {
 		Raetsel raetsel = payload.getRaetsel();
 		String raetselId = raetsel.getId();
 		PersistentesRaetsel persistentesRaetsel = PersistentesRaetsel.findById(raetselId);
-		String userId = sessopnService.getUser().getName();
+		String userId = authCtx.getUser().getName();
 
 		if (persistentesRaetsel == null) {
 
@@ -164,7 +169,7 @@ public class RaetselServiceImpl implements RaetselService {
 		}
 
 		if (!PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRelevantRoles(sessopnService), persistentesRaetsel.owner)) {
+			PermissionUtils.getRelevantRoles(authCtx), persistentesRaetsel.owner)) {
 
 			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", userId, persistentesRaetsel.schluessel,
 				persistentesRaetsel.owner);
@@ -194,6 +199,9 @@ public class RaetselServiceImpl implements RaetselService {
 
 		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
 		PersistentesRaetsel.persist(persistentesRaetsel);
+
+		LOGGER.info("Raetsel geaendert: [raetsel={}, user={}]", raetselId,
+			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
 
 		return getRaetselZuId(raetselId);
 	}
@@ -295,8 +303,8 @@ public class RaetselServiceImpl implements RaetselService {
 			.withStatus(raetselDB.status)
 			.withName(raetselDB.name);
 
-		boolean hasWritePermission = PermissionUtils.hasWritePermission(sessopnService.getUser().getName(),
-			PermissionUtils.getRelevantRoles(sessopnService), raetselDB.owner);
+		boolean hasWritePermission = PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
+			PermissionUtils.getRelevantRoles(authCtx), raetselDB.owner);
 
 		if (hasWritePermission) {
 

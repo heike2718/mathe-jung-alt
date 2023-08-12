@@ -17,7 +17,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.quellen.QuellenListItem;
 import de.egladil.mja_api.domain.quellen.QuellenService;
@@ -42,9 +41,6 @@ import jakarta.ws.rs.core.Response.Status;
 @Path("mja-api/quellen")
 @Tag(name = "Quellen")
 public class QuellenResource {
-
-	@Inject
-	SessionService sessionService;
 
 	@Inject
 	DevDelayService delayService;
@@ -105,8 +101,7 @@ public class QuellenResource {
 
 		this.delayService.pause();
 
-		String userId = sessionService.getUser().getName();
-		Optional<QuelleMinimalDto> result = this.quellenService.findQuelleForUser(userId);
+		Optional<QuelleMinimalDto> result = this.quellenService.findQuelleForUser();
 
 		if (result.isEmpty()) {
 

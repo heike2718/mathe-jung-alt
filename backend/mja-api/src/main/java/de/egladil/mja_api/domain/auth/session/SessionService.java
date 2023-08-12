@@ -20,12 +20,12 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import de.egladil.mja_api.MjaApiApplication;
 import de.egladil.mja_api.domain.auth.jwt.JWTService;
 import de.egladil.mja_api.domain.auth.jwt.impl.DecodedJWTReader;
 import de.egladil.mja_api.domain.auth.util.SecureTokenService;
 import de.egladil.mja_api.domain.exceptions.AuthException;
 import de.egladil.mja_api.domain.exceptions.SessionExpiredException;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -45,51 +45,13 @@ public class SessionService {
 	ContainerRequestContext requestContext;
 
 	@Inject
+	AuthenticationContext authCtx;
+
+	@Inject
 	JWTService jwtService;
 
 	@Inject
 	SecureTokenService secureTokenService;
-
-	/**
-	 * Der user wird vom InitSecurityContextFilter in den requestContext gepackt und hier dann herausgeholt.
-	 *
-	 * @return AuthenticatedUser
-	 */
-	public AuthenticatedUser getUser() {
-
-		Object u = requestContext.getProperty(MjaApiApplication.USER);
-		return u == null ? AuthenticatedUser.createAnonymousUser() : (AuthenticatedUser) u;
-
-	}
-
-	/**
-	 * Der user wird vom InitSecurityContextFilter in den requestContext gepackt und hier dann herausgeholt.
-	 *
-	 * @param  role
-	 * @return      boolean
-	 */
-	public boolean isUserInRole(final String role) {
-
-		Object u = requestContext.getProperty(MjaApiApplication.USER);
-
-		if (u == null) {
-
-			LOGGER.info("requestContext hatte keinen USER");
-			return false;
-		}
-
-		AuthenticatedUser user = (AuthenticatedUser) u;
-
-		Optional<String> optRole = Arrays.stream(user.getRoles()).filter(r -> r.equalsIgnoreCase(role)).findFirst();
-
-		if (optRole.isEmpty()) {
-
-			LOGGER.warn("dem User {} fehlt die Rolle {}", user.getName(), role);
-		}
-
-		return optRole.isPresent();
-
-	}
 
 	/**
 	 * Wenn das JWT sagt, ist kein Admin, dann wird eine anonyme Session angelegt.

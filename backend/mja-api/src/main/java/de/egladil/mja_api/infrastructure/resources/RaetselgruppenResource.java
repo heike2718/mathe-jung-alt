@@ -6,8 +6,8 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -15,10 +15,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
@@ -62,11 +59,6 @@ import jakarta.ws.rs.core.Response.Status;
 @Tag(name = "Raetselgruppen")
 public class RaetselgruppenResource {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenResource.class);
-
-	@Inject
-	SessionService sessionService;
-
 	@Inject
 	DevDelayService delayService;
 
@@ -80,27 +72,35 @@ public class RaetselgruppenResource {
 		operationId = "findGruppen", summary = "Gibt alle Rätselgruppen zurück, die auf die gegebene Suchanfrage passen.")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "name",
 			description = "Teil des Namens der Gruppe (Suche mit like)"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "schwierigkeitsgrad",
 			description = "Klassenstufe, für die die Rätselgruppe gedacht ist (enum)"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "referenztyp",
 			description = "Kontext zur Interpretation des Parameters 'referenz'"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "referenz",
 			description = "ID im alten Aufgabenarchiv"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "sortAttribute",
 			description = "Attribut, nach dem sortiert wird"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "sortDirection",
 			description = "Sortierrichtung für das gewählte Attribut"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "limit",
 			description = "Pagination: pageSize"),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "offset",
 			description = "Pagination: pageIndex") })
 	@APIResponse(
@@ -138,12 +138,6 @@ public class RaetselgruppenResource {
 	@Operation(
 		operationId = "raetselgruppeAnlegen",
 		summary = "neue Rätselgruppe anlegen")
-	@Parameters({
-		@Parameter(name = "requestPayload", description = "Daten der Raetselgruppe."),
-		@Parameter(
-			name = "csrfHeader",
-			description = "CSRF-Token")
-	})
 	@APIResponse(
 		name = "CreateRaetselgruppeOKResponse",
 		responseCode = "201",
@@ -160,13 +154,7 @@ public class RaetselgruppenResource {
 
 		delayService.pause();
 
-		String userUuid = this.sessionService.getUser().getName();
-
 		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeAnlegen(requestPayload);
-
-		LOGGER.info("Raetselgruppe angelegt: [raetselgruppe={}, user={}]", raetselsammlung.getId(),
-			StringUtils.abbreviate(userUuid, 11));
-
 		return Response.status(201).entity(raetselsammlung).build();
 	}
 
@@ -177,12 +165,6 @@ public class RaetselgruppenResource {
 	@Operation(
 		operationId = "raetselgruppeAendern",
 		summary = "neue Rätselgruppe anlegen")
-	@Parameters({
-		@Parameter(name = "requestPayload", description = "Daten der Raetselgruppe."),
-		@Parameter(
-			name = "csrfHeader",
-			description = "CSRF-Token")
-	})
 	@APIResponse(
 		name = "UpdateRaetselgruppeOKResponse",
 		responseCode = "200",
@@ -199,13 +181,7 @@ public class RaetselgruppenResource {
 
 		delayService.pause();
 
-		String userUuid = this.sessionService.getUser().getName();
-
 		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeBasisdatenAendern(requestPayload);
-
-		LOGGER.info("Raetselgruppe angelegt: [raetselgruppe={}, user={}]", raetselsammlung.getId(),
-			StringUtils.abbreviate(userUuid, 11));
-
 		return Response.status(200).entity(raetselsammlung).build();
 	}
 
@@ -217,6 +193,7 @@ public class RaetselgruppenResource {
 		summary = "Läd die Details der Rätselgruppe mit der gegebenen ID")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.PATH,
 			name = "raetselgruppeID",
 			description = "technische ID der Rätselgruppe") })
 	@APIResponse(
@@ -251,10 +228,7 @@ public class RaetselgruppenResource {
 		operationId = "raetselgruppenelementAnlegen",
 		summary = "Legt ein neues Element in einer Rätselgruppe an")
 	@Parameters({
-		@Parameter(name = "raetselgruppeID", description = "ID der Raetselgruppe."),
-		@Parameter(
-			name = "element",
-			description = "die Daten des Raetselgruppenelements")
+		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Raetselgruppe.")
 	})
 	@APIResponse(
 		name = "CreateRaetselgruppenelementOKResponse",
@@ -295,10 +269,7 @@ public class RaetselgruppenResource {
 		operationId = "raetselgruppenelementAendern",
 		summary = "Ändert das Element einer Rätselgruppe. Es können nur Nummer und Punkte geändert werden. Wenn der Schlüssel nicht stimmt, muss es gelöscht und neu angelegt werden.")
 	@Parameters({
-		@Parameter(name = "raetselgruppeID", description = "ID der Raetselgruppe."),
-		@Parameter(
-			name = "element",
-			description = "die Daten des Raetselgruppenelements")
+		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Raetselgruppe.")
 	})
 	@APIResponse(
 		name = "UpdateRaetselgruppenelementOKResponse",
@@ -333,11 +304,9 @@ public class RaetselgruppenResource {
 		summary = "Löscht das Element einer Rätselgruppe")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.PATH,
 			name = "raetselgruppeID",
-			description = "ID der Rätselgruppe"),
-		@Parameter(
-			name = "elementID",
-			description = "ID des Elements") })
+			description = "ID der Rätselgruppe") })
 	@APIResponse(
 		name = "DeleteRaetselgruppenelementOKResponse",
 		responseCode = "200",
@@ -373,8 +342,9 @@ public class RaetselgruppenResource {
 		operationId = "printQuiz",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
 	@Parameters({
-		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
 			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
 	})
@@ -412,8 +382,9 @@ public class RaetselgruppenResource {
 		operationId = "downloadLaTeXSource",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein LaTeX. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
 	@Parameters({
-		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
 		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
 			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
 	})

@@ -4,21 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.CookieParam;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
-import jakarta.annotation.security.PermitAll;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
@@ -33,6 +20,19 @@ import de.egladil.mja_api.domain.auth.login.LoginLogoutService;
 import de.egladil.mja_api.domain.auth.login.LoginUrlService;
 import de.egladil.mja_api.domain.auth.session.SessionUtils;
 import de.egladil.mja_api.domain.utils.DevDelayService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  * SessionResource
@@ -61,6 +61,7 @@ public class SessionResource {
 		summary = "Gibt die Login-URL zurück, mit der eine Anwendung zum authprovider redirecten kann")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.PATH,
 			name = "clientType",
 			description = "Typ des Clients beim authprovider") })
 	@APIResponse(
@@ -85,11 +86,9 @@ public class SessionResource {
 		summary = "Erzeugt eine Session anhand des per S2S-Kommunikation für das 'one time token' beim authprovider gekauften JWT und packt die SessionId in ein Cookie")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.PATH,
 			name = "clientType",
-			description = "Typ des Clients beim authprovider"),
-		@Parameter(
-			name = "authResult",
-			description = "das Resultat der Authentifizierung beim authprovider") })
+			description = "Typ des Clients beim authprovider") })
 	@APIResponse(
 		name = "GetLoginUrlOKResponse",
 		responseCode = "200",
@@ -110,11 +109,12 @@ public class SessionResource {
 	@Operation(
 		operationId = "logout",
 		summary = "entfernt die Session")
-	@Parameters({
-		@Parameter(
-			name = "sessionId",
-			description = "id der Session (cookie)"),
-	})
+	// @Parameters({
+	// @Parameter(
+	// in = ParameterIn.COOKIE,
+	// name = "sessionId",
+	// description = "id der Session (cookie)"),
+	// })
 	@APIResponse(
 		name = "GetLoginUrlOKResponse",
 		responseCode = "200",
@@ -135,6 +135,7 @@ public class SessionResource {
 		summary = "entfernt die Session (nur Dev)")
 	@Parameters({
 		@Parameter(
+			in = ParameterIn.PATH,
 			name = "sessionId",
 			description = "id der Session"),
 	})

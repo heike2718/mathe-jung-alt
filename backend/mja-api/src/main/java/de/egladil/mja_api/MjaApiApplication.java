@@ -11,5 +11,5 @@ import jakarta.ws.rs.core.Application;
  */
 public class MjaApiApplication extends Application {
 
-	public static final String USER = "USER";
+	// aktuell leer
 }
