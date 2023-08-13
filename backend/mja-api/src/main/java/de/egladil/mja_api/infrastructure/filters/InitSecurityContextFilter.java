@@ -5,6 +5,9 @@
 package de.egladil.mja_api.infrastructure.filters;
 
 import java.io.IOException;
+import java.security.Principal;
+import java.util.Arrays;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,7 @@ import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.PreMatching;
+import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.ext.Provider;
 
 /**
@@ -49,8 +53,6 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 		// https://quarkus.io/guides/context-propagation
 
-		LOGGER.debug("stage=" + configService.getStage() + ", mockSession=" + configService.isMockSession());
-
 		String method = requestContext.getMethod();
 
 		if ("OPTIONS".equals(method)) {
@@ -61,7 +63,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 		}
 
 		String path = requestContext.getUriInfo().getPath();
-		LOGGER.debug("entering InitSecurityContextFilter: path={}", path);
+		LOGGER.debug("stage={}, mockSession={}, path={}", configService.getStage(), configService.isMockSession(), path);
 
 		if (!ConfigService.STAGE_PROD.equals(configService.getStage()) && configService.isMockSession()) {
 
@@ -70,6 +72,8 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 			initMockSecurityContext(requestContext);
 		} else {
+
+			LOGGER.debug("path={}", path);
 
 			String sessionId = SessionUtils.getSessionId(requestContext, configService.getStage());
 
@@ -81,13 +85,65 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 				if (session != null) {
 
-					// Packen den User in den authenticationContext.
-					authCtx.setUser(session.getUser());
-					LOGGER.debug("user set");
+					AuthenticatedUser user = session.getUser();
+
+					if (user != null) {
+
+						addUserToAuthAndSecurityContext(user, requestContext);
+					} else {
+
+						LOGGER.warn("path={}, user ist null, die Anwendung wird nicht funktionieren!", path);
+					}
 
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param requestContext
+	 */
+	private void addUserToAuthAndSecurityContext(final AuthenticatedUser user, final ContainerRequestContext requestContext) {
+
+		authCtx.setUser(user);
+
+		requestContext.setSecurityContext(new SecurityContext() {
+
+			@Override
+			public boolean isUserInRole(final String role) {
+
+				Optional<String> opt = Arrays.stream(user.getRoles()).filter(r -> role.equalsIgnoreCase(r)).findFirst();
+				return opt.isPresent();
+			}
+
+			@Override
+			public boolean isSecure() {
+
+				return true;
+			}
+
+			@Override
+			public Principal getUserPrincipal() {
+
+				return new Principal() {
+
+					@Override
+					public String getName() {
+
+						return user.getUuid();
+					}
+				};
+			}
+
+			@Override
+			public String getAuthenticationScheme() {
+
+				return null;
+			}
+		});
+
+		LOGGER.debug("user {} added to AuthenticationContext and SecurityContext", user);
+
 	}
 
 	private void initMockSecurityContext(final ContainerRequestContext requestContext) {

@@ -7,9 +7,6 @@ package de.egladil.mja_api.infrastructure.cdi;
 import java.io.File;
 import java.io.IOException;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Observes;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -18,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.runtime.configuration.ConfigUtils;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 
 /**
  * AppLifecycleBean
@@ -69,9 +68,13 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "target.origin")
 	String targetOrigin;
 
+	@ConfigProperty(name = "version")
+	String version;
+
 	void onStartup(@Observes final StartupEvent ev) {
 
-		LOGGER.info(" ===========> The application is starting with profiles" + StringUtils.join(ConfigUtils.getProfiles()));
+		LOGGER.info(" ===========> Version {} of the application is starting with profiles {}", version,
+			StringUtils.join(ConfigUtils.getProfiles()));
 
 		checkLatexBaseDir();
 

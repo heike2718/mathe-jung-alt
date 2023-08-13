@@ -13,6 +13,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
+import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
@@ -59,7 +60,8 @@ public class DeskriptorenResource {
 			schema = @Schema(type = SchemaType.ARRAY, implementation = DeskriptorUI.class)))
 	public Response loadDeskriptorenV2() {
 
-		boolean admin = authCtx.getUser().isAdmin();
+		AuthenticatedUser user = authCtx.getUser();
+		boolean admin = user.isAdmin();
 		return Response.ok(deskriptorenService.loadDeskriptorenRaetsel(admin)).build();
 	}
 

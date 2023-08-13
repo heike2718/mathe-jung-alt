@@ -118,7 +118,7 @@ public final class SessionUtils {
 			return sessionIdFromHeader;
 		}
 
-		LOGGER.info("sessionIdFromHeader was null, try to get SessionId from Cookie");
+		LOGGER.debug("sessionIdFromHeader was null, try to get SessionId from Cookie");
 		String sessionIdFromCookie = getSessionIdFromCookie(requestContext);
 		LOGGER.info("sessionIdFromCookie={}", sessionIdFromCookie);
 
