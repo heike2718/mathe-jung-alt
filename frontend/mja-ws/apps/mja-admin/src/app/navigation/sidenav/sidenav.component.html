@@ -14,12 +14,12 @@
         <span class="nav-caption">Rätselgruppen</span>
     </a>
 
-    <a *ngIf="true" mat-list-item (click)="login()">
+    <a *ngIf="authFacade.userIsLoggedOut$ | async" mat-list-item (click)="login()">
         <mat-icon>login</mat-icon>
         <span class="nav-caption">einloggen</span>
     </a>
 
-    <a *ngIf="false" mat-list-item (click)="logout()">
+    <a *ngIf="authFacade.userIsLoggedOut$ | async" mat-list-item (click)="logout()">
         <mat-icon>logout</mat-icon>
         <span class="nav-caption">ausloggen</span>
     </a>

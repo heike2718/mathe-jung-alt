@@ -38,11 +38,11 @@ import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 
 /**
- * QuizResource
+ * QuizzResource
  */
 @Path("mja-api/quiz/v1")
 @Tag(name = "Quiz", description = "Stellt Aufgaben von Rätselgruppen in verschiedenen Formen als Quiz zur Verfügung.")
-public class QuizResource {
+public class QuizzResource {
 
 	@Inject
 	QuizService quizService;

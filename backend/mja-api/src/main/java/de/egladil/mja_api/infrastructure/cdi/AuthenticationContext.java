@@ -13,7 +13,7 @@ public interface AuthenticationContext {
 
 	/**
 	 * Der user wird vom InitSecurityContextFilter in den AuthenticationContext gepackt und hier dann herausgeholt.
-	 * 
+	 *
 	 * @return
 	 */
 	AuthenticatedUser getUser();
@@ -23,5 +23,4 @@ public interface AuthenticationContext {
 	 * @return      boolean
 	 */
 	boolean isUserInRole(String role);
-
 }

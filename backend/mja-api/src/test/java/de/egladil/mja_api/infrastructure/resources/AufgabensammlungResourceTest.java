@@ -19,7 +19,7 @@ import io.restassured.response.Response;
  * AufgabensammlungResourceTest
  */
 @QuarkusTest
-@TestHTTPEndpoint(QuizResource.class)
+@TestHTTPEndpoint(QuizzResource.class)
 @TestProfile(FullDatabaseTestProfile.class)
 public class AufgabensammlungResourceTest {
 

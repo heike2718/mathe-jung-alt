@@ -7,6 +7,7 @@ package de.egladil.mja_api.infrastructure.filters;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -39,6 +40,8 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InitSecurityContextFilter.class);
 
+	private static List<String> OPEN_DATA_PATHS = Arrays.asList(new String[] { "/mja-api/quiz" });
+
 	@Inject
 	ConfigService configService;
 
@@ -63,7 +66,17 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 		}
 
 		String path = requestContext.getUriInfo().getPath();
-		LOGGER.debug("stage={}, mockSession={}, path={}", configService.getStage(), configService.isMockSession(), path);
+
+		boolean openData = this.isPathOpenData(path);
+
+		LOGGER.info("stage={}, mockSession={}, path={}, openData={}", configService.getStage(), configService.isMockSession(), path,
+			openData);
+
+		if (openData) {
+
+			this.addUserToAuthAndSecurityContext(AuthenticatedUser.createAnonymousUser(), requestContext);
+			return;
+		}
 
 		if (!ConfigService.STAGE_PROD.equals(configService.getStage()) && configService.isMockSession()) {
 
@@ -97,6 +110,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 				}
 			}
+
 		}
 	}
 
@@ -153,5 +167,11 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 		authCtx.setUser(user);
 		LOGGER.warn("config property 'mock.session' is true => authCtx with mocked user: ");
+	}
+
+	boolean isPathOpenData(final String path) {
+
+		return OPEN_DATA_PATHS.stream().filter(p -> path.startsWith(p)).findFirst().isPresent();
+
 	}
 }
