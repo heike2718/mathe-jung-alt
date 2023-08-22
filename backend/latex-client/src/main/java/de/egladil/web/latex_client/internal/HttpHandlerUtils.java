@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
 import de.egladil.web.latex_client.LaTeXCommand;
 import de.egladil.web.latex_client.exception.InvalidInputException;
@@ -24,7 +23,7 @@ import io.undertow.server.HttpServerExchange;
  */
 public class HttpHandlerUtils {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HttpHandlerUtils.class);
+	private static final Logger LOGGER = Logger.getLogger(HttpHandlerUtils.class);
 
 	public LaTeXCommand getCommand(final HttpServerExchange exchange) {
 

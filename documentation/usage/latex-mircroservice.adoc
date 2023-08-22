@@ -125,9 +125,19 @@ REST-API
 
 http://host:port/latex2pdf?filename=name-tex-file-ohne-suffix
 
+```
+# vom host aus
+curl -X GET -k -i http://localhost:9200/latex2pdf?filename=02516
+```
+
 *Transformation LaTeX -> PNG:*
 
 http://host:port/latex2png?filename=name-tex-file-ohne-suffix
+
+```
+# vom host aus
+curl -X GET -k -i http://localhost:9200/latex2png?filename=02516
+```
 
 
 Content-Type ist application/json.

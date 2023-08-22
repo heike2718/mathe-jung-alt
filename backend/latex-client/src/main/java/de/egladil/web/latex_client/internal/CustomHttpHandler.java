@@ -4,15 +4,13 @@
 // =====================================================
 package de.egladil.web.latex_client.internal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.web.latex_client.LaTeXCommand;
 import de.egladil.web.latex_client.MessagePayload;
 import de.egladil.web.latex_client.exception.InvalidInputException;
-import de.egladil.web.latex_client.exception.LaTeXClientException;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
@@ -22,7 +20,7 @@ import io.undertow.util.Headers;
  */
 public class CustomHttpHandler implements HttpHandler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CustomHttpHandler.class);
+	private static final Logger LOGGER = Logger.getLogger(CustomHttpHandler.class);
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -30,6 +28,8 @@ public class CustomHttpHandler implements HttpHandler {
 
 	@Override
 	public void handleRequest(final HttpServerExchange exchange) throws Exception {
+
+		StringBuilder sb = new StringBuilder();
 
 		try {
 
@@ -48,6 +48,7 @@ public class CustomHttpHandler implements HttpHandler {
 			}
 
 			String filename = handlerUtils.getFileName(exchange);
+			LOGGER.info("====> calling " + cmd.getShellScript() + " for file " + filename);
 
 			if (filename.endsWith(".tex")) {
 
@@ -56,11 +57,12 @@ public class CustomHttpHandler implements HttpHandler {
 
 			}
 
-			StringBuilder sb = new StringBuilder();
 			int exitCode = 0;
 			sb.append(sayWhatWillBeDone(cmd, filename));
 
 			exitCode = this.performCommand(cmd, filename);
+			LOGGER.info("====> " + cmd.getShellScript() + " " + filename + " exited with exitCode code " + exitCode);
+
 			sb.append(" - exitCode=");
 			sb.append(exitCode);
 
@@ -72,12 +74,16 @@ public class CustomHttpHandler implements HttpHandler {
 
 		} catch (InvalidInputException e) {
 
+			LOGGER.warn(sb.toString());
+			LOGGER.error(e.getMessage(), e);
+
 			exchange.getResponseSender()
 				.send(objectMapper
 					.writeValueAsString(MessagePayload.warn("Request kann nicht verarbeitet werden: " + this.getUsage())));
 
-		} catch (LaTeXClientException e) {
+		} catch (Exception e) {
 
+			LOGGER.warn(sb.toString());
 			LOGGER.error(e.getMessage(), e);
 			exchange.getResponseSender()
 				.send(objectMapper.writeValueAsString(MessagePayload.error("Es ist ein Fehler aufgetreten. Guckstu ins log")));

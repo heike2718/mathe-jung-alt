@@ -35,6 +35,9 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.TokenExchangeRestClient\".url")
 	String tokenExchangeRestClientUrl;
 
+	@ConfigProperty(name = "quarkus.datasource.jdbc.url")
+	String jdbcUrl;
+
 	@ConfigProperty(name = "quarkus.http.root-path")
 	String quarkusRootPath;
 
@@ -81,6 +84,7 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  session timeout nach {} min", sessionIdleTimeoutMinutes);
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
+		LOGGER.info(" ===========>  jdbcUrl={}", jdbcUrl);
 		LOGGER.info(" ===========>  latexRestClientUrl={}", latexRestClientUrl);
 		LOGGER.info(" ===========>  initAccesstokenUrl={}", initAccesstokenUrl);
 		LOGGER.info(" ===========>  tokenExchangeRestClientUrl={}", tokenExchangeRestClientUrl);

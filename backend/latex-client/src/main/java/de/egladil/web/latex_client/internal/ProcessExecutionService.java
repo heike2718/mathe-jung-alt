@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
 import de.egladil.web.latex_client.LaTeXCommand;
 
@@ -18,7 +17,7 @@ import de.egladil.web.latex_client.LaTeXCommand;
  */
 public class ProcessExecutionService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessExecutionService.class);
+	private static final Logger LOGGER = Logger.getLogger(ProcessExecutionService.class);
 
 	private String shellScript;
 
@@ -63,9 +62,6 @@ public class ProcessExecutionService {
 			}
 		} catch (final InterruptedException e) {
 
-			int exitCode = process.exitValue();
-			LOGGER.info(cmd.getShellScript() + " exited with exitCode code " + exitCode);
-
 			LOGGER.error(e.getMessage(), e);
 
 			return -2;
@@ -77,11 +73,8 @@ public class ProcessExecutionService {
 
 			if (exitCode != 0) {
 
-				LOGGER.error(cmd.getShellScript() + " exited with exitCode code " + exitCode);
+				LOGGER.error(cmd.getShellScript() + " " + fileName + " exited with exitCode code " + exitCode);
 				return exitCode;
-			} else {
-
-				LOGGER.info(cmd.getShellScript() + " exited with exitCode code " + exitCode);
 			}
 
 			return 0;
