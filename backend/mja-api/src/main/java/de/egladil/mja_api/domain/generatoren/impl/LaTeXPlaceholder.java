@@ -17,6 +17,7 @@ public enum LaTeXPlaceholder {
 	LOESUNGSBUCHSTABE("{loesungsbuchstabe}"),
 	NEWPAGE("{newpage}"),
 	PAR("{par}"),
+	FONT_NAME("{font}"),
 	UEBERSCHRIFT("{ueberschrift}");
 
 	private final String placeholder;

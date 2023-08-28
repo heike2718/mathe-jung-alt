@@ -1,0 +1,121 @@
+# Layouts für die generierten Rätsel und Rätselgruppen
+
+Aktuell haben wir quiz-vorschau und raetsel, wobei beim PDF die Lösung direkt unter die Aufgabe gedruckt wird. 
+
+Für Leher:innen sinnvoll wäre ein Kartei-Format, in dem Aufgabe und Lösung auf 2 verschiedene Seiten eines A5-Blattes gedruckt werden.
+
+## Layout-Typen
+
++ Quizvorschau
+  + alle Elemente der Rätselgruppe werden separiert nach Rätsel und Lösungen hintereinander weg gedruckt
+  + erst kommen alle Fragen in der gegebenen Reihenfolge
+  + dann kommen alle Lösungen in der passenden Reihenfolge
+  
++ Rätsel als PNG (je eins für die Frage, eins für die Lösung)
+  + zur Anzeige in der mja-admin-App
+  + zur Anzeige in online-Quizes
+  + zur Anzeige in der Minikänguru-Open-Data-App, in der die Statistik aufbereitet wird
+
++ Rätsel als PDF
+  + zum Ausdrucken
+
+Streng genommen entspricht der Druck eines einzelnen Rätsels dem Druck einer Rätselgruppe, die nur ein Element enthält.
+
++ Knobelkartei
+  + aus Zusammenstellungen von Rätseln soll sich eine Kartei drucken lassen, in der jede Frage und jede Lösung auf aufeinander folgenden separaten Seiten stehen. Dann kann man sie mit 2 Seiten je Blatt drucken, zu A5 zurechtschneiden und laminieren.
+
++ Aufgabenblätter
+  + aus Zusammenstellungen von Rätseln sollen sich Aufgabenblätter drucken lassen
+  + Schwierigkeit: möglichst keine Seitenunbrüche innerhalb einer Augabe? Oder sollte das egal sein?
+  + Es werden 2 PDFs generiert: eins mit den Fragen, eins mit den Lösungen.
+  + Es soll gewählt werden können, ob die Antwortvorschläge mit gedruckt werden sollen.
+
+## Was soll als Variablen wähbar sein?
+
++ Layout der Antwortvorschläge (wenn es keine gibt oder wenn keine gedruckt werden sollen, kann das ignoriert werden)
++ Schriftgröße. Default ist 11pt
++ Font: wählbar sind
+  + Fibel Nord
+  + Fibel Süd
+  + LaTeX-Standard
+
+## Welche Generatoren benötigen wir
+
++ Generator für Quizvorschau
+  + Rätsel sollen sortiert sein.
+  + Font muss nicht wählbar sein
+  + Schriftgröße muss nicht wählbar sein
+
++ Generator für Rätsel-PNGs
+  + Font muss wählbar sein
+  + Schriftgröße muss wählbar sein (oder nehmen wir immer 12pt für diesen Zweck?)
+
++ Generator für Knobelkartei
+
++ Generator für Aufgabenblätter
+
+
+## Aktionen
+
+### Generiere PNGs für Rätsel
+
+Falls es Antwortvorschläge gibt, muss das Layout gewählt werden. Falls es keine gibt, ist Layout NOPE.
+
+Es kann der Font gewählt werden. Wenn keiner gewählt ist, wird der Standard-LaTeX-Fonf genommen.
+
+Es muss die Schriftgröße gewählt werden: 11pt oder 12pt
+
+Dann werden 2 PNGs generiert, eins für die Frage, eins für die Lösung. Beide werden im Payload zurückgegeben.Ob und wie die Client-Anwendung sie anzeigt, interessiert die API nicht.
+
+### Generiere Knobelkartei
+
+Ziel ist eine Rätselgruppe oder ein einzelnes Rätsel. Die Uminterpretation eines einzelnen Rätsels zu einer Rätselgruppe geschieht auf dem Server.
+
+Bei einer Knobelkartei ist die Reihenfolge der Elemente egal.
+
+Wenn es ein Element mit 2 oder mehr Antwortvorschlägen gibt, muss gewählt werden, ob Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.
+
+Es kann der Font gewählt werden. Wenn keiner Gewählt wurde 
+
+Es muss die Schriftgröße gewählt werden.
+
+Dann werden die Rätsel wie folgt gedruckt:
+
++ Frage
++ Seitenumbruch
++ Lösung
++ Seitenumbruch
++ ...
++ Lösung
+
+(Nach der Lösung des letzten Elements kein Seitenumbruch mehr)
+
+### Generiere Aufgabenblätter
+
+Ziel ist eine Rätselgruppe mit mindestens 2 Elementen. Ein Aufgabenblatt mit nur einem Element ist von einer Knobelkartei nicht unterscheidbar.
+
+Die Reihenfolge der Elemente muss durch die Anwendenden festelgbar sein. In den Rätselgruppen geschieht das aktuell durch die Wahl einer Nummer. Es sollte aber auch möglich sein, die Rätsel in der gewünschten Reihenfolge ohne Nummer zu sorieren (drag and drop oder ^^^- Aktionen auf der Liste). In diesem Fall wird die Nummer beim Umsortieren aktualisiert, also erst einmal 001, 002, ... Der Umsortieralgorithmus ist herausfordernd.
+
+Enthält die Rätselgruppe ein Multiple-Choice-Element, muss gewählt werden, ob als Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.
+
+Es muss der Font gewählt werden.
+
+Es muss die Schriftgröße gewählt werden.
+
+Es soll möglich sein, Seitenumbrüche vorzugeben. Den Probedruck kann man ohne Seitenumbrüche erstellen. Dann kann man zwischen einzelnen Rätseln Seitenumbrüche definieren.
+
+Dann werden die Rätsel wie folgt gedruckt:
+
++ Frage 1
++ Frage 2
++ ...
++ Seitenumbruch (also hintereinander Fragen bis zum Seitenumbruch)
++ Frage n
++ Seitenumbruch
++ Lösung 1
++ Lösung 2
++ ...
++ Lösung m
+
+Die Lösungen werden hintereinander weg ohne Seitenumbruch gedruckt.
+

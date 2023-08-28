@@ -23,7 +23,7 @@ public interface RaetselGeneratorService {
 	 *                                  AnzeigeAntwortvorschlaegeTyp
 	 * @return
 	 */
-	Images generatePNGsRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	Images generatePNGsRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font);
 
 	/**
 	 * Generiert das Rätsel als 2seitiges PDF: Frage auf Seite 1, Lösung auf Seite 2. Minderprivilegierte User bekommen nur bei
@@ -33,6 +33,6 @@ public interface RaetselGeneratorService {
 	 * @param  layoutAntwortvorschlaege
 	 * @return                          GeneratedFile
 	 */
-	GeneratedFile generatePDFRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	GeneratedFile generatePDFRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font);
 
 }

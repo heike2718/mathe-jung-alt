@@ -4,8 +4,6 @@ networks:
 services:
   docker-latex-client:
     image: heike2718/docker-latex-client
-    mem_limit: 512M
-    mem_reservation: 128M
     container_name: docker-latex-client
     ports:
       - 9200:8080
@@ -17,7 +15,7 @@ services:
     # to make it simpler to identify in 'docker volume ls'.
     restart: on-failure:3
     volumes:
-      - /home/drpwzrd/docker-volumes/latex/doc:/doc
+      - /home/heike/docker-volumes/latex/doc:/doc
     networks:
       - mja-network
     command: ["java","-jar","/opt/latex-client.jar"]

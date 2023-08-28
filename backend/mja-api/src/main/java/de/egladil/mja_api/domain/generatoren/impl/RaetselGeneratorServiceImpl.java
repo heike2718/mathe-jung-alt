@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.RaetselGeneratorService;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -24,6 +27,7 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
+import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
@@ -41,8 +45,13 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselGeneratorServiceImpl.class);
 
+	private static List<String> TEMPORARY_FILE_EXTENSIONS = Arrays.asList(new String[] { ".aux", ".log", ".out", ".tex", "" });
+
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
+
+	@ConfigProperty(name = "latex.generator.preserve.tempfiles")
+	boolean preserveTempFiles;
 
 	@Inject
 	AuthenticationContext authCtx;
@@ -58,7 +67,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
 
 		LOGGER.debug("start generate output");
 
@@ -74,13 +83,13 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
-		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege);
+		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege, font);
 
 		boolean generateLoesung = StringUtils.isNotBlank(raetsel.getLoesung());
 
 		if (generateLoesung) {
 
-			raetselFileService.generateLoesungLaTeX(raetsel);
+			raetselFileService.generateLoesungLaTeX(raetsel, font);
 		}
 
 		Response responseFrage = null;
@@ -178,7 +187,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	}
 
 	@Override
-	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
 
 		LOGGER.debug("start generate output");
 
@@ -199,7 +208,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 		boolean isOrdinaryUser = PermissionUtils.isUserOrdinary(relevantRoles);
 
-		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege, isOrdinaryUser);
+		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege, font, isOrdinaryUser);
 
 		Response response = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");
@@ -235,6 +244,8 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 				LOGGER.info("Raetsel PDF generiert: [raetsel={}, user={}]", raetselUuid,
 					StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
+
+				this.deleteTemporaryFiles(raetsel.getSchluessel());
 
 				return result;
 			}
@@ -302,5 +313,22 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
 		}
 		return raetsel;
+	}
+
+	void deleteTemporaryFiles(final String fileNameWithoutExtension) {
+
+		if (preserveTempFiles) {
+
+			LOGGER.info("tempfiles sollen aufgehoben werden, also fuer {} nicht loeschen", fileNameWithoutExtension);
+
+			return;
+		}
+
+		final String path = latexBaseDir + File.separator + fileNameWithoutExtension;
+
+		String[] paths = TEMPORARY_FILE_EXTENSIONS.stream().map(ext -> new String(path + ext)).toList().toArray(new String[0]);
+
+		MjaFileUtils.deleteTemporaryFiles(paths);
+
 	}
 }

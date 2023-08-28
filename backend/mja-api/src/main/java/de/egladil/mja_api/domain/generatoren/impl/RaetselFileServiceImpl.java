@@ -6,12 +6,11 @@ package de.egladil.mja_api.domain.generatoren.impl;
 
 import java.io.File;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
@@ -20,6 +19,7 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * RaetselFileServiceImpl
@@ -37,7 +37,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	String latexBaseDir;
 
 	@Override
-	public String generateFrageLaTeX(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public String generateFrageLaTeX(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
 
 		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + ".tex";
 		File file = new File(path);
@@ -46,6 +46,8 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 			.generateLaTeXAntwortvorschlaege(raetsel.getAntwortvorschlaege());
 
 		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PNG);
+
+		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), font.getLatexFileInputDefinition());
 		template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), raetsel.getFrage());
 		template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), antworten);
@@ -56,7 +58,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	}
 
 	@Override
-	public String generateLoesungLaTeX(final Raetsel raetsel) {
+	public String generateLoesungLaTeX(final Raetsel raetsel, final FontName font) {
 
 		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + SUFFIX_LOESUNGEN + ".tex";
 		File file = new File(path);
@@ -64,6 +66,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 		String textLoesungsbuchstabe = getTextLoesungsbuchstabe(raetsel.getAntwortvorschlaege());
 
 		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PNG);
+		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), font.getLatexFileInputDefinition());
 		template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), textLoesungsbuchstabe);
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), raetsel.getLoesung());
 		template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), "");
@@ -74,7 +77,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	}
 
 	@Override
-	public String generateFrageUndLoesung(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final boolean zweiseitig) {
+	public String generateFrageUndLoesung(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final boolean zweiseitig) {
 
 		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + SUFFIX_PDF + ".tex";
 		File file = new File(path);
@@ -83,9 +86,11 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 			.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung()).withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
 			.withZweiseitig(zweiseitig);
 
-		String textRaetsel = new QuizitemLaTeXGenerator().generateLaTeXFrageLoesung(input);
+		String textRaetsel = new QuizitemLaTeXGenerator().generateLaTeXFrageLoesung(input, font);
 
 		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PDF);
+
+		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), font.getLatexFileInputDefinition());
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), textRaetsel);
 
 		writeOutput(raetsel, file, template);

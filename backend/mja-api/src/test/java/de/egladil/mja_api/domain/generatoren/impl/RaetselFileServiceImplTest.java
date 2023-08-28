@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.TestFileUtils;
+import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -63,7 +64,7 @@ public class RaetselFileServiceImplTest {
 				Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
 
 				// Act
-				String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.NOOP);
+				String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.NOOP, FontName.STANDARD);
 
 				// Assert
 				assertEquals(expectedPath, path);
@@ -89,7 +90,7 @@ public class RaetselFileServiceImplTest {
 			Raetsel raetsel = TestFileUtils.loadReaetsel();
 
 			// Act
-			String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.BUCHSTABEN);
+			String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.BUCHSTABEN, FontName.STANDARD);
 
 			// Assert
 			assertEquals(expectedPath, path);
@@ -120,7 +121,7 @@ public class RaetselFileServiceImplTest {
 				Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
 
 				// Act
-				String path = fileService.generateLoesungLaTeX(raetsel);
+				String path = fileService.generateLoesungLaTeX(raetsel, FontName.STANDARD);
 
 				// Assert
 				assertEquals(expectedPath, path);

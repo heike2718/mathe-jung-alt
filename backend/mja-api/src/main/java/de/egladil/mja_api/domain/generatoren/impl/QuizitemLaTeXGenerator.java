@@ -4,13 +4,13 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import org.apache.commons.lang3.StringUtils;
 
+import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * QuizitemLaTeXGenerator
@@ -29,9 +29,11 @@ public class QuizitemLaTeXGenerator {
 	 *               RaetselGeneratorinput die Texte des Rätsels, die gedruckt werden sollen.
 	 * @return       String
 	 */
-	public String generateLaTeXFrageLoesung(final RaetselGeneratorinput input) {
+	public String generateLaTeXFrageLoesung(final RaetselGeneratorinput input, final FontName font) {
 
 		String template = new String(this.getTemplate());
+
+		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), font.getLatexFileInputDefinition());
 
 		template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.placeholder(), input.getFrage());
 

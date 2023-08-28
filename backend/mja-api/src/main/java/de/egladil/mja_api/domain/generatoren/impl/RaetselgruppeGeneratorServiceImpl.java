@@ -11,10 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
@@ -23,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
@@ -35,6 +32,9 @@ import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 
 /**
  * RaetselgruppeGeneratorServiceImpl
@@ -65,7 +65,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	RaetselService raetselService;
 
 	@Override
-	public GeneratedFile generatePDFQuiz(final PersistenteRaetselgruppe raetselgruppe, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile generatePDFQuiz(final PersistenteRaetselgruppe raetselgruppe, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
 
 		return null;
 	}
@@ -75,7 +75,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 		LOGGER.debug("start generate output");
 
-		String template = generateLaTeX(raetselgruppe, aufgaben, layoutAntwortvorschlaege);
+		String template = generateLaTeX(raetselgruppe, aufgaben, layoutAntwortvorschlaege, FontName.STANDARD);
 		String fileNameWithoutExtension = writeToDoc(template, raetselgruppe.uuid, raetselgruppe.name);
 		return generatePdf(fileNameWithoutExtension, raetselgruppe.uuid);
 	}
@@ -83,7 +83,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	@Override
 	public GeneratedFile downloadLaTeXSource(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		String template = generateLaTeX(raetselgruppe, aufgaben, layoutAntwortvorschlaege);
+		String template = generateLaTeX(raetselgruppe, aufgaben, layoutAntwortvorschlaege, FontName.STANDARD);
 
 		GeneratedFile result = new GeneratedFile();
 		result.setFileData(template.getBytes());
@@ -176,7 +176,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	 * @param  layoutAntwortvorschlaege
 	 * @return
 	 */
-	private String generateLaTeX(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	private String generateLaTeX(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
 
 		Collections.sort(aufgaben, new QuizaufgabeComparator());
 
@@ -224,7 +224,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 				sb.append(headerAufgabe);
 
-				String textFrageLoesung = quizitemLaTeXGenerator.generateLaTeXFrageLoesung(input);
+				String textFrageLoesung = quizitemLaTeXGenerator.generateLaTeXFrageLoesung(input, font);
 				sb.append(textFrageLoesung);
 
 				// if (count < aufgaben.size() - 2) {
@@ -245,7 +245,9 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 	void deleteTemporaryFiles(final String fileNameWithoutExtension) {
 
-		if (!preserveTempFiles) {
+		if (preserveTempFiles) {
+
+			LOGGER.info("tempfiles sollen aufgehoben werden, also fuer {} nicht loeschen", fileNameWithoutExtension);
 
 			return;
 		}

@@ -38,7 +38,7 @@ public interface RaetselgruppeGeneratorService {
 	 * @param  layoutAntwortvorschlaege
 	 * @return                          GeneratedFile
 	 */
-	GeneratedFile generatePDFQuiz(PersistenteRaetselgruppe raetselgruppe, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	GeneratedFile generatePDFQuiz(PersistenteRaetselgruppe raetselgruppe, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font);
 
 	/**
 	 * Generiert de Vorschau einer Rätselgruppe, unabhängig davon, ob sie bereits freigegeben ist. Aufgaben und Lösungen werden

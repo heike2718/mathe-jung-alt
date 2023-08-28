@@ -26,18 +26,22 @@ public interface RaetselFileService {
 	 *                                  Raetsel
 	 * @param  layoutAntwortvorschlaege
 	 *                                  LayoutAntwortvorschlaege
+	 * @param  font
+	 *                                  FontName in welchem font generiert werden soll.
 	 * @return                          String Pfad des LaTeX-Files.
 	 */
-	String generateFrageLaTeX(Raetsel raetsel, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	String generateFrageLaTeX(Raetsel raetsel, LayoutAntwortvorschlaege layoutAntwortvorschlaege, FontName font);
 
 	/**
 	 * Schreibt die Lösung des gegebenen Raetsels in ein LaTeX-File im Filesystem und gibt den Pfad des Files zurück. Der Name des
 	 * Files ist der Schlüssel des Raetsels mit angehängtem _l.
 	 *
 	 * @param  raetsel
+	 * @param  font
+	 *                 FontName in welchem font generiert werden soll.
 	 * @return         String Pfad des LaTeX-Files.
 	 */
-	String generateLoesungLaTeX(Raetsel raetsel);
+	String generateLoesungLaTeX(Raetsel raetsel, final FontName font);
 
 	/**
 	 * Schreibt frage und (falls existent) Lösung in das gleiche LaTeX-File im Filessystem und gibt den Pfad des Files zurück.
@@ -46,11 +50,13 @@ public interface RaetselFileService {
 	 *                                  Der Name des Files ist der Schlüssel des Raetsels mit angehängtem _x.
 	 * @param  layoutAntwortvorschlaege
 	 *                                  LayoutAntwortvorschlaege
+	 * @param  font
+	 *                                  FontName in welchem font generiert werden soll.
 	 * @param  zweiseitig
 	 *                                  boolean bei true wird die Lösung, falls vorhanden, auf die nächste Seite gedruckt.
 	 * @return                          String
 	 */
-	String generateFrageUndLoesung(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, boolean zweiseitig);
+	String generateFrageUndLoesung(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, boolean zweiseitig);
 
 	/**
 	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.

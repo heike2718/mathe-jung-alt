@@ -22,6 +22,7 @@ import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
+import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.RaetselGeneratorService;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -346,7 +347,12 @@ public class RaetselResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)") })
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "font",
+			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
+			required = false) })
 	@APIResponse(
 		name = "GenerateImagesRaetselOKResponse",
 		responseCode = "200",
@@ -361,11 +367,14 @@ public class RaetselResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	public Images raetselImagesGenerieren(@PathParam(
 		value = "raetselID") final String raetselUuid, @QueryParam(
-			value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+			value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @QueryParam(
+				value = "font") final FontName font) {
 
 		this.delayService.pause();
 
-		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege);
+		FontName theFont = font != null ? font : FontName.STANDARD;
+
+		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege, theFont);
 
 		return result;
 	}
@@ -384,7 +393,12 @@ public class RaetselResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)") })
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "font",
+			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
+			required = false) })
 	@APIResponse(
 		name = "GeneratePDFRaetselOKResponse",
 		responseCode = "200",
@@ -401,11 +415,13 @@ public class RaetselResource {
 		regexp = "^[a-fA-F\\d\\-]{1,36}$",
 		message = "raetselID enthält ungültige Zeichen") @PathParam(
 			value = "raetselID") final String raetselUuid, @QueryParam(
-				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @QueryParam(
+					value = "font") final FontName font) {
 
 		this.delayService.pause();
+		FontName theFont = font != null ? font : FontName.STANDARD;
 
-		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege);
+		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege, theFont);
 		return result;
 	}
 
