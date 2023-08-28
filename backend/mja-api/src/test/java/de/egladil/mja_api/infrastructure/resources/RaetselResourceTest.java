@@ -222,7 +222,7 @@ public class RaetselResourceTest {
 	void testRaetselDetailsLadenFound() throws Exception {
 
 		Response response = given()
-			.when().get("v1/cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866");
+			.when().get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1");
 
 		String responsePayload = response.asString();
 		System.out.println(responsePayload);
@@ -240,7 +240,7 @@ public class RaetselResourceTest {
 	void testRaetselDetailsLadenNotFound() throws Exception {
 
 		given()
-			.when().get("v1/f4369b22")
+			.when().get("f4369b22/v1")
 			.then()
 			.statusCode(404)
 			.body(is(""));
@@ -439,7 +439,7 @@ public class RaetselResourceTest {
 	void testGeneratePDF() {
 
 		given().accept(ContentType.JSON)
-			.get("v1/PDF/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(200);
+			.get("PDF/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(200);
 
 	}
 
@@ -469,7 +469,7 @@ public class RaetselResourceTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
-			.post("v1/PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.post("PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
 			.then()
 			.statusCode(200);
 
@@ -480,7 +480,7 @@ public class RaetselResourceTest {
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	void testLoadImages() {
 
-		given().accept(ContentType.JSON).get("v1/PNG/02610").then().statusCode(200);
+		given().accept(ContentType.JSON).get("PNG/02610/v1").then().statusCode(200);
 	}
 
 	@Test
@@ -488,7 +488,7 @@ public class RaetselResourceTest {
 	@Order(17)
 	void testGeneratePDFKeinTreffer() {
 
-		given().get("v1/PDF/2222222-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=BUCHSTABEN").then().statusCode(404);
+		given().get("PDF/2222222-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=BUCHSTABEN").then().statusCode(404);
 
 	}
 
@@ -502,7 +502,7 @@ public class RaetselResourceTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
-			.post("v1/PNG/2222222-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.post("PNG/2222222-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
 			.then().statusCode(404);
 	}
 
@@ -511,7 +511,7 @@ public class RaetselResourceTest {
 	@Order(19)
 	void testLoadImagesKeinTreffer() throws Exception {
 
-		Response response = given().accept(ContentType.JSON).get("v1/PNG/76767");
+		Response response = given().accept(ContentType.JSON).get("PNG/76767/v1");
 
 		response.then().statusCode(200);
 

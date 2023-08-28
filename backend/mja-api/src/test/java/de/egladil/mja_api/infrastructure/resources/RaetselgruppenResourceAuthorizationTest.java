@@ -67,7 +67,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.get("v1/" + id)
+			.get(id + "/v1")
 			.then()
 			.statusCode(401);
 	}
@@ -80,7 +80,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 
 		given()
 			.contentType(ContentType.JSON)
-			.get("v1/" + id)
+			.get(id + "/v1")
 			.then()
 			.assertThat()
 			.statusCode(403);
@@ -181,7 +181,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.delete("v1/" + raetselgruppeUuid + "/elemente/abcdef")
+			.delete(raetselgruppeUuid + "/elemente/abcdef/v1")
 			.then()
 			.statusCode(401);
 	}
@@ -196,7 +196,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.delete("v1/" + raetselgruppeUuid + "/elemente/abcdef")
+			.delete(raetselgruppeUuid + "/elemente/abcdef/v1")
 			.then()
 			.statusCode(403);
 	}
@@ -217,7 +217,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("v1/abcdef-987654/elemente")
+			.post("abcdef-987654/elemente/v1")
 			.then()
 			.statusCode(401);
 
@@ -240,7 +240,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("v1/abcdef-987654/elemente")
+			.post("abcdef-987654/elemente/v1")
 			.then()
 			.statusCode(403);
 
@@ -254,7 +254,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
 			.get(
-				"v1/latex/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+				"latex/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(401);
 	}
@@ -268,7 +268,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
 			.get(
-				"v1/latex/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+				"latex/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(403);
 	}
@@ -281,7 +281,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
 			.get(
-				"v1/vorschau/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+				"vorschau/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(401);
 	}
@@ -295,7 +295,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
 			.get(
-				"v1/vorschau/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+				"vorschau/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(403);
 	}

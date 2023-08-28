@@ -54,7 +54,7 @@ export class RaetselgruppenHttpService {
 
     findById(uuid: string): Observable<RaetselgruppeDetails> {
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        const url = this.#url + '/v1/' + uuid;
+        const url = this.#url + '/' + uuid + '/v1';
         return this.#http.get<RaetselgruppeDetails>(url, { headers });
     }
 
@@ -71,7 +71,7 @@ export class RaetselgruppenHttpService {
 
     saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
 
-        const url = this.#url + '/v1/' + raetselgruppeID + '/elemente';
+        const url = this.#url + '/' + raetselgruppeID + '/elemente/v1';
 
         if (payload.id === 'neu') {
             return this.#insertRaetselgruppenelement(url, payload);
@@ -81,7 +81,8 @@ export class RaetselgruppenHttpService {
     }
 
     deleteRaetselgruppenelement(raetselgruppeID: string, payload: Raetselgruppenelement): Observable<RaetselgruppeDetails> {
-        const url = this.#url + '/v1/' + raetselgruppeID + '/elemente/' + payload.id;
+        
+        const url = this.#url + '/' + raetselgruppeID + '/elemente/' + payload.id + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.delete<RaetselgruppeDetails>(url, { headers });
@@ -90,7 +91,7 @@ export class RaetselgruppenHttpService {
     generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
 
-        const url = this.#url + '/v1/vorschau/' + raetselgruppeID;
+        const url = this.#url + '/vorschau/' + raetselgruppeID + '/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
@@ -100,7 +101,7 @@ export class RaetselgruppenHttpService {
 
     generiereLaTeX(raetselgruppeID: string): Observable<GeneratedFile> {
 
-        const url = this.#url + '/v1/latex/' + raetselgruppeID;
+        const url = this.#url + '/latex/' + raetselgruppeID + '/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams().set('layoutAntwortvorschlaege', 'ANKREUZTABELLE');
 

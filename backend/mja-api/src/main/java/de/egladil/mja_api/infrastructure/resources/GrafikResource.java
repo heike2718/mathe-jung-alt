@@ -4,15 +4,6 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Pattern;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
-
-import jakarta.annotation.security.RolesAllowed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -24,11 +15,19 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import de.egladil.mja_api.domain.grafiken.Grafik;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
 /**
  * GrafikResource
  */
-@Path("mja-api/grafiken/v1")
+@Path("mja-api/grafiken")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Grafikvorschau")
 public class GrafikResource {
@@ -40,6 +39,7 @@ public class GrafikResource {
 	GrafikService grafikService;
 
 	@GET
+	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findGrafik", summary = "liefert eine Grafikvorschau (png) für ein Image, das in LaTeX eingebunden wird.")

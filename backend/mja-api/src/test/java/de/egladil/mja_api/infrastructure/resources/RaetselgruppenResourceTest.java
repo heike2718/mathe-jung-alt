@@ -47,9 +47,6 @@ import io.restassured.response.Response;
 @TestMethodOrder(OrderAnnotation.class)
 public class RaetselgruppenResourceTest {
 
-	/**
-	 *
-	 */
 	private static final String CSRF_TOKEN = "lqhidhqio";
 
 	@Test
@@ -107,7 +104,7 @@ public class RaetselgruppenResourceTest {
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.get("v1/" + id);
+			.get(id + "/v1");
 
 		String responsePayload = response.asString();
 
@@ -132,8 +129,7 @@ public class RaetselgruppenResourceTest {
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.get(
-				"v1/" + id);
+			.get(id + "/v1");
 
 		String responsePayload = response.asString();
 
@@ -553,8 +549,7 @@ public class RaetselgruppenResourceTest {
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
-				.get(
-					"v1/" + raetselgruppeUuid);
+				.get(raetselgruppeUuid + "/v1");
 
 			String responsePayload = response.asString();
 
@@ -585,7 +580,7 @@ public class RaetselgruppenResourceTest {
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("v1/" + raetselgruppeUuid + "/elemente");
+				.post(raetselgruppeUuid + "/elemente/v1");
 
 			String responsePayload = response.asString();
 
@@ -624,7 +619,7 @@ public class RaetselgruppenResourceTest {
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.put("v1/" + raetselgruppeUuid + "/elemente");
+					.put(raetselgruppeUuid + "/elemente/v1");
 
 				String responsePayload = response.asString();
 
@@ -657,7 +652,7 @@ public class RaetselgruppenResourceTest {
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
-					.delete("v1/" + raetselgruppeUuid + "/elemente/" + elementUuid);
+					.delete(raetselgruppeUuid + "/elemente/" + elementUuid + "/v1");
 
 				String responsePayload = response.asString();
 
@@ -692,7 +687,7 @@ public class RaetselgruppenResourceTest {
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.delete("v1/abcdef-012345/elemente/98765-fedcba");
+			.delete("abcdef-012345/elemente/98765-fedcba/v1");
 
 		String responsePayload = response.asString();
 
@@ -718,7 +713,7 @@ public class RaetselgruppenResourceTest {
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.delete("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/98765-fedcba");
+			.delete("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/98765-fedcba/v1");
 
 		String responsePayload = response.asString();
 
@@ -757,7 +752,7 @@ public class RaetselgruppenResourceTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("v1/abcdef-987654/elemente");
+			.post("abcdef-987654/elemente/v1");
 
 		String responsePayload = response.asString();
 
@@ -790,7 +785,7 @@ public class RaetselgruppenResourceTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("v1/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
+			.post("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente/v1");
 
 		String responsePayload = response.asString();
 
@@ -823,7 +818,7 @@ public class RaetselgruppenResourceTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
+			.post("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1");
 
 		String responsePayload = response.asString();
 
@@ -856,7 +851,7 @@ public class RaetselgruppenResourceTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.post("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
+			.post("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1");
 
 		String responsePayload = response.asString();
 
@@ -889,7 +884,7 @@ public class RaetselgruppenResourceTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.put("v1/abcdef-987654/elemente");
+			.put("abcdef-987654/elemente/v1");
 
 		String responsePayload = response.asString();
 
@@ -922,7 +917,7 @@ public class RaetselgruppenResourceTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.put("v1/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
+			.put("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente/v1");
 
 		String responsePayload = response.asString();
 
@@ -955,7 +950,7 @@ public class RaetselgruppenResourceTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.body(requestBody)
-			.put("v1/0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente");
+			.put("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente/v1");
 
 		String responsePayload = response.asString();
 
@@ -994,7 +989,7 @@ public class RaetselgruppenResourceTest {
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.post("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
+				.post("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1");
 
 			String responsePayload = response.asString();
 
@@ -1026,7 +1021,7 @@ public class RaetselgruppenResourceTest {
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(requestBody)
-				.put("v1/13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente");
+				.put("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1");
 
 			String responsePayload = response.asString();
 
@@ -1053,7 +1048,7 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
-				"v1/latex/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+				"latex/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then().statusCode(200);
 	}
 
@@ -1068,7 +1063,7 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
-				"v1/latex/33333333-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+				"latex/33333333-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(404);
 	}
@@ -1084,7 +1079,7 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
-				"v1/vorschau/10257506-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+				"vorschau/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(200);
 	}
@@ -1100,7 +1095,7 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
-				"v1/vorschau/33333333-71c5-423e-b355-bf90b5bb344d?layoutAntwortvorschlaege=BUCHSTABEN")
+				"vorschau/33333333-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(404);
 	}

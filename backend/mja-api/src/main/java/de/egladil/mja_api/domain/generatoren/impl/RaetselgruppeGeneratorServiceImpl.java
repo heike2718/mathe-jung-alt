@@ -182,6 +182,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE);
 
+		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), font.getLatexFileInputDefinition());
 		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), raetselgruppe.name);
 
 		List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();

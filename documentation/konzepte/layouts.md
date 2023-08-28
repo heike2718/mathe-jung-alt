@@ -7,22 +7,17 @@ Für Leher:innen sinnvoll wäre ein Kartei-Format, in dem Aufgabe und Lösung au
 ## Layout-Typen
 
 + Quizvorschau
-  + alle Elemente der Rätselgruppe werden separiert nach Rätsel und Lösungen hintereinander weg gedruckt
+  + alle Elemente der Rätselgruppe werden separiert nach Rätsel und Lösungen hintereinander weg gedruckt als PDF
   + erst kommen alle Fragen in der gegebenen Reihenfolge
   + dann kommen alle Lösungen in der passenden Reihenfolge
-  
-+ Rätsel als PNG (je eins für die Frage, eins für die Lösung)
-  + zur Anzeige in der mja-admin-App
-  + zur Anzeige in online-Quizes
-  + zur Anzeige in der Minikänguru-Open-Data-App, in der die Statistik aufbereitet wird
+
++ Knobelkartei
+  + aus Zusammenstellungen von Rätseln soll sich eine Kartei drucken lassen, in der jede Frage und jede Lösung auf aufeinander folgenden separaten Seiten stehen. Dann kann man sie mit 2 Seiten je Blatt drucken, zu A5 zurechtschneiden und laminieren.
 
 + Rätsel als PDF
   + zum Ausdrucken
 
-Streng genommen entspricht der Druck eines einzelnen Rätsels dem Druck einer Rätselgruppe, die nur ein Element enthält.
-
-+ Knobelkartei
-  + aus Zusammenstellungen von Rätseln soll sich eine Kartei drucken lassen, in der jede Frage und jede Lösung auf aufeinander folgenden separaten Seiten stehen. Dann kann man sie mit 2 Seiten je Blatt drucken, zu A5 zurechtschneiden und laminieren.
+Streng genommen entspricht der PDF-Druck eines einzelnen Rätsels dem Druck einer Rätselgruppe, die nur ein Element enthält.
 
 + Aufgabenblätter
   + aus Zusammenstellungen von Rätseln sollen sich Aufgabenblätter drucken lassen
@@ -30,14 +25,22 @@ Streng genommen entspricht der Druck eines einzelnen Rätsels dem Druck einer R�
   + Es werden 2 PDFs generiert: eins mit den Fragen, eins mit den Lösungen.
   + Es soll gewählt werden können, ob die Antwortvorschläge mit gedruckt werden sollen.
 
+  
++ Rätsel als PNG (je eins für die Frage, eins für die Lösung)
+  + zur Anzeige in der mja-admin-App
+  + zur Anzeige in online-Quizes
+  + zur Anzeige in der Minikänguru-Open-Data-App, in der die Statistik aufbereitet wird
+
+
 ## Was soll als Variablen wähbar sein?
 
 + Layout der Antwortvorschläge (wenn es keine gibt oder wenn keine gedruckt werden sollen, kann das ignoriert werden)
-+ Schriftgröße. Default ist 11pt
 + Font: wählbar sind
   + Fibel Nord
   + Fibel Süd
   + LaTeX-Standard
+
+Mit der Wahl des Fonts wird gleichzeitig festgelegt, mit wieviel pt getexed wird: Die Fibel-Fonts bekommen 12pt, LaTeX-Standard bekommt 11pt.
 
 ## Welche Generatoren benötigen wir
 
@@ -55,29 +58,54 @@ Streng genommen entspricht der Druck eines einzelnen Rätsels dem Druck einer R�
 + Generator für Aufgabenblätter
 
 
-## Aktionen
+## Aktionen für ADMINs und AUTORen
 
 ### Generiere PNGs für Rätsel
+
+Diese Aktion ist nur im Rätseleditor verfügbar.
 
 Falls es Antwortvorschläge gibt, muss das Layout gewählt werden. Falls es keine gibt, ist Layout NOPE.
 
 Es kann der Font gewählt werden. Wenn keiner gewählt ist, wird der Standard-LaTeX-Fonf genommen.
 
-Es muss die Schriftgröße gewählt werden: 11pt oder 12pt
-
 Dann werden 2 PNGs generiert, eins für die Frage, eins für die Lösung. Beide werden im Payload zurückgegeben.Ob und wie die Client-Anwendung sie anzeigt, interessiert die API nicht.
+
+### Generiere Vorschau für Rätselgruppen
+
+Diese Aktion ist nur im Feature Rätselgruppen verfügbar. Es soll eine schnelle Vorschau des Inhalts einer gewählten Rätselgruppe als PDF generiert werden, erst alle Fragen, dann Seitenumbruch, dann alle Lösungen.
+
+Sortiert wird nach gegebener Nummer.
+
+Wenn es ein Element mit 2 oder mehr Antwortvorschlägen gibt, muss gewählt werden, ob Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.
+
+Es kann der Font gewählt werden. Wenn keiner gewählt wurde wird Standard-LaTeX gedruckt.
+
+Nur ADMIN und AUTOR kann diese Akion ausführen.
+
+## Aktionen für authentifizierte Benutzer (Lehrer, Privatpersonen)
+
+Diese Personen sollen eigene Rätselgruppen anlegen können. Die Rätselgruppen sollten noch einen Typ bekommen.
+
++ RESTRICTED
++ PUBLIC
+
+PUBLIC Rätselgruppen soll jeder autentifizierte User anlegen und bearbeiten können. RESTRICTED Rätselgruppen sollen nur ADMINs und AUTORen anlegen und bearbeiten dürfen.
+
+In der Webanwendung für die Allgemeinheit können nur PUBLIC Rätselgruppen angelegt werden. Man kann nur seine eigenen Rätselgruppen sehen, bearbeiten und löschen.
+
+Zur Auswahl stehen nur freigegebene Rätsel.
 
 ### Generiere Knobelkartei
 
-Ziel ist eine Rätselgruppe oder ein einzelnes Rätsel. Die Uminterpretation eines einzelnen Rätsels zu einer Rätselgruppe geschieht auf dem Server.
+Ziel ist eine Rätselgruppe oder ein einzelnes Rätsel als PDF zu drucken. Die Uminterpretation eines einzelnen Rätsels zu einer Rätselgruppe geschieht auf dem Server.
+
+Die Aktion ist im Rätseleditor verfügbar für Admins und Autoren. Status ist egal.
 
 Bei einer Knobelkartei ist die Reihenfolge der Elemente egal.
 
 Wenn es ein Element mit 2 oder mehr Antwortvorschlägen gibt, muss gewählt werden, ob Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.
 
-Es kann der Font gewählt werden. Wenn keiner Gewählt wurde 
-
-Es muss die Schriftgröße gewählt werden.
+Es kann der Font gewählt werden. Wenn keiner gewählt wurde wird Standard-LaTeX gedruckt.
 
 Dann werden die Rätsel wie folgt gedruckt:
 

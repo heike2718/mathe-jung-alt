@@ -17,6 +17,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import de.egladil.mja_api.domain.dto.SortDirection;
+import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
@@ -65,8 +66,8 @@ public class RaetselgruppenResource {
 	@Inject
 	RaetselgruppenService raetselgruppenService;
 
-	@Path("v1")
 	@GET
+	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findGruppen", summary = "Gibt alle Rätselgruppen zurück, die auf die gegebene Suchanfrage passen.")
@@ -131,10 +132,10 @@ public class RaetselgruppenResource {
 		return raetselgruppenService.findRaetselgruppen(suchparameter, limit, offset);
 	}
 
-	@Path("v1")
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(
 		operationId = "raetselgruppeAnlegen",
 		summary = "neue Rätselgruppe anlegen")
@@ -158,10 +159,10 @@ public class RaetselgruppenResource {
 		return Response.status(201).entity(raetselsammlung).build();
 	}
 
-	@Path("v1")
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(
 		operationId = "raetselgruppeAendern",
 		summary = "neue Rätselgruppe anlegen")
@@ -186,7 +187,7 @@ public class RaetselgruppenResource {
 	}
 
 	@GET
-	@Path("v1/{raetselgruppeID}")
+	@Path("{raetselgruppeID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppeDetailsLaden",
@@ -222,7 +223,7 @@ public class RaetselgruppenResource {
 	}
 
 	@POST
-	@Path("v1/{raetselgruppeID}/elemente")
+	@Path("{raetselgruppeID}/elemente/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementAnlegen",
@@ -263,7 +264,7 @@ public class RaetselgruppenResource {
 
 
 	@PUT
-	@Path("v1/{raetselgruppeID}/elemente")
+	@Path("{raetselgruppeID}/elemente/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementAendern",
@@ -297,7 +298,7 @@ public class RaetselgruppenResource {
 	}
 
 	@DELETE
-	@Path("v1/{raetselgruppeID}/elemente/{elementID}")
+	@Path("{raetselgruppeID}/elemente/{elementID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementLoeschen",
@@ -335,9 +336,9 @@ public class RaetselgruppenResource {
 	}
 
 	@GET
-	@Path("v1/vorschau/{raetselgruppeID}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Path("vorschau/{raetselgruppeID}/v1")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printQuiz",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
@@ -346,7 +347,12 @@ public class RaetselgruppenResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "font",
+			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet. Bei Fibel-Fonts wird mit 12pt gedruckt, sonst mit 11pt.",
+			required = false)
 	})
 	@APIResponse(
 		name = "PrintQuizFreigegebenOKResponse",
@@ -375,12 +381,12 @@ public class RaetselgruppenResource {
 
 
 	@GET
-	@Path("v1/latex/{raetselgruppeID}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("latex/{raetselgruppeID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "downloadLaTeXSource",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein LaTeX. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
+		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein LaTeX. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Zuerst werden alle Aufgaben gedruckt, dann alle Lösungen.")
 	@Parameters({
 		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
 		@Parameter(
@@ -412,4 +418,86 @@ public class RaetselgruppenResource {
 
 		return raetselgruppenService.downloadLaTeXSource(raetselgruppeID, layoutAntwortvorschlaege);
 	}
+
+	@GET
+	@Path("{raetselgruppeID}/arbeitsblatt/v1")
+	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Operation(
+		operationId = "printArbeitsblatt",
+		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein.")
+	@Parameters({
+		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
+	})
+	@APIResponse(
+		name = "RaetselgruppenArbeitsblattOKResponse",
+		description = "Quiz erfolgreich geladen",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = GeneratedFile.class)))
+	@APIResponse(
+		name = "RaetselgruppenArbeitsblattNotFound",
+		description = "Gibt es nicht",
+		responseCode = "404")
+	@APIResponse(
+		name = "RaetselgruppenArbeitsblattServerError",
+		description = "Serverfehler",
+		responseCode = "500",
+		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
+	public GeneratedFile printArbeitsblatt(@PathParam(
+		value = "raetselgruppeID") @Pattern(
+			regexp = "^[a-fA-F\\d\\-]{1,36}$",
+			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
+				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @QueryParam(
+					value = "font") final FontName font) {
+
+		throw new WebApplicationException(
+			Response.status(501).entity(MessagePayload.warn("Die API ist noch nicht implementiert")).build());
+	}
+
+	@GET
+	@Path("{raetselgruppeID}/knobelkartei/v1")
+	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Operation(
+		operationId = "printKnobelkartei",
+		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF, in dem jede Seite genau ein Rätsel enthält. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein.")
+	@Parameters({
+		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
+	})
+	@APIResponse(
+		name = "RaetselgruppenArbeitsblattOKResponse",
+		description = "Quiz erfolgreich geladen",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = GeneratedFile.class)))
+	@APIResponse(
+		name = "RaetselgruppenArbeitsblattNotFound",
+		description = "Gibt es nicht",
+		responseCode = "404")
+	@APIResponse(
+		name = "RaetselgruppenArbeitsblattServerError",
+		description = "Serverfehler",
+		responseCode = "500",
+		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
+	public GeneratedFile printKnobelkartei(@PathParam(
+		value = "raetselgruppeID") @Pattern(
+			regexp = "^[a-fA-F\\d\\-]{1,36}$",
+			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
+				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @QueryParam(
+					value = "font") final FontName font) {
+
+		throw new WebApplicationException(
+			Response.status(501).entity(MessagePayload.warn("Die API ist noch nicht implementiert")).build());
+	}
+
+
 }

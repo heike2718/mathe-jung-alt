@@ -92,7 +92,7 @@ public class QuellenResourceTest {
 
 		given()
 			.when()
-			.get("v1/8ef4d9b8-62a6-4643-8674-73ebaec52d98")
+			.get("8ef4d9b8-62a6-4643-8674-73ebaec52d98/v1")
 			.then()
 			.statusCode(401);
 
@@ -104,7 +104,7 @@ public class QuellenResourceTest {
 
 		given()
 			.when()
-			.get("v1/8ef4d9b8-62a6-4643-8674-73ebaec52d98")
+			.get("8ef4d9b8-62a6-4643-8674-73ebaec52d98/v1")
 			.then()
 			.statusCode(403);
 
@@ -118,7 +118,7 @@ public class QuellenResourceTest {
 		String quelleId = "8ef4d9b8-62a6-4643-8674-73ebaec52d98";
 
 		QuellenListItem responsePayload = given()
-			.when().get("v1/" + quelleId).then().statusCode(200).and().extract().as(QuellenListItem.class);
+			.when().get(quelleId + "/v1").then().statusCode(200).and().extract().as(QuellenListItem.class);
 
 		assertEquals("Heike Winkelvoß", responsePayload.getName());
 	}
@@ -130,7 +130,7 @@ public class QuellenResourceTest {
 		String expected = "{\"level\":\"ERROR\",\"message\":\"Es gibt keine Quelle mit dieser UUID\"}";
 
 		given()
-			.when().get("v1/7a94e100-85e9-4ffb-903b-06835851063b")
+			.when().get("7a94e100-85e9-4ffb-903b-06835851063b/v1")
 			.then().statusCode(404).and()
 			.body(is(expected));
 
@@ -143,7 +143,7 @@ public class QuellenResourceTest {
 		String expected = "{\"level\":\"ERROR\",\"message\":\"Es gibt keine Quelle mit dieser UUID\"}";
 
 		given()
-			.when().get("v1/7a94e100-85e9-4ffb-903b-06835851063b")
+			.when().get("7a94e100-85e9-4ffb-903b-06835851063b/v1")
 			.then().statusCode(404).and()
 			.body(is(expected));
 

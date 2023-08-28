@@ -49,7 +49,7 @@ export class RaetselHttpService {
 
     loadRaetselDetails(raetsel: Raetsel): Observable<RaetselDetails> {
 
-        const url = this.#url + '/v1/' + raetsel.id;
+        const url = this.#url + '/' + raetsel.id + '/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
         return this.#http.get<RaetselDetails>(url, { headers: headers });
@@ -57,7 +57,7 @@ export class RaetselHttpService {
 
     generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
 
-        const url = this.#url + '/v1/PNG/' + raetselId;
+        const url = this.#url + '/PNG/' + raetselId + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
@@ -69,7 +69,7 @@ export class RaetselHttpService {
 
     generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
-        const url = this.#url + '/v1/PDF/' + raetselId;
+        const url = this.#url + '/PDF/' + raetselId + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
@@ -79,7 +79,7 @@ export class RaetselHttpService {
 
     findLatexLogs(schluessel: string): Observable<GeneratedFile[]> {
 
-        const url = this.#url + '/latexlogs/v1/' + schluessel;
+        const url = this.#url + '/latexlogs/' + schluessel + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 

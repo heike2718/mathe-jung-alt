@@ -78,8 +78,8 @@ public class RaetselResource {
 	@Inject
 	DeskriptorenService deskriptorenService;
 
-	@Path("admin/v2")
 	@GET
+	@Path("admin/v2")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "findRaetselAdmin", summary = "Gibt alle Rätsel zurück, die auf die gegebene Suchanfrage passen.")
@@ -139,8 +139,8 @@ public class RaetselResource {
 			sortDirection);
 	}
 
-	@Path("v2")
 	@GET
+	@Path("v2")
 	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
 	@Operation(
 		operationId = "findRaetselPublic", summary = "Gibt alle Rätsel mit den gegebenen Deskriptoren zurück")
@@ -198,7 +198,7 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("v1/{raetselID}")
+	@Path("{raetselID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselDetailsLaden",
@@ -236,10 +236,10 @@ public class RaetselResource {
 		return Response.status(200).entity(raetsel).build();
 	}
 
-	@Path("v1")
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(
 		operationId = "raetselAnlegen",
 		summary = "neues Rätsel anlegen")
@@ -270,10 +270,10 @@ public class RaetselResource {
 
 	}
 
-	@Path("v1")
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(
 		operationId = "raetselAendern",
 		summary = "vorhandenes Rätsel ändern")
@@ -304,7 +304,7 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("v1/PNG/{schluessel}")
+	@Path("PNG/{schluessel}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselImagesLaden",
@@ -334,7 +334,7 @@ public class RaetselResource {
 	}
 
 	@POST
-	@Path("v1/PNG/{raetselID}")
+	@Path("PNG/{raetselID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselImagesGenerieren",
@@ -380,7 +380,7 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("v1/PDF/{raetselID}")
+	@Path("PDF/{raetselID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
 	@Operation(
 		operationId = "raetselPDFGenerieren",
@@ -426,8 +426,8 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("latexlogs/v1/{schluessel}")
-	// @RolesAllowed({ "ADMIN", "AUTOR" })
+	@Path("latexlogs/{schluessel}/v1")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "downloadLatexLogFiles",
 		summary = "Läd aus dem LaTeX-Verzeichnis die Dateien schluessel.log und schluessel_l.log herunter, wenn sie existieren.")

@@ -44,10 +44,10 @@ public class DeskriptorenResource {
 	@Inject
 	DeskriptorenService deskriptorenService;
 
-	@Path("v2")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("v2")
 	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "loadDeskriptorenV2",
 		summary = "Liefert die Liste aller Deskriptoren. Je nach Rolle werden nur die public oder alle geladen.")
@@ -67,8 +67,8 @@ public class DeskriptorenResource {
 
 	@GET
 	@Path("ids")
-	@Produces(MediaType.TEXT_PLAIN)
 	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Produces(MediaType.TEXT_PLAIN)
 	@Operation(
 		operationId = "transformToDeskriptorenOrdinal",
 		summary = "Wandelt Deskriptoren in eine kommaseparierte Liste ihrer IDs um")

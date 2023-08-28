@@ -17,6 +17,12 @@ public enum FontName {
 			return "\\input{./include/fibel-nord}";
 		}
 
+		@Override
+		public String getSchriftgroesse() {
+
+			return "12pt";
+		}
+
 	},
 	FIBEL_SUED {
 
@@ -24,6 +30,12 @@ public enum FontName {
 		public String getLatexFileInputDefinition() {
 
 			return "\\input{./include/fibel-sued}";
+		}
+
+		@Override
+		public String getSchriftgroesse() {
+
+			return "12pt";
 		}
 
 	},
@@ -35,12 +47,25 @@ public enum FontName {
 			return "";
 		}
 
+		@Override
+		public String getSchriftgroesse() {
+
+			return "11pt";
+		}
+
 	};
 
 	/**
-	 * Default ist ""
+	 * Das, wodurch {font} im LaTeX-Template ersetzt werden soll.
 	 *
 	 * @return String
 	 */
 	public abstract String getLatexFileInputDefinition();
+
+	/**
+	 * Das, wodurch {size} im LaTeX-Template ersetzt werden soll.
+	 *
+	 * @return String
+	 */
+	public abstract String getSchriftgroesse();
 }

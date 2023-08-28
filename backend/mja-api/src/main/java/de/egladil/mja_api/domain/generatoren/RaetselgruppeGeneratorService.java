@@ -42,7 +42,7 @@ public interface RaetselgruppeGeneratorService {
 
 	/**
 	 * Generiert de Vorschau einer Rätselgruppe, unabhängig davon, ob sie bereits freigegeben ist. Aufgaben und Lösungen werden
-	 * zusammen gedruckt.
+	 * zusammen gedruckt. Es wird mit LaTeX-Standard-Font gedruckt.
 	 *
 	 * @param  raetselgruppe
 	 *                                  PersistenteRaetselgruppe

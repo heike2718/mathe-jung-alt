@@ -97,7 +97,7 @@ public class RaetselResourceAuthorizationTest {
 
 		given()
 			.when()
-			.get("v1/cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866")
+			.get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1")
 			.then()
 			.statusCode(401);
 	}
@@ -108,7 +108,7 @@ public class RaetselResourceAuthorizationTest {
 
 		given()
 			.when()
-			.get("v1/cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866")
+			.get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1")
 			.then()
 			.statusCode(403);
 	}
@@ -213,7 +213,7 @@ public class RaetselResourceAuthorizationTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
-			.post("v1/PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.post("PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
 			.then()
 			.statusCode(401);
 
@@ -228,7 +228,7 @@ public class RaetselResourceAuthorizationTest {
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
-			.post("v1/PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.post("PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
 			.then()
 			.statusCode(403);
 
@@ -239,7 +239,7 @@ public class RaetselResourceAuthorizationTest {
 
 		given()
 			.accept(ContentType.JSON)
-			.get("v1/PNG/02610")
+			.get("PNG/02610/v1")
 			.then()
 			.statusCode(401);
 	}
@@ -250,7 +250,7 @@ public class RaetselResourceAuthorizationTest {
 
 		given()
 			.accept(ContentType.JSON)
-			.get("v1/PNG/02610")
+			.get("PNG/02610/v1")
 			.then()
 			.statusCode(403);
 	}
