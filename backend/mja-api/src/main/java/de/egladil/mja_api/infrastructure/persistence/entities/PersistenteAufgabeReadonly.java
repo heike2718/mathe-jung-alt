@@ -4,15 +4,16 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.persistence.entities;
 
+import de.egladil.mja_api.domain.DomainEntityStatus;
+import de.egladil.mja_api.domain.quellen.Quellenart;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
-import de.egladil.mja_api.domain.quellen.Quellenart;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * PersistenteAufgabeReadonly
@@ -26,6 +27,11 @@ public class PersistenteAufgabeReadonly extends PanacheEntityBase {
 
 	@Column
 	public String schluessel;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	public DomainEntityStatus status;
 
 	@Column
 	public String nummer;

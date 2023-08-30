@@ -1,7 +1,6 @@
-
+{header-frage}
 {content-frage}
 {antwortvorschlaege}
-{newpage}
-{loesungsbuchstabe}
-{content-loesung}
+
 % ==================================================================
+

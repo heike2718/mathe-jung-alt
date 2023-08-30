@@ -65,7 +65,7 @@
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 (click)="generiereLaTeX()" [disabled]="buttonsGenerierenDisabled()">LaTeX herunterladen</button></div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                (click)="openPrintVorschauDialog()" [disabled]="buttonsGenerierenDisabled()">Vorschau (PDF)</button>
+                (click)="generiereVorschau()" [disabled]="buttonsGenerierenDisabled()">Vorschau (PDF)</button>
         </div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 (click)="gotoUebersicht()">zur Übersicht</button>
@@ -78,9 +78,11 @@
         (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
     </mja-raetselgruppenelemente>
 
-    <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
-    <div *ngIf="images else imagesFehlen">
-        <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
+    <div *ngIf="gruppe.elemente.length > 0">
+        <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
+        <div *ngIf="images else imagesFehlen">
+            <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
+        </div>
     </div>
 </div>
 

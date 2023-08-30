@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
@@ -24,6 +21,8 @@ import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * QuizService
@@ -91,6 +90,7 @@ public class QuizService {
 		aufgabe.setAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(dbAufgabe.antwortvorschlaege));
 		aufgabe.setSchluessel(dbAufgabe.schluessel);
 		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.schluessel));
+		aufgabe.setStatus(dbAufgabe.status);
 		aufgabe.setQuelle(mapQuelle(dbAufgabe));
 		aufgabe.setNummer(dbAufgabe.nummer);
 		aufgabe.setPunkte(dbAufgabe.punkte);
@@ -111,23 +111,23 @@ public class QuizService {
 
 		switch (dbAufgabe.quellenart) {
 
-			case PERSON: {
+		case PERSON: {
 
-				return dbAufgabe.person;
-			}
+			return dbAufgabe.person;
+		}
 
-			case BUCH: {
+		case BUCH: {
 
-				return dbAufgabe.mediumTitel + ", " + dbAufgabe.seite;
-			}
+			return dbAufgabe.mediumTitel + ", " + dbAufgabe.seite;
+		}
 
-			case ZEITSCHRIFT: {
+		case ZEITSCHRIFT: {
 
-				return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahrgang;
-			}
+			return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahrgang;
+		}
 
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + dbAufgabe.quellenart);
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + dbAufgabe.quellenart);
 		}
 	}
 

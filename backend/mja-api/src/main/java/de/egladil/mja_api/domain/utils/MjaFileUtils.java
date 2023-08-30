@@ -60,6 +60,13 @@ public class MjaFileUtils {
 		try (InputStream in = MjaFileUtils.class.getResourceAsStream(classpathLocation);
 			StringWriter sw = new StringWriter()) {
 
+			if (in == null) {
+
+				String message = classpathLocation + " existiert nicht!!!!";
+				LOGGER.error(message);
+				throw new IOException(message);
+			}
+
 			IOUtils.copy(in, sw, Charset.forName("UTF-8"));
 
 			return sw.toString();
@@ -131,6 +138,8 @@ public class MjaFileUtils {
 		result = result.replaceAll("ö", "oe");
 		result = result.replaceAll("ü", "ue");
 		result = result.replaceAll("ß", "ss");
+
+		result = result.replaceAll("_-_", "_");
 		return result;
 
 	}

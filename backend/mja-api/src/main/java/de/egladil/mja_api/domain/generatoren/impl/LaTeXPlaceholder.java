@@ -10,15 +10,25 @@ package de.egladil.mja_api.domain.generatoren.impl;
 public enum LaTeXPlaceholder {
 
 	ANTWORTVORSCHLAEGE("{antwortvorschlaege}"),
+	BUCHSTABE("{buchstabe}"),
+	COLOR("{color}"),
 	CONTENT("{content}"),
 	CONTENT_FRAGE("{content-frage}"),
 	CONTENT_LOESUNG("{content-loesung}"),
+	FONT_NAME("{font}"),
+	HEADER_FRAGE("{header-frage}"),
+	HEADER_LOESUNG("{header-loesung}"),
+	NUMMER("{nummer}"),
 	CONTENT_RAETSEL_FRAGE_LOESUNG("{content-raetsel-frage-loesung}"),
 	LOESUNGSBUCHSTABE("{loesungsbuchstabe}"),
 	NEWPAGE("{newpage}"),
 	PAR("{par}"),
-	FONT_NAME("{font}"),
-	UEBERSCHRIFT("{ueberschrift}");
+	PUNKTE("{punkte}"),
+	SCHLUESSEL("{schluessel}"),
+	UEBERSCHRIFT("{ueberschrift}"),
+	UEBERSCHRIFT_AUFGABEN("{ueberschrift-aufgaben}"),
+	UEBERSCHRIFT_LOESUNGEN("{ueberschrift-loesungen}"),
+	TRENNER_FRAGE_LOESUNG("{trenner-frage-loesung}");
 
 	private final String placeholder;
 

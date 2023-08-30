@@ -17,40 +17,21 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetsel
 public interface RaetselgruppeGeneratorService {
 
 	/**
-	 * Generiert de Vorschau einer Rätselgruppe, unabhängig davon, ob sie bereits freigegeben ist. Aufgaben und Lösungen werden
-	 * zusammen gedruckt.
+	 * Generiert LaTeX für die gegebene raetselguppe.
 	 *
 	 * @param  raetselgruppe
-	 *                                  PersistenteRaetselgruppe
+	 *                                  PersistenteRaetselgruppe Berechtigungsprüfung nimmr aufrufender Service vor.
 	 * @param  aufgaben
-	 *                                  die Aufgaben zu diesem Quiz. Diese sind bereits sortiert.
+	 *                                  List nur die Aufgaben, die gedruckt werden sollen. Vorauswahl trifft aufrufender Service.
 	 * @param  layoutAntwortvorschlaege
-	 * @return                          GeneratedFile
+	 *                                  LayoutAntwortvorschlaege wenn NOOP, werden keine Antwortvorschläge gedruckt. So können aus
+	 *                                  multiple
+	 *                                  choice- Aufgaben auch Arbeitsblätter werden.
+	 * @param  font
+	 *                                  FontName
+	 * @param  verwendungszweck
+	 *                                  Verwendungszweck entscheidet über die Gruppierung der Aufgaben.
+	 * @return                          GeneratedFile - ein PDF oder eine LaTeX-Textdatei
 	 */
-	GeneratedFile downloadLaTeXSource(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
-
-	/**
-	 * Generiert das PDF einer freigegebenen Rätselgruppe. Dabei werden die Lösungen mit einem newpage ans Ende gehängt, so dass
-	 * man es wie Arbeitsblätter verwenden kann.
-	 *
-	 * @param  raetselgruppe
-	 *                                  PersistenteRaetselgruppe
-	 * @param  layoutAntwortvorschlaege
-	 * @return                          GeneratedFile
-	 */
-	GeneratedFile generatePDFQuiz(PersistenteRaetselgruppe raetselgruppe, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font);
-
-	/**
-	 * Generiert de Vorschau einer Rätselgruppe, unabhängig davon, ob sie bereits freigegeben ist. Aufgaben und Lösungen werden
-	 * zusammen gedruckt. Es wird mit LaTeX-Standard-Font gedruckt.
-	 *
-	 * @param  raetselgruppe
-	 *                                  PersistenteRaetselgruppe
-	 * @param  aufgaben
-	 *                                  die Aufgaben zu diesem Quiz. Diese sind bereits sortiert.
-	 * @param  layoutAntwortvorschlaege
-	 * @return                          GeneratedFile
-	 */
-	GeneratedFile generateVorschauPDFQuiz(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
-
+	GeneratedFile generate(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege, FontName font, Verwendungszweck verwendungszweck);
 }

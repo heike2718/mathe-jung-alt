@@ -37,7 +37,7 @@
         <div *ngIf="!user.isAdmin">
             <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
                 <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                        [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF generieren</button></div>
+                        [disabled]="generierenDiabled()" (click)="printPDF()">PDF generieren</button></div>
                 <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                         (click)="gotoRaetselUebersicht()">Suche</button>
                 </div>
@@ -52,10 +52,10 @@
                         mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button></div>
                 <div *ngIf="!raetsel.schreibgeschuetzt" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill
                         mat-raised-button color="primary" [disabled]="generierenDiabled()"
-                        matTooltip="PNG Frage und Lösung generieren" (click)="openPrintPNGDialog()">PNG
+                        matTooltip="PNG Frage und Lösung generieren" (click)="printPNG()">PNG
                         generieren</button></div>
                 <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                        matTooltip="PDF generieren" [disabled]="generierenDiabled()" (click)="openPrintPDFDialog()">PDF
+                        matTooltip="PDF generieren" [disabled]="generierenDiabled()" (click)="printPDF()">PDF
                         generieren</button></div>
                 <div *ngIf="raetselFacade.generateLatexError$ | async" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                         (click)="downloadLatexLogs()">LaTeX-Logs</button>

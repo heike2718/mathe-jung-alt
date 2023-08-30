@@ -44,7 +44,8 @@ public interface RaetselFileService {
 	String generateLoesungLaTeX(Raetsel raetsel, final FontName font);
 
 	/**
-	 * Schreibt frage und (falls existent) Lösung in das gleiche LaTeX-File im Filessystem und gibt den Pfad des Files zurück.
+	 * Generiert das LaTeX für die PDF-Vorschau des gegebenen Raetsels, speichert es als LaTeX-File im Filessystem und gibt den Pfad
+	 * des Files zurück.
 	 *
 	 * @param  raetsel
 	 *                                  Der Name des Files ist der Schlüssel des Raetsels mit angehängtem _x.
@@ -52,11 +53,9 @@ public interface RaetselFileService {
 	 *                                  LayoutAntwortvorschlaege
 	 * @param  font
 	 *                                  FontName in welchem font generiert werden soll.
-	 * @param  zweiseitig
-	 *                                  boolean bei true wird die Lösung, falls vorhanden, auf die nächste Seite gedruckt.
 	 * @return                          String
 	 */
-	String generateFrageUndLoesung(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, boolean zweiseitig);
+	String generiereLaTeXRaetselPDF(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font);
 
 	/**
 	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.

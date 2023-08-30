@@ -4,6 +4,10 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.dto;
 
+import java.util.Arrays;
+import java.util.Optional;
+
+import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 
@@ -12,15 +16,52 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
  */
 public class RaetselGeneratorinput {
 
+	private String nummer;
+
+	private String schluessel;
+
 	private String frage;
 
 	private String loesung;
+
+	private int punkte;
 
 	private Antwortvorschlag[] antwortvorschlaege;
 
 	private LayoutAntwortvorschlaege layoutAntwortvorschlaege;
 
-	private boolean zweiseitig = false;
+	private Verwendungszweck verwendungszweck;
+
+	public String getTextColor() {
+
+		switch (punkte) {
+
+		case 300:
+			return "green";
+
+		case 400:
+			return "blue";
+
+		case 500:
+			return "orange";
+
+		default:
+			return "black";
+		}
+	}
+
+	public String getLoesungsbuchstabe() {
+
+		if (antwortvorschlaege == null) {
+
+			return "";
+		}
+
+		Optional<Antwortvorschlag> optKorrekt = Arrays.stream(antwortvorschlaege).filter(v -> v.isKorrekt()).findFirst();
+
+		return optKorrekt.isEmpty() ? "" : optKorrekt.get().getBuchstabe();
+
+	}
 
 	public String getFrage() {
 
@@ -66,14 +107,47 @@ public class RaetselGeneratorinput {
 		return this;
 	}
 
-	public boolean isZweiseitig() {
+	public int getPunkte() {
 
-		return zweiseitig;
+		return punkte;
 	}
 
-	public RaetselGeneratorinput withZweiseitig(final boolean zweiseitig) {
+	public RaetselGeneratorinput withPunkten(final int punkte) {
 
-		this.zweiseitig = zweiseitig;
+		this.punkte = punkte;
+		return this;
+	}
+
+	public String getNummer() {
+
+		return nummer;
+	}
+
+	public RaetselGeneratorinput withNummer(final String nummer) {
+
+		this.nummer = nummer;
+		return this;
+	}
+
+	public String getSchluessel() {
+
+		return schluessel;
+	}
+
+	public RaetselGeneratorinput withSchluessel(final String schluessel) {
+
+		this.schluessel = schluessel;
+		return this;
+	}
+
+	public Verwendungszweck getVerwendungszweck() {
+
+		return verwendungszweck;
+	}
+
+	public RaetselGeneratorinput withVerwendungszweck(final Verwendungszweck verwendungszweck) {
+
+		this.verwendungszweck = verwendungszweck;
 		return this;
 	}
 }

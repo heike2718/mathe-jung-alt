@@ -6,6 +6,7 @@ package de.egladil.mja_api.domain.raetselgruppen.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,7 +15,9 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
+import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -467,7 +470,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public GeneratedFile printVorschau(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile printVorschau(final String raetselgruppeID, final FontName font) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -479,11 +482,59 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
 
-		return raetselgruppeFileService.generateVorschauPDFQuiz(dbResult, aufgaben, layoutAntwortvorschlaege);
+		return raetselgruppeFileService.generate(dbResult, aufgaben, LayoutAntwortvorschlaege.ANKREUZTABELLE, font,
+			Verwendungszweck.VORSCHAU);
 	}
 
 	@Override
-	public GeneratedFile downloadLaTeXSource(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile printKartei(final String raetselgruppeID, final FontName font, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+
+		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
+
+		if (dbResult == null) {
+
+			throw new WebApplicationException(
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Rätselgruppe gibt es nicht.")).build());
+		}
+
+		checkPermission(dbResult);
+
+		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
+		List<Quizaufgabe> freigegebeneAufgaben = aufgaben;
+
+		if (PermissionUtils.isUserOrdinary(authCtx.getUser().getRoles())) {
+
+			freigegebeneAufgaben = aufgaben.stream().filter(a -> DomainEntityStatus.FREIGEGEBEN == a.getStatus())
+				.collect(Collectors.toList());
+
+			if (freigegebeneAufgaben.isEmpty()) {
+
+				LOGGER.error("Rätselgruppe {} - {} hat keine freigegebenen Aufgaben. Aufruf durch user {}", raetselgruppeID,
+					dbResult.name, StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
+
+				throw new WebApplicationException(
+					Response.status(Status.FORBIDDEN)
+						.entity(MessagePayload.error("Drucken einer Kartei nicht erlaubt. Keine freigegebenen Rätsel.")).build());
+			}
+
+		}
+
+		if (freigegebeneAufgaben.isEmpty()) {
+
+			LOGGER.error("Rätselgruppe {} - {} hat keine Aufgaben. Aufruf durch user {}", raetselgruppeID,
+				dbResult.name, StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
+
+			throw new WebApplicationException(
+				Response.status(Status.BAD_REQUEST)
+					.entity(MessagePayload.error("Drucken einer Kartei nicht möglich. Rätselgruppe ist leer.")).build());
+		}
+
+		return raetselgruppeFileService.generate(dbResult, freigegebeneAufgaben, layoutAntwortvorschlaege, font,
+			Verwendungszweck.KARTEI);
+	}
+
+	@Override
+	public GeneratedFile downloadLaTeXSource(final String raetselgruppeID) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -495,7 +546,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
 
-		return raetselgruppeFileService.downloadLaTeXSource(dbResult, aufgaben, layoutAntwortvorschlaege);
+		return raetselgruppeFileService.generate(dbResult, aufgaben, LayoutAntwortvorschlaege.ANKREUZTABELLE, FontName.STANDARD,
+			Verwendungszweck.LATEX);
 	}
 
 	void checkPermission(final PersistenteRaetselgruppe ausDB) {
@@ -503,12 +555,11 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		if (!PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
 			PermissionUtils.getRelevantRoles(authCtx), ausDB.owner)) {
 
-			LOGGER.warn("User {} hat versucht, Raetselgruppe {} mit Owner {} zu aendern",
+			LOGGER.warn("User {} hat versucht, Raetselgruppe {} mit Owner {} zu aendern oder zu drucken",
 				authCtx.getUser().getName(), ausDB.uuid,
 				ausDB.owner);
 
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 	}
-
 }

@@ -12,7 +12,7 @@ export const raetselgruppenActions = createActionGroup({
         'SELECT_RAETSELGRUPPE': props<{ raetselgruppe: RaetselgruppenTrefferItem }>(),
         'UNSELECT_RAETSELGRUPPE': emptyProps(),
         'RAETSELGRUPPEDETAILS_LOADED': props<{raetselgruppeDetails: RaetselgruppeDetails, navigateTo: string}>(),
-        'GENERIERE_VORSCHAU': props<{raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>(),
+        'GENERIERE_VORSCHAU': props<{raetselgruppeID: string}>(),
         'FILE_GENERATED': props<{ pdf: GeneratedFile }>(),
         'GENERIERE_LATEX': props<{raetselgruppeID: string}>(),
         'EDIT_RAETSELGUPPE': props<{raetselgruppeBasisdaten: RaetselgruppeBasisdaten}>(),

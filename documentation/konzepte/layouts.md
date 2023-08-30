@@ -66,9 +66,17 @@ Diese Aktion ist nur im Rätseleditor verfügbar.
 
 Falls es Antwortvorschläge gibt, muss das Layout gewählt werden. Falls es keine gibt, ist Layout NOPE.
 
-Es kann der Font gewählt werden. Wenn keiner gewählt ist, wird der Standard-LaTeX-Fonf genommen.
+Es kann der Font gewählt werden. Wenn keiner gewählt ist, wird der Standard-LaTeX-Font genommen.
 
-Dann werden 2 PNGs generiert, eins für die Frage, eins für die Lösung. Beide werden im Payload zurückgegeben.Ob und wie die Client-Anwendung sie anzeigt, interessiert die API nicht.
+Dann werden 2 PNGs generiert, eins für die Frage, eins für die Lösung. Beide werden im Payload zurückgegeben. Ob und wie die Client-Anwendung sie anzeigt, interessiert die API nicht.
+
+### Generiere PDF für Rätsel
+
+Das ist als Vorschau gedacht. Daher wird die Lösung ohne Seitenumbruch direkt hinter die Frage gedruckt.
+
+Wenn es Antwortvorschläge gibt, muss gewählt werden, ob Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.
+
+Es wird mit LaTeX-Standardfont, 11pt gedruckt.
 
 ### Generiere Vorschau für Rätselgruppen
 
@@ -126,9 +134,7 @@ Die Reihenfolge der Elemente muss durch die Anwendenden festelgbar sein. In den 
 
 Enthält die Rätselgruppe ein Multiple-Choice-Element, muss gewählt werden, ob als Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.
 
-Es muss der Font gewählt werden.
-
-Es muss die Schriftgröße gewählt werden.
+Es kann der Font gewählt werden. Wenn keiner gewählt wurde wird Standard-LaTeX gedruckt.
 
 Es soll möglich sein, Seitenumbrüche vorzugeben. Den Probedruck kann man ohne Seitenumbrüche erstellen. Dann kann man zwischen einzelnen Rätseln Seitenumbrüche definieren.
 
@@ -146,4 +152,54 @@ Dann werden die Rätsel wie folgt gedruckt:
 + Lösung m
 
 Die Lösungen werden hintereinander weg ohne Seitenumbruch gedruckt.
+
+## Kategorisierung
+
+Welche Merkmale zur Kategorisierung der Generierungsaufgabe gibt es?
+
++ Ausgabeformat (PDF, PNG, LaTeX)
++ Verwendungszweck (Aufgabenblatt, Aufgaben mit Lösungen, nur Aufgabe, nur Lösung)
++ Inhalte (Frage, Lösung)
++ Trenner aufgabe-loesung (kleiner Abstand, Seitenumbruch)
+
+PDF und LaTeX sind keine getrennten Aufgabenformate im eigentlichen Sinne. LaTeX ist die Vorstufe für PDF. D.h. man kann eine Methode schreiben, die das LaTeX erzeugt und als String zurückgibt. Darauf kann dann eine Methode aufsetzen, die den String in eine LaTeX-Datei schreibt und deren Pfad zurückgibt. Diese wiederum kann dem LaTeX-Service zur Generierung des PDF übergeben werden.
+
+Inhalt "nur Aufgabe" und "nur Lösung" sind nur für PNG erforderlich
+
+Der Trenner ist für PNG uninteressant.
+
+__Fazit:__
+
+### PNG
+
+Ausgabeformat = PNG.
+
+2 mögliche Inhalte: Frage, Lösung. Kein Rahmen.
+
+1. template-png-frage.txt
+1. template-png-loesung.txt
+
+### PDF
+
+Ausgabeformat = PDF
+
+3 mögliche Rahmen: Arbeitsblatt, Aufgaben mit Lösungen (für Aufgabenblätter), Kartei.
+
+Inhalte zusammengefasst oder getrennt.
+
+__Für die Rahmen:__
+
+1. template-aufgabenblatt-pdf.tex
+1. template-aufgabenblatt-mit-loesungen-pdf.tex
+1. template-kartei-pdf.tex
+
+__Für die Rätselgruppenelemente:__
+
+1. tmplate-pdf-frage.txt
+2. template-pdf-loesung.txt
+3. template-pdf-frage-loesung.txt
+
+Für eine Kartei ist Trenner aufgabe-loesung ein Seitenumbruch, für eine Vorschau ein kleiner Abstand. D.h. im Fall von PDF muss die Art des Trenners als Parameter mitgegeben werden.
+
+
 

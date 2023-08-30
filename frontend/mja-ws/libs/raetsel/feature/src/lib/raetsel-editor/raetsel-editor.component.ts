@@ -17,7 +17,7 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { Antwortvorschlag, EditRaetselPayload, GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, SelectableItem, SelectItemsCompomentModel, SelectPrintparametersDialogData, STATUS } from '@mja-ws/core/model';
+import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectPrintparametersDialogData, STATUS } from '@mja-ws/core/model';
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, SelectPrintparametersDialogComponent } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { GrafikFacade } from '@mja-ws/grafik/api';
@@ -196,33 +196,15 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.raetselFacade.cancelSelection();
   }
 
-  openPrintPNGDialog(): void {
-    const dialogData: SelectPrintparametersDialogData = {
-      titel: 'PNG generieren',
-      layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
-      selectedLayoutAntwortvorschlaege: undefined
+  printPNG(): void {
+
+    const outputformat: OUTPUTFORMAT = 'PNG';
+
+    if (this.#raetselDetails.antwortvorschlaege.length > 0) {
+      this.#openPrintDialog(outputformat);
+    } else {
+      this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, 'NOOP');
     }
-
-    const dialogRef = this.dialog.open(SelectPrintparametersDialogComponent, {
-      height: '300px',
-      width: '700px',
-      data: dialogData
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-
-      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
-
-        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
-        switch (dialogData.selectedLayoutAntwortvorschlaege) {
-          case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
-          case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
-          case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
-        }
-
-        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, 'PNG', layout);
-      }
-    });
   }
 
   openHistorieLaTeXSpeichernDialog(raetsel: RaetselDetails): void {
@@ -365,5 +347,34 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     };
 
     this.raetselFacade.saveRaetsel(editRaetselPayload);
+  }
+
+  #openPrintDialog(outputformat: OUTPUTFORMAT): void {
+    const dialogData: SelectPrintparametersDialogData = {
+      titel: outputformat + ' generieren',
+      layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
+      selectedLayoutAntwortvorschlaege: undefined
+    }
+
+    const dialogRef = this.dialog.open(SelectPrintparametersDialogComponent, {
+      height: '300px',
+      width: '700px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
+
+        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        switch (dialogData.selectedLayoutAntwortvorschlaege) {
+          case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
+          case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
+          case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
+        }
+
+        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, layout);
+      }
+    });
   }
 }

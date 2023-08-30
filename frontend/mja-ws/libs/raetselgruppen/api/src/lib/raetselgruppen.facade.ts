@@ -35,8 +35,8 @@ export class RaetselgruppenFacade {
         this.#store.dispatch(raetselgruppenActions.unselect_raetselgruppe());
     }
 
-    generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-        this.#store.dispatch(raetselgruppenActions.generiere_vorschau({ raetselgruppeID, layoutAntwortvorschlaege }));
+    generiereVorschau(raetselgruppeID: string): void {
+        this.#store.dispatch(raetselgruppenActions.generiere_vorschau({ raetselgruppeID }));
     }
 
     generiereLaTeX(raetselgruppeID: string): void {

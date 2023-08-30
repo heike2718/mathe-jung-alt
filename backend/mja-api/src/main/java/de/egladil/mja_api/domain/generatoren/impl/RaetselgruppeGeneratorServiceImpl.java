@@ -6,9 +6,7 @@ package de.egladil.mja_api.domain.generatoren.impl;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -21,14 +19,13 @@ import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
-import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
+import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
+import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
-import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
-import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
@@ -41,8 +38,6 @@ import jakarta.ws.rs.core.Response;
  */
 @ApplicationScoped
 public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGeneratorService {
-
-	private static final String LATEX_TEMPLATE = "/latex/template-quiz-vorschau.tex";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppeGeneratorServiceImpl.class);
 
@@ -64,37 +59,40 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	@Inject
 	RaetselService raetselService;
 
-	@Override
-	public GeneratedFile generatePDFQuiz(final PersistenteRaetselgruppe raetselgruppe, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
-
-		return null;
-	}
+	@Inject
+	LaTeXTemplatesService templatesService;
 
 	@Override
-	public GeneratedFile generateVorschauPDFQuiz(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile generate(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Verwendungszweck verwendungszweck) {
 
 		LOGGER.debug("start generate output");
 
-		String template = generateLaTeX(raetselgruppe, aufgaben, layoutAntwortvorschlaege, FontName.STANDARD);
-		String fileNameWithoutExtension = writeToDoc(template, raetselgruppe.uuid, raetselgruppe.name);
-		return generatePdf(fileNameWithoutExtension, raetselgruppe.uuid);
-	}
+		RaetselgruppeLaTeXGeneratorStrategy strategy = RaetselgruppeLaTeXGeneratorStrategy.getStrategy(verwendungszweck);
 
-	@Override
-	public GeneratedFile downloadLaTeXSource(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+		RaetselgruppeGeneratorInput input = new RaetselgruppeGeneratorInput()
+			.withAufgaben(aufgaben)
+			.withFont(font)
+			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
+			.withRaetselgruppe(raetselgruppe)
+			.withVerwendungszweck(verwendungszweck);
 
-		String template = generateLaTeX(raetselgruppe, aufgaben, layoutAntwortvorschlaege, FontName.STANDARD);
+		String template = strategy.generateLaTeX(input, templatesService, raetselService, quizitemLaTeXGenerator);
+
+		if (verwendungszweck.compileToPDF()) {
+
+			String fileNameWithoutExtension = writeToDoc(template, raetselgruppe.uuid, raetselgruppe.name);
+			return generatePdf(fileNameWithoutExtension, raetselgruppe.uuid);
+		}
 
 		GeneratedFile result = new GeneratedFile();
 		result.setFileData(template.getBytes());
-		result.setFileName(raetselgruppe.uuid + ".tex");
+		result.setFileName(MjaFileUtils.nameToFilenamePart(raetselgruppe.name) + ".tex");
 		return result;
 	}
 
 	String writeToDoc(final String template, final String raetselgruppeID, final String raetselgruppeName) {
 
-		String filenameWithoutExtension = MjaFileUtils.nameToFilenamePart(raetselgruppeName) + "-"
-			+ UUID.randomUUID().toString().substring(0, 8);
+		String filenameWithoutExtension = getFilenameWithoutExcension(raetselgruppeName);
 		String fileName = filenameWithoutExtension + ".tex";
 
 		String path = latexBaseDir + File.separator + fileName;
@@ -106,6 +104,17 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 		return filenameWithoutExtension;
 
+	}
+
+	/**
+	 * @param  raetselgruppeName
+	 * @return
+	 */
+	String getFilenameWithoutExcension(final String raetselgruppeName) {
+
+		String filenameWithoutExtension = MjaFileUtils.nameToFilenamePart(raetselgruppeName) + "-"
+			+ UUID.randomUUID().toString().substring(0, 8);
+		return filenameWithoutExtension;
 	}
 
 	GeneratedFile generatePdf(final String fileNameWithoutExtension, final String raetselgruppeID) {
@@ -168,80 +177,6 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 				response.close();
 			}
 		}
-	}
-
-	/**
-	 * @param  raetselgruppe
-	 * @param  aufgaben
-	 * @param  layoutAntwortvorschlaege
-	 * @return
-	 */
-	private String generateLaTeX(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
-
-		Collections.sort(aufgaben, new QuizaufgabeComparator());
-
-		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE);
-
-		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), font.getLatexFileInputDefinition());
-		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), raetselgruppe.name);
-
-		List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();
-		List<RaetselLaTeXDto> raetselLaTeX = raetselService.findRaetselLaTeXwithSchluessel(schluessel);
-
-		StringBuffer sb = new StringBuffer();
-
-		int count = 0;
-
-		for (Quizaufgabe aufgabe : aufgaben) {
-
-			Optional<RaetselLaTeXDto> opt = raetselLaTeX.stream().filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
-				.findFirst();
-
-			if (opt.isPresent()) {
-
-				RaetselLaTeXDto raetsel = opt.get();
-
-				RaetselGeneratorinput input = new RaetselGeneratorinput().withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
-					.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
-					.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege);
-
-				String headerAufgabe = null;
-
-				if (aufgabe.getNummer().equals(aufgabe.getSchluessel())) {
-
-					headerAufgabe = LaTeXConstants.HEADER_AUFGABE_SCHLUESSEL_PUNKTE.replace("{0}", aufgabe.getSchluessel());
-					headerAufgabe = headerAufgabe.replace("{1}", aufgabe.getPunkte() + "");
-				} else {
-
-					headerAufgabe = LaTeXConstants.HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE.replace("{0}", aufgabe.getNummer());
-					headerAufgabe = headerAufgabe.replace("{1}", aufgabe.getSchluessel());
-					headerAufgabe = headerAufgabe.replace("{2}", aufgabe.getPunkte() + "");
-				}
-
-				if (count > 0) {
-
-					sb.append("\\par \\vspace{1ex}");
-				}
-
-				sb.append(headerAufgabe);
-
-				String textFrageLoesung = quizitemLaTeXGenerator.generateLaTeXFrageLoesung(input, font);
-				sb.append(textFrageLoesung);
-
-				// if (count < aufgaben.size() - 2) {
-				//
-				// sb.append(LaTeXConstants.VALUE_LINEBREAK);
-				// }
-				count++;
-
-			} else {
-
-				LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
-			}
-		}
-
-		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), sb.toString());
-		return template;
 	}
 
 	void deleteTemporaryFiles(final String fileNameWithoutExtension) {

@@ -88,14 +88,13 @@ export class RaetselgruppenHttpService {
         return this.#http.delete<RaetselgruppeDetails>(url, { headers });
     }
 
-    generiereVorschau(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereVorschau(raetselgruppeID: string): Observable<GeneratedFile> {
 
 
         const url = this.#url + '/vorschau/' + raetselgruppeID + '/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
-        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
+        return this.#http.get<GeneratedFile>(url, { headers: headers });
 
     }
 
@@ -103,9 +102,8 @@ export class RaetselgruppenHttpService {
 
         const url = this.#url + '/latex/' + raetselgruppeID + '/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        const params = new HttpParams().set('layoutAntwortvorschlaege', 'ANKREUZTABELLE');
 
-        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
+        return this.#http.get<GeneratedFile>(url, { headers: headers });
     }
 
     #insertRaetselgruppe(url: string, payload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {

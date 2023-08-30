@@ -80,7 +80,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			LOGGER.warn("user {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
 				raetsel.getSchluessel());
 
-			throw new WebApplicationException(Status.UNAUTHORIZED);
+			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 
 		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege, font);
@@ -203,12 +203,10 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				authCtx.getUser().getName(),
 				raetsel.getSchluessel());
 
-			throw new WebApplicationException(Status.UNAUTHORIZED);
+			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 
-		boolean isOrdinaryUser = PermissionUtils.isUserOrdinary(relevantRoles);
-
-		raetselFileService.generateFrageUndLoesung(raetsel, layoutAntwortvorschlaege, font, isOrdinaryUser);
+		raetselFileService.generiereLaTeXRaetselPDF(raetsel, layoutAntwortvorschlaege, font);
 
 		Response response = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");

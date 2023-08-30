@@ -80,12 +80,26 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  openPrintPNGDialog(): void {
-    this.#openPrintDialog('PNG');
+  printPNG(): void {
+
+    const outputformat: OUTPUTFORMAT = 'PNG';
+
+    if (this.#raetselDetails.antwortvorschlaege.length > 0) {
+      this.#openPrintDialog(outputformat);
+    } else {
+      this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, 'NOOP');
+    }
   }
 
-  openPrintPDFDialog(): void {
-    this.#openPrintDialog('PDF');
+  printPDF(): void {
+
+    const outputformat: OUTPUTFORMAT = 'PDF';
+
+    if (this.#raetselDetails.antwortvorschlaege.length > 0) {
+      this.#openPrintDialog(outputformat);
+    } else {
+      this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, 'NOOP');
+    }
   }
 
   gotoRaetselUebersicht(): void {

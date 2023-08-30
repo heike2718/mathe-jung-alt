@@ -5,6 +5,7 @@
 package de.egladil.mja_api.domain.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
@@ -120,6 +121,23 @@ public final class PermissionUtils {
 		}
 
 		if (isUserAutor(roles)) {
+
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean isUserOrdinary(final String[] roles) {
+
+		List<String> rollen = Arrays.asList(roles);
+
+		if (isUserAdmin(rollen)) {
+
+			return false;
+		}
+
+		if (isUserAutor(rollen)) {
 
 			return false;
 		}

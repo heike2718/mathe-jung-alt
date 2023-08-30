@@ -340,14 +340,10 @@ public class RaetselgruppenResource {
 	@Path("vorschau/{raetselgruppeID}/v1")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
-		operationId = "printQuiz",
+		operationId = "printRaetselgruppeVorschau",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
 	@Parameters({
 		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "font",
@@ -355,28 +351,29 @@ public class RaetselgruppenResource {
 			required = false)
 	})
 	@APIResponse(
-		name = "PrintQuizFreigegebenOKResponse",
+		name = "PrintRaetselgruppeVorschauOKResponse",
 		description = "PDF erfolgreich generiert",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
-		name = "RaetselgruppeNotFound",
+		name = "PrintRaetselgruppeVorschauNotFound",
 		description = "Gibt es nicht",
 		responseCode = "404")
 	@APIResponse(
-		name = "RaetselgruppeServerError",
+		name = "PrintRaetselgruppeVorschauServerError",
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	public GeneratedFile printQuizVorschau(@PathParam(
+	public GeneratedFile printVorschau(@PathParam(
 		value = "raetselgruppeID") @Pattern(
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
 			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
-				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+				value = "font") final FontName font) {
 
-		return raetselgruppenService.printVorschau(raetselgruppeID, layoutAntwortvorschlaege);
+		FontName theFont = font == null ? FontName.STANDARD : font;
+		return raetselgruppenService.printVorschau(raetselgruppeID, theFont);
 	}
 
 
@@ -388,11 +385,7 @@ public class RaetselgruppenResource {
 		operationId = "downloadLaTeXSource",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein LaTeX. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Zuerst werden alle Aufgaben gedruckt, dann alle Lösungen.")
 	@Parameters({
-		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
+		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.")
 	})
 	@APIResponse(
 		name = "DownloadLaTeXSourceOKResponse",
@@ -413,10 +406,9 @@ public class RaetselgruppenResource {
 	public GeneratedFile downloadLaTeX(@PathParam(
 		value = "raetselgruppeID") @Pattern(
 			regexp = "^[a-fA-F\\d\\-]{1,36}$",
-			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
-				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID) {
 
-		return raetselgruppenService.downloadLaTeXSource(raetselgruppeID, layoutAntwortvorschlaege);
+		return raetselgruppenService.downloadLaTeXSource(raetselgruppeID);
 	}
 
 	@GET
@@ -495,8 +487,8 @@ public class RaetselgruppenResource {
 				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @QueryParam(
 					value = "font") final FontName font) {
 
-		throw new WebApplicationException(
-			Response.status(501).entity(MessagePayload.warn("Die API ist noch nicht implementiert")).build());
+		FontName theFont = font == null ? FontName.STANDARD : font;
+		return raetselgruppenService.printKartei(raetselgruppeID, theFont, layoutAntwortvorschlaege);
 	}
 
 

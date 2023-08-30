@@ -9,6 +9,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 
@@ -27,6 +28,10 @@ public class Quizaufgabe {
 	@JsonProperty
 	@Schema(description = "fachlich eindeutiger Schlüssel des verwendeten Rätsels")
 	private String schluessel;
+
+	@JsonProperty
+	@Schema(description = "Status des verwendeten Rätsels")
+	private DomainEntityStatus status;
 
 	@JsonProperty
 	@Schema(description = "Quelle der Quizaufgabe für eine Zitatsection")
@@ -156,6 +161,16 @@ public class Quizaufgabe {
 	public void setStrafpunkte(final int strafpunkte) {
 
 		this.strafpunkte = strafpunkte;
+	}
+
+	public DomainEntityStatus getStatus() {
+
+		return status;
+	}
+
+	public void setStatus(final DomainEntityStatus status) {
+
+		this.status = status;
 	}
 
 }

@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
+import de.egladil.mja_api.domain.generatoren.TrennerartFrageLoesung;
+import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -77,16 +79,23 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	}
 
 	@Override
-	public String generateFrageUndLoesung(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final boolean zweiseitig) {
+	public String generiereLaTeXRaetselPDF(final Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
 
 		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + SUFFIX_PDF + ".tex";
 		File file = new File(path);
 
-		RaetselGeneratorinput input = new RaetselGeneratorinput().withAntwortvorschlaege(raetsel.getAntwortvorschlaege())
-			.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung()).withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
-			.withZweiseitig(zweiseitig);
+		RaetselGeneratorinput input = new RaetselGeneratorinput()
+			.withAntwortvorschlaege(raetsel.getAntwortvorschlaege())
+			.withFrage(raetsel.getFrage())
+			.withLoesung(raetsel.getLoesung())
+			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
+			.withNummer(raetsel.getSchluessel())
+			.withVerwendungszweck(Verwendungszweck.LATEX)
+			.withSchluessel(raetsel.getSchluessel());
 
-		String textRaetsel = new QuizitemLaTeXGenerator().generateLaTeXFrageLoesung(input, font);
+		boolean printAsMultipleChoice = true;
+		String textRaetsel = new QuizitemLaTeXGenerator().generateLaTeXFrageLoesung(input, TrennerartFrageLoesung.ABSTAND,
+			printAsMultipleChoice);
 
 		String template = MjaFileUtils.loadTemplate(LATEX_TEMPLATE_PDF);
 

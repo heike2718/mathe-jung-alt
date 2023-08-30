@@ -105,9 +105,13 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
           case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
         }
 
-        this.raetselgruppenFacade.generiereVorschau(this.getRaetselgruppeID(), layout);
+        this.raetselgruppenFacade.generiereVorschau(this.getRaetselgruppeID());
       }
     });
+  }
+
+  generiereVorschau(): void {
+    this.raetselgruppenFacade.generiereVorschau(this.getRaetselgruppeID());
   }
 
   generiereLaTeX(): void {

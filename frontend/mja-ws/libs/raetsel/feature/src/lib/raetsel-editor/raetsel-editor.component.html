@@ -136,7 +136,7 @@
                 [disabled]="!form.valid || antwortvorschlaegeErrors()" (click)="submit()">speichern</button></div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 [disabled]="generierenDiabled()" matTooltip="PNG Frage und Lösung generieren"
-                (click)="openPrintPNGDialog()">PNG generieren</button></div>
+                (click)="printPNG()">PNG generieren</button></div>
         <div *ngIf="raetselFacade.generateLatexError$ | async" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 matTooltip="Logdateien herunterladen"
                 (click)="downloadLatexLogs()">LaTeX-Logs</button></div>

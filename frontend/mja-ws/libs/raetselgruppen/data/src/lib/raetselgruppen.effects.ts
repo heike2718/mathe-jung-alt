@@ -90,7 +90,7 @@ export class RaetselgruppenEffects {
     generiereVorschau$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselgruppenActions.generiere_vorschau),
-            concatMap((action) => this.#raetselgruppenHttpService.generiereVorschau(action.raetselgruppeID, action.layoutAntwortvorschlaege)),
+            concatMap((action) => this.#raetselgruppenHttpService.generiereVorschau(action.raetselgruppeID)),
             map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
         )
     );
