@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.TestFileUtils;
 import de.egladil.mja_api.domain.generatoren.FontName;
+import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -64,7 +65,8 @@ public class RaetselFileServiceImplTest {
 				Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
 
 				// Act
-				String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.NOOP, FontName.STANDARD);
+				String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.NOOP, FontName.STANDARD,
+					Schriftgroesse.NORMAL);
 
 				// Assert
 				assertEquals(expectedPath, path);
@@ -90,7 +92,8 @@ public class RaetselFileServiceImplTest {
 			Raetsel raetsel = TestFileUtils.loadReaetsel();
 
 			// Act
-			String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.BUCHSTABEN, FontName.STANDARD);
+			String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.BUCHSTABEN, FontName.STANDARD,
+				Schriftgroesse.NORMAL);
 
 			// Assert
 			assertEquals(expectedPath, path);
@@ -121,7 +124,7 @@ public class RaetselFileServiceImplTest {
 				Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
 
 				// Act
-				String path = fileService.generateLoesungLaTeX(raetsel, FontName.STANDARD);
+				String path = fileService.generateLoesungLaTeX(raetsel, FontName.STANDARD, Schriftgroesse.NORMAL);
 
 				// Assert
 				assertEquals(expectedPath, path);
@@ -182,13 +185,14 @@ public class RaetselFileServiceImplTest {
 		void should_getTextLoesungsbuchstabeReturnLoesungsbuchstabeUndText_when_textDifferent() {
 
 			// Arrange
-			String expected = "{\\bf Lösung ist X (42)}\\\\ \\vspace{1ex}";
+			String expected = "{\\it Lösung ist X (42)}\\par";
 
 			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[1];
 			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("X").withKorrekt(true).withText("42");
 
 			// Act
 			String result = fileService.getTextLoesungsbuchstabe(antwortvorschlaege);
+			// System.out.println(result);
 
 			// Assert
 			assertEquals(expected, result);
@@ -198,13 +202,14 @@ public class RaetselFileServiceImplTest {
 		void should_getTextLoesungsbuchstabeReturnNurLoesungsbuchstabe_when_textEquals() {
 
 			// Arrange
-			String expected = "{\\bf Lösung ist X}\\\\ \\vspace{1ex}";
+			String expected = "{\\it Lösung ist X}\\par";
 
 			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[1];
 			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("X").withKorrekt(true).withText("X");
 
 			// Act
 			String result = fileService.getTextLoesungsbuchstabe(antwortvorschlaege);
+			// System.out.println(result);
 
 			// Assert
 			assertEquals(expected, result);
@@ -214,13 +219,14 @@ public class RaetselFileServiceImplTest {
 		void should_getTextLoesungsbuchstabeReturnNurLoesungsbuchstabe_when_textNull() {
 
 			// Arrange
-			String expected = "{\\bf Lösung ist X}\\\\ \\vspace{1ex}";
+			String expected = "{\\it Lösung ist X}\\par";
 
 			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[1];
 			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("X").withKorrekt(true).withText(null);
 
 			// Act
 			String result = fileService.getTextLoesungsbuchstabe(antwortvorschlaege);
+			// System.out.println(result);
 
 			// Assert
 			assertEquals(expected, result);
@@ -230,13 +236,14 @@ public class RaetselFileServiceImplTest {
 		void should_getTextLoesungsbuchstabeReturnNurLoesungsbuchstabe_when_textBlank() {
 
 			// Arrange
-			String expected = "{\\bf Lösung ist X}\\\\ \\vspace{1ex}";
+			String expected = "{\\it Lösung ist X}\\par";
 
 			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[1];
 			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("X").withKorrekt(true).withText("  ");
 
 			// Act
 			String result = fileService.getTextLoesungsbuchstabe(antwortvorschlaege);
+			// System.out.println(result);
 
 			// Assert
 			assertEquals(expected, result);

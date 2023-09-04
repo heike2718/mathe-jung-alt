@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import {
     DeskriptorUI,
+    FONT_NAME,
     GeneratedFile,
     GeneratedImages,
     LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
@@ -11,7 +12,8 @@ import {
     QUERY_PARAM_OFFSET,
     QUERY_PARAM_SORT_DIRECTION,
     QUERY_PARAM_SUCHSTRING,
-    QUERY_PARAM_TYPE_DESKRIPTOREN
+    QUERY_PARAM_TYPE_DESKRIPTOREN,
+    SCHRIFTGROESSE
 } from "@mja-ws/core/model";
 import { EditRaetselPayload, Raetsel, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
 import { Observable } from "rxjs";
@@ -55,24 +57,28 @@ export class RaetselHttpService {
         return this.#http.get<RaetselDetails>(url, { headers: headers });
     }
 
-    generateRaetselPNGs(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
+    generateRaetselPNGs(raetselId: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
 
         const url = this.#url + '/PNG/' + raetselId + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
-
-        const obs$ = this.#http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers, params: params });
+        const params = new HttpParams()
+            .set('font', font)
+            .set('layoutAntwortvorschlaege', layoutAntwortvorschlaege)
+            .set('size', schriftgroesse);
 
         return this.#http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers, params: params });
     }
 
-    generateRaetselPDF(raetselId: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generateRaetselPDF(raetselId: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
         const url = this.#url + '/PDF/' + raetselId + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+        const params = new HttpParams()
+            .set('font', font)
+            .set('layoutAntwortvorschlaege', layoutAntwortvorschlaege)
+            .set('size', schriftgroesse);
 
         return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
     }

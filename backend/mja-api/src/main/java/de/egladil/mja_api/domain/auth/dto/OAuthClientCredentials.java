@@ -4,13 +4,12 @@
 // =====================================================
 package de.egladil.mja_api.domain.auth.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import de.egladil.mja_api.domain.auth.util.SecUtils;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 /**
  * OAuthClientCredentials
@@ -44,6 +43,42 @@ public class OAuthClientCredentials {
 		result.nonce = nonce;
 		return result;
 
+	}
+
+	@Override
+	public int hashCode() {
+
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+
+		if (this == obj) {
+
+			return true;
+		}
+
+		if (!(obj instanceof OAuthClientCredentials)) {
+
+			return false;
+		}
+		OAuthClientCredentials other = (OAuthClientCredentials) obj;
+
+		if (clientId == null) {
+
+			if (other.clientId != null) {
+
+				return false;
+			}
+		} else if (!clientId.equals(other.clientId)) {
+
+			return false;
+		}
+		return true;
 	}
 
 	public String getClientId() {

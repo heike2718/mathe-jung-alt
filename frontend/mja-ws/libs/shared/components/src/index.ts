@@ -2,7 +2,7 @@ export { FrageLoesungImagesComponent } from './lib/frage-loesung-images/frage-lo
 export { FileUploadComponent } from './lib/file-upload/file-upload.component';
 
 export { UploadComponentModel } from './lib/file-upload/file-upload.model';
-export { SelectPrintparametersDialogComponent} from './lib/select-printparameters-dialog/select-printparameters-dialog.component';
+export { GeneratorParametersDialogAutorenComponent } from './lib/generator-parameters-dialog-autoren/generator-parameters-dialog-autoren.component';
 export { SelectItemsComponent } from './lib/select-items/select-items.component';
 
 export { JaNeinDialogData} from './lib/ja-nein-dialog/ja-nein-dialog.model';

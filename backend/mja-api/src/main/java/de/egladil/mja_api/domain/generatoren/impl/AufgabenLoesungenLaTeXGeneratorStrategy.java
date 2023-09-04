@@ -28,13 +28,16 @@ public class AufgabenLoesungenLaTeXGeneratorStrategy implements RaetselgruppeLaT
 	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabenLoesungenLaTeXGeneratorStrategy.class);
 
 	@Override
-	public String generateLaTeX(final RaetselgruppeGeneratorInput input, final LaTeXTemplatesService templatesService, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
+	public String generateLaTeX(final RaetselgruppeGeneratorInput input, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
 
 		List<Quizaufgabe> aufgaben = input.getAufgaben();
 		Collections.sort(aufgaben, new QuizaufgabeComparator());
 
-		String template = templatesService.getTemplatePDFAufgabenblattMitLoesungen();
+		String template = LaTeXTemplatesService.getInstance().getTemplateDocumentPDFAufgabenblattMitLoesungen();
 
+		template = template.replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
+		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
+			input.getSchriftgroesse().getLaTeXReplacement());
 		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
 		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_AUFGABEN.placeholder(), input.getRaetselgruppe().name);
 		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_LOESUNGEN.placeholder(), input.getRaetselgruppe().name);
@@ -50,6 +53,28 @@ public class AufgabenLoesungenLaTeXGeneratorStrategy implements RaetselgruppeLaT
 		template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.placeholder(), contentAufgaben);
 		template = template.replace(LaTeXPlaceholder.TRENNER_FRAGE_LOESUNG.placeholder(), LaTeXConstants.VALUE_NEWPAGE);
 		template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), contentLoesungen);
+
+		switch (input.getFont()) {
+
+		case DRUCK_BY_WOK:
+
+			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
+				LaTeXTemplatesService.getInstance().getLizenzFontsDruckschrift());
+			break;
+
+		case FIBEL_NORD:
+		case FIBEL_SUED:
+			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
+				LaTeXTemplatesService.getInstance().getLizenzFontsFibel());
+			break;
+
+		case STANDARD:
+			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), "");
+			break;
+
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + input.getFont());
+		}
 
 		return template;
 	}

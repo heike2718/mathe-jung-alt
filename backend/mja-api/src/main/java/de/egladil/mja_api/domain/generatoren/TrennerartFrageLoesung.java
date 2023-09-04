@@ -16,7 +16,7 @@ public enum TrennerartFrageLoesung {
 		@Override
 		public String getLeTeX() {
 
-			return LaTeXConstants.VALUE_PAR;
+			return LaTeXConstants.ABSTAND_ITEMS;
 		}
 
 	},

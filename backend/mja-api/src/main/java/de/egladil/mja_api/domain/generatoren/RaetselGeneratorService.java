@@ -21,9 +21,11 @@ public interface RaetselGeneratorService {
 	 *                                  String
 	 * @param  layoutAntwortvorschlaege
 	 *                                  AnzeigeAntwortvorschlaegeTyp
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
 	 * @return
 	 */
-	Images generatePNGsRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font);
+	Images generatePNGsRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, Schriftgroesse schriftgroesse);
 
 	/**
 	 * Generiert das Rätsel als 2seitiges PDF: Frage auf Seite 1, Lösung auf Seite 2. Minderprivilegierte User bekommen nur bei
@@ -31,8 +33,10 @@ public interface RaetselGeneratorService {
 	 *
 	 * @param  raetselUuid
 	 * @param  layoutAntwortvorschlaege
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
 	 * @return                          GeneratedFile
 	 */
-	GeneratedFile generatePDFRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font);
+	GeneratedFile generatePDFRaetsel(String raetselUuid, LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, Schriftgroesse schriftgroesse);
 
 }

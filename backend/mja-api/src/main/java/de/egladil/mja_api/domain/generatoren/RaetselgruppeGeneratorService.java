@@ -23,15 +23,17 @@ public interface RaetselgruppeGeneratorService {
 	 *                                  PersistenteRaetselgruppe Berechtigungsprüfung nimmr aufrufender Service vor.
 	 * @param  aufgaben
 	 *                                  List nur die Aufgaben, die gedruckt werden sollen. Vorauswahl trifft aufrufender Service.
+	 * @param  verwendungszweck
+	 *                                  Verwendungszweck entscheidet über die Gruppierung der Aufgaben.
+	 * @param  font
+	 *                                  FontName
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
 	 * @param  layoutAntwortvorschlaege
 	 *                                  LayoutAntwortvorschlaege wenn NOOP, werden keine Antwortvorschläge gedruckt. So können aus
 	 *                                  multiple
 	 *                                  choice- Aufgaben auch Arbeitsblätter werden.
-	 * @param  font
-	 *                                  FontName
-	 * @param  verwendungszweck
-	 *                                  Verwendungszweck entscheidet über die Gruppierung der Aufgaben.
 	 * @return                          GeneratedFile - ein PDF oder eine LaTeX-Textdatei
 	 */
-	GeneratedFile generate(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, LayoutAntwortvorschlaege layoutAntwortvorschlaege, FontName font, Verwendungszweck verwendungszweck);
+	GeneratedFile generate(PersistenteRaetselgruppe raetselgruppe, List<Quizaufgabe> aufgaben, Verwendungszweck verwendungszweck, FontName font, Schriftgroesse schriftgroesse, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 }

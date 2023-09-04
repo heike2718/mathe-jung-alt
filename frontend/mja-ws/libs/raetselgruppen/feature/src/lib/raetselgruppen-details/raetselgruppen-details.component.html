@@ -63,9 +63,7 @@
         <div *ngIf="!(gruppe.schreibgeschuetzt)" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill
                 mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button></div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                (click)="generiereLaTeX()" [disabled]="buttonsGenerierenDisabled()">LaTeX herunterladen</button></div>
-        <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                (click)="generiereVorschau()" [disabled]="buttonsGenerierenDisabled()">Vorschau (PDF)</button>
+                (click)="openGenerateDialog()" [disabled]="buttonsGenerierenDisabled()">PDF / LaTeX</button>
         </div>
         <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                 (click)="gotoUebersicht()">zur Übersicht</button>

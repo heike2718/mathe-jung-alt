@@ -10,7 +10,6 @@ package de.egladil.mja_api.domain.generatoren;
 public enum Verwendungszweck {
 
 	ARBEITSBLATT,
-	AUFGABEN_MIT_LOESUNGEN,
 	KARTEI,
 	LATEX {
 

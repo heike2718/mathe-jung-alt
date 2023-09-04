@@ -7,6 +7,7 @@ package de.egladil.mja_api.domain.raetselgruppen;
 import java.util.Optional;
 
 import de.egladil.mja_api.domain.generatoren.FontName;
+import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
@@ -89,25 +90,45 @@ public interface RaetselgruppenService {
 
 	/**
 	 * Generiert die Vorschau des Quiz als PDF. Dabei werden Aufgaben und Lösungen gemischt.
+	 * Bei Aufgaben ohne Antwortvorschläge wird keine Tabelle gedruckt.
 	 *
 	 * @param  raetselgruppeID
 	 * @param  font
-	 *                         FontName
+	 *                                  FontName
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
+	 * @param  layoutAntwortvorschlaege
+	 *                                  LayoutAntwortvorschlaege
 	 * @return
 	 */
-	GeneratedFile printVorschau(final String raetselgruppeID, final FontName font);
+	GeneratedFile printVorschau(final String raetselgruppeID, final FontName font, Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 	/**
 	 * Generiert eine Kartei. Für jedes Element wird auf eine Seite die Frage gedruckt, auf die folgende Seite die Lösung.
 	 *
 	 * @param  raetselgruppeID
 	 * @param  font
-	 *                                  FontName
+	 * @param  schriftgroesse
+	 *                                  TODO
 	 * @param  layoutAntwortvorschlaege
 	 *                                  LayoutAntwortvorschlaege
+	 *                                  FontName
 	 * @return                          GeneratedFile
 	 */
-	GeneratedFile printKartei(final String raetselgruppeID, final FontName font, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
+	GeneratedFile printKartei(final String raetselgruppeID, final FontName font, Schriftgroesse schriftgroesse);
+
+	/**
+	 * Generiert eine PDF-Datei mit Aufgabenblättern und Lösungen. Zuerst kommen die Aufgaben, danach, beginnend mit einer neuen
+	 * Seite, die Lösungen in der gewünschten Reihenfolge. Es wird generell ohne Auntwortvorschläge gedruckt.
+	 *
+	 * @param  raetselgruppeID
+	 * @param  font
+	 *                                  FontName
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
+	 * @return                          GeneratedFile
+	 */
+	GeneratedFile printArbeitsblattMitLoesungen(final String raetselgruppeID, final FontName font, Schriftgroesse schriftgroesse);
 
 	/**
 	 * Generiert das LaTeX-File für die Raetselgruppe. Die Grafiken muss man sowieso lokal haben. Sollte sich mit kleineren
@@ -116,5 +137,5 @@ public interface RaetselgruppenService {
 	 * @param  raetselgruppeID
 	 * @return                 GeneratedFile
 	 */
-	GeneratedFile downloadLaTeXSource(final String raetselgruppeID);
+	GeneratedFile downloadLaTeXSource(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 }

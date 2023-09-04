@@ -17,6 +17,7 @@ import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
+import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
@@ -470,7 +471,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public GeneratedFile printVorschau(final String raetselgruppeID, final FontName font) {
+	public GeneratedFile printVorschau(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -482,14 +483,31 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
 
-		return raetselgruppeFileService.generate(dbResult, aufgaben, LayoutAntwortvorschlaege.ANKREUZTABELLE, font,
-			Verwendungszweck.VORSCHAU);
+		return raetselgruppeFileService.generate(dbResult, aufgaben, Verwendungszweck.VORSCHAU, font,
+			schriftgroesse, layoutAntwortvorschlaege);
 	}
 
 	@Override
-	public GeneratedFile printKartei(final String raetselgruppeID, final FontName font, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile printKartei(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
+		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
+
+		return raetselgruppeFileService.generate(dbResult, freigegebeneAufgaben, Verwendungszweck.KARTEI, font,
+			schriftgroesse, LayoutAntwortvorschlaege.NOOP);
+	}
+
+	@Override
+	public GeneratedFile printArbeitsblattMitLoesungen(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse) {
+
+		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
+		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
+
+		return raetselgruppeFileService.generate(dbResult, freigegebeneAufgaben, Verwendungszweck.ARBEITSBLATT, font,
+			schriftgroesse, LayoutAntwortvorschlaege.NOOP);
+	}
+
+	List<Quizaufgabe> vorbedingungenPublicResourcesPruefen(final PersistenteRaetselgruppe dbResult) throws WebApplicationException {
 
 		if (dbResult == null) {
 
@@ -498,6 +516,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		}
 
 		checkPermission(dbResult);
+
+		String raetselgruppeID = dbResult.uuid;
 
 		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
 		List<Quizaufgabe> freigegebeneAufgaben = aufgaben;
@@ -529,12 +549,11 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 					.entity(MessagePayload.error("Drucken einer Kartei nicht möglich. Rätselgruppe ist leer.")).build());
 		}
 
-		return raetselgruppeFileService.generate(dbResult, freigegebeneAufgaben, layoutAntwortvorschlaege, font,
-			Verwendungszweck.KARTEI);
+		return freigegebeneAufgaben;
 	}
 
 	@Override
-	public GeneratedFile downloadLaTeXSource(final String raetselgruppeID) {
+	public GeneratedFile downloadLaTeXSource(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -546,8 +565,8 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 
 		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
 
-		return raetselgruppeFileService.generate(dbResult, aufgaben, LayoutAntwortvorschlaege.ANKREUZTABELLE, FontName.STANDARD,
-			Verwendungszweck.LATEX);
+		return raetselgruppeFileService.generate(dbResult, aufgaben, Verwendungszweck.LATEX, FontName.STANDARD,
+			Schriftgroesse.NORMAL, layoutAntwortvorschlaege);
 	}
 
 	void checkPermission(final PersistenteRaetselgruppe ausDB) {

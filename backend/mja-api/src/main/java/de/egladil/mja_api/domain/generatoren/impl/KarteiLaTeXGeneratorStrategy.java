@@ -8,10 +8,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.generatoren.TrennerartFrageLoesung;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
@@ -30,13 +30,16 @@ public class KarteiLaTeXGeneratorStrategy implements RaetselgruppeLaTeXGenerator
 	private static final Logger LOGGER = LoggerFactory.getLogger(KarteiLaTeXGeneratorStrategy.class);
 
 	@Override
-	public String generateLaTeX(final RaetselgruppeGeneratorInput input, final LaTeXTemplatesService templatesService, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
+	public String generateLaTeX(final RaetselgruppeGeneratorInput input, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
 
 		List<Quizaufgabe> aufgaben = input.getAufgaben();
 		Collections.sort(aufgaben, new QuizaufgabeComparator());
 
-		String template = templatesService.getTemplatePDFKartei();
+		String template = LaTeXTemplatesService.getInstance().getTemplateDocumentPDFKartei();
 
+		template = template.replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
+		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
+			input.getSchriftgroesse().getLaTeXReplacement());
 		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
 
 		List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();
@@ -70,6 +73,29 @@ public class KarteiLaTeXGeneratorStrategy implements RaetselgruppeLaTeXGenerator
 		}
 
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), sb.toString());
+
+		switch (input.getFont()) {
+
+		case DRUCK_BY_WOK:
+
+			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
+				LaTeXTemplatesService.getInstance().getLizenzFontsDruckschrift());
+			break;
+
+		case FIBEL_NORD:
+		case FIBEL_SUED:
+			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
+				LaTeXTemplatesService.getInstance().getLizenzFontsFibel());
+			break;
+
+		case STANDARD:
+			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), "");
+			break;
+
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + input.getFont());
+		}
+
 		return template;
 	}
 
@@ -77,7 +103,7 @@ public class KarteiLaTeXGeneratorStrategy implements RaetselgruppeLaTeXGenerator
 	 * @param sb
 	 * @param raetselLaTeXDto
 	 */
-	private void appendFrageLoesung(final StringBuffer sb, final Quizaufgabe aufgabe, final RaetselLaTeXDto raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final Verwendungszweck verwendungszweck, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
+	void appendFrageLoesung(final StringBuffer sb, final Quizaufgabe aufgabe, final RaetselLaTeXDto raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final Verwendungszweck verwendungszweck, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
 
 		RaetselGeneratorinput raetselInput = new RaetselGeneratorinput()
 			.withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
@@ -90,15 +116,8 @@ public class KarteiLaTeXGeneratorStrategy implements RaetselgruppeLaTeXGenerator
 
 		boolean printAsMultipleChoice = GeneratorUtils.shouldPrintAntwortvorschlaege(layoutAntwortvorschlaege, aufgabe);
 
-		String textFrage = quizitemLaTeXGenerator.generateLaTeXFrage(raetselInput, printAsMultipleChoice);
-		sb.append(textFrage);
-
-		if (StringUtils.isNotBlank(raetselInput.getLoesung())) {
-
-			sb.append(LaTeXConstants.VALUE_NEWPAGE);
-			String textLoesung = quizitemLaTeXGenerator.generateLaTeXLoesung(raetselInput, printAsMultipleChoice);
-			sb.append(textLoesung);
-		}
+		String text = quizitemLaTeXGenerator.generateLaTeXFrageLoesung(raetselInput, TrennerartFrageLoesung.SEITENUMBRUCH,
+			printAsMultipleChoice);
+		sb.append(text);
 	}
-
 }

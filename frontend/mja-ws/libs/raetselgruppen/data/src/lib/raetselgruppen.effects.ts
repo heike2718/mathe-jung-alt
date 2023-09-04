@@ -87,10 +87,26 @@ export class RaetselgruppenEffects {
         )
     );
 
+    generiereArbeitsblatt$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.generiere_arbeitsblatt),
+            concatMap((action) => this.#raetselgruppenHttpService.generiereArbeitsblattMitLoesungen(action.raetselgruppeID, action.font, action.schriftgroesse)),
+            map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
+        )
+    );
+
+    generiereKnobelkartei$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.generiere_knobelkartei),
+            concatMap((action) => this.#raetselgruppenHttpService.generiereKnobelkartei(action.raetselgruppeID, action.font, action.schriftgroesse)),
+            map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
+        )
+    );
+
     generiereVorschau$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselgruppenActions.generiere_vorschau),
-            concatMap((action) => this.#raetselgruppenHttpService.generiereVorschau(action.raetselgruppeID)),
+            concatMap((action) => this.#raetselgruppenHttpService.generiereVorschau(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
             map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
         )
     );
@@ -100,7 +116,7 @@ export class RaetselgruppenEffects {
     generiereLaTeX$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselgruppenActions.generiere_latex),
-            concatMap((action) => this.#raetselgruppenHttpService.generiereLaTeX(action.raetselgruppeID)),
+            concatMap((action) => this.#raetselgruppenHttpService.generiereLaTeX(action.raetselgruppeID, action.layoutAntwortvorschlaege)),
             map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
         )
     );

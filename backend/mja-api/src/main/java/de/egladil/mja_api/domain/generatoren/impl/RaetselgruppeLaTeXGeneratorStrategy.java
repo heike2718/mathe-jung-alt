@@ -18,24 +18,19 @@ public interface RaetselgruppeLaTeXGeneratorStrategy {
 	 *
 	 * @param  input
 	 *                                RaetselgruppeGeneratorInput - die Parameter für das Generieren.
-	 * @param  templatesService
-	 *                                LaTeXTemplatesService - der Service, der die passenden Templates zur Verfügung stellt.
 	 * @param  raetselService
 	 *                                RaetselService
 	 * @param  quizitemLaTeXGenerator
 	 *                                QuizitemLaTeXGenerator
 	 * @return
 	 */
-	String generateLaTeX(RaetselgruppeGeneratorInput input, LaTeXTemplatesService templatesService, RaetselService raetselService, QuizitemLaTeXGenerator quizitemLaTeXGenerator);
+	String generateLaTeX(RaetselgruppeGeneratorInput input, RaetselService raetselService, QuizitemLaTeXGenerator quizitemLaTeXGenerator);
 
 	static RaetselgruppeLaTeXGeneratorStrategy getStrategy(final Verwendungszweck verwendungszweck) {
 
 		switch (verwendungszweck) {
 
 		case ARBEITSBLATT:
-			return new ArbeitsblattLaTeXGeneratorStrategy();
-
-		case AUFGABEN_MIT_LOESUNGEN:
 		case VORSCHAU:
 		case LATEX:
 			return new AufgabenLoesungenLaTeXGeneratorStrategy();

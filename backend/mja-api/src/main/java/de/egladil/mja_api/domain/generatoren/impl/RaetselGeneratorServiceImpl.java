@@ -21,6 +21,7 @@ import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.RaetselGeneratorService;
+import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -67,7 +68,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	@Override
-	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
+	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
 
 		LOGGER.debug("start generate output");
 
@@ -83,13 +84,13 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 
-		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege, font);
+		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege, font, schriftgroesse);
 
 		boolean generateLoesung = StringUtils.isNotBlank(raetsel.getLoesung());
 
 		if (generateLoesung) {
 
-			raetselFileService.generateLoesungLaTeX(raetsel, font);
+			raetselFileService.generateLoesungLaTeX(raetsel, font, schriftgroesse);
 		}
 
 		Response responseFrage = null;
@@ -187,7 +188,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	}
 
 	@Override
-	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font) {
+	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
 
 		LOGGER.debug("start generate output");
 
@@ -206,7 +207,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 
-		raetselFileService.generiereLaTeXRaetselPDF(raetsel, layoutAntwortvorschlaege, font);
+		raetselFileService.generiereLaTeXRaetselPDF(raetsel, layoutAntwortvorschlaege, font, schriftgroesse);
 
 		Response response = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");

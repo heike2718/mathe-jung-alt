@@ -28,9 +28,11 @@ public interface RaetselFileService {
 	 *                                  LayoutAntwortvorschlaege
 	 * @param  font
 	 *                                  FontName in welchem font generiert werden soll.
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
 	 * @return                          String Pfad des LaTeX-Files.
 	 */
-	String generateFrageLaTeX(Raetsel raetsel, LayoutAntwortvorschlaege layoutAntwortvorschlaege, FontName font);
+	String generateFrageLaTeX(Raetsel raetsel, LayoutAntwortvorschlaege layoutAntwortvorschlaege, FontName font, Schriftgroesse schriftgroesse);
 
 	/**
 	 * Schreibt die Lösung des gegebenen Raetsels in ein LaTeX-File im Filesystem und gibt den Pfad des Files zurück. Der Name des
@@ -38,10 +40,12 @@ public interface RaetselFileService {
 	 *
 	 * @param  raetsel
 	 * @param  font
-	 *                 FontName in welchem font generiert werden soll.
-	 * @return         String Pfad des LaTeX-Files.
+	 *                        FontName in welchem font generiert werden soll.
+	 * @param  schriftgroesse
+	 *                        Schriftgroesse
+	 * @return                String Pfad des LaTeX-Files.
 	 */
-	String generateLoesungLaTeX(Raetsel raetsel, final FontName font);
+	String generateLoesungLaTeX(Raetsel raetsel, final FontName font, Schriftgroesse schriftgroesse);
 
 	/**
 	 * Generiert das LaTeX für die PDF-Vorschau des gegebenen Raetsels, speichert es als LaTeX-File im Filessystem und gibt den Pfad
@@ -53,9 +57,11 @@ public interface RaetselFileService {
 	 *                                  LayoutAntwortvorschlaege
 	 * @param  font
 	 *                                  FontName in welchem font generiert werden soll.
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
 	 * @return                          String
 	 */
-	String generiereLaTeXRaetselPDF(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font);
+	String generiereLaTeXRaetselPDF(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, Schriftgroesse schriftgroesse);
 
 	/**
 	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.

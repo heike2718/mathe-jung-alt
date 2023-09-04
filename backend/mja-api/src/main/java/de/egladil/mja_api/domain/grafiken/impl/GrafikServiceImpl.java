@@ -12,9 +12,6 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
 import org.apache.commons.io.IOUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
@@ -28,6 +25,8 @@ import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.grafiken.Grafik;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
 import de.egladil.mja_api.domain.raetsel.impl.FindPathsGrafikParser;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * GrafikServiceImpl
@@ -69,7 +68,7 @@ public class GrafikServiceImpl implements GrafikService {
 		if (!validPath(relativerPfad)) {
 
 			LOGGER.error("Aufruf mit ungültigem relativen Pfad!");
-			return new Grafik().withMessagePayload(MessagePayload.error("Aufruf mit ungültigem Pfad")).withPfad("");
+			return new Grafik().withMessagePayload(MessagePayload.error("Aufruf mit ungültigem Pfad")).withPfad(relativerPfad);
 		}
 
 		boolean exists = fileService.existsGrafik(relativerPfad);

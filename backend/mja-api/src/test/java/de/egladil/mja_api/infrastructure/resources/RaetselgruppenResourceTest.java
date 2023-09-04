@@ -1040,7 +1040,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "AUTOR" })
 	@Order(28)
-	void testGetLaTeX() {
+	void test_downloadLaTeX() {
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -1048,14 +1048,14 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
-				"latex/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"10257506-71c5-423e-b355-bf90b5bb344d/latex/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then().statusCode(200);
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(29)
-	void testGetLaTeXKeinTreffer() {
+	void test_downloadLaTeXKeinTreffer() {
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -1063,7 +1063,7 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
-				"latex/33333333-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"33333333-71c5-423e-b355-bf90b5bb344d/latex/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(404);
 	}
@@ -1071,7 +1071,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@Order(30)
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
-	void testGetVorschau() {
+	void test_printVorschau() {
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -1079,15 +1079,15 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
-				"vorschau/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"10257506-71c5-423e-b355-bf90b5bb344d/vorschau/v1?layoutAntwortvorschlaege=BUCHSTABEN&font=FIBEL_NORD&size=LARGE")
 			.then()
 			.statusCode(200);
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "AUTOR" })
-	@Order(30)
-	void testGetVorschauKeinTreffer() {
+	@Order(31)
+	void test_printVorschauKeinTreffer() {
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -1095,9 +1095,41 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.get(
-				"vorschau/33333333-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"33333333-71c5-423e-b355-bf90b5bb344d/vorschau/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(404);
+	}
+
+	@Test
+	@Order(32)
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void test_printArbeitsblattMitLoesungen() {
+
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+			.get(
+				"10257506-71c5-423e-b355-bf90b5bb344d/arbeitsblatt/v1?font=FIBEL_NORD&size=LARGE")
+			.then()
+			.statusCode(200);
+	}
+
+	@Test
+	@Order(33)
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void test_printKnobelkartei() {
+
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+			.get(
+				"10257506-71c5-423e-b355-bf90b5bb344d/knobelkartei/v1?font=FIBEL_SUED&size=HUGE")
+			.then()
+			.statusCode(200);
 	}
 
 }

@@ -11,7 +11,7 @@ import {
     RaetselgruppeBasisdaten
 } from "@mja-ws/raetselgruppen/model";
 import { Observable } from "rxjs";
-import { GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION } from "@mja-ws/core/model";
+import { FONT_NAME, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION, SCHRIFTGROESSE } from "@mja-ws/core/model";
 
 
 @Injectable({ providedIn: 'root' })
@@ -88,22 +88,56 @@ export class RaetselgruppenHttpService {
         return this.#http.delete<RaetselgruppeDetails>(url, { headers });
     }
 
-    generiereVorschau(raetselgruppeID: string): Observable<GeneratedFile> {
+    generiereVorschau(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege:LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
 
-        const url = this.#url + '/vorschau/' + raetselgruppeID + '/v1';
+        const url = this.#url + '/' + raetselgruppeID + '/vorschau/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
+        const params = new HttpParams()
+            .set('font', font)
+            .set('size', schriftgroesse)
+            .set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
-        return this.#http.get<GeneratedFile>(url, { headers: headers });
+
+        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
 
     }
 
-    generiereLaTeX(raetselgruppeID: string): Observable<GeneratedFile> {
+    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): Observable<GeneratedFile> {
 
-        const url = this.#url + '/latex/' + raetselgruppeID + '/v1';
+
+        const url = this.#url + '/' + raetselgruppeID + '/knobelkartei/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
+        const params = new HttpParams()
+            .set('font', font)
+            .set('size', schriftgroesse);
 
-        return this.#http.get<GeneratedFile>(url, { headers: headers });
+
+        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
+
+    }
+
+    generiereArbeitsblattMitLoesungen(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): Observable<GeneratedFile> {
+
+
+        const url = this.#url + '/' + raetselgruppeID + '/arbeitsblatt/v1';
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const params = new HttpParams()
+            .set('font', font)
+            .set('size', schriftgroesse);
+
+
+        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
+
+    }
+
+    generiereLaTeX(raetselgruppeID: string, layoutAntwortvorschlaege:LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+
+        const url = this.#url + '/' + raetselgruppeID + '/latex/v1';
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+
+        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
     }
 
     #insertRaetselgruppe(url: string, payload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {

@@ -9,18 +9,22 @@ package de.egladil.mja_api.domain.generatoren;
  */
 public enum FontName {
 
+	DRUCK_BY_WOK {
+
+		@Override
+		public String getLatexFileInputDefinition() {
+
+			return "\\input{./include/druck-by-wok}";
+		}
+
+	},
+
 	FIBEL_NORD {
 
 		@Override
 		public String getLatexFileInputDefinition() {
 
 			return "\\input{./include/fibel-nord}";
-		}
-
-		@Override
-		public String getSchriftgroesse() {
-
-			return "12pt";
 		}
 
 	},
@@ -32,12 +36,6 @@ public enum FontName {
 			return "\\input{./include/fibel-sued}";
 		}
 
-		@Override
-		public String getSchriftgroesse() {
-
-			return "12pt";
-		}
-
 	},
 	STANDARD {
 
@@ -45,12 +43,6 @@ public enum FontName {
 		public String getLatexFileInputDefinition() {
 
 			return "";
-		}
-
-		@Override
-		public String getSchriftgroesse() {
-
-			return "11pt";
 		}
 
 	};
@@ -62,10 +54,4 @@ public enum FontName {
 	 */
 	public abstract String getLatexFileInputDefinition();
 
-	/**
-	 * Das, wodurch {size} im LaTeX-Template ersetzt werden soll.
-	 *
-	 * @return String
-	 */
-	public abstract String getSchriftgroesse();
 }

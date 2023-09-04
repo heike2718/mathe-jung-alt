@@ -247,57 +247,83 @@ public class RaetselgruppenResourceAuthorizationTest {
 	}
 
 	@Test
-	void testGetLaTeXUnauthorized() {
+	void test_downloadLaTeXUnauthorized() {
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
 			.get(
-				"latex/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"10257506-71c5-423e-b355-bf90b5bb344d/latex/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(401);
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	void testGetLaTeXForbidden() {
+	void test_downloadLaTeXForbidden() {
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
 			.get(
-				"latex/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"10257506-71c5-423e-b355-bf90b5bb344d/latex/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(403);
 	}
 
 	@Test
-	void testGetVorschauUnauthorized() {
+	void test_printVorschauUnauthorized() {
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
 			.get(
-				"vorschau/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"10257506-71c5-423e-b355-bf90b5bb344d/vorschau/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(401);
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	void testGetVorschauForbidden() {
+	void test_printVorschauForbidden() {
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
 			.get(
-				"vorschau/10257506-71c5-423e-b355-bf90b5bb344d/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"10257506-71c5-423e-b355-bf90b5bb344d/vorschau/v1?layoutAntwortvorschlaege=BUCHSTABEN")
 			.then()
 			.statusCode(403);
+	}
+
+	@Test
+	void test_printArbeitsblattMitLoesungenUnauthorized() {
+
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.accept(ContentType.JSON)
+			.get(
+				"10257506-71c5-423e-b355-bf90b5bb344d/arbeitsblatt/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+			.then()
+			.statusCode(401);
+	}
+
+	@Test
+	void test_printKnobelkarteiUnauthorized() {
+
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.accept(ContentType.JSON)
+			.get(
+				"10257506-71c5-423e-b355-bf90b5bb344d/knobelkartei/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+			.then()
+			.statusCode(401);
 	}
 
 }

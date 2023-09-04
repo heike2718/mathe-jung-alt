@@ -62,6 +62,8 @@ public class SessionService {
 	 */
 	public Session initSession(final String jwt, final boolean needsToBeAdmin) {
 
+		LOGGER.debug(jwt);
+
 		try {
 
 			DecodedJWT decodedJWT = jwtService.verify(jwt, SessionUtils.getPublicKey());

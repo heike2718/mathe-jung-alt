@@ -101,12 +101,40 @@ export interface GeneratedImages {
   readonly imageLoesung: string | null;
 };
 
-// #### PrintDialog
+// #### PrintDialoge
 export type OUTPUTFORMAT = 'PDF' | 'PNG' | 'LATEX';
 export type LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'ANKREUZTABELLE' | 'BUCHSTABEN' | 'DESCRIPTION' | 'NOOP';
+export type FONT_NAME = 'DRUCK_BY_WOK' | 'FIBEL_NORD' | 'FIBEL_SUED' | 'STANDARD';
+export type VERWENDUNGSZWECK = 'ARBEITSBLATT' | 'KARTEI' | 'LATEX' | 'VORSCHAU';
+export type SCHRIFTGROESSE = 'HUGE' | 'LARGE' | 'NORMAL';
 
 export const anzeigeAntwortvorschlaegeSelectInput: string[] = [
-  'ANKREUZTABELLE', 'BUCHSTABEN', 'DESCRIPTION', 'NOOP'
+  'Ankreuztabelle', 'Buchstaben', 'description', 'keine'
+];
+
+export const fontNamenSelectInput: string[] = [
+  'Druckschrift (Leseanfänger)',
+  'Fibel Nord',
+  'Fibel Süd',
+  'Standardfont (LaTeX)'
+];
+
+export const verwendungszweckePublicSelectInput: string[] = [
+  'Arbeitsblatt',
+  'Kartei'
+];
+
+export const verwendungszweckeAutorenSelectInput: string[] = [
+  'Arbeitsblatt',
+  'Knobelkartei',
+  'LaTeX',
+  'Vorschau'
+];
+
+export const schriftgroessenSelectInput: string[] = [
+  'normal',
+  'groß',
+  'sehr groß'
 ];
 
 export interface GeneratedFile {
@@ -114,11 +142,29 @@ export interface GeneratedFile {
   readonly fileData: Blob
 };
 
-export interface SelectPrintparametersDialogData {
+// dies sind die Parameter für Dialoge zum Generieren für die admin-app. Es muss gewählt werden können zwischen verschiedenen Antwortvorschlag-Layouts und Fonts
+export interface SelectGeneratorParametersUIModelAutoren {
   titel: string;
+  showVerwendungszwecke: boolean;
+  verwendungszwecke: string[];
+  selectedVerwendungszweck: string | undefined;
   layoutsAntwortvorschlaegeInput: string[];
-  selectedLayoutAntwortvorschlaege: string | undefined;
+  selectedLayoutAntwortvorschlaege: string | undefined;  
+  fontNamen: string[];
+  selectedFontName: string | undefined;
+  schriftgroessen: string[];
+  selectedSchriftgroesse: undefined;
 };
+
+// Für die public-API sollen die Menschen zwischen KARTEI und ARBEITSBLATT wählen dürfen.
+export interface SelectGeneratorParametersUIModelPublic {
+  verwendungszwecke: string[];
+  selectedVerwendungszweck: string | undefined;
+  fontNamen: string[];
+  selectedFontName: string | undefined;
+  schriftgroessen: string[];
+  selectedSchriftgroesse: undefined;
+}
 
 export class GuiReferenztypenMap {
 

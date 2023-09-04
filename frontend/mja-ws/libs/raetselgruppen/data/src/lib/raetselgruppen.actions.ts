@@ -1,4 +1,4 @@
-import { GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition } from '@mja-ws/core/model';
+import { FONT_NAME, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, SCHRIFTGROESSE } from '@mja-ws/core/model';
 import { RaetselgruppenTreffer, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem, RaetselgruppeDetails, RaetselgruppeBasisdaten, EditRaetselgruppePayload, EditRaetselgruppenelementPayload, Raetselgruppenelement } from '@mja-ws/raetselgruppen/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
@@ -12,9 +12,11 @@ export const raetselgruppenActions = createActionGroup({
         'SELECT_RAETSELGRUPPE': props<{ raetselgruppe: RaetselgruppenTrefferItem }>(),
         'UNSELECT_RAETSELGRUPPE': emptyProps(),
         'RAETSELGRUPPEDETAILS_LOADED': props<{raetselgruppeDetails: RaetselgruppeDetails, navigateTo: string}>(),
-        'GENERIERE_VORSCHAU': props<{raetselgruppeID: string}>(),
+        'GENERIERE_ARBEITSBLATT': props<{raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE}>(),
+        'GENERIERE_KNOBELKARTEI': props<{raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE}>(),
+        'GENERIERE_VORSCHAU': props<{raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE}>(),
         'FILE_GENERATED': props<{ pdf: GeneratedFile }>(),
-        'GENERIERE_LATEX': props<{raetselgruppeID: string}>(),
+        'GENERIERE_LATEX': props<{raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE}>(),
         'EDIT_RAETSELGUPPE': props<{raetselgruppeBasisdaten: RaetselgruppeBasisdaten}>(),
         'SAVE_RAETSELGRUPPE': props<{editRaetselgruppePayload: EditRaetselgruppePayload}>(),
         'RAETSELGRUPPE_SAVED': props<{raetselgruppe: RaetselgruppeBasisdaten}>(),

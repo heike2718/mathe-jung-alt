@@ -7,6 +7,7 @@ package de.egladil.mja_api.domain.generatoren.dto;
 import java.util.List;
 
 import de.egladil.mja_api.domain.generatoren.FontName;
+import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -42,6 +43,11 @@ public class RaetselgruppeGeneratorInput {
 	 * verwendungszweck Verwendungszweck - der Verwendungszweck
 	 */
 	private Verwendungszweck verwendungszweck;
+
+	/**
+	 * schriftgroesse Schriftgroesse in den LaTeX-Varianten '' (NORMAL), '\Large' (GROSS), '\LARGE' (HUGE).
+	 */
+	private Schriftgroesse schriftgroesse;
 
 	public PersistenteRaetselgruppe getRaetselgruppe() {
 
@@ -95,6 +101,17 @@ public class RaetselgruppeGeneratorInput {
 	public RaetselgruppeGeneratorInput withVerwendungszweck(final Verwendungszweck verwendungszweck) {
 
 		this.verwendungszweck = verwendungszweck;
+		return this;
+	}
+
+	public Schriftgroesse getSchriftgroesse() {
+
+		return schriftgroesse;
+	}
+
+	public RaetselgruppeGeneratorInput withSchriftgroesse(final Schriftgroesse schriftgroesse) {
+
+		this.schriftgroesse = schriftgroesse;
 		return this;
 	}
 

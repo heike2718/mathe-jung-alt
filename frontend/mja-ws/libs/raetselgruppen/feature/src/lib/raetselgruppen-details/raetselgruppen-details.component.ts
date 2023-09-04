@@ -5,8 +5,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectPrintparametersDialogComponent } from '@mja-ws/shared/components';
-import { anzeigeAntwortvorschlaegeSelectInput, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, SelectPrintparametersDialogData } from '@mja-ws/core/model';
+import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
+import {
+  anzeigeAntwortvorschlaegeSelectInput, FONT_NAME, fontNamenSelectInput, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
+  SCHRIFTGROESSE,
+  schriftgroessenSelectInput,
+  SelectGeneratorParametersUIModelAutoren,
+  verwendungszweckeAutorenSelectInput
+} from '@mja-ws/core/model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { Subscription, tap } from 'rxjs';
@@ -29,7 +35,7 @@ import { RaetselgruppeEditComponent } from '../raetselgruppe-edit/raetselgruppe-
     MatListModule,
     MatFormFieldModule,
     FrageLoesungImagesComponent,
-    SelectPrintparametersDialogComponent,
+    GeneratorParametersDialogAutorenComponent,
     RaetselgruppenelementDialogComponent,
     RaetselgruppenelementeComponent,
     RaetselgruppeEditComponent
@@ -76,46 +82,70 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
     this.raetselgruppenFacade.unselectRaetselgruppe();
   }
 
-  openPrintVorschauDialog(): void {
+  openGenerateDialog(): void {
 
     if (this.getRaetselgruppeID().length === 0) {
       return;
     }
 
-    const dialogData: SelectPrintparametersDialogData = {
-      titel: 'Vorschau generieren',
+    const dialogData: SelectGeneratorParametersUIModelAutoren = {
+      titel: 'File generieren',
+      showVerwendungszwecke: true,
+      verwendungszwecke: verwendungszweckeAutorenSelectInput,
+      selectedVerwendungszweck: undefined,
       layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
-      selectedLayoutAntwortvorschlaege: undefined
+      selectedLayoutAntwortvorschlaege: undefined,
+      fontNamen: fontNamenSelectInput,
+      selectedFontName: undefined,
+      schriftgroessen: schriftgroessenSelectInput,
+      selectedSchriftgroesse: undefined
     }
 
-    const dialogRef = this.dialog.open(SelectPrintparametersDialogComponent, {
-      height: '300px',
+    const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
+      height: '600px',
       width: '700px',
       data: dialogData
     });
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
+      if (result && dialogData.selectedVerwendungszweck) {
 
+        let font: FONT_NAME = 'STANDARD';
+        let size: SCHRIFTGROESSE = 'NORMAL';
         let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
-        switch (dialogData.selectedLayoutAntwortvorschlaege) {
-          case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
-          case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
-          case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
+
+        if (dialogData.selectedFontName) {
+          switch (dialogData.selectedLayoutAntwortvorschlaege) {
+            case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
+            case 'Buchstaben': layout = 'BUCHSTABEN'; break;
+            case 'description': layout = 'DESCRIPTION'; break;
+          }
         }
 
-        this.raetselgruppenFacade.generiereVorschau(this.getRaetselgruppeID());
+        if (dialogData.selectedSchriftgroesse) {
+          switch (dialogData.selectedSchriftgroesse) {
+            case 'groß': size = 'LARGE'; break;
+            case 'sehr groß': size = 'HUGE'; break;
+          }
+        }
+
+        if (dialogData.selectedFontName) {
+          switch (dialogData.selectedFontName) {
+            case 'Druckschrift (Leseanfänger)': font = 'DRUCK_BY_WOK'; break;
+            case 'Fibel Nord': font = 'FIBEL_NORD'; break;
+            case 'Fibel Süd': font = 'FIBEL_SUED'; break;
+          }
+        }        
+
+        switch (dialogData.selectedVerwendungszweck) {
+          case 'Arbeitsblatt': this.raetselgruppenFacade.generiereArbeitsblatt(this.getRaetselgruppeID(), font, size); break;
+          case 'Knobelkartei': this.raetselgruppenFacade.generiereKnobelkartei(this.getRaetselgruppeID(), font, size); break;
+          case 'Vorschau': this.raetselgruppenFacade.generiereVorschau(this.getRaetselgruppeID(), font, size, layout); break;
+          case 'LaTeX': this.raetselgruppenFacade.generiereLaTeX(this.getRaetselgruppeID(), layout); break;
+        }
       }
     });
-  }
-
-  generiereVorschau(): void {
-    this.raetselgruppenFacade.generiereVorschau(this.getRaetselgruppeID());
-  }
-
-  generiereLaTeX(): void {
-    this.raetselgruppenFacade.generiereLaTeX(this.getRaetselgruppeID());
   }
 
   startEdit(): void {
@@ -188,8 +218,8 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
     ).subscribe();
 
   }
-  
-  
+
+
 
   #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData): void {
     const dialogRef = this.dialog.open(RaetselgruppenelementDialogComponent, {

@@ -43,21 +43,6 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 
 	}
 
-	/**
-	 * @param idReference
-	 * @param rolle
-	 * @param fullName
-	 * @param uuid
-	 */
-	public static AuthenticatedUser create(final String idReference, final String[] roles, final String fullName, final String uuid) {
-
-		AuthenticatedUser result = new AuthenticatedUser(uuid);
-		result.idReference = idReference;
-		result.roles = roles;
-		result.fullName = fullName;
-		return result;
-	}
-
 	@Override
 	public String toString() {
 

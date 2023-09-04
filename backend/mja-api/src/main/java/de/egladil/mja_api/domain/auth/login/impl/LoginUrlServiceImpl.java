@@ -4,9 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.auth.login.impl;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -17,6 +15,9 @@ import de.egladil.mja_api.domain.auth.ClientType;
 import de.egladil.mja_api.domain.auth.clientauth.ClientAccessTokenService;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.login.LoginUrlService;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 
 /**
  * LoginUrlServiceImpl
@@ -41,7 +42,9 @@ public class LoginUrlServiceImpl implements LoginUrlService {
 	@Override
 	public Response getLoginUrl(final ClientType clientType) {
 
-		String accessToken = clientAccessTokenService.orderAccessToken(clientType);
+		// hierher ausgelagert, damit ClientAccessTokenService testbar wird.
+		String nonce = UUID.randomUUID().toString();
+		String accessToken = clientAccessTokenService.orderAccessToken(clientType, nonce);
 
 		if (StringUtils.isBlank(accessToken)) {
 
@@ -68,14 +71,14 @@ public class LoginUrlServiceImpl implements LoginUrlService {
 
 		switch (clientType) {
 
-			case ADMIN:
-				return adminLoginRedirectUrl;
+		case ADMIN:
+			return adminLoginRedirectUrl;
 
-			case PUBLIC:
-				return publicLoginRedirectUrl;
+		case PUBLIC:
+			return publicLoginRedirectUrl;
 
-			default:
-				break;
+		default:
+			break;
 
 		}
 

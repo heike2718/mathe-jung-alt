@@ -25,6 +25,7 @@ import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.RaetselGeneratorService;
+import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
@@ -115,7 +116,7 @@ public class RaetselResource {
 	// @formatter:off
 	public RaetselsucheTreffer findRaetselAdmin(
 		@QueryParam(value = "suchstring") @Pattern(
-		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{4,30}$",
+		regexp = "^[\\w äöüß ; \\+ \\- \\. \\,]{4,30}$",
 		message = "ungültige Eingabe: mindestens 4 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
 		@QueryParam(value = "deskriptoren") @Pattern(
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
@@ -347,11 +348,17 @@ public class RaetselResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)",
+			required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "font",
 			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
+			required = false),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "size",
+			description = "wird in LaTeX-Größenangaben umgewandelt.",
 			required = false) })
 	@APIResponse(
 		name = "GenerateImagesRaetselOKResponse",
@@ -365,16 +372,23 @@ public class RaetselResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Images raetselImagesGenerieren(@PathParam(
-		value = "raetselID") final String raetselUuid, @QueryParam(
-			value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @QueryParam(
-				value = "font") final FontName font) {
+	// @formatter:off
+	public Images raetselImagesGenerieren(
+		@Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid,
+		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
+		@QueryParam(value = "font") final FontName font,
+		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
+	// @formatter:on
 
 		this.delayService.pause();
 
 		FontName theFont = font != null ? font : FontName.STANDARD;
+		Schriftgroesse theSchriftgroesse = schriftgroesse != null ? schriftgroesse : Schriftgroesse.NORMAL;
 
-		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege, theFont);
+		LOGGER.info("font={}, theFont={}, schriftgroesse={}, theSchriftgroesse={}", font, theFont, schriftgroesse,
+			theSchriftgroesse);
+
+		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege, theFont, theSchriftgroesse);
 
 		return result;
 	}
@@ -393,11 +407,17 @@ public class RaetselResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)",
+			required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "font",
 			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
+			required = false),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "size",
+			description = "wird in LaTeX-Größenangaben umgewandelt.",
 			required = false) })
 	@APIResponse(
 		name = "GeneratePDFRaetselOKResponse",
@@ -411,17 +431,23 @@ public class RaetselResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public GeneratedFile raetselPDFGenerieren(@Pattern(
-		regexp = "^[a-fA-F\\d\\-]{1,36}$",
-		message = "raetselID enthält ungültige Zeichen") @PathParam(
-			value = "raetselID") final String raetselUuid, @QueryParam(
-				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @QueryParam(
-					value = "font") final FontName font) {
+	// @formatter:off
+	public GeneratedFile raetselPDFGenerieren(
+		@Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid,
+		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
+		@QueryParam(value = "font") final FontName font,
+		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
+	// @formatter:on
 
 		this.delayService.pause();
 		FontName theFont = font != null ? font : FontName.STANDARD;
+		Schriftgroesse theSchriftgroesse = schriftgroesse != null ? schriftgroesse : Schriftgroesse.NORMAL;
 
-		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege, theFont);
+		LOGGER.info("font={}, theFont={}, schriftgroesse={}, theSchriftgroesse={}", font, theFont, schriftgroesse,
+			theSchriftgroesse);
+
+		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege, theFont,
+			theSchriftgroesse);
 		return result;
 	}
 

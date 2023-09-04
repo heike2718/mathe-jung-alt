@@ -438,26 +438,36 @@ public class RaetselResourceTest {
 	@Order(14)
 	void testGeneratePDF() {
 
+		// Methode RaetselResource.raetselPDFGenerieren()
+
 		given().accept(ContentType.JSON)
 			.get("PDF/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(200);
 
 	}
 
-	// @Test
-	// @TestSecurity(user = "autor", roles = { "AUTOR" })
-	// @Order(15)
-	// void testGeneratePNGAutorAndOtherOwner() {
-	//
-	// given()
-	// .header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-	// .cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-	// .contentType(ContentType.JSON)
-	// .accept(ContentType.JSON)
-	// .post("v1/PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d?layoutAntwortvorschlaege=ANKREUZTABELLE")
-	// .then()
-	// .statusCode(401);
-	//
-	// }
+	@Test
+	@TestSecurity(user = "standard", roles = { "STANDARD" })
+	@Order(14)
+	void testGeneratePDFLaTeXKaputt() {
+
+		// Methode RaetselResource.raetselPDFGenerieren()
+
+		given().accept(ContentType.JSON)
+			.get("PDF/69682087-be49-498f-b9ee-1636978aefc0/v1?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(500);
+
+	}
+
+	@Test
+	@TestSecurity(user = "standard", roles = { "STANDARD" })
+	@Order(14)
+	void testGeneratePDFGrafikFehlt() {
+
+		// Methode RaetselResource.raetselPDFGenerieren()
+
+		given().accept(ContentType.JSON)
+			.get("PDF/69959982-83f9-482d-a26c-8eb4a92bd6ff/v1?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(400);
+
+	}
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
@@ -472,6 +482,38 @@ public class RaetselResourceTest {
 			.post("PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
 			.then()
 			.statusCode(200);
+
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(15)
+	void testGeneratePNGLaTeXInvalid() {
+
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+			.post("PNG/69682087-be49-498f-b9ee-1636978aefc0/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.then()
+			.statusCode(500);
+
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(15)
+	void testGeneratePNGGrafikFehlt() {
+
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+			.post("PNG/69959982-83f9-482d-a26c-8eb4a92bd6ff/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.then()
+			.statusCode(400);
 
 	}
 

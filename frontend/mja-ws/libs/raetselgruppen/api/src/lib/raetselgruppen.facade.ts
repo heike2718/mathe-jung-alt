@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, STATUS } from "@mja-ws/core/model";
+import { FONT_NAME, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, SCHRIFTGROESSE, STATUS } from "@mja-ws/core/model";
 import { fromRaetselgruppen, raetselgruppenActions } from "@mja-ws/raetselgruppen/data";
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { FrageLoesungImagesComponent } from "@mja-ws/shared/components";
@@ -35,12 +35,20 @@ export class RaetselgruppenFacade {
         this.#store.dispatch(raetselgruppenActions.unselect_raetselgruppe());
     }
 
-    generiereVorschau(raetselgruppeID: string): void {
-        this.#store.dispatch(raetselgruppenActions.generiere_vorschau({ raetselgruppeID }));
+    generiereArbeitsblatt(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): void {
+        this.#store.dispatch(raetselgruppenActions.generiere_arbeitsblatt({ raetselgruppeID, font, schriftgroesse }));
     }
 
-    generiereLaTeX(raetselgruppeID: string): void {
-        this.#store.dispatch(raetselgruppenActions.generiere_latex({ raetselgruppeID }));
+    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): void {
+        this.#store.dispatch(raetselgruppenActions.generiere_knobelkartei({ raetselgruppeID, font, schriftgroesse }));
+    }
+
+    generiereVorschau(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.#store.dispatch(raetselgruppenActions.generiere_vorschau({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
+    }
+
+    generiereLaTeX(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.#store.dispatch(raetselgruppenActions.generiere_latex({ raetselgruppeID, layoutAntwortvorschlaege }));
     }
 
     createAndEditRaetselgruppe(): void {

@@ -12,7 +12,6 @@ import de.egladil.mja_api.domain.generatoren.TrennerartFrageLoesung;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 /**
  * QuizitemLaTeXGenerator
@@ -21,9 +20,6 @@ import jakarta.inject.Inject;
 public class QuizitemLaTeXGenerator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QuizitemLaTeXGenerator.class);
-
-	@Inject
-	LaTeXTemplatesService templateService;
 
 	/**
 	 * Generiert ein Stück LaTeX, das in ein Dokument eingefügt werden kann. Es werden Frage und Lösung hintereinander eingefügt,
@@ -35,7 +31,7 @@ public class QuizitemLaTeXGenerator {
 	 */
 	public String generateLaTeXFrageLoesung(final RaetselGeneratorinput input, final TrennerartFrageLoesung trennerFrageLoesung, final boolean printAsMultipleChoice) {
 
-		String template = new String(this.templateService.getTemplatePDFRaetselFrageLoesung());
+		String template = new String(LaTeXTemplatesService.getInstance().getTemplatePDFRaetselFrageLoesung());
 
 		template = template.replace(LaTeXPlaceholder.COLOR.placeholder(), input.getTextColor());
 		template = template.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
@@ -52,6 +48,9 @@ public class QuizitemLaTeXGenerator {
 
 			template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), antworten);
 
+		} else {
+
+			template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), "");
 		}
 
 		if (StringUtils.isNotBlank(input.getLoesung())) {
@@ -66,6 +65,9 @@ public class QuizitemLaTeXGenerator {
 				if (StringUtils.isNotBlank(loesungsbuchstabe)) {
 
 					template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), loesungsbuchstabe);
+				} else {
+
+					template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
 				}
 
 			} else {
@@ -75,6 +77,12 @@ public class QuizitemLaTeXGenerator {
 
 			template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), input.getLoesung());
 
+		} else {
+
+			template = template.replace(LaTeXPlaceholder.TRENNER_FRAGE_LOESUNG.placeholder(), "");
+			template = template.replace(LaTeXPlaceholder.HEADER_LOESUNG.placeholder(), "");
+			template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
+			template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), "");
 		}
 
 		return template;
@@ -89,7 +97,7 @@ public class QuizitemLaTeXGenerator {
 	 */
 	public String generateLaTeXFrage(final RaetselGeneratorinput input, final boolean printAsMultipleChoice) {
 
-		String template = new String(this.templateService.getTemplatePDFRaetselFrage());
+		String template = new String(LaTeXTemplatesService.getInstance().getTemplatePDFRaetselFrage());
 
 		template = template.replace(LaTeXPlaceholder.HEADER_FRAGE.placeholder(), getHeaderFrage(input));
 		template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.placeholder(), input.getFrage());
@@ -127,7 +135,7 @@ public class QuizitemLaTeXGenerator {
 			return "";
 		}
 
-		String template = new String(this.templateService.getTemplatePDFRaetselLoesung());
+		String template = new String(LaTeXTemplatesService.getInstance().getTemplatePDFRaetselLoesung());
 
 		template = template.replace(LaTeXPlaceholder.HEADER_LOESUNG.placeholder(), getHeaderLoesung(input));
 
@@ -135,10 +143,7 @@ public class QuizitemLaTeXGenerator {
 
 		if (isMultipleChoice && printAsMultipleChoice) {
 
-			String loesungsbuchstabe = input.getLoesungsbuchstabe();
-
-			String replacement = LaTeXConstants.PATTERN_VALUE_LOESUNGSBUCHSTABE.replace(LaTeXPlaceholder.BUCHSTABE.placeholder(),
-				loesungsbuchstabe);
+			String replacement = getTextLoesungsbuchstabe(input.getAntwortvorschlaege());
 
 			template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), replacement);
 
@@ -165,7 +170,7 @@ public class QuizitemLaTeXGenerator {
 
 			result = LaTeXConstants.HEADER_AUFGABE_NUMMER;
 			result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
-			LOGGER.info(result);
+			LOGGER.debug(result);
 
 			return result;
 		}
@@ -184,7 +189,7 @@ public class QuizitemLaTeXGenerator {
 		result = result.replace(LaTeXPlaceholder.PUNKTE.placeholder(), input.getPunkte() + "");
 		result = result.replace(LaTeXPlaceholder.SCHLUESSEL.placeholder(), input.getSchluessel());
 
-		LOGGER.info(result);
+		LOGGER.debug(result);
 
 		return result;
 	}
@@ -197,7 +202,7 @@ public class QuizitemLaTeXGenerator {
 
 			result = LaTeXConstants.HEADER_LOESUNG_NUMMER;
 			result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
-			LOGGER.info(result);
+			LOGGER.debug(result);
 
 			return result;
 		}
@@ -214,7 +219,7 @@ public class QuizitemLaTeXGenerator {
 
 		result = result.replace(LaTeXPlaceholder.SCHLUESSEL.placeholder(), input.getSchluessel());
 
-		LOGGER.info(result);
+		LOGGER.debug(result);
 
 		return result;
 	}

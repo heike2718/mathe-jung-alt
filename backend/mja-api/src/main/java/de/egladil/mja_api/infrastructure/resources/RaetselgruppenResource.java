@@ -15,9 +15,12 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.generatoren.FontName;
+import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
@@ -59,6 +62,8 @@ import jakarta.ws.rs.core.Response.Status;
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Raetselgruppen")
 public class RaetselgruppenResource {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenResource.class);
 
 	@Inject
 	DevDelayService delayService;
@@ -337,17 +342,27 @@ public class RaetselgruppenResource {
 
 	@GET
 	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Path("vorschau/{raetselgruppeID}/v1")
+	@Path("{raetselgruppeID}/vorschau/v1")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printRaetselgruppeVorschau",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt.")
+		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt. . Es wird immer mit ANKREUTZABELLE gedruckt")
 	@Parameters({
 		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
 		@Parameter(
 			in = ParameterIn.QUERY,
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)",
+			required = true),
+		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "font",
-			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet. Bei Fibel-Fonts wird mit 12pt gedruckt, sonst mit 11pt.",
+			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
+			required = false),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "size",
+			description = "wird in LaTeX-Größenangaben umgewandelt.",
 			required = false)
 	})
 	@APIResponse(
@@ -366,26 +381,37 @@ public class RaetselgruppenResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	public GeneratedFile printVorschau(@PathParam(
-		value = "raetselgruppeID") @Pattern(
-			regexp = "^[a-fA-F\\d\\-]{1,36}$",
-			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
-				value = "font") final FontName font) {
+	// @formatter:off
+	public GeneratedFile printVorschau(
+		@PathParam(value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
+		@QueryParam(value = "font") final FontName font,
+		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
+	// @formatter:on
 
 		FontName theFont = font == null ? FontName.STANDARD : font;
-		return raetselgruppenService.printVorschau(raetselgruppeID, theFont);
+		Schriftgroesse theSchriftgroesse = schriftgroesse == null ? Schriftgroesse.NORMAL : schriftgroesse;
+
+		LOGGER.info("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
+
+		return raetselgruppenService.printVorschau(raetselgruppeID, theFont, theSchriftgroesse, layoutAntwortvorschlaege);
 	}
 
-
 	@GET
-	@Path("latex/{raetselgruppeID}/v1")
+	@Path("{raetselgruppeID}/latex/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "downloadLaTeXSource",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein LaTeX. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Zuerst werden alle Aufgaben gedruckt, dann alle Lösungen.")
 	@Parameters({
-		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.")
+		@Parameter(
+			in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.",
+			required = true),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
 	})
 	@APIResponse(
 		name = "DownloadLaTeXSourceOKResponse",
@@ -403,12 +429,13 @@ public class RaetselgruppenResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	public GeneratedFile downloadLaTeX(@PathParam(
-		value = "raetselgruppeID") @Pattern(
-			regexp = "^[a-fA-F\\d\\-]{1,36}$",
-			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID) {
+	// @formatter:off
+	public GeneratedFile downloadLaTeX(
+		@PathParam( value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+   // @formatter:on
 
-		return raetselgruppenService.downloadLaTeXSource(raetselgruppeID);
+		return raetselgruppenService.downloadLaTeXSource(raetselgruppeID, layoutAntwortvorschlaege);
 	}
 
 	@GET
@@ -417,12 +444,19 @@ public class RaetselgruppenResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printArbeitsblatt",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein.")
+		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
 		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
 		@Parameter(
-			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
+			in = ParameterIn.QUERY,
+			name = "font",
+			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
+			required = false),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "size",
+			description = "wird in LaTeX-Größenangaben umgewandelt.",
+			required = false)
 	})
 	@APIResponse(
 		name = "RaetselgruppenArbeitsblattOKResponse",
@@ -440,15 +474,19 @@ public class RaetselgruppenResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	public GeneratedFile printArbeitsblatt(@PathParam(
-		value = "raetselgruppeID") @Pattern(
-			regexp = "^[a-fA-F\\d\\-]{1,36}$",
-			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
-				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @QueryParam(
-					value = "font") final FontName font) {
+	// @formatter:off
+	public GeneratedFile printArbeitsblattMitLoesungen(
+		@PathParam(value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@QueryParam(value = "font") final FontName font,
+		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
+	// @formatter:on
 
-		throw new WebApplicationException(
-			Response.status(501).entity(MessagePayload.warn("Die API ist noch nicht implementiert")).build());
+		FontName theFont = font == null ? FontName.STANDARD : font;
+		Schriftgroesse theSchriftgroesse = schriftgroesse == null ? Schriftgroesse.NORMAL : schriftgroesse;
+
+		LOGGER.info("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
+
+		return raetselgruppenService.printArbeitsblattMitLoesungen(raetselgruppeID, theFont, theSchriftgroesse);
 	}
 
 	@GET
@@ -457,12 +495,19 @@ public class RaetselgruppenResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printKnobelkartei",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF, in dem jede Seite genau ein Rätsel enthält. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein.")
+		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF, in dem jede Seite genau ein Rätsel enthält. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
 		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
 		@Parameter(
-			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)")
+			in = ParameterIn.QUERY,
+			name = "font",
+			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
+			required = false),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "size",
+			description = "wird in LaTeX-Größenangaben umgewandelt.",
+			required = false)
 	})
 	@APIResponse(
 		name = "RaetselgruppenArbeitsblattOKResponse",
@@ -480,16 +525,19 @@ public class RaetselgruppenResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	public GeneratedFile printKnobelkartei(@PathParam(
-		value = "raetselgruppeID") @Pattern(
-			regexp = "^[a-fA-F\\d\\-]{1,36}$",
-			message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID, @QueryParam(
-				value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege, @QueryParam(
-					value = "font") final FontName font) {
+	// @formatter:off
+	public GeneratedFile printKnobelkartei(
+		@PathParam(value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@QueryParam(value = "font") final FontName font,
+		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
+	// @formatter:on
 
 		FontName theFont = font == null ? FontName.STANDARD : font;
-		return raetselgruppenService.printKartei(raetselgruppeID, theFont, layoutAntwortvorschlaege);
-	}
+		Schriftgroesse theSchriftgroesse = schriftgroesse == null ? Schriftgroesse.NORMAL : schriftgroesse;
 
+		LOGGER.info("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
+
+		return raetselgruppenService.printKartei(raetselgruppeID, theFont, theSchriftgroesse);
+	}
 
 }

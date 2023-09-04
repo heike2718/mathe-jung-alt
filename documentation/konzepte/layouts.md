@@ -158,13 +158,13 @@ Die Lösungen werden hintereinander weg ohne Seitenumbruch gedruckt.
 Welche Merkmale zur Kategorisierung der Generierungsaufgabe gibt es?
 
 + Ausgabeformat (PDF, PNG, LaTeX)
-+ Verwendungszweck (Aufgabenblatt, Aufgaben mit Lösungen, nur Aufgabe, nur Lösung)
-+ Inhalte (Frage, Lösung)
-+ Trenner aufgabe-loesung (kleiner Abstand, Seitenumbruch)
++ Verwendungszweck (LaTeX, Arbeitsblatt, Aufgaben mit Lösungen, Kartei, nur Frage, nur Lösung)
 
-PDF und LaTeX sind keine getrennten Aufgabenformate im eigentlichen Sinne. LaTeX ist die Vorstufe für PDF. D.h. man kann eine Methode schreiben, die das LaTeX erzeugt und als String zurückgibt. Darauf kann dann eine Methode aufsetzen, die den String in eine LaTeX-Datei schreibt und deren Pfad zurückgibt. Diese wiederum kann dem LaTeX-Service zur Generierung des PDF übergeben werden.
+PDF und LaTeX sind keine getrennten Ausgabeformate. Das erste wird aus dem letzten generiert.
 
-Inhalt "nur Aufgabe" und "nur Lösung" sind nur für PNG erforderlich
+Aufgaben mit Lösungen und LaTeX sind keine getrennten Verwendungszwecke im eigentlichen Sinne. LaTeX ist die Vorstufe für Aufgaben mit Lösungen. D.h. man kann eine Methode schreiben, die das LaTeX erzeugt und als String zurückgibt. Darauf kann dann eine Methode aufsetzen, die den String in eine LaTeX-Datei schreibt und deren Pfad zurückgibt. Diese wiederum kann dem LaTeX-Service zur Generierung des PDF übergeben werden.
+
+Verwendungszwecke und Aufgabeformate sind ebenfalls gekoppelt: "nur Frage" und "nur Lösung" gibt es nur bei Ausgabeformat PNG, die anderen Verwendungszwecke gibt es nur bei PDF und LaTeX.
 
 Der Trenner ist für PNG uninteressant.
 
@@ -181,7 +181,7 @@ Ausgabeformat = PNG.
 
 ### PDF
 
-Ausgabeformat = PDF
+Ausgabeformat = PDF (bzw. LaTeX)
 
 3 mögliche Rahmen: Arbeitsblatt, Aufgaben mit Lösungen (für Aufgabenblätter), Kartei.
 
@@ -189,8 +189,8 @@ Inhalte zusammengefasst oder getrennt.
 
 __Für die Rahmen:__
 
-1. template-aufgabenblatt-pdf.tex
-1. template-aufgabenblatt-mit-loesungen-pdf.tex
+1. template-aufgabenblatt-pdf.tex (könnte man hier das LaTeX nicht auch brauchen?)
+1. template-aufgabenblatt-mit-loesungen-pdf.tex => LaTeX und PDF
 1. template-kartei-pdf.tex
 
 __Für die Rätselgruppenelemente:__
@@ -201,5 +201,29 @@ __Für die Rätselgruppenelemente:__
 
 Für eine Kartei ist Trenner aufgabe-loesung ein Seitenumbruch, für eine Vorschau ein kleiner Abstand. D.h. im Fall von PDF muss die Art des Trenners als Parameter mitgegeben werden.
 
+## Änderungen am Dialog zum Generieren
+
+### Rätselgeneratoren
+
+Es soll auch der FONT gewählt werden können. Außerdem muss ein Hinweis stehen, dass bei LayoutAntwortvorschlaege.NONE keine gedruckt werden sollen.
+
+
+### Rätselgruppen
+
+__public__
+
+Im Fall von öffentlichen Zugriffen - Aufgabenblätter / Kartein: es wird generell nicht multiple choice gedruckt. Also nur wählbar, Aufgabenblätter (mit Lösungen) oder Kartei.
+
+Erstmal keine eigene URL für Arbeitsblätter ohne Lösungen, denn die Lösungen müssen ja dann nicht ausgedruckt werden.
+
+Erst Verwendungszweck wählen: nur KARTEI oder ARBEITSBLATT, dann Font.
+
+__Autoren__
+
+Erst Verwendungszweck wählen, dann LayoutAusgabeformat, dann Font. Alle Verwendungszwecke sollen wählbar sein. Bei einigen wird generell ohne Antwortvorschläge generiert.
+
+Alle Verwendungszwecke wählbar
+
+Daraus ergibt sich ein neues Paylaod und vielleicht eine eigene URL für Autoren?
 
 

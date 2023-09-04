@@ -52,7 +52,7 @@ export class RaetselEffects {
         return this.#actions.pipe(
             ofType(raetselActions.generate_raetsel_png),
             concatMap(
-                (action) => this.#raetselHttpService.generateRaetselPNGs(action.raetselID, action.layoutAntwortvorschlaege)
+                (action) => this.#raetselHttpService.generateRaetselPNGs(action.raetselID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)
                     .pipe(
                         map((generatedImages) => raetselActions.raetsel_png_generated({ images: generatedImages })),
                         catchError(() => of(raetselActions.latex_errors_detected()))
@@ -66,7 +66,7 @@ export class RaetselEffects {
         return this.#actions.pipe(
             ofType(raetselActions.generate_raetsel_pdf),
             concatMap(
-                (action) => this.#raetselHttpService.generateRaetselPDF(action.raetselID, action.layoutAntwortvorschlaege)
+                (action) => this.#raetselHttpService.generateRaetselPDF(action.raetselID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)
                     .pipe(
                         map((file) => raetselActions.raetsel_pdf_generated({ pdf: file })),
                         catchError(() => of(raetselActions.latex_errors_detected()))

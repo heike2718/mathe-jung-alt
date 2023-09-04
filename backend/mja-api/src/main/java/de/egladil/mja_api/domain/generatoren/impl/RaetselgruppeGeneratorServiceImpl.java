@@ -19,6 +19,7 @@ import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
+import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
@@ -59,11 +60,8 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 	@Inject
 	RaetselService raetselService;
 
-	@Inject
-	LaTeXTemplatesService templatesService;
-
 	@Override
-	public GeneratedFile generate(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Verwendungszweck verwendungszweck) {
+	public GeneratedFile generate(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final Verwendungszweck verwendungszweck, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		LOGGER.debug("start generate output");
 
@@ -74,9 +72,10 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 			.withFont(font)
 			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
 			.withRaetselgruppe(raetselgruppe)
-			.withVerwendungszweck(verwendungszweck);
+			.withVerwendungszweck(verwendungszweck)
+			.withSchriftgroesse(schriftgroesse);
 
-		String template = strategy.generateLaTeX(input, templatesService, raetselService, quizitemLaTeXGenerator);
+		String template = strategy.generateLaTeX(input, raetselService, quizitemLaTeXGenerator);
 
 		if (verwendungszweck.compileToPDF()) {
 

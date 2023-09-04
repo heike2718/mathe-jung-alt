@@ -17,8 +17,8 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { Antwortvorschlag, EditRaetselPayload, GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectPrintparametersDialogData, STATUS } from '@mja-ws/core/model';
-import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, SelectPrintparametersDialogComponent } from '@mja-ws/shared/components';
+import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, STATUS, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
+import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { GrafikFacade } from '@mja-ws/grafik/api';
 import { Message } from '@mja-ws/shared/messaging/api';
@@ -52,7 +52,7 @@ interface AntwortvorschlagFormValue {
     SelectItemsComponent,
     JaNeinDialogComponent,
     GrafikDetailsComponent,
-    SelectPrintparametersDialogComponent
+    GeneratorParametersDialogAutorenComponent
   ],
   templateUrl: './raetsel-editor.component.html',
   styleUrls: ['./raetsel-editor.component.scss'],
@@ -197,14 +197,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   printPNG(): void {
-
     const outputformat: OUTPUTFORMAT = 'PNG';
-
-    if (this.#raetselDetails.antwortvorschlaege.length > 0) {
-      this.#openPrintDialog(outputformat);
-    } else {
-      this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, 'NOOP');
-    }
+    this.#openPrintDialog(outputformat);
   }
 
   openHistorieLaTeXSpeichernDialog(raetsel: RaetselDetails): void {
@@ -350,13 +344,20 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   #openPrintDialog(outputformat: OUTPUTFORMAT): void {
-    const dialogData: SelectPrintparametersDialogData = {
+    const dialogData: SelectGeneratorParametersUIModelAutoren = {
       titel: outputformat + ' generieren',
+      showVerwendungszwecke: false,
+      verwendungszwecke: [],
+      selectedVerwendungszweck: undefined,
       layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
-      selectedLayoutAntwortvorschlaege: undefined
-    }
+      selectedLayoutAntwortvorschlaege: undefined,
+      fontNamen: fontNamenSelectInput,
+      selectedFontName: undefined,
+      schriftgroessen: schriftgroessenSelectInput,
+      selectedSchriftgroesse: undefined
+    };
 
-    const dialogRef = this.dialog.open(SelectPrintparametersDialogComponent, {
+    const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
       height: '300px',
       width: '700px',
       data: dialogData
@@ -368,12 +369,30 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
         let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
         switch (dialogData.selectedLayoutAntwortvorschlaege) {
-          case 'ANKREUZTABELLE': layout = 'ANKREUZTABELLE'; break;
-          case 'BUCHSTABEN': layout = 'BUCHSTABEN'; break;
-          case 'DESCRIPTION': layout = 'DESCRIPTION'; break;
+          case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
+          case 'Buchstaben': layout = 'BUCHSTABEN'; break;
+          case 'description': layout = 'DESCRIPTION'; break;
         }
 
-        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, layout);
+        let font: FONT_NAME = 'STANDARD';
+        let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
+
+        if (result && dialogData.selectedFontName) {
+          switch (dialogData.selectedFontName) {
+            case 'Druckschrift (Leseanfänger)': font = 'DRUCK_BY_WOK'; break;
+            case 'Fibel Nord': font = 'FIBEL_NORD'; break;
+            case 'Fibel Süd': font = 'FIBEL_SUED'; break;
+          }
+        }
+
+        if (result && dialogData.selectedSchriftgroesse) {
+          switch(dialogData.selectedSchriftgroesse) {
+            case 'sehr groß': schriftgroesse = 'HUGE'; break;
+            case 'groß': schriftgroesse = 'LARGE'; break;
+          }
+        }
+
+        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, font, schriftgroesse, layout);
       }
     });
   }

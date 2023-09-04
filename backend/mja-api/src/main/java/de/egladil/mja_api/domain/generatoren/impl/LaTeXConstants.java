@@ -11,23 +11,21 @@ public interface LaTeXConstants {
 
 	String VALUE_NEWPAGE = "\\newpage\n";
 
-	String VALUE_PAR = "\\par";
+	String VALUE_PAR = "\\par\n";
 
-	String VALUE_LINEBREAK = "\\\\";
+	String VALUE_LINEBREAK = "\\\\\n";
 
-	String PATTERN_VALUE_LOESUNGSBUCHSTABE = "{\\it Lösungsbuchstabe ist {buchstabe}}\\par";
+	String HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE = "{\\bf \\color{{color}} Aufgabe {nummer} - {schluessel} ({punkte}) }\\\\\n";
 
-	String HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE = "{\\bf \\color{{color}} Aufgabe {nummer} - {schluessel} ({punkte}) }\\\\";
+	String HEADER_AUFGABE_SCHLUESSEL_PUNKTE = "{\\bf \\color{{color}} Aufgabe {schluessel} ({punkte}) }\\\\\n";
 
-	String HEADER_AUFGABE_SCHLUESSEL_PUNKTE = "{\\bf \\color{{color}} Aufgabe {schluessel} ({punkte}) }\\\\";
+	String HEADER_AUFGABE_NUMMER = "{\\bf Aufgabe {nummer} }\\\\\n";
 
-	String HEADER_AUFGABE_NUMMER = "{\\bf Aufgabe {nummer} }\\\\";
+	String HEADER_LOESUNG_NUMMER_SCHLUESSEL = "{\\bf Lösung {nummer} - {schluessel} }\\\\\n";
 
-	String HEADER_LOESUNG_NUMMER_SCHLUESSEL = "{\\bf Lösung {nummer} - {schluessel} }\\\\";
+	String HEADER_LOESUNG_SCHLUESSEL = "{\\bf Lösung {schluessel}}\\\\\n";
 
-	String HEADER_LOESUNG_SCHLUESSEL = "{\\bf Lösung {schluessel}}\\\\";
-
-	String HEADER_LOESUNG_NUMMER = "{\\bf Lösung {nummer} }\\\\";
+	String HEADER_LOESUNG_NUMMER = "{\\bf Lösung {nummer} }\\\\\n";
 
 	String ABSTAND_ITEMS = "\\par \n\\vspace{1ex}\n";
 
