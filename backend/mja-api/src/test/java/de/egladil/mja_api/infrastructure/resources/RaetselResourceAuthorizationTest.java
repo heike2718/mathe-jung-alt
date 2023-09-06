@@ -104,13 +104,13 @@ public class RaetselResourceAuthorizationTest {
 
 	@Test
 	@TestSecurity(user = "bolle", roles = { "STANDARD" })
-	void testRaetselDetailsLadenForbidden() throws Exception {
+	void testRaetselDetailsLadenPublic() throws Exception {
 
 		given()
 			.when()
 			.get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1")
 			.then()
-			.statusCode(403);
+			.statusCode(200);
 	}
 
 	@Test

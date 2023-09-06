@@ -14,8 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
+import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.dto.SuchfilterVariante;
@@ -333,6 +335,16 @@ public class RaetselServiceImpl implements RaetselService {
 		PersistentesRaetsel raetsel = raetselDao.findWithSchluessel(schluessel);
 
 		return raetsel == null ? Optional.empty() : Optional.of(raetsel.uuid);
+	}
+
+	@Override
+	public AnzahlabfrageResponseDto zaehleFreigegebeneRaetsel() {
+
+		long anzahl = raetselDao.countRaetselWithStatus(DomainEntityStatus.FREIGEGEBEN);
+		AnzahlabfrageResponseDto result = new AnzahlabfrageResponseDto();
+		result.setErgebnis(anzahl);
+
+		return result;
 	}
 
 }

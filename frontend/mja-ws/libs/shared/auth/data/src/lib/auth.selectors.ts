@@ -1,4 +1,3 @@
-import { User } from '@mja-ws/shared/auth/model';
 import { createSelector } from '@ngrx/store';
 import { authFeature } from './auth.reducer';
 
@@ -9,8 +8,14 @@ const user = createSelector(
     (session) => session.user
 );
 
+const benutzerart = createSelector(
+    user,
+    (user) => user.benutzerart
+);
+
 export const fromAuth = {
     selectAuthState,
     selectSession,
-    user
+    user,
+    benutzerart
 };

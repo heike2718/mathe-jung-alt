@@ -7,9 +7,6 @@ package de.egladil.mja_api.domain.upload;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +18,8 @@ import de.egladil.web.filescanner_service.scan.ScanRequestPayload;
 import de.egladil.web.filescanner_service.scan.ScanResult;
 import de.egladil.web.filescanner_service.scan.ScanService;
 import de.egladil.web.filescanner_service.securitychecks.ThreadDetection;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * UploadScannerDelegate
@@ -35,7 +34,7 @@ public class UploadScannerDelegate {
 	@ConfigProperty(name = "upload.max.bytes")
 	String maxFilesizeBytes;
 
-	@ConfigProperty(name = "admin-client-id")
+	@ConfigProperty(name = "public-client-id")
 	String clientId;
 
 	@Inject

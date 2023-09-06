@@ -126,7 +126,20 @@ public class RaetselDaoImpl implements RaetselDao {
 				.getResultList();
 		}
 
-		int anzahl = trefferliste.get(0).intValue();
+		long anzahl = trefferliste.get(0);
+
+		return anzahl;
+	}
+
+	@Override
+	public long countRaetselWithStatus(final DomainEntityStatus status) {
+
+		String stmt = "SELECT count(*) FROM RAETSEL r WHERE STATUS = :status";
+
+		@SuppressWarnings("unchecked")
+		List<Long> trefferliste = entityManager.createNativeQuery(stmt).setParameter("status", status.toString()).getResultList();
+
+		long anzahl = trefferliste.get(0);
 
 		return anzahl;
 	}

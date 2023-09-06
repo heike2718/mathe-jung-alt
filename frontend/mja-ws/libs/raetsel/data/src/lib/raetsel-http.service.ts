@@ -25,7 +25,7 @@ export class RaetselHttpService {
 
     #url = '/mja-api/raetsel';
 
-    findRaetsel(suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
+    findRaetsel(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
 
         const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
@@ -44,7 +44,12 @@ export class RaetselHttpService {
 
         params = params.set(QUERY_PARAM_TYPE_DESKRIPTOREN, 'ORDINAL');
 
-        const url = this.#url + '/admin/v2';
+        let url = this.#url + '/v2';
+
+        if ( admin) {
+            url = this.#url + '/admin/v2';
+        }
+
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.get<RaetselsucheTreffer>(url, { headers, params });
     }

@@ -42,13 +42,13 @@ Falls jemand eine andere Java-Version benötigt, muss er das Image anpassen.
 
 Leider dauert das Bauen des images sehr lange, weil ein Haufen Tex-Zeug installiert werden muss.
 
-docker-latex-client
+latex-service-api
 ~~~~~~~~~~~~~~~~~~~
 
 Dieses Image erweitert heike2718/docker-java-latex um 
 
 * netbpm, damit im container das command pnm zur Verfügung steht, um aus ps-Files png-Files herauszuschneiden.
-* die Fonts fblnord (Fibelschrift Nord) und fblsued (Fibelschrit Süd)
+* die Fonts fblnord (Fibelschrift Nord), fblsued (Fibelschrit Süd) und () Druckschrift BY-WOK
 * shellscripts latex2png.sh sowie latex2pdf.sh 
 * eine Java-Anwendung, die diese scripte mit einem LaTeX-File als Argument aufruft, um dieses in das gewünschte Format zu tranformieren. Der Aufruf wird mittels undertow als http-Service zur Verfügung gestellt.
 

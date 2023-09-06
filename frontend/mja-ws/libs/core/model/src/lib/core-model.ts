@@ -306,3 +306,8 @@ export class GuiSchwierigkeitsgradeMap {
       return result;
   }
 }
+
+// Statistik
+export interface AnzahlabfrageErgebnis {
+  readonly ergebnis: number;
+};

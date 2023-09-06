@@ -33,11 +33,9 @@ public interface DeskriptorenService {
 	/**
 	 * Läd die Deskriptoren für RAETSEL.
 	 *
-	 * @param  admin
-	 *               boolean
 	 * @return       List
 	 */
-	List<DeskriptorUI> loadDeskriptorenRaetsel(boolean admin);
+	List<DeskriptorUI> loadDeskriptorenRaetsel();
 
 	/**
 	 * Sucht den Deskriptor anhand seines Namens.

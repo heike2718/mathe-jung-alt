@@ -1,3 +1,5 @@
+export type BENUTZERART = 'ANONYM' | 'ADMIN' | 'AUTOR' | 'STANDARD';
+
 export interface AuthResult {
   expiresAt: number | undefined;
   state: string | undefined;
@@ -7,6 +9,7 @@ export interface AuthResult {
 
 export interface User {
   readonly fullName: string,
+  readonly benutzerart: BENUTZERART,
   readonly isAdmin: boolean,
   readonly anonym: boolean
 };

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
+import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.generatoren.FontName;
@@ -28,12 +29,14 @@ import de.egladil.mja_api.domain.generatoren.RaetselGeneratorService;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
-import de.egladil.mja_api.domain.raetsel.impl.RaetselServiceImpl;
 import de.egladil.mja_api.domain.utils.DevDelayService;
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.persistence.EnumType;
@@ -68,7 +71,7 @@ public class RaetselResource {
 	DevDelayService delayService;
 
 	@Inject
-	RaetselServiceImpl raetselService;
+	RaetselService raetselService;
 
 	@Inject
 	RaetselFileService raetselFileService;
@@ -142,7 +145,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("v2")
-	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
 	@Operation(
 		operationId = "findRaetselPublic", summary = "Gibt alle Rätsel mit den gegebenen Deskriptoren zurück")
 	@Parameters({
@@ -183,7 +186,7 @@ public class RaetselResource {
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
 		@QueryParam(value = "sortDirection")  @DefaultValue("asc") final SortDirection sortDirection) {
-		// @formatter:on
+	// @formatter:on
 
 		this.delayService.pause();
 
@@ -199,8 +202,34 @@ public class RaetselResource {
 	}
 
 	@GET
+	@Path("/public/anzahl/v1")
+	@PermitAll
+	@Operation(
+		operationId = "getAnzahlFreigegebenerRaetsel",
+		summary = "Gibt die Anzahl der zum Abfragezeitpunkt freigegebenen Rätsel zurück.")
+	@APIResponse(
+		name = "GetAnzahlFreigegebenerRaetselOKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = AnzahlabfrageResponseDto.class)))
+	@APIResponse(
+		name = "GetAnzahlFreigegebenerRaetselServerError",
+		responseCode = "500",
+		description = "Fehler aufgetreten",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	// @formatter:off
+	public Response getAnzahlFreigegebenerRaetsel() {
+	// @formatter:on
+
+		return Response.ok(raetselService.zaehleFreigegebeneRaetsel()).build();
+	}
+
+	@GET
 	@Path("{raetselID}/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Authenticated
 	@Operation(
 		operationId = "raetselDetailsLaden",
 		summary = "Läd die Details des Rätsels mit der gegebenen ID")
@@ -395,7 +424,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("PDF/{raetselID}/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
 	@Operation(
 		operationId = "raetselPDFGenerieren",
 		summary = "generiert ein PDF mit dem Rätsel")

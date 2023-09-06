@@ -41,7 +41,7 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "quarkus.http.root-path")
 	String quarkusRootPath;
 
-	@ConfigProperty(name = "admin-redirect-url.login")
+	@ConfigProperty(name = "public-redirect-url")
 	String loginRedirectUrl;
 
 	@ConfigProperty(name = "quarkus.http.port")
@@ -68,6 +68,9 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "csrf.enabled")
 	String csrfEnabled;
 
+	@ConfigProperty(name = "mock.session")
+	String mockSession;
+
 	@ConfigProperty(name = "target.origin")
 	String targetOrigin;
 
@@ -92,6 +95,7 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  ClamAV: host={},port={}", clamAVHost, clamAVPort);
 		LOGGER.info(" ===========>  loginRedirectUrl={}", loginRedirectUrl);
 		LOGGER.info(" ===========>  csrfEnabled={}", csrfEnabled);
+		LOGGER.info(" ===========>  mockSession={}", mockSession);
 		LOGGER.info(" ===========>  quarkusRootPath={}", quarkusRootPath);
 		LOGGER.info(" ===========>  port={}", port);
 

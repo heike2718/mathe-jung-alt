@@ -9,15 +9,17 @@ describe('Auth Reducer', () => {
 
         const theNewSession: Session = {
             expiresAt: 99999,
+            sessionId: '512381',                
             user: {
                 anonym: false,
                 fullName: 'Ponder Stibbons',
+                benutzerart: 'ADMIN',
                 idReference: 'hjkahkj',
                 roles: ['ADMIN', 'STANDARD']
             }
         }
         const state = initialState;
-        const newState = authFeature.reducer(state, authActions.sessionCreated({ session: theNewSession }));
+        const newState = authFeature.reducer(state, authActions.session_created({session: theNewSession}));
         expect(newState.session).toBe(theNewSession);
     });
 
@@ -25,15 +27,17 @@ describe('Auth Reducer', () => {
 
         const theSession: Session = {
             expiresAt: 99999,
+            sessionId: '512381',                
             user: {
                 anonym: false,
                 fullName: 'Ponder Stibbons',
+                benutzerart: 'ADMIN',
                 idReference: 'hjkahkj',
                 roles: ['ADMIN', 'STANDARD']
             }
         }
         const state = {...initialState, session: theSession};
-        const newState = authFeature.reducer(state, authActions.loggedOut());
+        const newState = authFeature.reducer(state, authActions.logged_out());
         expect(newState.session).toBe(anonymousSession);
     });
 });

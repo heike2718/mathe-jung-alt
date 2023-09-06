@@ -1,7 +1,10 @@
+import { BENUTZERART } from "@mja-ws/shared/auth/model";
+
 export interface UserFull {
   readonly idReference: string;
   readonly roles: string[];
   readonly fullName: string;
+  readonly benutzerart: BENUTZERART;
   readonly anonym: boolean;
 };
 
@@ -15,6 +18,7 @@ const anonymousUser: UserFull = {
   fullName: 'Gast',
   idReference: 'ANONYM',
   roles: [],
+  benutzerart: 'ANONYM',
   anonym: true
 };
 
@@ -24,19 +28,13 @@ export const anonymousSession: Session = {
   user: anonymousUser
 };
 
-export function findRole(role: string, roles: string[]): boolean {
-
-  return roles.filter(r => r === role).length > 0;
-
-};
-
 export function isAdmin(user: UserFull | undefined): boolean {
 
   if (user === undefined) {
     return false;
   }
 
-  return findRole('ADMIN', user.roles);
+  return user.benutzerart === 'ADMIN' || user.benutzerart === 'AUTOR';
 };
 
 export function isAnonymousSession(session: Session): boolean {

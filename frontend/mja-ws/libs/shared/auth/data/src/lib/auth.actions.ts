@@ -7,6 +7,7 @@ export const authActions = createActionGroup({
     events: {
         'LOG_IN': emptyProps(),  // internal
         'REQUEST_LOGIN_URL': emptyProps(), // internal
+        'REQUEST_SIGNUP_URL': emptyProps(), // internal
         'REDIRECT_TO_AUTH': props<{ authUrl: string }>(), // internal
         'CREATE_SESSION': props<{hash: string}>(),
         'INIT_SESSION': props<{ authResult: AuthResult }>(), // public

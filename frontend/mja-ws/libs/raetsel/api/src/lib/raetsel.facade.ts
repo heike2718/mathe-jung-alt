@@ -35,10 +35,10 @@ export class RaetselFacade {
 
   #selectItemsFacade = inject(SelectItemsFacade);
 
-  public triggerSearch(suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
+  public triggerSearch(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
 
     this.#store.dispatch(raetselActions.raetsel_select_page({ pageDefinition }));
-    this.#store.dispatch(raetselActions.find_raetsel({ suchfilter, pageDefinition }));
+    this.#store.dispatch(raetselActions.find_raetsel({admin, suchfilter, pageDefinition }));
   }
 
   public selectRaetsel(raetsel: Raetsel): void {

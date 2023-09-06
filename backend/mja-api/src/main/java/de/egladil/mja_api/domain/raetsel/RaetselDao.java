@@ -6,6 +6,7 @@ package de.egladil.mja_api.domain.raetsel;
 
 import java.util.List;
 
+import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 
@@ -41,6 +42,12 @@ public interface RaetselDao {
 	 * @return                 List
 	 */
 	long countRaetselWithFilter(String suchstring, String deskriptorenIDs, boolean nurFreigegebene);
+
+	/**
+	 * @param  status
+	 * @return        long
+	 */
+	long countRaetselWithStatus(DomainEntityStatus status);
 
 	/**
 	 * Volltextsuche in RAETSEL mit dem gegebenen Suchstring.

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { CoreFacade } from '@mja-ws/core/api';
 import { AuthRepository } from '@mja-ws/shared/auth/data';
-import { AuthResult, User } from '@mja-ws/shared/auth/model';
+import { AuthResult, BENUTZERART, User } from '@mja-ws/shared/auth/model';
 import { MessageService } from '@mja-ws/shared/messaging/api';
 import { Observable, of, switchMap, tap } from 'rxjs';
 
@@ -14,26 +14,28 @@ export class AuthFacade {
   #coreFacade = inject(CoreFacade);
   #messageService = inject(MessageService);
 
-  readonly userIsAdmin$: Observable<boolean> = this.#authRepository.userIsAdmin$;
+  readonly userIsAdmin$: Observable<boolean> = this.#authRepository.benutzerart$.pipe(
+    switchMap((benutzerart) => of(benutzerart === 'ADMIN' || benutzerart === 'AUTOR'))
+  );
+
+  readonly userIsPublic$: Observable<boolean> = this.#authRepository.benutzerart$.pipe(
+    switchMap((benutzerart) => of(benutzerart === 'STANDARD'))
+  );
+
   readonly user$: Observable<User> = this.#authRepository.user$;
+
   readonly userIsLoggedIn$: Observable<boolean> = this.#authRepository.loggedIn$;
+
   readonly userIsLoggedOut$: Observable<boolean> = this.#authRepository.loggedIn$.pipe(
     switchMap((li) => of(!li))
   );
 
-  constructor() {
-
-    this.user$.pipe(
-      tap((user) => {
-        if (!user.anonym) {
-          this.#coreFacade.loadDeskriptoren(user.isAdmin);
-        }
-      })
-    ).subscribe();
-  }
-
   public login(): void {
     this.#authRepository.login();
+  }
+
+  public signup(): void {
+    this.#authRepository.signUp();
   }
 
   public initClearOrRestoreSession(): void {
@@ -48,6 +50,12 @@ export class AuthFacade {
         if (authResult.state === 'login') {
           this.#authRepository.createSession(authResult);
         }
+        if (authResult.state === 'signup') {
+          window.location.hash = '';
+          this.#messageService.info('Ihr Benutzerkonto wurde angelegt und muss noch aktiviert werden. Bitte schauen Sie in Ihrem Postfach nach.')
+        }
+      } else {
+        window.location.hash = '';
       }
     }
   }

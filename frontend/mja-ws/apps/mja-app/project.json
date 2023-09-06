@@ -1,0 +1,145 @@
+{
+  "name": "mja-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/mja-app/src",
+  "prefix": "mja-app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/mja-app",
+        "index": "apps/mja-app/src/index.html",
+        "main": "apps/mja-app/src/main.ts",
+        "polyfills": "apps/mja-app/src/polyfills.ts",
+        "tsConfig": "apps/mja-app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/mja-app/src/favicon.ico",
+          "apps/mja-app/src/assets"
+        ],
+        "styles": ["apps/mja-app/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "index": {
+            "input": "build-env/mja-app/index.prod.html",
+            "output": "index.html"
+          },
+           "fileReplacements": [
+            {
+              "replace": "apps/mja-app/src/environments/environment.ts",
+              "with": "apps/mja-app/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "local": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/mja-app/src/environments/environment.ts",
+              "with": "build-env/mja-app/environment.local.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "a300": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "index": {
+            "input": "build-env/mja-app/index.a300.html",
+            "output": "index.html"
+          },
+          "fileReplacements": [
+            {
+              "replace": "apps/mja-app/src/environments/environment.ts",
+              "with": "build-env/mja-app/environment.a300.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "mja-app:build:production"
+        },
+        "development": {
+          "browserTarget": "mja-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "mja-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/mja-app/**/*.ts",
+          "apps/mja-app/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/mja-app"],
+      "options": {
+        "jestConfig": "apps/mja-app/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["type:app"]
+}

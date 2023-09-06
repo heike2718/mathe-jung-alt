@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja_admin_api
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.domain.exceptions;

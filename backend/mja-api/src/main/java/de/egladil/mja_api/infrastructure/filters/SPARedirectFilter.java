@@ -24,7 +24,7 @@ public class SPARedirectFilter {
 
 	private static final String API_PREFIX = "/mja-api/";
 
-	private static final String ANGULAR_APP_BASE_URI = "/mja-admin/";
+	private static final String ANGULAR_APP_BASE_URI = "/mja-app/";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SPARedirectFilter.class);
 

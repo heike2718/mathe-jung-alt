@@ -1,14 +1,14 @@
 {
   "name": "mja-ws",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "license": "MIT",
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2020 browser module main",
     "start": "nx serve",
-    "build:mja-admin:local": "npx nx build mja-admin -c local --output-hashing=all --base-href /mja-admin/ --skip-nx-cache",
-    "build:mja-admin:a300": "npx nx build mja-admin -c a300 --output-hashing=all --base-href /mja-admin/ --skip-nx-cache",
-    "build:mja-admin:prod": "npx nx run mja-admin:build:production --output-hashing=all --base-href /mja-admin/ --skip-nx-cache",
+    "build:mja-app:local": "npx nx build mja-app -c local --output-hashing=all --base-href /mja-app/ --skip-nx-cache",
+    "build:mja-app:a300": "npx nx build mja-app -c a300 --output-hashing=all --base-href /mja-app/ --skip-nx-cache",
+    "build:mja-app:prod": "npx nx run mja-app:build:production --output-hashing=all --base-href /mja-app/ --skip-nx-cache",
     "test": "npx nx test",
     "test:all": "npx nx run-many --target=test --all",
     "lint:all": "npx nx run-many --target=lint --all",

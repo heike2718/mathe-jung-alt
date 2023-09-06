@@ -6,7 +6,7 @@ export const raetselActions = createActionGroup({
     source: 'Raetsel',
     events: {
         'RAETSEL_SELECT_PAGE': props<{pageDefinition: PageDefinition}>(),
-        'FIND_RAETSEL': props<{suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition}>(),
+        'FIND_RAETSEL': props<{admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition}>(),
         'RAETSEL_FOUND': props<{treffer: RaetselsucheTreffer}>(),
         'RAETSEL_SELECTED': props<{raetsel: Raetsel}>(),
         'RAETSEL_DETAILS_LOADED': props<{raetselDetails: RaetselDetails, navigateTo: string}>(),

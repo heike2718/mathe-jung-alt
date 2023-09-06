@@ -4,10 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.auth.login;
 
-import jakarta.ws.rs.core.Response;
-
-import de.egladil.mja_api.domain.auth.ClientType;
 import de.egladil.mja_api.domain.auth.dto.AuthResult;
+import jakarta.ws.rs.core.Response;
 
 /**
  * LoginLogoutService
@@ -24,12 +22,12 @@ public interface LoginLogoutService {
 	 *                        AuthMode
 	 * @return                Response
 	 */
-	Response login(ClientType clientType, final AuthResult authResult, boolean needsRoleAdmin);
+	Response login(final AuthResult authResult);
 
 	/**
 	 * Logout in Prod, also mit Cookies.
-	 * @param  sessionId
 	 *
+	 * @param  sessionId
 	 * @return           Response
 	 */
 	Response logout(final String sessionId);

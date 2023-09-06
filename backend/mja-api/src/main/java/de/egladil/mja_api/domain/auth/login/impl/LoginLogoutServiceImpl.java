@@ -4,18 +4,10 @@
 // =====================================================
 package de.egladil.mja_api.domain.auth.login.impl;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.NewCookie;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.auth.ClientType;
 import de.egladil.mja_api.domain.auth.clientauth.OAuthClientCredentialsProvider;
 import de.egladil.mja_api.domain.auth.config.ConfigService;
 import de.egladil.mja_api.domain.auth.dto.AuthResult;
@@ -27,6 +19,12 @@ import de.egladil.mja_api.domain.auth.session.Session;
 import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.auth.session.SessionUtils;
 import de.egladil.mja_api.domain.auth.util.CsrfCookieService;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.NewCookie;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * LoginLogoutServiceImpl
@@ -52,7 +50,7 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 	CsrfCookieService csrfCookieService;
 
 	@Override
-	public Response login(final ClientType clientType, final AuthResult authResult, final boolean needsRoleAdmin) {
+	public Response login(final AuthResult authResult) {
 
 		if (authResult == null) {
 
@@ -66,12 +64,12 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 		LOGGER.debug("idToken={}", StringUtils.abbreviate(oneTimeToken, 11));
 
-		OAuthClientCredentials clientCredentials = clientCredentialsProvider.getClientCredentials(clientType, null);
+		OAuthClientCredentials clientCredentials = clientCredentialsProvider.getClientCredentials(null);
 
 		String jwt = this.tokenExchangeService.exchangeTheOneTimeToken(clientCredentials.getClientId(),
 			clientCredentials.getClientSecret(), oneTimeToken);
 
-		Session session = this.sessionService.initSession(jwt, needsRoleAdmin);
+		Session session = this.sessionService.initSession(jwt);
 
 		if (session.isAnonym()) {
 
@@ -116,6 +114,5 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 		}
 
 		return Response.ok(MessagePayload.info("erfolgreich ausgeloggt")).build();
-
 	}
 }

@@ -9,7 +9,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.auth.ClientType;
 import de.egladil.mja_api.domain.auth.clientauth.ClientAccessTokenService;
 import de.egladil.mja_api.domain.auth.clientauth.OAuthClientCredentialsProvider;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
@@ -35,9 +34,9 @@ public class ClientAccessTokenServiceImpl implements ClientAccessTokenService {
 	InitAccessTokenDelegate initAccessTokenDelegate;
 
 	@Override
-	public String orderAccessToken(final ClientType clientType, final String nonce) {
+	public String orderAccessToken(final String nonce) {
 
-		OAuthClientCredentials credentials = clientCredentialsProvider.getClientCredentials(clientType, nonce);
+		OAuthClientCredentials credentials = clientCredentialsProvider.getClientCredentials(nonce);
 
 		Response authResponse = null;
 

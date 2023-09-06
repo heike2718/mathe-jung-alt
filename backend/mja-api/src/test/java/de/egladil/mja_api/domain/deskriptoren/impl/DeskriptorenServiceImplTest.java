@@ -7,6 +7,7 @@ package de.egladil.mja_api.domain.deskriptoren.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,18 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
+import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
-import io.quarkus.test.security.TestSecurity;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
 
 /**
  * DeskriptorenServiceImplTest
@@ -34,6 +37,9 @@ import io.quarkus.test.security.TestSecurity;
 @QuarkusTest
 @TestProfile(FullDatabaseTestProfile.class)
 public class DeskriptorenServiceImplTest {
+
+	@InjectMock
+	AuthenticationContext authCtx;
 
 	@InjectMock
 	DeskriptorenRepository repository;
@@ -143,8 +149,11 @@ public class DeskriptorenServiceImplTest {
 	class LoadTests {
 
 		@Test
-		@TestSecurity(authorizationEnabled = false)
-		void should_loadDeskriptorenRaetselReturnAllWithAdmin_when_adminTrue() {
+		void should_loadDeskriptorenRaetselReturnAllWithAdmin_when_BenutzerartAdmin() {
+
+			AuthenticatedUser user = new AuthenticatedUser("abcdef-012345")
+				.withBenutzerart(Benutzerart.ADMIN);
+			when(authCtx.getUser()).thenReturn(user);
 
 			// Arrange
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
@@ -152,7 +161,7 @@ public class DeskriptorenServiceImplTest {
 			when(repository.listAll()).thenReturn(alleDeskriptoren);
 
 			// Act
-			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel(true);
+			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel();
 
 			// Assert
 			assertEquals(5, result.size());
@@ -161,7 +170,11 @@ public class DeskriptorenServiceImplTest {
 		}
 
 		@Test
-		void should_loadDeskriptorenRaetselReturnPublic_when_adminFalse() {
+		void should_loadDeskriptorenRaetselReturnAllWithAdmin_when_BenutzerartAUTOR() {
+
+			AuthenticatedUser user = new AuthenticatedUser("abcdef-012345")
+				.withBenutzerart(Benutzerart.AUTOR);
+			when(authCtx.getUser()).thenReturn(user);
 
 			// Arrange
 			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
@@ -169,11 +182,56 @@ public class DeskriptorenServiceImplTest {
 			when(repository.listAll()).thenReturn(alleDeskriptoren);
 
 			// Act
-			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel(false);
+			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel();
+
+			// Assert
+			assertEquals(5, result.size());
+			verify(repository).listAll();
+
+		}
+
+		@Test
+		void should_loadDeskriptorenRaetselReturnPublic_when_BenutzerartSTANDARD() {
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser("abcdef-012345")
+				.withBenutzerart(Benutzerart.STANDARD);
+			when(authCtx.getUser()).thenReturn(user);
+
+			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
+			assertEquals(8, alleDeskriptoren.size());
+			when(repository.listAll()).thenReturn(alleDeskriptoren);
+
+			// Act
+			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel();
 
 			// Assert
 			assertEquals(3, result.size());
 			verify(repository).listAll();
+
+		}
+
+		@Test
+		void should_loadDeskriptorenRaetselThrowWebApplicationException_when_BenutzerartANONYM() {
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser("abcdef-012345")
+				.withBenutzerart(Benutzerart.ANONYM);
+			when(authCtx.getUser()).thenReturn(user);
+
+			List<Deskriptor> alleDeskriptoren = createAlleDeskriptoren();
+			assertEquals(8, alleDeskriptoren.size());
+			when(repository.listAll()).thenReturn(alleDeskriptoren);
+
+			// Act
+			try {
+
+				service.loadDeskriptorenRaetsel();
+				fail("keine WebApplicationException");
+			} catch (WebApplicationException e) {
+
+				assertEquals(403, e.getResponse().getStatus());
+			}
 
 		}
 

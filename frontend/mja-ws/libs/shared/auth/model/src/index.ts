@@ -1,1 +1,1 @@
-export { AuthResult, User } from './lib/auth.model';
+export { AuthResult, User, BENUTZERART } from './lib/auth.model';

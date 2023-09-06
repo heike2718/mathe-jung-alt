@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.exceptions.AuthException;
@@ -37,106 +38,206 @@ public class SessionServiceTest {
 	@Inject
 	SessionService sessionService;
 
-	@Test
-	void should_initSession_work_when_needsToBeAdmin() {
+	@Nested
+	class InitSessionTests {
+		@Test
+		void should_initSession_work_when_Admin() {
 
-		// Arrange
-		boolean needsToBeAdmin = true;
+			// Arrange
+			// Act 1
+			Session session = sessionService.initSession(VALID_JWT_ADMIN);
 
-		// Act 1
-		Session session = sessionService.initSession(VALID_JWT_ADMIN, needsToBeAdmin);
+			// Assert 1
+			AuthenticatedUser user = session.getUser();
 
-		// Assert 1
-		AuthenticatedUser user = session.getUser();
+			assertEquals("Heike Winkelvoß", user.getFullName());
+			assertEquals("b865fc75-1bcf-40c7-96c3-33744826e49f", user.getUuid());
+			assertEquals(Benutzerart.ADMIN, user.getBenutzerart());
 
-		assertEquals("Heike Winkelvoß", user.getFullName());
-		assertEquals("b865fc75-1bcf-40c7-96c3-33744826e49f", user.getUuid());
+			List<String> rollen = Arrays.asList(user.getRoles());
 
-		List<String> rollen = Arrays.asList(user.getRoles());
+			assertEquals(3, rollen.size());
+			assertTrue(PermissionUtils.isUserAdmin(rollen));
+			assertTrue(PermissionUtils.isUserAutor(rollen));
 
-		assertEquals(3, rollen.size());
-		assertTrue(PermissionUtils.isUserAdmin(rollen));
-		assertTrue(PermissionUtils.isUserAutor(rollen));
+			// Act 2
+			Session storedSession = sessionService.getAndRefreshSessionIfValid(session.getSessionId());
 
-		// Act 2
-		Session storedSession = sessionService.getAndRefreshSessionIfValid(session.getSessionId());
+			// Assert 2
+			assertEquals(session, storedSession);
 
-		// Assert 2
-		assertEquals(session, storedSession);
+			// Act 3
+			sessionService.invalidateSession(session.getSessionId());
+			storedSession = sessionService.getAndRefreshSessionIfValid(session.getSessionId());
 
-		// Act 3
-		sessionService.invalidateSession(session.getSessionId());
-		storedSession = sessionService.getAndRefreshSessionIfValid(session.getSessionId());
+			// Assert 3
+			assertNull(storedSession);
 
-		// Assert 3
-		assertNull(storedSession);
-
-	}
-
-	@Test
-	void should_initSession_work_when_ordinaryUserAndNotNeedsToBeAdmin() {
-
-		// Arrange
-		boolean needsToBeAdmin = false;
-
-		// Act
-		Session session = sessionService.initSession(VALID_JWT_ORDINARY_USER, needsToBeAdmin);
-
-		// Assert
-		AuthenticatedUser user = session.getUser();
-
-		assertEquals("Iche Doche", user.getFullName());
-		assertEquals("a6bf38f2-5450-4720-9688-9c239a2e87c8", user.getUuid());
-
-		List<String> rollen = Arrays.asList(user.getRoles());
-
-		assertEquals(1, rollen.size());
-		assertFalse(PermissionUtils.isUserAdmin(rollen));
-		assertFalse(PermissionUtils.isUserAutor(rollen));
-		assertTrue(PermissionUtils.isUserOrdinary(rollen));
-
-	}
-
-	@Test
-	void should_initSession_work_when_ordinaryUserAndNeedsToBeAdmin() {
-
-		// Arrange
-		boolean needsToBeAdmin = true;
-
-		// Act
-		Session session = sessionService.initSession(VALID_JWT_ORDINARY_USER, needsToBeAdmin);
-
-		// Assert
-		AuthenticatedUser user = session.getUser();
-
-		assertNull(user);
-
-	}
-
-	@Test
-	void should_initSessionThrowAuthException_when_TokenHasExpired() {
-
-		try {
-
-			sessionService.initSession(EXPIRED_JWT_ADMIN, true);
-			fail("keine AuthException");
-		} catch (AuthException e) {
-
-			assertEquals("JWT expired", e.getMessage());
 		}
 
+		@Test
+		void should_initSession_work_when_OrdinaryUser() {
+
+			// Arrange
+			// Act 1
+			Session session = sessionService.initSession(VALID_JWT_ORDINARY_USER);
+
+			// Assert 1
+			AuthenticatedUser user = session.getUser();
+
+			assertEquals("Iche Doche", user.getFullName());
+			assertEquals("a6bf38f2-5450-4720-9688-9c239a2e87c8", user.getUuid());
+			assertEquals(Benutzerart.STANDARD, user.getBenutzerart());
+
+			List<String> rollen = Arrays.asList(user.getRoles());
+
+			assertEquals(1, rollen.size());
+			assertFalse(PermissionUtils.isUserAdmin(rollen));
+			assertFalse(PermissionUtils.isUserAutor(rollen));
+
+			// Act 2
+			Session storedSession = sessionService.getAndRefreshSessionIfValid(session.getSessionId());
+
+			// Assert 2
+			assertEquals(session, storedSession);
+
+			// Act 3
+			sessionService.invalidateSession(session.getSessionId());
+			storedSession = sessionService.getAndRefreshSessionIfValid(session.getSessionId());
+
+			// Assert 3
+			assertNull(storedSession);
+
+		}
+
+		@Test
+		void should_initSessionThrowAuthException_when_TokenHasExpired() {
+
+			try {
+
+				sessionService.initSession(EXPIRED_JWT_ADMIN);
+				fail("keine AuthException");
+			} catch (AuthException e) {
+
+				assertEquals("JWT expired", e.getMessage());
+			}
+
+		}
+
+		@Test
+		void should_initSessionThrowAuthException_when_TokenIsInvalid() {
+
+			try {
+
+				sessionService.initSession(INVALID_JWT_ADMIN);
+				fail("keine AuthException");
+			} catch (AuthException e) {
+
+				assertEquals("JWT invalid", e.getMessage());
+			}
+
+		}
 	}
 
-	@Test
-	void should_initSessionThrowAuthException_when_TokenIsInvalid() {
+	@Nested
+	class GetBenuterartTests {
 
-		try {
+		@Test
+		void should_getBenutzerartReturn_anonym_when_rolesNull() {
 
-			sessionService.initSession(INVALID_JWT_ADMIN, true);
-			fail("keine AuthException");
-		} catch (AuthException e) {
+			// Arrange
+			String[] roles = null;
 
-			assertEquals("JWT invalid", e.getMessage());
+			// Act
+			Benutzerart result = sessionService.getBenutzerart(roles);
+
+			// Assert
+			assertEquals(Benutzerart.ANONYM, result);
+
+		}
+
+		@Test
+		void should_getBenutzerartReturn_anonym_when_rolesEmpty() {
+
+			// Arrange
+			String[] roles = new String[0];
+
+			// Act
+			Benutzerart result = sessionService.getBenutzerart(roles);
+
+			// Assert
+			assertEquals(Benutzerart.ANONYM, result);
+
+		}
+
+		@Test
+		void should_getBenutzerartReturn_anonym_when_unerwarteteRollen() {
+
+			// Arrange
+			String[] roles = new String[] { "PRIVAT", "HAMPELFRAU" };
+
+			// Act
+			Benutzerart result = sessionService.getBenutzerart(roles);
+
+			// Assert
+			assertEquals(Benutzerart.ANONYM, result);
+
+		}
+
+		@Test
+		void should_getBenutzerartReturn_admin_when_rolesContainsADMIN() {
+
+			// Arrange
+			String[] roles = new String[] { "STANDARD", "AUTOR", "ADMIN" };
+
+			// Act
+			Benutzerart result = sessionService.getBenutzerart(roles);
+
+			// Assert
+			assertEquals(Benutzerart.ADMIN, result);
+
+		}
+
+		@Test
+		void should_getBenutzerartReturn_autor_when_rolesContainsAUTORButNotADMIN() {
+
+			// Arrange
+			String[] roles = new String[] { "STANDARD", "AUTOR" };
+
+			// Act
+			Benutzerart result = sessionService.getBenutzerart(roles);
+
+			// Assert
+			assertEquals(Benutzerart.AUTOR, result);
+
+		}
+
+		@Test
+		void should_getBenutzerartReturn_standard_when_rolesNeigtherContainsAUTORNorADMIN() {
+
+			// Arrange
+			String[] roles = new String[] { "STANDARD", "LEHRER" };
+
+			// Act
+			Benutzerart result = sessionService.getBenutzerart(roles);
+
+			// Assert
+			assertEquals(Benutzerart.STANDARD, result);
+
+		}
+
+		@Test
+		void should_getBenutzerartReturn_standard_when_rolesLEHRER() {
+
+			// Arrange
+			String[] roles = new String[] { "LEHRER" };
+
+			// Act
+			Benutzerart result = sessionService.getBenutzerart(roles);
+
+			// Assert
+			assertEquals(Benutzerart.STANDARD, result);
+
 		}
 
 	}

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.config.ConfigService;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
+import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.auth.session.Session;
 import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.auth.session.SessionUtils;
@@ -40,7 +41,8 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InitSecurityContextFilter.class);
 
-	private static List<String> OPEN_DATA_PATHS = Arrays.asList(new String[] { "/mja-api/quiz" });
+	private static List<String> OPEN_DATA_PATHS = Arrays
+		.asList(new String[] { "/mja-api/quiz", "/mja-api/raetsel/public/anzahl/v1" });
 
 	@Inject
 	ConfigService configService;
@@ -163,7 +165,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 	private void initMockSecurityContext(final ContainerRequestContext requestContext) {
 
 		AuthenticatedUser user = new AuthenticatedUser("b865fc75-1bcf-40c7-96c3-33744826e49f").withFullName("Heike Winkelvoß")
-			.withIdReference("bla").withRoles(new String[] { "ADMIN" });
+			.withIdReference("bla").withRoles(new String[] { "ADMIN" }).withBenutzerart(Benutzerart.ADMIN);
 
 		authCtx.setUser(user);
 		LOGGER.warn("config property 'mock.session' is true => authCtx with mocked user: ");

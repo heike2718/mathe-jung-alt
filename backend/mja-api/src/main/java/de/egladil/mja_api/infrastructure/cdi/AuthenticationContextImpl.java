@@ -41,7 +41,7 @@ public class AuthenticationContextImpl implements AuthenticationContext {
 
 		if (optRole.isEmpty()) {
 
-			LOGGER.warn("dem User {} fehlt die Rolle {}", user.getName(), role);
+			LOGGER.info("dem User {} fehlt die Rolle {}", user.getName(), role);
 		}
 
 		return optRole.isPresent();

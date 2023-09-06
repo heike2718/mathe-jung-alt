@@ -24,7 +24,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.find_raetsel),
-            concatMap((action) => this.#raetselHttpService.findRaetsel(action.suchfilter, action.pageDefinition)),
+            concatMap((action) => this.#raetselHttpService.findRaetsel(action.admin, action.suchfilter, action.pageDefinition)),
             map((treffer) => raetselActions.raetsel_found({ treffer }))
         );
     });

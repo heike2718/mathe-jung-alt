@@ -5,7 +5,7 @@ import { authActions } from './auth.actions';
 import { Observable, of, switchMap } from 'rxjs';
 import { fromAuth } from './auth.selectors';
 import { filterDefined } from '@mja-ws/shared/ngrx-utils';
-import { AuthResult, User } from '@mja-ws/shared/auth/model';
+import { AuthResult, BENUTZERART, User } from '@mja-ws/shared/auth/model';
 
 @Injectable({
     providedIn: 'root'
@@ -14,16 +14,13 @@ export class AuthRepository {
 
     #store = inject(Store);
 
-    readonly userIsAdmin$: Observable<boolean> = this.#store.select(fromAuth.user).pipe(
-        filterDefined,
-        switchMap((user) => of(isAdmin(user)))
-    );
+    readonly benutzerart$: Observable<BENUTZERART> = this.#store.select(fromAuth.benutzerart);   
 
     readonly user$: Observable<User> = this.#store.select(fromAuth.user).pipe(
         filterDefined,
-        switchMap((user) => of({ fullName: user.fullName, isAdmin: isAdmin(user), anonym: user.anonym }))
+        switchMap((user) => of({ fullName: user.fullName, isAdmin: isAdmin(user), anonym: user.anonym, benutzerart: user.benutzerart }))
     );
-
+    
     readonly loggedIn$: Observable<boolean> = this.#store.select(fromAuth.user).pipe(
         switchMap((user) => of(!user.anonym))
     );
@@ -31,6 +28,11 @@ export class AuthRepository {
     public login(): void {
         // Dies triggert einen SideEffect (siehe auth.effects.ts)
         this.#store.dispatch(authActions.request_login_url());
+    }
+
+    public signUp(): void {
+        // Dies triggert einen SideEffect (siehe auth.effects.ts)
+        this.#store.dispatch(authActions.request_signup_url());
     }
 
     public logout(): void {

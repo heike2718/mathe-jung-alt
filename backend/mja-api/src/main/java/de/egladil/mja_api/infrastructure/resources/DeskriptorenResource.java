@@ -13,11 +13,11 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
+import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Pattern;
@@ -46,7 +46,7 @@ public class DeskriptorenResource {
 
 	@GET
 	@Path("v2")
-	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
+	@Authenticated
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "loadDeskriptorenV2",
@@ -60,9 +60,7 @@ public class DeskriptorenResource {
 			schema = @Schema(type = SchemaType.ARRAY, implementation = DeskriptorUI.class)))
 	public Response loadDeskriptorenV2() {
 
-		AuthenticatedUser user = authCtx.getUser();
-		boolean admin = user.isAdmin();
-		return Response.ok(deskriptorenService.loadDeskriptorenRaetsel(admin)).build();
+		return Response.ok(deskriptorenService.loadDeskriptorenRaetsel()).build();
 	}
 
 	@GET

@@ -1,0 +1,30 @@
+// =====================================================
+// Project: mja-api
+// (c) Heike Winkelvoß
+// =====================================================
+package de.egladil.mja_api.domain.dto;
+
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * AnzahlabfrageResponseDto
+ */
+@Schema(name = "AnzahlabfrageResponseDto", description = "Ergebnis ist die Zah, die die Anzahlabrfage ermittelt hat.")
+public class AnzahlabfrageResponseDto {
+
+	@JsonProperty
+	private long ergebnis;
+
+	public long getErgebnis() {
+
+		return ergebnis;
+	}
+
+	public void setErgebnis(final long ergebnis) {
+
+		this.ergebnis = ergebnis;
+	}
+
+}

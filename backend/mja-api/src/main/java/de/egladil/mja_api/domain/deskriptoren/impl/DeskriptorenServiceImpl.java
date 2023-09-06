@@ -17,6 +17,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
+import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
@@ -26,6 +29,9 @@ import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * DeskriptorenServiceImpl
@@ -100,7 +106,21 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 	}
 
 	@Override
-	public List<DeskriptorUI> loadDeskriptorenRaetsel(final boolean admin) {
+	public List<DeskriptorUI> loadDeskriptorenRaetsel() {
+
+		AuthenticatedUser user = authCtx.getUser();
+
+		LOGGER.debug(" ##==>" + (user == null ? "null" : user.toString()));
+
+		if (user == null || user.getBenutzerart() == Benutzerart.ANONYM) {
+
+			LOGGER.warn("loadDeskriptorenV2 wurde ohne oder mit anonymer Session aufgerufen");
+
+			throw new WebApplicationException(
+				Response.status(Status.FORBIDDEN).entity(MessagePayload.error("verbotene URL aufgerufen")).build());
+		}
+
+		boolean admin = user.isAdmin();
 
 		List<Deskriptor> alle = deskriptorenRepository.listAll();
 		Collections.sort(alle, DESKRIPTOREN_COMPARATOR);
@@ -110,10 +130,14 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 
 		if (admin) {
 
-			return nurRaetsel.stream().map(d -> new DeskriptorUI(d.id, d.name)).toList();
+			List<DeskriptorUI> result = nurRaetsel.stream().map(d -> new DeskriptorUI(d.id, d.name)).toList();
+			LOGGER.info("Deskriptoren für admin: Anzahl={}", result.size());
+			return result;
 		}
 
-		return nurRaetsel.stream().filter(d -> !d.admin).map(d -> new DeskriptorUI(d.id, d.name)).toList();
+		List<DeskriptorUI> result = nurRaetsel.stream().filter(d -> !d.admin).map(d -> new DeskriptorUI(d.id, d.name)).toList();
+		LOGGER.info("Deskriptoren für public: Anzahl={}", result.size());
+		return result;
 
 	}
 

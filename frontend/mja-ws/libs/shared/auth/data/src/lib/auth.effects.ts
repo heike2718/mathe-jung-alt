@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, inject, Injectable } from '@angular/core';
-import { Configuration } from '@mja-ws/shared/config';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, concatMap, map, tap } from 'rxjs/operators';
@@ -20,20 +19,27 @@ export class AuthEffects {
     #coreFacade = inject(CoreFacade);
     #router = inject(Router);
 
-    constructor(@Inject(Configuration) private configuration: Configuration) { }
-
-
     requestLoginUrl$ = createEffect(() => {
 
         return this.#actions.pipe(
             ofType(authActions.request_login_url),
-            concatMap(() => this.#httpClient.get<Message>('/mja-api/session/authurls/login/' + this.configuration.clientType)),
+            concatMap(() => this.#httpClient.get<Message>('/mja-api/session/authurls/login')),
             map((message: Message) => authActions.redirect_to_auth({ authUrl: message.message }))
         );
 
     });
 
-    redirectToLogin$ = createEffect(() =>
+    requestSignupUrl$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(authActions.request_signup_url),
+            concatMap(() => this.#httpClient.get<Message>('/mja-api/session/authurls/signup')),
+            map((message: Message) => authActions.redirect_to_auth({ authUrl: message.message }))
+        );
+
+    });
+
+    redirectToAuth$ = createEffect(() =>
 
         this.#actions.pipe(
             ofType(authActions.redirect_to_auth),
@@ -46,7 +52,7 @@ export class AuthEffects {
         return this.#actions.pipe(
             ofType(authActions.init_session),
             concatMap(({ authResult }) =>
-                this.#httpClient.post<Session>('/mja-api/session/login/' + this.configuration.clientType, authResult)
+                this.#httpClient.post<Session>('/mja-api/session/login', authResult)
             ),
             map((session: Session) => authActions.session_created({ session }))
         );
@@ -55,7 +61,13 @@ export class AuthEffects {
     sessionCreated$ = createEffect(() =>
         this.#actions.pipe(
             ofType(authActions.session_created),
-            tap(() => this.#coreFacade.loadQuelleAngemeldeterAdmin())
+            concatMap((action) => of(action.session)),
+            tap((session) => {
+                if (session.user) {
+                    this.#coreFacade.loadQuelleAngemeldeterAdmin(session.user.benutzerart);
+                    this.#coreFacade.loadDeskriptoren();
+                }
+            })
         ), { dispatch: false });
 
     logOut$ = createEffect(() => {

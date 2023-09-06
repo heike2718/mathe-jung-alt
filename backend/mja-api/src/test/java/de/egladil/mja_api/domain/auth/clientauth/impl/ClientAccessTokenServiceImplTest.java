@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.domain.auth.ClientType;
 import de.egladil.mja_api.domain.auth.clientauth.OAuthClientCredentialsProvider;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.dto.OAuthClientCredentials;
@@ -59,15 +58,15 @@ public class ClientAccessTokenServiceImplTest {
 		ResponsePayload responsePayload = ResponsePayload.messageOnly(MessagePayload.ok());
 		responsePayload.setData(data);
 
-		when(clientCredentialsProvider.getClientCredentials(ClientType.ADMIN, nonce)).thenReturn(credentials);
+		when(clientCredentialsProvider.getClientCredentials(nonce)).thenReturn(credentials);
 		when(initAccessTokenDelegate.authenticateClient(credentials)).thenReturn(responsePayload);
 
 		// Act
-		String result = service.orderAccessToken(ClientType.ADMIN, nonce);
+		String result = service.orderAccessToken(nonce);
 
 		// Assert
 		assertEquals(accessToken, result);
-		verify(clientCredentialsProvider).getClientCredentials(ClientType.ADMIN, nonce);
+		verify(clientCredentialsProvider).getClientCredentials(nonce);
 		verify(initAccessTokenDelegate).authenticateClient(credentials);
 	}
 
@@ -90,17 +89,17 @@ public class ClientAccessTokenServiceImplTest {
 		ResponsePayload responsePayload = ResponsePayload.messageOnly(MessagePayload.ok());
 		responsePayload.setData(data);
 
-		when(clientCredentialsProvider.getClientCredentials(ClientType.ADMIN, nonce)).thenReturn(credentials);
+		when(clientCredentialsProvider.getClientCredentials(nonce)).thenReturn(credentials);
 		when(initAccessTokenDelegate.authenticateClient(credentials)).thenReturn(responsePayload);
 
 		try {
 
-			service.orderAccessToken(ClientType.ADMIN, nonce);
+			service.orderAccessToken(nonce);
 
 			fail("keine ClientAuthException");
 		} catch (ClientAuthException e) {
 
-			verify(clientCredentialsProvider).getClientCredentials(ClientType.ADMIN, nonce);
+			verify(clientCredentialsProvider).getClientCredentials(nonce);
 			verify(initAccessTokenDelegate).authenticateClient(credentials);
 
 		}
@@ -125,20 +124,20 @@ public class ClientAccessTokenServiceImplTest {
 		ResponsePayload responsePayload = ResponsePayload.messageOnly(MessagePayload.ok());
 		responsePayload.setData(data);
 
-		when(clientCredentialsProvider.getClientCredentials(ClientType.ADMIN, nonce)).thenReturn(credentials);
+		when(clientCredentialsProvider.getClientCredentials(nonce)).thenReturn(credentials);
 		when(initAccessTokenDelegate.authenticateClient(credentials))
 			.thenThrow(new MjaRuntimeException("schlimm, schlimm, schlimm"));
 
 		try {
 
-			service.orderAccessToken(ClientType.ADMIN, nonce);
+			service.orderAccessToken(nonce);
 
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
 			assertEquals("schlimm, schlimm, schlimm", e.getMessage());
 
-			verify(clientCredentialsProvider).getClientCredentials(ClientType.ADMIN, nonce);
+			verify(clientCredentialsProvider).getClientCredentials(nonce);
 			verify(initAccessTokenDelegate).authenticateClient(credentials);
 
 		}

@@ -37,8 +37,6 @@
         <div *ngIf="!user.isAdmin">
             <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
                 <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                        [disabled]="generierenDiabled()" (click)="printPDF()">PDF generieren</button></div>
-                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
                         (click)="gotoRaetselUebersicht()">Suche</button>
                 </div>
             </div>

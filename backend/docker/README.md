@@ -14,15 +14,15 @@ Es basiert auf einer TexLive-full- Installation von
 
 __Achtung:__ Ich habe keine halben Sachen gemacht, damit später nicht irgendwelche LaTeX-Packages fehlen. Die full-installation dauert eine ganze Weile.
 
-### Der Java-Client - heike2718/docker-latex-client
+### Der Java-basierte LaTeX-Service - heike2718/latex-service-api
 
 Dieses Image basiert auf heike2718/docker-java-latex, also dem Container mit texlive-full und einer JRE (aktuell Java 17).
 
 und erweitert es um 
 
 * imagetools, mit denen aus ps pngs generiert werden können
-* Fibel-Fonts
-* eine undertow-basierte kleine Java-Applikation, die ein REST-Backend zum Aufruf der Tools zum generieren von PDF und png aus LaTeX-Dateien zur Verfügung stellt.
+* Erstleserfreundliche Fonts 
+* eine undertow-basierte kleine Java-Applikation, die ein REST-Backend zum Aufruf der Tools zum generieren von pdf und png aus LaTeX-Dateien zur Verfügung stellt.
   
 
 ### Testen des docker-latex-clients

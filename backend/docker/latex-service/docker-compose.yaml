@@ -1,0 +1,16 @@
+version: '2'
+networks:
+  mja-network:
+services:
+  latex-sercice-api:
+    image: heike2718/latex-service-api
+    container_name: latex-service-api
+    environment:
+      - TZ=Europe/Berlin
+      - JAVA_OPTS=-Xmx1024m
+    restart: on-failure:3
+    volumes:
+      - /home/heike/docker-volumes/latex/doc:/doc
+    networks:
+      - mja-network
+    command: ["java","-jar","/opt/latex-client.jar"]

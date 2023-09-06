@@ -26,6 +26,9 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 	@JsonProperty
 	private String fullName;
 
+	@JsonProperty
+	private Benutzerart benutzerart;
+
 	public static AuthenticatedUser createAnonymousUser() {
 
 		AuthenticatedUser result = new AuthenticatedUser("Anonym");
@@ -51,8 +54,7 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 
 	public boolean isAdmin() {
 
-		return Arrays.stream(roles).filter(r -> ("ADMIN".equals(r) || "AUTOR".equals(r))).findFirst().isPresent();
-
+		return this.benutzerart == Benutzerart.ADMIN || this.benutzerart == Benutzerart.AUTOR;
 	}
 
 	/**
@@ -102,6 +104,17 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 	public AuthenticatedUser withFullName(final String fullName) {
 
 		this.fullName = fullName;
+		return this;
+	}
+
+	public Benutzerart getBenutzerart() {
+
+		return benutzerart;
+	}
+
+	public AuthenticatedUser withBenutzerart(final Benutzerart benutzerart) {
+
+		this.benutzerart = benutzerart;
 		return this;
 	}
 }

@@ -440,7 +440,7 @@ public class RaetselgruppenResource {
 
 	@GET
 	@Path("{raetselgruppeID}/arbeitsblatt/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printArbeitsblatt",
@@ -491,7 +491,7 @@ public class RaetselgruppenResource {
 
 	@GET
 	@Path("{raetselgruppeID}/knobelkartei/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR", "LEHRER", "PRIVAT", "STANDARD" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printKnobelkartei",

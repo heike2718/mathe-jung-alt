@@ -57,10 +57,9 @@ public class SessionService {
 	 * Wenn das JWT sagt, ist kein Admin, dann wird eine anonyme Session angelegt.
 	 *
 	 * @param  jwt
-	 * @param  needsToBeAdmin
 	 * @return
 	 */
-	public Session initSession(final String jwt, final boolean needsToBeAdmin) {
+	public Session initSession(final String jwt) {
 
 		LOGGER.debug(jwt);
 
@@ -74,23 +73,12 @@ public class SessionService {
 
 			String uuid = decodedJWT.getSubject();
 
-			if (needsToBeAdmin) {
-
-				Optional<String> optAdmin = Arrays.stream(groups).filter(g -> "ADMIN".equals(g) || "AUTOR".equals(g)).findFirst();
-
-				if (optAdmin.isEmpty()) {
-
-					LOGGER.warn("User mit Rollen {} ist kein ADMIN => verboten. UUID={}", groups, uuid);
-					return this.internalCreateAnonymousSession();
-				}
-			}
-
 			String fullName = jwtReader.getFullName();
 
 			String userIdReference = uuid.substring(0, 8) + "_" + secureTokenService.createRandomToken();
 
 			AuthenticatedUser authenticatedUser = new AuthenticatedUser(uuid).withFullName(fullName)
-				.withIdReference(userIdReference).withRoles(groups);
+				.withIdReference(userIdReference).withRoles(groups).withBenutzerart(getBenutzerart(groups));
 
 			Session session = this.internalCreateAnonymousSession().withUser(authenticatedUser);
 
@@ -173,5 +161,42 @@ public class SessionService {
 
 		String sessionId = secureTokenService.createRandomToken();
 		return Session.createAnonymous(sessionId);
+	}
+
+	Benutzerart getBenutzerart(final String[] roles) {
+
+		if (roles == null || roles.length == 0) {
+
+			return Benutzerart.ANONYM;
+		}
+
+		Optional<String> optAdmin = Arrays.stream(roles).filter(r -> Benutzerart.ADMIN.toString().equalsIgnoreCase(r)).findFirst();
+
+		if (optAdmin.isPresent()) {
+
+			return Benutzerart.ADMIN;
+		}
+
+		Optional<String> optAutor = Arrays.stream(roles).filter(r -> Benutzerart.AUTOR.toString().equalsIgnoreCase(r)).findFirst();
+
+		if (optAutor.isPresent()) {
+
+			return Benutzerart.AUTOR;
+		}
+
+		Optional<String> optStandard = Arrays.stream(roles)
+			.filter(r -> Benutzerart.STANDARD.toString().equalsIgnoreCase(r) || "LEHRER".equalsIgnoreCase(r))
+			.findFirst();
+
+		if (optStandard.isPresent()) {
+
+			return Benutzerart.STANDARD;
+		}
+
+		String theRollen = StringUtils.join(roles, ",");
+		LOGGER.warn("Rollen unerwartet: erwarten eins von ADMIN, AUTOR, LEHRER, STANDARD. aktuell={} => Benutzerart ANONYM",
+			theRollen);
+
+		return Benutzerart.ANONYM;
 	}
 }

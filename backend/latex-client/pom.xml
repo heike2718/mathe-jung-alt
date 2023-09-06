@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.egladil.web</groupId>
-	<artifactId>latex-client</artifactId>
-	<version>0.0.2</version>
+	<artifactId>latex-service</artifactId>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>latex-client</name>
-	<description>lightweight interface to convert LaTeX into pdf or png</description>
+	<description>lightweight API to convert LaTeX into pdf or png</description>
 
 
 	<properties>

@@ -171,7 +171,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     if (this.isAdmin) {
       return ['status', 'schluessel', 'name', 'kommentar'];
     } else {
-      return ['schluessel', 'name', 'deskriptoren'];
+      return ['schluessel', 'name', 'kommentar'];
     }
   }
 
@@ -239,8 +239,6 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       sortDirection: this.sort ? this.sort.direction : this.#sortDirection
     }
 
-    this.#raetselFacade.triggerSearch(this.suchfilter, pageDefinition);
+    this.#raetselFacade.triggerSearch(this.isAdmin, this.suchfilter, pageDefinition);
   }
-
-
 }
