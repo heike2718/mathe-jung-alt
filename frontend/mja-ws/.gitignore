@@ -41,3 +41,4 @@ lint.log
 Thumbs.db
 
 .angular
+migrations.json
