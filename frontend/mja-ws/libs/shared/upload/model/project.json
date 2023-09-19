@@ -5,25 +5,26 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/shared/upload/model",
         "main": "libs/shared/upload/model/src/index.ts",
         "tsConfig": "libs/shared/upload/model/tsconfig.lib.json",
-        "assets": ["libs/shared/upload/model/*.md"]
+        "assets": ["libs/shared/upload/model/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/shared/upload/model/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/upload/model"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/upload/model"],
       "options": {
         "jestConfig": "libs/shared/upload/model/jest.config.ts",
         "passWithNoTests": true

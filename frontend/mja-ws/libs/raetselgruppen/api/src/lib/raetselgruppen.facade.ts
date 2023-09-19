@@ -22,33 +22,33 @@ export class RaetselgruppenFacade {
     raetselgruppenelemente$: Observable<Raetselgruppenelement[]> = this.#store.select(fromRaetselgruppen.raetselgruppenelemente);
 
     triggerSearch(raetselgruppenSuchparameter: RaetselgruppenSuchparameter, pageDefinition: PageDefinition): void {
-        this.#store.dispatch(raetselgruppenActions.raetselgruppen_select_page({ pageDefinition }));
-        this.#store.dispatch(raetselgruppenActions.find_raetselgruppen({ raetselgruppenSuchparameter, pageDefinition }));
+        this.#store.dispatch(raetselgruppenActions.rAETSELGRUPPEN_SELECT_PAGE({ pageDefinition }));
+        this.#store.dispatch(raetselgruppenActions.fIND_RAETSELGRUPPEN({ raetselgruppenSuchparameter, pageDefinition }));
     }
 
     selectRaetselgruppe(raetselgruppe: RaetselgruppenTrefferItem): void {
 
-        this.#store.dispatch(raetselgruppenActions.select_raetselgruppe({ raetselgruppe }));
+        this.#store.dispatch(raetselgruppenActions.sELECT_RAETSELGRUPPE({ raetselgruppe }));
     }
 
     unselectRaetselgruppe(): void {
-        this.#store.dispatch(raetselgruppenActions.unselect_raetselgruppe());
+        this.#store.dispatch(raetselgruppenActions.uNSELECT_RAETSELGRUPPE());
     }
 
     generiereArbeitsblatt(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): void {
-        this.#store.dispatch(raetselgruppenActions.generiere_arbeitsblatt({ raetselgruppeID, font, schriftgroesse }));
+        this.#store.dispatch(raetselgruppenActions.gENERIERE_ARBEITSBLATT({ raetselgruppeID, font, schriftgroesse }));
     }
 
     generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): void {
-        this.#store.dispatch(raetselgruppenActions.generiere_knobelkartei({ raetselgruppeID, font, schriftgroesse }));
+        this.#store.dispatch(raetselgruppenActions.gENERIERE_KNOBELKARTEI({ raetselgruppeID, font, schriftgroesse }));
     }
 
     generiereVorschau(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-        this.#store.dispatch(raetselgruppenActions.generiere_vorschau({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
+        this.#store.dispatch(raetselgruppenActions.gENERIERE_VORSCHAU({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
     generiereLaTeX(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-        this.#store.dispatch(raetselgruppenActions.generiere_latex({ raetselgruppeID, layoutAntwortvorschlaege }));
+        this.#store.dispatch(raetselgruppenActions.gENERIERE_LATEX({ raetselgruppeID, layoutAntwortvorschlaege }));
     }
 
     createAndEditRaetselgruppe(): void {
@@ -56,7 +56,7 @@ export class RaetselgruppenFacade {
     }
 
     editRaetselgruppe(raetselgruppeBasisdaten: RaetselgruppeBasisdaten): void {
-        this.#store.dispatch(raetselgruppenActions.edit_raetselguppe({ raetselgruppeBasisdaten }));
+        this.#store.dispatch(raetselgruppenActions.eDIT_RAETSELGUPPE({ raetselgruppeBasisdaten }));
     }
 
     reloadRaetselgruppe(raetselgruppeBasisdaten: RaetselgruppeBasisdaten, anzahlElemente: number): void {
@@ -91,13 +91,13 @@ export class RaetselgruppenFacade {
     }
 
     saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): void {
-        this.#store.dispatch(raetselgruppenActions.save_raetselgruppe({ editRaetselgruppePayload }));
+        this.#store.dispatch(raetselgruppenActions.sAVE_RAETSELGRUPPE({ editRaetselgruppePayload }));
     }
 
     cancelEdit(raetselgruppe: RaetselgruppeBasisdaten): void {
 
         if (raetselgruppe.id === 'neu') {
-            this.#store.dispatch(raetselgruppenActions.unselect_raetselgruppe());
+            this.#store.dispatch(raetselgruppenActions.uNSELECT_RAETSELGRUPPE());
         } else {
             const rg: RaetselgruppenTrefferItem = {
                 id: raetselgruppe.id,
@@ -109,15 +109,15 @@ export class RaetselgruppenFacade {
                 geaendertDurch: raetselgruppe.geaendertDurch,
                 anzahlElemente: 0
             };
-            this.#store.dispatch(raetselgruppenActions.select_raetselgruppe({ raetselgruppe: rg }));
+            this.#store.dispatch(raetselgruppenActions.sELECT_RAETSELGRUPPE({ raetselgruppe: rg }));
         }
     }
 
     saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
-        this.#store.dispatch(raetselgruppenActions.save_raetselgruppenelement({ raetselgruppeID, payload }));
+        this.#store.dispatch(raetselgruppenActions.sAVE_RAETSELGRUPPENELEMENT({ raetselgruppeID, payload }));
     }
 
     deleteRaetselgruppenelement(raetselgruppeID: string, payload: Raetselgruppenelement): void {
-        this.#store.dispatch(raetselgruppenActions.delete_raetselgruppenelement({ raetselgruppeID, payload }));
+        this.#store.dispatch(raetselgruppenActions.dELETE_RAETSELGRUPPENELEMENT({ raetselgruppeID, payload }));
     }
 }

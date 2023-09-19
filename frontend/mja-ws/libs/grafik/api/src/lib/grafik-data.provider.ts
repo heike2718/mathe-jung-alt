@@ -4,5 +4,5 @@ import { provideState } from "@ngrx/store";
 
 export const grafikDataProvider = [
     provideState(grafikFeature),
-    provideEffects([GrafikEffects])
+    provideEffects(GrafikEffects)
 ];

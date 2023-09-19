@@ -17,11 +17,11 @@ export class CoreDeskriptorUIEffects {
     loadDeskriptoren$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(coreDeskriptorenActions.load_deskriptoren),
+            ofType(coreDeskriptorenActions.lOAD_DESKRIPTOREN),
             concatMap(() =>
                 this.#httpClient.get<DeskriptorUI[]>('/mja-api/deskriptoren/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
             ),
-            map((deskriptoren: DeskriptorUI[]) => coreDeskriptorenActions.core_deskriptoren_loaded({ deskriptoren }))
+            map((deskriptoren: DeskriptorUI[]) => coreDeskriptorenActions.cORE_DESKRIPTOREN_LOADED({ deskriptoren }))
         )
     });
 

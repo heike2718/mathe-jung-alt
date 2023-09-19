@@ -5,5 +5,5 @@ import { raetselgruppenFeature, RaetselgruppenEffects} from '@mja-ws/raetselgrup
 
 export const raetselgruppenDataProvider = [
     provideState(raetselgruppenFeature),
-    provideEffects([RaetselgruppenEffects])
+    provideEffects(RaetselgruppenEffects)
 ];

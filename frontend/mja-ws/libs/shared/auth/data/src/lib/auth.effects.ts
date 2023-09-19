@@ -22,9 +22,9 @@ export class AuthEffects {
     requestLoginUrl$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(authActions.request_login_url),
+            ofType(authActions.rEQUEST_LOGIN_URL),
             concatMap(() => this.#httpClient.get<Message>('/mja-api/session/authurls/login')),
-            map((message: Message) => authActions.redirect_to_auth({ authUrl: message.message }))
+            map((message: Message) => authActions.rEDIRECT_TO_AUTH({ authUrl: message.message }))
         );
 
     });
@@ -32,9 +32,9 @@ export class AuthEffects {
     requestSignupUrl$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(authActions.request_signup_url),
+            ofType(authActions.rEQUEST_SIGNUP_URL),
             concatMap(() => this.#httpClient.get<Message>('/mja-api/session/authurls/signup')),
-            map((message: Message) => authActions.redirect_to_auth({ authUrl: message.message }))
+            map((message: Message) => authActions.rEDIRECT_TO_AUTH({ authUrl: message.message }))
         );
 
     });
@@ -42,7 +42,7 @@ export class AuthEffects {
     redirectToAuth$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(authActions.redirect_to_auth),
+            ofType(authActions.rEDIRECT_TO_AUTH),
             concatMap((action) => of(action.authUrl)),
             tap((authUrl) => window.location.href = authUrl)
         ), { dispatch: false });
@@ -50,17 +50,17 @@ export class AuthEffects {
     createSession$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(authActions.init_session),
+            ofType(authActions.iNIT_SESSION),
             concatMap(({ authResult }) =>
                 this.#httpClient.post<Session>('/mja-api/session/login', authResult)
             ),
-            map((session: Session) => authActions.session_created({ session }))
+            map((session: Session) => authActions.sESSION_CREATED({ session }))
         );
     });
 
     sessionCreated$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(authActions.session_created),
+            ofType(authActions.sESSION_CREATED),
             concatMap((action) => of(action.session)),
             tap((session) => {
                 if (session.user) {
@@ -73,18 +73,18 @@ export class AuthEffects {
     logOut$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(authActions.log_out),
+            ofType(authActions.lOG_OUT),
             concatMap(() =>
                 this.#httpClient.delete<Message>('/mja-api/session/logout')),
             tap(() => this.#coreFacade.handleLogout()),
-            map(() => authActions.logged_out()),
-            catchError(() => of(authActions.logged_out()))
+            map(() => authActions.lOGGED_OUT()),
+            catchError(() => of(authActions.lOGGED_OUT()))
         );
     });
 
     loggedOut$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(authActions.logged_out),
+            ofType(authActions.lOGGED_OUT),
             tap(() => this.#router.navigateByUrl('/'))
         ), { dispatch: false });
 

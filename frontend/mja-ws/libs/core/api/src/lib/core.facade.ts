@@ -39,18 +39,18 @@ export class CoreFacade {
             return;
         }
 
-        this.#store.dispatch(coreQuelleActions.load_quelle_admin());
+        this.#store.dispatch(coreQuelleActions.lOAD_QUELLE_ADMIN());
     }
 
     public loadDeskriptoren(): void {
         if (this.#deskriptorenLoaded) {
             return;
         }
-        this.#store.dispatch(coreDeskriptorenActions.load_deskriptoren());
+        this.#store.dispatch(coreDeskriptorenActions.lOAD_DESKRIPTOREN());
     }
 
     public loadAnzahlPublicRaetsel(): void{
-        this.#store.dispatch(coreStatistikActions.load_anzahl_raetsel_public());
+        this.#store.dispatch(coreStatistikActions.lOAD_ANZAHL_RAETSEL_PUBLIC());
     }
 
     public handleLogout(): void {
@@ -64,10 +64,10 @@ export class CoreFacade {
     }
 
     #removeQuelleAngemeldeterAdmin(): void {
-        this.#store.dispatch(coreQuelleActions.core_quelle_admin_remove());
+        this.#store.dispatch(coreQuelleActions.cORE_QUELLE_ADMIN_REMOVE());
     }
 
     #removeCoreDeskriptoren(): void {
-        this.#store.dispatch(coreDeskriptorenActions.core_deskriptoren_remove());
+        this.#store.dispatch(coreDeskriptorenActions.cORE_DESKRIPTOREN_REMOVE());
     }
 }

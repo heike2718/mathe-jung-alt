@@ -17,11 +17,11 @@ export class CoreStatistikEffects {
     loadAnzahlPublicRaetsel$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(coreStatistikActions.load_anzahl_raetsel_public),
+            ofType(coreStatistikActions.lOAD_ANZAHL_RAETSEL_PUBLIC),
             concatMap(() =>
                 this.#httpClient.get<AnzahlabfrageErgebnis>('/mja-api/raetsel/public/anzahl/v1', { context: new HttpContext().set(SILENT_LOAD_CONTEXT, true) })
             ),
-            map((payload: AnzahlabfrageErgebnis) => coreStatistikActions.anzahl_raetsel_public_loaded({ payload }))
+            map((payload: AnzahlabfrageErgebnis) => coreStatistikActions.aNZAHL_RAETSEL_PUBLIC_LOADED({ payload }))
         )
     });
 }

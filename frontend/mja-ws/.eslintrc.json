@@ -1,21 +1,12 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "**/*"
-  ],
-  "plugins": [
-    "@nrwl/nx"
-  ],
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nx"],
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@nrwl/nx/enforce-module-boundaries": [
+        "@nx/enforce-module-boundaries": [
           "error",
           {
             "enforceBuildableLibDependency": true,
@@ -32,19 +23,14 @@
                   "type:shared:http",
                   "type:local-storage"
                 ]
-              }, 
+              },
               {
                 "sourceTag": "domain:raetselgruppen:model",
-                "onlyDependsOnLibsWithTags": [
-                  "type:model",
-                  "type:core:model"
-                ]
+                "onlyDependsOnLibsWithTags": ["type:model", "type:core:model"]
               },
               {
                 "sourceTag": "domain:raetselgruppen:data",
-                "onlyDependsOnLibsWithTags": [
-                  "domain:raetselgruppen:model"
-                ]
+                "onlyDependsOnLibsWithTags": ["domain:raetselgruppen:model"]
               },
               {
                 "sourceTag": "domain:raetselgruppen:api",
@@ -61,19 +47,14 @@
                   "domain:raetselgruppen:api",
                   "domain:raetsel:api"
                 ]
-              },             
+              },
               {
                 "sourceTag": "domain:raetsel:model",
-                "onlyDependsOnLibsWithTags": [
-                  "type:model",
-                  "type:core:model"
-                ]
+                "onlyDependsOnLibsWithTags": ["type:model", "type:core:model"]
               },
               {
                 "sourceTag": "domain:raetsel:data",
-                "onlyDependsOnLibsWithTags": [
-                  "domain:raetsel:model"
-                ]
+                "onlyDependsOnLibsWithTags": ["domain:raetsel:model"]
               },
               {
                 "sourceTag": "domain:raetsel:api",
@@ -94,10 +75,7 @@
               },
               {
                 "sourceTag": "domain:grafik:model",
-                "onlyDependsOnLibsWithTags": [
-                  "type:model",
-                  "type:core:model"
-                ]
+                "onlyDependsOnLibsWithTags": ["type:model", "type:core:model"]
               },
               {
                 "sourceTag": "domain:grafik:data",
@@ -123,9 +101,8 @@
                   "type:api",
                   "type:ui",
                   "type:model"
-                ],"bannedExternalImports": [
-                  "@ngrx/**"
-                ]
+                ],
+                "bannedExternalImports": ["@ngrx/**"]
               },
               {
                 "sourceTag": "type:ui",
@@ -134,22 +111,16 @@
                   "type:api",
                   "type:shared:util",
                   "type:shared:ui"
-                ],"bannedExternalImports": [
-                  "@ngrx/**"
-                ]
+                ],
+                "bannedExternalImports": ["@ngrx/**"]
               },
               {
                 "sourceTag": "type:api",
-                "onlyDependOnLibWithTags": [
-                  "type:model",
-                  "type:data"
-                ]
+                "onlyDependOnLibWithTags": ["type:model", "type:data"]
               },
               {
                 "sourceTag": "type:data",
-                "onlyDependOnLibWithTags": [
-                  "type:model"
-                ]
+                "onlyDependOnLibWithTags": ["type:model"]
               },
               {
                 "sourceTag": "domain:shared:messaging:ui",
@@ -165,13 +136,13 @@
                   "type:shared:messaging:api"
                 ]
               },
-              { 
+              {
                 "sourceTag": "type:shared:auth:api",
                 "onlyDependOnLibWithTags": [
                   "domain:shared:auth:model",
                   "type:core:api",
-                  "type:shared:auth:data"            
-                ]               
+                  "type:shared:auth:data"
+                ]
               },
               {
                 "sourceTag": "type:shared:auth:data",
@@ -200,12 +171,9 @@
                   "type:shared:ngrx-utils"
                 ]
               },
-              { 
+              {
                 "sourceTag": "type:core:api",
-                "onlyDependOnLibWithTags": [
-                  "type:core:model",
-                  "type:core:data"            
-                ]               
+                "onlyDependOnLibWithTags": ["type:core:model", "type:core:data"]
               },
               {
                 "sourceTag": "type:core:data",
@@ -216,9 +184,7 @@
               },
               {
                 "sourceTag": "type:shared:ngrx-utils",
-                "onlyDependOnLibsWithTags": [
-                  "type:shared:util"
-                ]
+                "onlyDependOnLibsWithTags": ["type:shared:util"]
               }
             ]
           }
@@ -226,32 +192,17 @@
       }
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/typescript"
-      ],
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
       "rules": {}
     },
     {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/javascript"
-      ],
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
       "rules": {}
     },
     {
-      "files": [
-        "*.spec.ts",
-        "*.spec.tsx",
-        "*.spec.js",
-        "*.spec.jsx"
-      ],
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
       "env": {
         "jest": true
       },

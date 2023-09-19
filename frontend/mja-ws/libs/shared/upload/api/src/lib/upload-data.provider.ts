@@ -5,6 +5,6 @@ import { provideState } from "@ngrx/store";
 
 export const uploadDataProvider = [
     provideState(uploadFeature),
-    provideEffects([UploadEffects])
+    provideEffects(UploadEffects)
 
 ];

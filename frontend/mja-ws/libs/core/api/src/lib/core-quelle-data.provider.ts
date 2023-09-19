@@ -4,5 +4,5 @@ import { provideState } from "@ngrx/store";
 
 export const coreQuelleDataProvider = [
     provideState(coreQuelleFeature),
-    provideEffects([CoreQuelleEffects])
+    provideEffects(CoreQuelleEffects)
 ];

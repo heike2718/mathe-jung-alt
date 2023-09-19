@@ -18,7 +18,7 @@ export const coreQuelleFeature = createFeature({
     reducer: createReducer<CoreQuelleState>(
         initialState,
         on(
-            coreQuelleActions.core_quelle_admin_loaded,
+            coreQuelleActions.cORE_QUELLE_ADMIN_LOADED,
             (state, { quelle: quelle }): CoreQuelleState => ({
                 ...state,
                 quelleAdmin: quelle ? quelle : noopQuelle,
@@ -26,7 +26,7 @@ export const coreQuelleFeature = createFeature({
             })
         ),
         on(
-            coreQuelleActions.core_quelle_admin_remove,
+            coreQuelleActions.cORE_QUELLE_ADMIN_REMOVE,
             (_state, _action) => initialState
         )
     )

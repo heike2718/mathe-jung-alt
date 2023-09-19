@@ -17,11 +17,11 @@ export class GrafikFacade {
     // public grafikSearchResult$: Observable<GrafikSearchResult | undefined> = this.#store.select(fromGrafik.selectedGrafikSearchResult);
 
     public grafikPruefen(relativerPfad: string): void {
-        this.#store.dispatch(grafikActions.pruefe_grafik({pfad: relativerPfad}));
+        this.#store.dispatch(grafikActions.pRUEFE_GRAFIK({pfad: relativerPfad}));
     }
 
     public grafikHochgeladen(message: Message): void {
-        this.#store.dispatch(grafikActions.grafik_hochgeladen({message}));
+        this.#store.dispatch(grafikActions.gRAFIK_HOCHGELADEN({message}));
     }
 
     public handleUploadError(message: Message): void {
@@ -29,7 +29,7 @@ export class GrafikFacade {
     }
 
     public clearVorschau(): void {
-        this.#store.dispatch(grafikActions.clear_vorschau());
+        this.#store.dispatch(grafikActions.cLEAR_VORSCHAU());
     }
 
 } 

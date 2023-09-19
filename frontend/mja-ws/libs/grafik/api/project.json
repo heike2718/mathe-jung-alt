@@ -5,25 +5,26 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/grafik/api",
         "main": "libs/grafik/api/src/index.ts",
         "tsConfig": "libs/grafik/api/tsconfig.lib.json",
-        "assets": ["libs/grafik/api/*.md"]
+        "assets": ["libs/grafik/api/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/grafik/api/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/grafik/api"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/grafik/api"],
       "options": {
         "jestConfig": "libs/grafik/api/jest.config.ts",
         "passWithNoTests": true

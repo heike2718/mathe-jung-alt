@@ -4,5 +4,5 @@ import { authFeature, AuthEffects } from '@mja-ws/shared/auth/data';
 
 export const authDataProvider = [
     provideState(authFeature),
-    provideEffects([AuthEffects])
+    provideEffects(AuthEffects)
 ];

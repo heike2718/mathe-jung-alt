@@ -5,25 +5,26 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/raetsel/model",
         "main": "libs/raetsel/model/src/index.ts",
         "tsConfig": "libs/raetsel/model/tsconfig.lib.json",
-        "assets": ["libs/raetsel/model/*.md"]
+        "assets": ["libs/raetsel/model/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/raetsel/model/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/raetsel/model"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/raetsel/model"],
       "options": {
         "jestConfig": "libs/raetsel/model/jest.config.ts",
         "passWithNoTests": true

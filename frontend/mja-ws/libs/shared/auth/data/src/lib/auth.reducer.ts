@@ -16,7 +16,7 @@ export const authFeature = createFeature({
     reducer: createReducer<AuthState>(
         initialState,
         on(
-            authActions.session_created,
+            authActions.sESSION_CREATED,
             (state, { session: session }): AuthState => {
 
                 const correlationId = generateUUID();
@@ -31,7 +31,7 @@ export const authFeature = createFeature({
             }
         ),
         on(
-            authActions.logged_out,
+            authActions.lOGGED_OUT,
             (state, _action): AuthState => ({
                 ...state,
                 session: anonymousSession

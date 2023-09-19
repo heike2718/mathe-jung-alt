@@ -5,25 +5,26 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/shared/auth/data",
         "main": "libs/shared/auth/data/src/index.ts",
         "tsConfig": "libs/shared/auth/data/tsconfig.lib.json",
-        "assets": ["libs/shared/auth/data/*.md"]
+        "assets": ["libs/shared/auth/data/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/shared/auth/data/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/auth/data"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/auth/data"],
       "options": {
         "jestConfig": "libs/shared/auth/data/jest.config.ts",
         "passWithNoTests": true

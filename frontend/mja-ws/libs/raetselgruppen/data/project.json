@@ -5,25 +5,26 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/raetselgruppen/data",
         "main": "libs/raetselgruppen/data/src/index.ts",
         "tsConfig": "libs/raetselgruppen/data/tsconfig.lib.json",
-        "assets": ["libs/raetselgruppen/data/*.md"]
+        "assets": ["libs/raetselgruppen/data/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/raetselgruppen/data/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/raetselgruppen/data"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/raetselgruppen/data"],
       "options": {
         "jestConfig": "libs/raetselgruppen/data/jest.config.ts",
         "passWithNoTests": true

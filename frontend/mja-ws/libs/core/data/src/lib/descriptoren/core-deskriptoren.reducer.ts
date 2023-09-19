@@ -17,7 +17,7 @@ export const coreDeskriptorenUIFeature = createFeature({
     reducer: createReducer<CoreDeskriptorenUIState>(
         initialState,
         on(
-            coreDeskriptorenActions.core_deskriptoren_loaded,
+            coreDeskriptorenActions.cORE_DESKRIPTOREN_LOADED,
             (state, { deskriptoren: deskriptoren }): CoreDeskriptorenUIState => (
                 {
                     ...state,
@@ -27,7 +27,7 @@ export const coreDeskriptorenUIFeature = createFeature({
             )
         ),
         on(
-            coreDeskriptorenActions.core_deskriptoren_remove,
+            coreDeskriptorenActions.cORE_DESKRIPTOREN_REMOVE,
             (state_, action_) => initialState
         )
     )
