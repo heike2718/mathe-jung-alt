@@ -29,18 +29,18 @@ export const raetselFeature = createFeature({
     name: 'raetsel',
     reducer: createReducer(
         initialState,
-        on(raetselActions.raetsel_select_page, (state, action): RaetselState => {
+        on(raetselActions.rAETSEL_SELECT_PAGE, (state, action): RaetselState => {
             return {
                 ...state,
                 generateLatexError: false,
                 paginationState: { ...state.paginationState, pageDefinition: { pageIndex: action.pageDefinition.pageIndex, pageSize: action.pageDefinition.pageSize, sortDirection: action.pageDefinition.sortDirection } }
             };
         }),
-        on(raetselActions.raetselsuchfilter_changed, (state, action) => {
+        on(raetselActions.rAETSELSUCHFILTER_CHANGED, (state, action) => {
 
             return {...state, raetselSuchfilter: action.suchfilter, generateLatexError: false};
         }),
-        on(raetselActions.raetsel_found, (state, action): RaetselState => {
+        on(raetselActions.rAETSEL_FOUND, (state, action): RaetselState => {
             return {
                 ...state,
                 loaded: true,
@@ -50,7 +50,7 @@ export const raetselFeature = createFeature({
                 generateLatexError: false
             }
         }),
-        on(raetselActions.raetsel_details_loaded, (state, action) => {
+        on(raetselActions.rAETSEL_DETAILS_LOADED, (state, action) => {
 
             const selectableDeskriptoren: SelectableItem[] = [];
             action.raetselDetails.deskriptoren.forEach(d => {
@@ -68,7 +68,7 @@ export const raetselFeature = createFeature({
                 generateLatexError: false
             };
         }),
-        on(raetselActions.raetsel_png_generated, (state, action) => {
+        on(raetselActions.rAETSEL_PNG_GENERATED, (state, action) => {
 
             if (state.raetselDetails) {
                 const images: GeneratedImages = { imageFrage: action.images.imageFrage, imageLoesung: action.images.imageLoesung };
@@ -78,7 +78,7 @@ export const raetselFeature = createFeature({
 
             return { ...state };
         }),
-        on(raetselActions.raetsel_saved, (state, action) => {
+        on(raetselActions.rAETSEL_SAVED, (state, action) => {
 
             const selectableDeskriptoren: SelectableItem[] = [];
             action.raetselDetails.deskriptoren.forEach(d => {
@@ -96,7 +96,7 @@ export const raetselFeature = createFeature({
                 generateLatexError: false
             };
         }),
-        on(raetselActions.reset_raetselsuchfilter, (state, _action): RaetselState => {
+        on(raetselActions.rESET_RAETSELSUCHFILTER, (state, _action): RaetselState => {
             return {
                 ...state,
                 loaded: false,
@@ -106,10 +106,10 @@ export const raetselFeature = createFeature({
                 generateLatexError: false
             };
         }),
-        on(raetselActions.raetsel_cancel_selection, (state, _action) => {
+        on(raetselActions.rAETSEL_CANCEL_SELECTION, (state, _action) => {
             return {...state, raetselDetails: undefined, selectableDeskriptoren: [], generateLatexError: false}
         }),
-        on(raetselActions.latex_errors_detected, (state, _action) => {
+        on(raetselActions.lATEX_ERRORS_DETECTED, (state, _action) => {
             return {
                 ...state,
                 generateLatexError: true

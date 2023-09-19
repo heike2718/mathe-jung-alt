@@ -5,5 +5,5 @@ import { provideState } from "@ngrx/store";
 
 export const coreStatistikDataProvider = [
     provideState(statistikFeature),
-    provideEffects([CoreStatistikEffects])
+    provideEffects(CoreStatistikEffects)
 ];

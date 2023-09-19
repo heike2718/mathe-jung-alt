@@ -25,7 +25,7 @@ export const raetselgruppenFeature = createFeature({
     name: 'raetselgruppen',
     reducer: createReducer(
         initialRaetselgruppenState,
-        on(raetselgruppenActions.raetselgruppen_found, (state, action) => {
+        on(raetselgruppenActions.rAETSELGRUPPEN_FOUND, (state, action) => {
             return {
                 ...state,
                 paginationState: { ...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt },
@@ -33,7 +33,7 @@ export const raetselgruppenFeature = createFeature({
                 loaded: true
             };
         }),
-        on((raetselgruppenActions.raetselgruppen_select_page), (state, action) => {
+        on((raetselgruppenActions.rAETSELGRUPPEN_SELECT_PAGE), (state, action) => {
             return {
                 ...state,
                 paginationState: { ...state.paginationState,
@@ -45,22 +45,22 @@ export const raetselgruppenFeature = createFeature({
                 }
             };
         }),
-        on(raetselgruppenActions.edit_raetselguppe, (state, action) => {
+        on(raetselgruppenActions.eDIT_RAETSELGUPPE, (state, action) => {
             return {
                 ...state,
                 raetselgruppeBasisdaten: action.raetselgruppeBasisdaten
             }
         }),
-        on(raetselgruppenActions.raetselgruppe_saved, (state, action) => {
+        on(raetselgruppenActions.rAETSELGRUPPE_SAVED, (state, action) => {
             const raetselgruppeBasisdaten: RaetselgruppeBasisdaten = action.raetselgruppe;
             return { ...state, raetselgruppeBasisdaten: raetselgruppeBasisdaten };
         }),
-        on(raetselgruppenActions.raetselgruppedetails_loaded, (state, action) => {
+        on(raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED, (state, action) => {
             return {...state, raetselgruppeDetails: action.raetselgruppeDetails, raetselgruppeBasisdaten: undefined};
         }),
-        on(raetselgruppenActions.unselect_raetselgruppe, (state, _action) => {
+        on(raetselgruppenActions.uNSELECT_RAETSELGRUPPE, (state, _action) => {
             return {...state, raetselgruppeDetails: undefined, raetselgruppeBasisdaten: undefined}
         }),
-        on(raetselgruppenActions.raetselgruppenelemente_changed, (state, action) => ({ ...state, raetselgruppeDetails: action.raetselgruppenDetails })),
+        on(raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED, (state, action) => ({ ...state, raetselgruppeDetails: action.raetselgruppenDetails })),
     )
 });

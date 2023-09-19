@@ -15,10 +15,7 @@
         "polyfills": "apps/mja-app/src/polyfills.ts",
         "tsConfig": "apps/mja-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/mja-app/src/favicon.ico",
-          "apps/mja-app/src/assets"
-        ],
+        "assets": ["apps/mja-app/src/favicon.ico", "apps/mja-app/src/assets"],
         "styles": ["apps/mja-app/src/styles.scss"],
         "scripts": []
       },
@@ -40,7 +37,7 @@
             "input": "build-env/mja-app/index.prod.html",
             "output": "index.html"
           },
-           "fileReplacements": [
+          "fileReplacements": [
             {
               "replace": "apps/mja-app/src/environments/environment.ts",
               "with": "apps/mja-app/src/environments/environment.prod.ts"
@@ -124,17 +121,14 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/mja-app/**/*.ts",
-          "apps/mja-app/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/mja-app/**/*.ts", "apps/mja-app/**/*.html"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/mja-app"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/mja-app"],
       "options": {
         "jestConfig": "apps/mja-app/jest.config.ts",
         "passWithNoTests": true

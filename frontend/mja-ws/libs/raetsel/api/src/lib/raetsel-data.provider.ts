@@ -4,5 +4,5 @@ import { provideState } from "@ngrx/store";
 
 export const raetselDataProvider = [
     provideState(raetselFeature),
-    provideEffects([RaetselEffects])
+    provideEffects(RaetselEffects)
 ];

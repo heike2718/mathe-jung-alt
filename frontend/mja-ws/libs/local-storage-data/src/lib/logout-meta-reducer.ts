@@ -3,7 +3,7 @@ import { authActions } from '@mja-ws/shared/auth/data';
 
 function clearState(reducer: ActionReducer<any>): ActionReducer<any> {
     return (state, action) => {
-        if (action != null && action.type === authActions.logged_out.type) {
+        if (action != null && action.type === authActions.lOGGED_OUT.type) {
             return reducer(undefined, { type: INIT });
         }
         return reducer(state, action);

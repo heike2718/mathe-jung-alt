@@ -5,25 +5,26 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/shared/messaging/api",
         "main": "libs/shared/messaging/api/src/index.ts",
         "tsConfig": "libs/shared/messaging/api/tsconfig.lib.json",
-        "assets": ["libs/shared/messaging/api/*.md"]
+        "assets": ["libs/shared/messaging/api/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/shared/messaging/api/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/messaging/api"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/messaging/api"],
       "options": {
         "jestConfig": "libs/shared/messaging/api/jest.config.ts",
         "passWithNoTests": true

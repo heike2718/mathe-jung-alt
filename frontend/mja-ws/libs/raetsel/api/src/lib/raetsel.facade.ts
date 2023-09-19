@@ -37,19 +37,19 @@ export class RaetselFacade {
 
   public triggerSearch(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
 
-    this.#store.dispatch(raetselActions.raetsel_select_page({ pageDefinition }));
-    this.#store.dispatch(raetselActions.find_raetsel({admin, suchfilter, pageDefinition }));
+    this.#store.dispatch(raetselActions.rAETSEL_SELECT_PAGE({ pageDefinition }));
+    this.#store.dispatch(raetselActions.fIND_RAETSEL({admin, suchfilter, pageDefinition }));
   }
 
   public selectRaetsel(raetsel: Raetsel): void {
-    this.#store.dispatch(raetselActions.raetsel_selected({ raetsel }));
+    this.#store.dispatch(raetselActions.rAETSEL_SELECTED({ raetsel }));
   }
 
   public generiereRaetselOutput(raetselID: string, outputFormat: OUTPUTFORMAT, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
 
     switch (outputFormat) {
-      case 'PNG': this.#store.dispatch(raetselActions.generate_raetsel_png({ raetselID, font, schriftgroesse, layoutAntwortvorschlaege })); break;
-      case 'PDF': this.#store.dispatch(raetselActions.generate_raetsel_pdf({ raetselID, font, schriftgroesse, layoutAntwortvorschlaege })); break;
+      case 'PNG': this.#store.dispatch(raetselActions.gENERATE_RAETSEL_PNG({ raetselID, font, schriftgroesse, layoutAntwortvorschlaege })); break;
+      case 'PDF': this.#store.dispatch(raetselActions.gENERATE_RAETSEL_PDF({ raetselID, font, schriftgroesse, layoutAntwortvorschlaege })); break;
       default: throw new Error('Unbekanntes outputFormat ' + outputFormat);
     }
   }
@@ -61,7 +61,7 @@ export class RaetselFacade {
   }
 
   public changeSuchfilterWithDeskriptoren(deskriptoren: DeskriptorUI[], suchstring: string) {
-    this.#store.dispatch(raetselActions.raetselsuchfilter_changed({ suchfilter: { deskriptoren, suchstring } }));
+    this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter: { deskriptoren, suchstring } }));
   }
 
   public changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string): void {
@@ -77,16 +77,16 @@ export class RaetselFacade {
       deskriptoren: deskriptoren
     };
 
-    this.#store.dispatch(raetselActions.raetselsuchfilter_changed({ suchfilter }));
+    this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
   }
 
   public neueRaetselsuche(): void {
-    this.#store.dispatch(raetselActions.reset_raetselsuchfilter());
+    this.#store.dispatch(raetselActions.rESET_RAETSELSUCHFILTER());
     this.#selectItemsFacade.resetSelection();
   }
 
   public cancelSelection(): void {
-    this.#store.dispatch(raetselActions.raetsel_cancel_selection());
+    this.#store.dispatch(raetselActions.rAETSEL_CANCEL_SELECTION());
   }
 
   public createAndEditRaetsel(quelle: QuelleUI | undefined): void {
@@ -96,7 +96,7 @@ export class RaetselFacade {
       return;
     }
     const raetselDetails: RaetselDetails = { ...initialRaetselDetails, quelle: quelle };
-    this.#store.dispatch(raetselActions.raetsel_details_loaded({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
+    this.#store.dispatch(raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
   }
 
   public initSelectItemsCompomentModel(selectedDeskriptoren: DeskriptorUI[], alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
@@ -125,11 +125,11 @@ export class RaetselFacade {
   }
 
   public saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
-    this.#store.dispatch(raetselActions.save_raetsel({ editRaetselPayload }));
+    this.#store.dispatch(raetselActions.sAVE_RAETSEL({ editRaetselPayload }));
   }
 
 
   public downloadLatexLogs(schluessel: string): void {
-    this.#store.dispatch(raetselActions.find_latexlogs({ schluessel: schluessel }));
+    this.#store.dispatch(raetselActions.fIND_LATEXLOGS({ schluessel: schluessel }));
   }
 }

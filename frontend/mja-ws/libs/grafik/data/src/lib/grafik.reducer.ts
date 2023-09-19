@@ -19,10 +19,10 @@ export const grafikFeature = createFeature({
     name: 'grafik',
     reducer: createReducer(
         initialGrafikState,
-        on(grafikActions.pruefe_grafik, (state, _action) => ({ ...state, selectedGrafikSearchResult: undefined })),
-        on(grafikActions.grafik_geprueft, (state, action) => ({ ...state, loaded: true, selectedGrafikSearchResult: action.grafikSearchResult })),
-        on(grafikActions.grafik_hochgeladen, (state, _action) => ({ ...state, loaded: false, selectedGrafikSearchResult: undefined })),
-        on(grafikActions.clear_vorschau, (state, _action) => ({ ...state, loaded: false, selectedGrafikSearchResult: undefined })),
+        on(grafikActions.pRUEFE_GRAFIK, (state, _action) => ({ ...state, selectedGrafikSearchResult: undefined })),
+        on(grafikActions.gRAFIK_GEPRUEFT, (state, action) => ({ ...state, loaded: true, selectedGrafikSearchResult: action.grafikSearchResult })),
+        on(grafikActions.gRAFIK_HOCHGELADEN, (state, _action) => ({ ...state, loaded: false, selectedGrafikSearchResult: undefined })),
+        on(grafikActions.cLEAR_VORSCHAU, (state, _action) => ({ ...state, loaded: false, selectedGrafikSearchResult: undefined })),
     )
 });
 

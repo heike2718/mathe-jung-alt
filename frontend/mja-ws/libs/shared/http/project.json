@@ -5,25 +5,26 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/shared/http",
         "main": "libs/shared/http/src/index.ts",
         "tsConfig": "libs/shared/http/tsconfig.lib.json",
-        "assets": ["libs/shared/http/*.md"]
+        "assets": ["libs/shared/http/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/shared/http/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/http"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/http"],
       "options": {
         "jestConfig": "libs/shared/http/jest.config.ts",
         "passWithNoTests": true

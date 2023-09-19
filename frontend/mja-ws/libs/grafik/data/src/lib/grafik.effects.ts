@@ -15,15 +15,15 @@ export class GrafikEffects {
     pruefeGrafik$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(grafikActions.pruefe_grafik),
+            ofType(grafikActions.pRUEFE_GRAFIK),
             concatMap((action) => this.#grafikHttpService.loadGrafik(action.pfad)),
-            map((grafikSearchResult) => grafikActions.grafik_geprueft({ grafikSearchResult }))
+            map((grafikSearchResult) => grafikActions.gRAFIK_GEPRUEFT({ grafikSearchResult }))
         );
     });
 
     grafikHochgeladen$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(grafikActions.grafik_hochgeladen),
+            ofType(grafikActions.gRAFIK_HOCHGELADEN),
             tap((action) => {
                 this.#messageService.message(action.message);
             }),

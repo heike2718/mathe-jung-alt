@@ -4,5 +4,5 @@ import { provideState } from "@ngrx/store";
 
 export const coreDeskriptorenDataProvider = [
     provideState(coreDeskriptorenUIFeature),
-    provideEffects([CoreDeskriptorUIEffects])
+    provideEffects(CoreDeskriptorUIEffects)
 ];

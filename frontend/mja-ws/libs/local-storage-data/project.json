@@ -5,30 +5,31 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/local-storage-data",
         "main": "libs/local-storage-data/src/index.ts",
         "tsConfig": "libs/local-storage-data/tsconfig.lib.json",
-        "assets": ["libs/local-storage-data/*.md"]
+        "assets": ["libs/local-storage-data/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/local-storage-data/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/local-storage-data"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/local-storage-data"],
       "options": {
         "jestConfig": "libs/local-storage-data/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": ["domain:shared","type:local-storage"]
+  "tags": ["domain:shared", "type:local-storage"]
 }

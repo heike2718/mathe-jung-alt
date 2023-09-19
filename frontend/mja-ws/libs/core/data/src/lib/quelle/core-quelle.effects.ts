@@ -17,11 +17,11 @@ export class CoreQuelleEffects {
     loadQuelleAdmin$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(coreQuelleActions.load_quelle_admin),
+            ofType(coreQuelleActions.lOAD_QUELLE_ADMIN),
             concatMap(() =>
                 this.#httpClient.get<QuelleUI>('/mja-api/quellen/admin/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
             ),
-            map((quelle: QuelleUI) => coreQuelleActions.core_quelle_admin_loaded({ quelle }))
+            map((quelle: QuelleUI) => coreQuelleActions.cORE_QUELLE_ADMIN_LOADED({ quelle }))
         );
     });
 }

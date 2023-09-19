@@ -1,16 +1,14 @@
 <h2>{{model.ueberschriftAuswahlliste}}</h2>
 <div class="mb-2" *ngIf="selectItemsFacade.selectableItemsModel$| async as model">
-    <mat-chip-list >
+    <mat-chip-listbox>
         <div *ngFor="let item of model.vorrat">
-            <mat-chip (click)="auswaehlen(item)">{{item.name}}</mat-chip>
+            <mat-chip-option (click)="auswaehlen(item)">{{item.name}}</mat-chip-option>
         </div>
-    </mat-chip-list>
-
+    </mat-chip-listbox>
     <h2>{{model.ueberschriftGewaehlteItems}}</h2>
-
-    <mat-chip-list>
+    <mat-chip-listbox>
         <div *ngFor="let item of model.gewaehlteItems">
-            <mat-chip (click)="verwerfen(item)">{{item.name}}</mat-chip>
+            <mat-chip-option (click)="verwerfen(item)">{{item.name}}</mat-chip-option>
         </div>
-    </mat-chip-list>
+    </mat-chip-listbox>
 </div>

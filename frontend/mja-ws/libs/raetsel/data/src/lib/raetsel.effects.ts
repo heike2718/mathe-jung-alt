@@ -23,25 +23,25 @@ export class RaetselEffects {
     findRaetsel$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(raetselActions.find_raetsel),
+            ofType(raetselActions.fIND_RAETSEL),
             concatMap((action) => this.#raetselHttpService.findRaetsel(action.admin, action.suchfilter, action.pageDefinition)),
-            map((treffer) => raetselActions.raetsel_found({ treffer }))
+            map((treffer) => raetselActions.rAETSEL_FOUND({ treffer }))
         );
     });
 
     raetselSelected$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(raetselActions.raetsel_selected),
+            ofType(raetselActions.rAETSEL_SELECTED),
             concatMap((action) => this.#raetselHttpService.loadRaetselDetails(action.raetsel)),
-            map((raetselDetails) => raetselActions.raetsel_details_loaded({ raetselDetails: raetselDetails, navigateTo: 'raetsel/details' }))
+            map((raetselDetails) => raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/details' }))
         );
     });
 
     showDetails$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselActions.raetsel_details_loaded),
+            ofType(raetselActions.rAETSEL_DETAILS_LOADED),
             tap((action) => {
                 this.#router.navigateByUrl(action.navigateTo);
             }),
@@ -50,12 +50,12 @@ export class RaetselEffects {
     generateRaetselPng$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(raetselActions.generate_raetsel_png),
+            ofType(raetselActions.gENERATE_RAETSEL_PNG),
             concatMap(
                 (action) => this.#raetselHttpService.generateRaetselPNGs(action.raetselID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)
                     .pipe(
-                        map((generatedImages) => raetselActions.raetsel_png_generated({ images: generatedImages })),
-                        catchError(() => of(raetselActions.latex_errors_detected()))
+                        map((generatedImages) => raetselActions.rAETSEL_PNG_GENERATED({ images: generatedImages })),
+                        catchError(() => of(raetselActions.lATEX_ERRORS_DETECTED()))
                     )
             ),
         );
@@ -64,12 +64,12 @@ export class RaetselEffects {
     generateRaetselPDF$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(raetselActions.generate_raetsel_pdf),
+            ofType(raetselActions.gENERATE_RAETSEL_PDF),
             concatMap(
                 (action) => this.#raetselHttpService.generateRaetselPDF(action.raetselID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)
                     .pipe(
-                        map((file) => raetselActions.raetsel_pdf_generated({ pdf: file })),
-                        catchError(() => of(raetselActions.latex_errors_detected()))
+                        map((file) => raetselActions.rAETSEL_PDF_GENERATED({ pdf: file })),
+                        catchError(() => of(raetselActions.lATEX_ERRORS_DETECTED()))
                     )
             )
         );
@@ -78,7 +78,7 @@ export class RaetselEffects {
     downloadPDF$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselActions.raetsel_pdf_generated),
+            ofType(raetselActions.rAETSEL_PDF_GENERATED),
             tap((action) => {
                 this.#fileDownloadService.downloadPdf(action.pdf.fileData, action.pdf.fileName);
             }),
@@ -88,15 +88,15 @@ export class RaetselEffects {
     findLatexLogs$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselActions.find_latexlogs),
+            ofType(raetselActions.fIND_LATEXLOGS),
             concatMap((action) => this.#raetselHttpService.findLatexLogs(action.schluessel)),
-            map((files) => raetselActions.latexlogs_found({ files: files }))
+            map((files) => raetselActions.lATEXLOGS_FOUND({ files: files }))
         ));
 
     latexLogsFound$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselActions.latexlogs_found),
+            ofType(raetselActions.lATEXLOGS_FOUND),
             tap((action) => {
 
                 if (action.files.length > 0) {
@@ -113,22 +113,22 @@ export class RaetselEffects {
 
     cancelSelectiont$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselActions.raetsel_cancel_selection),
+            ofType(raetselActions.rAETSEL_CANCEL_SELECTION),
             tap(() => this.#router.navigateByUrl('raetsel/uebersicht')),
         ), { dispatch: false });
 
     saveRaetsel$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(raetselActions.save_raetsel),
+            ofType(raetselActions.sAVE_RAETSEL),
             concatMap((action) => this.#raetselHttpService.saveRaetsel(action.editRaetselPayload)),
-            map((raetselDetails) => raetselActions.raetsel_saved({ raetselDetails }))
+            map((raetselDetails) => raetselActions.rAETSEL_SAVED({ raetselDetails }))
         );
     });
 
     raetselSaved$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselActions.raetsel_saved),
+            ofType(raetselActions.rAETSEL_SAVED),
             tap(() => this.#messageService.info('Rätsel erfolgreich gespeichert')),
         ), { dispatch: false });
 }

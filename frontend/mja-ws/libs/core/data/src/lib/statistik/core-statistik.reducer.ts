@@ -16,7 +16,7 @@ export const statistikFeature = createFeature({
     name: 'Statistik',
     reducer: createReducer(
         initialState,
-        on(coreStatistikActions.anzahl_raetsel_public_loaded, (state, action) => {
+        on(coreStatistikActions.aNZAHL_RAETSEL_PUBLIC_LOADED, (state, action) => {
             return {
                 ...state,
                 anzahlPublicRaetsel: action.payload.ergebnis,

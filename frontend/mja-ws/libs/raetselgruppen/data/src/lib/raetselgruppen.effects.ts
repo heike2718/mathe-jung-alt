@@ -17,18 +17,18 @@ export class RaetselgruppenEffects {
 
     findRaetselgruppen$ = createEffect(() => {
         return this.#actions.pipe(
-            ofType(raetselgruppenActions.find_raetselgruppen),
+            ofType(raetselgruppenActions.fIND_RAETSELGRUPPEN),
             concatMap((action) => this.#raetselgruppenHttpService.findRaetselgruppen(action.raetselgruppenSuchparameter, action.pageDefinition)),
-            map((treffer) => raetselgruppenActions.raetselgruppen_found({ treffer }))
+            map((treffer) => raetselgruppenActions.rAETSELGRUPPEN_FOUND({ treffer }))
         );
     });
 
     selectRaetselgruppe$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(raetselgruppenActions.select_raetselgruppe),
+            ofType(raetselgruppenActions.sELECT_RAETSELGRUPPE),
             concatMap((action) => this.#raetselgruppenHttpService.findById(action.raetselgruppe.id)),
-            map((raetselgruppeDetails) => raetselgruppenActions.raetselgruppedetails_loaded({ raetselgruppeDetails: raetselgruppeDetails, navigateTo: 'raetselgruppen/details' }))
+            map((raetselgruppeDetails) => raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED({ raetselgruppeDetails: raetselgruppeDetails, navigateTo: 'raetselgruppen/details' }))
         )
 
     });
@@ -36,7 +36,7 @@ export class RaetselgruppenEffects {
     showDetails$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.raetselgruppedetails_loaded),
+            ofType(raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED),
             tap((action) => {
                 this.#router.navigateByUrl(action.navigateTo);
             }),
@@ -45,7 +45,7 @@ export class RaetselgruppenEffects {
     unselectRaetselgruppe$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.unselect_raetselgruppe),
+            ofType(raetselgruppenActions.uNSELECT_RAETSELGRUPPE),
             tap(() => {
                 this.#router.navigateByUrl('raetselgruppen');
             }),
@@ -54,7 +54,7 @@ export class RaetselgruppenEffects {
     editRaetselgruppe$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.edit_raetselguppe),
+            ofType(raetselgruppenActions.eDIT_RAETSELGUPPE),
             tap(() => {
                 this.#router.navigateByUrl('raetselgruppen/edit');
             }),
@@ -63,51 +63,51 @@ export class RaetselgruppenEffects {
     saveRaetselgruppe$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.save_raetselgruppe),
+            ofType(raetselgruppenActions.sAVE_RAETSELGRUPPE),
             concatMap((action) => this.#raetselgruppenHttpService.saveRaetselgruppe(action.editRaetselgruppePayload)),
-            map((raetselgruppe) => raetselgruppenActions.raetselgruppe_saved({ raetselgruppe }))
+            map((raetselgruppe) => raetselgruppenActions.rAETSELGRUPPE_SAVED({ raetselgruppe }))
         )
     );
 
     saveRaetselgruppenelement$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.save_raetselgruppenelement),
+            ofType(raetselgruppenActions.sAVE_RAETSELGRUPPENELEMENT),
             concatMap((action) => this.#raetselgruppenHttpService.saveRaetselgruppenelement(action.raetselgruppeID, action.payload)),
-            map((raetselgruppenDetails) => raetselgruppenActions.raetselgruppenelemente_changed({ raetselgruppenDetails }))
+            map((raetselgruppenDetails) => raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED({ raetselgruppenDetails }))
         )
     );
 
     deleteRaetselgruppenelement$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.delete_raetselgruppenelement),
+            ofType(raetselgruppenActions.dELETE_RAETSELGRUPPENELEMENT),
             concatMap((action) => this.#raetselgruppenHttpService.deleteRaetselgruppenelement(action.raetselgruppeID, action.payload)),
-            map((raetselgruppenDetails) => raetselgruppenActions.raetselgruppenelemente_changed({ raetselgruppenDetails }))
+            map((raetselgruppenDetails) => raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED({ raetselgruppenDetails }))
         )
     );
 
     generiereArbeitsblatt$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.generiere_arbeitsblatt),
+            ofType(raetselgruppenActions.gENERIERE_ARBEITSBLATT),
             concatMap((action) => this.#raetselgruppenHttpService.generiereArbeitsblattMitLoesungen(action.raetselgruppeID, action.font, action.schriftgroesse)),
-            map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
+            map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
 
     generiereKnobelkartei$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.generiere_knobelkartei),
+            ofType(raetselgruppenActions.gENERIERE_KNOBELKARTEI),
             concatMap((action) => this.#raetselgruppenHttpService.generiereKnobelkartei(action.raetselgruppeID, action.font, action.schriftgroesse)),
-            map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
+            map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
 
     generiereVorschau$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.generiere_vorschau),
+            ofType(raetselgruppenActions.gENERIERE_VORSCHAU),
             concatMap((action) => this.#raetselgruppenHttpService.generiereVorschau(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
-            map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
+            map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
 
@@ -115,15 +115,15 @@ export class RaetselgruppenEffects {
 
     generiereLaTeX$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.generiere_latex),
+            ofType(raetselgruppenActions.gENERIERE_LATEX),
             concatMap((action) => this.#raetselgruppenHttpService.generiereLaTeX(action.raetselgruppeID, action.layoutAntwortvorschlaege)),
-            map((genaratedFile: GeneratedFile) => raetselgruppenActions.file_generated({ pdf: genaratedFile }))
+            map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
 
     downloadPDF$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.file_generated),
+            ofType(raetselgruppenActions.fILE_GENERATED),
             tap((action) => this.#downloadService.downloadPdf(action.pdf.fileData, action.pdf.fileName)),
         ), { dispatch: false });
 }

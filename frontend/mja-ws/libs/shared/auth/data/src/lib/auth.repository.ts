@@ -27,24 +27,24 @@ export class AuthRepository {
 
     public login(): void {
         // Dies triggert einen SideEffect (siehe auth.effects.ts)
-        this.#store.dispatch(authActions.request_login_url());
+        this.#store.dispatch(authActions.rEQUEST_LOGIN_URL());
     }
 
     public signUp(): void {
         // Dies triggert einen SideEffect (siehe auth.effects.ts)
-        this.#store.dispatch(authActions.request_signup_url());
+        this.#store.dispatch(authActions.rEQUEST_SIGNUP_URL());
     }
 
     public logout(): void {
-        this.#store.dispatch(authActions.log_out());
+        this.#store.dispatch(authActions.lOG_OUT());
     }
 
     public handleSessionExpired(): void {
-        this.#store.dispatch(authActions.logged_out());
+        this.#store.dispatch(authActions.lOGGED_OUT());
     }
 
     public createSession(authResult: AuthResult): void {
-        this.#store.dispatch(authActions.init_session({ authResult }));
+        this.#store.dispatch(authActions.iNIT_SESSION({ authResult }));
     }
 
 
