@@ -1,0 +1,121 @@
+@import "@angular/material/theming";
+
+@include mat-core();
+
+$palette: (
+    50: #e5ebf0,
+    100: #becdda,
+    200: #92abc1,
+    300: #6689a8,
+    400: #467096,
+    500: #255783,
+    600: #214f7b,
+    700: #1b4670,
+    800: #163c66,
+    900: #0d2c53,
+    A100: #8ab7ff,
+    A200: #5798ff,
+    A400: #2479ff,
+    A700: #0a69ff,
+    contrast: (50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000),
+);
+
+$main-color: mat-color($palette, 500);
+
+$candy-app-primary: mat-palette($palette);
+$candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
+$candy-app-warn: mat-palette($mat-red);
+$candy-app-theme: mat-light-theme($candy-app-primary,
+        $candy-app-accent,
+        $candy-app-warn);
+@include angular-material-theme($candy-app-theme);
+
+body {
+    margin: 0;
+    height: 100%;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    font-size: 1.0rem;
+}
+
+a,
+.link {
+    color: #255783;
+}
+
+.centered {
+    text-align: center;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.bordered {
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+mat-form-field {
+    display: block;
+}
+
+.mt-1 {
+    margin-top: 1rem;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 2rem;
+}
+
+.mr-1 {
+    margin-right: 1rem;
+}
+
+.mr-2 {
+    margin-right: 2rem;
+}
+
+.m-1 {
+    margin: 1rem;
+}
+
+.p-5 {
+    padding: 5px;
+}
+
+.p-10 {
+    padding: 10px;
+}

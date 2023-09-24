@@ -1,3 +1,47 @@
+
+xx.09.2023
+
+Print-Dialo gehißt seltsamerweise genarator-parameters-dialog-autoren.component "wat??"
+
+
+SPARoutingFilter
+
+```
+	private static final Predicate<String> FILE_NAME_PREDICATE = Pattern.compile(".*[.][a-zA-Z\\d]+").asMatchPredicate();
+
+	private static final String API_PREFIX = "/mja-api/";
+
+	private static final String APP_PLUS_API_PREFIX = "/mja-app" + API_PREFIX;
+
+	private static final String DEFAULT_APP = "/mja-app/";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SPARouteFilter.class);
+
+	@RouteFilter(100)
+	void apiFilter(final RoutingContext rc) {
+
+		final String path = rc.normalizedPath();
+		LOGGER.info("Check reroute with path: " + path);
+
+		if (FILE_NAME_PREDICATE.test(path)) {
+
+			LOGGER.info("keine Umleitung bei statischen Dateien");
+
+			rc.next();
+		} else if (path.startsWith(APP_PLUS_API_PREFIX)) {
+
+			String rerouted = path.replaceFirst(DEFAULT_APP, "/");
+			LOGGER.info("rc.reroute: " + rerouted);
+			rc.reroute(rerouted);
+		} else {
+
+			LOGGER.info("global else => rc.next()");
+			rc.next();
+		}
+	}
+```
+
+
 01.05.2023
 
 (/) latex-client: Java 17, jackson 2.15.0, undertow 2.3.5.Final: gebaut und nach /media/veracrypt1/ansible/vserver/latex-v1-v2/images/docker-latex-client/deployment kopiert
