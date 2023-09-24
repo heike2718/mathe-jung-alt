@@ -106,7 +106,7 @@ export const appConfig: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: 'de-DE' },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { appearance: 'outline' },
+      useValue: { appearance: 'outline', floatLabel: 'auto' },
     },
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: LoadingInterceptor },
