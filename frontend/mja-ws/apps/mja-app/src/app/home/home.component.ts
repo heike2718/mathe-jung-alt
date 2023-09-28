@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.imageSourceLogo = this.#configService.assetsPath + 'mja_logo_2-indigo.svg';
+    this.imageSourceLogo = this.#configService.assetsPath + 'mja_logo_2.svg';
     this.coreFacade.loadAnzahlPublicRaetsel();      
   }
 

@@ -11,7 +11,7 @@ body {
 
 a,
 .link {
-    color: #255783;
+    color: #467096;
 }
 
 .centered {
@@ -68,21 +68,6 @@ mat-icon {
     width: 20px !important;
 }
 
-.nicht-berechtigt {
-    color: red;
-}
-
-.right-button {
-    position: fixed;
-    bottom: 45px;
-    right: 0
-}
-
-.btn-thin {
-    margin: 10px 10px 10px 0;
-    width: 160px;
-}
-
 .mat-sort-header-container {
     display: flex !important;
     cursor: pointer !important;
@@ -125,4 +110,79 @@ mat-icon {
 
 .p-10 {
     padding: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+mat-card {
+    width: 80%;
+    min-width: 600px;
+    margin: 26px;
+    align-items: center;
+    padding: 20px;
+}
+
+mat-form-field {
+    display: block;
+}
+
+mat-card-actions>button {
+    margin: 1em;
+}
+
+.mja-container mat-form-field+mat-form-field {
+    margin-left: 8px;
+}
+
+.mja-container mat-form-field {
+    width: 600px;
+}
+
+.mja-container form {
+    margin-bottom: 20px;
+}
+
+.mja-container form>* {
+    margin: 12px 0;
+}
+
+.mja-container .mat-radio-button {
+    margin: 0 12px;
+}
+
+.mja-form-fields {
+    display: block;
+    margin-bottom: 2rem;
+}
+
+.block {
+    display: block;
+}
+
+.grid-container-1 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 1fr);
+    margin-left: 2rem;
+    grid-gap: 2rem;
+}
+
+.grid-container-2 {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    margin-left: 2rem;
+    grid-gap: 2rem;
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
+    align-items: center;
+    margin-left: 2rem;
+    grid-gap: 2rem;
+}
+
+label {
+    font-weight: bold;
 }
