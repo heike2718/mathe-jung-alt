@@ -11,7 +11,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { Antwortvorschlag, EditRaetselPayload, GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
@@ -23,6 +22,7 @@ import { CoreFacade } from '@mja-ws/core/api';
 import { GrafikFacade } from '@mja-ws/grafik/api';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
+import { MatCardModule } from '@angular/material/card';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -35,17 +35,17 @@ interface AntwortvorschlagFormValue {
   imports: [
     CommonModule,
     MatButtonModule,
+    MatCardModule,
     MatChipsModule,
     MatDialogModule,
+    MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatFormFieldModule,
     MatListModule,
     MatSlideToggleModule,
     MatTooltipModule,
     CdkAccordionModule,
     TextFieldModule,
-    FlexLayoutModule,
     MatExpansionModule,
     ReactiveFormsModule,
     FrageLoesungImagesComponent,
@@ -358,41 +358,44 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
-      height: '300px',
+      height: '600px',
       width: '700px',
       data: dialogData
     });
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
+      if (result) {
 
-        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
-        switch (dialogData.selectedLayoutAntwortvorschlaege) {
-          case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
-          case 'Buchstaben': layout = 'BUCHSTABEN'; break;
-          case 'description': layout = 'DESCRIPTION'; break;
-        }
+        if (dialogData.selectedLayoutAntwortvorschlaege) {
 
-        let font: FONT_NAME = 'STANDARD';
-        let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
-
-        if (result && dialogData.selectedFontName) {
-          switch (dialogData.selectedFontName) {
-            case 'Druckschrift (Leseanfänger)': font = 'DRUCK_BY_WOK'; break;
-            case 'Fibel Nord': font = 'FIBEL_NORD'; break;
-            case 'Fibel Süd': font = 'FIBEL_SUED'; break;
+          let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+          switch (dialogData.selectedLayoutAntwortvorschlaege) {
+            case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
+            case 'Buchstaben': layout = 'BUCHSTABEN'; break;
+            case 'Liste': layout = 'DESCRIPTION'; break;
           }
-        }
 
-        if (result && dialogData.selectedSchriftgroesse) {
-          switch(dialogData.selectedSchriftgroesse) {
-            case 'sehr groß': schriftgroesse = 'HUGE'; break;
-            case 'groß': schriftgroesse = 'LARGE'; break;
+          let font: FONT_NAME = 'STANDARD';
+          let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
+
+          if (dialogData.selectedFontName) {
+            switch (dialogData.selectedFontName) {
+              case 'Druckschrift (Leseanfänger)': font = 'DRUCK_BY_WOK'; break;
+              case 'Fibel Nord': font = 'FIBEL_NORD'; break;
+              case 'Fibel Süd': font = 'FIBEL_SUED'; break;
+            }
           }
-        }
 
-        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, font, schriftgroesse, layout);
+          if (dialogData.selectedSchriftgroesse) {
+            switch (dialogData.selectedSchriftgroesse) {
+              case 'sehr groß': schriftgroesse = 'HUGE'; break;
+              case 'groß': schriftgroesse = 'LARGE'; break;
+            }
+          }
+
+          this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, font, schriftgroesse, layout);
+        }
       }
     });
   }

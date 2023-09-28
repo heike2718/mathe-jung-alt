@@ -33,21 +33,21 @@
       <!-- Show Images Column -->
       <ng-container matColumnDef="show">
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element"> <button mat-raised-button color="primary"
+        <td mat-cell *matCellDef="let element"> <button mat-stroked-button color="primary"
             (click)="showImagesClicked(element)">PNGs</button></td>
       </ng-container>
   
       <!-- Edit Column -->
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element"> <button mat-raised-button color="primary"
+        <td mat-cell *matCellDef="let element"> <button mat-stroked-button color="primary"
             (click)="editElementClicked(element)">bearbeiten</button></td>
       </ng-container>
   
       <!-- Delete Column -->
       <ng-container matColumnDef="delete">
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element"> <button mat-raised-button color="warn"
+        <td mat-cell *matCellDef="let element"> <button mat-stroked-button color="warn"
             (click)="deleteElementClicked(element)">löschen</button></td>
       </ng-container>
   

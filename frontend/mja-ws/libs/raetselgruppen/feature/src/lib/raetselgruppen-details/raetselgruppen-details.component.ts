@@ -2,7 +2,6 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
 import { MatButtonModule } from '@angular/material/button';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
@@ -22,15 +21,18 @@ import { RaetselgruppenelementDialogComponent } from '../raetselgruppenelement-d
 import { RaetselgruppenelementeComponent } from '../raetselgruppenelemente/raetselgruppenelemente.component';
 import { CoreFacade } from '@mja-ws/core/api';
 import { RaetselgruppeEditComponent } from '../raetselgruppe-edit/raetselgruppe-edit.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'mja-raetselgruppen-details',
   standalone: true,
   imports: [
     CommonModule,
-    FlexLayoutModule,
     MatButtonModule,
+    MatCardModule,
     MatDialogModule,
+    MatGridListModule,
     MatInputModule,
     MatListModule,
     MatFormFieldModule,
@@ -119,7 +121,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
           switch (dialogData.selectedLayoutAntwortvorschlaege) {
             case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
             case 'Buchstaben': layout = 'BUCHSTABEN'; break;
-            case 'description': layout = 'DESCRIPTION'; break;
+            case 'Liste': layout = 'DESCRIPTION'; break;
           }
         }
 

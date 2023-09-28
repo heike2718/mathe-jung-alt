@@ -15,12 +15,9 @@
             <mja-file-upload [uploadModel]="uploadModel" (dateiAusgewaehlt)="onDateiAusgewaehlt($event)"
                 (responsePayload)="onResponse($event)"></mja-file-upload>
         </div>
-        
-        <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="flex-start">
 
-            <div fxFlex="0 1 calc(25%-20px)">
-                <button mat-raised-button color="primary" (click)="reset()">leeren</button>
-            </div>
+        <div class="button-container">
+            <button mat-stroked-button color="primary" (click)="reset()">leeren</button>
         </div>
     </ng-container>
 </div>

@@ -1,8 +1,4 @@
-<div [ngStyle]="{'background': isKorrekt() ? '#d7e6f4' : 'white'}" fxLayout="row wrap" fxLayoutGap="20px"
-    fxLayoutAlign="flex-start"
-    class="p-10 bordered">
-    <div fxFlex="0 1 calc(2%-20px)">
-        {{antwortvorschlag.buchstabe}}:
-    </div>
-    <div fxFlex="0 1 calc(98%-20px)" class="mb-1">{{antwortvorschlag.text}}</div>
+<div [ngStyle]="{'background': isKorrekt() ? '#d7e6f4' : 'white'}" id="antwortvorschlag"  class="bordered">
+    <label>{{antwortvorschlag.buchstabe}}:</label>
+    <div id="text">{{antwortvorschlag.text}}</div>
 </div>

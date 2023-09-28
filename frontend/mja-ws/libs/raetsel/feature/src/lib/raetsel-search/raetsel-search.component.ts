@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { RaetselDataSource, RaetselFacade } from '@mja-ws/raetsel/api';
 import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { initialSelectItemsComponentModel, PageDefinition, PaginationState, QuelleUI, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
@@ -20,7 +19,6 @@ import { SelectItemsComponent } from '@mja-ws/shared/components';
   standalone: true,
   imports: [
     CommonModule,
-    FlexLayoutModule,
     MatTableModule,
     MatButtonModule,
     MatPaginatorModule,
@@ -39,7 +37,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   coreFacade = inject(CoreFacade);
 
-  isAdmin = false;
+  isAutor = false;
   anzahlRaetsel = 0;
 
   selectItemsCompomentModel: SelectItemsCompomentModel = initialSelectItemsComponentModel;
@@ -76,7 +74,9 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   ngOnInit(): void {
 
     this.#userSubscription = this.#authFacade.user$.pipe(
-      tap((user) => this.isAdmin = user.isAdmin)
+      tap((user) => {
+        this.isAutor = user.benutzerart === 'AUTOR' || user.benutzerart === 'ADMIN';
+      })
     ).subscribe();
 
     this.#paginationStateSubscription = this.#raetselFacade.paginationState$.subscribe(
@@ -168,7 +168,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   getDisplayedColumns(): string[] {
 
-    if (this.isAdmin) {
+    if (this.isAutor) {
       return ['status', 'schluessel', 'name', 'kommentar'];
     } else {
       return ['schluessel', 'name', 'kommentar'];
@@ -239,6 +239,6 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       sortDirection: this.sort ? this.sort.direction : this.#sortDirection
     }
 
-    this.#raetselFacade.triggerSearch(this.isAdmin, this.suchfilter, pageDefinition);
+    this.#raetselFacade.triggerSearch(this.isAutor, this.suchfilter, pageDefinition);
   }
 }

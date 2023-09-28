@@ -1,0 +1,11 @@
+#antwortvorschlag {
+    display: grid;
+    max-width: 20%;
+    grid-template-columns: 1fr 9fr;    
+    margin: 1em;
+}
+
+#text {
+    grid-row: span 9;
+    text-align: start;
+}

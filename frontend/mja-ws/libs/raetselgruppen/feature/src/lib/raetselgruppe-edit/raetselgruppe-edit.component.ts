@@ -2,11 +2,12 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatListModule } from '@angular/material/list';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { STATUS, GuiSchwierigkeitsgradeMap, GuiReferenztypenMap, initialGuiSchwierigkeitsgrad, initialGuiReferenztyp, GuiSchwierigkeitsgrad, GuiRefereztyp, Referenztyp, Schwierigkeitsgrad } from '@mja-ws/core/model';
 import { Router } from '@angular/router';
@@ -18,8 +19,9 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule,
-    FlexLayoutModule,
+    MatCardModule,
     MatButtonModule,
+    MatGridListModule,
     MatInputModule,
     MatInputModule,
     MatFormFieldModule,
@@ -107,6 +109,8 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
   #createForm(): void {
     this.form = this.#formBuilder.group({
+      id: [''],
+      user: [''],
       name: ['', [Validators.required, Validators.maxLength(100)]],
       status: ['ERFASST', [Validators.required]],
       kommentar: [''],
@@ -118,6 +122,8 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
   #initForm() {
 
+    this.form.controls['id'].setValue(this.#raetselgruppeBasisdaten.id);
+    this.form.controls['user'].setValue(this.#raetselgruppeBasisdaten.geaendertDurch ? this.#raetselgruppeBasisdaten.geaendertDurch : ' ');
     this.form.controls['name'].setValue(this.#raetselgruppeBasisdaten.name ? this.#raetselgruppeBasisdaten.name : '');
     this.form.controls['status'].setValue(this.#raetselgruppeBasisdaten.status);
     this.form.controls['kommentar'].setValue(this.#raetselgruppeBasisdaten.kommentar ? this.#raetselgruppeBasisdaten.kommentar : '');

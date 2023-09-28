@@ -1,30 +1,27 @@
 <h1>Rätsel</h1>
 
-<ng-container *ngIf="isAdmin">
+<div *ngIf="isAutor" class="grid-container-1">
     <mja-raetsel-suchfilter-admin [selectItemsCompomentModel]="selectItemsCompomentModel"
         (inputChanged)="onSuchfilterSuchstringChanged($event)"
         (selectableItemsChanged)="onSelectItemsCompomentModelChanged($event)"></mja-raetsel-suchfilter-admin>
 
-    <p>Suchkriterien: {{suchfilter | json}}</p>
-</ng-container>
+    <p>Suchkriterien: {{suchfilter | json}}</p>   
+</div>
 
-<ng-container *ngIf="!isAdmin">
+<div *ngIf="!isAutor"  class="grid-container-1">
     <mja-select-items [model]="selectItemsCompomentModel"
         (modelChanged)="onSelectItemsCompomentModelChanged($event)"></mja-select-items>
-</ng-container>
+</div>
 
-<div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column" class="mb-2">
-    <div fxLayoutAlign="left center" fxFlex="10"><button mat-raised-button color="primary" (click)="neueSuche()"
-            [disabled]="buttonNeueSucheDisabled()">neue
-            Suche</button></div>
-
-    <ng-container *ngIf="isAdmin">
-        <div *ngIf="coreFacade.existsQuelleAdmin$ | async; else keineQuelle" fxLayoutAlign="left center" fxFlex="10">
-            <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues
-                Rätsel</button>
-        </div>
-    </ng-container>
-    
+<div class="button-container mt-2 mb-2">
+    <div>
+        <button mat-raised-button color="primary" (click)="neueSuche()" [disabled]="buttonNeueSucheDisabled()">neue
+            Suche</button>
+    </div>
+    <div *ngIf="isAutor else keinAutor">
+        <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues
+            Rätsel</button>
+    </div>
 </div>
 
 <mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
@@ -65,10 +62,6 @@
 </mat-table>
 
 
-<ng-template #keineQuelle>
-    <div fxLayout="column m-1">
-        <div fxFlex="0 1 calc(80%-20px)">
-            zuerst als Autor:in eintragen lassen, dann selbst Rätsel erfassen
-        </div>
-    </div>
+<ng-template #keinAutor>
+    Bitte nehmen Sie Kontakt mit mir auf, wenn Sie Autor:in werden und selbst Rätsel erstellen möchten.
 </ng-template>

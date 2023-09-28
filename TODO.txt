@@ -1,3 +1,205 @@
+
+28.09.2023
+
+error-message session abgelaufen:
+
+```
+2023-09-27 15:06:49,891 INFO (vert.x-eventloop-thread-2) clientId=mja-app, correlationId=4ef343c3-01a5-c83a-7720-0f8e417f1738, [de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter:74] stage=dev, mockSession=false, path=/mja-api/raetselgruppen/v1, openData=false
+2023-09-27 20:17:57,247 INFO (vert.x-eventloop-thread-2) clientId=mja-app, correlationId=4ef343c3-01a5-c83a-7720-0f8e417f1738, [de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter:74] stage=dev, mockSession=false, path=/mja-api/session/logout, openData=false
+2023-09-27 20:17:57,248 INFO (vert.x-eventloop-thread-2) clientId=mja-app, correlationId=4ef343c3-01a5-c83a-7720-0f8e417f1738, [de.egladil.mja_api.infrastructure.error.MjaAdminExceptionMapper:39] Die Session ist abgelaufen. Bitte neu einloggen.: de.egladil.mja_api.domain.exceptions.SessionExpiredException: Die Session ist abgelaufen. Bitte neu einloggen.
+	at de.egladil.mja_api.domain.auth.session.SessionService.getAndRefreshSessionIfValid(SessionService.java:131)
+	at de.egladil.mja_api.domain.auth.session.SessionService_ClientProxy.getAndRefreshSessionIfValid(Unknown Source)
+	at de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter.filter(InitSecurityContextFilter.java:99)
+	at de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter_ClientProxy.filter(Unknown Source)
+	at org.jboss.resteasy.reactive.server.handlers.ResourceRequestFilterHandler.handle(ResourceRequestFilterHandler.java:48)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:131)
+	at org.jboss.resteasy.reactive.common.core.AbstractResteasyReactiveContext.run(AbstractResteasyReactiveContext.java:147)
+	at org.jboss.resteasy.reactive.server.handlers.RestInitialHandler.beginProcessing(RestInitialHandler.java:48)
+	at org.jboss.resteasy.reactive.server.vertx.ResteasyReactiveVertxHandler.handle(ResteasyReactiveVertxHandler.java:23)
+	at org.jboss.resteasy.reactive.server.vertx.ResteasyReactiveVertxHandler.handle(ResteasyReactiveVertxHandler.java:10)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.quarkus.vertx.http.runtime.options.HttpServerCommonHandlers$1.handle(HttpServerCommonHandlers.java:58)
+	at io.quarkus.vertx.http.runtime.options.HttpServerCommonHandlers$1.handle(HttpServerCommonHandlers.java:36)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at de.egladil.mja_api.infrastructure.filters.SPARouteFilter.apiFilter(SPARouteFilter.java:50)
+	at de.egladil.mja_api.infrastructure.filters.SPARouteFilter_RouteHandler_apiFilter_f00ebe83052fe39f2ec82e35f359315b67317a2b.invoke(Unknown Source)
+	at io.quarkus.vertx.web.runtime.RouteHandler.handle(RouteHandler.java:97)
+	at io.quarkus.vertx.web.runtime.RouteHandler.handle(RouteHandler.java:22)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.quarkus.vertx.http.runtime.security.AbstractHttpAuthorizer.checkPermission(AbstractHttpAuthorizer.java:74)
+	at io.quarkus.vertx.http.runtime.security.HttpAuthorizer.checkPermission(HttpAuthorizer.java:16)
+	at io.quarkus.vertx.http.runtime.security.HttpSecurityRecorder$2.handle(HttpSecurityRecorder.java:86)
+	at io.quarkus.vertx.http.runtime.security.HttpSecurityRecorder$2.handle(HttpSecurityRecorder.java:78)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.quarkus.resteasy.reactive.server.runtime.ResteasyReactiveRecorder$12.handle(ResteasyReactiveRecorder.java:332)
+	at io.quarkus.resteasy.reactive.server.runtime.ResteasyReactiveRecorder$12.handle(ResteasyReactiveRecorder.java:325)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.quarkus.vertx.http.runtime.security.HttpSecurityRecorder$AbstractAuthenticationHandler$3$1.onItem(HttpSecurityRecorder.java:455)
+	at io.quarkus.vertx.http.runtime.security.HttpSecurityRecorder$AbstractAuthenticationHandler$3$1.onItem(HttpSecurityRecorder.java:445)
+	at io.smallrye.mutiny.operators.uni.UniOnItemTransformToUni$UniOnItemTransformToUniProcessor.onItem(UniOnItemTransformToUni.java:60)
+	at io.smallrye.mutiny.operators.uni.builders.DefaultUniEmitter.complete(DefaultUniEmitter.java:37)
+	at io.smallrye.mutiny.groups.UniOnNull.lambda$failWith$1(UniOnNull.java:46)
+	at io.smallrye.context.impl.wrappers.SlowContextualBiConsumer.accept(SlowContextualBiConsumer.java:21)
+	at io.smallrye.mutiny.groups.UniOnItem.lambda$transformToUni$4(UniOnItem.java:177)
+	at io.smallrye.context.impl.wrappers.SlowContextualConsumer.accept(SlowContextualConsumer.java:21)
+	at io.smallrye.mutiny.operators.uni.builders.UniCreateWithEmitter.subscribe(UniCreateWithEmitter.java:22)
+	at io.smallrye.mutiny.operators.AbstractUni.subscribe(AbstractUni.java:36)
+	at io.smallrye.mutiny.operators.uni.UniOnItemTransformToUni$UniOnItemTransformToUniProcessor.performInnerSubscription(UniOnItemTransformToUni.java:81)
+	at io.smallrye.mutiny.operators.uni.UniOnItemTransformToUni$UniOnItemTransformToUniProcessor.onItem(UniOnItemTransformToUni.java:57)
+	at io.smallrye.mutiny.operators.uni.builders.UniCreateFromKnownItem$KnownItemSubscription.forward(UniCreateFromKnownItem.java:38)
+	at io.smallrye.mutiny.operators.uni.builders.UniCreateFromKnownItem.subscribe(UniCreateFromKnownItem.java:23)
+	at io.smallrye.mutiny.operators.AbstractUni.subscribe(AbstractUni.java:36)
+	at io.smallrye.mutiny.operators.uni.UniOnItemTransformToUni.subscribe(UniOnItemTransformToUni.java:25)
+	at io.smallrye.mutiny.operators.AbstractUni.subscribe(AbstractUni.java:36)
+	at io.smallrye.mutiny.groups.UniSubscribe.withSubscriber(UniSubscribe.java:51)
+	at io.quarkus.vertx.http.runtime.security.HttpSecurityRecorder$AbstractAuthenticationHandler$3.onItem(HttpSecurityRecorder.java:445)
+	at io.quarkus.vertx.http.runtime.security.HttpSecurityRecorder$AbstractAuthenticationHandler$3.onItem(HttpSecurityRecorder.java:431)
+	at io.smallrye.mutiny.operators.uni.UniMemoizeOp.forwardTo(UniMemoizeOp.java:123)
+	at io.smallrye.mutiny.operators.uni.UniMemoizeOp.notifyAwaiters(UniMemoizeOp.java:135)
+	at io.smallrye.mutiny.operators.uni.UniMemoizeOp.onItem(UniMemoizeOp.java:97)
+	at io.smallrye.mutiny.operators.uni.builders.UniCreateFromItemSupplier.subscribe(UniCreateFromItemSupplier.java:29)
+	at io.smallrye.mutiny.operators.AbstractUni.subscribe(AbstractUni.java:36)
+	at io.smallrye.mutiny.groups.UniSubscribe.withSubscriber(UniSubscribe.java:51)
+	at io.smallrye.mutiny.operators.uni.UniMemoizeOp.subscribe(UniMemoizeOp.java:59)
+	at io.smallrye.mutiny.operators.AbstractUni.subscribe(AbstractUni.java:36)
+	at io.smallrye.mutiny.groups.UniSubscribe.withSubscriber(UniSubscribe.java:51)
+	at io.quarkus.vertx.http.runtime.security.HttpSecurityRecorder$AbstractAuthenticationHandler.handle(HttpSecurityRecorder.java:431)
+	at io.quarkus.vertx.http.runtime.security.HttpSecurityRecorder$AbstractAuthenticationHandler.handle(HttpSecurityRecorder.java:385)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.quarkus.vertx.http.runtime.cors.CORSFilter.handle(CORSFilter.java:198)
+	at io.quarkus.vertx.http.runtime.cors.CORSFilter.handle(CORSFilter.java:21)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingCoplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.quarkus.vertx.http.runtime.VertxHttpRecorder$8.handle(VertxHttpRecorder.java:520)
+	at io.quarkus.vertx.http.runtime.VertxHttpRecorder$8.handle(VertxHttpRecorder.java:516)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.quarkus.vertx.http.runtime.filters.accesslog.AccessLogHandler.handle(AccessLogHandler.java:151)
+	at io.quarkus.vertx.http.runtime.filters.accesslog.AccessLogHandler.handle(AccessLogHandler.java:93)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.quarkus.vertx.http.runtime.devmode.VertxHttpHotReplacementSetup.handleHotReplacementRequest(VertxHttpHotReplacementSetup.java:135)
+	at io.quarkus.vertx.http.runtime.VertxHttpRecorder$5.handle(VertxHttpRecorder.java:435)
+	at io.quarkus.vertx.http.runtime.VertxHttpRecorder$5.handle(VertxHttpRecorder.java:431)
+	at io.vertx.ext.web.impl.RouteState.handleContext(RouteState.java:1284)
+	at io.vertx.ext.web.impl.RoutingContextImplBase.iterateNext(RoutingContextImplBase.java:177)
+	at io.vertx.ext.web.impl.RoutingContextImpl.next(RoutingContextImpl.java:141)
+	at io.vertx.ext.web.impl.RouterImpl.handle(RouterImpl.java:68)
+	at io.vertx.ext.web.impl.RouterImpl.handle(RouterImpl.java:37)
+	at io.quarkus.vertx.http.runtime.VertxHttpRecorder$7.handle(VertxHttpRecorder.java:508)
+	at io.quarkus.vertx.http.runtime.VertxHttpRecorder$7.handle(VertxHttpRecorder.java:505)
+	at io.quarkus.vertx.http.runtime.options.HttpServerCommonHandlers$2.handle(HttpServerCommonHandlers.java:82)
+	at io.quarkus.vertx.http.runtime.options.HttpServerCommonHandlers$2.handle(HttpServerCommonHandlers.java:65)
+	at io.quarkus.vertx.http.runtime.VertxHttpRecorder$1.handle(VertxHttpRecorder.java:176)
+	at io.quarkus.vertx.http.runtime.VertxHttpRecorder$1.handle(VertxHttpRecorder.java:152)
+	at io.vertx.core.impl.EventLoopContext.emit(EventLoopContext.java:55)
+	at io.vertx.core.impl.DuplicatedContext.emit(DuplicatedContext.java:158)
+	at io.vertx.core.http.impl.Http1xServerConnection.handleMessage(Http1xServerConnection.java:167)
+	at io.vertx.core.net.impl.ConnectionBase.read(ConnectionBase.java:158)
+	at io.vertx.core.net.impl.VertxHandler.channelRead(VertxHandler.java:153)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.vertx.core.http.impl.Http1xUpgradeToH2CHandler.channelRead(Http1xUpgradeToH2CHandler.java:124)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.vertx.core.http.impl.Http1xOrH2CHandler.end(Http1xOrH2CHandler.java:61)
+	at io.vertx.core.http.impl.Http1xOrH2CHandler.channelRead(Http1xOrH2CHandler.java:38)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+
+2023-09-27 20:17:57,331 INFO (vert.x-eventloop-thread-2) clientId=mja-app, correlationId=4ef343c3-01a5-c83a-7720-0f8e417f1738, [de.egladil.mja_api.infrastructure.filters.InitSecurityContextFilter:74] stage=dev, mockSession=false, path=/mja-api/raetsel/public/anzahl/v1, openData=true
+
+```
+
+
+xx.09.2023
+
+Print-Dialo gehißt seltsamerweise genarator-parameters-dialog-autoren.component "wat??"
+
+
+SPARoutingFilter
+
+```
+	private static final Predicate<String> FILE_NAME_PREDICATE = Pattern.compile(".*[.][a-zA-Z\\d]+").asMatchPredicate();
+
+	private static final String API_PREFIX = "/mja-api/";
+
+	private static final String APP_PLUS_API_PREFIX = "/mja-app" + API_PREFIX;
+
+	private static final String DEFAULT_APP = "/mja-app/";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SPARouteFilter.class);
+
+	@RouteFilter(100)
+	void apiFilter(final RoutingContext rc) {
+
+		final String path = rc.normalizedPath();
+		LOGGER.info("Check reroute with path: " + path);
+
+		if (FILE_NAME_PREDICATE.test(path)) {
+
+			LOGGER.info("keine Umleitung bei statischen Dateien");
+
+			rc.next();
+		} else if (path.startsWith(APP_PLUS_API_PREFIX)) {
+
+			String rerouted = path.replaceFirst(DEFAULT_APP, "/");
+			LOGGER.info("rc.reroute: " + rerouted);
+			rc.reroute(rerouted);
+		} else {
+
+			LOGGER.info("global else => rc.next()");
+			rc.next();
+		}
+	}
+```
+
+
 01.05.2023
 
 (/) latex-client: Java 17, jackson 2.15.0, undertow 2.3.5.Final: gebaut und nach /media/veracrypt1/ansible/vserver/latex-v1-v2/images/docker-latex-client/deployment kopiert

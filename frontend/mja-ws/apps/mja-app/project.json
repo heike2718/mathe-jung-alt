@@ -15,8 +15,15 @@
         "polyfills": "apps/mja-app/src/polyfills.ts",
         "tsConfig": "apps/mja-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/mja-app/src/favicon.ico", "apps/mja-app/src/assets"],
-        "styles": ["apps/mja-app/src/styles.scss"],
+        "assets": [
+          "apps/mja-app/src/favicon.ico",
+          "apps/mja-app/src/assets"
+        ],
+        "styles": [
+          "libs/shared/layout/src/lib/scss/theme.scss",
+          "apps/mja-app/src/styles.scss",
+          "node_modules/material-icons/iconfont/material-icons.scss"
+        ],
         "scripts": []
       },
       "configurations": {
