@@ -95,7 +95,8 @@ export const appConfig: ApplicationConfig = {
           environment.baseUrl,
           environment.assetsPath,
           environment.withCredentials,
-          'mja-app'
+          'mja-app',
+          environment.production
         ),
     },
 

@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -14,6 +13,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GuiReferenztypenMap, GuiRefereztyp, GuiSchwierigkeitsgrad, GuiSchwierigkeitsgradeMap, initialGuiReferenztyp, initialGuiSchwierigkeitsgrad, initialPaginationState, PageDefinition, PaginationState, Referenztyp, Schwierigkeitsgrad, SortOrder } from '@mja-ws/core/model';
 import { initialRaetselgruppenSuchparameter, isInitialRaetselgruppenSuchparameter, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from '@mja-ws/raetselgruppen/model';
 import { MatSelectModule } from '@angular/material/select';
+import { Configuration } from '@mja-ws/shared/config';
 
 const STATUS = 'status';
 const NAME = 'name';
@@ -26,7 +26,6 @@ const REFERENZ = 'referenz';
   standalone: true,
   imports: [
     CommonModule,
-    FlexLayoutModule,
     MatTableModule,
     MatButtonModule,
     MatPaginatorModule,
@@ -45,6 +44,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
 
   dataSource = inject(RaetselgruppenDataSource);
   anzahlRaetselgruppen = 0;
+
 
   suchparameterStr = '';
 
@@ -67,6 +67,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  #configuration = inject(Configuration);
   #raetselgruppenFacade = inject(RaetselgruppenFacade);
   
 
@@ -229,6 +230,10 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     this.#paginationStateSubscription.unsubscribe();
     this.#matPaginatorSubscription.unsubscribe();
     this.#matSortChangedSubscription.unsubscribe();
+  }
+
+  showSuchparameter(): boolean {
+    return !this.#configuration.production;
   }
 
   getDisplayedColumns(): string[] {

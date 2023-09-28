@@ -9,7 +9,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
@@ -21,7 +20,16 @@ import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.
 import { Message } from '@mja-ws/shared/messaging/api';
 import { GrafikFacade } from '@mja-ws/grafik/api';
 import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
-import { anzeigeAntwortvorschlaegeSelectInput, FONT_NAME, fontNamenSelectInput, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SCHRIFTGROESSE, schriftgroessenSelectInput, SelectGeneratorParametersUIModelAutoren } from '@mja-ws/core/model';
+import {
+  anzeigeAntwortvorschlaegeSelectInput,
+  FONT_NAME,
+  fontNamenSelectInput,
+  LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
+  OUTPUTFORMAT,
+  SCHRIFTGROESSE,
+  schriftgroessenSelectInput,
+  SelectGeneratorParametersUIModelAutoren
+} from '@mja-ws/core/model';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -29,7 +37,6 @@ import { anzeigeAntwortvorschlaegeSelectInput, FONT_NAME, fontNamenSelectInput, 
   imports: [
     CommonModule,
     CdkAccordionModule,
-    FlexLayoutModule,
     MatExpansionModule,
     MatChipsModule,
     MatButtonModule,
@@ -133,26 +140,30 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
-      height: '300px',
+      height: '600px',
       width: '700px',
       data: dialogData
     });
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if (result && dialogData.selectedLayoutAntwortvorschlaege) {
+      if (result) {
 
         let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
-        switch (dialogData.selectedLayoutAntwortvorschlaege) {
-          case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
-          case 'Buchstaben': layout = 'BUCHSTABEN'; break;
-          case 'description': layout = 'DESCRIPTION'; break;
+
+        if (dialogData.selectedLayoutAntwortvorschlaege) {
+
+          switch (dialogData.selectedLayoutAntwortvorschlaege) {
+            case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
+            case 'Buchstaben': layout = 'BUCHSTABEN'; break;
+            case 'Liste': layout = 'DESCRIPTION'; break;
+          }
         }
 
         let font: FONT_NAME = 'STANDARD';
         let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
 
-        if (result && dialogData.selectedFontName) {
+        if (dialogData.selectedFontName) {
           switch (dialogData.selectedFontName) {
             case 'Druckschrift (Leseanfänger)': font = 'DRUCK_BY_WOK'; break;
             case 'Fibel Nord': font = 'FIBEL_NORD'; break;
@@ -160,8 +171,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
           }
         }
 
-        if (result && dialogData.selectedSchriftgroesse) {
-          switch(dialogData.selectedSchriftgroesse) {
+        if (dialogData.selectedSchriftgroesse) {
+          switch (dialogData.selectedSchriftgroesse) {
             case 'sehr groß': schriftgroesse = 'HUGE'; break;
             case 'groß': schriftgroesse = 'LARGE'; break;
           }

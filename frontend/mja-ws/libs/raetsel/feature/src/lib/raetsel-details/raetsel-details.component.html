@@ -1,164 +1,136 @@
-<div *ngIf="authFacade.user$ | async as user">
-    <div *ngIf="raetselFacade.raetselDetails$ | async as raetsel; else keinRaetsel" fxLayout="column"
-        fxLayoutGap="20px">
-        <h1>Rätsel {{raetsel.schluessel}}</h1>
-
-        <div fxLayout="row" fxLayoutAlign="space-between">
-            <div fxLayout="column">
+<div class="mja-container">
+    <div *ngIf="authFacade.user$ | async as user">
+        <div *ngIf="raetselFacade.raetselDetails$ | async as raetsel; else keinRaetsel">
+            <h1>Rätsel {{raetsel.schluessel}}</h1>
+            <div class="grid-container-1 mt-2 mb-2">
                 <mat-chip-listbox>
                     <div *ngFor="let deskriptor of raetsel.deskriptoren">
                         <mat-chip-option>{{deskriptor.name}}</mat-chip-option>
                     </div>
                 </mat-chip-listbox>
-            </div>
-        </div>
 
-        <mja-frage-loesung-images *ngIf="raetsel.images" [images]="raetsel.images"></mja-frage-loesung-images>
+                <mja-frage-loesung-images *ngIf="raetsel.images" [images]="raetsel.images"></mja-frage-loesung-images>
 
-        <div *ngIf="raetsel.antwortvorschlaege.length > 0">
-            <mat-accordion>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Antwortvorschläge
-                        </mat-panel-title>
+                <div *ngIf="raetsel.antwortvorschlaege.length > 0">
+                    <mat-accordion>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Antwortvorschläge
+                                </mat-panel-title>
 
-                    </mat-expansion-panel-header>
+                            </mat-expansion-panel-header>
 
-                    <div fxLayout="column" fxLayoutGap="10px">
-                        <div *ngFor="let antwortvorschlag of raetsel.antwortvorschlaege">
-                            <mja-antwortvorschlag [antwortvorschlag]="antwortvorschlag"></mja-antwortvorschlag>
-                        </div>
-                    </div>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
+                            <div *ngFor="let antwortvorschlag of raetsel.antwortvorschlaege">
+                                <mja-antwortvorschlag [antwortvorschlag]="antwortvorschlag"></mja-antwortvorschlag>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
 
-        <div *ngIf="!user.isAdmin">
-            <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
-                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
+                <div *ngIf="!user.isAdmin" class="button-container">
+                    <button class="label" mat-raised-button color="primary"
                         (click)="gotoRaetselUebersicht()">Suche</button>
                 </div>
+
+                <div *ngIf="user.isAdmin">
+                    <h2>Metadaten und LaTeX</h2>
+
+                    <div class="button-container">
+                        <div *ngIf="!raetsel.schreibgeschuetzt"><button class="label" mat-raised-button color="primary"
+                                (click)="startEdit()">bearbeiten</button>
+                        </div>
+                        <div *ngIf="!raetsel.schreibgeschuetzt"><button class="label" mat-raised-button color="primary"
+                                [disabled]="generierenDiabled()" matTooltip="PNG Frage und Lösung generieren"
+                                (click)="printPNG()">PNG
+                                generieren</button></div>
+                        <div><button class="label" mat-raised-button color="primary" matTooltip="PDF generieren"
+                                [disabled]="generierenDiabled()" (click)="printPDF()">PDF
+                                generieren</button></div>
+                        <div *ngIf="raetselFacade.generateLatexError$ | async">
+                            <button class="label" mat-raised-button color="primary"
+                                (click)="downloadLatexLogs()">LaTeX-Logs</button>
+                        </div>
+                        <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+                                (click)="gotoRaetselUebersicht()">Rätselsuche</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-container-2 mt-2 mb-2">
+
+                        <label>ID:</label>
+                        <div>{{raetsel.id}}</div>
+
+                        <label>Name:</label>
+                        <div>{{raetsel.name}}</div>
+
+                        <label>Quelle:</label>
+                        <div>{{raetsel.quelle.name}}</div>
+
+                        <label>Status:</label>
+                        <div>{{raetsel.status}}</div>
+                    </div>
+
+                    <mat-accordion>
+
+                        <mat-expansion-panel *ngIf="raetsel.grafikInfos.length !== 0">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Grafiken
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <mat-nav-list>
+                                <mat-list-item *ngFor="let grafikInfo of raetsel.grafikInfos">
+                                    {{ grafikInfo.pfad }}
+                                    <button mat-icon-button (click)="grafikLaden(grafikInfo.pfad)">
+                                        <mat-icon>info</mat-icon>
+                                    </button>
+                                </mat-list-item>
+                            </mat-nav-list>
+
+                            <mja-grafik (responsePayload)="onGrafikHochgeladen($event)"></mja-grafik>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Frage (LaTeX)
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
+                                disabled="true">{{raetsel.frage}}</textarea>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel *ngIf="raetsel.loesung">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Lösung (LaTeX)
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
+                                disabled="true">{{raetsel.loesung}}</textarea>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel *ngIf="raetsel.kommentar">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Kommentar
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
+                                disabled="true">{{raetsel.kommentar}}</textarea>
+                        </mat-expansion-panel>
+
+                    </mat-accordion>
+                </div>
             </div>
         </div>
-
-        <div *ngIf="user.isAdmin">
-            <h2>Metadaten und LaTeX</h2>
-
-            <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
-                <div *ngIf="!raetsel.schreibgeschuetzt" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill
-                        mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button></div>
-                <div *ngIf="!raetsel.schreibgeschuetzt" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill
-                        mat-raised-button color="primary" [disabled]="generierenDiabled()"
-                        matTooltip="PNG Frage und Lösung generieren" (click)="printPNG()">PNG
-                        generieren</button></div>
-                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                        matTooltip="PDF generieren" [disabled]="generierenDiabled()" (click)="printPDF()">PDF
-                        generieren</button></div>
-                <div *ngIf="raetselFacade.generateLatexError$ | async" fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                        (click)="downloadLatexLogs()">LaTeX-Logs</button>
-                </div>
-                <div fxLayoutAlign="left center" fxFlex="20"><button fxFlexFill mat-raised-button color="primary"
-                        matTooltip="zurück zur Suche" (click)="gotoRaetselUebersicht()">Rätselsuche</button>
-                </div>
-            </div>
-
-            <div class="container">
-
-                <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
-                    <div fxLayoutAlign="left center" fxFlex="20">
-                        <mat-label>ID:</mat-label>
-                    </div>
-                    <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.id}}</div>
-                </div>
-
-                <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
-                    <div fxLayoutAlign="left center" fxFlex="20">
-                        <mat-label>Name:</mat-label>
-                    </div>
-                    <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.name}}</div>
-                </div>
-
-                <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
-                    <div fxLayoutAlign="left center" fxFlex="20">
-                        <mat-label>Quelle:</mat-label>
-                    </div>
-                    <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.quelle.name}}</div>
-                </div>
-
-                <div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column">
-                    <div fxLayoutAlign="left center" fxFlex="20">
-                        <mat-label>Status:</mat-label>
-                    </div>
-                    <div fxLayoutAlign="left center" fxFlex="80">{{raetsel.status}}</div>
-                </div>
-
-            </div>
-
-            <mat-accordion>
-
-                <mat-expansion-panel *ngIf="raetsel.grafikInfos.length !== 0">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Grafiken
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-
-                    <mat-nav-list>
-                        <mat-list-item *ngFor="let grafikInfo of raetsel.grafikInfos">
-                            {{ grafikInfo.pfad }}
-                            <button mat-icon-button (click)="grafikLaden(grafikInfo.pfad)">
-                                <mat-icon>info</mat-icon>
-                            </button>
-                        </mat-list-item>
-                    </mat-nav-list>
-
-                    <mja-grafik (responsePayload)="onGrafikHochgeladen($event)"></mja-grafik>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Frage (LaTeX)
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-
-                    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
-                        disabled="true">{{raetsel.frage}}</textarea>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel *ngIf="raetsel.loesung">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Lösung (LaTeX)
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-
-                    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
-                        disabled="true">{{raetsel.loesung}}</textarea>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel *ngIf="raetsel.kommentar">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            Kommentar
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-
-                    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
-                        disabled="true">{{raetsel.kommentar}}</textarea>
-                </mat-expansion-panel>
-
-            </mat-accordion>
-        </div>
-
     </div>
-
-
 </div>
-
-
-
 
 <ng-template #keinRaetsel>
     <h1>Rätsel Details</h1>

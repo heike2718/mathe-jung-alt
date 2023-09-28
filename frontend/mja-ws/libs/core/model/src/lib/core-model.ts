@@ -12,6 +12,7 @@ export const QUERY_PARAM_SORT_ATTRIBUTE = 'sortAttribute';
 
 export type Schwierigkeitsgrad =
     'NOOP' |
+    'ALLE' |
     'AB_NEUN' |
     'DREI_VIER' |
     'EINS' |
@@ -109,7 +110,7 @@ export type VERWENDUNGSZWECK = 'ARBEITSBLATT' | 'KARTEI' | 'LATEX' | 'VORSCHAU';
 export type SCHRIFTGROESSE = 'HUGE' | 'LARGE' | 'NORMAL';
 
 export const anzeigeAntwortvorschlaegeSelectInput: string[] = [
-  'Ankreuztabelle', 'Buchstaben', 'description', 'keine'
+  'Ankreuztabelle', 'Buchstaben', 'Liste'
 ];
 
 export const fontNamenSelectInput: string[] = [
@@ -250,6 +251,7 @@ export class GuiSchwierigkeitsgradeMap {
       this.#schwierigkeitsgrade.set('GRUNDSCHULE', 'Grundschule');
       this.#schwierigkeitsgrade.set('SEK_1', 'Sekundarstufe 1');
       this.#schwierigkeitsgrade.set('SEK_2', 'Sekundarstufe 2');
+      this.#schwierigkeitsgrade.set('ALLE', 'von Vorschule bis Erwachsene');
 
       this.#schwierigkeitsgradeInvers.set('', 'NOOP');
       this.#schwierigkeitsgradeInvers.set('Inklusion', 'IKID');
@@ -264,6 +266,7 @@ export class GuiSchwierigkeitsgradeMap {
       this.#schwierigkeitsgradeInvers.set('Grundschule','GRUNDSCHULE');
       this.#schwierigkeitsgradeInvers.set('Sekundarstufe 1','SEK_1');
       this.#schwierigkeitsgradeInvers.set('Sekundarstufe 2','SEK_2');
+      this.#schwierigkeitsgradeInvers.set('von Vorschule bis Erwachsene','ALLE');
   }
 
   public getSchwierigkeitsgradOfLabel(label: string): Schwierigkeitsgrad {

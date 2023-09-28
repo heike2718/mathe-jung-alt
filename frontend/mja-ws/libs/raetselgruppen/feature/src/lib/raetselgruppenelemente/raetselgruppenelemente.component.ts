@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { RaetselgruppeDetails, Raetselgruppenelement } from '@mja-ws/raetselgruppen/model';
 import { RaetselgruppenelementeDataSource } from './raetselgruppenelemente.datasource';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -11,7 +10,6 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [
     CommonModule,
-    FlexLayoutModule,
     MatButtonModule,
     MatTableModule
   ],

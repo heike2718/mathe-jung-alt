@@ -11,12 +11,9 @@
     </div>
 
     <div *ngIf="showMaxSizeExceeded" class="mt-1 hint-red">{{fileSize}}: {{errmMaxFileSize}}</div>
-    <div class="mt-1">
-        {{maxFileSizeInfo}}
-    </div>
-    <div class="mt-1">
-        {{uploadModel.acceptMessage}}
-    </div>
+    <div class="mt-1 mb-1">
+        {{maxFileSizeInfo}}, {{uploadModel.acceptMessage}}
+    </div>   
 </div>
 
 <div *ngIf="currentFile" class="row mt-3">

@@ -1,19 +1,24 @@
 <h1>Rätselgruppen</h1>
 
-<div flex fxLayout="row" fxLayoutGap="10px" fxLayout.lt-sm="column" class="mb-2">
-  <div fxLayoutAlign="left center" fxFlex="10"><button mat-raised-button color="primary" (click)="resetAllFilters()"
-          [disabled]="buttonResetAllFiltersDisabled()">Filter leeren</button></div>
-
-  <div fxLayoutAlign="left center" fxFlex="10"><button
-          mat-raised-button color="primary" (click)="neueRaetselgruppe()">neue
-          Gruppe</button></div>
+<div class="button-container">
+  <div>
+    <button mat-raised-button color="primary" (click)="resetAllFilters()"
+      [disabled]="buttonResetAllFiltersDisabled()">Filter leeren</button>
+  </div>
+  <div>
+    <button mat-raised-button color="primary" (click)="neueRaetselgruppe()">neue
+      Gruppe</button>
+  </div>
 </div>
 
-<p>Suchparameter: {{suchparameterStr}}</p>
+<div *ngIf="showSuchparameter()" class="grid-container-2 mt-2 mb-2">
+  <label>Suchparameter</label>
+  <div>{{suchparameterStr}}</div>
+</div>
 
 <mat-paginator [length]="anzahlRaetselgruppen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
 
-<mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" matSort matSortActive="name"
+<mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mt-2" matSort matSortActive="name"
   matSortDirection="asc" matSortDisableClear>
 
   <!-- status -->
@@ -31,7 +36,7 @@
   <!-- name -->
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef>
-      <div fxLayout="column">
+      <div class="grid-container-1">
         <label mat-sort-header>
           Name
         </label>
@@ -54,7 +59,7 @@
   <!-- schwierigkeitsgrad -->
   <ng-container matColumnDef="schwierigkeitsgrad">
     <mat-header-cell *matHeaderCellDef>
-      <div fxLayout="column">
+      <div class="grid-container-1">
         <label>
           Level
         </label>
@@ -73,7 +78,7 @@
   <!-- referenztyp -->
   <ng-container matColumnDef="referenztyp">
     <mat-header-cell *matHeaderCellDef>
-      <div fxLayout="column">
+      <div class="grid-container-1">
         <label mat-sort-header>
           Referenztyp
         </label>
@@ -92,18 +97,12 @@
   <!-- referenz -->
   <ng-container matColumnDef="referenz">
     <mat-header-cell *matHeaderCellDef>
-      <div fxLayout="column">
+      <div class="grid-container-1">
         <label mat-sort-header>
           Referenz
         </label>
-        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
-          <input matInput [formControl]="referenzFilterControl" type="text" #referenzFilterInput />
-          <button mat-button *ngIf="referenzFilterInput.value" matSuffix mat-icon-button
-            class="mat-form-field-suffix__clear" aria-label="Clear" (click)="clearFilter(referenzFilterControl)">
-            <mat-icon>
-              close
-            </mat-icon>
-          </button>
+        <mat-form-field class="filter">
+          <input matInput [formControl]="referenzFilterControl" type="text" #referenzFilterInput />          
         </mat-form-field>
       </div>
     </mat-header-cell>

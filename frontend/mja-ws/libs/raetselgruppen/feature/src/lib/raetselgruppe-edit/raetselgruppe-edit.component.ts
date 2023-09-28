@@ -8,7 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatListModule } from '@angular/material/list';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { STATUS, GuiSchwierigkeitsgradeMap, GuiReferenztypenMap, initialGuiSchwierigkeitsgrad, initialGuiReferenztyp, GuiSchwierigkeitsgrad, GuiRefereztyp, Referenztyp, Schwierigkeitsgrad } from '@mja-ws/core/model';
 import { Router } from '@angular/router';
@@ -20,7 +19,6 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule,
-    FlexLayoutModule,
     MatCardModule,
     MatButtonModule,
     MatGridListModule,

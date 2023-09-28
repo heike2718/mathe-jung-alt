@@ -14,6 +14,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 	description = "enum Schwierigkeitsgrad für Rätselgruppen oder Quiz(e)")
 public enum Schwierigkeitsgrad {
 
+	ALLE("von Vorschule bis Erwachsene"),
 	AB_NEUN("ab Klasse 9"),
 	DREI_VIER("Klassen 3/4"),
 	EINS("Klasse 1"),
