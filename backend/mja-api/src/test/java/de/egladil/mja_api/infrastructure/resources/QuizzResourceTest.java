@@ -9,10 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.profiles.OpenDataTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
 import io.restassured.response.Response;
 
 /**
@@ -20,7 +18,6 @@ import io.restassured.response.Response;
  */
 @QuarkusTest
 @TestHTTPEndpoint(QuizzResource.class)
-@TestProfile(OpenDataTestProfile.class)
 public class QuizzResourceTest {
 
 	@Test
