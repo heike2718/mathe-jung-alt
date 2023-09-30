@@ -35,4 +35,12 @@ public class TestFileUtils {
 		}
 
 	}
+
+	public static byte[] loadBytes(final String classpath) throws Exception {
+
+		try (InputStream in = TestFileUtils.class.getResourceAsStream(classpath)) {
+
+			return in.readAllBytes();
+		}
+	}
 }

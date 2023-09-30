@@ -8,18 +8,16 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
-import de.egladil.web.filescanner_service.clamav.VirusDetection;
-import de.egladil.web.filescanner_service.scan.ScanRequestPayload;
-import de.egladil.web.filescanner_service.scan.ScanResult;
-import de.egladil.web.filescanner_service.scan.ScanService;
-import de.egladil.web.filescanner_service.securitychecks.ThreadDetection;
+import de.egladil.mja_api.infrastructure.restclient.FilescannerRestClient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 
 /**
  * UploadScannerDelegate
@@ -37,10 +35,11 @@ public class UploadScannerDelegate {
 	@ConfigProperty(name = "public-client-id")
 	String clientId;
 
+	@RestClient
 	@Inject
-	ScanService scanService;
+	FilescannerRestClient fileScannerClient;
 
-	public ScanResult scanUpload(final UploadRequestDto uploadPayload) throws UploadFormatException {
+	public FileScanResult scanUpload(final UploadRequestDto uploadPayload) throws UploadFormatException {
 
 		String fileOwnerId = uploadPayload.getBenutzerUuid();
 		int maxBytes = Integer.valueOf(maxFilesizeBytes);
@@ -54,10 +53,13 @@ public class UploadScannerDelegate {
 			throw new UploadFormatException(errorMessage);
 		}
 
+		Upload upload = uploadPayload.getUploadData().toUpload();
 		ScanRequestPayload scanRequestPayload = new ScanRequestPayload().withClientId(clientId)
-			.withFileOwner(fileOwnerId).withUpload(uploadPayload.getUploadData().toUpload());
+			.withFileOwner(fileOwnerId).withUpload(upload);
 
-		ScanResult scanResult = scanService.scanFile(scanRequestPayload);
+		Response response = fileScannerClient.scanUpload(scanRequestPayload);
+
+		FileScanResult scanResult = response.readEntity(FileScanResult.class);
 
 		VirusDetection virusDetection = scanResult.getVirusDetection();
 

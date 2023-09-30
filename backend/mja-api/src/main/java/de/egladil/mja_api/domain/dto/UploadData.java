@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.Base64;
 
 import de.egladil.mja_api.domain.semantik.ValueObject;
-import de.egladil.web.filescanner_service.scan.Upload;
+import de.egladil.mja_api.domain.upload.Upload;
 
 /**
  * UploadData ein Upload

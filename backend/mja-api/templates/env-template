@@ -5,6 +5,7 @@ PUBLIC-CLIENT-ID=N7SsGenun4znNUdQzyLD0wzOfRHOmc9XN35TOGfbBcvA
 PUBLIC-CLIENT-SECRET=start123
 
 QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_LATEXRESTCLIENT__URL=http://localhost:9200
+QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_FILESCANNERRESTCLIENT__URL=http://localhost:9800
 QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_INITACCESSTOKENRESTCLIENT__URL=http://heikedeb:9000/authprovider
 QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_TOKENEXCHANGERESTCLIENT__URL=http://heikedeb:9000/authprovider
 
@@ -46,11 +47,18 @@ EMAIL_CREDENTIALS_PATH=/home/heike/git/konfigurationen/commons-mailer/mailprovid
 #=============================================================================================#
 #        Logging                                                                              #
 #=============================================================================================#
+
+
+#=============================================================================================#
+#        Logging                                                                              #
+#=============================================================================================#
 QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_INFRASTRUCTURE_FILTERS_SPAREDIRECTFILTER__LEVEL=INFO
 #QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_DOMAIN_AUTH_SESSION_SESSIONUTILS__LEVEL=INFO
 QUARKUS_LOG_CATEGORY__ORG_JBOSS_RESTEASY_REACTIVE_CLIENT_LOGGING_DEFAULTCLIENTLOGGER__LEVEL=DEBUG
 
 MOCK_SESSION=false
+
+
 
 
 #=============================================================================================#
