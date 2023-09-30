@@ -37,13 +37,6 @@ PUBLIC_REDIRECT_URL=http://localhost:4200
 #        App in Dev-Mode ENDE                                     #
 #=================================================================#
 
-CLAMAV_HOST = 192.168.10.176
-CLAMAV_PORT = 3310
-ZIP_MAX_EXPECTED_COMPRESSION_RATIO = 100
-
-EMAIL_CREDENTIALS_SOURCE_FILE=true
-EMAIL_CREDENTIALS_PATH=/home/heike/git/konfigurationen/commons-mailer/mailprovider.properties
-
 #=============================================================================================#
 #        Logging                                                                              #
 #=============================================================================================#

@@ -29,6 +29,9 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient\".url")
 	String latexRestClientUrl;
 
+	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.FilescannerRestClient\".url")
+	String fileScannerRestClientUrl;
+
 	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.InitAccessTokenRestClient\".url")
 	String initAccesstokenUrl;
 
@@ -59,12 +62,6 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "session.idle.timeout")
 	int sessionIdleTimeoutMinutes = 120;
 
-	@ConfigProperty(name = "clamav.host")
-	String clamAVHost;
-
-	@ConfigProperty(name = "clamav.port")
-	String clamAVPort;
-
 	@ConfigProperty(name = "csrf.enabled")
 	String csrfEnabled;
 
@@ -89,10 +86,10 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
 		LOGGER.info(" ===========>  jdbcUrl={}", jdbcUrl);
 		LOGGER.info(" ===========>  latexRestClientUrl={}", latexRestClientUrl);
+		LOGGER.info(" ===========>  fileScannerRestClientUrl={}", fileScannerRestClientUrl);
 		LOGGER.info(" ===========>  initAccesstokenUrl={}", initAccesstokenUrl);
 		LOGGER.info(" ===========>  tokenExchangeRestClientUrl={}", tokenExchangeRestClientUrl);
 		LOGGER.info(" ===========>  targetOrigin={}", targetOrigin);
-		LOGGER.info(" ===========>  ClamAV: host={},port={}", clamAVHost, clamAVPort);
 		LOGGER.info(" ===========>  loginRedirectUrl={}", loginRedirectUrl);
 		LOGGER.info(" ===========>  csrfEnabled={}", csrfEnabled);
 		LOGGER.info(" ===========>  mockSession={}", mockSession);
