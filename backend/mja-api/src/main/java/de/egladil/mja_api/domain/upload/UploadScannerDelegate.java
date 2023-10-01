@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
+import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
 import de.egladil.mja_api.infrastructure.restclient.FilescannerRestClient;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -58,6 +59,14 @@ public class UploadScannerDelegate {
 			.withFileOwner(fileOwnerId).withUpload(upload);
 
 		Response response = fileScannerClient.scanUpload(scanRequestPayload);
+
+		if (response.getStatus() != 200) {
+
+			String message = "Beim Scannen des Uploads ist ein Fehler aufgetreten: filescanner response not ok: status="
+				+ response.getStatus();
+			LOGGER.error(message);
+			throw new MjaRuntimeException(message);
+		}
 
 		FileScanResult scanResult = response.readEntity(FileScanResult.class);
 
