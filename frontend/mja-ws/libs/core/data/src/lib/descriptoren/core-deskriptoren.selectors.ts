@@ -1,15 +1,15 @@
 import { createSelector } from '@ngrx/store';
 import { coreDeskriptorenUIFeature } from './core-deskriptoren.reducer';
 
-const { selectCoreDeskriptorenState } = coreDeskriptorenUIFeature;
+const { selectMjaCoreDeskriptorenState } = coreDeskriptorenUIFeature;
 
 const isDeskriptorenUILoaded = createSelector(
-    selectCoreDeskriptorenState,
+    selectMjaCoreDeskriptorenState,
     (state) => state.deskriptorenUILoaded
 );
 
 const deskriptorenUI = createSelector(
-    selectCoreDeskriptorenState,
+    selectMjaCoreDeskriptorenState,
     (state) => state.deskriptoren
 );
 

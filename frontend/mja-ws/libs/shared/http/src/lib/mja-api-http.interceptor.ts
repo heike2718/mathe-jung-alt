@@ -22,7 +22,7 @@ export class MjaAPIHttpInterceptor implements HttpInterceptor {
 
     const url = this.#config.baseUrl + req.url;
 
-    const auth = localStorage.getItem('corellationId');
+    const auth = localStorage.getItem('mjaCorellationId');
     
     const correlationId = auth ? auth : generateUUID();
 

@@ -13,7 +13,7 @@ const initialState: CoreDeskriptorenUIState = {
 };
 
 export const coreDeskriptorenUIFeature = createFeature({
-    name: 'coreDeskriptoren',
+    name: 'mjaCoreDeskriptoren',
     reducer: createReducer<CoreDeskriptorenUIState>(
         initialState,
         on(

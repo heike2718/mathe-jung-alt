@@ -1,7 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { authFeature } from './auth.reducer';
 
-const { selectAuthState, selectSession } = authFeature;
+const { selectMjaAuthState, selectSession } = authFeature;
 
 const user = createSelector(
     selectSession,
@@ -14,7 +14,7 @@ const benutzerart = createSelector(
 );
 
 export const fromAuth = {
-    selectAuthState,
+    selectMjaAuthState,
     selectSession,
     user,
     benutzerart

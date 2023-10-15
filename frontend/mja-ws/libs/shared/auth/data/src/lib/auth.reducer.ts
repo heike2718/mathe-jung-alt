@@ -12,7 +12,7 @@ export const initialState: AuthState = {
 };
 
 export const authFeature = createFeature({
-    name: 'auth',
+    name: 'mjaAuth',
     reducer: createReducer<AuthState>(
         initialState,
         on(
@@ -21,7 +21,7 @@ export const authFeature = createFeature({
 
                 const correlationId = generateUUID();
 
-                localStorage.setItem('corellationId', correlationId);
+                localStorage.setItem('mjaCorellationId', correlationId);
 
 
                 return {

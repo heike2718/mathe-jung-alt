@@ -43,9 +43,9 @@ if (environment.production) {
 }
 
 const localStorageMetaReducer = localStorageReducer(
-  'auth',
-  'coreQuelle',
-  'coreDeskriptoren'
+  'mjaAuth',
+  'mjaCoreQuelle',
+  'mjaCoreDeskriptoren'
 ); // <-- synchronisiert diese Slices des Store mit localStorage wegen F5.
 const clearStoreMetaReducer = loggedOutMetaReducer;
 

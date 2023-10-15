@@ -14,7 +14,7 @@ const initialState: CoreQuelleState = {
 };
 
 export const coreQuelleFeature = createFeature({
-    name: 'coreQuelle',
+    name: 'mjaCoreQuelle',
     reducer: createReducer<CoreQuelleState>(
         initialState,
         on(

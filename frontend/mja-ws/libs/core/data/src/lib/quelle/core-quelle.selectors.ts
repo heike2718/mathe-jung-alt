@@ -1,15 +1,15 @@
 import { createSelector } from '@ngrx/store';
 import { coreQuelleFeature } from './core-quelle.reducer';
 
-const { selectCoreQuelleState } = coreQuelleFeature;
+const { selectMjaCoreQuelleState } = coreQuelleFeature;
 
 const quelleAdmin = createSelector(
-    selectCoreQuelleState,
+    selectMjaCoreQuelleState,
     (state) => state.quelleAdmin
 );
 
 const isQuelleAdminLoaded = createSelector(
-    selectCoreQuelleState,
+    selectMjaCoreQuelleState,
     (quelleAdminLoaded) => quelleAdminLoaded
 );
 
