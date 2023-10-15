@@ -53,7 +53,7 @@ export class CoreFacade {
         this.#store.dispatch(coreStatistikActions.lOAD_ANZAHL_RAETSEL_PUBLIC());
     }
 
-    public handleLogout(): void {
+    public handleLogout(): void {        
         this.#removeCoreDeskriptoren();
         this.#removeQuelleAngemeldeterAdmin;
         this.#router.navigateByUrl('/');
