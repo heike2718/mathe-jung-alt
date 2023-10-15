@@ -1,11 +1,8 @@
-.mat-row .mat-cell {
-    border-bottom: 1px solid transparent;
-    border-top: 1px solid transparent;
+.mat-mdc-row {
     cursor: pointer;
 }
 
-.mat-row:hover .mat-cell {
-    border-color: black;
+.mat-mdc-row:hover {
     background-color: rgb(240, 239, 239);
 }
 

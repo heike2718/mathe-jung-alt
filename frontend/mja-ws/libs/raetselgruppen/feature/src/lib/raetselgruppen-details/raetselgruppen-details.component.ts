@@ -60,7 +60,6 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   #raetselgruppeSubscription = new Subscription();
   #imagesSubscription = new Subscription();
 
-
   #raetselgruppeBasisdaten!: RaetselgruppeBasisdaten;
   #anzahlElemente = 0;
 
@@ -221,8 +220,6 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
   }
 
-
-
   #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData): void {
     const dialogRef = this.dialog.open(RaetselgruppenelementDialogComponent, {
       height: '400px',
@@ -268,6 +265,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
         this.raetselgruppenFacade.deleteRaetselgruppenelement(this.getRaetselgruppeID(), element);
+        this.images = undefined;
       }
     });
   }
