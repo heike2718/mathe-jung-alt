@@ -23,14 +23,16 @@ const paginationState = createSelector(
     (state) => state.paginationState
 );
 
+// aus irgendwelchen Gründen ist nach F5 der ganze state undefined, obwohl es genauso aufgebaut ist wie in der raetsel-lib. 
+
 const raetselgruppeDetails = createSelector(
     selectRaetselgruppenState,
-    (state) => state.raetselgruppeDetails
+    (state) => state ? state.raetselgruppeDetails : undefined
 );
 
 const raetselgruppeBasisdaten = createSelector(
     selectRaetselgruppenState,
-    (state) => state.raetselgruppeBasisdaten
+    (state) => state ? state.raetselgruppeBasisdaten : undefined
 );
 
 const raetselgruppenelemente = createSelector(

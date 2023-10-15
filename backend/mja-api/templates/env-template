@@ -25,33 +25,25 @@ QUARKUS_DATASOURCE_PASSWORD=hwinkel
 
 AUTHPROVIDER_URL=http://heikedeb:9000/authprovider
 AUTH_APP_URL=http://heikedeb:80/auth-app
-#PUBLIC_REDIRECT_URL=http://localhost:9210/mja-app/
 
 #=================================================================#
-#        App in Dev-Mode START                                    #
+#        Redirect URL                                             #
 #=================================================================#
 
 PUBLIC_REDIRECT_URL=http://localhost:4200
-
-#=================================================================#
-#        App in Dev-Mode ENDE                                     #
-#=================================================================#
+#PUBLIC_REDIRECT_URL=http://localhost:9210/mja-app/
 
 #=============================================================================================#
 #        Logging                                                                              #
 #=============================================================================================#
-
-
-#=============================================================================================#
-#        Logging                                                                              #
-#=============================================================================================#
-QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_INFRASTRUCTURE_FILTERS_SPAREDIRECTFILTER__LEVEL=INFO
-#QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_DOMAIN_AUTH_SESSION_SESSIONUTILS__LEVEL=INFO
-QUARKUS_LOG_CATEGORY__ORG_JBOSS_RESTEASY_REACTIVE_CLIENT_LOGGING_DEFAULTCLIENTLOGGER__LEVEL=DEBUG
+QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_INFRASTRUCTURE_FILTERS_SPAROUTEFILTER__LEVEL=DEBUG
+QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_DOMAIN_AUTH_SESSION_SESSIONUTILS__LEVEL=WARN
+QUARKUS_LOG_CATEGORY__ORG_JBOSS_RESTEASY_REACTIVE_CLIENT_LOGGING_DEFAULTCLIENTLOGGER__LEVEL=WARN
+QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_DOMAIN_GENERATOREN_IMPL_IMAGEGENERATORSERVICEIMPL__LEVEL=WARN
+QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_DOMAIN_UTILS_MJAFILEUTILS__LEVEL=WARN
+QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_INFRASTRUCTURE_CDI_AUTHENTICATIONCONTEXTIMPL__LEVEL=WARN
 
 MOCK_SESSION=false
-
-
 
 
 #=============================================================================================#

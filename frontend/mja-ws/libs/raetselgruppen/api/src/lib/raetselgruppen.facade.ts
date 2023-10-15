@@ -2,7 +2,6 @@ import { inject, Injectable } from "@angular/core";
 import { FONT_NAME, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, SCHRIFTGROESSE, STATUS } from "@mja-ws/core/model";
 import { fromRaetselgruppen, raetselgruppenActions } from "@mja-ws/raetselgruppen/data";
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
-import { FrageLoesungImagesComponent } from "@mja-ws/shared/components";
 import { deepClone, filterDefined } from "@mja-ws/shared/ngrx-utils";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -78,7 +77,7 @@ export class RaetselgruppenFacade {
     toggleStatus(raetselgruppeBasisdaten: RaetselgruppeBasisdaten): void {
 
         const editRaetselgruppePayload: EditRaetselgruppePayload = {
-            id:raetselgruppeBasisdaten.id,
+            id: raetselgruppeBasisdaten.id,
             kommentar: raetselgruppeBasisdaten.kommentar,
             name: raetselgruppeBasisdaten.name,
             referenz: raetselgruppeBasisdaten.referenz,

@@ -6,6 +6,7 @@ package de.egladil.mja_api.infrastructure.filters;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,8 @@ public class SPARouteFilter {
 
 	private static final String DEFAULT_APP = "/mja-app/";
 
+	private static final String[] PATH_PREFIXES = { DEFAULT_APP };
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(SPARouteFilter.class);
 
 	@RouteFilter(100)
@@ -34,20 +37,75 @@ public class SPARouteFilter {
 		final String path = rc.normalizedPath();
 		LOGGER.info("Check reroute with path: " + path);
 
-		if (FILE_NAME_PREDICATE.test(path)) {
+		if (path.startsWith(APP_PLUS_API_PREFIX)) {
 
-			LOGGER.info("keine Umleitung bei statischen Dateien");
-
-			rc.next();
-		} else if (path.startsWith(APP_PLUS_API_PREFIX)) {
-
+			// reroute to REST-API
 			String rerouted = path.replaceFirst(DEFAULT_APP, "/");
-			LOGGER.info("rc.reroute: " + rerouted);
+			LOGGER.info("(2) rc.reroute: " + rerouted);
 			rc.reroute(rerouted);
 		} else {
 
-			LOGGER.info("global else => rc.next()");
-			rc.next();
+			LOGGER.debug("(3)");
+
+			if (this.doesNotNeedRedirect(path)) {
+
+				LOGGER.debug("(4)");
+				rc.next();
+			} else {
+
+				LOGGER.debug("(5)");
+
+				if (path.startsWith(DEFAULT_APP)) {
+
+					// I0094: deep-Angular-Router-Links (z.B. /mja-app/raetselgruppen/) müssen zur SPA Grund-URL
+					// (/mja-app/) umgeleited werden. Danach übernimmt wieder das Angular-Routing
+					// Jetzt funktionieren Bookmarking, Back-Button sowie F5 ohne dass es ein 404 gibt.
+					String[] tokens = path.split("/");
+					LOGGER.debug("(6) Anzahl token = {}", tokens.length);
+
+					if (tokens.length > 2) {
+
+						// /mja-app/ => 2 tokens!
+						String rerouted = "/" + tokens[1] + "/";
+						LOGGER.info("(7) Umleiten von deep Angular router links: {} nach {} ", path, rerouted);
+						rc.reroute(rerouted);
+					} else {
+
+						LOGGER.debug("(8) kein Umleiten der SPA-Grund-URL {} ", path);
+						rc.next();
+					}
+
+				} else {
+
+					LOGGER.debug("(9) global else => rc.next()");
+					rc.next();
+				}
+			}
 		}
+	}
+
+	boolean doesNotNeedRedirect(final String path) {
+
+		if (path.equals("/")) {
+
+			LOGGER.debug("(3-1) kein Umleiten von /");
+			return true;
+		}
+
+		if (FILE_NAME_PREDICATE.test(path)) {
+
+			LOGGER.debug(
+				"(3-2) kein Umleiten von statischen files aus src/main/resources/META-INF/resources/mja-app/");
+			return true;
+		}
+
+		if (Stream.of(PATH_PREFIXES).noneMatch(path::startsWith)) {
+
+			LOGGER.debug("(3-3) kein Umleiten von Pfaden, die nicht mit {} beginnen", DEFAULT_APP);
+			return true;
+		}
+
+		LOGGER.debug("(3-4)");
+		return false;
 	}
 }
