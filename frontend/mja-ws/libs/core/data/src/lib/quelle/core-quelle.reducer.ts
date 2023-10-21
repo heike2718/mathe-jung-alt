@@ -27,10 +27,7 @@ export const coreQuelleFeature = createFeature({
         ),
         on(
             coreQuelleActions.cORE_QUELLE_ADMIN_REMOVE,
-            (_state, _action) => {
-                localStorage.setItem('mjaCoreQuelle', JSON.stringify(initialState));
-                return initialState;
-            }
+            (_state, _action) => initialState
         )
     )
 });

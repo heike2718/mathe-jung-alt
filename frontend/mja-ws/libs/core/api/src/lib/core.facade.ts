@@ -65,9 +65,11 @@ export class CoreFacade {
 
     #removeQuelleAngemeldeterAdmin(): void {
         this.#store.dispatch(coreQuelleActions.cORE_QUELLE_ADMIN_REMOVE());
+        console.log('coreQuelleActions.cORE_QUELLE_ADMIN_REMOVE() called')
     }
 
-    #removeCoreDeskriptoren(): void {
+    #removeCoreDeskriptoren(): void {       
         this.#store.dispatch(coreDeskriptorenActions.cORE_DESKRIPTOREN_REMOVE());
+        
     }
 }

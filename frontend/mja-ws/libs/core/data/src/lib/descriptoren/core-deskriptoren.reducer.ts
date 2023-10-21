@@ -28,7 +28,7 @@ export const coreDeskriptorenUIFeature = createFeature({
         ),
         on(
             coreDeskriptorenActions.cORE_DESKRIPTOREN_REMOVE,
-            (state_, action_) => initialState
+            (_state, _action) => initialState
         )
     )
 });
