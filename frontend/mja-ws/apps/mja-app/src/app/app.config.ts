@@ -75,12 +75,8 @@ export const appConfig: ApplicationConfig = {
       }
     ),
     provideEffects(LocalStorageEffects),
-    provideStoreDevtools({
-      maxAge: 25,
-      logOnly: environment.production,
-      autoPause: true,
-    }),
-
+    provideStore(),
+    environment.providers,
     importProvidersFrom(
       HttpClientModule,
       HttpClientXsrfModule.withOptions({
