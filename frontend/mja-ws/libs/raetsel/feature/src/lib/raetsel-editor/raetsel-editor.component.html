@@ -13,8 +13,8 @@
                         <mat-form-field>
                             <mat-label>Schlüssel</mat-label>
                             <input matInput maxlength="5" inputmode="tel" formControlName="schluessel" #schluesselInput>
-                            <mat-hint>genau 5 Ziffern - verwendet als Dateiname für generierte Bilder sowie in
-                                Rätselgruppen</mat-hint>
+                            <mat-hint *ngIf="isRoot">für neue Rätsel beim Speichern generieren</mat-hint>
+                            <mat-hint *ngIf="!isRoot">wird vom System generiert</mat-hint>
                             <mat-error *ngIf="raetselDataError('schluessel', 'required')">Schlüssel ist
                                 Pflicht</mat-error>
                             <mat-error *ngIf="raetselDataError('schluessel', 'pattern')">genau 5 Ziffern - nach
@@ -153,8 +153,8 @@
             <mat-error *ngIf="(!form.valid || antwortvorschlaegeErrors())">
                 Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
                 Pflichtangaben und so.
-            </mat-error>            
-        </mat-card-footer>        
+            </mat-error>
+        </mat-card-footer>
     </mat-card>
 </div>
 

@@ -23,6 +23,7 @@ import { GrafikFacade } from '@mja-ws/grafik/api';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
 import { MatCardModule } from '@angular/material/card';
+import { AuthFacade } from '@mja-ws/shared/auth/api';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -64,10 +65,13 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   #fb = inject(UntypedFormBuilder);
 
   #coreFacade = inject(CoreFacade);
+  #authFacade = inject(AuthFacade);
 
-  #raetselDetailsSubscription = new Subscription();
+  #combinedSubscription = new Subscription();
 
   #selectedDeskriptoren: DeskriptorUI[] = [];
+
+  isRoot = false;
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
@@ -83,7 +87,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   constructor() {
 
     this.form = this.#fb.group({
-      schluessel: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
+      schluessel: ['', [Validators.pattern('^[0-9]{5}$')]],
       name: ['', [Validators.required, Validators.maxLength(100)]],
       quelleId: ['', [Validators.required]],
       status: ['', [Validators.required]],
@@ -98,19 +102,20 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.#raetselDetailsSubscription = combineLatest([this.raetselFacade.raetselDetails$, this.#coreFacade.alleDeskriptoren$])
-      .subscribe(([raetselDetails, alleDeskriptoren]) => {
+    this.#combinedSubscription = combineLatest([this.raetselFacade.raetselDetails$, this.#coreFacade.alleDeskriptoren$, this.#authFacade.userIsRoot$])
+      .subscribe(([raetselDetails, alleDeskriptoren, root]) => {
 
         this.#raetselDetails = { ...raetselDetails };
         this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
         this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails.deskriptoren, alleDeskriptoren);
 
+        this.isRoot = root;
         this.#initForm();
       });
   }
 
   ngOnDestroy(): void {
-    this.#raetselDetailsSubscription.unsubscribe();
+    this.#combinedSubscription.unsubscribe();
   }
 
   isFormValid(): boolean {
@@ -264,6 +269,10 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.form.controls['anzahlAntwortvorschlaege'].setValue(raetsel.antwortvorschlaege.length + '');
 
     this.#addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
+
+    if(!this.isRoot) {
+      this.form.controls['schluessel'].disable();
+    }
 
     for (let i = 0; i < raetsel.antwortvorschlaege.length; i++) {
 

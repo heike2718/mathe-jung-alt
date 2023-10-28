@@ -6,6 +6,7 @@ package de.egladil.mja_api.infrastructure.persistence.dao;
 
 import java.util.List;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,9 @@ import jakarta.persistence.EntityManager;
 public class RaetselDaoImpl implements RaetselDao {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselDaoImpl.class);
+
+	@ConfigProperty(name = "stage")
+	String stage;
 
 	@Inject
 	EntityManager entityManager;
@@ -177,6 +181,17 @@ public class RaetselDaoImpl implements RaetselDao {
 			.setFirstResult(offset)
 			.setMaxResults(limit)
 			.getResultList();
+	}
+
+	@Override
+	public int getMaximalSchluessel() {
+
+		String stmt = "SELECT max(r.schluessel) from RAETSEL r where SCHLUESSEL != :schluessel";
+
+		@SuppressWarnings("unchecked")
+		List<String> trefferliste = entityManager.createNativeQuery(stmt).setParameter("schluessel", "99999").getResultList();
+
+		return Integer.valueOf(trefferliste.get(0)).intValue();
 	}
 
 	@Override

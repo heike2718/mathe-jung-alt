@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.dto.SortDirection;
@@ -123,6 +124,12 @@ public class RaetselServiceImpl implements RaetselService {
 	@Transactional
 	public Raetsel raetselAnlegen(final EditRaetselPayload payload) {
 
+		if (schluesselGenerieren(payload)) {
+
+			String schluessel = generiereSchluessel();
+			payload.getRaetsel().setSchluessel(schluessel);
+		}
+
 		boolean schluesselExistiert = this.schluesselExists(payload);
 
 		if (schluesselExistiert) {
@@ -150,6 +157,30 @@ public class RaetselServiceImpl implements RaetselService {
 			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
 
 		return result;
+	}
+
+	/**
+	 * @return
+	 */
+	String generiereSchluessel() {
+
+		int maxSchluessel = raetselDao.getMaximalSchluessel();
+		String schluessel = StringUtils.leftPad(++maxSchluessel + "", 5, "0");
+		return schluessel;
+	}
+
+	/**
+	 * @param  payload
+	 * @return
+	 */
+	boolean schluesselGenerieren(final EditRaetselPayload payload) {
+
+		if (Benutzerart.ADMIN != authCtx.getUser().getBenutzerart()) {
+
+			return true;
+		}
+
+		return StringUtils.isBlank(payload.getRaetsel().getSchluessel());
 	}
 
 	@Override

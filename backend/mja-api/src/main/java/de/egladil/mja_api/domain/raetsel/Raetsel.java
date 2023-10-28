@@ -7,8 +7,6 @@ package de.egladil.mja_api.domain.raetsel;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.validation.constraints.Pattern;
-
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -21,6 +19,7 @@ import de.egladil.mja_api.domain.raetsel.dto.GrafikInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * Raetsel
@@ -138,6 +137,11 @@ public class Raetsel extends AbstractDomainEntity {
 	public String getSchluessel() {
 
 		return schluessel;
+	}
+
+	public void setSchluessel(final String schluessel) {
+
+		this.schluessel = schluessel;
 	}
 
 	public Raetsel withSchluessel(final String schluessel) {

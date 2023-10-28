@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { CoreFacade } from '@mja-ws/core/api';
 import { AuthRepository } from '@mja-ws/shared/auth/data';
-import { AuthResult, BENUTZERART, User } from '@mja-ws/shared/auth/model';
+import { AuthResult, User } from '@mja-ws/shared/auth/model';
 import { MessageService } from '@mja-ws/shared/messaging/api';
 import { Observable, of, switchMap, tap } from 'rxjs';
 
@@ -11,8 +10,11 @@ import { Observable, of, switchMap, tap } from 'rxjs';
 export class AuthFacade {
 
   #authRepository = inject(AuthRepository);
-  #coreFacade = inject(CoreFacade);
   #messageService = inject(MessageService);
+
+  readonly userIsRoot$: Observable<boolean> = this.#authRepository.benutzerart$.pipe(
+    switchMap((benutzerart) => of(benutzerart === 'ADMIN'))
+  );
 
   readonly userIsAdmin$: Observable<boolean> = this.#authRepository.benutzerart$.pipe(
     switchMap((benutzerart) => of(benutzerart === 'ADMIN' || benutzerart === 'AUTOR'))

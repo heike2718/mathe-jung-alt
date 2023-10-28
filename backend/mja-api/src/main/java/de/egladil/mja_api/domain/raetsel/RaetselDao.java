@@ -109,4 +109,11 @@ public interface RaetselDao {
 	 * @return            List
 	 */
 	List<PersistentesRaetsel> findWithSchluessel(List<String> schluessel);
+
+	/**
+	 * Gibt den maximal existierenden Raetsel.schluessel in der DB zurück.
+	 *
+	 * @return String
+	 */
+	int getMaximalSchluessel();
 }
