@@ -8,6 +8,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.Pattern;
+
 /**
  * AbstractDomainEntity
  */
@@ -16,6 +18,7 @@ public abstract class AbstractDomainEntity {
 	public static final String UUID_NEUE_ENTITY = "neu";
 
 	@Schema(description = "technische ID, 'neu' für neue Rätsel")
+	@Pattern(regexp = "^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$|neu", message = "die id enthält ungültige Zeichen")
 	private String id;
 
 	/**

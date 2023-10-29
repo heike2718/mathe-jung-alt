@@ -34,6 +34,12 @@ public class RaetselDaoImpl implements RaetselDao {
 	@Inject
 	EntityManager entityManager;
 
+	@Override
+	public PersistentesRaetsel getWithID(final String uuid) {
+
+		return entityManager.find(PersistentesRaetsel.class, uuid);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public long countRaetselVolltext(final String suchstring, final boolean nurFreigegebene) {

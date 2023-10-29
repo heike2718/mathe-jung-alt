@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { FileUploadComponent, UploadComponentModel } from '@mja-ws/shared/components';
@@ -21,10 +21,14 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
 
   grafikFacade = inject(GrafikFacade);
 
+  @Input()
+  schluessel = '';
+
   @Output()
   responsePayload: EventEmitter<Message> = new EventEmitter<Message>();
 
   uploadModel: UploadComponentModel = {
+    schluesselRaetsel: '',
     pfad: '',
     titel: 'Grafik hochladen',
     maxSizeBytes: 2097152,
@@ -43,7 +47,7 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
     this.#selectedGrafikSubscription = this.#grafikFacade.grafikSearchResult$.subscribe(
       (selectedGrafik) => {
         if (selectedGrafik) {
-          this.uploadModel = { ...this.uploadModel, pfad: selectedGrafik.pfad };
+          this.uploadModel = { ...this.uploadModel, pfad: selectedGrafik.pfad, schluesselRaetsel: this.schluessel };
           this.grafikSelected = true;
         }
       });

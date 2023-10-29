@@ -23,7 +23,7 @@ export class UploadFacade {
             acceptMessage: acceptFileTypeMessage
         };
 
-        this.#store.dispatch(uploadActions.upload_ui_model_created({uiModel: uiModel}));
+        this.#store.dispatch(uploadActions.uPLOAD_UI_MODEL_CREATED({uiModel: uiModel}));
     }
 
     fileAdded(): void {
@@ -32,7 +32,7 @@ export class UploadFacade {
 
     uploadFile(file: File, uiModel: UploadUIModel): void {
 
-        this.#store.dispatch(uploadActions.upload_file({file: file, pfad: uiModel.pfad}));
+        this.#store.dispatch(uploadActions.uPLOAD_FILE({file: file, pfad: uiModel.pfad}));
     }
 
 }

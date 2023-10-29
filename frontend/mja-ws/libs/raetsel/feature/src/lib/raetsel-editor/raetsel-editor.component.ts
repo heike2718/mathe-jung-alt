@@ -305,9 +305,11 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
 
+    const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : ''
+
     const raetselDetails: RaetselDetails = {
       ...this.#raetselDetails,
-      schluessel: formValue['schluessel'].trim(),
+      schluessel: c_schluessel,
       name: formValue['name'] !== null ? formValue['name'].trim() : '',
       status: formValue['status'],
       kommentar: formValue['kommentar'] !== null ? formValue['kommentar'].trim() : null,

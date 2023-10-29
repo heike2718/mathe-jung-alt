@@ -73,7 +73,7 @@
 
                     <mat-accordion>
 
-                        <mat-expansion-panel *ngIf="raetsel.grafikInfos.length !== 0">
+                        <mat-expansion-panel *ngIf="!raetsel.schreibgeschuetzt && raetsel.grafikInfos.length !== 0">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Grafiken
@@ -89,7 +89,7 @@
                                 </mat-list-item>
                             </mat-nav-list>
 
-                            <mja-grafik (responsePayload)="onGrafikHochgeladen($event)"></mja-grafik>
+                            <mja-grafik [schluessel] = raetsel.schluessel (responsePayload)="onGrafikHochgeladen($event)"></mja-grafik>
                         </mat-expansion-panel>
 
                         <mat-expansion-panel>

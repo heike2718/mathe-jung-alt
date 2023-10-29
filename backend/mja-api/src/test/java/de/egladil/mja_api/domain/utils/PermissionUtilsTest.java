@@ -240,7 +240,7 @@ public class PermissionUtilsTest {
 		}
 
 		@Test
-		void should_hasWritePermissionReturnFalse_when_userAutorAndOwnerIdNotUserId() {
+		void should_hasWritePermissionReturnFalse_when_userAutorButNotOwner() {
 
 			// Arrange
 			List<String> roles = Arrays.asList(new String[] { "AUTOR" });
@@ -253,7 +253,7 @@ public class PermissionUtilsTest {
 		}
 
 		@Test
-		void should_hasWritePermissionReturnTrue_when_userAutorAndOwnerIdEqualsUserId() {
+		void should_hasWritePermissionReturnTrue_when_userAutorAndOwner() {
 
 			// Arrange
 			List<String> roles = Arrays.asList(new String[] { "AUTOR" });

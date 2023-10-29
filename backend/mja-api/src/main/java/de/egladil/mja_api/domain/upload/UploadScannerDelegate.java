@@ -40,7 +40,7 @@ public class UploadScannerDelegate {
 	@Inject
 	FilescannerRestClient fileScannerClient;
 
-	public FileScanResult scanUpload(final UploadRequestDto uploadPayload) throws UploadFormatException {
+	public void scanUpload(final UploadRequestDto uploadPayload) throws UploadFormatException {
 
 		String fileOwnerId = uploadPayload.getBenutzerUuid();
 		int maxBytes = Integer.valueOf(maxFilesizeBytes);
@@ -96,7 +96,5 @@ public class UploadScannerDelegate {
 			LOGGER.error("Unbekannter MediaType {} - brechen ab.", scanResult.getMediaType());
 			throw new UploadFormatException(applicationMessages.getString("upload.unbekannterMediaType"));
 		}
-
-		return scanResult;
 	}
 }

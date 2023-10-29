@@ -7,8 +7,11 @@ package de.egladil.mja_api.infrastructure.resources;
 import java.io.File;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.RestForm;
@@ -16,6 +19,7 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.dto.UploadData;
+import de.egladil.mja_api.domain.raetsel.impl.FindPathsGrafikParser;
 import de.egladil.mja_api.domain.upload.FileUplodService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import jakarta.annotation.security.RolesAllowed;
@@ -49,34 +53,58 @@ public class UploadResource {
 	@Operation(
 		operationId = "uploadFile",
 		summary = "Nimmt eine hochgeladene Datei des UploadTypes (eps) entgegen und speichert sie in dem gewünschten Unterverzeichnis des latex.base.dirs. Form-Parameters=pfad (Pfad des Zielverzeichnisses relativ zum konfigurierten latex.base.dir. Der Wert des Parameters muss mit einem / beginnen), image (Image-Datei)")
+	@Parameters({
+		@Parameter(
+			in = ParameterIn.DEFAULT,
+			name = "raetselId", description = "UUID des Rätsels, zu dem die Grafik hochgeladen wird.",
+			required = true),
+		@Parameter(
+			in = ParameterIn.DEFAULT,
+			name = "pfad", description = "relativer Pfad zum LaTeX-Verzeichnis, aus dem die eps beim compilieren gelesen wird.",
+			required = true),
+		@Parameter(
+			name = "uploadedFile",
+			description = "Das File",
+			required = true)
+	})
 	@APIResponse(
-		name = "UploadFileOKResponse",
+		name = "OKResponse",
 		description = "Datei erfolgreich hochgeladen",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
-		name = "UploadFileConstraintViolation",
-		description = "pfad verstößt gegen Validierungsregel oder File ist zu groß oder hat Virus",
+		name = "Bad Request",
+		description = "raetselId oder pfad verstoßen gegen Validierungsregeln oder File ist zu groß oder hat Virus",
 		responseCode = "400")
 	@APIResponse(
-		name = "UploadFileServerException",
+		name = "Forbidden",
+		description = "Akteur ist nicht Besitzer des Rätsels und auch kein ADMIN",
+		responseCode = "403")
+	@APIResponse(
+		name = "Not Found",
+		description = "Das Rätsel existiert nicht",
+		responseCode = "404")
+	@APIResponse(
+		name = "ServerException",
 		description = "sonstige Fehler",
 		responseCode = "500",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response uploadFile(@RestForm("pfad") @Pattern(
-		regexp = "^(/[\\da-zA-Z_\\-/]*\\.[\\da-zA-Z_\\-/]*)$",
-		message = "pfad enthält ungültige Zeichen") final String relativerPfad, @RestForm("uploadedFile") final FileUpload file) {
+	public Response uploadFile(@RestForm("raetselId") @Pattern(
+		regexp = "^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$|neu",
+		message = "die raetselId enthält ungültige Zeichen") final String raetselId, @RestForm("pfad") @Pattern(
+			regexp = FindPathsGrafikParser.REGEXP_GRAFIK,
+			message = "pfad ist nicht akzeptabel") final String relativerPfad, @RestForm("uploadedFile") final FileUpload file) {
 
 		this.delayService.pause();
 
 		File theFile = file.filePath().toFile();
 		UploadData uploadData = new UploadData(relativerPfad, theFile);
 
-		MessagePayload messagePayload = this.fileUploadService.saveTheUpload(uploadData, relativerPfad);
+		MessagePayload messagePayload = this.fileUploadService.saveTheUpload(raetselId, uploadData, relativerPfad);
 
 		if (messagePayload.isOk()) {
 

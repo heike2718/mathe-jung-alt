@@ -14,7 +14,7 @@ public class FullDatabaseTestProfile implements QuarkusTestProfile {
 	@Override
 	public String getConfigProfile() {
 
-		// aus application.properties
+		// aus .env (siehe templates/env-template)
 		return "full-db-test";
 	}
 

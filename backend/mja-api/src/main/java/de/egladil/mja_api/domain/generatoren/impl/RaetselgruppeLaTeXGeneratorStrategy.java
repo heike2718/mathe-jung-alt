@@ -18,7 +18,7 @@ public interface RaetselgruppeLaTeXGeneratorStrategy {
 	 *
 	 * @param  input
 	 *                                RaetselgruppeGeneratorInput - die Parameter für das Generieren.
-	 * @param  raetselService
+	 * @param  raetselDao
 	 *                                RaetselService
 	 * @param  quizitemLaTeXGenerator
 	 *                                QuizitemLaTeXGenerator

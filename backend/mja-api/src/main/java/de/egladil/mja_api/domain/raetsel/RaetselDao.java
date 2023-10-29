@@ -116,4 +116,10 @@ public interface RaetselDao {
 	 * @return String
 	 */
 	int getMaximalSchluessel();
+
+	/**
+	 * @param  uuid
+	 * @return
+	 */
+	PersistentesRaetsel getWithID(String uuid);
 }

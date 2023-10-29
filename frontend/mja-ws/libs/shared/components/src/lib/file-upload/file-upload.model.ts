@@ -1,4 +1,5 @@
 export interface UploadComponentModel {
+	readonly schluesselRaetsel: string;
     readonly pfad: string;
 	readonly titel: string;
 	readonly maxSizeBytes: number;

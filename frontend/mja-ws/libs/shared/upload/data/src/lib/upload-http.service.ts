@@ -13,11 +13,12 @@ export class UploadHttpService {
 
     #http = inject(HttpClient);
 
-    public uploadFile(file: File, pfad: string): Observable<Message> {
+    public uploadFile(file: File, pfad: string, raetselId: string): Observable<Message> {
 
         const formData = new FormData();
         formData.append('uploadedFile', file);
         formData.append('pfad', pfad);
+        formData.append('raetselId', raetselId);
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
