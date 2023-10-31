@@ -17,9 +17,9 @@ export class UploadEffects {
     uploadFile$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(uploadActions.uPLOAD_FILE),
-            switchMap((action) => this.#uploadService.uploadFile(action.file, action.pfad, action.schluessel)),
-            map((messagePayload: Message) => uploadActions.uPLOAD_SUCCESS({ message: messagePayload.message })),
+            ofType(uploadActions.uPDATE_FILE),
+            switchMap((action) => this.#uploadService.uploadFile(action.file, action.pfad, action.raetselId)),
+            map((messagePayload: Message) => uploadActions.uPDATE_FILE_SUCCESS({ message: messagePayload.message })),
             catchError(() => of(uploadActions.uPLOAD_ERROR({ errormessage: 'Beim Hochladen der Datei ist ein Fehler aufgetreten. Details stehen im server.log' })))
         )
     });
@@ -27,7 +27,7 @@ export class UploadEffects {
     uploadSuccess$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(uploadActions.uPLOAD_SUCCESS),
+            ofType(uploadActions.uPDATE_FILE_SUCCESS),
             tap((action) => {
                 this.#messageService.info(action.message);
             }),

@@ -5,10 +5,8 @@
 package de.egladil.mja_api.domain.dto;
 
 import java.io.File;
-import java.util.Base64;
 
 import de.egladil.mja_api.domain.semantik.ValueObject;
-import de.egladil.mja_api.domain.upload.Upload;
 
 /**
  * UploadData ein Upload
@@ -42,23 +40,6 @@ public class UploadData {
 	public byte[] getData() {
 
 		return data;
-	}
-
-	public byte[] getDataBASE64() {
-
-		return Base64.getEncoder().encode(data);
-
-	}
-
-	public Upload toUpload() {
-
-		return new Upload().withData(data).withName(filename);
-
-	}
-
-	public int size() {
-
-		return this.data.length;
 	}
 
 	public File getFile() {

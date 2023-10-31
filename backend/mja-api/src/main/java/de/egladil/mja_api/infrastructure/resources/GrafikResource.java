@@ -15,6 +15,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import de.egladil.mja_api.domain.grafiken.Grafik;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
+import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Pattern;
@@ -42,7 +43,7 @@ public class GrafikResource {
 	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findGrafik", summary = "liefert eine Grafikvorschau (png) für ein Image, das in LaTeX eingebunden wird.")
+		operationId = "generatePreview", summary = "generiert Vorschau (png) für ein Image, das in LaTeX eingebunden wird.")
 	@Parameters({
 		@Parameter(
 			name = "pfad",
@@ -54,12 +55,12 @@ public class GrafikResource {
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = Grafik.class)))
-	public Grafik findGrafik(@Pattern(
-		regexp = "^(/[\\da-zA-Z_\\-/]*\\.[\\da-zA-Z_\\-/]*)$",
+	public Grafik generatePreview(@Pattern(
+		regexp = MjaRegexps.VAILD_RELATIVE_PATH_EPS,
 		message = "pfad enthält ungültige Zeichen") @QueryParam(value = "pfad") final String relativerPfad) {
 
 		this.delayService.pause();
 
-		return grafikService.findGrafik(relativerPfad);
+		return grafikService.generatePreview(relativerPfad);
 	}
 }

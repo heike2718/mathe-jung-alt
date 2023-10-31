@@ -11,12 +11,12 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import de.egladil.mja_api.domain.validation.MjaRegexps;
+
 /**
  * FindPathsGrafikParser
  */
 public class FindPathsGrafikParser {
-
-	public static final String REGEXP_GRAFIK = "/resources/\\d{3}/\\d{5}[_-]{0,1}\\d{0,2}.eps";
 
 	private final Pattern pattern;
 
@@ -25,7 +25,7 @@ public class FindPathsGrafikParser {
 	 */
 	public FindPathsGrafikParser() {
 
-		pattern = Pattern.compile(REGEXP_GRAFIK);
+		pattern = Pattern.compile(MjaRegexps.REGEXP_RELATIVE_PATH_EPS_IN_TEXT);
 
 	}
 
@@ -54,5 +54,4 @@ public class FindPathsGrafikParser {
 
 		return result;
 	}
-
 }

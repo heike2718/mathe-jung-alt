@@ -45,7 +45,8 @@ public class UploadScannerDelegate {
 		String fileOwnerId = uploadPayload.getBenutzerUuid();
 		int maxBytes = Integer.valueOf(maxFilesizeBytes);
 
-		int size = uploadPayload.getUploadData().size();
+		Upload upload = uploadPayload.getUpload();
+		int size = upload.getDecodedData().length;
 
 		if (size > maxBytes) {
 
@@ -54,7 +55,6 @@ public class UploadScannerDelegate {
 			throw new UploadFormatException(errorMessage);
 		}
 
-		Upload upload = uploadPayload.getUploadData().toUpload();
 		ScanRequestPayload scanRequestPayload = new ScanRequestPayload().withClientId(clientId)
 			.withFileOwner(fileOwnerId).withUpload(upload);
 

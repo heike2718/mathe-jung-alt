@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,9 +23,13 @@ import de.egladil.mja_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.ImageGeneratorService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
+import de.egladil.mja_api.domain.generatoren.impl.IncludegraphicsTextGenerator;
 import de.egladil.mja_api.domain.grafiken.Grafik;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
-import de.egladil.mja_api.domain.raetsel.impl.FindPathsGrafikParser;
+import de.egladil.mja_api.domain.upload.Upload;
+import de.egladil.mja_api.domain.upload.dto.EmbeddableImageContext;
+import de.egladil.mja_api.domain.upload.dto.EmbeddableImageResponseDto;
+import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -36,7 +41,12 @@ public class GrafikServiceImpl implements GrafikService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GrafikServiceImpl.class);
 
-	private final Pattern pattern;
+	private final Pattern patternRelativePathForEps;
+
+	private final IncludegraphicsTextGenerator includegraphicsTextGenerator;
+
+	@Inject
+	FilenameDelegate filenameDelegate;
 
 	@Inject
 	RaetselFileService fileService;
@@ -52,12 +62,13 @@ public class GrafikServiceImpl implements GrafikService {
 	 */
 	public GrafikServiceImpl() {
 
-		pattern = Pattern.compile(FindPathsGrafikParser.REGEXP_GRAFIK);
+		patternRelativePathForEps = Pattern.compile(MjaRegexps.REGEXP_RELATIVE_PATH_EPS_IN_TEXT);
+		includegraphicsTextGenerator = new IncludegraphicsTextGenerator();
 
 	}
 
 	@Override
-	public Grafik findGrafik(final String relativerPfad) {
+	public Grafik generatePreview(final String relativerPfad) {
 
 		if (relativerPfad == null) {
 
@@ -95,7 +106,7 @@ public class GrafikServiceImpl implements GrafikService {
 	}
 
 	@Override
-	public MessagePayload grafikSpeichern(final UploadRequestDto uploadRequestDto) {
+	public MessagePayload replaceEmbeddedImage(final UploadRequestDto uploadRequestDto) {
 
 		if (uploadRequestDto.getRelativerPfad() == null) {
 
@@ -119,7 +130,7 @@ public class GrafikServiceImpl implements GrafikService {
 		}
 
 		try (FileOutputStream fos = new FileOutputStream(file);
-			InputStream in = new ByteArrayInputStream(uploadRequestDto.getUploadData().getData())) {
+			InputStream in = new ByteArrayInputStream(uploadRequestDto.getUpload().getDecodedData())) {
 
 			IOUtils.copy(in, fos);
 			fos.flush();
@@ -133,10 +144,46 @@ public class GrafikServiceImpl implements GrafikService {
 		return MessagePayload.info("Grafik erfolgreich gespeichert");
 	}
 
-	boolean validPath(final String relativerPfad) {
+	@Override
+	public EmbeddableImageResponseDto createAndEmbedImage(final EmbeddableImageContext context, final Upload upload) {
 
-		Matcher matcher = pattern.matcher(relativerPfad);
-		return matcher.matches();
+		String uuid = UUID.randomUUID().toString();
+		String filenameUpload = upload.getName();
+
+		String relativePath = filenameDelegate.getRelativePathForEmbeddableImage(uuid, filenameUpload);
+		File file = new File(latexBaseDir + relativePath);
+
+		File uploadDir = new File(file.getParent());
+
+		if (!uploadDir.exists()) {
+
+			uploadDir.mkdirs();
+		}
+
+		try (FileOutputStream fos = new FileOutputStream(file);
+			InputStream in = new ByteArrayInputStream(upload.getDecodedData())) {
+
+			IOUtils.copy(in, fos);
+			fos.flush();
+
+		} catch (IOException e) {
+
+			LOGGER.error("Fehler beim Speichern im Filesystem: " + e.getMessage(), e);
+			throw new MjaRuntimeException("Fehler beim speichern des embeddable image: " + e.getMessage(), e);
+		}
+
+		String includegraphicsCommand = includegraphicsTextGenerator.generateIncludegraphicsText(relativePath);
+
+		EmbeddableImageResponseDto result = new EmbeddableImageResponseDto().with(context);
+		result.setPfad(relativePath);
+		result.setIncludegraphicsCommand(includegraphicsCommand);
+
+		return result;
 	}
 
+	boolean validPath(final String relativerPfad) {
+
+		Matcher matcher = patternRelativePathForEps.matcher(relativerPfad);
+		return matcher.matches();
+	}
 }

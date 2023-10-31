@@ -70,7 +70,9 @@
                   "domain:raetsel:model",
                   "domain:raetsel:api",
                   "domain:grafik:api",
-                  "domain:grafik:model"
+                  "domain:grafik:model",
+                  "domain:includegraphics:api",
+                  "domain:includegraphics:model"
                 ]
               },
               {
@@ -89,6 +91,24 @@
                 "onlyDependsOnLibsWithTags": [
                   "domain:grafik:model",
                   "domain:grafik:data"
+                ]
+              },
+              {
+                "sourceTag": "domain:includegraphics:model",
+                "onlyDependsOnLibsWithTags": ["type:model"]
+              },
+              {
+                "sourceTag": "domain:includegraphics:data",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:includegraphics:model",
+                  "type:shared:messaging:api"
+                ]
+              },
+              {
+                "sourceTag": "domain:includegraphics:api",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:includegraphics:model",
+                  "domain:includegraphics:data"
                 ]
               },
               {

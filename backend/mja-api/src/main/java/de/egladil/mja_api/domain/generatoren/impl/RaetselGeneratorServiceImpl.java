@@ -194,7 +194,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 		Raetsel raetsel = loadRaetsel(raetselUuid);
 
-		List<String> relevantRoles = PermissionUtils.getRelevantRoles(authCtx);
+		List<String> relevantRoles = PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx);
 		boolean hasReadPermission = PermissionUtils.hasReadPermission(relevantRoles,
 			raetsel.getStatus());
 

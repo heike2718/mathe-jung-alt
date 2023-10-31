@@ -1,11 +1,11 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UploadComponentModel } from './file-upload.model';
-import { Message, MessageService } from '@mja-ws/shared/messaging/api';
+import { Message } from '@mja-ws/shared/messaging/api';
 import { FileUploadService } from './file-upload.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { catchError, tap } from 'rxjs';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'mja-file-upload',
@@ -43,7 +43,6 @@ export class FileUploadComponent implements OnInit {
   errmMaxFileSize = 'die gewählte Datei ist zu groß. Bitte wählen Sie eine andere Datei.'
 
   #fileUploadService = inject(FileUploadService);
-  #messageService = inject(MessageService);
 
   ngOnInit(): void {
     const maxFileSizeInKB = this.uploadModel.maxSizeBytes / 1024;

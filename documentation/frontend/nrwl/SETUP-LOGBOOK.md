@@ -123,7 +123,7 @@ unter libs: Verzeichnis shared angelegt
 
 
 ```
-npx nx generate @nrwl/js:library config --directory=shared --tags='domain:shared, type:shared:config' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib config --directory=shared --tags='domain:shared, type:shared:config' --buildable --no-interactive --dry-run
 ```
 
 In einer configuration.ts wird eine Klasse mit public attribute baseUrl angelegt. Später können dort weitere Konfigurationen hinzukommen.
@@ -147,11 +147,11 @@ Das hat den Vorteil, dass man in main.ts, wo man Zugriff auf environment hat, ap
 
 
 ```
-npx nx generate @nrwl/js:library api --directory=shared/auth --tags='domain:shared, type:shared:auth:api' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib api --directory=shared/auth --tags='domain:shared, type:shared:auth:api' --buildable --no-interactive --dry-run
 
-npx nx generate @nrwl/js:library data --directory=shared/auth --tags='domain:shared, type:type:shared:auth:data' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib data --directory=shared/auth --tags='domain:shared, type:type:shared:auth:data' --buildable --no-interactive --dry-run
 
-npx nx generate @nrwl/js:library model --directory=shared/auth --tags='domain:auth:model, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib model --directory=shared/auth --tags='domain:auth:model, type:model' --buildable --no-interactive --dry-run
 ```
 
 Zwischendurch musste eine lib messaging angelegt werden, weil das Message-Interface erforderlich ist.
@@ -161,9 +161,9 @@ auth.api stellt eine Facade mit 3 Methoden und 3 Observables zur Verfügung, die
 ### messaging
 
 ```
-npx nx generate @nrwl/js:library api --directory=shared/messaging --tags='domain:shared, type:shared:messaging:api' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib api --directory=shared/messaging --tags='domain:shared, type:shared:messaging:api' --buildable --no-interactive --dry-run
 
-npx nx generate @nrwl/js:library ui --directory=shared/messaging --tags='domain:shared:messaging:ui, type:ui' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib ui --directory=shared/messaging --tags='domain:shared:messaging:ui, type:ui' --buildable --no-interactive --dry-run
 
 ```
 
@@ -180,13 +180,13 @@ npx nx generate @nrwl/angular:component loading-indicator --project=shared-messa
 Enthält Helferfunktionen, sie keinerlei dependencies haben
 
 ```
-npx nx generate @nrwl/js:library util --directory=shared --tags='domain:shared, type:shared:util' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib util --directory=shared --tags='domain:shared, type:shared:util' --buildable --no-interactive --dry-run
 ```
 
 ### ngrx-utils
 
 ```
-npx nx generate @nrwl/js:library ngrx-utils --directory=shared --tags='domain:shared, type:shared:ngrx-utils' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib ngrx-utils --directory=shared --tags='domain:shared, type:shared:ngrx-utils' --buildable --no-interactive --dry-run
 ```
 
 ### http
@@ -194,13 +194,13 @@ npx nx generate @nrwl/js:library ngrx-utils --directory=shared --tags='domain:sh
 hier residieren low level http utils wie Interceptors, die nahezu keine Abhängikeiten haben.
 
 ```
-npx nx generate @nrwl/js:library http --directory=shared --tags='domain:shared, type:shared:http' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib http --directory=shared --tags='domain:shared, type:shared:http' --buildable --no-interactive --dry-run
 ```
 
 ### layout
 
 ```
-npx nx generate @nrwl/js:library layout --directory=shared --tags='domain:shared, type:shared:ui, type:ui' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib layout --directory=shared --tags='domain:shared, type:shared:ui, type:ui' --buildable --no-interactive --dry-run
 ```
 
 
@@ -209,21 +209,73 @@ npx nx generate @nrwl/js:library layout --directory=shared --tags='domain:shared
 hier residieren die Model-Interfaces, Store, api, die in vielen Komponenten benötigt werden
 
 ```
-npx nx generate @nrwl/js:library api --directory=core --tags='domain:core, type:core:api' --no-interactive --dry-run
-npx nx generate @nrwl/js:library data --directory=core --tags='domain:core, type:core:data' --no-interactive --dry-run
-npx nx generate @nrwl/js:library model --directory=core --tags='domain:core, type:core:model' --no-interactive --dry-run
+npx nx generate @nx/angular:lib api --directory=core --tags='domain:core, type:core:api' --no-interactive --dry-run
+npx nx generate @nx/angular:lib data --directory=core --tags='domain:core, type:core:data' --no-interactive --dry-run
+npx nx generate @nx/angular:lib model --directory=core --tags='domain:core, type:core:model' --no-interactive --dry-run
 ```
+
+## includegraphics
+
+Übernimmt das Hochladen von eps, die mittels \includegraphics in die Texte eingebettet werden können.
+
+Unterschieden wird zwischen Anlegen (also Hochladen einer neuen eps) und Ändern (also Austauschen einer vorhandenen)
+
+```
+npx nx generate @nx/angular:library --name=api --buildable=true --directory=includegraphics/api --tags='domain:includegraphics, type:domain:includegraphics:api' --projectNameAndRootFormat=as-provided --skipModule=true --no-interactive --dry-run
+
+npx nx generate @nx/angular:library --name=data --buildable=true --directory=includegraphics/data --tags='domain:includegraphics, type:domain:includegraphics:data' --projectNameAndRootFormat=as-provided --skipModule=true --no-interactive --dry-run
+
+npx nx generate @nx/angular:library --name=model --buildable=true --directory=includegraphics/model --tags='domain:includegraphics, type:domain:includegraphics:model' --projectNameAndRootFormat=as-provided --skipModule=true --no-interactive --dry-run
+```
+
+__lint:__
+
+```
+{
+                "sourceTag": "domain:raetsel:feature",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:raetsel:model",
+                  "domain:raetsel:api",
+                  "domain:grafik:api",
+                  "domain:grafik:model",
+                  "domain:includegraphics:api",
+                  "domain:includegraphics:model"
+                ]
+              },
+...
+
+{
+                "sourceTag": "domain:includegraphics:model",
+                "onlyDependsOnLibsWithTags": ["type:model"]
+              },
+              {
+                "sourceTag": "domain:includegraphics:data",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:includegraphics:model",
+                  "type:shared:messaging:api"
+                ]
+              },
+              {
+                "sourceTag": "domain:includegraphics:api",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:includegraphics:model",
+                  "domain:includegraphics:data"
+                ]
+              },
+...              
+```
+
 
 ## Deskriptoren
 
 ```
-npx nx generate @nrwl/js:library model --directory=deskriptoren --tags='domain:deskriptoren, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib model --directory=deskriptoren --tags='domain:deskriptoren, type:model' --buildable --no-interactive --dry-run
 ```
 
 ## localStorage synchronisieren mittels ngrx local storage
 
 ```
-npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib local-storage-data --tags='domain:core' --buildable --no-interactive --dry-run
 ```
 
 ## File upload
@@ -231,9 +283,9 @@ npx nx generate @nrwl/js:library local-storage-data --tags='domain:core' --build
 ist eine library, die für das Hochladen von Files zuständig ist.
 
 ```
-npx nx generate @nrwl/js:library model --directory=shared/upload --tags='domain:upload, type:model' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library data --directory=shared/upload --tags='domain:upload, type:data' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library api --directory=shared/upload --tags='domain:upload, type:api' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib model --directory=shared/upload --tags='domain:upload, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib data --directory=shared/upload --tags='domain:upload, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib api --directory=shared/upload --tags='domain:upload, type:api' --buildable --no-interactive --dry-run
 ```
 
 
@@ -245,18 +297,18 @@ Es ist sinnvoll, dafür ein eigenes Store-Feature zu haben, weil anderenfalls da
 Store/raetsel kann ohne Store/grafik auskommen. Und die meiste Zeit benötigt man libs/grafik nicht für die Raetsel.
 
 ```
-npx nx generate @nrwl/js:library model --directory=grafik --tags='domain:grafik, type:model' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library data --directory=grafik --tags='domain:grafik, type:data' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library api --directory=grafik --tags='domain:grafik, type:api' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib model --directory=grafik --tags='domain:grafik, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib data --directory=grafik --tags='domain:grafik, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib api --directory=grafik --tags='domain:grafik, type:api' --buildable --no-interactive --dry-run
 ```
 
 ## Rätsel
 
 ```
-npx nx generate @nrwl/js:library model --directory=raetsel --tags='domain:raetsel:model, type:model' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library data --directory=raetsel --tags='domain:raetsel:data, type:data' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library api --directory=raetsel --tags='domain:raetsel:api, type:api' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library feature --directory=raetsel --tags='domain:raetsel:feature, type:feature' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib model --directory=raetsel --tags='domain:raetsel:model, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib data --directory=raetsel --tags='domain:raetsel:data, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib api --directory=raetsel --tags='domain:raetsel:api, type:api' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib feature --directory=raetsel --tags='domain:raetsel:feature, type:feature' --buildable --no-interactive --dry-run
 ```
 
 ### RaetselSearchComponent
@@ -310,10 +362,10 @@ npx nx generate @nrwl/angular:component raetsel-suchfilter-admin --project=raets
 ## Raetselgruppen
 
 ```
-npx nx generate @nrwl/js:library model --directory=raetselgruppen --tags='domain:raetselgruppen:model, type:model' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library data --directory=raetselgruppen --tags='domain:raetselgruppen:data, type:data' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library api --directory=raetselgruppen --tags='domain:raetselgruppen:api, type:api' --buildable --no-interactive --dry-run
-npx nx generate @nrwl/js:library feature --directory=raetselgruppen --tags='domain:raetselgruppen:feature, type:feature' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib model --directory=raetselgruppen --tags='domain:raetselgruppen:model, type:model' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib data --directory=raetselgruppen --tags='domain:raetselgruppen:data, type:data' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib api --directory=raetselgruppen --tags='domain:raetselgruppen:api, type:api' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib feature --directory=raetselgruppen --tags='domain:raetselgruppen:feature, type:feature' --buildable --no-interactive --dry-run
 ```
 
 ### RaetselgruppenSearchComponent
@@ -351,7 +403,7 @@ npx nx generate @nrwl/angular:component raetselgruppe-edit --project=raetselgrup
 ## Shared Componensts library
 
 ```
-npx nx generate @nrwl/js:library components --directory=shared --tags='domain:shared, type:shared:ui' --buildable --no-interactive --dry-run
+npx nx generate @nx/angular:lib components --directory=shared --tags='domain:shared, type:shared:ui' --buildable --no-interactive --dry-run
 ```
 
 Linting-Rules erweitert. Man kommt mit der Grafik jetzt leider nicht mehr hinterher

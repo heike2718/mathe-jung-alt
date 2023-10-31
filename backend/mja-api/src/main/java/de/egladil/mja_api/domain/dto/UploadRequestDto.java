@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.domain.dto;
 
+import de.egladil.mja_api.domain.upload.Upload;
+
 /**
  * UploadRequestDto
  */
@@ -11,7 +13,7 @@ public class UploadRequestDto {
 
 	private String benutzerUuid;
 
-	private UploadData uploadData;
+	private Upload upload;
 
 	private String relativerPfad;
 
@@ -26,14 +28,14 @@ public class UploadRequestDto {
 		return this;
 	}
 
-	public UploadData getUploadData() {
+	public Upload getUpload() {
 
-		return uploadData;
+		return upload;
 	}
 
-	public UploadRequestDto withUploadData(final UploadData uploadData) {
+	public UploadRequestDto withUpload(final Upload uploadData) {
 
-		this.uploadData = uploadData;
+		this.upload = uploadData;
 		return this;
 	}
 

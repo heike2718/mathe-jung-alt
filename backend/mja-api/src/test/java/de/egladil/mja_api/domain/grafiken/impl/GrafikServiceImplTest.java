@@ -18,11 +18,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.dto.UploadData;
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
 import de.egladil.mja_api.domain.generatoren.ImageGeneratorService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.grafiken.Grafik;
+import de.egladil.mja_api.domain.upload.Upload;
+import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -55,7 +56,7 @@ public class GrafikServiceImplTest {
 			when(fileService.existsGrafik(pfad)).thenReturn(Boolean.TRUE);
 
 			// Act
-			Grafik grafik = service.findGrafik(pfad);
+			Grafik grafik = service.generatePreview(pfad);
 
 			// Assert
 			MessagePayload messagePayload = grafik.getMessagePayload();
@@ -77,7 +78,7 @@ public class GrafikServiceImplTest {
 			String pfad = "/ressources/001/01121.eps";
 
 			// Act
-			Grafik grafik = service.findGrafik(pfad);
+			Grafik grafik = service.generatePreview(pfad);
 
 			// Assert
 			MessagePayload messagePayload = grafik.getMessagePayload();
@@ -102,7 +103,7 @@ public class GrafikServiceImplTest {
 			when(fileService.existsGrafik(pfad)).thenReturn(Boolean.FALSE);
 
 			// Act
-			Grafik grafik = service.findGrafik(pfad);
+			Grafik grafik = service.generatePreview(pfad);
 
 			// Assert
 			MessagePayload messagePayload = grafik.getMessagePayload();
@@ -129,7 +130,7 @@ public class GrafikServiceImplTest {
 			when(fileService.existsGrafik(pfad)).thenReturn(Boolean.TRUE);
 
 			// Act
-			Grafik grafik = service.findGrafik(pfad);
+			Grafik grafik = service.generatePreview(pfad);
 
 			// Assert
 			MessagePayload messagePayload = grafik.getMessagePayload();
@@ -156,12 +157,14 @@ public class GrafikServiceImplTest {
 			File file = File.createTempFile("00000-", "eps");
 			file.deleteOnExit();
 
+			byte[] data = MjaFileUtils.loadBinaryFile(file.getAbsolutePath(), false);
+
 			UploadRequestDto uploadRequestDto = new UploadRequestDto()
 				.withBenutzerUuid("uuid")
-				.withUploadData(new UploadData("00000.eps", file));
+				.withUpload(new Upload().withName("00000.eps").withData(data));
 
 			// Act
-			MessagePayload messagePayload = service.grafikSpeichern(uploadRequestDto);
+			MessagePayload messagePayload = service.replaceEmbeddedImage(uploadRequestDto);
 
 			// Assert
 
@@ -179,14 +182,16 @@ public class GrafikServiceImplTest {
 			File file = File.createTempFile("00000-", "eps");
 			file.deleteOnExit();
 
+			byte[] data = MjaFileUtils.loadBinaryFile(file.getAbsolutePath(), false);
+
 			String pfad = "/ressources/001/01121.eps";
 			UploadRequestDto uploadRequestDto = new UploadRequestDto()
 				.withBenutzerUuid("uuid")
 				.withRelativerPfad(pfad)
-				.withUploadData(new UploadData("00000.eps", file));
+				.withUpload(new Upload().withName("00000.eps").withData(data));
 
 			// Act
-			MessagePayload messagePayload = service.grafikSpeichern(uploadRequestDto);
+			MessagePayload messagePayload = service.replaceEmbeddedImage(uploadRequestDto);
 
 			// Assert
 

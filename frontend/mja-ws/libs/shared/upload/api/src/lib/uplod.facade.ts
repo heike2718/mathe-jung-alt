@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { UploadUIModel, initialUploadUIModel } from "@mja-ws/shared/upload/model";
+import { EmbeddableImageContext, UploadUIModel, initialUploadUIModel } from "@mja-ws/shared/upload/model";
 import { uploadActions} from '@mja-ws/shared/upload/data';
 import { Store } from '@ngrx/store';
 
@@ -26,13 +26,14 @@ export class UploadFacade {
         this.#store.dispatch(uploadActions.uPLOAD_UI_MODEL_CREATED({uiModel: uiModel}));
     }
 
-    fileAdded(): void {
+    createEmbeddableImage(file: File, context: EmbeddableImageContext): void {
 
+        this.#store.dispatch(uploadActions.cREATE_EMBEDDABLE_IMAGE({file, context}));
     }
 
     uploadFile(file: File, uiModel: UploadUIModel): void {
 
-        this.#store.dispatch(uploadActions.uPLOAD_FILE({file: file, pfad: uiModel.pfad}));
+        this.#store.dispatch(uploadActions.uPDATE_FILE({file: file, pfad: uiModel.pfad, raetselId: uiModel.context.raetselId}));
     }
 
 }

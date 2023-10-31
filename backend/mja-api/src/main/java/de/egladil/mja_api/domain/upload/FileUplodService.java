@@ -12,11 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.dto.UploadData;
 import de.egladil.mja_api.domain.dto.UploadRequestDto;
+import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
 import de.egladil.mja_api.domain.grafiken.GrafikService;
 import de.egladil.mja_api.domain.raetsel.RaetselDao;
+import de.egladil.mja_api.domain.upload.dto.EmbeddableImageContext;
+import de.egladil.mja_api.domain.upload.dto.EmbeddableImageResponseDto;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
@@ -51,16 +55,86 @@ public class FileUplodService {
 	RaetselDao raetselDao;
 
 	/**
+	 * Wenn mit den UploadData alles palletti ist, werden ein Dateiname generiert, die Datei in ein entsprechendes Verzeichnis
+	 * gespeichert, der LaTeX-includegraphics-Befehl an den text im requestDto angehängt und ein Vorschaubild generiert.
+	 *
+	 * @param  uploadContext
+	 *                       EmbeddableImageContext kontext zum Upload. Zurückzureichen an Client
+	 * @param  uploadData
+	 *                       UploadData - das, was Quarkus beim FileUpload produziert.
+	 * @return               EmbeddableImageResponseDto
+	 */
+	public EmbeddableImageResponseDto createEmbeddableImage(final EmbeddableImageContext uploadContext, final UploadData uploadData) {
+
+		AuthenticatedUser user = authCtx.getUser();
+		String userId = user.getUuid();
+
+		if (PermissionUtils.isUserOrdinary(user.getRoles())) {
+
+			LOGGER.warn("User {} hat versucht, eine Grafik hochzuladen", userId);
+
+			throw new WebApplicationException(Status.FORBIDDEN);
+		}
+
+		PersistentesRaetsel raetsel = raetselDao.getWithID(uploadContext.getRaetselId());
+
+		if (raetsel != null && !PermissionUtils.hasWritePermission(userId,
+			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetsel.owner)) {
+
+			LOGGER.warn("User {} hat versucht, zu Raetsel {} mit Owner {} eine Grafik hochzuladen", userId, raetsel.schluessel,
+				raetsel.owner);
+
+			throw new WebApplicationException(Status.FORBIDDEN);
+		}
+
+		try {
+
+			Upload upload = processUploadService.processFile(uploadData);
+
+			uploadScanner.scanUpload(new UploadRequestDto()
+				.withBenutzerUuid(user.getName())
+				.withUpload(upload));
+
+			return grafikService.createAndEmbedImage(uploadContext, upload);
+
+		} catch (MjaRuntimeException e) {
+
+			LOGGER.error(e.getMessage(), e);
+
+			throw e;
+		} catch (UploadFormatException e) {
+			// wurde schon geloggt
+
+			throw new MjaRuntimeException("upload enthält viren oder anderes zeug");
+
+		} catch (Exception e) {
+
+			LOGGER.error(e.getMessage(), e);
+			String errorMessage = applicationMessages.getString("general.internalServerError");
+			throw new MjaRuntimeException(errorMessage);
+
+		}
+	}
+
+	/**
 	 * @param  raetselId
 	 * @param  uploadData
 	 * @param  relativerPfad
 	 * @return               MessagePayload
 	 */
-	public MessagePayload saveTheUpload(final String raetselId, final UploadData uploadData, final String relativerPfad) {
+	public MessagePayload replaceTheEmbeddableImage(final String raetselId, final UploadData uploadData, final String relativerPfad) {
+
+		AuthenticatedUser user = authCtx.getUser();
+		String userId = user.getUuid();
+
+		if (PermissionUtils.isUserOrdinary(user.getRoles())) {
+
+			LOGGER.warn("User {} hat versucht, eine Grafik hochzuladen", userId);
+
+			throw new WebApplicationException(Status.FORBIDDEN);
+		}
 
 		PersistentesRaetsel raetsel = raetselDao.getWithID(raetselId);
-
-		String userId = authCtx.getUser().getUuid();
 
 		if (raetsel == null) {
 
@@ -72,7 +146,7 @@ public class FileUplodService {
 		}
 
 		if (!PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRelevantRoles(authCtx), raetsel.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetsel.owner)) {
 
 			LOGGER.warn("User {} hat versucht, zu Raetsel {} mit Owner {} eine Grafik hochzuladen", userId, raetsel.schluessel,
 				raetsel.owner);
@@ -82,15 +156,15 @@ public class FileUplodService {
 
 		try {
 
-			processUploadService.processFile(uploadData);
+			Upload upload = processUploadService.processFile(uploadData);
 
 			UploadRequestDto uploadRequest = new UploadRequestDto()
-				.withBenutzerUuid(authCtx.getUser().getName())
-				.withUploadData(uploadData).withRelativerPfad(relativerPfad);
+				.withBenutzerUuid(user.getName())
+				.withUpload(upload).withRelativerPfad(relativerPfad);
 
 			uploadScanner.scanUpload(uploadRequest);
 
-			return grafikService.grafikSpeichern(uploadRequest);
+			return grafikService.replaceEmbeddedImage(uploadRequest);
 
 		} catch (UploadFormatException e) {
 			// wurde schon geloggt
@@ -105,4 +179,5 @@ public class FileUplodService {
 
 		}
 	}
+
 }

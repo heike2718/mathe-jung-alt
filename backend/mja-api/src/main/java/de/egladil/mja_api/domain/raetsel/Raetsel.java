@@ -18,6 +18,7 @@ import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.raetsel.dto.GrafikInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
+import de.egladil.mja_api.domain.validation.MjaRegexps;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import jakarta.validation.constraints.Pattern;
 
@@ -30,7 +31,7 @@ public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
 	@Schema(description = "fachlicher Schlüssel im Aufgabenarchiv.")
-	@Pattern(regexp = "^[\\d]{5}$", message = "schluessel muss aus genau 5 Ziffern bestehen")
+	@Pattern(regexp = MjaRegexps.VALID_SCHLUESSEL, message = "schluessel muss aus genau 5 Ziffern bestehen")
 	private String schluessel;
 
 	@JsonProperty

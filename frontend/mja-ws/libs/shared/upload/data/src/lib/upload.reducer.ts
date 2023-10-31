@@ -1,5 +1,5 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { UploadUIModel, initialUploadUIModel } from '@mja-ws/shared/upload/model';
+import { CreateEmbeddableImageResponse, UploadUIModel, initialUploadUIModel } from '@mja-ws/shared/upload/model';
 import { uploadActions } from "./upload.actions";
 
 
@@ -11,6 +11,7 @@ export interface UploadState {
     readonly fileSize: string;
     readonly maxFilesizeExceeded: boolean;
     readonly maxFileSizeInfo: string;
+    readonly createEmbeddableImageResponse: CreateEmbeddableImageResponse | undefined;
 };
 
 const initialUploadState: UploadState = {
@@ -20,14 +21,15 @@ const initialUploadState: UploadState = {
     uploading: false,
     fileSize: '',
     maxFilesizeExceeded: false,
-    maxFileSizeInfo: ''
+    maxFileSizeInfo: '',
+    createEmbeddableImageResponse: undefined
 };
 
 export const uploadFeature = createFeature({
     name: 'upload',
     reducer: createReducer(
         initialUploadState,
-        on(uploadActions.upload_ui_model_created, (state, action) => {
+        on(uploadActions.uPLOAD_UI_MODEL_CREATED, (state, action) => {
 
             const maxFileSizeInKB = action.uiModel.maxSizeBytes / 1024;
             const maxFileSizeInMB = maxFileSizeInKB / 1024;
@@ -35,7 +37,7 @@ export const uploadFeature = createFeature({
 
             return { ...state, maxFileSizeInfo: maxFileSizeInfo };
         }),
-        on(uploadActions.file_selected, (state, action) => {
+        on(uploadActions.fILE_SELECTED, (state, action) => {
 
             const fileList: FileList = action.files;
             const size = fileList[0].size;
@@ -47,15 +49,15 @@ export const uploadFeature = createFeature({
 
             return { ...state, selectedFiles: action.files };
         }),
-        on(uploadActions.upload_file, (state, _action) => {
+        on(uploadActions.uPDATE_FILE, (state, _action) => {
 
             return {...state, uploading: true};
         }),
-        on(uploadActions.upload_success, (state, _action) => {
+        on(uploadActions.uPDATE_FILE_SUCCESS, (state, _action) => {
 
             return {...state, uploading: false, selectedFiles: undefined, currentFile: undefined};
         }),
-        on(uploadActions.upload_error, (state, _action, ) => {
+        on(uploadActions.uPLOAD_ERROR, (state, _action, ) => {
 
             return {...state, uploading: false, selectedFiles: undefined, currentFile: undefined};
         })

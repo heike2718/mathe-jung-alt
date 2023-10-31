@@ -81,7 +81,7 @@ public class RaetselServiceImpl implements RaetselService {
 		List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
 		long anzahlGesamt = 0L;
 
-		boolean nurFreigegebene = PermissionUtils.restrictSucheToFreigegeben(PermissionUtils.getRelevantRoles(authCtx));
+		boolean nurFreigegebene = PermissionUtils.restrictSucheToFreigegeben(PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx));
 
 		switch (suchfilterVariante) {
 
@@ -202,7 +202,7 @@ public class RaetselServiceImpl implements RaetselService {
 		}
 
 		if (!PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRelevantRoles(authCtx), persistentesRaetsel.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), persistentesRaetsel.owner)) {
 
 			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", userId, persistentesRaetsel.schluessel,
 				persistentesRaetsel.owner);
@@ -337,7 +337,7 @@ public class RaetselServiceImpl implements RaetselService {
 			.withName(raetselDB.name);
 
 		boolean hasWritePermission = PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRelevantRoles(authCtx), raetselDB.owner);
+			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetselDB.owner);
 
 		if (hasWritePermission) {
 

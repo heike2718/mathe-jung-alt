@@ -5,6 +5,7 @@ import { FileUploadComponent, UploadComponentModel } from '@mja-ws/shared/compon
 import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 import { GrafikFacade } from '@mja-ws/grafik/api';
+import { UploadFacade } from '@mja-ws/shared/upload/api';
 
 @Component({
   selector: 'mja-grafik',
@@ -20,6 +21,7 @@ import { GrafikFacade } from '@mja-ws/grafik/api';
 export class GrafikDetailsComponent implements OnInit, OnDestroy {
 
   grafikFacade = inject(GrafikFacade);
+  #uploadFacade = inject(UploadFacade);
 
   @Input()
   schluessel = '';
