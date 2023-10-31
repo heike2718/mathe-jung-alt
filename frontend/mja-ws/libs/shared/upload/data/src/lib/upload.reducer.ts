@@ -1,5 +1,5 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { CreateEmbeddableImageResponse, UploadUIModel, initialUploadUIModel } from '@mja-ws/shared/upload/model';
+import { UploadUIModel, initialUploadUIModel } from '@mja-ws/shared/upload/model';
 import { uploadActions } from "./upload.actions";
 
 
@@ -11,7 +11,6 @@ export interface UploadState {
     readonly fileSize: string;
     readonly maxFilesizeExceeded: boolean;
     readonly maxFileSizeInfo: string;
-    readonly createEmbeddableImageResponse: CreateEmbeddableImageResponse | undefined;
 };
 
 const initialUploadState: UploadState = {
@@ -21,8 +20,7 @@ const initialUploadState: UploadState = {
     uploading: false,
     fileSize: '',
     maxFilesizeExceeded: false,
-    maxFileSizeInfo: '',
-    createEmbeddableImageResponse: undefined
+    maxFileSizeInfo: ''
 };
 
 export const uploadFeature = createFeature({

@@ -87,7 +87,7 @@ public class ImageGeneratorServiceImpl implements ImageGeneratorService {
 
 		LOGGER.debug("relativerPfad={}, file={}", relativerPfad, file.getAbsolutePath());
 
-		String errorMessage = "konnte kein LaTex-File schreiben Grafik: [relativerPfad=" + relativerPfad + "]";
+		String errorMessage = "konnte kein LaTex-File schreiben EmbeddableImageVorschau: [relativerPfad=" + relativerPfad + "]";
 
 		MjaFileUtils.writeOutput(file, template, errorMessage);
 	}

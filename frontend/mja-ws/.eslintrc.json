@@ -71,8 +71,8 @@
                   "domain:raetsel:api",
                   "domain:grafik:api",
                   "domain:grafik:model",
-                  "domain:includegraphics:api",
-                  "domain:includegraphics:model"
+                  "domain:embeddable-images:api",
+                  "domain:embeddable-images:model"
                 ]
               },
               {
@@ -94,21 +94,21 @@
                 ]
               },
               {
-                "sourceTag": "domain:includegraphics:model",
+                "sourceTag": "domain:embeddable-images:model",
                 "onlyDependsOnLibsWithTags": ["type:model"]
               },
               {
-                "sourceTag": "domain:includegraphics:data",
+                "sourceTag": "domain:embeddable-images:data",
                 "onlyDependsOnLibsWithTags": [
-                  "domain:includegraphics:model",
+                  "domain:embeddable-images:model",
                   "type:shared:messaging:api"
                 ]
               },
               {
-                "sourceTag": "domain:includegraphics:api",
+                "sourceTag": "domain:embeddable-images:api",
                 "onlyDependsOnLibsWithTags": [
-                  "domain:includegraphics:model",
-                  "domain:includegraphics:data"
+                  "domain:embeddable-images:model",
+                  "domain:embeddable-images:data"
                 ]
               },
               {

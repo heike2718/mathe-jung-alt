@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { EmbeddableImageContext, UploadUIModel, initialUploadUIModel } from "@mja-ws/shared/upload/model";
+import { UploadUIModel, initialUploadUIModel } from "@mja-ws/shared/upload/model";
 import { uploadActions} from '@mja-ws/shared/upload/data';
 import { Store } from '@ngrx/store';
+import { EmbeddableImageContext } from 'libs/embeddable-images/model/src/embeddable-images.model';
 
 @Injectable({
     providedIn: 'root'
@@ -24,11 +25,6 @@ export class UploadFacade {
         };
 
         this.#store.dispatch(uploadActions.uPLOAD_UI_MODEL_CREATED({uiModel: uiModel}));
-    }
-
-    createEmbeddableImage(file: File, context: EmbeddableImageContext): void {
-
-        this.#store.dispatch(uploadActions.cREATE_EMBEDDABLE_IMAGE({file, context}));
     }
 
     uploadFile(file: File, uiModel: UploadUIModel): void {

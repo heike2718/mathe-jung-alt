@@ -10,7 +10,10 @@ export const environment = {
   withCredentials: true,
   assetsPath: '/assets/',
   providers: [
-    provideStoreDevtools({ maxAge: 25 })
+    provideStoreDevtools({
+      maxAge: 25,
+      autoPause: true,
+    }),
   ],
 };
 

@@ -221,11 +221,11 @@ npx nx generate @nx/angular:lib model --directory=core --tags='domain:core, type
 Unterschieden wird zwischen Anlegen (also Hochladen einer neuen eps) und Ändern (also Austauschen einer vorhandenen)
 
 ```
-npx nx generate @nx/angular:library --name=api --buildable=true --directory=includegraphics/api --tags='domain:includegraphics, type:domain:includegraphics:api' --projectNameAndRootFormat=as-provided --skipModule=true --no-interactive --dry-run
+npx nx generate @nx/angular:library --name=api --buildable=true --directory=libs/includegraphics/api --importPath=@mja-ws/includegraphics/api --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:includegraphics, type:domain:includegraphics:api" --no-interactive --dry-run
 
-npx nx generate @nx/angular:library --name=data --buildable=true --directory=includegraphics/data --tags='domain:includegraphics, type:domain:includegraphics:data' --projectNameAndRootFormat=as-provided --skipModule=true --no-interactive --dry-run
+npx nx generate @nx/angular:library --name=data --buildable=true --directory=libs/includegraphics/data --importPath=@mja-ws/includegraphics/data --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:includegraphics, type:domain:includegraphics:data" --no-interactive --dry-run
 
-npx nx generate @nx/angular:library --name=model --buildable=true --directory=includegraphics/model --tags='domain:includegraphics, type:domain:includegraphics:model' --projectNameAndRootFormat=as-provided --skipModule=true --no-interactive --dry-run
+npx nx generate @nx/angular:library --name=model --buildable=true --directory=libs/includegraphics/model --importPath=@mja-ws/includegraphics/model --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:includegraphics, type:domain:includegraphics:model" --no-interactive --dry-run
 ```
 
 __lint:__

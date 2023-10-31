@@ -1,0 +1,297 @@
+// =====================================================
+// Project: mja-api
+// (c) Heike Winkelvoß
+// =====================================================
+package de.egladil.mja_api.infrastructure.resources;
+
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Base64;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.junit.jupiter.api.Test;
+
+import de.egladil.mja_api.TestFileUtils;
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.embeddable_images.dto.CreateEmbeddableImageRequestDto;
+import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageContext;
+import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageResponseDto;
+import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageVorschau;
+import de.egladil.mja_api.domain.embeddable_images.dto.ReplaceEmbeddableImageRequestDto;
+import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
+import de.egladil.mja_api.domain.upload.UploadedFile;
+import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
+import io.quarkus.test.security.TestSecurity;
+import io.restassured.http.ContentType;
+
+/**
+ * EmbeddableImagesResourceTest
+ */
+@QuarkusTest
+@TestHTTPEndpoint(EmbeddableImagesResource.class)
+@TestProfile(FullDatabaseTestProfile.class)
+public class EmbeddableImagesResourceTest {
+
+	@ConfigProperty(name = "latex.base.dir")
+	String latexBaseDir;
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldCreateEmbeddableImage_work() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/00000.eps");
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(data);
+
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("neu").withTextart(Textart.FRAGE);
+		CreateEmbeddableImageRequestDto requestDto = new CreateEmbeddableImageRequestDto();
+		requestDto.setContext(context);
+		requestDto.setFile(uploadedFile);
+
+		EmbeddableImageResponseDto result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.put("v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(EmbeddableImageResponseDto.class);
+
+		System.out.println(latexBaseDir + result.getPfad());
+		System.out.println(result.getIncludegraphicsCommand());
+
+		assertEquals(context, result.getContext());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "AUTOR" })
+	void shouldCreateEmbeddableImage_rejectExcel() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/excel.xlsx");
+
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(data);
+
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("neu").withTextart(Textart.FRAGE);
+		CreateEmbeddableImageRequestDto requestDto = new CreateEmbeddableImageRequestDto();
+		requestDto.setContext(context);
+		requestDto.setFile(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.put("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals("Die hochgeladene Datei kann nicht verarbeitet werden. Bitte senden Sie eine Mail an info@egladil.de.",
+			result.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "AUTOR" })
+	void shouldCreateEmbeddableImage_rejectVirus() throws Exception {
+
+		// Für den RestAssured-Test muss man das decoden, weil UploadedFile es encoded.
+		byte[] content = Base64.getDecoder()
+			.decode("WDVPIVAlQEFQWzRcUFpYNTQoUF4pN0NDKTd9JEVJQ0FSLVNUQU5EQVJELUFOVElWSVJVUy1URVNULUZJTEUhJEgrSCo=".getBytes());
+
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(content);
+
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("neu").withTextart(Textart.FRAGE);
+		CreateEmbeddableImageRequestDto requestDto = new CreateEmbeddableImageRequestDto();
+		requestDto.setContext(context);
+		requestDto.setFile(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.put("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals("Die hochgeladene Datei kann nicht verarbeitet werden. Bitte prüfen Sie Ihren Rechner auf Viren.",
+			result.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldReplaceEmbeddableImage_work() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/00000.eps");
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(data);
+
+		String relativerPfad = "/resources/001/01003.eps";
+		String raetselId = "69959982-83f9-482d-a26c-8eb4a92bd6ff";
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(raetselId)
+			.withRelativerPfad(relativerPfad).withUpload(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.post("v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		System.err.println(result.getMessage());
+
+		assertTrue(result.isOk());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldReplaceEmbeddableImage_rejectExcel() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/excel.xlsx");
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(data);
+
+		String relativerPfad = "/resources/001/01003.eps";
+		String raetselId = "69959982-83f9-482d-a26c-8eb4a92bd6ff";
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(raetselId)
+			.withRelativerPfad(relativerPfad).withUpload(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.post("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals("Die hochgeladene Datei kann nicht verarbeitet werden. Bitte senden Sie eine Mail an info@egladil.de.",
+			result.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldReplaceEmbeddableImage_rejectVirus() throws Exception {
+
+		// Arrange
+		// Für den RestAssured-Test muss man das decoden, weil UploadedFile es encoded.
+		byte[] content = Base64.getDecoder()
+			.decode("WDVPIVAlQEFQWzRcUFpYNTQoUF4pN0NDKTd9JEVJQ0FSLVNUQU5EQVJELUFOVElWSVJVUy1URVNULUZJTEUhJEgrSCo=".getBytes());
+
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(content);
+
+		String relativerPfad = "/resources/001/01003.eps";
+		String raetselId = "69959982-83f9-482d-a26c-8eb4a92bd6ff";
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(raetselId)
+			.withRelativerPfad(relativerPfad).withUpload(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.post("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals("Die hochgeladene Datei kann nicht verarbeitet werden. Bitte prüfen Sie Ihren Rechner auf Viren.",
+			result.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void should_generatePreview_work() {
+
+		String relativerPfad = "/resources/001/01003.eps";
+
+		EmbeddableImageVorschau result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.queryParam("pfad", relativerPfad)
+			.get("v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(EmbeddableImageVorschau.class);
+
+		assertTrue(result.getImage().length > 0);
+		assertEquals(relativerPfad, result.getPfad());
+
+		MessagePayload messagePayload = result.getMessagePayload();
+		assertTrue(messagePayload.isOk());
+		assertEquals("ok", messagePayload.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void should_generatePreview_returnError_when_resourceNotFound() {
+
+		String relativerPfad = "/resources/001/90000.eps";
+
+		EmbeddableImageVorschau result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.queryParam("pfad", relativerPfad)
+			.get("v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(EmbeddableImageVorschau.class);
+
+		assertNull(result.getImage());
+		assertEquals(relativerPfad, result.getPfad());
+
+		MessagePayload messagePayload = result.getMessagePayload();
+		assertEquals("WARN", messagePayload.getLevel());
+		assertEquals("Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen.", messagePayload.getMessage());
+	}
+
+}

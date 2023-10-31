@@ -17,13 +17,13 @@ import { Antwortvorschlag, EditRaetselPayload, GrafikInfo, RaetselDetails } from
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, STATUS, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
-import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
+import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { GrafikFacade } from '@mja-ws/grafik/api';
-import { Message } from '@mja-ws/shared/messaging/api';
 import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
 import { MatCardModule } from '@angular/material/card';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { TEXTART, UploadedFile } from '@mja-ws/embeddable-images/model';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -53,7 +53,8 @@ interface AntwortvorschlagFormValue {
     SelectItemsComponent,
     JaNeinDialogComponent,
     GrafikDetailsComponent,
-    GeneratorParametersDialogAutorenComponent
+    GeneratorParametersDialogAutorenComponent,
+    SelectFileComponent
   ],
   templateUrl: './raetsel-editor.component.html',
   styleUrls: ['./raetsel-editor.component.scss'],
@@ -83,6 +84,30 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   raetselFacade = inject(RaetselFacade);
   grafikFacade = inject(GrafikFacade);
   form!: UntypedFormGroup;
+
+  #selectedFile: UploadedFile | undefined;
+
+  selectFileFrageModel: SelectFileModel = {
+    maxSizeBytes: 2097152,
+    errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
+    accept: '.eps',
+    acceptMessage: 'erlaubte Dateitypen: eps',
+    titel: 'EPS für Frage hochladen'
+  }; 
+
+
+  selectFileLoesungModel: SelectFileModel = {
+    maxSizeBytes: 2097152,
+    errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
+    accept: '.eps',
+    acceptMessage: 'erlaubte Dateitypen: eps',
+    titel: 'EPS für Lösung hochladen'
+  };
+
+  showBtnUploadFileFrage = false;
+  showBtnUploadFileLoesung = false;
+  showSelectFileFrageComponent = true;
+  showSelectFileLoesungComponent = true;
 
   constructor() {
 
@@ -241,17 +266,38 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.grafikFacade.grafikPruefen(link);
   }
 
-  onGrafikHochgeladen($event: Message): void {
-    if ($event.level === 'INFO') {
-      const pfad = $event.message;
-      // this.raetselFacade.grafikHochgeladen(this.raetselDetailsContent.raetsel, pfad);
-      // TODO
-    }
-  }
-
   downloadLatexLogs(): void {
     if (this.#raetselDetails && this.#raetselDetails.schluessel) {
       this.raetselFacade.downloadLatexLogs(this.#raetselDetails.schluessel)
+    }
+  }
+
+  onFileSelected($event: UploadedFile, textart: TEXTART): void {
+    if (textart === 'FRAGE') {
+      this.showBtnUploadFileFrage = true;
+      this.showSelectFileFrageComponent = false;
+    }
+    if (textart === 'LOESUNG') {
+      this.showBtnUploadFileLoesung = true;
+      this.showSelectFileLoesungComponent = false;
+    }
+    this.#selectedFile = $event;
+  }
+
+  uploadFile(textart: TEXTART): void {
+    if (this.#selectedFile) {
+      console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
+      this.#selectedFile = undefined;
+
+      if (textart === 'FRAGE'){
+        this.showBtnUploadFileFrage = false;
+        this.showSelectFileFrageComponent = true;
+      }
+
+      if (textart === 'LOESUNG') {
+        this.showBtnUploadFileLoesung = false; 
+        this.showSelectFileLoesungComponent = true;
+      }
     }
   }
 
@@ -270,7 +316,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     this.#addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
 
-    if(!this.isRoot) {
+    if (!this.isRoot) {
       this.form.controls['schluessel'].disable();
     }
 

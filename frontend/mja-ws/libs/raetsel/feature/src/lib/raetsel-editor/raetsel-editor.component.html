@@ -69,6 +69,15 @@
                         </mat-form-field>
                     </div>
 
+                    <!-- fileSelected transportiert ein UploadedFile- Objekt, das dann hochgeladen werden kann -->
+                    <div class="mb-2">
+                        <mja-select-file *ngIf="showSelectFileFrageComponent" [selectFileModel]="selectFileFrageModel"
+                            (fileSelected)="onFileSelected($event, 'FRAGE')"></mja-select-file>
+
+                        <button mat-raised-button color="primary" *ngIf="showBtnUploadFileFrage"
+                            (click)="uploadFile('FRAGE')">Datei hochladen</button>
+                    </div>
+
                     <!-- Frage -->
                     <div class="mb-2">
                         <mat-form-field>
@@ -79,6 +88,15 @@
                             <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
                             <mat-error *ngIf="raetselDataError('frage', 'required')">Frage ist Pflicht</mat-error>
                         </mat-form-field>
+                    </div>
+
+                    <div class="mb-2">
+                        <!-- fileSelected transportiert ein UploadedFile- Objekt, das dann hochgeladen werden kann -->
+                        <mja-select-file *ngIf="showSelectFileLoesungComponent" [selectFileModel]="selectFileLoesungModel"
+                            (fileSelected)="onFileSelected($event, 'LOESUNG')"></mja-select-file>
+
+                        <button mat-raised-button color="primary" *ngIf="showBtnUploadFileLoesung"
+                            (click)="uploadFile('LOESUNG')">Datei hochladen</button>
                     </div>
 
                     <!-- Lösung -->

@@ -21,7 +21,7 @@ public class GrafikInfo {
 	private String pfad;
 
 	@JsonProperty
-	@Schema(description = "Flag, ob die Grafik schon hochgeladen wurde. Erst dann lässt sich das Rätsel generieren.")
+	@Schema(description = "Flag, ob die EmbeddableImageVorschau schon hochgeladen wurde. Erst dann lässt sich das Rätsel generieren.")
 	private boolean existiert;
 
 	/**

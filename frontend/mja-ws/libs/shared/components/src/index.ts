@@ -7,3 +7,6 @@ export { SelectItemsComponent } from './lib/select-items/select-items.component'
 
 export { JaNeinDialogData} from './lib/ja-nein-dialog/ja-nein-dialog.model';
 export { JaNeinDialogComponent } from './lib/ja-nein-dialog/ja-nein-dialog.component';
+
+export { SelectFileComponent } from './lib/select-file/select-file.component';
+export * from './lib/select-file/select-file.model';

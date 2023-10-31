@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 export class GrafikHttpService {
 
     #http = inject(HttpClient);
-    #url = '/mja-api/grafiken/v1';
+    #url = '/mja-api/embeddable-images/v1';
 
     public loadGrafik(relativerPfad: string): Observable<GrafikSearchResult> {
 

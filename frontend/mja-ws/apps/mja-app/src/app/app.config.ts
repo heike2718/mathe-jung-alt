@@ -75,7 +75,6 @@ export const appConfig: ApplicationConfig = {
       }
     ),
     provideEffects(LocalStorageEffects),
-    provideStore(),
     environment.providers,
     importProvidersFrom(
       HttpClientModule,
