@@ -23,7 +23,8 @@ import { GrafikFacade } from '@mja-ws/grafik/api';
 import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
 import { MatCardModule } from '@angular/material/card';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
-import { TEXTART, UploadedFile } from '@mja-ws/embeddable-images/model';
+import { EmbeddableImageContext, TEXTART, UploadedFile } from '@mja-ws/embeddable-images/model';
+import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -68,6 +69,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #coreFacade = inject(CoreFacade);
   #authFacade = inject(AuthFacade);
+  #embeddableImagesFacade = inject(EmbeddableImagesFacade);
 
   #combinedSubscription = new Subscription();
 
@@ -89,6 +91,9 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   fileInfoFrage: FileInfoModel | undefined;
   fileInfoLoesung: FileInfoModel | undefined;
 
+  pfadGrafikFrage: string | undefined;
+  pfadGrafikLoesung: string | undefined;
+
   selectFileFrageModel: SelectFileModel = {
     maxSizeBytes: 2097152,
     errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
@@ -107,6 +112,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     titel: 'Bild in Lösung einbinden',
     beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Lösung-Textes und kann an eine beliebiege Stelle verschoben werden.'
   };
+
+  #embeddableImagesResponseSubscription: Subscription = new Subscription();
 
   constructor() {
 
@@ -136,10 +143,34 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
         this.isRoot = root;
         this.#initForm();
       });
+
+    this.#embeddableImagesResponseSubscription = this.#embeddableImagesFacade.embeddableImageResponse$.subscribe(
+      (responseDto) => {
+        if (responseDto.context.textart === 'FRAGE') {
+
+          const text = this.form.controls['frage'].value + '\n' + responseDto.includegraphicsCommand;
+          this.form.controls['frage'].setValue(text);
+          this.fileInfoFrage = undefined;
+          this.pfadGrafikFrage = responseDto.pfad;
+          this.#embeddableImagesFacade.resetState();
+          // TODO: facade die Vorschau generieren lassen
+        }
+        if (responseDto.context.textart === 'LOESUNG') {
+
+          const text = this.form.controls['loesung'].value + '\n' + responseDto.includegraphicsCommand;
+          this.form.controls['loesung'].setValue(text);
+          this.fileInfoLoesung = undefined;
+          this.pfadGrafikLoesung = responseDto.pfad;
+          this.#embeddableImagesFacade.resetState();
+          // TODO: facade die Vorschau generieren lassen
+        }
+      }
+    )
   }
 
   ngOnDestroy(): void {
     this.#combinedSubscription.unsubscribe();
+    this.#embeddableImagesResponseSubscription.unsubscribe();
   }
 
   isFormValid(): boolean {
@@ -282,19 +313,19 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   uploadFile(textart: TEXTART): void {
-    
+
     console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
 
-    if (textart === 'FRAGE') {
-      if (this.fileInfoFrage) {
-        this.fileInfoFrage = undefined;
-      }
-    }
+    const context: EmbeddableImageContext = {
+      raetselId: this.#raetselDetails.id,
+      textart: textart
+    };
 
-    if (textart === 'LOESUNG') {
-      if (this.fileInfoLoesung) {
-        this.fileInfoLoesung = undefined;
-      }
+    if (textart === 'FRAGE' && this.fileInfoFrage) {
+      this.#embeddableImagesFacade.createEmbeddableImage(context, this.fileInfoFrage!.file);
+    }
+    if (textart === 'LOESUNG' && this.fileInfoLoesung) {
+      this.#embeddableImagesFacade.createEmbeddableImage(context, this.fileInfoLoesung!.file);
     }
   }
 

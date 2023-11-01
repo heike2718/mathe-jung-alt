@@ -47,6 +47,12 @@ export interface EmbeddableImageResponseDto {
   readonly pfad: string;
 };
 
+export const initialEmbeddableImageResponseDto: EmbeddableImageResponseDto = {
+  context: initialEmbeddableImageContext,
+  includegraphicsCommand: '',
+  pfad: ''
+};
+
 export interface ReplaceEmbeddableImageRequestDto {
     readonly raetselId: string;
     readonly relativerPfad: string;

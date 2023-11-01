@@ -3,11 +3,10 @@ import { Router } from "@angular/router";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { map, concatMap, tap, Observable, catchError, of } from "rxjs";
+import { map, concatMap, tap, catchError, of } from "rxjs";
 import { RaetselHttpService } from "./raetsel-http.service";
 import { raetselActions } from "./raetsel.actions";
 import { GeneratedFile, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-ws/core/model";
-import { safeConcatMap } from "@mja-ws/shared/ngrx-utils";
 
 @Injectable({
     providedIn: 'root'

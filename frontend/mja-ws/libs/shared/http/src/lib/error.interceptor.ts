@@ -22,7 +22,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError((err) => {        
         const errorMessageContext = req.context.get(ERROR_MESSAGE_CONTEXT);
         this.#messageService.error(errorMessageContext);
-        err['message'] = errorMessageContext;
+        // err['message'] = errorMessageContext;
         return throwError(() => err);
       })
     );

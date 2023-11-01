@@ -10,7 +10,7 @@ import { Observable, of } from "rxjs";
 })
 export class EmbeddableImagesHttpService {
 
-    #url = 'embeddable-images';
+    #url = '/mja-api/embeddable-images';
     #httpClient = inject(HttpClient);
 
     public createEmbeddableImage(requestDto: CreateEmbeddableImageRequestDto): Observable<EmbeddableImageResponseDto> {
