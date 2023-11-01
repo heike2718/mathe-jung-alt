@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
-import de.egladil.mja_api.domain.raetsel.dto.GrafikInfo;
+import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
@@ -83,9 +83,9 @@ public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
 	@Schema(
-		type = SchemaType.ARRAY, implementation = GrafikInfo.class,
-		description = "Info über die im LaTeX-Code der Frage oder Lösung eingebundenen eps-Images.")
-	private List<GrafikInfo> grafikInfos = new ArrayList<>();
+		type = SchemaType.ARRAY, implementation = EmbeddableImageInfo.class,
+		description = "Info über die im LaTeX-Code der Frage oder Lösung eingebundenen eps-Files")
+	private List<EmbeddableImageInfo> embeddableImageInfos = new ArrayList<>();
 
 	@Schema(description = "Images, die angezeigt werden können")
 	@JsonProperty
@@ -249,14 +249,14 @@ public class Raetsel extends AbstractDomainEntity {
 		return this;
 	}
 
-	public List<GrafikInfo> getGrafikInfos() {
+	public List<EmbeddableImageInfo> getEmbeddableImageInfos() {
 
-		return grafikInfos;
+		return embeddableImageInfos;
 	}
 
-	public void setGrafikInfos(final List<GrafikInfo> grafikInfos) {
+	public void setEmbeddableImageInfos(final List<EmbeddableImageInfo> embeddableImageInfos) {
 
-		this.grafikInfos = grafikInfos;
+		this.embeddableImageInfos = embeddableImageInfos;
 	}
 
 	public boolean isSchreibgeschuetzt() {

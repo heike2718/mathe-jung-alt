@@ -15,9 +15,9 @@ export class GrafikEffects {
     pruefeGrafik$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(grafikActions.pRUEFE_GRAFIK),
+            ofType(grafikActions.lADE_VORSCHAU),
             concatMap((action) => this.#grafikHttpService.loadGrafik(action.pfad)),
-            map((grafikSearchResult) => grafikActions.gRAFIK_GEPRUEFT({ grafikSearchResult }))
+            map((embeddableImageVorschau) => grafikActions.vORSCHAU_GELADEN({embeddableImageVorschau }))
         );
     });
 

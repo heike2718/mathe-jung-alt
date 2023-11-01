@@ -30,7 +30,7 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
-import de.egladil.mja_api.domain.raetsel.dto.GrafikInfo;
+import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
@@ -81,7 +81,8 @@ public class RaetselServiceImpl implements RaetselService {
 		List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
 		long anzahlGesamt = 0L;
 
-		boolean nurFreigegebene = PermissionUtils.restrictSucheToFreigegeben(PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx));
+		boolean nurFreigegebene = PermissionUtils
+			.restrictSucheToFreigegeben(PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx));
 
 		switch (suchfilterVariante) {
 
@@ -266,10 +267,10 @@ public class RaetselServiceImpl implements RaetselService {
 		List<String> grafikLinks = findPathsGrafikParser.findPaths(raetsel.frage);
 		grafikLinks.addAll(findPathsGrafikParser.findPaths(raetsel.loesung));
 
-		List<GrafikInfo> grafikInfos = getGrafikInfos(grafikLinks);
+		List<EmbeddableImageInfo> grafikInfos = getGrafikInfos(grafikLinks);
 		result.setImages(raetselFileService.findImages(result.getSchluessel()));
 
-		result.setGrafikInfos(grafikInfos);
+		result.setEmbeddableImageInfos(grafikInfos);
 		Optional<QuelleMinimalDto> optQuelle = quellenServive.loadQuelleMinimal(raetsel.quelle);
 
 		if (optQuelle.isPresent()) {
@@ -295,14 +296,14 @@ public class RaetselServiceImpl implements RaetselService {
 
 	}
 
-	List<GrafikInfo> getGrafikInfos(final List<String> pfade) {
+	List<EmbeddableImageInfo> getGrafikInfos(final List<String> pfade) {
 
-		final ArrayList<GrafikInfo> result = new ArrayList<>();
+		final ArrayList<EmbeddableImageInfo> result = new ArrayList<>();
 
 		pfade.forEach(pfad -> {
 
-			boolean exists = raetselFileService.existsGrafik(pfad);
-			result.add(new GrafikInfo(pfad, exists));
+			boolean exists = raetselFileService.fileExists(pfad);
+			result.add(new EmbeddableImageInfo(pfad, exists));
 		});
 
 		return result;

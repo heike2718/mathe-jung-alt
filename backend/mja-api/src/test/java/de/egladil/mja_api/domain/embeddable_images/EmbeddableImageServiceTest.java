@@ -5,6 +5,7 @@
 package de.egladil.mja_api.domain.embeddable_images;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -44,106 +45,69 @@ public class EmbeddableImageServiceTest {
 	EmbeddableImageService service;
 
 	@Nested
-	class FindGrafikTests {
+	class GeneratePreviewTests {
 
 		@Test
-		void should_findGrafik_work() {
+		void should_generatePreview_work() {
 
 			// Arrange
 			String pfad = "/resources/001/01121.eps";
 
 			when(imageGeneratorService.generiereGrafikvorschau(pfad)).thenReturn(new byte[0]);
-			when(fileService.existsGrafik(pfad)).thenReturn(Boolean.TRUE);
+			when(fileService.fileExists(pfad)).thenReturn(Boolean.TRUE);
 
 			// Act
-			EmbeddableImageVorschau grafik = service.generatePreview(pfad);
+			EmbeddableImageVorschau vorschau = service.generatePreview(pfad);
 
 			// Assert
-			MessagePayload messagePayload = grafik.getMessagePayload();
+			assertNotNull(vorschau.getImage());
+			assertTrue(vorschau.isExists());
+			assertEquals(pfad, vorschau.getPfad());
 
-			// System.out.println(messagePayload.toString());
-
-			assertTrue(messagePayload.isOk());
-			assertNotNull(grafik.getImage());
-
-			verify(fileService).existsGrafik(pfad);
+			verify(fileService).fileExists(pfad);
 			verify(imageGeneratorService).generiereGrafikvorschau(pfad);
 
 		}
 
 		@Test
-		void should_findGrafikReturnErrorMessage_when_invalidPath() {
-
-			// Arrange
-			String pfad = "/ressources/001/01121.eps";
-
-			// Act
-			EmbeddableImageVorschau grafik = service.generatePreview(pfad);
-
-			// Assert
-			MessagePayload messagePayload = grafik.getMessagePayload();
-
-			// System.out.println(messagePayload.toString());
-
-			assertEquals("ERROR", messagePayload.getLevel());
-			assertEquals("Aufruf mit ungültigem Pfad", messagePayload.getMessage());
-			assertNull(grafik.getImage());
-
-			verify(fileService, never()).existsGrafik(pfad);
-			verify(imageGeneratorService, never()).generiereGrafikvorschau(pfad);
-
-		}
-
-		@Test
-		void should_findGrafikReturnWarning_when_thereIsNoGrafik() {
+		void should_generatePreviewReturnWarning_when_thereIsNoGrafik() {
 
 			// Arrange
 			String pfad = "/resources/001/00000.eps";
 
-			when(fileService.existsGrafik(pfad)).thenReturn(Boolean.FALSE);
+			when(fileService.fileExists(pfad)).thenReturn(Boolean.FALSE);
 
 			// Act
-			EmbeddableImageVorschau grafik = service.generatePreview(pfad);
+			EmbeddableImageVorschau vorschau = service.generatePreview(pfad);
 
 			// Assert
-			MessagePayload messagePayload = grafik.getMessagePayload();
+			assertNull(vorschau.getImage());
+			assertFalse(vorschau.isExists());
+			assertEquals(pfad, vorschau.getPfad());
 
-			// System.out.println(messagePayload.toString());
-
-			assertEquals("WARN", messagePayload.getLevel());
-			assertEquals("Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen.",
-				messagePayload.getMessage());
-			assertNull(grafik.getImage());
-
-			verify(fileService).existsGrafik(pfad);
+			verify(fileService).fileExists(pfad);
 			verify(imageGeneratorService, never()).generiereGrafikvorschau(pfad);
 
 		}
 
 		@Test
-		void should_findGrafikReturnErrorMessage_when_ExceptionBeimGenerieren() {
+		void should_generatePreviewReturnErrorMessage_when_ExceptionBeimGenerieren() {
 
 			// Arrange
 			String pfad = "/resources/001/01121.eps";
 
 			when(imageGeneratorService.generiereGrafikvorschau(pfad))
 				.thenThrow(new RuntimeException("irgendwas ist schiefgelaufen"));
-			when(fileService.existsGrafik(pfad)).thenReturn(Boolean.TRUE);
+			when(fileService.fileExists(pfad)).thenReturn(Boolean.TRUE);
 
 			// Act
-			EmbeddableImageVorschau grafik = service.generatePreview(pfad);
+			EmbeddableImageVorschau vorschau = service.generatePreview(pfad);
 
-			// Assert
-			MessagePayload messagePayload = grafik.getMessagePayload();
+			assertNull(vorschau.getImage());
+			assertTrue(vorschau.isExists());
+			assertEquals(pfad, vorschau.getPfad());
 
-			// System.out.println(messagePayload.toString());
-
-			assertEquals("WARN", messagePayload.getLevel());
-			assertEquals("Die EmbeddableImageVorschau existiert zwar, aber beim Umwandeln in png lief etwas schief.",
-				messagePayload.getMessage());
-			assertNull(grafik.getImage());
-
-			verify(fileService).existsGrafik(pfad);
+			verify(fileService).fileExists(pfad);
 			verify(imageGeneratorService).generiereGrafikvorschau(pfad);
 
 		}
@@ -153,7 +117,7 @@ public class EmbeddableImageServiceTest {
 	class GrafikSpeichernTests {
 
 		@Test
-		void should_findGrafikReturnErrorMessage_when_relativePathNull() throws Exception {
+		void should_replaceEmbeddedImageReturnErrorMessage_when_relativePathNull() throws Exception {
 
 			// Arrange
 			File file = File.createTempFile("00000-", "eps");
@@ -176,7 +140,7 @@ public class EmbeddableImageServiceTest {
 		}
 
 		@Test
-		void should_findGrafikReturnErrorMessage_when_invalidPath() throws Exception {
+		void should_replaceEmbeddedImageReturnErrorMessage_when_invalidPath() throws Exception {
 
 			// Arrange
 			File file = File.createTempFile("00000-", "eps");

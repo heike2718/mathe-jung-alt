@@ -24,6 +24,7 @@ import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -65,8 +66,8 @@ public class EmbeddableImagesResource {
 			description = "Pfad des Zielverzeichnisses relativ zum konfigurierten latex.base.dir. Muss mit einem / beginnen",
 			required = true) })
 	@APIResponse(
-		name = "FindGrafikOKResponse",
-		description = "Grafikvorschau geladen",
+		name = "OKResponse",
+		description = "Vorschau generiert",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
@@ -74,17 +75,21 @@ public class EmbeddableImagesResource {
 	@APIResponse(
 		name = "Bad Request",
 		description = "pfad verstößt gegen Validierungsregeln",
-		responseCode = "400")
+		responseCode = "400",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "Not Found",
 		responseCode = "404")
-	public EmbeddableImageVorschau generatePreview(@Pattern(
+	public Response generatePreview(@NotBlank @Pattern(
 		regexp = MjaRegexps.VAILD_RELATIVE_PATH_EPS,
 		message = "pfad enthält ungültige Zeichen") @QueryParam(value = "pfad") final String relativerPfad) {
 
 		this.delayService.pause();
 
-		return embeddableImageService.generatePreview(relativerPfad);
+		EmbeddableImageVorschau result = embeddableImageService.generatePreview(relativerPfad);
+		return Response.ok(result).build();
 	}
 
 	@PUT
@@ -147,7 +152,10 @@ public class EmbeddableImagesResource {
 	@APIResponse(
 		name = "Bad Request",
 		description = "raetselId oder pfad verstoßen gegen Validierungsregeln oder File ist zu groß oder hat Virus",
-		responseCode = "400")
+		responseCode = "400",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "Forbidden",
 		description = "Akteur ist nicht Besitzer des Rätsels und auch kein ADMIN",

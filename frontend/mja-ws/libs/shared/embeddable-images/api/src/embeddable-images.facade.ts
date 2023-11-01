@@ -24,6 +24,15 @@ export class EmbeddableImagesFacade {
         }}));
     }
 
+    public replaceEmbeddableImage(raetselId: string, pfad: string, file: UploadedFile): void {
+        
+        this.#store.dispatch(embeddableImagesActions.rEPLACE_EMEDDABLE_IMAGE({requestDto: {
+            raetselId: raetselId,
+            relativerPfad: pfad,
+            file: file
+        }}));
+    }
+
     public resetState(): void {
 
         this.#store.dispatch(embeddableImagesActions.rESET_STATE());

@@ -27,13 +27,13 @@ export interface GrafikInfo {
   readonly existiert: boolean;
 };
 
-export interface GrafikSearchResult {
-  readonly pfad: string;
-  readonly messagePayload: Message;
-  readonly image: string | undefined;
-};
+// export interface GrafikSearchResult {
+//   readonly pfad: string;
+//   readonly messagePayload: Message;
+//   readonly image: string | undefined;
+// };
 
-export const nullGraphicSearchResult: GrafikSearchResult = { pfad: '', messagePayload: { level: 'INFO', message: '' }, image: undefined };
+// export const nullGraphicSearchResult: GrafikSearchResult = { pfad: '', messagePayload: { level: 'INFO', message: '' }, image: undefined };
 
 
 
@@ -61,7 +61,7 @@ export interface RaetselDetails {
   readonly deskriptoren: DeskriptorUI[];
   readonly images: GeneratedImages | null;
   readonly raetselPDF: Blob | null;
-  readonly grafikInfos: GrafikInfo[];
+  readonly embeddableImageInfos: GrafikInfo[];
 };
 
 export interface EditRaetselPayload {
@@ -83,7 +83,7 @@ export const initialRaetselDetails: RaetselDetails = {
   deskriptoren: [],
   images: null,
   raetselPDF: null,
-  grafikInfos: []
+  embeddableImageInfos: []
 };
 
 export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {

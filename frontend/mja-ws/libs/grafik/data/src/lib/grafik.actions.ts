@@ -1,12 +1,12 @@
-import { GrafikSearchResult } from "@mja-ws/grafik/model";
+import { EmbeddableImageVorschau } from "@mja-ws/embeddable-images/model";
 import { Message } from "@mja-ws/shared/messaging/api";
 import { createActionGroup, emptyProps, props } from "@ngrx/store";
 
 export const grafikActions = createActionGroup({
     source: 'Grafik',
     events: {
-        'PRUEFE_GRAFIK': props<{pfad: string}>(),
-        'GRAFIK_GEPRUEFT': props<{grafikSearchResult: GrafikSearchResult}>(),
+        'LADE_VORSCHAU': props<{pfad: string}>(),
+        'VORSCHAU_GELADEN': props<{embeddableImageVorschau: EmbeddableImageVorschau}>(),
         'GRAFIK_HOCHGELADEN': props<{message: Message}>(),
         'CLEAR_VORSCHAU': emptyProps()
     }

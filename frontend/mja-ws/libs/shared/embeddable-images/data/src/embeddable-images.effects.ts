@@ -20,6 +20,15 @@ export class EmbeddableImagesEffects {
             map((responseDto) => embeddableImagesActions.eMBEDDABLE_IMAGE_CREATED({ responseDto }))
         );
     });
+
+    replaceEmbeddableImage$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(embeddableImagesActions.rEPLACE_EMEDDABLE_IMAGE),
+            concatMap((action) => this.#httpService.replaceEmbeddableImage(action.requestDto)),
+            map((message) => embeddableImagesActions.eMBEDABBLE_IMAGE_REPLACED({ message }))
+        );
+    });
     
 
 }

@@ -2,13 +2,16 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { embeddableImagesActions } from './embeddable-images.actions';
 import { EmbeddableImageResponseDto, initialEmbeddableImageResponseDto } from "@mja-ws/embeddable-images/model";
+import { Message } from "@mja-ws/shared/messaging/api";
 
 export interface EmbeddableImagesState {
     embeddableImagesResponse: EmbeddableImageResponseDto | undefined;
+    replaceEmbeddableImageMessage: Message | undefined;
 }
 
 const initialState: EmbeddableImagesState = {
-    embeddableImagesResponse: initialEmbeddableImageResponseDto
+    embeddableImagesResponse: initialEmbeddableImageResponseDto,
+    replaceEmbeddableImageMessage: undefined
 };
 
 export const embeddableImagesFeature = createFeature({
@@ -21,6 +24,15 @@ export const embeddableImagesFeature = createFeature({
                 {
                     ...state,
                     embeddableImagesResponse: action.responseDto
+                }
+            )
+        ),
+        on(
+            embeddableImagesActions.eMBEDABBLE_IMAGE_REPLACED,
+            (state, action): EmbeddableImagesState => (
+                {
+                    ...state,
+                    replaceEmbeddableImageMessage: action.message
                 }
             )
         ),

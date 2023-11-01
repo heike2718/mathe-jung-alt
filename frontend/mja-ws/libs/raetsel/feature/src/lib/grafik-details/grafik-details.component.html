@@ -1,19 +1,30 @@
-<div *ngIf="grafikSelected" else grafikNichtGeladen>
-    <ng-container *ngIf="grafikFacade.grafikSearchResult$ | async as selectedGrafik">
-        <div *ngIf="selectedGrafik.messagePayload.level !=='INFO'" class="bordered bg-white">
-            {{selectedGrafik.pfad}}: {{selectedGrafik.messagePayload.message}}
+<div *ngIf="selectedEmbeddableImageVorschau" else vorschauNichtGeladen>
+    <ng-container *ngIf="grafikFacade.selectedEmbeddableImageVorschau$ | async as selectedVorschau">
+        <div *ngIf="!selectedVorschau.exists" class="bordered bg-white">
+            {{selectedVorschau.pfad}}: Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen.
         </div>
-        <div *ngIf="selectedGrafik.messagePayload.level ==='INFO'" class="bordered bg-white">
-            {{selectedGrafik.pfad}}: Alles gut: Grafik ist schon hochgeladen.
+        <div *ngIf="selectedVorschau.exists" class="bordered bg-white">
+            {{selectedVorschau.pfad}}: Alles gut: Grafik ist schon hochgeladen.
 
-            <div *ngIf="selectedGrafik.image !== null" class="bg-white mt-1">
-                <img src="data:image/png;base64,{{selectedGrafik.image}}" />
+            <div *ngIf="selectedVorschau.image !== null" class="bg-white mt-1">
+                <img src="data:image/png;base64,{{selectedVorschau.image}}" />
             </div>
         </div>
 
-        <div *ngIf="uploadModel.pfad !== ''">
-            <mja-file-upload [uploadModel]="uploadModel" (dateiAusgewaehlt)="onDateiAusgewaehlt($event)"
-                (responsePayload)="onResponse($event)"></mja-file-upload>
+
+        <div class="mb-2">
+            <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
+            <mja-select-file *ngIf="!fileInfo" [selectFileModel]="selectFileModel"
+                (fileSelected)="onFileSelected($event)"></mja-select-file>
+
+            <mja-file-info *ngIf="fileInfo" [titel]="selectFileModel.titel"
+                [beschreibung]="selectFileModel.beschreibung" [fileName]="fileInfo.file.name"
+                [maxSizeBytes]="selectFileModel.maxSizeBytes"
+                [actualFileSize]="fileInfo.fileSize">
+            </mja-file-info>
+
+            <button mat-raised-button color="primary" *ngIf="fileInfo"
+                (click)="uploadFile()">Datei hochladen</button>
         </div>
 
         <div class="button-container">
@@ -22,6 +33,6 @@
     </ng-container>
 </div>
 
-<ng-template #grafikNichtGeladen>
-    <p>zum Prüfen auf info klicken</p>
+<ng-template #vorschauNichtGeladen>
+    <p>zum Laden der Vorschau auf info klicken</p>
 </ng-template>

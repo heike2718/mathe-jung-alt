@@ -221,7 +221,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   generierenDiabled(): boolean {
 
-    const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.grafikInfos.filter(gi => !gi.existiert);
+    const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
     return !this.form.valid || this.antwortvorschlaegeErrors() || grafikInfosOhneFile.length > 0;
   }
 
@@ -293,7 +293,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   grafikLaden(link: string): void {
-    this.grafikFacade.grafikPruefen(link);
+    this.grafikFacade.vorschauLaden(link);
   }
 
   downloadLatexLogs(): void {

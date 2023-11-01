@@ -8,8 +8,6 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-
 /**
  * EmbeddableImageVorschau
  */
@@ -17,12 +15,13 @@ import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 public class EmbeddableImageVorschau {
 
 	@JsonProperty
-	@Schema(description = "Info, ob Image-Datei bereits da ist")
-	private MessagePayload messagePayload;
-
-	@JsonProperty
 	@Schema(description = "der relative Pfad im LaTeX")
 	private String pfad;
+
+	@JsonProperty
+	@Schema(
+		description = "Flag, ob es die Datei gibt. Es kann zu Fehlern beim Generieren der Vorschau gegeben haben. Dann ist das image auch null")
+	private boolean exists;
 
 	@JsonProperty
 	@Schema(
@@ -40,17 +39,6 @@ public class EmbeddableImageVorschau {
 		return this;
 	}
 
-	public MessagePayload getMessagePayload() {
-
-		return messagePayload;
-	}
-
-	public EmbeddableImageVorschau withMessagePayload(final MessagePayload messagePayload) {
-
-		this.messagePayload = messagePayload;
-		return this;
-	}
-
 	public byte[] getImage() {
 
 		return image;
@@ -59,6 +47,17 @@ public class EmbeddableImageVorschau {
 	public EmbeddableImageVorschau withImage(final byte[] image) {
 
 		this.image = image;
+		return this;
+	}
+
+	public boolean isExists() {
+
+		return exists;
+	}
+
+	public EmbeddableImageVorschau markExists() {
+
+		this.exists = true;
 		return this;
 	}
 

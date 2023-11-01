@@ -292,7 +292,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
-		List<String> fehlendeGrafiken = raetsel.getGrafikInfos().stream().filter(gi -> !gi.isExistiert()).map(gi -> gi.getPfad())
+		List<String> fehlendeGrafiken = raetsel.getEmbeddableImageInfos().stream().filter(gi -> !gi.isExistiert()).map(gi -> gi.getPfad())
 			.collect(Collectors.toList());
 
 		if (!fehlendeGrafiken.isEmpty()) {

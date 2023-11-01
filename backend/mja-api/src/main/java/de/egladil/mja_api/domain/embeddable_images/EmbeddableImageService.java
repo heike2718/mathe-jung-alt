@@ -79,41 +79,23 @@ public class EmbeddableImageService {
 	 */
 	public EmbeddableImageVorschau generatePreview(final String relativerPfad) {
 
-		if (relativerPfad == null) {
-
-			LOGGER.error("Aufruf ohne relativen Pfad");
-			return new EmbeddableImageVorschau().withMessagePayload(MessagePayload.error("Aufruf ohne Pfad")).withPfad("");
-		}
-
-		if (!validPath(relativerPfad)) {
-
-			LOGGER.error("Aufruf mit ungültigem relativen Pfad!");
-			return new EmbeddableImageVorschau().withMessagePayload(MessagePayload.error("Aufruf mit ungültigem Pfad"))
-				.withPfad(relativerPfad);
-		}
-
-		boolean exists = fileService.existsGrafik(relativerPfad);
+		boolean exists = fileService.fileExists(relativerPfad);
 
 		if (!exists) {
 
 			return new EmbeddableImageVorschau()
-				.withMessagePayload(
-					MessagePayload.warn("Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen."))
 				.withPfad(relativerPfad);
 		}
 
 		try {
 
 			byte[] image = imageGeneratorService.generiereGrafikvorschau(relativerPfad);
-			return new EmbeddableImageVorschau().withMessagePayload(MessagePayload.ok()).withPfad(relativerPfad).withImage(image);
+			return new EmbeddableImageVorschau().withPfad(relativerPfad).withImage(image).markExists();
 		} catch (Exception e) {
 
 			LOGGER.error("Exception beim Laden des Images: " + e.getMessage(), e);
 			return new EmbeddableImageVorschau()
-				.withMessagePayload(
-					MessagePayload
-						.warn("Die EmbeddableImageVorschau existiert zwar, aber beim Umwandeln in png lief etwas schief."))
-				.withPfad(relativerPfad);
+				.withPfad(relativerPfad).markExists();
 		}
 	}
 

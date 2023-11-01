@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.upload.UploadedFile;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 /**
@@ -30,6 +31,7 @@ public class ReplaceEmbeddableImageRequestDto {
 	@Pattern(
 		regexp = MjaRegexps.VAILD_RELATIVE_PATH_EPS,
 		message = "pfad ist nicht akzeptabel")
+	@NotBlank
 	private String relativerPfad;
 
 	@JsonProperty

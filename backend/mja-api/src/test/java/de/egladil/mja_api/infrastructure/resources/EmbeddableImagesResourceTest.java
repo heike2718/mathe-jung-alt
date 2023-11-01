@@ -6,6 +6,7 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -72,6 +73,37 @@ public class EmbeddableImagesResourceTest {
 		System.out.println(result.getIncludegraphicsCommand());
 
 		assertEquals(context, result.getContext());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldCreateEmbeddableImageReturn400_when_raetselIdInvalid() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/00000.eps");
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(data);
+
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("abcx").withTextart(Textart.FRAGE);
+		CreateEmbeddableImageRequestDto requestDto = new CreateEmbeddableImageRequestDto();
+		requestDto.setContext(context);
+		requestDto.setFile(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.put("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals("die raetselId enthält ungültige Zeichen", result.getMessage());
 	}
 
 	@Test
@@ -261,15 +293,12 @@ public class EmbeddableImagesResourceTest {
 
 		assertTrue(result.getImage().length > 0);
 		assertEquals(relativerPfad, result.getPfad());
-
-		MessagePayload messagePayload = result.getMessagePayload();
-		assertTrue(messagePayload.isOk());
-		assertEquals("ok", messagePayload.getMessage());
+		assertTrue(result.isExists());
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
-	void should_generatePreview_returnError_when_resourceNotFound() {
+	void should_generatePreview_work_when_resourceNotFound() {
 
 		String relativerPfad = "/resources/001/90000.eps";
 
@@ -288,10 +317,30 @@ public class EmbeddableImagesResourceTest {
 
 		assertNull(result.getImage());
 		assertEquals(relativerPfad, result.getPfad());
+		assertFalse(result.isExists());
+	}
 
-		MessagePayload messagePayload = result.getMessagePayload();
-		assertEquals("WARN", messagePayload.getLevel());
-		assertEquals("Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen.", messagePayload.getMessage());
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void should_generatePreview_return400_when_pfadInvalid() {
+
+		String relativerPfad = "/resources/x/00786.eps";
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.queryParam("pfad", relativerPfad)
+			.get("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals("pfad enthält ungültige Zeichen", result.getMessage());
 	}
 
 }

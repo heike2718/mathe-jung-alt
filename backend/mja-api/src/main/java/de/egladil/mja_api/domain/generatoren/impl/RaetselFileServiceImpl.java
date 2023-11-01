@@ -220,7 +220,7 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	}
 
 	@Override
-	public boolean existsGrafik(final String relativerPfad) {
+	public boolean fileExists(final String relativerPfad) {
 
 		String path = latexBaseDir + relativerPfad;
 		File file = new File(path);

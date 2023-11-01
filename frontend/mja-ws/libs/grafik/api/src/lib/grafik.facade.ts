@@ -1,6 +1,6 @@
 import { inject, Injectable} from '@angular/core';
+import { EmbeddableImageVorschau } from '@mja-ws/embeddable-images/model';
 import { fromGrafik, grafikActions } from '@mja-ws/grafik/data';
-import { GrafikSearchResult } from '@mja-ws/grafik/model';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { filterDefined } from '@mja-ws/shared/ngrx-utils';
 import { Store } from '@ngrx/store';
@@ -12,12 +12,15 @@ export class GrafikFacade {
 
     #store = inject(Store);
 
-    public isLoaded$: Observable<boolean> = this.#store.select(fromGrafik.isLoaded);
-    public grafikSearchResult$: Observable<GrafikSearchResult> = filterDefined(this.#store.select(fromGrafik.selectedGrafikSearchResult));
-    // public grafikSearchResult$: Observable<GrafikSearchResult | undefined> = this.#store.select(fromGrafik.selectedGrafikSearchResult);
+    isLoaded$: Observable<boolean> = this.#store.select(fromGrafik.isLoaded);
+    selectedEmbeddableImageVorschau$: Observable<EmbeddableImageVorschau> = filterDefined(this.#store.select(fromGrafik.selectedEmbeddableImageVorschau));
+    pfad$: Observable<string> = filterDefined(this.#store.select(fromGrafik.grafikPfad));
+    grafikHochgeladenMessage$: Observable<Message|undefined> = this.#store.select(fromGrafik.selectGrafikHochgeladenMessage);
 
-    public grafikPruefen(relativerPfad: string): void {
-        this.#store.dispatch(grafikActions.pRUEFE_GRAFIK({pfad: relativerPfad}));
+
+
+    public vorschauLaden(relativerPfad: string): void {
+        this.#store.dispatch(grafikActions.lADE_VORSCHAU({pfad: relativerPfad}));
     }
 
     public grafikHochgeladen(message: Message): void {

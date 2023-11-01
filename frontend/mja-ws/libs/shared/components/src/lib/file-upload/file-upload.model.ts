@@ -1,3 +1,4 @@
+// TODO: ist überflüssig => deprecated
 export interface UploadComponentModel {
 	readonly schluesselRaetsel: string;
     readonly pfad: string;

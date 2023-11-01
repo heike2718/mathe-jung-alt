@@ -1,4 +1,5 @@
 import { UploadedFile, initialUploadedFile } from "@mja-ws/core/model";
+import { Message } from "@mja-ws/shared/messaging/api";
 
 export type TEXTART = 'FRAGE' | 'LOESUNG';
 
@@ -56,3 +57,10 @@ export const initialReplaceEmbeddableImageRequestDto: ReplaceEmbeddableImageRequ
     relativerPfad: '',
     file: initialUploadedFile
 };
+
+export interface EmbeddableImageVorschau {
+  readonly pfad: string;
+  readonly exists: boolean;
+  readonly image: string | undefined
+};
+

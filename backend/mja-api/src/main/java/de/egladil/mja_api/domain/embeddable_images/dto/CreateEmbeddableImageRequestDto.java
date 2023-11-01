@@ -9,6 +9,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.upload.UploadedFile;
+import jakarta.validation.Valid;
 
 /**
  * CreateEmbeddableImageRequestDto
@@ -17,6 +18,7 @@ import de.egladil.mja_api.domain.upload.UploadedFile;
 public class CreateEmbeddableImageRequestDto {
 
 	@JsonProperty
+	@Valid
 	@Schema(description = "dieser Kontext ist zum Rücktransport an den Client gedacht. Er wird ungeändert in die Response gepackt.")
 	private EmbeddableImageContext context;
 

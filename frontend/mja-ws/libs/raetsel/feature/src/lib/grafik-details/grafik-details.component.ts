@@ -1,18 +1,20 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Message } from '@mja-ws/shared/messaging/api';
-import { FileUploadComponent, UploadComponentModel } from '@mja-ws/shared/components';
+import { FileInfoComponent, FileInfoModel, SelectFileComponent, SelectFileModel } from '@mja-ws/shared/components';
 import { MatButtonModule } from '@angular/material/button';
-import { Subscription } from 'rxjs';
 import { GrafikFacade } from '@mja-ws/grafik/api';
+import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
+import { Subscription } from 'rxjs';
+import { EmbeddableImageVorschau } from '@mja-ws/embeddable-images/model';
 
 @Component({
   selector: 'mja-grafik',
   standalone: true,
   imports: [
     CommonModule,
-    FileUploadComponent,
-    MatButtonModule
+    MatButtonModule,
+    SelectFileComponent,
+    FileInfoComponent
   ],
   templateUrl: './grafik-details.component.html',
   styleUrls: ['./grafik-details.component.scss'],
@@ -24,65 +26,67 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
   @Input()
   schluessel = '';
 
-  @Output()
-  responsePayload: EventEmitter<Message> = new EventEmitter<Message>();
+  @Input()
+  raetselId = '';
 
-  uploadModel: UploadComponentModel = {
-    schluesselRaetsel: '',
-    pfad: '',
-    titel: 'Grafik hochladen',
+  selectedEmbeddableImageVorschau: EmbeddableImageVorschau | undefined;
+
+  fileInfo: FileInfoModel | undefined;
+
+  pfadGrafik: string | undefined;
+
+  selectFileModel: SelectFileModel = {
     maxSizeBytes: 2097152,
     errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
     accept: '.eps',
-    acceptMessage: 'erlaubte Dateitypen: eps'
+    acceptMessage: 'erlaubte Dateitypen: eps',
+    titel: 'Grafikdatei hochladen',
+    beschreibung: 'Die neue Datei ersetzt die aktuell importierte Grafik im LaTeX.'
   };
 
-  grafikSelected = false;
 
-  #grafikFacade = inject(GrafikFacade);
-  #selectedGrafikSubscription: Subscription = new Subscription();
+  #embeddableImagesFacade = inject(EmbeddableImagesFacade);
+
+  #grafikSelectedSubscription: Subscription = new Subscription();
+  #grafikHochgeladenSubscription: Subscription = new Subscription();
 
   ngOnInit(): void {
 
-    this.#selectedGrafikSubscription = this.#grafikFacade.grafikSearchResult$.subscribe(
-      (selectedGrafik) => {
-        if (selectedGrafik) {
-          this.uploadModel = { ...this.uploadModel, pfad: selectedGrafik.pfad, schluesselRaetsel: this.schluessel };
-          this.grafikSelected = true;
+    this.#grafikSelectedSubscription = this.grafikFacade.selectedEmbeddableImageVorschau$.subscribe(
+      (selectedEmbeddableImageVorschau) => this.selectedEmbeddableImageVorschau = selectedEmbeddableImageVorschau);
+
+    this.#grafikHochgeladenSubscription = this.grafikFacade.grafikHochgeladenMessage$.subscribe(
+      (message) => {
+        if (message && message.level === 'INFO' && this.pfadGrafik) {
+          this.grafikFacade.vorschauLaden(this.pfadGrafik);
         }
-      });
+      }
+    )
   }
 
   ngOnDestroy(): void {
-    this.#grafikFacade.clearVorschau();
-    this.#selectedGrafikSubscription.unsubscribe();
+    this.grafikFacade.clearVorschau();
+    this.#grafikSelectedSubscription.unsubscribe();
   }
 
-  onDateiAusgewaehlt(_event: string): void {
-    // interessiert uns hier nicht so sehr.
+  onFileSelected($event: FileInfoModel): void {
+    this.fileInfo = $event;
   }
 
-  onResponse(messagePayload: Message | any): void {
+  uploadFile(): void {
+    if (this.selectedEmbeddableImageVorschau && this.fileInfo) {
 
-    if (messagePayload) {
-      const message = this.uploadModel.pfad + ': ' + messagePayload.message;
-      const mp: Message = { ...messagePayload, message: message };
-
-      if (mp.level === 'INFO') {
-        this.#grafikFacade.grafikHochgeladen(mp);
-        this.#grafikFacade.grafikPruefen(this.uploadModel.pfad);
+      if (this.selectedEmbeddableImageVorschau.exists) {
+        this.#embeddableImagesFacade.replaceEmbeddableImage(this.raetselId, this.selectedEmbeddableImageVorschau.pfad, this.fileInfo.file);
+      } else {
+        this.#embeddableImagesFacade.createEmbeddableImage({ raetselId: this.raetselId, textart: 'FRAGE' }, this.fileInfo.file);
       }
-
-
-      this.#grafikFacade.grafikHochgeladen(mp);
-      this.#grafikFacade.grafikPruefen(this.uploadModel.pfad);
-      this.responsePayload.emit({ level: messagePayload.level, message: this.uploadModel.pfad });
+      this.fileInfo = undefined;
     }
   }
 
   reset(): void {
-    this.grafikSelected = false;
-    this.uploadModel = {...this.uploadModel, pfad: ''};
-    this.#grafikFacade.clearVorschau();
+    this.grafikFacade.clearVorschau();
+    this.fileInfo = undefined;
   }
 }

@@ -104,15 +104,17 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   generierenDiabled(): boolean {
-    const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.grafikInfos.filter(gi => !gi.existiert);
+    const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
     return grafikInfosOhneFile.length > 0;
   }
 
   grafikLaden(link: string): void {
-    this.grafikFacade.grafikPruefen(link);
+    this.grafikFacade.vorschauLaden(link);
   }
 
   onGrafikHochgeladen($event: Message): void {
+
+    // Das cḱlingt seltsam. Warum???
     if ($event.level === 'INFO') {
       this.raetselFacade.selectRaetsel(this.#raetselDetails);
     }

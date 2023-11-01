@@ -9,25 +9,25 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * GrafikInfo
+ * EmbeddableImageInfo
  */
 @Schema(
-	name = "GrafikInfo",
+	name = "EmbeddableImageInfo",
 	description = "Info über ein im LaTeX-Code der Frage oder Lösung eingebundenes eps-Image.")
-public class GrafikInfo {
+public class EmbeddableImageInfo {
 
 	@JsonProperty
 	@Schema(description = "Pfad des eps relativ zum LaTex-File im LaTeX-Code")
 	private String pfad;
 
 	@JsonProperty
-	@Schema(description = "Flag, ob die EmbeddableImageVorschau schon hochgeladen wurde. Erst dann lässt sich das Rätsel generieren.")
+	@Schema(description = "Flag, ob das File schon hochgeladen wurde. Erst dann lässt sich das Rätsel generieren.")
 	private boolean existiert;
 
 	/**
 	 *
 	 */
-	public GrafikInfo() {
+	public EmbeddableImageInfo() {
 
 		super();
 
@@ -37,7 +37,7 @@ public class GrafikInfo {
 	 * @param pfad
 	 * @param existiert
 	 */
-	public GrafikInfo(final String pfad, final boolean existiert) {
+	public EmbeddableImageInfo(final String pfad, final boolean existiert) {
 
 		super();
 		this.pfad = pfad;

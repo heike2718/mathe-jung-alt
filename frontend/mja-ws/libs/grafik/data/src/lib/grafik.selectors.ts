@@ -13,14 +13,20 @@ const grafikPfad = createSelector(
     (state) => state.pfad
 );
 
-const selectedGrafikSearchResult = createSelector(
+const selectedEmbeddableImageVorschau = createSelector(
     selectGrafikState,
-    (state) => state.selectedGrafikSearchResult
+    (state) => state.selectedEmbeddableImageVorschau
 );
+
+const selectGrafikHochgeladenMessage = createSelector(
+    selectGrafikState,
+    (state) => state.grafikHochgeladenMessage
+)
 
 export const fromGrafik = {
     isLoaded,
     grafikPfad,
-    selectedGrafikSearchResult
+    selectedEmbeddableImageVorschau,
+    selectGrafikHochgeladenMessage
 };
 

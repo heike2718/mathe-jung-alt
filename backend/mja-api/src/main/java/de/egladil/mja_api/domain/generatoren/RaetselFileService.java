@@ -109,7 +109,7 @@ public interface RaetselFileService {
 	 * @param  relativerPfad
 	 * @return
 	 */
-	boolean existsGrafik(String relativerPfad);
+	boolean fileExists(String relativerPfad);
 
 	/**
 	 * Löscht die temporären Files aus dem latex-basedir.
