@@ -17,7 +17,7 @@ import { Antwortvorschlag, EditRaetselPayload, GrafikInfo, RaetselDetails } from
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, STATUS, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
-import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel } from '@mja-ws/shared/components';
+import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel, FileInfoComponent, FileInfoModel } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { GrafikFacade } from '@mja-ws/grafik/api';
 import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
@@ -54,7 +54,8 @@ interface AntwortvorschlagFormValue {
     JaNeinDialogComponent,
     GrafikDetailsComponent,
     GeneratorParametersDialogAutorenComponent,
-    SelectFileComponent
+    SelectFileComponent,
+    FileInfoComponent
   ],
   templateUrl: './raetsel-editor.component.html',
   styleUrls: ['./raetsel-editor.component.scss'],
@@ -85,15 +86,17 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   grafikFacade = inject(GrafikFacade);
   form!: UntypedFormGroup;
 
-  #selectedFile: UploadedFile | undefined;
+  fileInfoFrage: FileInfoModel | undefined;
+  fileInfoLoesung: FileInfoModel | undefined;
 
   selectFileFrageModel: SelectFileModel = {
     maxSizeBytes: 2097152,
     errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
-    titel: 'EPS für Frage hochladen'
-  }; 
+    titel: 'Bild in Frage einbinden',
+    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Frage-Textes und kann an eine beliebiege Stelle verschoben werden.'
+  };
 
 
   selectFileLoesungModel: SelectFileModel = {
@@ -101,13 +104,9 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
-    titel: 'EPS für Lösung hochladen'
+    titel: 'Bild in Lösung einbinden',
+    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Lösung-Textes und kann an eine beliebiege Stelle verschoben werden.'
   };
-
-  showBtnUploadFileFrage = false;
-  showBtnUploadFileLoesung = false;
-  showSelectFileFrageComponent = true;
-  showSelectFileLoesungComponent = true;
 
   constructor() {
 
@@ -272,31 +271,29 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFileSelected($event: UploadedFile, textart: TEXTART): void {
+  onFileSelected($event: FileInfoModel, textart: TEXTART): void {
     if (textart === 'FRAGE') {
-      this.showBtnUploadFileFrage = true;
-      this.showSelectFileFrageComponent = false;
+      this.fileInfoFrage = $event;
     }
     if (textart === 'LOESUNG') {
-      this.showBtnUploadFileLoesung = true;
-      this.showSelectFileLoesungComponent = false;
+      this.fileInfoLoesung = $event;
     }
-    this.#selectedFile = $event;
+
   }
 
   uploadFile(textart: TEXTART): void {
-    if (this.#selectedFile) {
-      console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
-      this.#selectedFile = undefined;
+    
+    console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
 
-      if (textart === 'FRAGE'){
-        this.showBtnUploadFileFrage = false;
-        this.showSelectFileFrageComponent = true;
+    if (textart === 'FRAGE') {
+      if (this.fileInfoFrage) {
+        this.fileInfoFrage = undefined;
       }
+    }
 
-      if (textart === 'LOESUNG') {
-        this.showBtnUploadFileLoesung = false; 
-        this.showSelectFileLoesungComponent = true;
+    if (textart === 'LOESUNG') {
+      if (this.fileInfoLoesung) {
+        this.fileInfoLoesung = undefined;
       }
     }
   }

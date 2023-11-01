@@ -1,4 +1,5 @@
 <h2 *ngIf="selectFileModel.titel && selectFileModel.titel.length>0">{{selectFileModel.titel}}</h2>
+<p class="hint" *ngIf="selectFileModel.beschreibung">{{selectFileModel.beschreibung}}</p>
 
 <div *ngIf="!currentFile">
     <input type="file" #file accept="{{selectFileModel.accept}}" style="display: none" (change)="onFileAdded($event)"
@@ -9,16 +10,8 @@
             <mat-icon>attach_file</mat-icon>
         </button>
     </div>
-
-    <div *ngIf="showMaxSizeExceeded" class="mt-1 hint-red">{{fileSize}}: {{errmMaxFileSize}}</div>
-    <div class="mt-1 mb-1">
+    
+    <div class="mt-1 mb-1 hint">
         {{maxFileSizeInfo}}, {{selectFileModel.acceptMessage}}
-    </div>   
-</div>
-
-<!-- TODO: in eigene file-info.component auslagern, damit diese Daten in der Elternkomponente angezeigt werden können -->
-<div *ngIf="currentFile" class="row mt-3">
-    <div class="col-12" *ngIf="currentFile">
-        <p>{{currentFile.name}} ({{fileSize}})</p>
-    </div>    
+    </div>
 </div>

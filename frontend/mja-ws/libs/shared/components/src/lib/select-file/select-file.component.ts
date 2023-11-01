@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, Input, EventEmitter, Output, OnInit } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { SelectFileModel } from "./select-file.model";
+import { FileInfoModel, SelectFileModel } from "./select-file.model";
 import { UploadedFile } from "@mja-ws/embeddable-images/model";
 
 
@@ -24,7 +24,7 @@ export class SelectFileComponent implements OnInit {
     selectFileModel!: SelectFileModel;
 
     @Output()
-    fileSelected: EventEmitter<UploadedFile> = new EventEmitter<UploadedFile>();
+    fileSelected: EventEmitter<FileInfoModel> = new EventEmitter<FileInfoModel>();
 
     currentFile: File | undefined;
 
@@ -66,7 +66,7 @@ export class SelectFileComponent implements OnInit {
                         dataBase64: base64String
                     }
 
-                    this.fileSelected.emit(uploadedFile);
+                    this.fileSelected.emit({file: uploadedFile, fileSize: this.currentFile!.size});
                 }
 
             } else {

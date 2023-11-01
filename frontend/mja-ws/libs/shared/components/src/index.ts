@@ -10,3 +10,5 @@ export { JaNeinDialogComponent } from './lib/ja-nein-dialog/ja-nein-dialog.compo
 
 export { SelectFileComponent } from './lib/select-file/select-file.component';
 export * from './lib/select-file/select-file.model';
+
+export { FileInfoComponent } from './lib/file-info/file-info.component';
