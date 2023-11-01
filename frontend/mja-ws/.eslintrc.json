@@ -12,7 +12,7 @@
             "enforceBuildableLibDependency": true,
             "allow": [],
             "depConstraints": [
-              {
+               {
                 "sourceTag": "type:app",
                 "onlyDependOnLibsWithTags": [
                   "type:model",
@@ -49,6 +49,21 @@
                 ]
               },
               {
+                "sourceTag": "domain:embeddable-images:data",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:embeddable-images:model",
+                  "type:shared:messaging:api"
+                  
+                ]
+              },
+              {
+                "sourceTag": "domain:embeddable-images:api",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:embeddable-images:model",
+                  "domain:embeddable-images:data"
+                ]
+              },
+              {
                 "sourceTag": "domain:raetsel:model",
                 "onlyDependsOnLibsWithTags": ["type:model", "type:core:model"]
               },
@@ -71,8 +86,8 @@
                   "domain:raetsel:api",
                   "domain:grafik:api",
                   "domain:grafik:model",
-                  "domain:embeddable-images:api",
-                  "domain:embeddable-images:model"
+                  "type:core:api",
+                  "type:core:model"
                 ]
               },
               {
@@ -94,24 +109,6 @@
                 ]
               },
               {
-                "sourceTag": "domain:embeddable-images:model",
-                "onlyDependsOnLibsWithTags": ["type:model"]
-              },
-              {
-                "sourceTag": "domain:embeddable-images:data",
-                "onlyDependsOnLibsWithTags": [
-                  "domain:embeddable-images:model",
-                  "type:shared:messaging:api"
-                ]
-              },
-              {
-                "sourceTag": "domain:embeddable-images:api",
-                "onlyDependsOnLibsWithTags": [
-                  "domain:embeddable-images:model",
-                  "domain:embeddable-images:data"
-                ]
-              },
-              {
                 "sourceTag": "domain:core",
                 "onlyDependsOnLibsWithTags": "domain:shared"
               },
@@ -120,7 +117,8 @@
                 "onlyDependOnLibsWithTags": [
                   "type:api",
                   "type:ui",
-                  "type:model"
+                  "type:model",
+                  "type:shared:config"
                 ],
                 "bannedExternalImports": ["@ngrx/**"]
               },
@@ -181,7 +179,7 @@
                   "type:core:model",
                   "type:core:api",
                   "type:shared:util",
-                  "type:shared:messaging:api"
+                  "type:shared:messaging:api"                  
                 ]
               },
               {

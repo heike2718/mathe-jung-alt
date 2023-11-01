@@ -24,10 +24,6 @@ export class GrafikFacade {
         this.#store.dispatch(grafikActions.gRAFIK_HOCHGELADEN({message}));
     }
 
-    public handleUploadError(message: Message): void {
-        
-    }
-
     public clearVorschau(): void {
         this.#store.dispatch(grafikActions.cLEAR_VORSCHAU());
     }

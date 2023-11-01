@@ -1,4 +1,4 @@
-import { UploadedFile } from "@mja-ws/embeddable-images/model";
+import { UploadedFile } from "@mja-ws/core/model";
 
 export interface SelectFileModel {
     readonly titel: string;

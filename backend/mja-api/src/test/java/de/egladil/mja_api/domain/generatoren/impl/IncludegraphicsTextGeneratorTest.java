@@ -22,7 +22,7 @@ public class IncludegraphicsTextGeneratorTest {
 	void should_generateIncludegraphicsTextReturnTheExpected() {
 
 		// Arrange
-		String expected = "\n\n\\begin{center} \\includegraphics[width=0.5\\linewidth]{./resources/4/4d367e6c-00534.eps} \\end{center}";
+		String expected = "\\begin{center} \\includegraphics[width=0.5\\linewidth]{./resources/4/4d367e6c-00534.eps} \\end{center}";
 		String relativePath = "/resources/4/4d367e6c-00534.eps";
 
 		// Act

@@ -29,7 +29,7 @@ public interface LaTeXConstants {
 
 	String ABSTAND_ITEMS = "\\par \n\\vspace{1ex}\n";
 
-	String INCLUDEGRAPHICS_START = "\n\n\\begin{center} \\includegraphics[width=0.5\\linewidth]{.";
+	String INCLUDEGRAPHICS_START = "\\begin{center} \\includegraphics[width=0.5\\linewidth]{.";
 
 	String INCLUDEGRAPHICS_END = "} \\end{center}";
 

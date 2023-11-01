@@ -221,11 +221,11 @@ npx nx generate @nx/angular:lib model --directory=core --tags='domain:core, type
 Unterschieden wird zwischen Anlegen (also Hochladen einer neuen eps) und Ändern (also Austauschen einer vorhandenen)
 
 ```
-npx nx generate @nx/angular:library --name=api --buildable=true --directory=libs/includegraphics/api --importPath=@mja-ws/includegraphics/api --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:includegraphics, type:domain:includegraphics:api" --no-interactive --dry-run
+npx nx generate @nx/angular:library --name=embeddable-images-api --buildable=true --directory=libs/shared/embeddable-images/api --importPath=@mja-ws/libs/shared/embeddable-image/api --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:embeddable-images", "type:api" --no-interactive --dry-run
 
-npx nx generate @nx/angular:library --name=data --buildable=true --directory=libs/includegraphics/data --importPath=@mja-ws/includegraphics/data --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:includegraphics, type:domain:includegraphics:data" --no-interactive --dry-run
+npx nx generate @nx/angular:library --name=embeddable-images-data --buildable=true --directory=libs/shared/embeddable-images/data --importPath=@mja-ws/libs/shared/embeddable-images/data --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:embeddable-images, type:data" --no-interactive --dry-run
 
-npx nx generate @nx/angular:library --name=model --buildable=true --directory=libs/includegraphics/model --importPath=@mja-ws/includegraphics/model --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:includegraphics, type:domain:includegraphics:model" --no-interactive --dry-run
+npx nx generate @nx/angular:library --name=embeddable-images-model --buildable=true --directory=libs/shared/embeddable-images/model --importPath=@mja-ws/libs/shared/embeddable-images/model --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:embeddable-images, type:model" --no-interactive
 ```
 
 __lint:__
@@ -238,28 +238,28 @@ __lint:__
                   "domain:raetsel:api",
                   "domain:grafik:api",
                   "domain:grafik:model",
-                  "domain:includegraphics:api",
-                  "domain:includegraphics:model"
+                  "type:api",
+                  "type:model"
                 ]
               },
 ...
 
 {
-                "sourceTag": "domain:includegraphics:model",
+                "sourceTag": "domain:embeddable-images:model",
                 "onlyDependsOnLibsWithTags": ["type:model"]
               },
               {
-                "sourceTag": "domain:includegraphics:data",
+                "sourceTag": "domain:embeddable-images:data",
                 "onlyDependsOnLibsWithTags": [
-                  "domain:includegraphics:model",
+                  "domain:embeddable-images:model",
                   "type:shared:messaging:api"
                 ]
               },
               {
-                "sourceTag": "domain:includegraphics:api",
+                "sourceTag": "domain:embeddable-images:api",
                 "onlyDependsOnLibsWithTags": [
-                  "domain:includegraphics:model",
-                  "domain:includegraphics:data"
+                  "domain:embeddable-images:model",
+                  "domain:embeddable-images:data"
                 ]
               },
 ...              

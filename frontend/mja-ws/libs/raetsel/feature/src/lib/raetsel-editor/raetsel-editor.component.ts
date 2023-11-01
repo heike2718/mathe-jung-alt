@@ -23,7 +23,7 @@ import { GrafikFacade } from '@mja-ws/grafik/api';
 import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
 import { MatCardModule } from '@angular/material/card';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
-import { EmbeddableImageContext, TEXTART, UploadedFile } from '@mja-ws/embeddable-images/model';
+import { EmbeddableImageContext, TEXTART } from '@mja-ws/embeddable-images/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 
 interface AntwortvorschlagFormValue {
@@ -148,7 +148,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       (responseDto) => {
         if (responseDto.context.textart === 'FRAGE') {
 
-          const text = this.form.controls['frage'].value + '\n' + responseDto.includegraphicsCommand;
+          const text = this.form.controls['frage'].value + '\n\n' + responseDto.includegraphicsCommand;
           this.form.controls['frage'].setValue(text);
           this.fileInfoFrage = undefined;
           this.pfadGrafikFrage = responseDto.pfad;
@@ -157,7 +157,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
         }
         if (responseDto.context.textart === 'LOESUNG') {
 
-          const text = this.form.controls['loesung'].value + '\n' + responseDto.includegraphicsCommand;
+          const text = this.form.controls['loesung'].value + '\n\n' + responseDto.includegraphicsCommand;
           this.form.controls['loesung'].setValue(text);
           this.fileInfoLoesung = undefined;
           this.pfadGrafikLoesung = responseDto.pfad;

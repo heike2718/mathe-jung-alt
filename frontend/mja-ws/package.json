@@ -12,7 +12,8 @@
     "test": "npx nx test",
     "test:all": "npx nx run-many --target=test --all",
     "lint:all": "npx nx run-many --target=lint --all",
-    "full-check": "npx nx run-s lint:all test:all build"
+    "full-check": "npx nx run-s lint:all test:all build",
+    "graph": "npx nx graph"
   },
   "private": true,
   "dependencies": {

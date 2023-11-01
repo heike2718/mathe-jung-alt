@@ -56,6 +56,16 @@ export const initialSelectItemsComponentModel: SelectItemsCompomentModel = {
   gewaehlteItems: []
 };
 
+export interface UploadedFile {
+  readonly name: string;
+  readonly dataBase64: string
+};
+
+export const initialUploadedFile: UploadedFile = {
+  name: '',
+  dataBase64: ''
+};
+
 /** 
  * Ein angemeldeter ADMIN bzw. AUTOR ist selbst eine Quelle. Dies ist die zugeordnete Quelle.
  * Alle Raetsel und davon abgeleiteten Objekte referenzieren eine Quelle. Dies ist die zugeordnete Quelle 
