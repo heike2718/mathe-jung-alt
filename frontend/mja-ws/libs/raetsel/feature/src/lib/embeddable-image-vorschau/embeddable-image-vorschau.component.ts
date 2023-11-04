@@ -2,7 +2,6 @@ import { Component, inject, Input, OnDestroy, OnInit, Output } from '@angular/co
 import { CommonModule } from '@angular/common';
 import { FileInfoComponent, FileInfoModel, SelectFileComponent, SelectFileModel } from '@mja-ws/shared/components';
 import { MatButtonModule } from '@angular/material/button';
-import { GrafikFacade } from '@mja-ws/grafik/api';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { Subscription } from 'rxjs';
 import { EmbeddableImageVorschau } from '@mja-ws/embeddable-images/model';
@@ -21,7 +20,7 @@ import { EmbeddableImageVorschau } from '@mja-ws/embeddable-images/model';
 })
 export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
 
-  grafikFacade = inject(GrafikFacade);
+  embeddableImagesFacade = inject(EmbeddableImagesFacade);
 
   @Input()
   schluessel = '';
@@ -44,30 +43,27 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
     beschreibung: 'Die neue Datei ersetzt die aktuell importierte Grafik im LaTeX.'
   };
 
-
-  #embeddableImagesFacade = inject(EmbeddableImagesFacade);
-
-  #grafikSelectedSubscription: Subscription = new Subscription();
-  #grafikHochgeladenSubscription: Subscription = new Subscription();
+  #selectedEmbeddableImageSubscription: Subscription = new Subscription();
+  #embeddableImageResponseSubscription: Subscription = new Subscription();
 
   ngOnInit(): void {
 
-    this.#grafikSelectedSubscription = this.grafikFacade.selectedEmbeddableImageVorschau$.subscribe(
+    this.#selectedEmbeddableImageSubscription = this.embeddableImagesFacade.selectedEmbeddableImageVorschau$.subscribe(
       (selectedEmbeddableImageVorschau) => this.selectedEmbeddableImageVorschau = selectedEmbeddableImageVorschau);
 
-    this.#grafikHochgeladenSubscription = this.grafikFacade.grafikHochgeladenMessage$.subscribe(
-      (message) => {
-        if (message && message.level === 'INFO' && this.pfadGrafik) {
-          this.grafikFacade.vorschauLaden(this.pfadGrafik);
+    this.#embeddableImageResponseSubscription = this.embeddableImagesFacade.embeddableImageResponse$.subscribe(
+      (response) => {
+        if (response.pfad !== '') {
+          this.embeddableImagesFacade.vorschauLaden(response.pfad);
         }
       }
     )
   }
 
   ngOnDestroy(): void {
-    this.grafikFacade.clearVorschau();
-    this.#grafikSelectedSubscription.unsubscribe();
-    this.#grafikHochgeladenSubscription.unsubscribe();
+    this.embeddableImagesFacade.clearVorschau();
+    this.#selectedEmbeddableImageSubscription.unsubscribe();
+    this.#embeddableImageResponseSubscription.unsubscribe();
   }
 
   onFileSelected($event: FileInfoModel): void {
@@ -78,16 +74,16 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
     if (this.selectedEmbeddableImageVorschau && this.fileInfo) {
 
       if (this.selectedEmbeddableImageVorschau.exists) {
-        this.#embeddableImagesFacade.replaceEmbeddableImage(this.raetselId, this.selectedEmbeddableImageVorschau.pfad, this.fileInfo.file);
+        this.embeddableImagesFacade.replaceEmbeddableImage(this.raetselId, this.selectedEmbeddableImageVorschau.pfad, this.fileInfo.file);
       } else {
-        this.#embeddableImagesFacade.createEmbeddableImage({ raetselId: this.raetselId, textart: 'FRAGE' }, this.fileInfo.file);
+        this.embeddableImagesFacade.createEmbeddableImage({ raetselId: this.raetselId, textart: 'FRAGE' }, this.fileInfo.file);
       }
       this.fileInfo = undefined;
     }
   }
 
   reset(): void {
-    this.grafikFacade.clearVorschau();
+    this.embeddableImagesFacade.clearVorschau();
     this.fileInfo = undefined;
   }
 }

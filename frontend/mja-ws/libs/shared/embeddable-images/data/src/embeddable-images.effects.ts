@@ -12,6 +12,15 @@ export class EmbeddableImagesEffects {
     #actions = inject(Actions);
     #httpService = inject(EmbeddableImagesHttpService);
 
+    ladeVorschau$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(embeddableImagesActions.lADE_VORSCHAU),
+            concatMap((action) => this.#httpService.loadGrafik(action.pfad)),
+            map((embeddableImageVorschau) => embeddableImagesActions.vORSCHAU_GELADEN({embeddableImageVorschau }))
+        );
+    });
+
     createEmbeddableImage$ = createEffect(() => {
 
         return this.#actions.pipe(

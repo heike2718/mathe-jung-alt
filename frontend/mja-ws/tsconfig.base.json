@@ -28,9 +28,6 @@
       "@mja-ws/embeddable-images/model": [
         "libs/shared/embeddable-images/model/src/index.ts"
       ],
-      "@mja-ws/grafik/api": ["libs/grafik/api/src/index.ts"],
-      "@mja-ws/grafik/data": ["libs/grafik/data/src/index.ts"],
-      "@mja-ws/grafik/model": ["libs/grafik/model/src/index.ts"],
       "@mja-ws/local-storage-data": ["libs/local-storage-data/src/index.ts"],
       "@mja-ws/raetsel/api": ["libs/raetsel/api/src/index.ts"],
       "@mja-ws/raetsel/data": ["libs/raetsel/data/src/index.ts"],

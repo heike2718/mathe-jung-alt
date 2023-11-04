@@ -18,7 +18,6 @@ import { Subscription, tap } from 'rxjs';
 import { FileUploadComponent, FrageLoesungImagesComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
 import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
 import { Message } from '@mja-ws/shared/messaging/api';
-import { GrafikFacade } from '@mja-ws/grafik/api';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import {
   anzeigeAntwortvorschlaegeSelectInput,
@@ -30,6 +29,7 @@ import {
   schriftgroessenSelectInput,
   SelectGeneratorParametersUIModelAutoren
 } from '@mja-ws/core/model';
+import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -57,11 +57,11 @@ import {
 })
 export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
-  public raetselFacade = inject(RaetselFacade);
-  public authFacade = inject(AuthFacade);
-  public grafikFacade = inject(GrafikFacade);
-  public dialog = inject(MatDialog);
+  raetselFacade = inject(RaetselFacade);
+  authFacade = inject(AuthFacade);
+  dialog = inject(MatDialog);
 
+  #embeddableImagesFacade = inject(EmbeddableImagesFacade);
   #router = inject(Router);
 
   #raetselDetailsSubscription = new Subscription();
@@ -109,7 +109,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   grafikLaden(link: string): void {
-    this.grafikFacade.vorschauLaden(link);
+    this.#embeddableImagesFacade.vorschauLaden(link);
   }
 
   onGrafikHochgeladen($event: Message): void {

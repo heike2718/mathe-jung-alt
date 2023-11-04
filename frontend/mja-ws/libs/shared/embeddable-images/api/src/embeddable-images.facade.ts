@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { CreateEmbeddableImageRequestDto, EmbeddableImageContext, EmbeddableImageResponseDto } from "@mja-ws/embeddable-images/model";
+import { CreateEmbeddableImageRequestDto, EmbeddableImageContext, EmbeddableImageResponseDto, EmbeddableImageVorschau } from "@mja-ws/embeddable-images/model";
 import { Store } from "@ngrx/store";
 import { embeddableImagesActions, fromEmbeddableImages }  from '@mja-ws/embeddable-images/data';
 import { Observable } from "rxjs";
@@ -14,9 +14,17 @@ export class EmbeddableImagesFacade {
 
     #store = inject(Store);
 
+    embeddableImageVorschauGeladen$: Observable<boolean> = this.#store.select(fromEmbeddableImages.embeddableImageVorschauGeladen);
+    selectedEmbeddableImageVorschau$: Observable<EmbeddableImageVorschau> = filterDefined(this.#store.select(fromEmbeddableImages.selectedEmbeddableImageVorschau));
+    pfad$: Observable<string> = filterDefined(this.#store.select(fromEmbeddableImages.embeddableImageVorschauPfad));
+
     embeddableImageResponse$: Observable<EmbeddableImageResponseDto> = filterDefined(this.#store.select(fromEmbeddableImages.embeddableImagesResponse));
 
-    public createEmbeddableImage(context: EmbeddableImageContext, file: UploadedFile): void {
+    vorschauLaden(relativerPfad: string): void {
+        this.#store.dispatch(embeddableImagesActions.lADE_VORSCHAU({pfad: relativerPfad}));
+    }
+    
+    createEmbeddableImage(context: EmbeddableImageContext, file: UploadedFile): void {
         
         this.#store.dispatch(embeddableImagesActions.cREATE_EMBEDDABLE_IMAGE({requestDto: {
             context: context,
@@ -24,7 +32,11 @@ export class EmbeddableImagesFacade {
         }}));
     }
 
-    public replaceEmbeddableImage(raetselId: string, pfad: string, file: UploadedFile): void {
+    clearVorschau(): void {
+        this.#store.dispatch(embeddableImagesActions.cLEAR_VORSCHAU());
+    }
+
+    replaceEmbeddableImage(raetselId: string, pfad: string, file: UploadedFile): void {
         
         this.#store.dispatch(embeddableImagesActions.rEPLACE_EMEDDABLE_IMAGE({requestDto: {
             raetselId: raetselId,
@@ -33,7 +45,7 @@ export class EmbeddableImagesFacade {
         }}));
     }
 
-    public resetState(): void {
+    resetState(): void {
 
         this.#store.dispatch(embeddableImagesActions.rESET_STATE());
     }

@@ -1,10 +1,10 @@
 <div *ngIf="selectedEmbeddableImageVorschau" else vorschauNichtGeladen>
-    <ng-container *ngIf="grafikFacade.selectedEmbeddableImageVorschau$ | async as selectedVorschau">
+    <ng-container *ngIf="embeddableImagesFacade.selectedEmbeddableImageVorschau$ | async as selectedVorschau">
         <div *ngIf="!selectedVorschau.exists" class="bordered bg-white">
             {{selectedVorschau.pfad}}: Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen.
         </div>
         <div *ngIf="selectedVorschau.exists" class="bordered bg-white">
-            {{selectedVorschau.pfad}}: Alles gut: Grafik ist schon hochgeladen.
+            {{selectedVorschau.pfad}}
 
             <div *ngIf="selectedVorschau.image !== null" class="bg-white mt-1">
                 <img src="data:image/png;base64,{{selectedVorschau.image}}" />

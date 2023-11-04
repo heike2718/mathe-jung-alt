@@ -3,9 +3,9 @@ import { RaetselSearchComponent } from "./raetsel-search/raetsel-search.componen
 import { raetselDataProvider } from '@mja-ws/raetsel/api';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { RaetselDetailsComponent } from "./raetsel-details/raetsel-details.component";
-import { grafikDataProvider } from "@mja-ws/grafik/api";
 import { RaetselEditorComponent } from "./raetsel-editor/raetsel-editor.component";
 import { inject } from "@angular/core";
+import { embeddableImagesDataProvider } from "@mja-ws/embeddable-images/api";
 
 // siehe https://www.angulararchitects.io/en/aktuelles/modern-and-lightweight-angular-architectures-with-angulars-latest-innovations/
 
@@ -16,7 +16,7 @@ export const raetselRoutes: Routes = [
     component: RaetselSearchComponent,
     providers: [
       raetselDataProvider,
-      grafikDataProvider
+      embeddableImagesDataProvider
     ],
   },
   {
@@ -25,7 +25,7 @@ export const raetselRoutes: Routes = [
     component: RaetselDetailsComponent,
     providers: [
       raetselDataProvider,
-      grafikDataProvider
+      embeddableImagesDataProvider
     ],
   },
   {
@@ -34,7 +34,7 @@ export const raetselRoutes: Routes = [
     component: RaetselEditorComponent,
     providers: [
       raetselDataProvider,
-      grafikDataProvider
+      embeddableImagesDataProvider
     ],
   },
   {
@@ -44,7 +44,7 @@ export const raetselRoutes: Routes = [
     component: RaetselSearchComponent,
     providers: [
       raetselDataProvider,
-      grafikDataProvider
+      embeddableImagesDataProvider
     ],
   },
 ];

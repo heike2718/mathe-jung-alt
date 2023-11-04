@@ -8,6 +8,24 @@ const embeddableImagesResponse = createSelector(
     ((state) => state.embeddableImagesResponse)
 );
 
+const embeddableImageVorschauGeladen = createSelector(
+    selectEmbeddableImagesState,
+    (state) => state.embeddableImageVorschauGeladen
+);
+
+const embeddableImageVorschauPfad = createSelector(
+    selectEmbeddableImagesState,
+    (state) => state.embeddableImageVorschauPfad
+);
+
+const selectedEmbeddableImageVorschau = createSelector(
+    selectEmbeddableImagesState,
+    (state) => state.selectedEmbeddableImageVorschau
+);
+
 export const fromEmbeddableImages = {
-    embeddableImagesResponse
+    embeddableImagesResponse,
+    embeddableImageVorschauGeladen,
+    embeddableImageVorschauPfad,
+    selectedEmbeddableImageVorschau
 };

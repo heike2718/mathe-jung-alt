@@ -1,17 +1,24 @@
 
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { embeddableImagesActions } from './embeddable-images.actions';
-import { EmbeddableImageResponseDto, initialEmbeddableImageResponseDto } from "@mja-ws/embeddable-images/model";
+import { EmbeddableImageResponseDto, EmbeddableImageVorschau, initialEmbeddableImageResponseDto } from "@mja-ws/embeddable-images/model";
 import { Message } from "@mja-ws/shared/messaging/api";
 
 export interface EmbeddableImagesState {
-    embeddableImagesResponse: EmbeddableImageResponseDto | undefined;
-    replaceEmbeddableImageMessage: Message | undefined;
+    readonly embeddableImagesResponse: EmbeddableImageResponseDto | undefined;
+    readonly replaceEmbeddableImageMessage: Message | undefined;
+    readonly embeddableImageVorschauPfad: string | undefined;
+    readonly embeddableImageVorschauGeladen: boolean;
+    readonly selectedEmbeddableImageVorschau: EmbeddableImageVorschau | undefined;
 }
 
 const initialState: EmbeddableImagesState = {
     embeddableImagesResponse: initialEmbeddableImageResponseDto,
-    replaceEmbeddableImageMessage: undefined
+    replaceEmbeddableImageMessage: undefined,
+    embeddableImageVorschauPfad: undefined,
+    embeddableImageVorschauGeladen: false,
+    selectedEmbeddableImageVorschau: undefined
+
 };
 
 export const embeddableImagesFeature = createFeature({
@@ -36,6 +43,9 @@ export const embeddableImagesFeature = createFeature({
                 }
             )
         ),
+        on(embeddableImagesActions.lADE_VORSCHAU, (state, _action) => ({ ...state, selectedEmbeddableImageVorschau: undefined })),
+        on(embeddableImagesActions.vORSCHAU_GELADEN, (state, action) => ({ ...state, embeddableImageVorschauGeladen: true, selectedEmbeddableImageVorschau: action.embeddableImageVorschau })),
+        on(embeddableImagesActions.cLEAR_VORSCHAU, (state, _action) => ({ ...state, embeddableImageVorschauGeladen: false, selectedEmbeddableImageVorschau: undefined })),
         on(
             embeddableImagesActions.rESET_STATE,
             (_state, _action) => (initialState)

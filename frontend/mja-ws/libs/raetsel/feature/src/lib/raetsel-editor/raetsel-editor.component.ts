@@ -19,7 +19,6 @@ import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormG
 import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, STATUS, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel, FileInfoComponent, FileInfoModel } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
-import { GrafikFacade } from '@mja-ws/grafik/api';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import { MatCardModule } from '@angular/material/card';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
@@ -85,7 +84,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   dialog = inject(MatDialog);
 
   raetselFacade = inject(RaetselFacade);
-  grafikFacade = inject(GrafikFacade);
   form!: UntypedFormGroup;
 
   fileInfoFrage: FileInfoModel | undefined;
@@ -99,8 +97,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
-    titel: 'Bild in Frage einbinden',
-    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Frage-Textes und kann an eine beliebiege Stelle verschoben werden.'
+    titel: 'neues Bild in Frage einbinden',
+    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Frage-Textes und kann an eine beliebiege Stelle verschoben werden. Bitte den \includegraphics-Befehl __nicht__ manuell einbinden. Er muss generiert werden!'
   };
 
 
@@ -109,8 +107,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
-    titel: 'Bild in Lösung einbinden',
-    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Lösung-Textes und kann an eine beliebiege Stelle verschoben werden.'
+    titel: 'neues Bild in Lösung einbinden',
+    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Lösung-Textes und kann an eine beliebiege Stelle verschoben werden. Bitte den \includegraphics-Befehl __nicht__ manuell einbinden. Er muss generiert werden!'
   };
 
   #embeddableImagesResponseSubscription: Subscription = new Subscription();
@@ -245,6 +243,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
+    this.raetselFacade.leaveEditMode();
     if (this.#raetselDetails && this.#raetselDetails.id !== 'neu') {
       this.raetselFacade.selectRaetsel(this.#raetselDetails);
     } else {
@@ -253,6 +252,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   gotoSuche(): void {
+    this.raetselFacade.leaveEditMode();
     this.raetselFacade.cancelSelection();
   }
 
@@ -292,8 +292,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  grafikLaden(link: string): void {
-    this.grafikFacade.vorschauLaden(link);
+  #vorschauLaden(link: string): void {
+    this.#embeddableImagesFacade.vorschauLaden(link);
   }
 
   downloadLatexLogs(): void {
