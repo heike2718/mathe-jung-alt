@@ -40,7 +40,8 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
     titel: 'Grafikdatei hochladen',
-    beschreibung: 'Die neue Datei ersetzt die aktuell importierte Grafik im LaTeX.'
+    beschreibung: 'Die neue Datei ersetzt die aktuell importierte Grafik im LaTeX.',
+    hinweis: undefined
   };
 
   #selectedEmbeddableImageSubscription: Subscription = new Subscription();

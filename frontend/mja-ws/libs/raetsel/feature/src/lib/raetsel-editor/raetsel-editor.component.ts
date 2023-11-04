@@ -62,6 +62,7 @@ interface AntwortvorschlagFormValue {
 })
 export class RaetselEditorComponent implements OnInit, OnDestroy {
 
+  #warnungIncludegraphics = 'Bitte den \includegraphics-Befehl nicht manuell einfügen. Er wird beim Hochladen einer neuen Datei vom System generiert. Der generierte Pfad darf nicht geändert werden!';
 
   #raetselDetails!: RaetselDetails;
   #fb = inject(UntypedFormBuilder);
@@ -98,7 +99,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
     titel: 'neues Bild in Frage einbinden',
-    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Frage-Textes und kann an eine beliebiege Stelle verschoben werden. Bitte den \includegraphics-Befehl __nicht__ manuell einbinden. Er muss generiert werden!'
+    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Frage-Textes und kann an eine beliebiege Stelle verschoben werden. Das width-Attribut kann geändert werden.',
+    hinweis: this.#warnungIncludegraphics
   };
 
 
@@ -108,7 +110,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
     titel: 'neues Bild in Lösung einbinden',
-    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Lösung-Textes und kann an eine beliebiege Stelle verschoben werden. Bitte den \includegraphics-Befehl __nicht__ manuell einbinden. Er muss generiert werden!'
+    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Lösung-Textes und kann an eine beliebiege Stelle verschoben werden. Das width-Attribut kann geändert werden.',
+    hinweis: this.#warnungIncludegraphics
   };
 
   #embeddableImagesResponseSubscription: Subscription = new Subscription();
