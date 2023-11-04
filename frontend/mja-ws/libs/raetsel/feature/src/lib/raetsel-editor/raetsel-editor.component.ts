@@ -20,7 +20,7 @@ import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWOR
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel, FileInfoComponent, FileInfoModel } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { GrafikFacade } from '@mja-ws/grafik/api';
-import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
+import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import { MatCardModule } from '@angular/material/card';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { EmbeddableImageContext, TEXTART } from '@mja-ws/embeddable-images/model';
@@ -53,7 +53,7 @@ interface AntwortvorschlagFormValue {
     FrageLoesungImagesComponent,
     SelectItemsComponent,
     JaNeinDialogComponent,
-    GrafikDetailsComponent,
+    EmbeddableImageVorschauComponent,
     GeneratorParametersDialogAutorenComponent,
     SelectFileComponent,
     FileInfoComponent

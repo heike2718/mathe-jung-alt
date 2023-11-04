@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { EmbeddableImageVorschau } from '@mja-ws/embeddable-images/model';
 
 @Component({
-  selector: 'mja-grafik',
+  selector: 'mja-embeddable-image-vorschau',
   standalone: true,
   imports: [
     CommonModule,
@@ -16,10 +16,10 @@ import { EmbeddableImageVorschau } from '@mja-ws/embeddable-images/model';
     SelectFileComponent,
     FileInfoComponent
   ],
-  templateUrl: './grafik-details.component.html',
-  styleUrls: ['./grafik-details.component.scss'],
+  templateUrl: './embeddable-image-vorschau.component.html',
+  styleUrls: ['./embeddable-image-vorschau.component.scss'],
 })
-export class GrafikDetailsComponent implements OnInit, OnDestroy {
+export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
 
   grafikFacade = inject(GrafikFacade);
 
@@ -67,6 +67,7 @@ export class GrafikDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.grafikFacade.clearVorschau();
     this.#grafikSelectedSubscription.unsubscribe();
+    this.#grafikHochgeladenSubscription.unsubscribe();
   }
 
   onFileSelected($event: FileInfoModel): void {

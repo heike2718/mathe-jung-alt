@@ -19,7 +19,7 @@ import { FileUploadComponent, FrageLoesungImagesComponent, GeneratorParametersDi
 import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { GrafikFacade } from '@mja-ws/grafik/api';
-import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
+import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import {
   anzeigeAntwortvorschlaegeSelectInput,
   FONT_NAME,
@@ -49,7 +49,7 @@ import {
     FrageLoesungImagesComponent,
     AntwortvorschlagComponent,
     FileUploadComponent,
-    GrafikDetailsComponent,
+    EmbeddableImageVorschauComponent,
     GeneratorParametersDialogAutorenComponent
   ],
   templateUrl: './raetsel-details.component.html',
