@@ -29,11 +29,7 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   @Input()
   raetselId = '';
 
-  @Input()
-  modusEdit = false;
-
-  @Input()
-  textart!: TEXTART;
+  hinweisNichtExistierendeGrafik = '';
 
   #config = inject(Configuration);
   devMode = !this.#config.production;
@@ -69,6 +65,8 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
         }
       }
     )
+
+    this.hinweisNichtExistierendeGrafik = 'Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen. Zum Hochladen bitte Rätsel bearbeiten.';
   }
 
   ngOnDestroy(): void {
@@ -78,16 +76,12 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   }
 
   showSelectFileComponent(): boolean {
-
+    
     if (this.fileInfo) {
       return false;
     }
 
-    if (!this.modusEdit) {
-      return this.#selectedEmbeddableImageVorschau? this.#selectedEmbeddableImageVorschau.exists : false;
-    } else {
-      return !this.fileInfo;
-    }
+    return this.#selectedEmbeddableImageVorschau ? this.#selectedEmbeddableImageVorschau.exists : false;
   }
 
   onFileSelected($event: FileInfoModel): void {
@@ -95,14 +89,12 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   }
 
   uploadFile(): void {
-    if (this.#selectedEmbeddableImageVorschau && this.fileInfo) {
+    if (this.fileInfo) {
 
-      const context: EmbeddableImageContext = { raetselId: this.raetselId, textart: this.textart };
+      const context: EmbeddableImageContext = { raetselId: this.raetselId, textart: 'FRAGE' };
 
-      if (this.#selectedEmbeddableImageVorschau.exists) {
+      if (this.#selectedEmbeddableImageVorschau) {
         this.embeddableImagesFacade.replaceEmbeddableImage(this.#selectedEmbeddableImageVorschau.pfad, context, this.fileInfo.file);
-      } else {
-        this.embeddableImagesFacade.createEmbeddableImage(context, this.fileInfo.file);
       }
       this.fileInfo = undefined;
     }

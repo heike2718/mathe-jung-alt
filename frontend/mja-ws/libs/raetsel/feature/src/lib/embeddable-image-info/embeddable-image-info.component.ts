@@ -5,8 +5,6 @@ import { Configuration } from '@mja-ws/shared/config';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
-import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { Message } from '@mja-ws/shared/messaging/api';
 
 @Component({
   selector: 'mja-ws-embeddable-image-info',
@@ -14,7 +12,7 @@ import { Message } from '@mja-ws/shared/messaging/api';
   imports: [
     CommonModule,
     MatIconModule,
-    MatButtonModule   
+    MatButtonModule
   ],
   templateUrl: './embeddable-image-info.component.html',
   styleUrls: ['./embeddable-image-info.component.scss'],
@@ -25,18 +23,12 @@ export class EmbeddableImageInfoComponent {
   embeddableImageInfo!: EmbeddableImageInfo;
 
   @Output()
-  grafikHochgeladen: EventEmitter<Message> = new EventEmitter<Message>();
+  pfadSelected: EventEmitter<string> = new EventEmitter<string>();
 
   #config = inject(Configuration);
   devMode = !this.#config.production;
 
-  #embeddableImagesFacade = inject(EmbeddableImagesFacade);
-
-  grafikLaden(link: string): void {
-    this.#embeddableImagesFacade.vorschauLaden(link);
-  }
-
-  onGrafikHochgeladen($event: Message): void {
-    this.grafikHochgeladen.emit($event);
+  selected($event: string) {
+    this.pfadSelected.emit($event);
   }
 }

@@ -83,12 +83,12 @@
 
                             <mat-nav-list>
                                 <mat-list-item *ngFor="let embeddableImageInfo of raetsel.embeddableImageInfos">
-                                    <mja-ws-embeddable-image-info [embeddableImageInfo]="embeddableImageInfo" (grafikHochgeladen)="onGrafikHochgeladen($event)"></mja-ws-embeddable-image-info>                                    
+                                    <mja-ws-embeddable-image-info [embeddableImageInfo]="embeddableImageInfo" (pfadSelected)="onPfadVorschauSelected($event)"></mja-ws-embeddable-image-info>                                    
                                 </mat-list-item>
                             </mat-nav-list>
 
                             <mja-embeddable-image-vorschau [schluessel]=raetsel.schluessel
-                                [raetselId]=raetsel.id [modusEdit]=false [textart]="'FRAGE'"></mja-embeddable-image-vorschau>
+                                [raetselId]=raetsel.id></mja-embeddable-image-vorschau>
                         </mat-expansion-panel>
 
                         <mat-expansion-panel>

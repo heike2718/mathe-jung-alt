@@ -3,7 +3,7 @@
     <ng-container *ngIf="embeddableImagesFacade.selectedEmbeddableImageVorschau$ | async as selectedVorschau">
         <p *ngIf="devMode" class="hint">image-Teil (keine eigene Komponente)</p>
         <div *ngIf="!selectedVorschau.exists" class="bordered bg-white">
-            {{selectedVorschau.pfad}}: Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen. Zum Hochladen bitte Rätsel bearbeiten.
+            {{selectedVorschau.pfad}}: {{hinweisNichtExistierendeGrafik}}
         </div>
         <div *ngIf="selectedVorschau.exists" class="bordered bg-white">
             {{selectedVorschau.pfad}}

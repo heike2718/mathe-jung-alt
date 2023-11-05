@@ -1,4 +1,4 @@
 export interface JaNeinDialogData {
-    frage: string;
-    hinweis: string | undefined;
+   readonly frage: string;
+   readonly hinweis: string | undefined;
 };

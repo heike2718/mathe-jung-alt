@@ -69,6 +69,14 @@
                         </mat-form-field>
                     </div>
 
+                    <h2 *ngIf="embeddableImageInfosFrage.length > 0">Eingebundene Bilder</h2>
+                    <mat-nav-list *ngIf="embeddableImageInfosFrage.length > 0">
+                        <mat-list-item *ngFor="let embeddableImageInfo of embeddableImageInfosFrage">
+                            <mja-ws-embeddable-image-info [embeddableImageInfo]="embeddableImageInfo"
+                                (pfadSelected)="onPfadVorschauSelected($event)"></mja-ws-embeddable-image-info>
+                        </mat-list-item>
+                    </mat-nav-list>
+
                     <div class="mb-2">
                         <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
                         <mja-select-file *ngIf="!fileInfoFrage" [selectFileModel]="selectFileFrageModel"
@@ -95,6 +103,13 @@
                             <mat-error *ngIf="raetselDataError('frage', 'required')">Frage ist Pflicht</mat-error>
                         </mat-form-field>
                     </div>
+
+                    <mat-nav-list *ngIf="embeddableImageInfosLoesung.length > 0">
+                        <mat-list-item *ngFor="let embeddableImageInfo of embeddableImageInfosLoesung">
+                            <mja-ws-embeddable-image-info [embeddableImageInfo]="embeddableImageInfo"
+                                (pfadSelected)="onPfadVorschauSelected($event)"></mja-ws-embeddable-image-info>
+                        </mat-list-item>
+                    </mat-nav-list>
 
                     <div class="mb-2">
                         <!-- fileSelected transportiert ein FileInfoModel- Objekt -->

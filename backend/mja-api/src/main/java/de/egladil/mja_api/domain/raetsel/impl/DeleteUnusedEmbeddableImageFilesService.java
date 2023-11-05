@@ -44,7 +44,6 @@ public class DeleteUnusedEmbeddableImageFilesService {
 		neuePfade.addAll(pathsParser.findPaths(fragenUndLoesungen.getLoesungNeu()));
 
 		checkAndDelete(altePfade, neuePfade);
-
 	}
 
 	private void checkAndDelete(final List<String> pfadeNeu, final List<String> pfadeAlt) {

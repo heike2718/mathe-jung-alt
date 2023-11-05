@@ -43,7 +43,6 @@ import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddabl
     MatChipsModule,
     MatButtonModule,
     MatDialogModule,
-    // MatIconModule,
     MatFormFieldModule,
     MatListModule,
     MatTooltipModule,
@@ -114,16 +113,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     return mbeddableImageInfosOhneFile.length > 0;
   }
 
-  grafikLaden(link: string): void {
-    this.#embeddableImagesFacade.vorschauLaden(link);
-  }
-
-  onGrafikHochgeladen($event: Message): void {
-
-    // Das cḱlingt seltsam. Warum???
-    if ($event.level === 'INFO') {
-      this.raetselFacade.selectRaetsel(this.#raetselDetails);
-    }
+  onPfadVorschauSelected($pfad: string): void {
+    this.#embeddableImagesFacade.vorschauLaden($pfad);
   }
 
   downloadLatexLogs(): void {

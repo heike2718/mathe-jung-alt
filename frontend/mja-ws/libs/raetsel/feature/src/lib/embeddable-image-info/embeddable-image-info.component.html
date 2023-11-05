@@ -4,10 +4,10 @@
     {{embeddableImageInfo.textart}}</span>
 <button *ngIf="embeddableImageInfo.existiert" matTooltip="Vorschau laden oder Grafikdatei ersetzen"
     aria-label="Vorschau laden oder Grafikdatei ersetzen" mat-icon-button
-    (click)="grafikLaden(embeddableImageInfo.pfad)">
+    (click)="selected(embeddableImageInfo.pfad)">
     <mat-icon *ngIf="embeddableImageInfo.existiert">image</mat-icon>
 </button>
 <button *ngIf="!embeddableImageInfo.existiert" matTooltip="Grafikdatei hochladen" aria-label="Grafikdatei hochladen"
-    mat-icon-button (click)="grafikLaden(embeddableImageInfo.pfad)">
+    mat-icon-button (click)="selected(embeddableImageInfo.pfad)">
     <mat-icon *ngIf="!embeddableImageInfo.existiert">warning</mat-icon>
 </button>

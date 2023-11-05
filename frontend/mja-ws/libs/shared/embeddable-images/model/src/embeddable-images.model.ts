@@ -37,12 +37,14 @@ export interface EmbeddableImageResponseDto {
   readonly context: EmbeddableImageContext;
   readonly includegraphicsCommand: string;
   readonly pfad: string;
+  readonly replaced: boolean;
 };
 
 export const initialEmbeddableImageResponseDto: EmbeddableImageResponseDto = {
   context: initialEmbeddableImageContext,
   includegraphicsCommand: '',
-  pfad: ''
+  pfad: '',
+  replaced: false
 };
 
 export interface ReplaceEmbeddableImageRequestDto {
