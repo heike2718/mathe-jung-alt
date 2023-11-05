@@ -70,6 +70,9 @@ public class RaetselServiceImpl implements RaetselService {
 	@Inject
 	RaetselDao raetselDao;
 
+	@Inject
+	DeleteUnusedEmbeddableImageFilesService deleteImagesFileService;
+
 	private final FindPathsGrafikParser findPathsGrafikParser = new FindPathsGrafikParser();
 
 	@Override
@@ -232,8 +235,15 @@ public class RaetselServiceImpl implements RaetselService {
 			PersistentesRaetselHistorieItem.persist(neuesHistorieItem);
 		}
 
+		FragenUndLoesungenVO fragenLoesungenVo = new FragenUndLoesungenVO().withFrageAlt(persistentesRaetsel.frage)
+			.withFrageNeu(payload.getRaetsel().getFrage()).withLoesungAlt(persistentesRaetsel.loesung)
+			.withLoesungNeu(payload.getRaetsel().getLoesung());
+
 		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
 		PersistentesRaetsel.persist(persistentesRaetsel);
+
+		// Nur löschen, wenn persist klar ging!
+		deleteImagesFileService.checkAndDeleteUnusedFiles(fragenLoesungenVo);
 
 		LOGGER.info("Raetsel geaendert: [raetsel={}, user={}]", raetselId,
 			StringUtils.abbreviate(authCtx.getUser().getName(), 11));

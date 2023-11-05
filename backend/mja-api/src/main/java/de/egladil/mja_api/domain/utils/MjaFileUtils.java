@@ -117,7 +117,7 @@ public class MjaFileUtils {
 		return null;
 	}
 
-	public static void deleteTemporaryFiles(final String... paths) {
+	public static void deleteFiles(final String... paths) {
 
 		for (String path : paths) {
 

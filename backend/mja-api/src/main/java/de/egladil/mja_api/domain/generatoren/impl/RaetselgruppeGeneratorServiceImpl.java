@@ -191,7 +191,7 @@ public class RaetselgruppeGeneratorServiceImpl implements RaetselgruppeGenerator
 
 		String[] paths = TEMPORARY_FILE_EXTENSIONS.stream().map(ext -> new String(path + ext)).toList().toArray(new String[0]);
 
-		MjaFileUtils.deleteTemporaryFiles(paths);
+		MjaFileUtils.deleteFiles(paths);
 
 	}
 }

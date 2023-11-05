@@ -33,8 +33,8 @@ public class FindPathsGrafikParser {
 	 * Sucht die relativem Pfade von Grafiken in einem Latex-Text.
 	 *
 	 * @param  latex
-	 *               String
-	 * @return       List
+	 *               String darf blank sein
+	 * @return       List immer
 	 */
 	public List<String> findPaths(final String latex) {
 

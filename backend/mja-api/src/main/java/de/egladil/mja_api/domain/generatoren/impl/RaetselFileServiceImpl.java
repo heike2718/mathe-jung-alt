@@ -5,11 +5,14 @@
 package de.egladil.mja_api.domain.generatoren.impl;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
@@ -240,6 +243,27 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 
 				LOGGER.warn("File {} wurde nicht gelöscht", path);
 			}
+		}
+	}
+
+	@Override
+	public boolean deleteImageFile(final String relativePath) {
+
+		Path path = Path.of(this.latexBaseDir + File.separator + relativePath);
+
+		try {
+
+			java.nio.file.Files.delete(path);
+
+			return true;
+		} catch (IOException e) {
+
+			LOGGER.error(e.getMessage(), e);
+
+			String message = "Datei " + path + " konnte nicht geloescht werden";
+
+			throw new MjaRuntimeException(message);
+
 		}
 	}
 
