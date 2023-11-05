@@ -83,22 +83,7 @@
 
                             <mat-nav-list>
                                 <mat-list-item *ngFor="let embeddableImageInfo of raetsel.embeddableImageInfos">
-                                    <span *ngIf="devMode" class="hint">embeddableImageInfo</span>
-                                    <span *ngIf="embeddableImageInfo.existiert">{{embeddableImageInfo.pfad}} - {{embeddableImageInfo.textart}}</span>
-                                    <span *ngIf="!embeddableImageInfo.existiert"
-                                        class="notFound">{{embeddableImageInfo.pfad}} -
-                                        {{embeddableImageInfo.textart}}</span>
-                                    <button *ngIf="embeddableImageInfo.existiert"
-                                        matTooltip="Vorschau laden oder Grafikdatei ersetzen"
-                                        aria-label="Vorschau laden oder Grafikdatei ersetzen" mat-icon-button
-                                        (click)="grafikLaden(embeddableImageInfo.pfad)">
-                                        <mat-icon *ngIf="embeddableImageInfo.existiert">image</mat-icon>
-                                    </button>
-                                    <button *ngIf="!embeddableImageInfo.existiert" matTooltip="Grafikdatei hochladen"
-                                        aria-label="Grafikdatei hochladen" mat-icon-button
-                                        (click)="grafikLaden(embeddableImageInfo.pfad)">
-                                        <mat-icon *ngIf="!embeddableImageInfo.existiert">warning</mat-icon>
-                                    </button>
+                                    <mja-ws-embeddable-image-info [embeddableImageInfo]="embeddableImageInfo" (grafikHochgeladen)="onGrafikHochgeladen($event)"></mja-ws-embeddable-image-info>                                    
                                 </mat-list-item>
                             </mat-nav-list>
 

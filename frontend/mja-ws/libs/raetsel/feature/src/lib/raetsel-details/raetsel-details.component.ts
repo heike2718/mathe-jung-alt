@@ -31,6 +31,7 @@ import {
 } from '@mja-ws/core/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { Configuration } from '@mja-ws/shared/config';
+import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -42,7 +43,7 @@ import { Configuration } from '@mja-ws/shared/config';
     MatChipsModule,
     MatButtonModule,
     MatDialogModule,
-    MatIconModule,
+    // MatIconModule,
     MatFormFieldModule,
     MatListModule,
     MatTooltipModule,
@@ -51,6 +52,7 @@ import { Configuration } from '@mja-ws/shared/config';
     AntwortvorschlagComponent,
     FileUploadComponent,
     EmbeddableImageVorschauComponent,
+    EmbeddableImageInfoComponent,
     GeneratorParametersDialogAutorenComponent
   ],
   templateUrl: './raetsel-details.component.html',
