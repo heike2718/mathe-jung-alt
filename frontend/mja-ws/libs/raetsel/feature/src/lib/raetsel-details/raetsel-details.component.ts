@@ -13,7 +13,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { Router } from '@angular/router';
-import { GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
+import { EmbeddableImageInfo, RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
 import { FileUploadComponent, FrageLoesungImagesComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
 import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
@@ -30,6 +30,7 @@ import {
   SelectGeneratorParametersUIModelAutoren
 } from '@mja-ws/core/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
+import { Configuration } from '@mja-ws/shared/config';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -60,6 +61,9 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   raetselFacade = inject(RaetselFacade);
   authFacade = inject(AuthFacade);
   dialog = inject(MatDialog);
+
+  #config = inject(Configuration);
+  devMode = !this.#config.production;
 
   #embeddableImagesFacade = inject(EmbeddableImagesFacade);
   #router = inject(Router);
@@ -104,8 +108,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   generierenDiabled(): boolean {
-    const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
-    return grafikInfosOhneFile.length > 0;
+    const mbeddableImageInfosOhneFile: EmbeddableImageInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
+    return mbeddableImageInfosOhneFile.length > 0;
   }
 
   grafikLaden(link: string): void {

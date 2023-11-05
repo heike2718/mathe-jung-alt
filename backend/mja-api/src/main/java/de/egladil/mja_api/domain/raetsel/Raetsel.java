@@ -254,9 +254,9 @@ public class Raetsel extends AbstractDomainEntity {
 		return embeddableImageInfos;
 	}
 
-	public void setEmbeddableImageInfos(final List<EmbeddableImageInfo> embeddableImageInfos) {
+	public void addAllEmbeddableImageInfos(final List<EmbeddableImageInfo> embeddableImageInfos) {
 
-		this.embeddableImageInfos = embeddableImageInfos;
+		this.embeddableImageInfos.addAll(embeddableImageInfos);
 	}
 
 	public boolean isSchreibgeschuetzt() {

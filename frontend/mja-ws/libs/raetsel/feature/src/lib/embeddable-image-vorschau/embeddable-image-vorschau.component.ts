@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { Subscription } from 'rxjs';
 import { EmbeddableImageVorschau } from '@mja-ws/embeddable-images/model';
+import { Configuration } from '@mja-ws/shared/config';
 
 @Component({
   selector: 'mja-embeddable-image-vorschau',
@@ -28,7 +29,13 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   @Input()
   raetselId = '';
 
-  selectedEmbeddableImageVorschau: EmbeddableImageVorschau | undefined;
+  @Input()
+  modusEdit = false;
+
+  #config = inject(Configuration);
+  devMode = !this.#config.production;
+
+  #selectedEmbeddableImageVorschau: EmbeddableImageVorschau | undefined;
 
   fileInfo: FileInfoModel | undefined;
 
@@ -50,7 +57,7 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.#selectedEmbeddableImageSubscription = this.embeddableImagesFacade.selectedEmbeddableImageVorschau$.subscribe(
-      (selectedEmbeddableImageVorschau) => this.selectedEmbeddableImageVorschau = selectedEmbeddableImageVorschau);
+      (selectedEmbeddableImageVorschau) => this.#selectedEmbeddableImageVorschau = selectedEmbeddableImageVorschau);
 
     this.#embeddableImageResponseSubscription = this.embeddableImagesFacade.embeddableImageResponse$.subscribe(
       (response) => {
@@ -67,15 +74,28 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
     this.#embeddableImageResponseSubscription.unsubscribe();
   }
 
+  showSelectFileComponent(): boolean {
+
+    if (this.fileInfo) {
+      return false;
+    }
+
+    if (!this.modusEdit) {
+      return this.#selectedEmbeddableImageVorschau? this.#selectedEmbeddableImageVorschau.exists : false;
+    } else {
+      return !this.fileInfo;
+    }
+  }
+
   onFileSelected($event: FileInfoModel): void {
     this.fileInfo = $event;
   }
 
   uploadFile(): void {
-    if (this.selectedEmbeddableImageVorschau && this.fileInfo) {
+    if (this.#selectedEmbeddableImageVorschau && this.fileInfo) {
 
-      if (this.selectedEmbeddableImageVorschau.exists) {
-        this.embeddableImagesFacade.replaceEmbeddableImage(this.raetselId, this.selectedEmbeddableImageVorschau.pfad, this.fileInfo.file);
+      if (this.#selectedEmbeddableImageVorschau.exists) {
+        this.embeddableImagesFacade.replaceEmbeddableImage(this.raetselId, this.#selectedEmbeddableImageVorschau.pfad, this.fileInfo.file);
       } else {
         this.embeddableImagesFacade.createEmbeddableImage({ raetselId: this.raetselId, textart: 'FRAGE' }, this.fileInfo.file);
       }

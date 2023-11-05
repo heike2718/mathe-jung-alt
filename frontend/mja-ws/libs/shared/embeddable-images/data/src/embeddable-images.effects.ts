@@ -38,6 +38,4 @@ export class EmbeddableImagesEffects {
             map((message) => embeddableImagesActions.eMBEDABBLE_IMAGE_REPLACED({ message }))
         );
     });
-    
-
 }

@@ -1,4 +1,5 @@
 <h2 *ngIf="selectFileModel.titel && selectFileModel.titel.length>0">{{selectFileModel.titel}}</h2>
+<p *ngIf="devMode" class="hint">select-file.component</p>
 <p class="info" *ngIf="selectFileModel.beschreibung">{{selectFileModel.beschreibung}}</p>
 <p class="warnung" *ngIf="selectFileModel.hinweis">{{selectFileModel.hinweis}}</p>
 

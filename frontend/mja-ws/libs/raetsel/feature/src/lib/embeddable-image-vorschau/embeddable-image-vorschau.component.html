@@ -1,7 +1,9 @@
-<div *ngIf="selectedEmbeddableImageVorschau" else vorschauNichtGeladen>
+<div *ngIf="embeddableImagesFacade.embeddableImageVorschauGeladen$ | async">
+    <p *ngIf="devMode" class="hint">embeddable-image-vorschau.component</p>
     <ng-container *ngIf="embeddableImagesFacade.selectedEmbeddableImageVorschau$ | async as selectedVorschau">
+        <p *ngIf="devMode" class="hint">image-Teil (keine eigene Komponente)</p>
         <div *ngIf="!selectedVorschau.exists" class="bordered bg-white">
-            {{selectedVorschau.pfad}}: Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen.
+            {{selectedVorschau.pfad}}: Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen. Zum Hochladen bitte Rätsel bearbeiten.
         </div>
         <div *ngIf="selectedVorschau.exists" class="bordered bg-white">
             {{selectedVorschau.pfad}}
@@ -11,28 +13,19 @@
             </div>
         </div>
 
+        <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
+        <mja-select-file *ngIf="showSelectFileComponent()" [selectFileModel]="selectFileModel"
+            (fileSelected)="onFileSelected($event)"></mja-select-file>
 
-        <div class="mb-2">
-            <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-            <mja-select-file *ngIf="!fileInfo" [selectFileModel]="selectFileModel"
-                (fileSelected)="onFileSelected($event)"></mja-select-file>
+        <mja-file-info *ngIf="fileInfo" [titel]="selectFileModel.titel" [beschreibung]="selectFileModel.beschreibung"
+            [fileName]="fileInfo.file.name" [maxSizeBytes]="selectFileModel.maxSizeBytes"
+            [actualFileSize]="fileInfo.fileSize">
+        </mja-file-info>
 
-            <mja-file-info *ngIf="fileInfo" [titel]="selectFileModel.titel"
-                [beschreibung]="selectFileModel.beschreibung" [fileName]="fileInfo.file.name"
-                [maxSizeBytes]="selectFileModel.maxSizeBytes"
-                [actualFileSize]="fileInfo.fileSize">
-            </mja-file-info>
+        <button mat-raised-button color="primary" *ngIf="fileInfo" (click)="uploadFile()">Datei hochladen</button>
 
-            <button mat-raised-button color="primary" *ngIf="fileInfo"
-                (click)="uploadFile()">Datei hochladen</button>
-        </div>
-
-        <div class="button-container">
+        <div class="button-container mt-2">
             <button mat-stroked-button color="primary" (click)="reset()">leeren</button>
         </div>
     </ng-container>
 </div>
-
-<ng-template #vorschauNichtGeladen>
-    <p>zum Laden der Vorschau auf info klicken</p>
-</ng-template>

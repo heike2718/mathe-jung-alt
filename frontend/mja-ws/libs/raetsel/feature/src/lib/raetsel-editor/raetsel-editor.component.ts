@@ -13,7 +13,7 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { Antwortvorschlag, EditRaetselPayload, GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
+import { Antwortvorschlag, EditRaetselPayload, EmbeddableImageInfo, RaetselDetails } from '@mja-ws/raetsel/model';
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, STATUS, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
@@ -62,7 +62,7 @@ interface AntwortvorschlagFormValue {
 })
 export class RaetselEditorComponent implements OnInit, OnDestroy {
 
-  #warnungIncludegraphics = 'Bitte den \includegraphics-Befehl nicht manuell einfügen. Er wird beim Hochladen einer neuen Datei vom System generiert. Der generierte Pfad darf nicht geändert werden!';
+  #warnungIncludegraphics = 'Bitte den \\includegraphics-Befehl nicht manuell einfügen. Er wird beim Hochladen einer neuen Datei vom System generiert. Der generierte Pfad darf nicht geändert werden!';
 
   #raetselDetails!: RaetselDetails;
   #fb = inject(UntypedFormBuilder);
@@ -222,8 +222,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   generierenDiabled(): boolean {
 
-    const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
-    return !this.form.valid || this.antwortvorschlaegeErrors() || grafikInfosOhneFile.length > 0;
+    const mbeddableImageInfosOhneFile: EmbeddableImageInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
+    return !this.form.valid || this.antwortvorschlaegeErrors() || mbeddableImageInfosOhneFile.length > 0;
   }
 
   onChangeAnzahlAntwortvorschlaege($event: any) {

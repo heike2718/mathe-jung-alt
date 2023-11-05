@@ -15,8 +15,8 @@ ersetzt, analog zur raetsel-editor.
 
 ~~grafik.state muss in embeddableImages.state integriert werden und alle Methode aus GrafikFacade müssen in EmbeddableImagesFacade umziehen.~~
 
-~~Nach dem Hochladen der neuen Grafik wird das Vorschaubild in der grafik-details.component noch nicht ausgetauscht.~~
-~~Das Event für das erfolgreiche Hochladen gelangt noch nicht zurück in die grafik-details.component.~~
+Nach dem Hochladen der neuen Grafik wird das Vorschaubild in der grafik-details.component noch nicht ausgetauscht.
+Das Event für das erfolgreiche Hochladen gelangt noch nicht zurück in die grafik-details.component.
 
 ~~Also die GRAFIK_HOCHGELADEN - Action sollte das Laden der Vorschau auslösen. Da ist uns ein Event abhanden gekommen, das im file-upload noch~~
 ~~vorhanden war.~~

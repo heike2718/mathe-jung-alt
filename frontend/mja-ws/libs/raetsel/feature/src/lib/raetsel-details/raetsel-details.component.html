@@ -83,13 +83,16 @@
 
                             <mat-nav-list>
                                 <mat-list-item *ngFor="let embeddableImageInfo of raetsel.embeddableImageInfos">
-                                    <span *ngIf="embeddableImageInfo.existiert">{{ embeddableImageInfo.pfad }}</span>
-                                    <span *ngIf="!embeddableImageInfo.existiert" class="notFound">{{
-                                        embeddableImageInfo.pfad }}</span>
-                                    <button *ngIf="embeddableImageInfo.existiert" matTooltip="Vorschau laden oder Grafikdatei ersetzen"
+                                    <span *ngIf="devMode" class="hint">embeddableImageInfo</span>
+                                    <span *ngIf="embeddableImageInfo.existiert">{{embeddableImageInfo.pfad}} - {{embeddableImageInfo.textart}}</span>
+                                    <span *ngIf="!embeddableImageInfo.existiert"
+                                        class="notFound">{{embeddableImageInfo.pfad}} -
+                                        {{embeddableImageInfo.textart}}</span>
+                                    <button *ngIf="embeddableImageInfo.existiert"
+                                        matTooltip="Vorschau laden oder Grafikdatei ersetzen"
                                         aria-label="Vorschau laden oder Grafikdatei ersetzen" mat-icon-button
                                         (click)="grafikLaden(embeddableImageInfo.pfad)">
-                                        <mat-icon *ngIf="embeddableImageInfo.existiert">info</mat-icon>
+                                        <mat-icon *ngIf="embeddableImageInfo.existiert">image</mat-icon>
                                     </button>
                                     <button *ngIf="!embeddableImageInfo.existiert" matTooltip="Grafikdatei hochladen"
                                         aria-label="Grafikdatei hochladen" mat-icon-button
@@ -99,7 +102,8 @@
                                 </mat-list-item>
                             </mat-nav-list>
 
-                            <mja-embeddable-image-vorschau [schluessel]=raetsel.schluessel [raetselId]=raetsel.id></mja-embeddable-image-vorschau>
+                            <mja-embeddable-image-vorschau [schluessel]=raetsel.schluessel
+                                [raetselId]=raetsel.id [modusEdit]=false></mja-embeddable-image-vorschau>
                         </mat-expansion-panel>
 
                         <mat-expansion-panel>

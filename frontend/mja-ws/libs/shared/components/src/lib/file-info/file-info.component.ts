@@ -1,10 +1,9 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { Configuration } from "@mja-ws/shared/config";
 import { calculateFileSize } from "@mja-ws/shared/util";
-
-
 
 @Component({
     selector: 'mja-file-info',
@@ -33,6 +32,9 @@ export class FileInfoComponent implements OnInit {
 
     @Input()
     actualFileSize!: number;
+
+    #config = inject(Configuration);
+    devMode = !this.#config.production;
 
     maxFileSizeInfo!: string;
     fileSize = '';
