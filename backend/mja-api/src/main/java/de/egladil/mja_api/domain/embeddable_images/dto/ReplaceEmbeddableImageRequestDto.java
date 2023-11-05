@@ -64,4 +64,10 @@ public class ReplaceEmbeddableImageRequestDto {
 		return context;
 	}
 
+	public ReplaceEmbeddableImageRequestDto withContext(final EmbeddableImageContext context) {
+
+		this.context = context;
+		return this;
+	}
+
 }

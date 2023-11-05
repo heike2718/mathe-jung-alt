@@ -73,6 +73,8 @@ public class EmbeddableImagesResourceTest {
 		System.out.println(result.getIncludegraphicsCommand());
 
 		assertEquals(context, result.getContext());
+		assertTrue(result.getIncludegraphicsCommand().length() > 0);
+		assertFalse(result.getPfad().isEmpty());
 	}
 
 	@Test
@@ -182,12 +184,14 @@ public class EmbeddableImagesResourceTest {
 		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
 			.withData(data);
 
-		String relativerPfad = "/resources/001/01003.eps";
 		String raetselId = "69959982-83f9-482d-a26c-8eb4a92bd6ff";
-		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(raetselId)
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(raetselId).withTextart(Textart.FRAGE);
+
+		String relativerPfad = "/resources/001/01003.eps";
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
 			.withRelativerPfad(relativerPfad).withUpload(uploadedFile);
 
-		MessagePayload result = given().when()
+		EmbeddableImageResponseDto result = given().when()
 			.contentType(ContentType.JSON)
 			.header("Accept", ContentType.JSON)
 			.body(requestDto)
@@ -198,11 +202,108 @@ public class EmbeddableImagesResourceTest {
 			.assertThat()
 			.contentType(ContentType.JSON)
 			.extract()
+			.as(EmbeddableImageResponseDto.class);
+
+		assertEquals(context, result.getContext());
+		assertTrue(result.getIncludegraphicsCommand().length() > 0);
+		assertFalse(result.getPfad().isEmpty());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldReplaceEmbeddableImageReturn400_when_raetselIdInvalid() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/00000.eps");
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(data);
+
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("abcx").withTextart(Textart.FRAGE);
+
+		String relativerPfad = "/resources/001/01003.eps";
+
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
+			.withRelativerPfad(relativerPfad).withUpload(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.put("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
 			.as(MessagePayload.class);
 
-		System.err.println(result.getMessage());
+		assertEquals("ERROR", result.getLevel());
+		assertEquals("die raetselId enthält ungültige Zeichen", result.getMessage());
+	}
 
-		assertTrue(result.isOk());
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldReplaceEmbeddableImageReturn400_when_pfadNull() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/00000.eps");
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(data);
+
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("abcdef").withTextart(Textart.FRAGE);
+
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
+			.withUpload(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.put("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals("die raetselId enthält ungültige Zeichen", result.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldReplaceEmbeddableImageReturn400_when_pfadInvalid() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/00000.eps");
+		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
+			.withData(data);
+
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("abcx").withTextart(Textart.FRAGE);
+
+		String relativerPfad = "/resources/e/001/01003.eps";
+
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
+			.withRelativerPfad(relativerPfad).withUpload(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.put("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals("die raetselId enthält ungültige Zeichen", result.getMessage());
 	}
 
 	@Test
@@ -216,7 +317,9 @@ public class EmbeddableImagesResourceTest {
 
 		String relativerPfad = "/resources/001/01003.eps";
 		String raetselId = "69959982-83f9-482d-a26c-8eb4a92bd6ff";
-		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(raetselId)
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(raetselId).withTextart(Textart.FRAGE);
+
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
 			.withRelativerPfad(relativerPfad).withUpload(uploadedFile);
 
 		MessagePayload result = given().when()
@@ -251,7 +354,9 @@ public class EmbeddableImagesResourceTest {
 
 		String relativerPfad = "/resources/001/01003.eps";
 		String raetselId = "69959982-83f9-482d-a26c-8eb4a92bd6ff";
-		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(raetselId)
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(raetselId).withTextart(Textart.FRAGE);
+
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
 			.withRelativerPfad(relativerPfad).withUpload(uploadedFile);
 
 		MessagePayload result = given().when()

@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.TestFileUtils;
-import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.embeddable_images.EmbeddableImageService;
 import de.egladil.mja_api.domain.embeddable_images.dto.CreateEmbeddableImageRequestDto;
@@ -275,7 +274,9 @@ public class EmbeddableImageUplodServiceTest {
 			when(authCtx.isUserInRole("AUTOR")).thenReturn(Boolean.TRUE);
 			when(raetselDao.getWithID(RAETSEL_ID)).thenReturn(raetsel);
 
-			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(RAETSEL_ID).withRelativerPfad(RELATIVER_PFAD).withUpload(uploadedFile);
+			EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(RAETSEL_ID).withTextart(Textart.LOESUNG);
+
+			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context).withRelativerPfad(RELATIVER_PFAD).withUpload(uploadedFile);
 
 			// Act
 			try {
@@ -298,7 +299,9 @@ public class EmbeddableImageUplodServiceTest {
 
 			// Arrange
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
-			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(RAETSEL_ID).withRelativerPfad(RELATIVER_PFAD).withUpload(uploadedFile);
+
+			EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(RAETSEL_ID).withTextart(Textart.LOESUNG);
+			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context).withRelativerPfad(RELATIVER_PFAD).withUpload(uploadedFile);
 
 			// Act
 			try {
@@ -331,7 +334,9 @@ public class EmbeddableImageUplodServiceTest {
 
 			when(raetselDao.getWithID(RAETSEL_ID)).thenReturn(null);
 
-			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(RAETSEL_ID)
+			EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(RAETSEL_ID).withTextart(Textart.LOESUNG);
+
+			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
 				.withRelativerPfad(RELATIVER_PFAD).withUpload(uploadedFile);
 
 			// Act
@@ -367,7 +372,9 @@ public class EmbeddableImageUplodServiceTest {
 			doThrow(new UploadFormatException("Hilfe Virus one, one, one, ...")).when(uploadScanner)
 				.scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 
-			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(RAETSEL_ID)
+			EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(RAETSEL_ID).withTextart(Textart.LOESUNG);
+
+			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
 				.withRelativerPfad(RELATIVER_PFAD).withUpload(uploadedFile);
 
 			// Act
@@ -402,16 +409,18 @@ public class EmbeddableImageUplodServiceTest {
 			doNothing().when(uploadScanner)
 				.scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 
-			MessagePayload mp = MessagePayload.ok();
-			when(embeddableImageService.replaceEmbeddedImage(any(ReplaceEmbeddableImageRequestDto.class))).thenReturn(mp);
+			EmbeddableImageResponseDto expectedResult = new EmbeddableImageResponseDto();
 
-			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withRaetselId(RAETSEL_ID)
+			when(embeddableImageService.replaceEmbeddedImage(any(ReplaceEmbeddableImageRequestDto.class)))
+				.thenReturn(expectedResult);
+
+			EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(RAETSEL_ID).withTextart(Textart.LOESUNG);
+
+			ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
 				.withRelativerPfad(RELATIVER_PFAD).withUpload(uploadedFile);
 
 			// Act
-			MessagePayload result = service.replaceTheEmbeddableImage(requestDto);
-			assertEquals("ok", result.getMessage());
-			assertEquals("INFO", result.getLevel());
+			service.replaceTheEmbeddableImage(requestDto);
 
 			verify(authCtx).getUser();
 			verify(authCtx).isUserInRole("ADMIN");
