@@ -29,9 +29,6 @@ public class EmbeddableImageContext {
 	@Schema(description = "transportiert die textart aus der Payload unverändert zurück zum Aufrufer.")
 	private Textart textart;
 
-	@JsonProperty
-	private boolean replaced = false;
-
 	@Override
 	public int hashCode() {
 
@@ -93,17 +90,6 @@ public class EmbeddableImageContext {
 	public EmbeddableImageContext withTextart(final Textart textart) {
 
 		this.textart = textart;
-		return this;
-	}
-
-	public boolean isReplaced() {
-
-		return replaced;
-	}
-
-	public EmbeddableImageContext withReplaced(final boolean replaced) {
-
-		this.replaced = replaced;
 		return this;
 	}
 }
