@@ -4,7 +4,7 @@ import { FileInfoComponent, FileInfoModel, SelectFileComponent, SelectFileModel 
 import { MatButtonModule } from '@angular/material/button';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { Subscription } from 'rxjs';
-import { EmbeddableImageVorschau } from '@mja-ws/embeddable-images/model';
+import { EmbeddableImageContext, EmbeddableImageVorschau, TEXTART } from '@mja-ws/embeddable-images/model';
 import { Configuration } from '@mja-ws/shared/config';
 
 @Component({
@@ -31,6 +31,9 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
 
   @Input()
   modusEdit = false;
+
+  @Input()
+  textart!: TEXTART;
 
   #config = inject(Configuration);
   devMode = !this.#config.production;
@@ -94,10 +97,12 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   uploadFile(): void {
     if (this.#selectedEmbeddableImageVorschau && this.fileInfo) {
 
+      const context: EmbeddableImageContext = { raetselId: this.raetselId, textart: this.textart };
+
       if (this.#selectedEmbeddableImageVorschau.exists) {
-        this.embeddableImagesFacade.replaceEmbeddableImage(this.raetselId, this.#selectedEmbeddableImageVorschau.pfad, this.fileInfo.file);
+        this.embeddableImagesFacade.replaceEmbeddableImage(this.#selectedEmbeddableImageVorschau.pfad, context, this.fileInfo.file);
       } else {
-        this.embeddableImagesFacade.createEmbeddableImage({ raetselId: this.raetselId, textart: 'FRAGE' }, this.fileInfo.file);
+        this.embeddableImagesFacade.createEmbeddableImage(context, this.fileInfo.file);
       }
       this.fileInfo = undefined;
     }

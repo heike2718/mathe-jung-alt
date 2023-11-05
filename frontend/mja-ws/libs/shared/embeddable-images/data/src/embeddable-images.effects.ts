@@ -35,7 +35,7 @@ export class EmbeddableImagesEffects {
         return this.#actions.pipe(
             ofType(embeddableImagesActions.rEPLACE_EMEDDABLE_IMAGE),
             concatMap((action) => this.#httpService.replaceEmbeddableImage(action.requestDto)),
-            map((message) => embeddableImagesActions.eMBEDABBLE_IMAGE_REPLACED({ message }))
+            map((responseDto) => embeddableImagesActions.eMBEDABBLE_IMAGE_REPLACED({ responseDto }))
         );
     });
 }

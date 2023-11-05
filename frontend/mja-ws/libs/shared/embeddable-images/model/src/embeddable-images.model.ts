@@ -1,5 +1,4 @@
 import { UploadedFile, initialUploadedFile } from "@mja-ws/core/model";
-import { Message } from "@mja-ws/shared/messaging/api";
 
 export type TEXTART = 'FRAGE' | 'LOESUNG';
 
@@ -21,13 +20,13 @@ export interface FileInfo {
 
 export interface CreateEmbeddableImageRequestDto {
 
-    readonly context: EmbeddableImageContext;
-    readonly file: UploadedFile;
+  readonly context: EmbeddableImageContext;
+  readonly file: UploadedFile;
 };
 
 export const initialCreateEmbeddableImageRequestDto: CreateEmbeddableImageRequestDto = {
-    context: initialEmbeddableImageContext,
-    file: initialUploadedFile
+  context: initialEmbeddableImageContext,
+  file: initialUploadedFile
 };
 
 /** 
@@ -47,15 +46,15 @@ export const initialEmbeddableImageResponseDto: EmbeddableImageResponseDto = {
 };
 
 export interface ReplaceEmbeddableImageRequestDto {
-    readonly raetselId: string;
-    readonly relativerPfad: string;
-    readonly file: UploadedFile;
+  readonly context: EmbeddableImageContext;
+  readonly relativerPfad: string;
+  readonly file: UploadedFile;
 };
 
 export const initialReplaceEmbeddableImageRequestDto: ReplaceEmbeddableImageRequestDto = {
-    raetselId: 'neu',
-    relativerPfad: '',
-    file: initialUploadedFile
+  context: initialEmbeddableImageContext,
+  relativerPfad: '',
+  file: initialUploadedFile
 };
 
 export interface EmbeddableImageVorschau {

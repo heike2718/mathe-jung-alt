@@ -120,7 +120,7 @@ public class EmbeddableImageUplodService {
 	 * @param  relativerPfad
 	 * @return               MessagePayload
 	 */
-	public MessagePayload replaceTheEmbeddableImage(final ReplaceEmbeddableImageRequestDto requestDto) {
+	public EmbeddableImageResponseDto replaceTheEmbeddableImage(final ReplaceEmbeddableImageRequestDto requestDto) {
 
 		AuthenticatedUser user = authCtx.getUser();
 		String userId = user.getUuid();
@@ -132,7 +132,7 @@ public class EmbeddableImageUplodService {
 			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 
-		String raetselId = requestDto.getRaetselId();
+		String raetselId = requestDto.getContext().getRaetselId();
 
 		PersistentesRaetsel raetsel = raetselDao.getWithID(raetselId);
 
@@ -171,7 +171,7 @@ public class EmbeddableImageUplodService {
 
 			LOGGER.error(e.getMessage(), e);
 			String errorMessage = applicationMessages.getString("general.internalServerError");
-			return MessagePayload.error(errorMessage);
+			throw new MjaRuntimeException(errorMessage);
 
 		}
 	}

@@ -148,7 +148,7 @@ public class EmbeddableImagesResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = MessagePayload.class)))
+			schema = @Schema(implementation = EmbeddableImageResponseDto.class)))
 	@APIResponse(
 		name = "Bad Request",
 		description = "raetselId oder pfad verstoßen gegen Validierungsregeln oder File ist zu groß oder hat Virus",
@@ -175,14 +175,9 @@ public class EmbeddableImagesResource {
 
 		this.delayService.pause();
 
-		MessagePayload messagePayload = this.uploadService.replaceTheEmbeddableImage(requestDto);
+		EmbeddableImageResponseDto result = this.uploadService.replaceTheEmbeddableImage(requestDto);
 
-		if (messagePayload.isOk()) {
-
-			return Response.ok(messagePayload).build();
-		}
-
-		return Response.serverError().entity(messagePayload).build();
+		return Response.ok(result).build();
 
 		// return Response.serverError().entity(MessagePayload.error("absichtlicher Error")).build();
 	}

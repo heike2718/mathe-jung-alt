@@ -32,11 +32,11 @@ export class EmbeddableImagesHttpService {
         });
     }
 
-    replaceEmbeddableImage(requestDto: ReplaceEmbeddableImageRequestDto): Observable<Message> {
+    replaceEmbeddableImage(requestDto: ReplaceEmbeddableImageRequestDto): Observable<EmbeddableImageResponseDto> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        return this.#httpClient.post<Message>(this.#url + '/v1', requestDto, {
+        return this.#httpClient.post<EmbeddableImageResponseDto>(this.#url + '/v1', requestDto, {
             headers: headers
         });
     }

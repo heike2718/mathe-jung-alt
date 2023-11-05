@@ -1,6 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { CreateEmbeddableImageRequestDto, EmbeddableImageResponseDto, EmbeddableImageVorschau, ReplaceEmbeddableImageRequestDto } from '@mja-ws/embeddable-images/model';
-import { Message } from '@mja-ws/shared/messaging/api';
 
 export const embeddableImagesActions = createActionGroup({
     source: 'EmbeddableImages',
@@ -11,7 +10,7 @@ export const embeddableImagesActions = createActionGroup({
         'CREATE_EMBEDDABLE_IMAGE': props<{requestDto: CreateEmbeddableImageRequestDto}>(),
         'EMBEDDABLE_IMAGE_CREATED': props<{ responseDto: EmbeddableImageResponseDto }>(),
         'REPLACE_EMEDDABLE_IMAGE': props<{requestDto: ReplaceEmbeddableImageRequestDto}>(),
-        'EMBEDABBLE_IMAGE_REPLACED': props<{message: Message}>(),
+        'EMBEDABBLE_IMAGE_REPLACED': props<{ responseDto: EmbeddableImageResponseDto}>(),
         'RESET_STATE': emptyProps
     }
 });

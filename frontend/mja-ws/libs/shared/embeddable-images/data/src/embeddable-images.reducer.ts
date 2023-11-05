@@ -2,11 +2,10 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { embeddableImagesActions } from './embeddable-images.actions';
 import { EmbeddableImageResponseDto, EmbeddableImageVorschau, initialEmbeddableImageResponseDto } from "@mja-ws/embeddable-images/model";
-import { Message } from "@mja-ws/shared/messaging/api";
 
 export interface EmbeddableImagesState {
     readonly embeddableImagesResponse: EmbeddableImageResponseDto | undefined;
-    readonly replaceEmbeddableImageMessage: Message | undefined;
+    readonly replaceEmbeddableImageMessage: string | undefined;
     readonly embeddableImageVorschauPfad: string | undefined;
     readonly embeddableImageVorschauGeladen: boolean;
     readonly selectedEmbeddableImageVorschau: EmbeddableImageVorschau | undefined;
@@ -39,7 +38,8 @@ export const embeddableImagesFeature = createFeature({
             (state, action): EmbeddableImagesState => (
                 {
                     ...state,
-                    replaceEmbeddableImageMessage: action.message
+                    replaceEmbeddableImageMessage: 'Grafikdatei erfolgreich ersetzt',
+                    embeddableImagesResponse: action.responseDto
                 }
             )
         ),

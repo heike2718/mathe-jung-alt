@@ -36,10 +36,10 @@ export class EmbeddableImagesFacade {
         this.#store.dispatch(embeddableImagesActions.cLEAR_VORSCHAU());
     }
 
-    replaceEmbeddableImage(raetselId: string, pfad: string, file: UploadedFile): void {
+    replaceEmbeddableImage(pfad: string, context: EmbeddableImageContext, file: UploadedFile): void {
         
         this.#store.dispatch(embeddableImagesActions.rEPLACE_EMEDDABLE_IMAGE({requestDto: {
-            raetselId: raetselId,
+            context: context,
             relativerPfad: pfad,
             file: file
         }}));

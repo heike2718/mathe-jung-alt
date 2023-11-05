@@ -62,6 +62,7 @@ interface AntwortvorschlagFormValue {
 })
 export class RaetselEditorComponent implements OnInit, OnDestroy {
 
+  #infoIncludegraphics = 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Textes und kann an eine beliebiege Stelle verschoben werden. Das width-Attribut kann geändert werden. Um eine eingebundene Grafik wieder zu löschen, bitte einfach den \\includegraphics-Befehl aus dem Text entfernen und Speichern. Dabei wird auf dem Server auch die Grafikdatei gelöscht.';
   #warnungIncludegraphics = 'Bitte den \\includegraphics-Befehl nicht manuell einfügen. Er wird beim Hochladen einer neuen Datei vom System generiert. Der generierte Pfad darf nicht geändert werden!';
 
   #raetselDetails!: RaetselDetails;
@@ -99,7 +100,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
     titel: 'neues Bild in Frage einbinden',
-    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Frage-Textes und kann an eine beliebiege Stelle verschoben werden. Das width-Attribut kann geändert werden.',
+    beschreibung: this.#infoIncludegraphics,
     hinweis: this.#warnungIncludegraphics
   };
 
@@ -110,7 +111,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
     titel: 'neues Bild in Lösung einbinden',
-    beschreibung: 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Lösung-Textes und kann an eine beliebiege Stelle verschoben werden. Das width-Attribut kann geändert werden.',
+    beschreibung: this.#infoIncludegraphics,
     hinweis: this.#warnungIncludegraphics
   };
 

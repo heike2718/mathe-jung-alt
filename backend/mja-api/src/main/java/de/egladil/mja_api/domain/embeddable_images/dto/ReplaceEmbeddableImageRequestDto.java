@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.upload.UploadedFile;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
@@ -20,11 +21,9 @@ import jakarta.validation.constraints.Pattern;
 public class ReplaceEmbeddableImageRequestDto {
 
 	@JsonProperty
-	@Schema(description = "uuid des Rätsels, für das die eps-Datei ausgetauscht werden soll.")
-	@Pattern(
-		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "die raetselId enthält ungültige Zeichen")
-	private String raetselId;
+	@Valid
+	@Schema(description = "dieser Kontext ist zum Rücktransport an den Client gedacht. Er wird ungeändert in die Response gepackt.")
+	EmbeddableImageContext context;
 
 	@JsonProperty
 	@Schema(description = "Pfad einer vorhandenen eps-Datei relativ zu latex.base.dir")
@@ -37,17 +36,6 @@ public class ReplaceEmbeddableImageRequestDto {
 	@JsonProperty
 	@Schema(description = "Daten des hochgeladenen Files: name und die Daten als Base64-encodeter String")
 	private UploadedFile file;
-
-	public String getRaetselId() {
-
-		return raetselId;
-	}
-
-	public ReplaceEmbeddableImageRequestDto withRaetselId(final String raetselId) {
-
-		this.raetselId = raetselId;
-		return this;
-	}
 
 	public UploadedFile getFile() {
 
@@ -69,6 +57,11 @@ public class ReplaceEmbeddableImageRequestDto {
 
 		this.relativerPfad = relativerPfad;
 		return this;
+	}
+
+	public EmbeddableImageContext getContext() {
+
+		return context;
 	}
 
 }

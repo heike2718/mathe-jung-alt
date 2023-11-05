@@ -33,6 +33,9 @@ import de.egladil.mja_api.domain.validation.MjaRegexps;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * EmbeddableImageService
@@ -105,26 +108,17 @@ public class EmbeddableImageService {
 	 * @param  dto
 	 * @return     MessagePayload
 	 */
-	public MessagePayload replaceEmbeddedImage(final ReplaceEmbeddableImageRequestDto uploadRequestDto) {
+	public EmbeddableImageResponseDto replaceEmbeddedImage(final ReplaceEmbeddableImageRequestDto uploadRequestDto) {
 
-		if (uploadRequestDto.getRelativerPfad() == null) {
-
-			LOGGER.error("Aufruf ohne relativen Pfad");
-			return MessagePayload.error("Aufruf ohne Pfad");
-		}
-
-		if (!validPath(uploadRequestDto.getRelativerPfad())) {
-
-			LOGGER.error("Aufruf mit ungültigem relativen Pfad!");
-			return MessagePayload.error("Aufruf mit ungültigem Pfad");
-		}
-
-		File file = new File(latexBaseDir + uploadRequestDto.getRelativerPfad());
+		String relativerPfad = uploadRequestDto.getRelativerPfad();
+		File file = new File(latexBaseDir + relativerPfad);
 
 		if (!file.canRead()) {
 
 			LOGGER.error("Zu ersetzende Datei nicht gefunden: pfad={}!", file.getAbsolutePath());
-			return MessagePayload.error("404 - Datei nicht gefunden");
+
+			throw new WebApplicationException(
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("404 - Datei nicht gefunden")).build());
 		}
 
 		try (FileOutputStream fos = new FileOutputStream(file);
@@ -140,7 +134,14 @@ public class EmbeddableImageService {
 
 		LOGGER.info("Grafikdatei hochgeladen: {} - {}", StringUtils.abbreviate(authCtx.getUser().getName(), 11),
 			file.getAbsolutePath());
-		return MessagePayload.info("Image erfolgreich gespeichert");
+
+		String includegraphicsCommand = includegraphicsTextGenerator.generateIncludegraphicsText(relativerPfad);
+
+		EmbeddableImageResponseDto result = new EmbeddableImageResponseDto().with(uploadRequestDto.getContext());
+		result.setPfad(relativerPfad);
+		result.setIncludegraphicsCommand(includegraphicsCommand);
+
+		return result;
 	}
 
 	/**
