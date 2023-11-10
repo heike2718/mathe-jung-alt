@@ -44,7 +44,7 @@ __raetsel-editor:__
 ~~selectedVorschau oder EmbeddableImageResponseDto muss gelöscht werden, wenn aus den Details wegnavigiert wird.~~
 ~~Bug: in Details Datei neu hochladen, dann zurück zu Rätsel, dann zum Editor: der Frage-Text enthält am Ende \\includegraphics des letzten Results.~~
 
-raetsel-details.component: für EmbeddableImagesContext sollte es die Textart auch über das das gewählte image geben
+~~raetsel-details.component: für EmbeddableImagesContext sollte es die Textart auch über das das gewählte image geben~~
 
 Lange Erklärtexte mittes Hilfe-Dialog anzeigen.
 

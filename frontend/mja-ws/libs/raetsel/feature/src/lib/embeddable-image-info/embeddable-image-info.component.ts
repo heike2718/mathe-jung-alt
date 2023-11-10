@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EmbeddableImageInfo } from '@mja-ws/raetsel/model';
 import { Configuration } from '@mja-ws/shared/config';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
+import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
 
 @Component({
   selector: 'mja-ws-embeddable-image-info',
@@ -22,13 +22,12 @@ export class EmbeddableImageInfoComponent {
   @Input()
   embeddableImageInfo!: EmbeddableImageInfo;
 
-  @Output()
-  pfadSelected: EventEmitter<string> = new EventEmitter<string>();
-
   #config = inject(Configuration);
   devMode = !this.#config.production;
 
-  selected($event: string) {
-    this.pfadSelected.emit($event);
+  #embeddableImagesFacade = inject(EmbeddableImagesFacade);
+
+  expand() {
+     this.#embeddableImagesFacade.handleEmbeddableImageInfoExpanded(this.embeddableImageInfo);
   }
 }

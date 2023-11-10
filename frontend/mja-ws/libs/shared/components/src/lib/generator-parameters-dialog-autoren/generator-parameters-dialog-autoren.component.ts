@@ -23,8 +23,6 @@ import { SelectGeneratorParametersUIModelAutoren } from '@mja-ws/core/model';
 })
 export class GeneratorParametersDialogAutorenComponent {
 
-  // selectedOption: string | undefined;
-
   public dialogRef: MatDialogRef<GeneratorParametersDialogAutorenComponent> = inject(MatDialogRef);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: SelectGeneratorParametersUIModelAutoren) {}

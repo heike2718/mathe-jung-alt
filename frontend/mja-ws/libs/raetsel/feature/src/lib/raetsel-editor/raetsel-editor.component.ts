@@ -13,7 +13,7 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { Antwortvorschlag, EditRaetselPayload, EmbeddableImageInfo, RaetselDetails } from '@mja-ws/raetsel/model';
+import { Antwortvorschlag, EditRaetselPayload, RaetselDetails } from '@mja-ws/raetsel/model';
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, STATUS, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
@@ -22,9 +22,8 @@ import { CoreFacade } from '@mja-ws/core/api';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import { MatCardModule } from '@angular/material/card';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
-import { EmbeddableImageContext, EmbeddableImageVorschau, TEXTART } from '@mja-ws/embeddable-images/model';
+import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, TEXTART } from '@mja-ws/embeddable-images/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
-import { Message } from '@mja-ws/shared/messaging/api';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 
 interface AntwortvorschlagFormValue {
@@ -126,6 +125,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   };
 
   #embeddableImagesResponseSubscription: Subscription = new Subscription();
+  #selectedEmbeddableImageInfoSubscription: Subscription = new Subscription();
   #selectedEmbeddableImageVorschauSubscription: Subscription = new Subscription();
 
   constructor() {
@@ -181,18 +181,25 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       }
     );
 
+    this.#selectedEmbeddableImageInfoSubscription = this.#embeddableImagesFacade.selectedEmbeddableImageInfo$.subscribe((info) => {
+      this.#pfadSelectedClicked = true;
+      this.#embeddableImagesFacade.vorschauLaden(info);
+    });
+
     this.#selectedEmbeddableImageVorschauSubscription = this.#embeddableImagesFacade.selectedEmbeddableImageVorschau$.subscribe((vorschau) => {
       this.selectedVorschau = vorschau;
-      if (vorschau && this.#pfadSelectedClicked) {
+      if (this.#pfadSelectedClicked) {
         this.#openEmbeddableImageVorschauDialog(vorschau);
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {
     this.#combinedSubscription.unsubscribe();
     this.#embeddableImagesResponseSubscription.unsubscribe();
+    this.#selectedEmbeddableImageInfoSubscription.unsubscribe();
     this.#selectedEmbeddableImageVorschauSubscription.unsubscribe();
+    this.#embeddableImagesFacade.clearVorschau();
   }
 
   isFormValid(): boolean {
@@ -302,12 +309,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       this.#doSubmit(raetsel, result);
     });
   }
-
-  onPfadVorschauSelected($pfad: string): void {
-    this.#pfadSelectedClicked = true;
-    this.#embeddableImagesFacade.vorschauLaden($pfad);
-  }
-
 
   submit() {
 

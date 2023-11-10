@@ -1,5 +1,5 @@
 import { DeskriptorUI, GeneratedImages, noopQuelle, QuelleUI, STATUS } from "@mja-ws/core/model";
-import { TEXTART } from "@mja-ws/embeddable-images/model";
+import { EmbeddableImageInfo } from "@mja-ws/embeddable-images/model";
 
 export interface RaetselSuchfilter {
   readonly suchstring: string;
@@ -21,13 +21,6 @@ export interface RaetselsucheTreffer {
   readonly trefferGesamt: number;
   readonly treffer: Raetsel[];
 };
-
-export interface EmbeddableImageInfo {
-  readonly pfad: string;
-  readonly existiert: boolean;
-  readonly textart: TEXTART;
-};
-
 
 /** Minimalset an Attributen, die bei einer Suche geladen werden sollen */
 export interface Raetsel {

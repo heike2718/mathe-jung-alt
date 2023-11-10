@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FileInfoComponent, FileInfoModel, SelectFileComponent, SelectFileModel } from '@mja-ws/shared/components';
 import { MatButtonModule } from '@angular/material/button';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
-import { Subscription } from 'rxjs';
-import { EmbeddableImageContext, EmbeddableImageVorschau, TEXTART } from '@mja-ws/embeddable-images/model';
+import { combineLatest, Subscription } from 'rxjs';
+import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, TEXTART } from '@mja-ws/embeddable-images/model';
 import { Configuration } from '@mja-ws/shared/config';
 
 @Component({
@@ -34,6 +34,7 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   #config = inject(Configuration);
   devMode = !this.#config.production;
 
+  #selectedEmbeddableImageInfo: EmbeddableImageInfo | undefined;
   #selectedEmbeddableImageVorschau: EmbeddableImageVorschau | undefined;
 
   fileInfo: FileInfoModel | undefined;
@@ -50,18 +51,23 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
     hinweis: undefined
   };
 
-  #selectedEmbeddableImageSubscription: Subscription = new Subscription();
+  #combinedSelectionSubscription: Subscription = new Subscription();
   #embeddableImageResponseSubscription: Subscription = new Subscription();
 
   ngOnInit(): void {
 
-    this.#selectedEmbeddableImageSubscription = this.embeddableImagesFacade.selectedEmbeddableImageVorschau$.subscribe(
-      (selectedEmbeddableImageVorschau) => this.#selectedEmbeddableImageVorschau = selectedEmbeddableImageVorschau);
+    this.#combinedSelectionSubscription = combineLatest([this.embeddableImagesFacade.selectedEmbeddableImageInfo$, this.embeddableImagesFacade.selectedEmbeddableImageVorschau$])
+      .subscribe(([imageInfo, imageVorschau]) => {
+        this.#selectedEmbeddableImageInfo = imageInfo;
+        this.#selectedEmbeddableImageVorschau = imageVorschau;
+      });
+
+    
 
     this.#embeddableImageResponseSubscription = this.embeddableImagesFacade.embeddableImageResponse$.subscribe(
-      (response) => {
-        if (response.pfad !== '') {
-          this.embeddableImagesFacade.vorschauLaden(response.pfad);
+      () => {
+        if (this.#selectedEmbeddableImageInfo && this.#selectedEmbeddableImageVorschau) {
+          this.embeddableImagesFacade.vorschauLaden(this.#selectedEmbeddableImageInfo);
         }
       }
     )
@@ -71,12 +77,12 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.embeddableImagesFacade.clearVorschau();
-    this.#selectedEmbeddableImageSubscription.unsubscribe();
+    this.#combinedSelectionSubscription.unsubscribe();
     this.#embeddableImageResponseSubscription.unsubscribe();
   }
 
   showSelectFileComponent(): boolean {
-    
+
     if (this.fileInfo) {
       return false;
     }
@@ -91,7 +97,9 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   uploadFile(): void {
     if (this.fileInfo) {
 
-      const context: EmbeddableImageContext = { raetselId: this.raetselId, textart: 'FRAGE' };
+      const textart: TEXTART = this.#selectedEmbeddableImageInfo ? this.#selectedEmbeddableImageInfo.textart : 'FRAGE';
+
+      const context: EmbeddableImageContext = { raetselId: this.raetselId, textart: textart };
 
       if (this.#selectedEmbeddableImageVorschau) {
         this.embeddableImagesFacade.replaceEmbeddableImage(this.#selectedEmbeddableImageVorschau.pfad, context, this.fileInfo.file);
