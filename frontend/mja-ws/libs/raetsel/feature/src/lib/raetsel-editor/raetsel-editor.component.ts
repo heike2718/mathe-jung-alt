@@ -40,6 +40,7 @@ interface AntwortvorschlagFormValue {
     MatCardModule,
     MatChipsModule,
     MatDialogModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
