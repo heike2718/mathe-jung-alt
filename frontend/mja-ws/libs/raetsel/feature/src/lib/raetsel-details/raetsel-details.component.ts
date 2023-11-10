@@ -15,7 +15,7 @@ import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { Router } from '@angular/router';
 import { RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
-import { FileUploadComponent, FrageLoesungImagesComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
+import { FrageLoesungImagesComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
 import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import {
@@ -49,7 +49,6 @@ import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
     TextFieldModule,
     FrageLoesungImagesComponent,
     AntwortvorschlagComponent,
-    FileUploadComponent,
     EmbeddableImageVorschauComponent,
     EmbeddableImageInfoComponent,
     GeneratorParametersDialogAutorenComponent
