@@ -107,7 +107,7 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		final RaetselgruppeDetails result = RaetselgruppeDetails.createFromDB(raetselgruppe);
 
 		if (PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRelevantRoles(authCtx), raetselgruppe.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetselgruppe.owner)) {
 
 			result.markiereAlsAenderbar();
 		}
@@ -572,13 +572,13 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	void checkPermission(final PersistenteRaetselgruppe ausDB) {
 
 		if (!PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRelevantRoles(authCtx), ausDB.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), ausDB.owner)) {
 
 			LOGGER.warn("User {} hat versucht, Raetselgruppe {} mit Owner {} zu aendern oder zu drucken",
 				authCtx.getUser().getName(), ausDB.uuid,
 				ausDB.owner);
 
-			throw new WebApplicationException(Status.UNAUTHORIZED);
+			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 	}
 }

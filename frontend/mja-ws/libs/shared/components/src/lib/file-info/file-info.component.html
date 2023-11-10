@@ -1,0 +1,7 @@
+<h2>{{titel}}</h2>
+<p *ngIf="devMode" class="hint">file-info.component</p>
+<p class="hint" *ngIf="beschreibung">{{beschreibung}}</p>
+<div class="row mt-3">
+    <p>{{fileName}} ({{fileSize}})</p>
+</div>
+<div *ngIf="showMaxSizeExceeded" class="mt-1 hint-red">{{fileSize}}: {{errmMaxFileSize}}</div>

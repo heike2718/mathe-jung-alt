@@ -34,6 +34,13 @@ h2 {
     padding: 5px;
 }
 
+.bordered-red {
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 5px;
+    color: red;
+}
+
 .bg-white {
     background-color: white;
 }
@@ -62,6 +69,11 @@ mat-icon {
 
 .block {
     display: block;
+}
+
+.hint {
+    font-size: small;
+    color: #467096;
 }
 
 .mat-mdc-select-arrow {
@@ -125,8 +137,8 @@ mat-card {
 }
 
 mat-form-field {
-    display: block;
-}
+    width: 100% !important;
+ }
 
 mat-card-actions>button {
     margin: 1em;
@@ -134,10 +146,6 @@ mat-card-actions>button {
 
 .mja-container mat-form-field+mat-form-field {
     margin-left: 8px;
-}
-
-.mja-container mat-form-field {
-    width: 600px;
 }
 
 .mja-container form {
@@ -152,9 +160,13 @@ mat-card-actions>button {
     margin: 0 12px;
 }
 
-.mja-form-fields {
-    display: block;
+.mja-form {
+    width: 100%;
     margin-bottom: 2rem;
+}
+
+mat-card-content, mat-dialog-content {
+    width: 100%;
 }
 
 .block {

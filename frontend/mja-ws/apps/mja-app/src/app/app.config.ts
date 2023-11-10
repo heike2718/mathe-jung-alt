@@ -37,6 +37,7 @@ import { ErrorHandlerService } from './services/error-handler.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { registerLocaleData } from '@angular/common';
+import { embeddableImagesDataProvider } from '@mja-ws/embeddable-images/api';
 
 if (environment.production) {
   enableProdMode();
@@ -61,6 +62,7 @@ export const appConfig: ApplicationConfig = {
     coreQuelleDataProvider,
     coreDeskriptorenDataProvider,
     coreStatistikDataProvider,
+    embeddableImagesDataProvider,
     provideAnimations(),
     provideRouter(appRoutes),
     provideRouterStore(),
@@ -75,7 +77,6 @@ export const appConfig: ApplicationConfig = {
       }
     ),
     provideEffects(LocalStorageEffects),
-    provideStore(),
     environment.providers,
     importProvidersFrom(
       HttpClientModule,

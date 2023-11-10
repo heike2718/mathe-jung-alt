@@ -33,19 +33,21 @@ export class RaetselFacade {
   suchfilter$: Observable<RaetselSuchfilter> = this.#store.select(fromRaetsel.suchfilter);
   generateLatexError$: Observable<boolean> = this.#store.select(fromRaetsel.generateLatexError);
 
+  editModus$: Observable<boolean> = this.#store.select(fromRaetsel.editModus);
+
   #selectItemsFacade = inject(SelectItemsFacade);
 
-  public triggerSearch(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
+  triggerSearch(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
 
     this.#store.dispatch(raetselActions.rAETSEL_SELECT_PAGE({ pageDefinition }));
     this.#store.dispatch(raetselActions.fIND_RAETSEL({admin, suchfilter, pageDefinition }));
   }
 
-  public selectRaetsel(raetsel: Raetsel): void {
+  selectRaetsel(raetsel: Raetsel): void {
     this.#store.dispatch(raetselActions.rAETSEL_SELECTED({ raetsel }));
   }
 
-  public generiereRaetselOutput(raetselID: string, outputFormat: OUTPUTFORMAT, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+  generiereRaetselOutput(raetselID: string, outputFormat: OUTPUTFORMAT, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
 
     switch (outputFormat) {
       case 'PNG': this.#store.dispatch(raetselActions.gENERATE_RAETSEL_PNG({ raetselID, font, schriftgroesse, layoutAntwortvorschlaege })); break;
@@ -54,17 +56,18 @@ export class RaetselFacade {
     }
   }
 
-  public editRaetsel(): void {
+  editRaetsel(): void {
 
+    this.#enterEditMode();
     this.#router.navigateByUrl('raetsel/editor');
 
   }
 
-  public changeSuchfilterWithDeskriptoren(deskriptoren: DeskriptorUI[], suchstring: string) {
+  changeSuchfilterWithDeskriptoren(deskriptoren: DeskriptorUI[], suchstring: string) {
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter: { deskriptoren, suchstring } }));
   }
 
-  public changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string): void {
+  changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string): void {
 
     const deskriptoren: DeskriptorUI[] = [];
     selectedItems.forEach(item => {
@@ -80,7 +83,7 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
   }
 
-  public neueRaetselsuche(): void {
+  neueRaetselsuche(): void {
     this.#store.dispatch(raetselActions.rESET_RAETSELSUCHFILTER());
     this.#selectItemsFacade.resetSelection();
   }
@@ -89,17 +92,18 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSEL_CANCEL_SELECTION());
   }
 
-  public createAndEditRaetsel(quelle: QuelleUI | undefined): void {
+  createAndEditRaetsel(quelle: QuelleUI | undefined): void {
 
     if (quelle === undefined) {
-      // Exception werfen!!!
+      // TODO: Exception werfen!!!
       return;
     }
+    this.#enterEditMode();
     const raetselDetails: RaetselDetails = { ...initialRaetselDetails, quelle: quelle };
     this.#store.dispatch(raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
   }
 
-  public initSelectItemsCompomentModel(selectedDeskriptoren: DeskriptorUI[], alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
+  initSelectItemsCompomentModel(selectedDeskriptoren: DeskriptorUI[], alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
 
     const gewaehlteItems: SelectableItem[] = [];
     selectedDeskriptoren.forEach(d => gewaehlteItems.push({ id: d.id, name: d.name, selected: true }));
@@ -124,12 +128,22 @@ export class RaetselFacade {
 
   }
 
-  public saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
+  saveRaetsel(editRaetselPayload: EditRaetselPayload): void {
     this.#store.dispatch(raetselActions.sAVE_RAETSEL({ editRaetselPayload }));
   }
 
 
-  public downloadLatexLogs(schluessel: string): void {
+  downloadLatexLogs(schluessel: string): void {
     this.#store.dispatch(raetselActions.fIND_LATEXLOGS({ schluessel: schluessel }));
   }
+  
+  leaveEditMode() {
+    this.#store.dispatch(raetselActions.fINISH_EDIT());
+  } 
+
+
+  #enterEditMode() {
+    this.#store.dispatch(raetselActions.pREPARE_EDIT());
+  }
+
 }

@@ -20,7 +20,13 @@ public final class PermissionUtils {
 
 	public static final String ROLE_AUTOR = "AUTOR";
 
-	public static List<String> getRelevantRoles(final AuthenticationContext authContext) {
+	/**
+	 * Gibt die Rollen zurück, die Rätsel erstellen und editieren dürfen.
+	 *
+	 * @param  authContext
+	 * @return
+	 */
+	public static List<String> getRolesWithWriteRaetselAndRaetselgruppenPermission(final AuthenticationContext authContext) {
 
 		List<String> roles = new ArrayList<>();
 
@@ -154,13 +160,11 @@ public final class PermissionUtils {
 	 */
 	public static boolean restrictSucheToFreigegeben(final List<String> roles) {
 
-		boolean nurFreigegebene = true;
-
 		if (PermissionUtils.isUserAdmin(roles) || PermissionUtils.isUserAutor(roles)) {
 
-			nurFreigegebene = false;
+			return false;
 		}
 
-		return nurFreigegebene;
+		return true;
 	}
 }

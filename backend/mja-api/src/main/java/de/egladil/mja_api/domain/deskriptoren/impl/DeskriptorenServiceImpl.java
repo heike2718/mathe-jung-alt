@@ -66,7 +66,7 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 
 		List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).toList();
 
-		List<String> roles = PermissionUtils.getRelevantRoles(authCtx);
+		List<String> roles = PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx);
 
 		if (PermissionUtils.isUserAdmin(roles) || PermissionUtils.isUserAutor(roles)) {
 

@@ -1,0 +1,51 @@
+{
+  "name": "embeddable-images-model",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/embeddable-images/model/src",
+  "prefix": "mja-ws",
+  "tags": ["domain:shared:embeddable-images:model", "type:core:model", "type:model"],
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/shared/embeddable-images/model/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/embeddable-images/model/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/embeddable-images/model/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/shared/embeddable-images/model/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/embeddable-images/model/**/*.ts",
+          "libs/shared/embeddable-images/model/**/*.html",
+          "libs/shared/embeddable-images/model/package.json"
+        ]
+      }
+    }
+  }
+}

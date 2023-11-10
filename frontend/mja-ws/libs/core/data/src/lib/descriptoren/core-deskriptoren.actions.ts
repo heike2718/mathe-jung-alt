@@ -1,5 +1,4 @@
 import {DeskriptorUI} from '@mja-ws/core/model';
-
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const coreDeskriptorenActions = createActionGroup({

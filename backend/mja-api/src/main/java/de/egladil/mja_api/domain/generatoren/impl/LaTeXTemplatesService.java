@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 
 /**
- * LaTeXTemplatesService Bunkert die Templates im Heap zur Verringerung der IO-Zugriffszeit.
+ * LaTeXTemplatesService - Singleton. Bunkert die Templates im Heap zur Verringerung der IO-Zugriffszeit.
  */
 
 public class LaTeXTemplatesService {

@@ -1,1 +1,1 @@
-export * from './lib/raetsel-model';
+export * from './lib/raetsel.model';

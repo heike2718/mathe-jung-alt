@@ -140,4 +140,29 @@ public class FindPathsGrafikParserTest {
 
 	}
 
+	@Test
+	void should_returnGrafikPfadeSize3_when_dreiGrafikenVerschiedeneReladivePfade() throws Exception {
+
+		// Arrange
+		String latex = "";
+
+		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex"); StringWriter sw = new StringWriter()) {
+
+			IOUtils.copy(in, sw, "UTF-8");
+
+			latex = sw.toString();
+
+		}
+
+		// Act
+		List<String> result = new FindPathsGrafikParser().findPaths(latex);
+
+		// Assert
+		assertEquals(3, result.size());
+		assertEquals("/resources/4/4d367e6c-76e9.eps", result.get(0));
+		assertEquals("/resources/001/00001.eps", result.get(1));
+		assertEquals("/resources/4/4d367e6c-02345.eps", result.get(2));
+
+	}
+
 }

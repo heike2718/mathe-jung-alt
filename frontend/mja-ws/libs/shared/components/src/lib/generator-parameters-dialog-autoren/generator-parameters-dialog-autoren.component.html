@@ -1,54 +1,61 @@
 <h2 mat-dialog-title>{{data.titel}}</h2>
-<mat-dialog-content class="mt-2">
 
-    <div class="mb-1">
-        Der Font ist optional. Ohne Auswahl wird der Standard-LaTeX-Font verwendet.<br>
-        Die Schriftgröße ist optional.
-        Empfehlung bei Fibel-Fonts: Vorschule bis Klasse 1 'sehr
-        groß', ab Klasse 2 'groß' <br>
-        Layout Antwortvorschläge: nur sinnvoll bei multiple choice und wenn die Antwortvorschläge nicht bereits im Aufgabentext vorkommmen.
-    </div>
+<div class="mt-3">
+    <mat-dialog-content>
 
-    <mat-form-field *ngIf="data.showVerwendungszwecke">
-        <mat-label>Verwendungszweck</mat-label>
-        <select matNativeControl name="verwendungszweckeTyp" id="verwendungszweckeTyp"
-            [(ngModel)]="data.selectedVerwendungszweck">
-            <option selected="" value=""></option>
-            <option [ngValue]="c" *ngFor="let c of data.verwendungszwecke">
-                {{c}}
-            </option>
-        </select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Font</mat-label>
-        <select matNativeControl name="fontTyp" id="fontTyp" [(ngModel)]="data.selectedFontName">
-            <option selected="" value=""></option>
-            <option [ngValue]="c" *ngFor="let c of data.fontNamen">
-                {{c}}
-            </option>
-        </select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Schriftgröße</mat-label>
-        <select matNativeControl name="schriftgroesseTyp" id="schriftgroesseTyp"
-            [(ngModel)]="data.selectedSchriftgroesse">
-            <option selected="" value=""></option>
-            <option [ngValue]="c" *ngFor="let c of data.schriftgroessen">
-                {{c}}
-            </option>
-        </select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Layout Antwortvorschläge</mat-label>
-        <select matNativeControl name="antowrtvorschlaegeTyp" id="antowrtvorschlaegeTyp"
-            [(ngModel)]="data.selectedLayoutAntwortvorschlaege">
-            <option selected="" value=""></option>
-            <option [ngValue]="c" *ngFor="let c of data.layoutsAntwortvorschlaegeInput">
-                {{c}}
-            </option>
-        </select>
-    </mat-form-field>
-</mat-dialog-content>
+        <mat-form-field *ngIf="data.showVerwendungszwecke">
+            <mat-label>Verwendungszweck</mat-label>
+            <select required="true" matNativeControl name="verwendungszweckeTyp" id="verwendungszweckeTyp"
+                [(ngModel)]="data.selectedVerwendungszweck">
+                <option selected="" value=""></option>
+                <option [ngValue]="c" *ngFor="let c of data.verwendungszwecke">
+                    {{c}}
+                </option>
+            </select>
+        </mat-form-field>
+        <div *ngIf="data.showVerwendungszwecke" class="hint mb-1">Hinweis 'Verwendungszweck': bei Arbeitsblättern werden
+            alle Lösungen ans Ende gedruckt, bei Knobelkarteien werden Frage und Lösung abwechselnd auf einzelne Blätter
+            gedruckt.</div>
+        <mat-form-field>
+            <mat-label>Font</mat-label>
+            <select matNativeControl name="fontTyp" id="fontTyp" [(ngModel)]="data.selectedFontName">
+                <option selected="" value=""></option>
+                <option [ngValue]="c" *ngFor="let c of data.fontNamen">
+                    {{c}}
+                </option>
+            </select>
+        </mat-form-field>
+        <div class="hint mb-1">Hinweis 'Font': optional. Ohne Auswahl wird der Standard-LaTeX-Font verwendet.
+            Empfehlung: zum Generieren der
+            Vorschaubilder Druckschrift (Leseanfänger)</div>
+        <mat-form-field>
+            <mat-label>Schriftgröße</mat-label>
+            <select matNativeControl name="schriftgroesseTyp" id="schriftgroesseTyp"
+                [(ngModel)]="data.selectedSchriftgroesse">
+                <option selected="" value=""></option>
+                <option [ngValue]="c" *ngFor="let c of data.schriftgroessen">
+                    {{c}}
+                </option>
+            </select>
+        </mat-form-field>
+        <div class="hint mb-1">Hinweis 'Schriftgröße': optional. Empfehlung bei Fibel-Fonts: Vorschule bis Klasse 1
+            'sehr
+            groß', ab Klasse 2 'groß'</div>
+        <mat-form-field>
+            <mat-label>Layout Antwortvorschläge</mat-label>
+            <select matNativeControl name="antowrtvorschlaegeTyp" id="antowrtvorschlaegeTyp"
+                [(ngModel)]="data.selectedLayoutAntwortvorschlaege">
+                <option selected="" value=""></option>
+                <option [ngValue]="c" *ngFor="let c of data.layoutsAntwortvorschlaegeInput">
+                    {{c}}
+                </option>
+            </select>
+        </mat-form-field>
+        <div class="hint mb-1">Hinweis 'Layout Antwortvorschläge': optional. Es ist nur sinnvoll bei multiple choice und
+            wenn die Antwortvorschläge nicht bereits im
+            Aufgabentext vorkommmen.</div>
+    </mat-dialog-content>
+</div>
 <mat-dialog-actions align="end">
     <button mat-raised-button color="primary" [disabled]="data.showVerwendungszwecke && !data.selectedVerwendungszweck"
         [mat-dialog-close]="true">generieren</button>

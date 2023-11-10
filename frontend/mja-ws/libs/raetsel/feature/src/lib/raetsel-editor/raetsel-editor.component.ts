@@ -13,17 +13,18 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { Antwortvorschlag, EditRaetselPayload, GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
+import { Antwortvorschlag, EditRaetselPayload, RaetselDetails } from '@mja-ws/raetsel/model';
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, STATUS, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
-import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
+import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel, FileInfoComponent, FileInfoModel, ImageDialogComponent, ImageDialogModel } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
-import { GrafikFacade } from '@mja-ws/grafik/api';
-import { Message } from '@mja-ws/shared/messaging/api';
-import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
+import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import { MatCardModule } from '@angular/material/card';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, TEXTART } from '@mja-ws/embeddable-images/model';
+import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
+import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -39,6 +40,7 @@ interface AntwortvorschlagFormValue {
     MatCardModule,
     MatChipsModule,
     MatDialogModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -52,20 +54,27 @@ interface AntwortvorschlagFormValue {
     FrageLoesungImagesComponent,
     SelectItemsComponent,
     JaNeinDialogComponent,
-    GrafikDetailsComponent,
-    GeneratorParametersDialogAutorenComponent
+    EmbeddableImageVorschauComponent,
+    EmbeddableImageInfoComponent,
+    GeneratorParametersDialogAutorenComponent,
+    ImageDialogComponent,
+    SelectFileComponent,
+    FileInfoComponent
   ],
   templateUrl: './raetsel-editor.component.html',
   styleUrls: ['./raetsel-editor.component.scss'],
 })
 export class RaetselEditorComponent implements OnInit, OnDestroy {
 
+  #infoIncludegraphics = 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Textes und kann an eine beliebiege Stelle verschoben werden. Das width-Attribut kann geändert werden. Um eine eingebundene Grafik wieder zu löschen, bitte einfach den \\includegraphics-Befehl aus dem Text entfernen und Speichern. Dabei wird auf dem Server auch die Grafikdatei gelöscht.';
+  #warnungIncludegraphics = 'Bitte den \\includegraphics-Befehl nicht manuell einfügen. Er wird beim Hochladen einer neuen Datei vom System generiert. Der generierte Pfad darf nicht geändert werden!';
 
   #raetselDetails!: RaetselDetails;
   #fb = inject(UntypedFormBuilder);
 
   #coreFacade = inject(CoreFacade);
   #authFacade = inject(AuthFacade);
+  #embeddableImagesFacade = inject(EmbeddableImagesFacade);
 
   #combinedSubscription = new Subscription();
 
@@ -81,8 +90,44 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   dialog = inject(MatDialog);
 
   raetselFacade = inject(RaetselFacade);
-  grafikFacade = inject(GrafikFacade);
   form!: UntypedFormGroup;
+
+  fileInfoFrage: FileInfoModel | undefined;
+  fileInfoLoesung: FileInfoModel | undefined;
+
+  pfadGrafikFrage: string | undefined;
+  pfadGrafikLoesung: string | undefined;
+
+  embeddableImageInfosFrage: EmbeddableImageInfo[] = [];
+  embeddableImageInfosLoesung: EmbeddableImageInfo[] = [];
+  #pfadSelectedClicked = false;
+
+  selectedVorschau?: EmbeddableImageVorschau;
+
+  selectFileFrageModel: SelectFileModel = {
+    maxSizeBytes: 2097152,
+    errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
+    accept: '.eps',
+    acceptMessage: 'erlaubte Dateitypen: eps',
+    titel: 'neues Bild in Frage einbinden (ersetzen ist nur in der Detailansicht möglich)',
+    beschreibung: this.#infoIncludegraphics,
+    hinweis: this.#warnungIncludegraphics
+  };
+
+
+  selectFileLoesungModel: SelectFileModel = {
+    maxSizeBytes: 2097152,
+    errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
+    accept: '.eps',
+    acceptMessage: 'erlaubte Dateitypen: eps',
+    titel: 'neues Bild in Lösung einbinden (ersetzen ist nur in der Detailansicht möglich)',
+    beschreibung: this.#infoIncludegraphics,
+    hinweis: this.#warnungIncludegraphics
+  };
+
+  #embeddableImagesResponseSubscription: Subscription = new Subscription();
+  #selectedEmbeddableImageInfoSubscription: Subscription = new Subscription();
+  #selectedEmbeddableImageVorschauSubscription: Subscription = new Subscription();
 
   constructor() {
 
@@ -109,13 +154,53 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
         this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
         this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails.deskriptoren, alleDeskriptoren);
 
+        this.embeddableImageInfosFrage = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
+        this.embeddableImageInfosLoesung = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
+
         this.isRoot = root;
         this.#initForm();
       });
+
+    this.#embeddableImagesResponseSubscription = this.#embeddableImagesFacade.embeddableImageResponse$.subscribe(
+      (responseDto) => {
+        if (responseDto.context.textart === 'FRAGE') {
+
+          const text = this.form.controls['frage'].value + '\n\n' + responseDto.includegraphicsCommand;
+          this.form.controls['frage'].setValue(text);
+          this.fileInfoFrage = undefined;
+          this.pfadGrafikFrage = responseDto.pfad;
+          this.#embeddableImagesFacade.resetState();
+        }
+        if (responseDto.context.textart === 'LOESUNG') {
+
+          const text = this.form.controls['loesung'].value + '\n\n' + responseDto.includegraphicsCommand;
+          this.form.controls['loesung'].setValue(text);
+          this.fileInfoLoesung = undefined;
+          this.pfadGrafikLoesung = responseDto.pfad;
+          this.#embeddableImagesFacade.resetState();
+        }
+      }
+    );
+
+    this.#selectedEmbeddableImageInfoSubscription = this.#embeddableImagesFacade.selectedEmbeddableImageInfo$.subscribe((info) => {
+      this.#pfadSelectedClicked = true;
+      this.#embeddableImagesFacade.vorschauLaden(info);
+    });
+
+    this.#selectedEmbeddableImageVorschauSubscription = this.#embeddableImagesFacade.selectedEmbeddableImageVorschau$.subscribe((vorschau) => {
+      this.selectedVorschau = vorschau;
+      if (this.#pfadSelectedClicked) {
+        this.#openEmbeddableImageVorschauDialog(vorschau);
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.#combinedSubscription.unsubscribe();
+    this.#embeddableImagesResponseSubscription.unsubscribe();
+    this.#selectedEmbeddableImageInfoSubscription.unsubscribe();
+    this.#selectedEmbeddableImageVorschauSubscription.unsubscribe();
+    this.#embeddableImagesFacade.clearVorschau();
   }
 
   isFormValid(): boolean {
@@ -166,8 +251,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   generierenDiabled(): boolean {
 
-    const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.grafikInfos.filter(gi => !gi.existiert);
-    return !this.form.valid || this.antwortvorschlaegeErrors() || grafikInfosOhneFile.length > 0;
+    const mbeddableImageInfosOhneFile: EmbeddableImageInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
+    return !this.form.valid || this.antwortvorschlaegeErrors() || mbeddableImageInfosOhneFile.length > 0;
   }
 
   onChangeAnzahlAntwortvorschlaege($event: any) {
@@ -190,6 +275,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
+    this.raetselFacade.leaveEditMode();
     if (this.#raetselDetails && this.#raetselDetails.id !== 'neu') {
       this.raetselFacade.selectRaetsel(this.#raetselDetails);
     } else {
@@ -198,6 +284,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   gotoSuche(): void {
+    this.raetselFacade.leaveEditMode();
     this.raetselFacade.cancelSelection();
   }
 
@@ -237,21 +324,37 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  grafikLaden(link: string): void {
-    this.grafikFacade.grafikPruefen(link);
-  }
-
-  onGrafikHochgeladen($event: Message): void {
-    if ($event.level === 'INFO') {
-      const pfad = $event.message;
-      // this.raetselFacade.grafikHochgeladen(this.raetselDetailsContent.raetsel, pfad);
-      // TODO
-    }
-  }
-
   downloadLatexLogs(): void {
     if (this.#raetselDetails && this.#raetselDetails.schluessel) {
       this.raetselFacade.downloadLatexLogs(this.#raetselDetails.schluessel)
+    }
+  }
+
+  onFileSelected($event: FileInfoModel, textart: TEXTART): void {
+    if (textart === 'FRAGE') {
+      this.fileInfoFrage = $event;
+    }
+    if (textart === 'LOESUNG') {
+      this.fileInfoLoesung = $event;
+    }
+
+  }
+
+  uploadFile(textart: TEXTART): void {
+
+    console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
+
+    const context: EmbeddableImageContext = {
+      raetselId: this.#raetselDetails.id,
+      textart: textart
+    };
+
+    // im Editor wird immer nur eine neue Datei hochgeladen.
+    if (textart === 'FRAGE' && this.fileInfoFrage) {
+      this.#embeddableImagesFacade.createEmbeddableImage(context, this.fileInfoFrage!.file);
+    }
+    if (textart === 'LOESUNG' && this.fileInfoLoesung) {
+      this.#embeddableImagesFacade.createEmbeddableImage(context, this.fileInfoLoesung!.file);
     }
   }
 
@@ -270,7 +373,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     this.#addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
 
-    if(!this.isRoot) {
+    if (!this.isRoot) {
       this.form.controls['schluessel'].disable();
     }
 
@@ -371,7 +474,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
       height: '600px',
       width: '700px',
-      data: dialogData
+      data: dialogData,
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -410,4 +514,32 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  #openEmbeddableImageVorschauDialog(vorschau: EmbeddableImageVorschau): void {
+    this.#pfadSelectedClicked = false;
+
+    const hinweis = vorschau.exists ? undefined :
+      'Es gibt keine Datei mit diesem Pfad. Vorgehen: Datei hochladen und anschließend im Text den fehlerhaften \\includegraphics-Befehl durch den neu generierten ersetzen.';
+
+    const dialogData: ImageDialogModel = {
+      titel: vorschau.pfad,
+      hinweis: hinweis,
+      image: vorschau.image
+    }
+
+    const height = vorschau.exists ? '650' : '270px';
+    const width = vorschau.exists ? '700px' : '500px';
+
+    const dialogRef = this.dialog.open(ImageDialogComponent, {
+      height: height,
+      width: width,
+      data: dialogData,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(_result => {
+      this.#embeddableImagesFacade.clearVorschau();
+    });
+  }
+
 }

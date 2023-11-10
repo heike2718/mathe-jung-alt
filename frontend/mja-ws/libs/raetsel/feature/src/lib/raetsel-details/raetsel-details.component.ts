@@ -13,13 +13,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { Router } from '@angular/router';
-import { GrafikInfo, RaetselDetails } from '@mja-ws/raetsel/model';
+import { RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
-import { FileUploadComponent, FrageLoesungImagesComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
+import { FrageLoesungImagesComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
 import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
-import { Message } from '@mja-ws/shared/messaging/api';
-import { GrafikFacade } from '@mja-ws/grafik/api';
-import { GrafikDetailsComponent } from '../grafik-details/grafik-details.component';
+import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import {
   anzeigeAntwortvorschlaegeSelectInput,
   FONT_NAME,
@@ -30,6 +28,10 @@ import {
   schriftgroessenSelectInput,
   SelectGeneratorParametersUIModelAutoren
 } from '@mja-ws/core/model';
+import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
+import { Configuration } from '@mja-ws/shared/config';
+import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
+import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -41,15 +43,14 @@ import {
     MatChipsModule,
     MatButtonModule,
     MatDialogModule,
-    MatIconModule,
     MatFormFieldModule,
     MatListModule,
     MatTooltipModule,
     TextFieldModule,
     FrageLoesungImagesComponent,
     AntwortvorschlagComponent,
-    FileUploadComponent,
-    GrafikDetailsComponent,
+    EmbeddableImageVorschauComponent,
+    EmbeddableImageInfoComponent,
     GeneratorParametersDialogAutorenComponent
   ],
   templateUrl: './raetsel-details.component.html',
@@ -57,28 +58,38 @@ import {
 })
 export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
-  public raetselFacade = inject(RaetselFacade);
-  public authFacade = inject(AuthFacade);
-  public grafikFacade = inject(GrafikFacade);
-  public dialog = inject(MatDialog);
+  raetselFacade = inject(RaetselFacade);
+  authFacade = inject(AuthFacade);
+  dialog = inject(MatDialog);
 
+  #config = inject(Configuration);
+  devMode = !this.#config.production;
+
+  #embeddableImagesFacade = inject(EmbeddableImagesFacade);
   #router = inject(Router);
 
   #raetselDetailsSubscription = new Subscription();
   #raetselDetails!: RaetselDetails;
 
+  #selectedEmbeddableImageInfoSubscription: Subscription = new Subscription();
+
   ngOnInit(): void {
 
     this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.pipe(
       tap((details) => {
-        console.log('raetselDetails changed');
         this.#raetselDetails = details;
       })
     ).subscribe();
+
+    this.#embeddableImagesFacade.selectedEmbeddableImageInfo$.subscribe((info) => {
+      this.#embeddableImagesFacade.vorschauLaden(info);
+    });
   }
 
   ngOnDestroy(): void {
+    this.#selectedEmbeddableImageInfoSubscription.unsubscribe();
     this.#raetselDetailsSubscription.unsubscribe();
+    this.#embeddableImagesFacade.clearVorschau();
   }
 
   startEdit(): void {
@@ -104,18 +115,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   generierenDiabled(): boolean {
-    const grafikInfosOhneFile: GrafikInfo[] = this.#raetselDetails.grafikInfos.filter(gi => !gi.existiert);
-    return grafikInfosOhneFile.length > 0;
-  }
-
-  grafikLaden(link: string): void {
-    this.grafikFacade.grafikPruefen(link);
-  }
-
-  onGrafikHochgeladen($event: Message): void {
-    if ($event.level === 'INFO') {
-      this.raetselFacade.selectRaetsel(this.#raetselDetails);
-    }
+    const mbeddableImageInfosOhneFile: EmbeddableImageInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
+    return mbeddableImageInfosOhneFile.length > 0;
   }
 
   downloadLatexLogs(): void {

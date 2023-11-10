@@ -22,6 +22,7 @@ import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.dto.SuchfilterVariante;
+import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.quellen.QuellenService;
@@ -30,7 +31,7 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
-import de.egladil.mja_api.domain.raetsel.dto.GrafikInfo;
+import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
@@ -69,6 +70,9 @@ public class RaetselServiceImpl implements RaetselService {
 	@Inject
 	RaetselDao raetselDao;
 
+	@Inject
+	DeleteUnusedEmbeddableImageFilesService deleteImagesFileService;
+
 	private final FindPathsGrafikParser findPathsGrafikParser = new FindPathsGrafikParser();
 
 	@Override
@@ -81,7 +85,8 @@ public class RaetselServiceImpl implements RaetselService {
 		List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
 		long anzahlGesamt = 0L;
 
-		boolean nurFreigegebene = PermissionUtils.restrictSucheToFreigegeben(PermissionUtils.getRelevantRoles(authCtx));
+		boolean nurFreigegebene = PermissionUtils
+			.restrictSucheToFreigegeben(PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx));
 
 		switch (suchfilterVariante) {
 
@@ -202,7 +207,7 @@ public class RaetselServiceImpl implements RaetselService {
 		}
 
 		if (!PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRelevantRoles(authCtx), persistentesRaetsel.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), persistentesRaetsel.owner)) {
 
 			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", userId, persistentesRaetsel.schluessel,
 				persistentesRaetsel.owner);
@@ -230,8 +235,15 @@ public class RaetselServiceImpl implements RaetselService {
 			PersistentesRaetselHistorieItem.persist(neuesHistorieItem);
 		}
 
+		FragenUndLoesungenVO fragenLoesungenVo = new FragenUndLoesungenVO().withFrageAlt(persistentesRaetsel.frage)
+			.withFrageNeu(payload.getRaetsel().getFrage()).withLoesungAlt(persistentesRaetsel.loesung)
+			.withLoesungNeu(payload.getRaetsel().getLoesung());
+
 		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
 		PersistentesRaetsel.persist(persistentesRaetsel);
+
+		// Nur löschen, wenn persist klar ging!
+		deleteImagesFileService.checkAndDeleteUnusedFiles(fragenLoesungenVo);
 
 		LOGGER.info("Raetsel geaendert: [raetsel={}, user={}]", raetselId,
 			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
@@ -263,13 +275,24 @@ public class RaetselServiceImpl implements RaetselService {
 
 		Raetsel result = mapFromDB(raetsel);
 
-		List<String> grafikLinks = findPathsGrafikParser.findPaths(raetsel.frage);
-		grafikLinks.addAll(findPathsGrafikParser.findPaths(raetsel.loesung));
+		List<String> grafikLinksFrage = findPathsGrafikParser.findPaths(raetsel.frage);
 
-		List<GrafikInfo> grafikInfos = getGrafikInfos(grafikLinks);
+		if (!grafikLinksFrage.isEmpty()) {
+
+			List<EmbeddableImageInfo> grafikInfosFrage = getGrafikInfos(grafikLinksFrage, Textart.FRAGE);
+			result.addAllEmbeddableImageInfos(grafikInfosFrage);
+		}
+
+		List<String> grafikLinksLoesung = findPathsGrafikParser.findPaths(raetsel.loesung);
+
+		if (!grafikLinksLoesung.isEmpty()) {
+
+			List<EmbeddableImageInfo> grafikInfosLoesung = getGrafikInfos(grafikLinksLoesung, Textart.LOESUNG);
+			result.addAllEmbeddableImageInfos(grafikInfosLoesung);
+		}
+
 		result.setImages(raetselFileService.findImages(result.getSchluessel()));
 
-		result.setGrafikInfos(grafikInfos);
 		Optional<QuelleMinimalDto> optQuelle = quellenServive.loadQuelleMinimal(raetsel.quelle);
 
 		if (optQuelle.isPresent()) {
@@ -295,14 +318,14 @@ public class RaetselServiceImpl implements RaetselService {
 
 	}
 
-	List<GrafikInfo> getGrafikInfos(final List<String> pfade) {
+	List<EmbeddableImageInfo> getGrafikInfos(final List<String> pfade, final Textart textart) {
 
-		final ArrayList<GrafikInfo> result = new ArrayList<>();
+		final ArrayList<EmbeddableImageInfo> result = new ArrayList<>();
 
 		pfade.forEach(pfad -> {
 
-			boolean exists = raetselFileService.existsGrafik(pfad);
-			result.add(new GrafikInfo(pfad, exists));
+			boolean exists = raetselFileService.fileExists(pfad);
+			result.add(new EmbeddableImageInfo(pfad, exists, textart));
 		});
 
 		return result;
@@ -337,7 +360,7 @@ public class RaetselServiceImpl implements RaetselService {
 			.withName(raetselDB.name);
 
 		boolean hasWritePermission = PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRelevantRoles(authCtx), raetselDB.owner);
+			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetselDB.owner);
 
 		if (hasWritePermission) {
 

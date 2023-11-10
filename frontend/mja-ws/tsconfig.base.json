@@ -19,9 +19,15 @@
       "@mja-ws/core/data": ["libs/core/data/src/index.ts"],
       "@mja-ws/core/model": ["libs/core/model/src/index.ts"],
       "@mja-ws/deskriptoren/model": ["libs/deskriptoren/model/src/index.ts"],
-      "@mja-ws/grafik/api": ["libs/grafik/api/src/index.ts"],
-      "@mja-ws/grafik/data": ["libs/grafik/data/src/index.ts"],
-      "@mja-ws/grafik/model": ["libs/grafik/model/src/index.ts"],
+      "@mja-ws/embeddable-images/api": [
+        "libs/shared/embeddable-images/api/src/index.ts"
+      ],
+      "@mja-ws/embeddable-images/data": [
+        "libs/shared/embeddable-images/data/src/index.ts"
+      ],
+      "@mja-ws/embeddable-images/model": [
+        "libs/shared/embeddable-images/model/src/index.ts"
+      ],
       "@mja-ws/local-storage-data": ["libs/local-storage-data/src/index.ts"],
       "@mja-ws/raetsel/api": ["libs/raetsel/api/src/index.ts"],
       "@mja-ws/raetsel/data": ["libs/raetsel/data/src/index.ts"],
@@ -47,9 +53,6 @@
       ],
       "@mja-ws/shared/messaging/ui": ["libs/shared/messaging/ui/src/index.ts"],
       "@mja-ws/shared/ngrx-utils": ["libs/shared/ngrx-utils/src/index.ts"],
-      "@mja-ws/shared/upload/api": ["libs/shared/upload/api/src/index.ts"],
-      "@mja-ws/shared/upload/data": ["libs/shared/upload/data/src/index.ts"],
-      "@mja-ws/shared/upload/model": ["libs/shared/upload/model/src/index.ts"],
       "@mja-ws/shared/util": ["libs/shared/util/src/index.ts"]
     }
   },

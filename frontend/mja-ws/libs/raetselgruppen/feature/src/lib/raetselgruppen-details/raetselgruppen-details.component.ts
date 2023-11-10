@@ -103,7 +103,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
     }
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
-      height: '600px',
+      height: '750px',
       width: '700px',
       data: dialogData
     });

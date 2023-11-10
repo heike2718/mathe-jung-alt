@@ -12,6 +12,7 @@ export interface RaetselState {
     readonly raetselDetails: RaetselDetails | undefined;
     readonly raetselSuchfilter: RaetselSuchfilter;
     readonly generateLatexError: boolean;
+    readonly editModus: boolean;
 };
 
 const initialState: RaetselState = {
@@ -22,7 +23,8 @@ const initialState: RaetselState = {
     saveSuccessMessage: undefined,
     raetselDetails: undefined,
     raetselSuchfilter: initialRaetselSuchfilter,
-    generateLatexError: false
+    generateLatexError: false,
+    editModus: false
 };
 
 export const raetselFeature = createFeature({
@@ -114,6 +116,8 @@ export const raetselFeature = createFeature({
                 ...state,
                 generateLatexError: true
             }
-        })
+        }),
+        on(raetselActions.pREPARE_EDIT, (state, _action) => ({ ...state, editModus: true })),
+        on(raetselActions.fINISH_EDIT, (state, _action) => ({ ...state, editModus: false })),
     )
 });

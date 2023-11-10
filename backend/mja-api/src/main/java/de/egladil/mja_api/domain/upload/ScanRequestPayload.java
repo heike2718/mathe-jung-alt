@@ -25,7 +25,7 @@ public class ScanRequestPayload {
 
 	@JsonProperty
 	@NotNull
-	private Upload upload;
+	private UploadedFile upload;
 
 	public String getClientId() {
 
@@ -49,12 +49,12 @@ public class ScanRequestPayload {
 		return this;
 	}
 
-	public Upload getUpload() {
+	public UploadedFile getUpload() {
 
 		return upload;
 	}
 
-	public ScanRequestPayload withUpload(final Upload upload) {
+	public ScanRequestPayload withUpload(final UploadedFile upload) {
 
 		this.upload = upload;
 		return this;

@@ -1,0 +1,19 @@
+<h2 *ngIf="selectFileModel.titel && selectFileModel.titel.length>0">{{selectFileModel.titel}}</h2>
+<p *ngIf="devMode" class="hint">select-file.component</p>
+<p class="info" *ngIf="selectFileModel.beschreibung">{{selectFileModel.beschreibung}}</p>
+<p class="warnung" *ngIf="selectFileModel.hinweis">{{selectFileModel.hinweis}}</p>
+
+<div *ngIf="!currentFile">
+    <input type="file" #file accept="{{selectFileModel.accept}}" style="display: none" (change)="onFileAdded($event)"
+        #fileUpload />
+
+    <div class="file-upload">
+        <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+            <mat-icon>attach_file</mat-icon>
+        </button>
+    </div>
+    
+    <div class="mt-1 mb-1 hint">
+        {{maxFileSizeInfo}}, {{selectFileModel.acceptMessage}}
+    </div>
+</div>

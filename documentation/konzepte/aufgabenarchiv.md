@@ -154,6 +154,70 @@ Vorhandene Aufgabensammlungen sind
 
 Die Persistierung von Aufgabensammlungen dient der Datensicherung
 
+## Imagedateien zum Einbetten in LaTeX
+
+Alle Images müssen als eps vorliegen. 
+
+### Hochladen einer neuen eps
+
+Das Hochladen erfolgt im raetsel-editor, also im Kontext eines neuen oder vorhandenen Rätsels.
+
+Hier müssen 2 File-Upload-Komponenten eingebunden werden, eine für Bilder zur Frage, eine für Bilder zur Lösung. Dadurch ist der Kontext klar.
+
+
+```
+export type TEXTART = 'FRAGE' | 'LOESUNG';
+
+export interface EmbeddableImageContext {
+  readonly raetselId: string;
+  readonly textart: TEXTART | undefined;
+};
+```
+
+Wenn die Datei ok ist, wird 
+
+- ein Dateiname generiert
+  - bei Dateien, deren Name dem Pattern 01234.eps oder 01234_5.eps entspricht, werden die ersten 9 Zeichen einer zufälligen UUID verwendet und der Name meiner Datei angehängt
+  - bei allen anderen Dateien werden die ersten 13 Zeichen einer zufälligen UUID verwendet.
+- die Datei mit diesem Namen im Unterverzeichnis .../latex/doc/resources/x gespeichert, wobei x durch das erste Zeichen des Dateinamen ersetzt wird. Dadurch entstehen 16 Unterverzeichnisse mit einer einigermaßen gleich verteilten Anzahl an eps-Dateien
+- der LaTeX-Befehl zum Includieren der Grafik in den Text generiert
+
+Nebem dem oben genannten EmbeddableImageContext werden der generierte LaTeX-Befehl sowie der relative Pfad zum Generieren der Vorschau (also z.B. /resources/a/abcdef01-01234.eps) an den Client zurückgeliefert.
+
+Der LaTeX-Befehl wird dann vom Client entsprechend der TEXTART an das Ende der Frage/der Lösung gehängt und kann von dort im Editor an einen beliebigen anderen Platz kopiert und angepasst werden (z.B. andere Breite).
+
+__Berechtigungen:__
+
+Rollen: ADMIN und AUTOR
+
+AUTORen dürfen 
+
+- beim Erfassen eines neuen Rätsels
+- beim Ändern eines eigenen Rätsels
+
+eps hochladen.
+
+ADMINs dürfen
+
+- beim Erfassen eines neuen Rätsels
+- beim Ändern eines beliebigen Rätsels
+
+eps hochladen.
+
+
+### Austauschen einer vorhandenen eps
+
+Es ibt bereits die Grafik-Komponente, die eine Liste von Grafik-Infos zu einem Rätsel anzeigt. Die Grafik-Infos werden Dabei aus den Texten von Frage und Lösung extrahiert.
+
+Diese Komponente stellt einen Fileupload zur Verfügung, der als Kontext die id des raetsels und den relativen Pfad aus dem Text hat. Die hochgeladene Datei überschreibt nach dem Hochladen also die Datei, die am angegebenen Pfad liegt.
+
+__Berechtigungen:__
+
+Rollen: ADMIN und AUTOR
+
+AUTORen dürfen nur bei eigenen Rätseln eps austauschen. ADMINs dürfen in allen Rätseln eps austauschen.
+
+
 # Nächste Schritte
 
 * Aufsetzen frontend-nrwl-workspace mit nx-cli und angularachitects/ddd-cli. (erledigt)
@@ -162,7 +226,7 @@ Die Persistierung von Aufgabensammlungen dient der Datensicherung
 
 * Geneatoren für LaTeX-File einer einzelnen Aufgabe (erledigt)
 
-* Frontend: Editor für Aufgaben mit Metadaten, zunächst nur selbst als Quelle wegen Minikänguru
+* Frontend: Editor für Aufgaben mit Metadaten, zunächst nur selbst als Quelle wegen Minikänguru (erledigt)
 
 
 

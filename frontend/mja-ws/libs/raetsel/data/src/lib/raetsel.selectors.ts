@@ -34,12 +34,18 @@ const generateLatexError = createSelector(
     (state) => state.generateLatexError
 );
 
+const editModus = createSelector(
+    selectRaetselState,
+    (state) => state.editModus
+);
+
 export const fromRaetsel = {
     isLoaded,
     page,
     paginationState,
     raetselDetails,
     suchfilter,
-    generateLatexError
+    generateLatexError,
+    editModus
 };
 

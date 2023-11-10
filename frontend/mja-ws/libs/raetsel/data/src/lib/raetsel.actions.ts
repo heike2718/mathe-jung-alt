@@ -22,5 +22,7 @@ export const raetselActions = createActionGroup({
         'RAETSEL_SAVED': props<{raetselDetails: RaetselDetails}>(),
         'FIND_LATEXLOGS': props<{schluessel: string}>(),
         'LATEXLOGS_FOUND':props<{ files: GeneratedFile[] }>(),
+        'PREPARE_EDIT': emptyProps(),
+        'FINISH_EDIT': emptyProps()
     }
 });
