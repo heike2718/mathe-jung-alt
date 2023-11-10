@@ -482,35 +482,38 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
       if (result) {
 
+        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+
         if (dialogData.selectedLayoutAntwortvorschlaege) {
 
-          let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+
           switch (dialogData.selectedLayoutAntwortvorschlaege) {
             case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
             case 'Buchstaben': layout = 'BUCHSTABEN'; break;
             case 'Liste': layout = 'DESCRIPTION'; break;
           }
-
-          let font: FONT_NAME = 'STANDARD';
-          let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
-
-          if (dialogData.selectedFontName) {
-            switch (dialogData.selectedFontName) {
-              case 'Druckschrift (Leseanfänger)': font = 'DRUCK_BY_WOK'; break;
-              case 'Fibel Nord': font = 'FIBEL_NORD'; break;
-              case 'Fibel Süd': font = 'FIBEL_SUED'; break;
-            }
-          }
-
-          if (dialogData.selectedSchriftgroesse) {
-            switch (dialogData.selectedSchriftgroesse) {
-              case 'sehr groß': schriftgroesse = 'HUGE'; break;
-              case 'groß': schriftgroesse = 'LARGE'; break;
-            }
-          }
-
-          this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, font, schriftgroesse, layout);
         }
+
+        let font: FONT_NAME = 'STANDARD';
+        let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
+
+        if (dialogData.selectedFontName) {
+          switch (dialogData.selectedFontName) {
+            case 'Druckschrift (Leseanfänger)': font = 'DRUCK_BY_WOK'; break;
+            case 'Fibel Nord': font = 'FIBEL_NORD'; break;
+            case 'Fibel Süd': font = 'FIBEL_SUED'; break;
+          }
+        }
+
+        if (dialogData.selectedSchriftgroesse) {
+          switch (dialogData.selectedSchriftgroesse) {
+            case 'sehr groß': schriftgroesse = 'HUGE'; break;
+            case 'groß': schriftgroesse = 'LARGE'; break;
+          }
+        }
+
+        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, font, schriftgroesse, layout);
+
       }
     });
   }
