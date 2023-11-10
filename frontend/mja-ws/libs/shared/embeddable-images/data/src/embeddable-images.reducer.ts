@@ -45,7 +45,7 @@ export const embeddableImagesFeature = createFeature({
         ),
         on(embeddableImagesActions.lADE_VORSCHAU, (state, _action) => ({ ...state, selectedEmbeddableImageVorschau: undefined })),
         on(embeddableImagesActions.vORSCHAU_GELADEN, (state, action) => ({ ...state, embeddableImageVorschauGeladen: true, selectedEmbeddableImageVorschau: action.embeddableImageVorschau })),
-        on(embeddableImagesActions.cLEAR_VORSCHAU, (state, _action) => ({ ...state, embeddableImageVorschauGeladen: false, selectedEmbeddableImageVorschau: undefined })),
+        on(embeddableImagesActions.cLEAR_VORSCHAU, (state, _action) => ({ ...state, embeddableImageVorschauGeladen: false, selectedEmbeddableImageVorschau: undefined, embeddableImagesResponse: initialEmbeddableImageResponseDto })),
         on(
             embeddableImagesActions.rESET_STATE,
             (_state, _action) => (initialState)

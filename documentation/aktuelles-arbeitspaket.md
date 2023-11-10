@@ -24,7 +24,7 @@ Die raetsel-details.component ist soweit fertig.
 ~~Zum Zeitpunkt des Ladens der Raetsel-Details, werden mittels regexp alle Pfade von eingebetteten Images extrahiert und die emeddableImageInfos werden~~
 ~~erzeugt und in das RaetselDetailsDto gepackt.~~
 
-~~EmbeddableImagesInfo muss wissen, ob sie zur Frage oder zur Lösung gehört, damit man die embeddable-images-vorschau.component für den editor splitten~~ ~~kann.~~ Erledigt: textart ist Attribut auch beim Replace
+~~EmbeddableImagesInfo muss wissen, ob sie zur Frage oder zur Lösung gehört, damit man die embeddable-images-vorschau.component für den editor splitten~~ ~~kann.~~ ~~Erledigt: textart ist Attribut auch beim Replace~~
 
 
 __raetsel-details:__ ~~vorhandene embeddableImages anzeigen und austauschen. nicht vorhandene markieren und Verweis auf Editor~~
@@ -40,9 +40,11 @@ __raetsel-editor:__
 
 ~~Beim Speichern eines Rätsels müssen alle referenzierten Grafikdateien gelöscht werden, die jetzt nicht mehr referenziert werden.~~
 
-Neuer Bug:
-selectedVorschau oder EmbeddableImageResponseDto muss gelöscht werden, wenn aus dem Details wegnavigiert wird.
-Bug: in Details Datei neu hochladen, dann zurück zu Rätsel, dann zum Editor: der Frage-Text enthält am Ende \\includegraphics des letzten Results.
+~~Neuer Bug:~~
+~~selectedVorschau oder EmbeddableImageResponseDto muss gelöscht werden, wenn aus den Details wegnavigiert wird.~~
+~~Bug: in Details Datei neu hochladen, dann zurück zu Rätsel, dann zum Editor: der Frage-Text enthält am Ende \\includegraphics des letzten Results.~~
+
+raetsel-details.component: für EmbeddableImagesContext sollte es die Textart auch über das das gewählte image geben
 
 Lange Erklärtexte mittes Hilfe-Dialog anzeigen.
 

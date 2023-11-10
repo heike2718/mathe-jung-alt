@@ -75,8 +75,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.pipe(
-      tap((details) => {
-        console.log('raetselDetails changed');
+      tap((details) => {        
         this.#raetselDetails = details;
       })
     ).subscribe();
@@ -84,6 +83,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.#raetselDetailsSubscription.unsubscribe();
+    this.#embeddableImagesFacade.clearVorschau();
   }
 
   startEdit(): void {
