@@ -103,28 +103,30 @@ export class RaetselgruppenHttpService {
 
     }
 
-    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): Observable<GeneratedFile> {
+    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege:LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
 
         const url = this.#url + '/' + raetselgruppeID + '/knobelkartei/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams()
             .set('font', font)
-            .set('size', schriftgroesse);
+            .set('size', schriftgroesse)
+            .set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
 
         return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
 
     }
 
-    generiereArbeitsblattMitLoesungen(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): Observable<GeneratedFile> {
+    generiereArbeitsblattMitLoesungen(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
 
         const url = this.#url + '/' + raetselgruppeID + '/arbeitsblatt/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams()
             .set('font', font)
-            .set('size', schriftgroesse);
+            .set('size', schriftgroesse)
+            .set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
 
         return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });

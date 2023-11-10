@@ -446,7 +446,12 @@ public class RaetselgruppenResource {
 		operationId = "printArbeitsblatt",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
-		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)",
+			required = false),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "font",
@@ -478,15 +483,18 @@ public class RaetselgruppenResource {
 	public GeneratedFile printArbeitsblattMitLoesungen(
 		@PathParam(value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "font") final FontName font,
-		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
+		@QueryParam(value = "size") final Schriftgroesse schriftgroesse,
+		@QueryParam(value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 	// @formatter:on
 
 		FontName theFont = font == null ? FontName.STANDARD : font;
 		Schriftgroesse theSchriftgroesse = schriftgroesse == null ? Schriftgroesse.NORMAL : schriftgroesse;
+		LayoutAntwortvorschlaege theLayout = layoutAntwortvorschlaege == null ? LayoutAntwortvorschlaege.NOOP
+			: layoutAntwortvorschlaege;
 
 		LOGGER.info("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
 
-		return raetselgruppenService.printArbeitsblattMitLoesungen(raetselgruppeID, theFont, theSchriftgroesse);
+		return raetselgruppenService.printArbeitsblattMitLoesungen(raetselgruppeID, theFont, theSchriftgroesse, theLayout);
 	}
 
 	@GET
@@ -497,7 +505,12 @@ public class RaetselgruppenResource {
 		operationId = "printKnobelkartei",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF, in dem jede Seite genau ein Rätsel enthält. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
-		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "layoutAntwortvorschlaege",
+			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)",
+			required = false),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "font",
@@ -529,15 +542,19 @@ public class RaetselgruppenResource {
 	public GeneratedFile printKnobelkartei(
 		@PathParam(value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "font") final FontName font,
-		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
+		@QueryParam(value = "size") final Schriftgroesse schriftgroesse,
+		@QueryParam(value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 	// @formatter:on
 
 		FontName theFont = font == null ? FontName.STANDARD : font;
 		Schriftgroesse theSchriftgroesse = schriftgroesse == null ? Schriftgroesse.NORMAL : schriftgroesse;
+		LayoutAntwortvorschlaege theLayout = layoutAntwortvorschlaege == null ? LayoutAntwortvorschlaege.NOOP
+			: layoutAntwortvorschlaege;
 
-		LOGGER.info("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
+		LOGGER.info("font={}, theFont={}, size={}, theSize={}, theLayout={}", font, theFont, schriftgroesse, theSchriftgroesse,
+			theLayout);
 
-		return raetselgruppenService.printKartei(raetselgruppeID, theFont, theSchriftgroesse);
+		return raetselgruppenService.printKartei(raetselgruppeID, theFont, theSchriftgroesse, theLayout);
 	}
 
 }

@@ -38,12 +38,11 @@
                 </option>
             </select>
         </mat-form-field>
-        <div class="hint mb-1">Hinweis 'Schriftgröße': optional. Empfehlung bei Fibel-Fonts: Vorschule bis Klasse 1
-            'sehr
-            groß', ab Klasse 2 'groß'</div>
+        <div class="hint mb-1">Hinweis 'Schriftgröße': optional und nur sinnvoll bei Wahl eines Fonts. Empfehlung: Vorschule bis Klasse 1
+            'sehr groß', ab Klasse 2 'groß'</div>
         <mat-form-field>
             <mat-label>Layout Antwortvorschläge</mat-label>
-            <select matNativeControl name="antowrtvorschlaegeTyp" id="antowrtvorschlaegeTyp"
+            <select matNativeControl name="antwortvorschlaegeTyp" id="antwortvorschlaegeTyp"
                 [(ngModel)]="data.selectedLayoutAntwortvorschlaege">
                 <option selected="" value=""></option>
                 <option [ngValue]="c" *ngFor="let c of data.layoutsAntwortvorschlaegeInput">
@@ -51,9 +50,8 @@
                 </option>
             </select>
         </mat-form-field>
-        <div class="hint mb-1">Hinweis 'Layout Antwortvorschläge': optional. Es ist nur sinnvoll bei multiple choice und
-            wenn die Antwortvorschläge nicht bereits im
-            Aufgabentext vorkommmen.</div>
+        <div class="hint mb-1">Hinweis 'Layout Antwortvorschläge': Sie können entscheiden, ob Antwortvorschläge gedruckt werden sollen und deren Anordnung wählen. 
+            Es ist nur sinnvoll bei multiple choice und wenn die Antwortvorschläge nicht bereits im Aufgabentext vorkommmen.</div>
     </mat-dialog-content>
 </div>
 <mat-dialog-actions align="end">

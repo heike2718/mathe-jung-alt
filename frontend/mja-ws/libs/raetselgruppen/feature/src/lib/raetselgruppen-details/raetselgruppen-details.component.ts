@@ -99,7 +99,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
       fontNamen: fontNamenSelectInput,
       selectedFontName: undefined,
       schriftgroessen: schriftgroessenSelectInput,
-      selectedSchriftgroesse: undefined
+      selectedSchriftgroesse: undefined,      
     }
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
@@ -116,7 +116,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
         let size: SCHRIFTGROESSE = 'NORMAL';
         let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
 
-        if (dialogData.selectedFontName) {
+        if (dialogData.selectedLayoutAntwortvorschlaege) {
           switch (dialogData.selectedLayoutAntwortvorschlaege) {
             case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
             case 'Buchstaben': layout = 'BUCHSTABEN'; break;
@@ -140,8 +140,8 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
         }        
 
         switch (dialogData.selectedVerwendungszweck) {
-          case 'Arbeitsblatt': this.raetselgruppenFacade.generiereArbeitsblatt(this.getRaetselgruppeID(), font, size); break;
-          case 'Knobelkartei': this.raetselgruppenFacade.generiereKnobelkartei(this.getRaetselgruppeID(), font, size); break;
+          case 'Arbeitsblatt': this.raetselgruppenFacade.generiereArbeitsblatt(this.getRaetselgruppeID(), font, size, layout); break;
+          case 'Knobelkartei': this.raetselgruppenFacade.generiereKnobelkartei(this.getRaetselgruppeID(), font, size, layout); break;
           case 'Vorschau': this.raetselgruppenFacade.generiereVorschau(this.getRaetselgruppeID(), font, size, layout); break;
           case 'LaTeX': this.raetselgruppenFacade.generiereLaTeX(this.getRaetselgruppeID(), layout); break;
         }

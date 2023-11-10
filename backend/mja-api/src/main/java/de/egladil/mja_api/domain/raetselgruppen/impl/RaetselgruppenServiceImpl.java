@@ -488,23 +488,23 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	}
 
 	@Override
-	public GeneratedFile printKartei(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse) {
+	public GeneratedFile printKartei(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
 
 		return raetselgruppeFileService.generate(dbResult, freigegebeneAufgaben, Verwendungszweck.KARTEI, font,
-			schriftgroesse, LayoutAntwortvorschlaege.NOOP);
+			schriftgroesse, layoutAntwortvorschlaege);
 	}
 
 	@Override
-	public GeneratedFile printArbeitsblattMitLoesungen(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse) {
+	public GeneratedFile printArbeitsblattMitLoesungen(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
 
 		return raetselgruppeFileService.generate(dbResult, freigegebeneAufgaben, Verwendungszweck.ARBEITSBLATT, font,
-			schriftgroesse, LayoutAntwortvorschlaege.NOOP);
+			schriftgroesse, layoutAntwortvorschlaege);
 	}
 
 	List<Quizaufgabe> vorbedingungenPublicResourcesPruefen(final PersistenteRaetselgruppe dbResult) throws WebApplicationException {

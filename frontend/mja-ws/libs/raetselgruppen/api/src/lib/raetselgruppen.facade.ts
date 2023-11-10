@@ -34,12 +34,12 @@ export class RaetselgruppenFacade {
         this.#store.dispatch(raetselgruppenActions.uNSELECT_RAETSELGRUPPE());
     }
 
-    generiereArbeitsblatt(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): void {
-        this.#store.dispatch(raetselgruppenActions.gENERIERE_ARBEITSBLATT({ raetselgruppeID, font, schriftgroesse }));
+    generiereArbeitsblatt(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.#store.dispatch(raetselgruppenActions.gENERIERE_ARBEITSBLATT({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
-    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE): void {
-        this.#store.dispatch(raetselgruppenActions.gENERIERE_KNOBELKARTEI({ raetselgruppeID, font, schriftgroesse }));
+    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.#store.dispatch(raetselgruppenActions.gENERIERE_KNOBELKARTEI({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
     generiereVorschau(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {

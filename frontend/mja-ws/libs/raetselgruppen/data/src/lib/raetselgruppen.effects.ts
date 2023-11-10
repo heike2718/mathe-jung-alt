@@ -90,7 +90,7 @@ export class RaetselgruppenEffects {
     generiereArbeitsblatt$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselgruppenActions.gENERIERE_ARBEITSBLATT),
-            concatMap((action) => this.#raetselgruppenHttpService.generiereArbeitsblattMitLoesungen(action.raetselgruppeID, action.font, action.schriftgroesse)),
+            concatMap((action) => this.#raetselgruppenHttpService.generiereArbeitsblattMitLoesungen(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
             map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
@@ -98,7 +98,7 @@ export class RaetselgruppenEffects {
     generiereKnobelkartei$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselgruppenActions.gENERIERE_KNOBELKARTEI),
-            concatMap((action) => this.#raetselgruppenHttpService.generiereKnobelkartei(action.raetselgruppeID, action.font, action.schriftgroesse)),
+            concatMap((action) => this.#raetselgruppenHttpService.generiereKnobelkartei(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
             map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );

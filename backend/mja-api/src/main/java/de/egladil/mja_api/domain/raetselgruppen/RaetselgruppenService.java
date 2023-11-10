@@ -108,14 +108,14 @@ public interface RaetselgruppenService {
 	 *
 	 * @param  raetselgruppeID
 	 * @param  font
+	 *                                  FontName
 	 * @param  schriftgroesse
-	 *                                  TODO
+	 *                                  Schriftgroesse
 	 * @param  layoutAntwortvorschlaege
 	 *                                  LayoutAntwortvorschlaege
-	 *                                  FontName
 	 * @return                          GeneratedFile
 	 */
-	GeneratedFile printKartei(final String raetselgruppeID, final FontName font, Schriftgroesse schriftgroesse);
+	GeneratedFile printKartei(final String raetselgruppeID, final FontName font, Schriftgroesse schriftgroesse, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 	/**
 	 * Generiert eine PDF-Datei mit Aufgabenblättern und Lösungen. Zuerst kommen die Aufgaben, danach, beginnend mit einer neuen
@@ -126,9 +126,11 @@ public interface RaetselgruppenService {
 	 *                                  FontName
 	 * @param  schriftgroesse
 	 *                                  Schriftgroesse
+	 * @param  layoutAntwortvorschlaege
+	 *                                  LayoutAntwortvorschlaege
 	 * @return                          GeneratedFile
 	 */
-	GeneratedFile printArbeitsblattMitLoesungen(final String raetselgruppeID, final FontName font, Schriftgroesse schriftgroesse);
+	GeneratedFile printArbeitsblattMitLoesungen(final String raetselgruppeID, final FontName font, Schriftgroesse schriftgroesse, LayoutAntwortvorschlaege layoutAntwortvorschlaege);
 
 	/**
 	 * Generiert das LaTeX-File für die Raetselgruppe. Die Grafiken muss man sowieso lokal haben. Sollte sich mit kleineren

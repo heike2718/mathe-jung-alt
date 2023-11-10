@@ -158,7 +158,7 @@ export interface SelectGeneratorParametersUIModelAutoren {
   titel: string;
   showVerwendungszwecke: boolean;
   verwendungszwecke: string[];
-  selectedVerwendungszweck: string | undefined;
+  selectedVerwendungszweck: string | undefined;  
   layoutsAntwortvorschlaegeInput: string[];
   selectedLayoutAntwortvorschlaege: string | undefined;  
   fontNamen: string[];
