@@ -21,6 +21,7 @@ import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
+import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -33,6 +34,8 @@ import jakarta.enterprise.context.ApplicationScoped;
  */
 @ApplicationScoped
 public class RaetselFileServiceImpl implements RaetselFileService {
+
+	private static final String FIRST_SUBDIR = "/vorschau/";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselFileServiceImpl.class);
 
@@ -141,38 +144,23 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 	}
 
 	@Override
-	public byte[] findImageFrage(final String schluessel) {
+	public byte[] findVorschau(final String filename) {
 
-		String path = latexBaseDir + File.separator + schluessel + ".png";
-		return MjaFileUtils.loadBinaryFile(path, false);
-	}
-
-	/**
-	 * @param  raetsel
-	 * @param  file
-	 * @param  template
-	 * @return          String
-	 */
-	private void writeOutput(final Raetsel raetsel, final File file, final String template) {
-
-		String errorMessage = "konnte kein LaTex-File schreiben Raetsel: [schluessel=" + raetsel.getSchluessel()
-			+ ", uuid="
-			+ raetsel.getId() + "]";
-
-		MjaFileUtils.writeOutput(file, template, errorMessage);
-	}
-
-	@Override
-	public byte[] findImageLoesung(final String schluessel) {
-
-		String path = latexBaseDir + File.separator + schluessel + SUFFIX_LOESUNGEN + ".png";
+		String path = latexBaseDir + FIRST_SUBDIR + filename.substring(0, 1) + File.separator + filename;
 		return MjaFileUtils.loadBinaryFile(path, false);
 	}
 
 	@Override
-	public Images findImages(final String schluessel) {
+	public void moveVorschau(final Raetsel raetsel) {
 
-		return new Images().withImageFrage(findImageFrage(schluessel)).withImageLoesung(findImageLoesung(schluessel));
+		moveVorschauFrage(raetsel);
+		moveVorschauLoesung(raetsel);
+	}
+
+	@Override
+	public Images findImages(final String filenameFrage, final String filenameLoesung) {
+
+		return new Images().withImageFrage(findVorschau(filenameFrage)).withImageLoesung(findVorschau(filenameLoesung));
 	}
 
 	@Override
@@ -276,6 +264,60 @@ public class RaetselFileServiceImpl implements RaetselFileService {
 
 		return new LoesungsbuchstabeTextGenerator().getTextLoesungsbuchstabe(antwortvorschlaege);
 
+	}
+
+	/**
+	 * @param  raetsel
+	 * @param  file
+	 * @param  template
+	 * @return          String
+	 */
+	private void writeOutput(final Raetsel raetsel, final File file, final String template) {
+
+		String errorMessage = "konnte kein LaTex-File schreiben Raetsel: [schluessel=" + raetsel.getSchluessel()
+			+ ", uuid="
+			+ raetsel.getId() + "]";
+
+		MjaFileUtils.writeOutput(file, template, errorMessage);
+	}
+
+	private void moveVorschauLoesung(final Raetsel raetsel) {
+
+		String pfad = latexBaseDir + File.separator + raetsel.getSchluessel() + SUFFIX_LOESUNGEN
+			+ Outputformat.PNG.getFilenameExtension();
+		File source = new File(pfad);
+
+		if (source.exists()) {
+
+			String filenameVorschauLoesung = raetsel.getFilenameVorschauLoesung();
+			String targetPfad = latexBaseDir + FIRST_SUBDIR + filenameVorschauLoesung.substring(0, 1) + File.separator
+				+ filenameVorschauLoesung;
+
+			File target = new File(targetPfad);
+			MjaFileUtils.moveFile(source, target);
+		} else {
+
+			LOGGER.warn("{} existiert nicht und wird folglich nicht verschoben", source.getAbsolutePath());
+		}
+	}
+
+	private void moveVorschauFrage(final Raetsel raetsel) {
+
+		String pfad = latexBaseDir + File.separator + raetsel.getSchluessel() + Outputformat.PNG.getFilenameExtension();
+		File source = new File(pfad);
+
+		if (source.exists()) {
+
+			String filenameVorschauFrage = raetsel.getFilenameVorschauFrage();
+			String targetPfad = latexBaseDir + FIRST_SUBDIR + filenameVorschauFrage.substring(0, 1) + File.separator
+				+ filenameVorschauFrage;
+
+			File target = new File(targetPfad);
+			MjaFileUtils.moveFile(source, target);
+		} else {
+
+			LOGGER.warn("{} existiert nicht und wird folglich nicht verschoben", source.getAbsolutePath());
+		}
 	}
 
 }

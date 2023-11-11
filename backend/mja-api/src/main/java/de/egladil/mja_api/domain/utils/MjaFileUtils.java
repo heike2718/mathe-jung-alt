@@ -14,6 +14,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,37 @@ public class MjaFileUtils {
 			throw new MjaRuntimeException(message);
 
 		}
+	}
+
+	public static void moveFile(final File source, final File target) {
+
+		if (source.isFile() && source.canRead()) {
+
+			try {
+
+				if (target.exists()) {
+
+					// Eigentlich wollte ich das tun, aber ich habe keinen Bock zu schauen, warum
+					// StandardCopyOption.REPLACE_EXISTING ignoriert wird.
+					// FileUtils.moveFile(source, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+
+					FileUtils.delete(target);
+					LOGGER.debug("{} deleted", target.getAbsolutePath());
+				}
+
+				FileUtils.moveFile(source, target);
+
+				LOGGER.debug("{} verschoben nach {}", source.getAbsolutePath(), target.getAbsolutePath());
+			} catch (IOException e) {
+
+				LOGGER.error("Fehler beim Verschieben einer Datei: " + e.getMessage(), e);
+				throw new MjaRuntimeException("Datei " + source.getAbsolutePath() + " konnte nicht verschoben werden");
+			}
+		} else {
+
+			LOGGER.warn("Datei {} existiert nicht oder hat keine write permission.", source.getAbsolutePath());
+		}
+
 	}
 
 	/**

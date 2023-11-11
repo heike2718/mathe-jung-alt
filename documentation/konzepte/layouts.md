@@ -111,7 +111,10 @@ Die Aktion ist im Rätseleditor verfügbar für Admins und Autoren. Status ist e
 
 Bei einer Knobelkartei ist die Reihenfolge der Elemente egal.
 
-Wenn es ein Element mit 2 oder mehr Antwortvorschlägen gibt, muss gewählt werden, ob Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.
+~~Wenn es ein Element mit 2 oder mehr Antwortvorschlägen gibt, muss gewählt werden, ob Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der~~
+~~Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.~~
+
+Weniger kompliziert implementiert, denn man kann ja mehrfach generieren, wenn das Ergebnis missfällt.
 
 Es kann der Font gewählt werden. Wenn keiner gewählt wurde wird Standard-LaTeX gedruckt.
 
@@ -132,7 +135,10 @@ Ziel ist eine Rätselgruppe mit mindestens 2 Elementen. Ein Aufgabenblatt mit nu
 
 Die Reihenfolge der Elemente muss durch die Anwendenden festelgbar sein. In den Rätselgruppen geschieht das aktuell durch die Wahl einer Nummer. Es sollte aber auch möglich sein, die Rätsel in der gewünschten Reihenfolge ohne Nummer zu sorieren (drag and drop oder ^^^- Aktionen auf der Liste). In diesem Fall wird die Nummer beim Umsortieren aktualisiert, also erst einmal 001, 002, ... Der Umsortieralgorithmus ist herausfordernd.
 
-Enthält die Rätselgruppe ein Multiple-Choice-Element, muss gewählt werden, ob als Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.
+~~Enthält die Rätselgruppe ein Multiple-Choice-Element, muss gewählt werden, ob als Multiple-Choice gedruckt werden soll. Bei "Ja" muss das Layout der~~
+~~Antwortvorschläge gewählt werden. Bei "Nein" dürfen Antwortvorschläge nicht gedruckt werden, auch wenn es welche gibt. Entspricht LayoutAntwortvorschlaege.NOPE.~~
+
+Weniger kompliziert implementiert, denn man kann ja mehrfach generieren, wenn das Ergebnis missfällt.
 
 Es kann der Font gewählt werden. Wenn keiner gewählt wurde wird Standard-LaTeX gedruckt.
 

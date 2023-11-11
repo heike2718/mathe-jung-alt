@@ -458,13 +458,14 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   #openPrintDialog(outputformat: OUTPUTFORMAT): void {
+
     const dialogData: SelectGeneratorParametersUIModelAutoren = {
       titel: outputformat + ' generieren',
       showVerwendungszwecke: false,
       verwendungszwecke: [],
       selectedVerwendungszweck: undefined,
       layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
-      selectedLayoutAntwortvorschlaege: undefined,
+      selectedLayoutAntwortvorschlaege: outputformat === 'PNG' ? 'Liste' : undefined,
       fontNamen: fontNamenSelectInput,
       selectedFontName: undefined,
       schriftgroessen: schriftgroessenSelectInput,
@@ -482,17 +483,16 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
       if (result) {
 
-        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+                let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
 
         if (dialogData.selectedLayoutAntwortvorschlaege) {
-
-
+          
           switch (dialogData.selectedLayoutAntwortvorschlaege) {
             case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
             case 'Buchstaben': layout = 'BUCHSTABEN'; break;
             case 'Liste': layout = 'DESCRIPTION'; break;
           }
-        }
+        } 
 
         let font: FONT_NAME = 'STANDARD';
         let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';

@@ -419,6 +419,8 @@ public class RaetselResource {
 
 		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege, theFont, theSchriftgroesse);
 
+		// jetzt liegt schluessel.png und evtl. schluessel_l.png im latex.base.dir und muss verschoben werden.
+
 		return result;
 	}
 

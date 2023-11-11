@@ -84,6 +84,9 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
         this.anzahlRaetsel = state.anzahlTreffer;
         this.#pageIndex = state.pageDefinition.pageIndex;
         this.#sortDirection = state.pageDefinition.sortDirection === 'asc' ? 'asc' : 'desc';
+        if (this.paginator && this.sort){          
+          this.#initPaginator();
+        }
       }
     );
 

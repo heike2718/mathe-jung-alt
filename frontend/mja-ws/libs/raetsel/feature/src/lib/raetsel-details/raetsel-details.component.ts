@@ -133,7 +133,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
       verwendungszwecke: [],
       selectedVerwendungszweck: undefined,
       layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
-      selectedLayoutAntwortvorschlaege: undefined,
+      selectedLayoutAntwortvorschlaege: outputformat === 'PNG' ? 'Liste' : undefined,
       fontNamen: fontNamenSelectInput,
       selectedFontName: undefined,
       schriftgroessen: schriftgroessenSelectInput,

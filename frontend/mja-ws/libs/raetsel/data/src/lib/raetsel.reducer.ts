@@ -105,7 +105,8 @@ export const raetselFeature = createFeature({
                 page: [],
                 raetselDetails: undefined,
                 raetselSuchfilter: initialRaetselSuchfilter,
-                generateLatexError: false
+                generateLatexError: false,
+                paginationState: initialPaginationState
             };
         }),
         on(raetselActions.rAETSEL_CANCEL_SELECTION, (state, _action) => {

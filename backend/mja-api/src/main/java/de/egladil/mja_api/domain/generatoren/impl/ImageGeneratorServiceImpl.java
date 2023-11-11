@@ -7,10 +7,6 @@ package de.egladil.mja_api.domain.generatoren.impl;
 import java.io.File;
 import java.util.UUID;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
@@ -18,8 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.generatoren.ImageGeneratorService;
+import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 
 /**
  * ImageGeneratorServiceImpl
@@ -46,7 +46,7 @@ public class ImageGeneratorServiceImpl implements ImageGeneratorService {
 
 		String filenameOhneSuffix = UUID.randomUUID().toString();
 		String path = latexBaseDir + File.separator + filenameOhneSuffix + ".tex";
-		String pathImage = latexBaseDir + File.separator + filenameOhneSuffix + ".png";
+		String pathImage = latexBaseDir + File.separator + filenameOhneSuffix + Outputformat.PNG.getFilenameExtension();
 
 		LOGGER.debug("===> relativerPfad={}, path={}, pathImage={}", relativerPfad, path, pathImage);
 		File file = new File(path);

@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
@@ -53,6 +54,12 @@ public class Raetsel extends AbstractDomainEntity {
 	@JsonProperty
 	@Schema(description = "Veröffentlichungsstatus des Rätsels, nur freigegebene können in der mja-app gefunden werden.")
 	private DomainEntityStatus status;
+
+	@JsonIgnore
+	private String filenameVorschauFrage;
+
+	@JsonIgnore
+	private String filenameVorschauLoesung;
 
 	@JsonProperty
 	@Schema(description = "Referenz auf die Quelle des Rätsels")
@@ -277,5 +284,27 @@ public class Raetsel extends AbstractDomainEntity {
 	public void setQuelle(final QuelleMinimalDto quelle) {
 
 		this.quelle = quelle;
+	}
+
+	public String getFilenameVorschauFrage() {
+
+		return filenameVorschauFrage;
+	}
+
+	public Raetsel withFilenameVorschauFrage(final String filenameVorschauFrage) {
+
+		this.filenameVorschauFrage = filenameVorschauFrage;
+		return this;
+	}
+
+	public String getFilenameVorschauLoesung() {
+
+		return filenameVorschauLoesung;
+	}
+
+	public Raetsel withFilenameVorschauLoesung(final String filenameVorschauLoesung) {
+
+		this.filenameVorschauLoesung = filenameVorschauLoesung;
+		return this;
 	}
 }

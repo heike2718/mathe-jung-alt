@@ -89,7 +89,7 @@ public class QuizService {
 		Quizaufgabe aufgabe = new Quizaufgabe();
 		aufgabe.setAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(dbAufgabe.antwortvorschlaege));
 		aufgabe.setSchluessel(dbAufgabe.schluessel);
-		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.schluessel));
+		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.filenameVorschauFrage, dbAufgabe.filenameVorschauLoesung));
 		aufgabe.setStatus(dbAufgabe.status);
 		aufgabe.setQuelle(mapQuelle(dbAufgabe));
 		aufgabe.setNummer(dbAufgabe.nummer);

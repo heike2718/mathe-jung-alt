@@ -109,13 +109,11 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 			LOGGER.debug("nach Aufruf LaTeXRestClient");
 			MessagePayload message = responseFrage.readEntity(MessagePayload.class);
 
-			String filename = raetsel.getSchluessel() + Outputformat.PNG.getFilenameExtension();
-			String filenameLoesung = raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN
-				+ Outputformat.PNG.getFilenameExtension();
-
 			if (message.isOk()) {
 
-				byte[] imageFrage = this.raetselFileService.findImageFrage(raetsel.getSchluessel());
+				raetselFileService.moveVorschau(raetsel);
+
+				byte[] imageFrage = this.raetselFileService.findVorschau(raetsel.getFilenameVorschauFrage());
 
 				Images result = new Images().withImageFrage(imageFrage);
 
@@ -125,7 +123,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 					if (message.isOk()) {
 
-						byte[] imageLoesung = this.raetselFileService.findImageLoesung(raetsel.getSchluessel());
+						byte[] imageLoesung = this.raetselFileService.findVorschau(raetsel.getFilenameVorschauLoesung());
 
 						// System.out.println(new String(Base64.getEncoder().encode(imageLoesung)));
 
@@ -135,7 +133,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 						LOGGER.error("Mist: generieren der Lösung hat nicht geklappt: " + message.getMessage());
 						throw new LaTeXCompileException(
 							"Beim Generieren der Lösung ist etwas schiefgegangen: " + message.getMessage())
-								.withNameFile(filenameLoesung);
+								.withNameFile(raetsel.getFilenameVorschauLoesung());
 					}
 
 				}
@@ -159,7 +157,7 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 
 			LOGGER.error("Mist: generieren der Frage hat nicht geklappt: " + message.getMessage());
 			throw new LaTeXCompileException("Beim Generieren der Frage ist etwas schiefgegangen: " + message.getMessage())
-				.withNameFile(filename);
+				.withNameFile(raetsel.getFilenameVorschauFrage());
 
 		} catch (LaTeXCompileException e) {
 
@@ -184,7 +182,6 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 				responseLoesung.close();
 			}
 		}
-
 	}
 
 	@Override

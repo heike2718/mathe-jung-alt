@@ -6,6 +6,12 @@ package de.egladil.mja_api.infrastructure.persistence.entities;
 
 import java.util.Date;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import de.egladil.mja_api.domain.DomainEntityStatus;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,13 +26,6 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import de.egladil.mja_api.domain.DomainEntityStatus;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 /**
  * PersistentesRaetsel
@@ -112,6 +111,12 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 
 	@Column
 	public String antwortvorschlaege;
+
+	@Column(name = "FILENAME_VORSCHAU_FRAGE")
+	public String filenameVorschauFrage;
+
+	@Column(name = "FILENAME_VORSCHAU_LOESUNG")
+	public String filenameVorschauLoesung;
 
 	@Column(name = "GEAENDERT_DURCH")
 	@NotNull

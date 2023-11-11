@@ -27,6 +27,7 @@ import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.quellen.QuellenService;
 import de.egladil.mja_api.domain.raetsel.AntwortvorschlaegeMapper;
+import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
@@ -150,6 +151,9 @@ public class RaetselServiceImpl implements RaetselService {
 
 		neuesRaetsel.owner = userId;
 		neuesRaetsel.geaendertDurch = userId;
+		neuesRaetsel.filenameVorschauFrage = generateFilenameVorschau();
+		neuesRaetsel.filenameVorschauLoesung = generateFilenameVorschau();
+
 		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
 
 		PersistentesRaetsel.persist(neuesRaetsel);
@@ -239,6 +243,17 @@ public class RaetselServiceImpl implements RaetselService {
 			.withFrageNeu(payload.getRaetsel().getFrage()).withLoesungAlt(persistentesRaetsel.loesung)
 			.withLoesungNeu(payload.getRaetsel().getLoesung());
 
+		if (persistentesRaetsel.filenameVorschauFrage == null) {
+
+			persistentesRaetsel.filenameVorschauFrage = generateFilenameVorschau();
+		}
+
+		if (persistentesRaetsel.filenameVorschauLoesung == null) {
+
+			persistentesRaetsel.filenameVorschauLoesung = generateFilenameVorschau();
+
+		}
+
 		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
 		PersistentesRaetsel.persist(persistentesRaetsel);
 
@@ -264,6 +279,7 @@ public class RaetselServiceImpl implements RaetselService {
 	}
 
 	@Override
+	@Transactional
 	public Raetsel getRaetselZuId(final String id) {
 
 		PersistentesRaetsel raetsel = PersistentesRaetsel.findById(id);
@@ -271,6 +287,26 @@ public class RaetselServiceImpl implements RaetselService {
 		if (raetsel == null) {
 
 			return null;
+		}
+
+		// TODO kann wieder entfernt nehmen, wenn es keine RAETSEL ohne filenamesVorschau mehr gibt.
+		if (raetsel.filenameVorschauFrage == null || raetsel.filenameVorschauLoesung == null) {
+			// I0098: migration der Vorschau-Files
+
+			if (raetsel.filenameVorschauFrage == null) {
+
+				raetsel.filenameVorschauFrage = generateFilenameVorschau();
+			}
+
+			if (raetsel.filenameVorschauLoesung == null) {
+
+				raetsel.filenameVorschauLoesung = generateFilenameVorschau();
+			}
+
+			raetsel.persistAndFlush();
+
+			LOGGER.info("{}: Filenames vorschau generiert - frage={}, loesung={}", raetsel.schluessel,
+				raetsel.filenameVorschauFrage, raetsel.filenameVorschauLoesung);
 		}
 
 		Raetsel result = mapFromDB(raetsel);
@@ -291,7 +327,7 @@ public class RaetselServiceImpl implements RaetselService {
 			result.addAllEmbeddableImageInfos(grafikInfosLoesung);
 		}
 
-		result.setImages(raetselFileService.findImages(result.getSchluessel()));
+		result.setImages(raetselFileService.findImages(raetsel.filenameVorschauFrage, raetsel.filenameVorschauLoesung));
 
 		Optional<QuelleMinimalDto> optQuelle = quellenServive.loadQuelleMinimal(raetsel.quelle);
 
@@ -306,7 +342,14 @@ public class RaetselServiceImpl implements RaetselService {
 	@Override
 	public Images findImagesZuSchluessel(final String schluessel) {
 
-		return this.raetselFileService.findImages(schluessel);
+		PersistentesRaetsel raetselDB = raetselDao.findWithSchluessel(schluessel);
+
+		if (raetselDB == null) {
+
+			return new Images();
+		}
+
+		return this.raetselFileService.findImages(raetselDB.filenameVorschauFrage, raetselDB.filenameVorschauLoesung);
 	}
 
 	@Override
@@ -357,7 +400,9 @@ public class RaetselServiceImpl implements RaetselService {
 			.withQuelleId(raetselDB.quelle)
 			.withSchluessel(raetselDB.schluessel)
 			.withStatus(raetselDB.status)
-			.withName(raetselDB.name);
+			.withName(raetselDB.name)
+			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
+			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);
 
 		boolean hasWritePermission = PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
 			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetselDB.owner);
@@ -399,6 +444,14 @@ public class RaetselServiceImpl implements RaetselService {
 		result.setErgebnis(anzahl);
 
 		return result;
+	}
+
+	/**
+	 * @return
+	 */
+	String generateFilenameVorschau() {
+
+		return UUID.randomUUID().toString().substring(0, 13) + Outputformat.PNG.getFilenameExtension();
 	}
 
 }

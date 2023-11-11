@@ -64,28 +64,30 @@ public interface RaetselFileService {
 	String generiereLaTeXRaetselPDF(Raetsel raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, Schriftgroesse schriftgroesse);
 
 	/**
-	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.
-	 *
-	 * @param  schluessel
-	 * @return
+	 * @param  filename
+	 * @return          byte[] oder null
 	 */
-	byte[] findImageFrage(String schluessel);
-
-	/**
-	 * Falls das png bereits generiert wurde, wird es aus dem Dateisystem gelesen.
-	 *
-	 * @param  schluessel
-	 * @return
-	 */
-	byte[] findImageLoesung(String schluessel);
+	byte[] findVorschau(String filename);
 
 	/**
 	 * Schaut, ob die Images für Frage und Lösung bereits da sind und verpackt sie in ein Objekt.
 	 *
-	 * @param  schluessel
+	 * @param  filenameFrage
+	 *                         String
+	 * @param  filenameLoesung
+	 *                         String
 	 * @return
 	 */
-	Images findImages(String schluessel);
+	Images findImages(String filenameFrage, String filenameLoesung);
+
+	/**
+	 * Nach dem generieren der PNGs liegen diese im latex.base.dir (Namen schluessel.png bzw. schluessel_l.png). Diese Methode
+	 * verschiebt die generierten PNGs in das entsprechende Unterverzeichnis.
+	 *
+	 * @param raetsel
+	 *                Raetsel
+	 */
+	void moveVorschau(Raetsel raetsel);
 
 	/**
 	 * Falls das PDF bereits generiert wurde, wird es aus dem Dateisystem gelesen.
