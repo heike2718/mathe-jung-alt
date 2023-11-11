@@ -1,6 +1,6 @@
 {
   "name": "mja-ws",
-  "version": "2.2.5-SNAPSHOT",
+  "version": "2.3.0",
   "license": "MIT",
   "scripts": {
     "ng": "nx",

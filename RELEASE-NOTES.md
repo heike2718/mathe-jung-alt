@@ -1,5 +1,18 @@
 # Release-Notes
 
+__2.3.0__
+
+[2023-Q4 Teil 1](https://github.com/heike2718/mathe-jung-alt/milestone/7?closed=1)
+
+__2.2.4__
+
++ [2023-Q3](https://github.com/heike2718/mathe-jung-alt/issues?q=is%3Aclosed+milestone%3A2023-Q3)
+
+__2.0.0__
+
++ [2023-Q2](https://github.com/heike2718/mathe-jung-alt/issues?q=is%3Aclosed+milestone%3A2023-Q2)
+
+
 __1.3.2__
 
 * [Rätselgruppen: Vorschau und Download Sortierung ändern](https://github.com/heike2718/mathe-jung-alt/issues/60)
@@ -77,6 +90,3 @@ __1.0.0__
 * [Prod-Infrastruktur bereitstellen](https://github.com/heike2718/mathe-jung-alt/issues/10)
 
 
-## Was inzwischen fertig, aber noch nicht releaed ist
-
-[I0001](https://github.com/heike2718/mathe-jung-alt/issues/1)
