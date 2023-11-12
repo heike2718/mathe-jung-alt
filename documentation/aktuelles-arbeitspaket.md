@@ -4,7 +4,11 @@ Damit ich mich nach einigen Tagen Pause wieder erinnere, wo ich weitermachen mus
 
 ## 12.11.2023
 
+Muss noch weitere Grafiken hochladen.
 
+Werde mal quarkus-quartz ausprobieren, um in dem Verzeichnis regelmäßig die generierten Dateien wegzuwerfen. 
+
+Oder, wenn die Daten im Heap sind, also die response payload fertig, die Datei in MjaFileUtils zu löschen.
 
 ## 11.11.2023
 
