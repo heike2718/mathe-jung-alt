@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { embeddableImagesActions } from './embeddable-images.actions';
 import { EmbeddableImagesHttpService } from "./embeddable-images-http.service";
-import { concatMap, map } from "rxjs";
+import { map, switchMap } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +16,7 @@ export class EmbeddableImagesEffects {
 
         return this.#actions.pipe(
             ofType(embeddableImagesActions.lADE_VORSCHAU),
-            concatMap((action) => this.#httpService.loadGrafik(action.pfad)),
+            switchMap((action) => this.#httpService.loadGrafik(action.pfad)),
             map((embeddableImageVorschau) => embeddableImagesActions.vORSCHAU_GELADEN({embeddableImageVorschau }))
         );
     });
@@ -25,7 +25,7 @@ export class EmbeddableImagesEffects {
 
         return this.#actions.pipe(
             ofType(embeddableImagesActions.cREATE_EMBEDDABLE_IMAGE),
-            concatMap((action) => this.#httpService.createEmbeddableImage(action.requestDto)),
+            switchMap((action) => this.#httpService.createEmbeddableImage(action.requestDto)),
             map((responseDto) => embeddableImagesActions.eMBEDDABLE_IMAGE_CREATED({ responseDto }))
         );
     });
@@ -34,7 +34,7 @@ export class EmbeddableImagesEffects {
 
         return this.#actions.pipe(
             ofType(embeddableImagesActions.rEPLACE_EMEDDABLE_IMAGE),
-            concatMap((action) => this.#httpService.replaceEmbeddableImage(action.requestDto)),
+            switchMap((action) => this.#httpService.replaceEmbeddableImage(action.requestDto)),
             map((responseDto) => embeddableImagesActions.eMBEDABBLE_IMAGE_REPLACED({ responseDto }))
         );
     });

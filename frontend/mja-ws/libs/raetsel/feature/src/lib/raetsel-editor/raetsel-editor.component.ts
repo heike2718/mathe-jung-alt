@@ -49,7 +49,6 @@ interface AntwortvorschlagFormValue {
     MatTooltipModule,
     CdkAccordionModule,
     TextFieldModule,
-    MatExpansionModule,
     ReactiveFormsModule,
     FrageLoesungImagesComponent,
     SelectItemsComponent,
@@ -100,9 +99,10 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   embeddableImageInfosFrage: EmbeddableImageInfo[] = [];
   embeddableImageInfosLoesung: EmbeddableImageInfo[] = [];
-  #pfadSelectedClicked = false;
 
-  selectedVorschau?: EmbeddableImageVorschau;
+  panelGrafikenFrageOpen = false;
+  panelGrafikenLoesungOpen = false;
+
 
   selectFileFrageModel: SelectFileModel = {
     maxSizeBytes: 2097152,
@@ -126,8 +126,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   };
 
   #embeddableImagesResponseSubscription: Subscription = new Subscription();
-  #selectedEmbeddableImageInfoSubscription: Subscription = new Subscription();
-  #selectedEmbeddableImageVorschauSubscription: Subscription = new Subscription();
+  #combinedEmbeddableImageVorschauSubscription: Subscription = new Subscription();
 
   constructor() {
 
@@ -182,24 +181,24 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.#selectedEmbeddableImageInfoSubscription = this.#embeddableImagesFacade.selectedEmbeddableImageInfo$.subscribe((info) => {
-      this.#pfadSelectedClicked = true;
-      this.#embeddableImagesFacade.vorschauLaden(info);
-    });
+    this.#combinedEmbeddableImageVorschauSubscription = combineLatest([this.#embeddableImagesFacade.selectedEmbeddableImageInfo$, this.#embeddableImagesFacade.selectedEmbeddableImageVorschau$])
+      .subscribe(([imageInfo, imageVorschau]) => {
 
-    this.#selectedEmbeddableImageVorschauSubscription = this.#embeddableImagesFacade.selectedEmbeddableImageVorschau$.subscribe((vorschau) => {
-      this.selectedVorschau = vorschau;
-      if (this.#pfadSelectedClicked) {
-        this.#openEmbeddableImageVorschauDialog(vorschau);
-      }
-    });
+        if (imageInfo.existiert && imageInfo.pfad === imageVorschau.pfad) {
+          if (imageInfo.textart === 'FRAGE' && this.panelGrafikenFrageOpen) {
+            this.#openEmbeddableImageVorschauDialog(imageVorschau);
+          }
+          if (imageInfo.textart === 'LOESUNG' && this.panelGrafikenLoesungOpen) {
+            this.#openEmbeddableImageVorschauDialog(imageVorschau);
+          }
+        }
+      });
   }
 
   ngOnDestroy(): void {
     this.#combinedSubscription.unsubscribe();
     this.#embeddableImagesResponseSubscription.unsubscribe();
-    this.#selectedEmbeddableImageInfoSubscription.unsubscribe();
-    this.#selectedEmbeddableImageVorschauSubscription.unsubscribe();
+    this.#combinedEmbeddableImageVorschauSubscription.unsubscribe();
     this.#embeddableImagesFacade.clearVorschau();
   }
 
@@ -483,16 +482,16 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
       if (result) {
 
-                let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
 
         if (dialogData.selectedLayoutAntwortvorschlaege) {
-          
+
           switch (dialogData.selectedLayoutAntwortvorschlaege) {
             case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
             case 'Buchstaben': layout = 'BUCHSTABEN'; break;
             case 'Liste': layout = 'DESCRIPTION'; break;
           }
-        } 
+        }
 
         let font: FONT_NAME = 'STANDARD';
         let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
@@ -519,10 +518,9 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   #openEmbeddableImageVorschauDialog(vorschau: EmbeddableImageVorschau): void {
-    this.#pfadSelectedClicked = false;
 
-    const hinweis = vorschau.exists ? undefined :
-      'Es gibt keine Datei mit diesem Pfad. Vorgehen: Datei hochladen und anschließend im Text den fehlerhaften \\includegraphics-Befehl durch den neu generierten ersetzen.';
+    const hinweis = 'Die Grafik kann ersetzt werden, indem sie in der Detailansicht unter Grafiken ausgewählt und anschließend eine neue hochgeladen wird '
+      + 'oder indem im Editor eine neue Grafik hochgeladen und der entsprechende \\includegraphics-Befehl durch den neu generierten ersetzt wird. ';
 
     const dialogData: ImageDialogModel = {
       titel: vorschau.pfad,

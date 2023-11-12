@@ -2,6 +2,10 @@
 
 Damit ich mich nach einigen Tagen Pause wieder erinnere, wo ich weitermachen muss.
 
+## 12.11.2023
+
+
+
 ## 11.11.2023
 
 Arbeite an [Verzeichnisstruktur auf dem Server](https://github.com/heike2718/mathe-jung-alt/issues/98)

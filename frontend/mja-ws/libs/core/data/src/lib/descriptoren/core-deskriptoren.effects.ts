@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { DeskriptorUI } from '@mja-ws/core/model';
 import { SILENT_LOAD_CONTEXT } from '@mja-ws/shared/messaging/api';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { concatMap, map } from 'rxjs';
+import { switchMap, map } from 'rxjs';
 import { coreDeskriptorenActions } from './core-deskriptoren.actions';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class CoreDeskriptorUIEffects {
 
         return this.#actions.pipe(
             ofType(coreDeskriptorenActions.lOAD_DESKRIPTOREN),
-            concatMap(() =>
+            switchMap(() =>
                 this.#httpClient.get<DeskriptorUI[]>('/mja-api/deskriptoren/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
             ),
             map((deskriptoren: DeskriptorUI[]) => coreDeskriptorenActions.cORE_DESKRIPTOREN_LOADED({ deskriptoren }))

@@ -45,10 +45,21 @@ export const embeddableImagesFeature = createFeature({
                 }
             )
         ),
-        on(embeddableImagesActions.iMAGE_INFO_SELECTED, (state, action) => ({...state, selectedEmbeddableImageInfo: action.embeddableImageInfo})),
+        on(embeddableImagesActions.iMAGE_INFO_SELECTED, (state, action) => ({ ...state, selectedEmbeddableImageInfo: action.embeddableImageInfo })),
         on(embeddableImagesActions.lADE_VORSCHAU, (state, _action) => ({ ...state, selectedEmbeddableImageVorschau: undefined })),
-        on(embeddableImagesActions.vORSCHAU_GELADEN, (state, action) => ({ ...state, embeddableImageVorschauGeladen: true, selectedEmbeddableImageVorschau: action.embeddableImageVorschau })),
-        on(embeddableImagesActions.cLEAR_VORSCHAU, (state, _action) => ({ ...state, embeddableImageVorschauGeladen: false, selectedEmbeddableImageInfo: undefined, selectedEmbeddableImageVorschau: undefined, embeddableImagesResponse: initialEmbeddableImageResponseDto })),
+        on(embeddableImagesActions.vORSCHAU_GELADEN, (state, action) =>
+            ({ ...state,
+                embeddableImageVorschauGeladen: true,
+                selectedEmbeddableImageVorschau: action.embeddableImageVorschau
+             })),
+        on(embeddableImagesActions.cLEAR_VORSCHAU, (state, _action) =>
+        ({
+            ...state,
+            embeddableImageVorschauGeladen: false,
+            selectedEmbeddableImageInfo: undefined,
+            selectedEmbeddableImageVorschau: undefined,
+            embeddableImagesResponse: initialEmbeddableImageResponseDto
+        })),
         on(
             embeddableImagesActions.rESET_STATE,
             (_state, _action) => (initialState)

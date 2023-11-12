@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { map, concatMap, tap, catchError, of } from "rxjs";
+import { map, switchMap, tap, catchError, of } from "rxjs";
 import { RaetselHttpService } from "./raetsel-http.service";
 import { raetselActions } from "./raetsel.actions";
 import { GeneratedFile, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-ws/core/model";
@@ -23,7 +23,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.fIND_RAETSEL),
-            concatMap((action) => this.#raetselHttpService.findRaetsel(action.admin, action.suchfilter, action.pageDefinition)),
+            switchMap((action) => this.#raetselHttpService.findRaetsel(action.admin, action.suchfilter, action.pageDefinition)),
             map((treffer) => raetselActions.rAETSEL_FOUND({ treffer }))
         );
     });
@@ -32,7 +32,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.rAETSEL_SELECTED),
-            concatMap((action) => this.#raetselHttpService.loadRaetselDetails(action.raetsel)),
+            switchMap((action) => this.#raetselHttpService.loadRaetselDetails(action.raetsel)),
             map((raetselDetails) => raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/details' }))
         );
     });
@@ -50,7 +50,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.gENERATE_RAETSEL_PNG),
-            concatMap(
+            switchMap(
                 (action) => this.#raetselHttpService.generateRaetselPNGs(action.raetselID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)
                     .pipe(
                         map((generatedImages) => raetselActions.rAETSEL_PNG_GENERATED({ images: generatedImages })),
@@ -64,7 +64,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.gENERATE_RAETSEL_PDF),
-            concatMap(
+            switchMap(
                 (action) => this.#raetselHttpService.generateRaetselPDF(action.raetselID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)
                     .pipe(
                         map((file) => raetselActions.rAETSEL_PDF_GENERATED({ pdf: file })),
@@ -88,7 +88,7 @@ export class RaetselEffects {
 
         this.#actions.pipe(
             ofType(raetselActions.fIND_LATEXLOGS),
-            concatMap((action) => this.#raetselHttpService.findLatexLogs(action.schluessel)),
+            switchMap((action) => this.#raetselHttpService.findLatexLogs(action.schluessel)),
             map((files) => raetselActions.lATEXLOGS_FOUND({ files: files }))
         ));
 
@@ -120,7 +120,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.sAVE_RAETSEL),
-            concatMap((action) => this.#raetselHttpService.saveRaetsel(action.editRaetselPayload)),
+            switchMap((action) => this.#raetselHttpService.saveRaetsel(action.editRaetselPayload)),
             map((raetselDetails) => raetselActions.rAETSEL_SAVED({ raetselDetails }))
         );
     });

@@ -83,38 +83,35 @@
                     </div>
 
 
-                    <mat-accordion>
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Grafiken Frage (eingebundene Bilder anzeigen oder neue hochladen)
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-                            <h2 *ngIf="embeddableImageInfosFrage.length > 0">Eingebundene Bilder</h2>
-                            <mat-nav-list *ngIf="embeddableImageInfosFrage.length > 0">
-                                <mat-list-item *ngFor="let embeddableImageInfo of embeddableImageInfosFrage">
-                                    <mja-ws-embeddable-image-info
-                                        [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
-                                </mat-list-item>
-                            </mat-nav-list>
+                    <mat-expansion-panel (opened)="panelGrafikenFrageOpen=true" (closed)="panelGrafikenFrageOpen = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Grafiken Frage (eingebundene Bilder anzeigen oder neue hochladen)
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <h2 *ngIf="embeddableImageInfosFrage.length > 0">Eingebundene Bilder</h2>
+                        <mat-nav-list *ngIf="embeddableImageInfosFrage.length > 0">
+                            <mat-list-item *ngFor="let embeddableImageInfo of embeddableImageInfosFrage">
+                                <mja-ws-embeddable-image-info
+                                    [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
+                            </mat-list-item>
+                        </mat-nav-list>
 
-                            <div class="mb-2">
-                                <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-                                <mja-select-file *ngIf="!fileInfoFrage" [selectFileModel]="selectFileFrageModel"
-                                    (fileSelected)="onFileSelected($event, 'FRAGE')"></mja-select-file>
+                        <div class="mb-2">
+                            <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
+                            <mja-select-file *ngIf="!fileInfoFrage" [selectFileModel]="selectFileFrageModel"
+                                (fileSelected)="onFileSelected($event, 'FRAGE')"></mja-select-file>
 
-                                <mja-file-info *ngIf="fileInfoFrage" [titel]="selectFileFrageModel.titel"
-                                    [beschreibung]="selectFileFrageModel.beschreibung"
-                                    [fileName]="fileInfoFrage.file.name"
-                                    [maxSizeBytes]="selectFileFrageModel.maxSizeBytes"
-                                    [actualFileSize]="fileInfoFrage.fileSize">
-                                </mja-file-info>
+                            <mja-file-info *ngIf="fileInfoFrage" [titel]="selectFileFrageModel.titel"
+                                [beschreibung]="selectFileFrageModel.beschreibung" [fileName]="fileInfoFrage.file.name"
+                                [maxSizeBytes]="selectFileFrageModel.maxSizeBytes"
+                                [actualFileSize]="fileInfoFrage.fileSize">
+                            </mja-file-info>
 
-                                <button mat-raised-button color="primary" *ngIf="fileInfoFrage"
-                                    (click)="uploadFile('FRAGE')">Datei hochladen</button>
-                            </div>
-                        </mat-expansion-panel>
-                    </mat-accordion>
+                            <button mat-raised-button color="primary" *ngIf="fileInfoFrage"
+                                (click)="uploadFile('FRAGE')">Datei hochladen</button>
+                        </div>
+                    </mat-expansion-panel>
 
 
 
@@ -130,37 +127,35 @@
                         </mat-form-field>
                     </div>
 
-                    <mat-accordion>
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Grafiken Lösung (eingebundene Bilder anzeigen oder neue hochladen)
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-                            <mat-nav-list *ngIf="embeddableImageInfosLoesung.length > 0">
-                                <mat-list-item *ngFor="let embeddableImageInfo of embeddableImageInfosLoesung">
-                                    <mja-ws-embeddable-image-info
-                                        [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
-                                </mat-list-item>
-                            </mat-nav-list>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Grafiken Lösung (eingebundene Bilder anzeigen oder neue hochladen)
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-nav-list *ngIf="embeddableImageInfosLoesung.length > 0">
+                            <mat-list-item *ngFor="let embeddableImageInfo of embeddableImageInfosLoesung">
+                                <mja-ws-embeddable-image-info
+                                    [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
+                            </mat-list-item>
+                        </mat-nav-list>
 
-                            <div class="mb-2">
-                                <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-                                <mja-select-file *ngIf="!fileInfoLoesung" [selectFileModel]="selectFileLoesungModel"
-                                    (fileSelected)="onFileSelected($event, 'LOESUNG')"></mja-select-file>
+                        <div class="mb-2">
+                            <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
+                            <mja-select-file *ngIf="!fileInfoLoesung" [selectFileModel]="selectFileLoesungModel"
+                                (fileSelected)="onFileSelected($event, 'LOESUNG')"></mja-select-file>
 
-                                <mja-file-info *ngIf="fileInfoLoesung" [titel]="selectFileLoesungModel.titel"
-                                    [beschreibung]="selectFileLoesungModel.beschreibung"
-                                    [fileName]="fileInfoLoesung.file.name"
-                                    [maxSizeBytes]="selectFileLoesungModel.maxSizeBytes"
-                                    [actualFileSize]="fileInfoLoesung.fileSize">
-                                </mja-file-info>
+                            <mja-file-info *ngIf="fileInfoLoesung" [titel]="selectFileLoesungModel.titel"
+                                [beschreibung]="selectFileLoesungModel.beschreibung"
+                                [fileName]="fileInfoLoesung.file.name"
+                                [maxSizeBytes]="selectFileLoesungModel.maxSizeBytes"
+                                [actualFileSize]="fileInfoLoesung.fileSize">
+                            </mja-file-info>
 
-                                <button mat-raised-button color="primary" *ngIf="fileInfoLoesung"
-                                    (click)="uploadFile('LOESUNG')">Datei hochladen</button>
-                            </div>
-                        </mat-expansion-panel>
-                    </mat-accordion>
+                            <button mat-raised-button color="primary" *ngIf="fileInfoLoesung"
+                                (click)="uploadFile('LOESUNG')">Datei hochladen</button>
+                        </div>
+                    </mat-expansion-panel>
 
                     <div class="mb-2 mt-2">
                         <mat-form-field>

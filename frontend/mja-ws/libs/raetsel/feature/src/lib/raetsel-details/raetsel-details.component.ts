@@ -71,8 +71,6 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   #raetselDetailsSubscription = new Subscription();
   #raetselDetails!: RaetselDetails;
 
-  #selectedEmbeddableImageInfoSubscription: Subscription = new Subscription();
-
   ngOnInit(): void {
 
     this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.pipe(
@@ -80,14 +78,9 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
         this.#raetselDetails = details;
       })
     ).subscribe();
-
-    this.#embeddableImagesFacade.selectedEmbeddableImageInfo$.subscribe((info) => {
-      this.#embeddableImagesFacade.vorschauLaden(info);
-    });
   }
 
   ngOnDestroy(): void {
-    this.#selectedEmbeddableImageInfoSubscription.unsubscribe();
     this.#raetselDetailsSubscription.unsubscribe();
     this.#embeddableImagesFacade.clearVorschau();
   }

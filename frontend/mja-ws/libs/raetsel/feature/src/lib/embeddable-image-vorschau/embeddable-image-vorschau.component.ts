@@ -47,7 +47,7 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
     accept: '.eps',
     acceptMessage: 'erlaubte Dateitypen: eps',
     titel: 'Grafikdatei hochladen',
-    beschreibung: 'Die neue Datei ersetzt die aktuell importierte Grafik im LaTeX.',
+    beschreibung: 'Die neue Datei ersetzt die aktuell mittels \\includegraphics in LaTeX importierte Grafik.',
     hinweis: undefined
   };
 
@@ -62,7 +62,7 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
         this.#selectedEmbeddableImageVorschau = imageVorschau;
       });
 
-    
+
 
     this.#embeddableImageResponseSubscription = this.embeddableImagesFacade.embeddableImageResponse$.subscribe(
       () => {

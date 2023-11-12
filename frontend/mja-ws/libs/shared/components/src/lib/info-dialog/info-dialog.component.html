@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{data.ueberschrift}}</h1>
+<mat-dialog-content class="mat-typography">
+    <mat-hint *ngIf="data.text">{{data.text}}
+    </mat-hint>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary"
+        [mat-dialog-close]="true">OK</button>
+</mat-dialog-actions>

@@ -13,3 +13,6 @@ export { FileInfoComponent } from './lib/file-info/file-info.component';
 
 export { ImageDialogComponent } from './lib/image-dialog/image-dialog.component';
 export { ImageDialogModel } from './lib/image-dialog/image-dialog.model';
+
+export { InfoDialogModel } from './lib/info-dialog/info-dialog.model';
+export { InfoDialogComponent } from './lib/info-dialog/info-dialog.component';

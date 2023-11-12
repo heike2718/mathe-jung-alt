@@ -19,6 +19,7 @@ export class EmbeddableImagesFacade {
     selectedEmbeddableImageVorschau$: Observable<EmbeddableImageVorschau> = filterDefined(this.#store.select(fromEmbeddableImages.selectedEmbeddableImageVorschau));
     pfad$: Observable<string> = filterDefined(this.#store.select(fromEmbeddableImages.embeddableImageVorschauPfad));
     embeddableImageResponse$: Observable<EmbeddableImageResponseDto> = filterDefined(this.#store.select(fromEmbeddableImages.embeddableImagesResponse));
+    vorschauGeladen$: Observable<boolean> = this.#store.select(fromEmbeddableImages.embeddableImageVorschauGeladen);
 
     handleEmbeddableImageInfoExpanded(embeddableImageInfo: EmbeddableImageInfo): void {
 
