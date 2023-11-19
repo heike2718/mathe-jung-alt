@@ -2,13 +2,21 @@
 
 Damit ich mich nach einigen Tagen Pause wieder erinnere, wo ich weitermachen muss.
 
+## 19.12.2023
+
+Volltextsuche ist auf OR umgestellt, aber nur im Backend, weil das jetzt default ist
+
+Negative Suche fehlt noch.
+
+Werde mal quarkus-quartz ausprobieren, um in dem Verzeichnis regelmäßig die generierten Dateien wegzuwerfen.
+Aber das probiere ich nur auf Arbeit aus. 
+
 ## 12.11.2023
 
 Muss noch weitere Grafiken hochladen.
 
 Werde mal quarkus-quartz ausprobieren, um in dem Verzeichnis regelmäßig die generierten Dateien wegzuwerfen. 
 
-Oder, wenn die Daten im Heap sind, also die response payload fertig, die Datei in MjaFileUtils zu löschen.
 
 ## 11.11.2023
 
