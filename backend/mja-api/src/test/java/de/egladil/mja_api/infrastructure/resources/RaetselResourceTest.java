@@ -5,10 +5,10 @@
 package de.egladil.mja_api.infrastructure.resources;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -53,16 +53,13 @@ public class RaetselResourceTest {
 	@Order(1)
 	void testFindRaetselMitDeskriptorenUndSuchstring() throws Exception {
 
-		Response response = given()
-			.when().get("admin/v2?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING");
-		response
+		RaetselsucheTreffer suchergebnis = given()
+			.when().get("admin/v2?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING")
 			.then()
-			.statusCode(200);
-
-		String responsePayload = response.asString();
-		System.out.println(responsePayload);
-
-		RaetselsucheTreffer suchergebnis = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer.class);
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 		assertEquals(3, alleRaetsel.size());
@@ -83,17 +80,13 @@ public class RaetselResourceTest {
 
 		// Volltextsuche unterscheidet nicht zwischen zahlen und zählen!
 
-		Response response = given()
-			.when().get("admin/v2?deskriptoren=2,9,13&suchstring=zählen&typeDeskriptoren=ORDINAL");
-
-		response
+		RaetselsucheTreffer suchergebnis = given()
+			.when().get("admin/v2?deskriptoren=2,9,13&suchstring=zählen&typeDeskriptoren=ORDINAL")
 			.then()
-			.statusCode(200);
-
-		String responsePayload = response.asString();
-		System.out.println(responsePayload);
-
-		RaetselsucheTreffer suchergebnis = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer.class);
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
@@ -124,19 +117,39 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@Order(2)
+	void testFindRaetselMitDeskriptorenNumerischUndSuchstringAndUNION() throws Exception {
+
+		RaetselsucheTreffer suchergebnis = given()
+			.when().get("admin/v2?deskriptoren=1,2&suchstring=Äpfel%20Tiere&typeDeskriptoren=ORDINAL&modus=UNION")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
+
+		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+
+		assertEquals(3, alleRaetsel.size());
+		assertEquals(3, suchergebnis.getTrefferGesamt());
+
+		assertEquals("02613", alleRaetsel.get(0).getSchluessel());
+		assertEquals("02785", alleRaetsel.get(1).getSchluessel());
+		assertEquals("02818", alleRaetsel.get(2).getSchluessel());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(3)
 	void testFindRaetselMitSuchstring() throws Exception {
 
-		Response response = given()
-			.when().get("admin/v2?suchstring=zählen&typeDeskriptoren=ORDINAL");
-		response
+		RaetselsucheTreffer suchergebnis = given()
+			.when().get("admin/v2?suchstring=zählen&typeDeskriptoren=ORDINAL&modus=INTERSECTION")
 			.then()
-			.statusCode(200);
-
-		String responsePayload = response.asString();
-		System.out.println(responsePayload);
-
-		RaetselsucheTreffer suchergebnis = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer.class);
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
@@ -163,13 +176,16 @@ public class RaetselResourceTest {
 	@Order(4)
 	void testFindRaetselMitSuchstringKeinTreffer() {
 
-		String expected = "{\"trefferGesamt\":0,\"treffer\":[]}";
-
-		given()
-			.when().get("admin/v2?suchstring=holleriedidudeldö&typeDeskriptoren=STRING")
+		RaetselsucheTreffer suchergebnis = given()
+			.when().get("admin/v2?suchstring=holleriedidudeldö&typeDeskriptoren=STRING&modus=UNION")
 			.then()
 			.statusCode(200)
-			.body(is(expected));
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
+
+		assertEquals(0, suchergebnis.getTrefferGesamt());
+		assertTrue(suchergebnis.getTreffer().isEmpty());
 	}
 
 	@Test
@@ -177,12 +193,12 @@ public class RaetselResourceTest {
 	@Order(5)
 	void testFindFromMinikaenguruWithCoordinates() throws Exception {
 
-		Response response = given().when().get("admin/v2?deskriptoren=2,6,47,78&typeDeskriptoren=ORDINAL");
-
-		String responsePayload = response.asString();
-		System.out.println(responsePayload);
-
-		RaetselsucheTreffer suchergebnis = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer.class);
+		RaetselsucheTreffer suchergebnis = given().when().get("admin/v2?deskriptoren=2,6,47,78&typeDeskriptoren=ORDINAL")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
@@ -199,12 +215,11 @@ public class RaetselResourceTest {
 	@Order(6)
 	void testFindWithSchluessel() throws Exception {
 
-		Response response = given().when().get("admin/v2?suchstring=02790&typeDeskriptoren=ORDINAL");
-
-		String responsePayload = response.asString();
-		System.out.println(responsePayload);
-
-		RaetselsucheTreffer suchergebnis = new ObjectMapper().readValue(responsePayload, RaetselsucheTreffer.class);
+		RaetselsucheTreffer suchergebnis = given().when().get("admin/v2?suchstring=02790&typeDeskriptoren=ORDINAL").then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
@@ -221,16 +236,14 @@ public class RaetselResourceTest {
 	@Order(7)
 	void testRaetselDetailsLadenFound() throws Exception {
 
-		Response response = given()
-			.when().get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1");
+		Raetsel treffer = given()
+			.when().get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1").then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(Raetsel.class);
 
-		String responsePayload = response.asString();
-		System.out.println(responsePayload);
-
-		Raetsel treffer = new ObjectMapper().readValue(responsePayload, Raetsel.class);
 		assertEquals("02622", treffer.getSchluessel());
-
-		assertEquals(200, response.getStatusCode());
 
 	}
 
@@ -242,8 +255,7 @@ public class RaetselResourceTest {
 		given()
 			.when().get("f4369b22/v1")
 			.then()
-			.statusCode(404)
-			.body(is(""));
+			.statusCode(404);
 	}
 
 	@Test

@@ -48,6 +48,8 @@ public class ValidationReportResponseFilter implements ContainerResponseFilter {
 
 					MessagePayload responsePayload = mapToMessagePayload(entity, method, path);
 
+					LOGGER.warn(responsePayload.toString());
+
 					responseContext.setEntity(responsePayload);
 
 				}

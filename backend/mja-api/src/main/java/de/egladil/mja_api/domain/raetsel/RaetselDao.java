@@ -7,6 +7,7 @@ package de.egladil.mja_api.domain.raetsel;
 import java.util.List;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
+import de.egladil.mja_api.domain.Suchmodus;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 
@@ -19,9 +20,11 @@ public interface RaetselDao {
 	 * Volltextsuche in RAETSEL mit dem gegebenen Suchstring.
 	 *
 	 * @param  suchstring
+	 * @param  suchmodus
+	 *                    Suchmodus mündet in AND oder OR, wenn der Suchstring aus mehr als einem Wort besteht.
 	 * @return            List
 	 */
-	long countRaetselVolltext(String suchstring, boolean nurFreigegebene);
+	long countRaetselVolltext(String suchstring, Suchmodus suchmodus, boolean nurFreigegebene);
 
 	/**
 	 * Sucht alle Raetsel, deren Deskriptoren die deskriptorenIDs als Teilmenge enthalten.
@@ -39,9 +42,11 @@ public interface RaetselDao {
 	 *                         String Wort.
 	 * @param  deskriptorenIDs
 	 *                         String die IDs der Deskriptoren, kommasepariert
+	 * @param  suchmodus
+	 *                         Suchmodus
 	 * @return                 List
 	 */
-	long countRaetselWithFilter(String suchstring, String deskriptorenIDs, boolean nurFreigegebene);
+	long countRaetselWithFilter(String suchstring, String deskriptorenIDs, Suchmodus suchmodus, boolean nurFreigegebene);
 
 	/**
 	 * @param  status
@@ -53,6 +58,8 @@ public interface RaetselDao {
 	 * Volltextsuche in RAETSEL mit dem gegebenen Suchstring.
 	 *
 	 * @param  suchstring
+	 * @param  suchmodus
+	 *                       Suchmodus
 	 * @param  limit
 	 *                       int Anzahl Treffer in page
 	 * @param  offset
@@ -61,7 +68,7 @@ public interface RaetselDao {
 	 *                       SortDirection asc/desc
 	 * @return               List
 	 */
-	List<PersistentesRaetsel> findRaetselVolltext(String suchstring, int limit, int offset, SortDirection sortDirection, boolean nurFreigegebene);
+	List<PersistentesRaetsel> findRaetselVolltext(String suchstring, Suchmodus suchmodus, int limit, int offset, SortDirection sortDirection, boolean nurFreigegebene);
 
 	/**
 	 * Sucht alle Raetsel, deren Deskriptoren die deskriptorenIDs als Teilmenge enthalten.
@@ -85,6 +92,8 @@ public interface RaetselDao {
 	 *                         String Wort.
 	 * @param  deskriptorenIDs
 	 *                         String die IDs der Deskriptoren, kommasepariert
+	 * @param  suchmodus
+	 *                         Suchmodus
 	 * @param  limit
 	 *                         int Anzahl Treffer in page
 	 * @param  offset
@@ -93,7 +102,7 @@ public interface RaetselDao {
 	 *                         SortDirection asc/desc
 	 * @return                 List
 	 */
-	List<PersistentesRaetsel> findRaetselWithFilter(String suchstring, String deskriptorenIDs, int limit, int offset, SortDirection sortDirection, boolean nurFreigegebene);
+	List<PersistentesRaetsel> findRaetselWithFilter(String suchstring, String deskriptorenIDs, Suchmodus suchmodus, int limit, int offset, SortDirection sortDirection, boolean nurFreigegebene);
 
 	/**
 	 * @param  schluessel

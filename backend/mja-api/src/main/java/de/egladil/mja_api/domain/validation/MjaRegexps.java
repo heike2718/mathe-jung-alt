@@ -35,4 +35,6 @@ public interface MjaRegexps {
 
 	String VALID_DOMAIN_OBJECT_ID = "^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}|neu$";
 
+	String VALID_SUCHSTRING = "^[\\w ÄÖÜäöüß \\% ; \\+ \\- \\. \\,]{4,200}$";
+
 }

@@ -7,17 +7,23 @@ package de.egladil.mja_api.domain.dto;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import de.egladil.mja_api.domain.Suchmodus;
+
 /**
  * Suchfilter
  */
 @Schema(name = "Suchfilter", description = "ein Objekt, das Suchparameter enthält")
 public class Suchfilter {
 
-	@Schema(description = "ein String, mit dem gesucht wird")
+	@Schema(
+		description = "ein String, mit dem gesucht wird. Worttrenner ist Leerzeichen. Es wird unter Berücksichtigung des Suchmodus gesucht.")
 	private final String suchstring;
 
 	@Schema(description = "ein kommaseparierter String, der IDs von Deskriptoren, mit denen gesucht wird")
 	private final String deskriptorenIds;
+
+	@Schema(description = "Modus, wie gesucht wird. INTERSECTION = AND, UNION = OR. Default ist UNION")
+	private Suchmodus modus = Suchmodus.UNION;
 
 	/**
 	 * @param suchstring
@@ -58,6 +64,16 @@ public class Suchfilter {
 
 		return SuchfilterVariante.DESKRIPTOREN;
 
+	}
+
+	public Suchmodus getModus() {
+
+		return modus;
+	}
+
+	public void setModus(final Suchmodus modus) {
+
+		this.modus = modus;
 	}
 
 }

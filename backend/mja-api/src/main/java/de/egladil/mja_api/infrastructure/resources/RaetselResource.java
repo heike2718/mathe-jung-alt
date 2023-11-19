@@ -17,6 +17,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.Suchmodus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
@@ -35,6 +36,7 @@ import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.utils.DevDelayService;
+import de.egladil.mja_api.domain.validation.MjaRegexps;
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -91,10 +93,14 @@ public class RaetselResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "suchstring",
-			description = "Freitext zum suchen. Es erfolgt eine Volltextsuche über Schlüssel, Name, Kommentar, Frage und Lösung"),
+			description = "Freitext zum suchen. Es erfolgt eine Volltextsuche über Schlüssel, Name, Kommentar, Frage und Lösung. Mehrere Worte werden je nach Modus mit AND oder mit OR verknüft."),
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "deskriptoren", description = "kommaseparierte Liste von Deskriptoren-Identifizierern"),
+			name = "deskriptoren",
+			description = "kommaseparierte Liste von Deskriptoren-Identifizierern. Je nach Modus wird mit AND oder OR gesucht."),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "modus", description = "INTERSECTION | UNION. Default ist UNION"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
@@ -119,11 +125,12 @@ public class RaetselResource {
 	// @formatter:off
 	public RaetselsucheTreffer findRaetselAdmin(
 		@QueryParam(value = "suchstring") @Pattern(
-		regexp = "^[\\w äöüß ; \\+ \\- \\. \\,]{4,30}$",
-		message = "ungültige Eingabe: mindestens 4 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") final String suchstring,
+		regexp = MjaRegexps.VALID_SUCHSTRING,
+		message = "ungültige Eingabe: mindestens 4 höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring,
 		@QueryParam(value = "deskriptoren") @Pattern(
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
+		@QueryParam(value = "modus") final Suchmodus modus,
 		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
@@ -139,7 +146,19 @@ public class RaetselResource {
 			return new RaetselsucheTreffer();
 		}
 
-		return raetselService.sucheRaetsel(new Suchfilter(suchstring, deskriptorenOrdinal), limit, offset,
+		String theSuchstring = suchstring;
+
+		if (StringUtils.isNotBlank(suchstring) && suchstring.contains("%20")) {
+
+			theSuchstring = suchstring.replaceAll("%20", " ");
+		}
+
+		Suchmodus theModus = modus == null ? Suchmodus.UNION : modus;
+
+		Suchfilter suchfilter = new Suchfilter(theSuchstring, deskriptorenOrdinal);
+		suchfilter.setModus(theModus);
+
+		return raetselService.sucheRaetsel(suchfilter, limit, offset,
 			sortDirection);
 	}
 
