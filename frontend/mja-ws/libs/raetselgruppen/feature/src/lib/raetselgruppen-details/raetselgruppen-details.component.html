@@ -2,16 +2,12 @@
 
     <div *ngIf="raetselgruppenFacade.raetselgruppeDetails$ | async as gruppe else keineGruppe">
 
-        <h2>Rätselgruppe {{gruppe.name}}</h2>
+        <h2>Rätselgruppe {{gruppe.name}} <span matBadge={{gruppe.elemente.length}} matBadgeColor="accent" class="ml-1"></span></h2>
 
         <div class="grid-container-2 mt-2 mb-2">
             <label>ID:</label>
             <div>
                 {{gruppe.id}}
-            </div>
-            <label>Anzahl Elemente:</label>
-            <div>
-                {{gruppe.elemente.length}}
             </div>
             <label>Kommentar:</label>
             <div>

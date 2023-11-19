@@ -14,6 +14,7 @@ import {
 } from '@mja-ws/core/model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
+import {MatBadgeModule} from '@angular/material/badge';
 import { Subscription, tap } from 'rxjs';
 import { EditRaetselgruppenelementPayload, RaetselgruppeBasisdaten, Raetselgruppenelement } from '@mja-ws/raetselgruppen/model';
 import { RaetselgruppenelementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
@@ -29,6 +30,7 @@ import { MatCardModule } from '@angular/material/card';
   standalone: true,
   imports: [
     CommonModule,
+    MatBadgeModule,
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
