@@ -4,17 +4,14 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.persistence.dao;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import de.egladil.mja_api.domain.semantik.Repository;
-import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
-import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * DeskriptorenRepository
  */
 @Repository
 @ApplicationScoped
-public class DeskriptorenRepository implements PanacheRepository<Deskriptor> {
+public class DeskriptorenRepository {
 
 }

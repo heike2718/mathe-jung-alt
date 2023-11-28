@@ -22,6 +22,13 @@ LATEX_BASE_DIR=/home/heike/docker-volumes/latex/doc
 
 QUARKUS_DATASOURCE_JDBC_URL=jdbc:mariadb://172.21.0.2:3306/mathe_jung_alt
 QUARKUS_DATASOURCE_PASSWORD=hwinkel
+QUARKUS_HIBERNATE_ORM_LOG_SQL=true
+
+# man muss auch das MIN-Level auf TRACE setzen, wenn man das SQL von namedQueries sehen will
+QUARKUS_LOG_MIN_LEVEL=TRACE
+QUARKUS_HIBERNATE_ORM_LOG_BIND_PARAMETERS=true
+QUARKUS_HIBERNATE_ORM_LOG_SQL=true
+
 
 AUTHPROVIDER_URL=http://heikedeb:9000/authprovider
 AUTH_APP_URL=http://heikedeb:80/auth-app
@@ -63,3 +70,9 @@ _FULL-DB-TEST_CSRF_ENABLED=false
 _FULL-DB-TEST_QUARKUS_LOG_FILE_ENABLE=false
 _FULL-DB-TEST_QUARKUS_HTTP_ACCESS-LOG_LOG-TO-FILE=false
 _FULL-DB-TEST_AUTHORIZATION_ENABLED=false
+
+# man muss auch das MIN-Level auf TRACE setzen, wenn man das SQL von namedQueries sehen will
+_FULL-DB-TEST_QUARKUS_LOG_MIN_LEVEL=TRACE
+_FULL-DB-TEST_QUARKUS_HIBERNATE_ORM_LOG_BIND_PARAMETERS=true
+_FULL-DB-TEST_QUARKUS_HIBERNATE_ORM_LOG_SQL=true
+

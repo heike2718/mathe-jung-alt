@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.persistence.entities;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,10 +19,6 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-
 /**
  * PersistentesRaetselgruppenelement
  */
@@ -31,14 +29,14 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 		name = "PersistentesRaetselgruppenelement.LOAD_BY_GRUPPE",
 		query = "select e from PersistentesRaetselgruppenelement e where e.raetselgruppeID = :raetselgruppeID")
 })
-public class PersistentesRaetselgruppenelement extends PanacheEntityBase implements PersistenteMjaEntity {
+public class PersistentesRaetselgruppenelement implements PersistenteMjaEntity {
 
 	public static final String LOAD_BY_GRUPPE = "PersistentesRaetselgruppenelement.LOAD_BY_GRUPPE";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
 	@GenericGenerator(
-		name = "uuid_generator", strategy = "de.egladil.mja_api.infrastructure.persistence.entities.UuidGenerator")
+		name = "uuid_generator", type = UuidGenerator.class)
 	@NotNull
 	@Size(min = 1, max = 40)
 	@Column
@@ -62,6 +60,15 @@ public class PersistentesRaetselgruppenelement extends PanacheEntityBase impleme
 
 	@Transient
 	private String importierteUuid;
+
+	/**
+	 * @return
+	 */
+	@Override
+	public boolean isPersistent() {
+
+		return uuid != null;
+	}
 
 	@Override
 	public String getImportierteUuid() {

@@ -11,14 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
-import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenDao;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
-import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -29,17 +28,24 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * RaetselgruppenDaoImpl
+ * RaetselgruppenDao
  */
+@Repository
 @ApplicationScoped
-public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
+public class RaetselgruppenDao {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenDao.class);
 
 	@Inject
 	EntityManager entityManager;
 
-	@Override
+	/**
+	 * Zählt die Treffermenge bei Anwendung des gegebenen Filters. Die Parameter können null sein. Bei name und kommentar wird mit
+	 * like gesucht, alle anderen mit equal.
+	 *
+	 * @param  suchparameter
+	 * @return               long
+	 */
 	public long countByFilter(final RaetselgruppenSuchparameter suchparameter) {
 
 		String stmt = "select count(*) from PersistenteRaetselgruppe g";
@@ -68,7 +74,15 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		return anzahl;
 	}
 
-	@Override
+	/**
+	 * Sucht die Rätselgruppen die den Filterkriterien entsprechen, sortiert nach name. Die Parameter können null sein. Bei name
+	 * und kommentar wird mit like gesucht, alle anderen mit equal.
+	 *
+	 * @param  suchparameter
+	 * @param  limit
+	 * @param  offset
+	 * @return               List
+	 */
 	public List<PersistenteRaetselgruppe> findByFilter(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
 
 		String stmt = "select g from PersistenteRaetselgruppe g";
@@ -169,7 +183,12 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		}
 	}
 
-	@Override
+	/**
+	 * @param  referenztyp
+	 * @param  referenz
+	 * @param  schwierigkeitsgrad
+	 * @return                    PersistenteRaetselgruppe oder null
+	 */
 	public PersistenteRaetselgruppe findByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
 
 		List<PersistenteRaetselgruppe> trefferliste = entityManager
@@ -189,13 +208,19 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		return trefferliste.isEmpty() ? null : trefferliste.get(0);
 	}
 
-	@Override
+	/**
+	 * @param  raetselgruppeID
+	 * @return
+	 */
 	public PersistenteRaetselgruppe findByID(final String raetselgruppeID) {
 
 		return entityManager.find(PersistenteRaetselgruppe.class, raetselgruppeID);
 	}
 
-	@Override
+	/**
+	 * @param  name
+	 * @return      PersistenteRaetselgruppe oder null
+	 */
 	public PersistenteRaetselgruppe findByName(final String name) {
 
 		List<PersistenteRaetselgruppe> trefferliste = entityManager
@@ -212,7 +237,12 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		return trefferliste.isEmpty() ? null : trefferliste.get(0);
 	}
 
-	@Override
+	/**
+	 * Gibt alle Elemente der gegebenen Rästelgruppe zurück.
+	 *
+	 * @param  gruppeID
+	 * @return          List
+	 */
 	public List<PersistentesRaetselgruppenelement> loadElementeRaetselgruppe(final String gruppeID) {
 
 		return entityManager
@@ -220,14 +250,25 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 			.setParameter("raetselgruppeID", gruppeID).getResultList();
 	}
 
-	@Override
+	/**
+	 * Läd alle Aufgaben der gegebenen Rätselgruppe.
+	 *
+	 * @param  raetselgruppeId
+	 * @return                 List
+	 */
 	public List<PersistenteAufgabeReadonly> loadAufgabenByReaetselgruppe(final String raetselgruppeId) {
 
-		return PersistenteAufgabeReadonly.list("select a from PersistenteAufgabeReadonly a where a.gruppe = :gruppe",
-			Parameters.with("gruppe", raetselgruppeId));
+		return entityManager.createNamedQuery(PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_GRUPPE, PersistenteAufgabeReadonly.class)
+			.setParameter("gruppe", raetselgruppeId).getResultList();
 	}
 
-	@Override
+	/**
+	 * Speichert die gegebene Rätselgruppe und gibt die gespeicherte Entity zurück.
+	 *
+	 * @param  gruppe
+	 *                PersistenteRaetselgruppe
+	 * @return        PersistenteRaetselgruppe
+	 */
 	public PersistenteRaetselgruppe saveRaetselgruppe(final PersistenteRaetselgruppe gruppe) {
 
 		if (gruppe.isPersistent()) {
@@ -240,7 +281,10 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		return gruppe;
 	}
 
-	@Override
+	/**
+	 * @param  uuid
+	 * @return
+	 */
 	public long countElementeRaetselgruppe(@NotNull @Size(min = 1, max = 40) final String uuid) {
 
 		String stmt = "SELECT COUNT(*) from RAETSELGRUPPENELEMENTE e WHERE e.GRUPPE = :gruppe";
@@ -251,13 +295,19 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		return trefferliste.get(0).longValue();
 	}
 
-	@Override
+	/**
+	 * @param  raetselgruppenelementID
+	 * @return                         PersistentesRaetselgruppenelement
+	 */
 	public PersistentesRaetselgruppenelement findElementById(final String raetselgruppenelementID) {
 
 		return entityManager.find(PersistentesRaetselgruppenelement.class, raetselgruppenelementID);
 	}
 
-	@Override
+	/**
+	 * @param  element
+	 * @return         PersistentesRaetselgruppenelement
+	 */
 	public PersistentesRaetselgruppenelement saveRaetselgruppenelement(final PersistentesRaetselgruppenelement element) {
 
 		if (element.isPersistent()) {
@@ -269,7 +319,9 @@ public class RaetselgruppenDaoImpl implements RaetselgruppenDao {
 		return element;
 	}
 
-	@Override
+	/**
+	 * @param element
+	 */
 	@Transactional
 	public void deleteRaetselgruppenelement(final String elementID) {
 

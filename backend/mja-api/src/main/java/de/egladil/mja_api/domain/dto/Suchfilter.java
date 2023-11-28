@@ -5,25 +5,22 @@
 package de.egladil.mja_api.domain.dto;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import de.egladil.mja_api.domain.Suchmodus;
+import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
+import de.egladil.mja_api.domain.SuchmodusVolltext;
 
 /**
  * Suchfilter
  */
-@Schema(name = "Suchfilter", description = "ein Objekt, das Suchparameter enthält")
 public class Suchfilter {
 
-	@Schema(
-		description = "ein String, mit dem gesucht wird. Worttrenner ist Leerzeichen. Es wird unter Berücksichtigung des Suchmodus gesucht.")
 	private final String suchstring;
 
-	@Schema(description = "ein kommaseparierter String, der IDs von Deskriptoren, mit denen gesucht wird")
 	private final String deskriptorenIds;
 
-	@Schema(description = "Modus, wie gesucht wird. INTERSECTION = AND, UNION = OR. Default ist UNION")
-	private Suchmodus modus = Suchmodus.UNION;
+	private SuchmodusVolltext modusVolltext = SuchmodusVolltext.UNION;
+
+	private SuchmodusDeskriptoren modusDeskriptoren = SuchmodusDeskriptoren.LIKE;
 
 	/**
 	 * @param suchstring
@@ -66,14 +63,24 @@ public class Suchfilter {
 
 	}
 
-	public Suchmodus getModus() {
+	public SuchmodusVolltext getModusVolltext() {
 
-		return modus;
+		return modusVolltext;
 	}
 
-	public void setModus(final Suchmodus modus) {
+	public void setModusVolltext(final SuchmodusVolltext modus) {
 
-		this.modus = modus;
+		this.modusVolltext = modus;
+	}
+
+	public SuchmodusDeskriptoren getModusDeskriptoren() {
+
+		return modusDeskriptoren;
+	}
+
+	public void setModusDeskriptoren(final SuchmodusDeskriptoren modusDeskriptoren) {
+
+		this.modusDeskriptoren = modusDeskriptoren;
 	}
 
 }

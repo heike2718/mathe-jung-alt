@@ -6,6 +6,11 @@ package de.egladil.mja_api.infrastructure.persistence.entities;
 
 import java.util.Date;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import de.egladil.mja_api.domain.quellen.Quellenart;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,25 +24,17 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import de.egladil.mja_api.domain.quellen.Quellenart;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import io.quarkus.panache.common.Parameters;
-
 /**
  * PersistenteQuelle
  */
 @Entity
 @Table(name = "QUELLEN")
-public class PersistenteQuelle extends PanacheEntityBase implements PersistenteMjaEntity {
+public class PersistenteQuelle implements PersistenteMjaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
 	@GenericGenerator(
-		name = "uuid_generator", strategy = "de.egladil.mja_api.infrastructure.persistence.entities.UuidGenerator")
+		name = "uuid_generator", type = UuidGenerator.class)
 	@NotNull
 	@Size(min = 1, max = 40)
 	@Column(name = "UUID")
@@ -88,6 +85,15 @@ public class PersistenteQuelle extends PanacheEntityBase implements PersistenteM
 
 	@Transient
 	private String importierteUuid;
+
+	/**
+	 * @return
+	 */
+	@Override
+	public boolean isPersistent() {
+
+		return uuid != null;
+	}
 
 	public static PersistenteQuelle getDefaultQuelle() {
 

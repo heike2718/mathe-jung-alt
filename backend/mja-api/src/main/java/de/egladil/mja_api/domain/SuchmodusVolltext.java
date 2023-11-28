@@ -5,9 +5,9 @@
 package de.egladil.mja_api.domain;
 
 /**
- * Suchmodus
+ * SuchmodusVolltext
  */
-public enum Suchmodus {
+public enum SuchmodusVolltext {
 
 	INTERSECTION {
 
@@ -29,5 +29,16 @@ public enum Suchmodus {
 	};
 
 	public abstract String getOperator();
+
+	/**
+	 * Machen explizit, dass UNION der default ist. INTERSECTION wird vom Frontend nicht bedient. Es ist auch fraglich, ob das
+	 * überhaupt sinnvoll ist.
+	 *
+	 * @return
+	 */
+	public static SuchmodusVolltext getDefault() {
+
+		return SuchmodusVolltext.UNION;
+	}
 
 }

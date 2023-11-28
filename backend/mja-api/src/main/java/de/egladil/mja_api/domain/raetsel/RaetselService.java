@@ -37,6 +37,7 @@ import de.egladil.mja_api.domain.raetsel.impl.FindPathsGrafikParser;
 import de.egladil.mja_api.domain.raetsel.impl.FragenUndLoesungenVO;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
+import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -101,9 +102,11 @@ public class RaetselService {
 		switch (suchfilterVariante) {
 
 		case COMPLETE -> anzahlGesamt = raetselDao.countRaetselWithFilter(suchfilter.getSuchstring(),
-			suchfilter.getDeskriptorenIds(), suchfilter.getModus(), nurFreigegebene);
-		case DESKRIPTOREN -> anzahlGesamt = raetselDao.countWithDeskriptoren(suchfilter.getDeskriptorenIds(), nurFreigegebene);
-		case VOLLTEXT -> anzahlGesamt = raetselDao.countRaetselVolltext(suchfilter.getSuchstring(), suchfilter.getModus(),
+			suchfilter.getDeskriptorenIds(), suchfilter.getModusVolltext(), nurFreigegebene);
+		case DESKRIPTOREN -> anzahlGesamt = raetselDao.countWithDeskriptoren(suchfilter.getDeskriptorenIds(),
+			suchfilter.getModusDeskriptoren(),
+			nurFreigegebene);
+		case VOLLTEXT -> anzahlGesamt = raetselDao.countRaetselVolltext(suchfilter.getSuchstring(), suchfilter.getModusVolltext(),
 			nurFreigegebene);
 		default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
 		}
@@ -117,11 +120,13 @@ public class RaetselService {
 
 		case COMPLETE -> trefferliste = raetselDao.findRaetselWithFilter(suchfilter.getSuchstring(),
 			suchfilter.getDeskriptorenIds(),
-			suchfilter.getModus(),
+			suchfilter.getModusVolltext(),
 			limit, offset, sortDirection, nurFreigegebene);
-		case DESKRIPTOREN -> trefferliste = raetselDao.findWithDeskriptoren(suchfilter.getDeskriptorenIds(), limit, offset,
-			sortDirection, nurFreigegebene);
-		case VOLLTEXT -> trefferliste = raetselDao.findRaetselVolltext(suchfilter.getSuchstring(), suchfilter.getModus(), limit,
+		case DESKRIPTOREN -> trefferliste = raetselDao.findWithDeskriptoren(suchfilter.getDeskriptorenIds(),
+			suchfilter.getModusDeskriptoren(), limit,
+			offset, sortDirection, nurFreigegebene);
+		case VOLLTEXT -> trefferliste = raetselDao.findRaetselVolltext(suchfilter.getSuchstring(), suchfilter.getModusVolltext(),
+			limit,
 			offset, sortDirection, nurFreigegebene);
 
 		default -> new IllegalArgumentException("Unexpected value: " + suchfilterVariante);
@@ -172,7 +177,7 @@ public class RaetselService {
 
 		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
 
-		PersistentesRaetsel.persist(neuesRaetsel);
+		raetselDao.save(neuesRaetsel);
 
 		Raetsel result = payload.getRaetsel();
 		result.setId(neuesRaetsel.uuid);
@@ -189,7 +194,7 @@ public class RaetselService {
 	 */
 	String generiereSchluessel() {
 
-		int maxSchluessel = raetselDao.getMaximalSchluessel();
+		int maxSchluessel = raetselDao.getMaximumOfAllSchluessel();
 		String schluessel = StringUtils.leftPad(++maxSchluessel + "", 5, "0");
 		return schluessel;
 	}
@@ -220,7 +225,7 @@ public class RaetselService {
 
 		Raetsel raetsel = payload.getRaetsel();
 		String raetselId = raetsel.getId();
-		PersistentesRaetsel persistentesRaetsel = PersistentesRaetsel.findById(raetselId);
+		PersistentesRaetsel persistentesRaetsel = raetselDao.findById(raetselId);
 		String userId = authCtx.getUser().getName();
 
 		if (persistentesRaetsel == null) {
@@ -258,7 +263,7 @@ public class RaetselService {
 			neuesHistorieItem.geaendertDurch = userId;
 			neuesHistorieItem.raetsel = persistentesRaetsel;
 
-			PersistentesRaetselHistorieItem.persist(neuesHistorieItem);
+			raetselDao.insert(neuesHistorieItem);
 		}
 
 		FragenUndLoesungenVO fragenLoesungenVo = new FragenUndLoesungenVO().withFrageAlt(persistentesRaetsel.frage)
@@ -277,7 +282,7 @@ public class RaetselService {
 		}
 
 		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
-		PersistentesRaetsel.persist(persistentesRaetsel);
+		raetselDao.save(persistentesRaetsel);
 
 		// Nur löschen, wenn persist klar ging!
 		deleteImagesFileService.checkAndDeleteUnusedFiles(fragenLoesungenVo);
@@ -310,31 +315,11 @@ public class RaetselService {
 	@Transactional
 	public Raetsel getRaetselZuId(final String id) {
 
-		PersistentesRaetsel raetsel = PersistentesRaetsel.findById(id);
+		PersistentesRaetsel raetsel = raetselDao.findById(id);
 
 		if (raetsel == null) {
 
 			return null;
-		}
-
-		// TODO kann wieder entfernt nehmen, wenn es keine RAETSEL ohne filenamesVorschau mehr gibt.
-		if (raetsel.filenameVorschauFrage == null || raetsel.filenameVorschauLoesung == null) {
-			// I0098: migration der Vorschau-Files
-
-			if (raetsel.filenameVorschauFrage == null) {
-
-				raetsel.filenameVorschauFrage = generateFilenameVorschau();
-			}
-
-			if (raetsel.filenameVorschauLoesung == null) {
-
-				raetsel.filenameVorschauLoesung = generateFilenameVorschau();
-			}
-
-			raetsel.persistAndFlush();
-
-			LOGGER.info("{}: Filenames vorschau generiert - frage={}, loesung={}", raetsel.schluessel,
-				raetsel.filenameVorschauFrage, raetsel.filenameVorschauLoesung);
 		}
 
 		Raetsel result = mapFromDB(raetsel);
@@ -393,7 +378,7 @@ public class RaetselService {
 	 */
 	public List<RaetselLaTeXDto> findRaetselLaTeXwithSchluessel(final List<String> schluessel) {
 
-		List<PersistentesRaetsel> trefferliste = raetselDao.findWithSchluessel(schluessel);
+		List<PersistentesRaetsel> trefferliste = raetselDao.findWithSchluesselListe(schluessel);
 
 		return trefferliste.stream().map(pr -> RaetselLaTeXDto.mapFromDB(pr)).toList();
 

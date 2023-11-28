@@ -17,7 +17,8 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.Suchmodus;
+import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
+import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
@@ -103,6 +104,9 @@ public class RaetselResource {
 			name = "modus", description = "INTERSECTION | UNION. Default ist UNION"),
 		@Parameter(
 			in = ParameterIn.QUERY,
+			name = "modusDeskriptoren", description = "LIKE | NOT_LIKE. Default ist LIKE"),
+		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
 		@Parameter(
 			in = ParameterIn.QUERY,
@@ -130,7 +134,8 @@ public class RaetselResource {
 		@QueryParam(value = "deskriptoren") @Pattern(
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
-		@QueryParam(value = "modus") final Suchmodus modus,
+		@QueryParam(value = "modus") final SuchmodusVolltext modus,
+		@QueryParam(value = "modusDeskriptoren") final SuchmodusDeskriptoren modusDeskriptoren,
 		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
@@ -153,10 +158,13 @@ public class RaetselResource {
 			theSuchstring = suchstring.replaceAll("%20", " ");
 		}
 
-		Suchmodus theModus = modus == null ? Suchmodus.UNION : modus;
+		SuchmodusVolltext theModus = modus == null ? SuchmodusVolltext.getDefault() : modus;
+		SuchmodusDeskriptoren theModusDeskriptoren = modusDeskriptoren == null ? SuchmodusDeskriptoren.getDefault()
+			: modusDeskriptoren;
 
 		Suchfilter suchfilter = new Suchfilter(theSuchstring, deskriptorenOrdinal);
-		suchfilter.setModus(theModus);
+		suchfilter.setModusVolltext(theModus);
+		suchfilter.setModusDeskriptoren(theModusDeskriptoren);
 
 		return raetselService.sucheRaetsel(suchfilter, limit, offset,
 			sortDirection);

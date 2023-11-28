@@ -11,7 +11,6 @@ import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -52,7 +51,7 @@ import jakarta.validation.constraints.Size;
 		name = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL_LIST",
 		query = "select r from PersistentesRaetsel r where r.schluessel IN :schluessel")
 })
-public class PersistentesRaetsel extends PanacheEntityBase implements PersistenteMjaEntity {
+public class PersistentesRaetsel implements PersistenteMjaEntity {
 
 	public static final String FIND_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN";
 
@@ -69,7 +68,7 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
 	@GenericGenerator(
-		name = "uuid_generator", strategy = "de.egladil.mja_api.infrastructure.persistence.entities.UuidGenerator")
+		name = "uuid_generator", type = UuidGenerator.class)
 	@NotNull
 	@Size(min = 1, max = 40)
 	@Column(name = "UUID")
@@ -142,6 +141,15 @@ public class PersistentesRaetsel extends PanacheEntityBase implements Persistent
 	public void setImportierteUuid(final String importierteUuid) {
 
 		this.importierteUuid = importierteUuid;
+	}
+
+	/**
+	 * @return
+	 */
+	@Override
+	public boolean isPersistent() {
+
+		return uuid != null;
 	}
 
 }

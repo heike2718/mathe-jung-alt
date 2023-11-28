@@ -6,12 +6,13 @@ package de.egladil.mja_api.infrastructure.persistence.entities;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.quellen.Quellenart;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -20,7 +21,14 @@ import jakarta.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "VW_AUFGABEN")
-public class PersistenteAufgabeReadonly extends PanacheEntityBase {
+@NamedQueries({
+	@NamedQuery(
+		name = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_GRUPPE",
+		query = "select a from PersistenteAufgabeReadonly a where a.gruppe = :gruppe")
+})
+public class PersistenteAufgabeReadonly {
+
+	public static final String LOAD_AUFGABEN_IN_GRUPPE = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_GRUPPE";
 
 	@Id
 	public String uuid;

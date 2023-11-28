@@ -22,9 +22,9 @@ import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageResponseDt
 import de.egladil.mja_api.domain.embeddable_images.dto.ReplaceEmbeddableImageRequestDto;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
-import de.egladil.mja_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
+import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -78,7 +78,7 @@ public class EmbeddableImageUplodService {
 
 		EmbeddableImageContext uploadContext = requestDto.getContext();
 
-		PersistentesRaetsel raetsel = raetselDao.getWithID(uploadContext.getRaetselId());
+		PersistentesRaetsel raetsel = raetselDao.findById(uploadContext.getRaetselId());
 
 		if (raetsel != null && !PermissionUtils.hasWritePermission(userId,
 			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetsel.owner)) {
@@ -134,7 +134,7 @@ public class EmbeddableImageUplodService {
 
 		String raetselId = requestDto.getContext().getRaetselId();
 
-		PersistentesRaetsel raetsel = raetselDao.getWithID(raetselId);
+		PersistentesRaetsel raetsel = raetselDao.findById(raetselId);
 
 		if (raetsel == null) {
 

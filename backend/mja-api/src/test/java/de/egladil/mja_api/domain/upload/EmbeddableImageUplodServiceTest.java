@@ -29,8 +29,8 @@ import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageResponseDt
 import de.egladil.mja_api.domain.embeddable_images.dto.ReplaceEmbeddableImageRequestDto;
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
-import de.egladil.mja_api.domain.raetsel.RaetselDao;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
+import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -95,7 +95,7 @@ public class EmbeddableImageUplodServiceTest {
 			when(authCtx.isUserInRole("ADMIN")).thenReturn(Boolean.FALSE);
 			when(authCtx.isUserInRole("AUTOR")).thenReturn(Boolean.TRUE);
 
-			when(raetselDao.getWithID(RAETSEL_ID)).thenReturn(raetsel);
+			when(raetselDao.findById(RAETSEL_ID)).thenReturn(raetsel);
 
 			EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(RAETSEL_ID).withTextart(Textart.FRAGE);
 
@@ -114,7 +114,7 @@ public class EmbeddableImageUplodServiceTest {
 				verify(authCtx).isUserInRole("ADMIN");
 				verify(authCtx).isUserInRole("AUTOR");
 
-				verify(raetselDao).getWithID(RAETSEL_ID);
+				verify(raetselDao).findById(RAETSEL_ID);
 
 				verify(uploadScanner, never()).scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 				verify(embeddableImageService, never()).createAndEmbedImage(any(EmbeddableImageContext.class),
@@ -143,7 +143,7 @@ public class EmbeddableImageUplodServiceTest {
 				verify(authCtx, never()).isUserInRole("ADMIN");
 				verify(authCtx, never()).isUserInRole("AUTOR");
 
-				verify(raetselDao, never()).getWithID(anyString());
+				verify(raetselDao, never()).findById(anyString());
 				verify(uploadScanner, never()).scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 				verify(embeddableImageService, never()).createAndEmbedImage(any(EmbeddableImageContext.class), any(UploadedFile.class));
 			}
@@ -154,7 +154,7 @@ public class EmbeddableImageUplodServiceTest {
 
 			authenticatedUser = authenticatedUser.withRoles(new String[] { "ADMIN" });
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
-			when(raetselDao.getWithID(RAETSELID_NEU)).thenReturn(null);
+			when(raetselDao.findById(RAETSELID_NEU)).thenReturn(null);
 
 			doThrow(new UploadFormatException("Hilfe Virus one, one, one, ...")).when(uploadScanner)
 				.scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
@@ -175,7 +175,7 @@ public class EmbeddableImageUplodServiceTest {
 				verify(authCtx, never()).isUserInRole("ADMIN");
 				verify(authCtx, never()).isUserInRole("AUTOR");
 
-				verify(raetselDao).getWithID(anyString());
+				verify(raetselDao).findById(anyString());
 
 				verify(uploadScanner).scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 				verify(embeddableImageService, never()).createAndEmbedImage(any(EmbeddableImageContext.class),
@@ -191,7 +191,7 @@ public class EmbeddableImageUplodServiceTest {
 
 			authenticatedUser = authenticatedUser.withRoles(new String[] { "AUTOR" });
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
-			when(raetselDao.getWithID(RAETSELID_NEU)).thenReturn(null);
+			when(raetselDao.findById(RAETSELID_NEU)).thenReturn(null);
 			doNothing().when(uploadScanner)
 				.scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 
@@ -215,7 +215,7 @@ public class EmbeddableImageUplodServiceTest {
 			verify(authCtx, never()).isUserInRole("ADMIN");
 			verify(authCtx, never()).isUserInRole("AUTOR");
 
-			verify(raetselDao).getWithID(anyString());
+			verify(raetselDao).findById(anyString());
 
 			verify(uploadScanner).scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 			verify(embeddableImageService).createAndEmbedImage(any(EmbeddableImageContext.class), any(UploadedFile.class));
@@ -228,7 +228,7 @@ public class EmbeddableImageUplodServiceTest {
 			raetsel.owner = authenticatedUser.getUuid();
 
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
-			when(raetselDao.getWithID(RAETSEL_ID)).thenReturn(raetsel);
+			when(raetselDao.findById(RAETSEL_ID)).thenReturn(raetsel);
 
 			doNothing().when(uploadScanner)
 				.scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
@@ -253,7 +253,7 @@ public class EmbeddableImageUplodServiceTest {
 			verify(authCtx, never()).isUserInRole("ADMIN");
 			verify(authCtx, never()).isUserInRole("AUTOR");
 
-			verify(raetselDao).getWithID(anyString());
+			verify(raetselDao).findById(anyString());
 
 			verify(uploadScanner).scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 			verify(embeddableImageService).createAndEmbedImage(any(EmbeddableImageContext.class), any(UploadedFile.class));
@@ -272,7 +272,7 @@ public class EmbeddableImageUplodServiceTest {
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
 			when(authCtx.isUserInRole("ADMIN")).thenReturn(Boolean.FALSE);
 			when(authCtx.isUserInRole("AUTOR")).thenReturn(Boolean.TRUE);
-			when(raetselDao.getWithID(RAETSEL_ID)).thenReturn(raetsel);
+			when(raetselDao.findById(RAETSEL_ID)).thenReturn(raetsel);
 
 			EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(RAETSEL_ID).withTextart(Textart.LOESUNG);
 
@@ -316,7 +316,7 @@ public class EmbeddableImageUplodServiceTest {
 				verify(authCtx, never()).isUserInRole("ADMIN");
 				verify(authCtx, never()).isUserInRole("AUTOR");
 
-				verify(raetselDao, never()).getWithID(anyString());
+				verify(raetselDao, never()).findById(anyString());
 				verify(uploadScanner, never()).scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 				verify(embeddableImageService, never()).replaceEmbeddedImage(any(ReplaceEmbeddableImageRequestDto.class));
 
@@ -332,7 +332,7 @@ public class EmbeddableImageUplodServiceTest {
 
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
 
-			when(raetselDao.getWithID(RAETSEL_ID)).thenReturn(null);
+			when(raetselDao.findById(RAETSEL_ID)).thenReturn(null);
 
 			EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId(RAETSEL_ID).withTextart(Textart.LOESUNG);
 
@@ -367,7 +367,7 @@ public class EmbeddableImageUplodServiceTest {
 
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
 			when(authCtx.isUserInRole("ADMIN")).thenReturn(Boolean.TRUE);
-			when(raetselDao.getWithID(RAETSEL_ID)).thenReturn(raetsel);
+			when(raetselDao.findById(RAETSEL_ID)).thenReturn(raetsel);
 
 			doThrow(new UploadFormatException("Hilfe Virus one, one, one, ...")).when(uploadScanner)
 				.scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
@@ -404,7 +404,7 @@ public class EmbeddableImageUplodServiceTest {
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
 			when(authCtx.isUserInRole("ADMIN")).thenReturn(Boolean.FALSE);
 			when(authCtx.isUserInRole("AUTOR")).thenReturn(Boolean.TRUE);
-			when(raetselDao.getWithID(RAETSEL_ID)).thenReturn(raetsel);
+			when(raetselDao.findById(RAETSEL_ID)).thenReturn(raetsel);
 
 			doNothing().when(uploadScanner)
 				.scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
@@ -425,7 +425,7 @@ public class EmbeddableImageUplodServiceTest {
 			verify(authCtx).getUser();
 			verify(authCtx).isUserInRole("ADMIN");
 			verify(authCtx).isUserInRole("AUTOR");
-			verify(raetselDao).getWithID(RAETSEL_ID);
+			verify(raetselDao).findById(RAETSEL_ID);
 			verify(uploadScanner).scanUpload(any(ReplaceEmbeddableImageRequestDto.class), anyList());
 			verify(embeddableImageService).replaceEmbeddedImage(any(ReplaceEmbeddableImageRequestDto.class));
 		}

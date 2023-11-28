@@ -24,7 +24,6 @@ import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
-import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSortattribute;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
@@ -34,6 +33,7 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPay
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
+import de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;

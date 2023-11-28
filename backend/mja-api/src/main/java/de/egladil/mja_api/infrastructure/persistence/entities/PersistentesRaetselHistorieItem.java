@@ -17,14 +17,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+
 
 /**
  * PersistentesRaetselHistorieItem
  */
 @Entity
 @Table(name = "HISTORIE_RAETSEL")
-public class PersistentesRaetselHistorieItem extends PanacheEntityBase {
+public class PersistentesRaetselHistorieItem {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

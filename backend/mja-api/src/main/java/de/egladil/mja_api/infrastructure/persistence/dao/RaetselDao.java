@@ -14,24 +14,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
-import de.egladil.mja_api.domain.Suchmodus;
+import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
+import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
-import de.egladil.mja_api.domain.raetsel.RaetselDao;
+import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.domain.utils.SetOperationUtils;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
 /**
- * RaetselDaoImpl
+ * RaetselDao
  */
+@Repository
 @ApplicationScoped
-public class RaetselDaoImpl implements RaetselDao {
+public class RaetselDao {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselDao.class);
 
 	@ConfigProperty(name = "stage")
 	String stage;
@@ -39,19 +42,60 @@ public class RaetselDaoImpl implements RaetselDao {
 	@Inject
 	EntityManager entityManager;
 
-	@Override
-	public PersistentesRaetsel getWithID(final String uuid) {
+	/**
+	 * @param  uuid
+	 *              String
+	 * @return      PersistentesRaetel oder null
+	 */
+	public PersistentesRaetsel findById(final String uuid) {
 
 		return entityManager.find(PersistentesRaetsel.class, uuid);
 	}
 
+	/**
+	 * Persistiert ein neues RaetselHistorieItem
+	 *
+	 * @param neuesHistorieItem
+	 *                          PersistentesRaetselHistorieItem
+	 */
+	public void insert(final PersistentesRaetselHistorieItem neuesHistorieItem) {
+
+		entityManager.persist(neuesHistorieItem);
+
+	}
+
+	/**
+	 * Speichert ein neues Rätsel oder ändert ein vorhandenes.
+	 *
+	 * @param persistentesRaetsel
+	 */
+	public void save(final PersistentesRaetsel persistentesRaetsel) {
+
+		if (persistentesRaetsel.isPersistent()) {
+
+			entityManager.merge(persistentesRaetsel);
+		} else {
+
+			entityManager.persist(persistentesRaetsel);
+		}
+
+	}
+
+	/**
+	 * Zählt alle RAETSEL, bei denen der Suchstring im Volltextindex enthalten ist. Dieser umfasst NAME, KOMMENTAR, FRAGE und
+	 * LOESUNG. Bei mehreren Worten werden alle je nach suchmodus mit AND oder mit OR verknüpft.
+	 *
+	 * @param  suchstring
+	 * @param  suchmodus
+	 *                    SuchmodusVolltext mündet in AND oder OR, wenn der Suchstring aus mehr als einem Wort besteht.
+	 * @return            List
+	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public long countRaetselVolltext(final String suchstring, final Suchmodus suchmodus, final boolean nurFreigegebene) {
+	public long countRaetselVolltext(final String suchstring, final SuchmodusVolltext suchmodus, final boolean nurFreigegebene) {
 
 		String[] worte = StringUtils.split(suchstring, ' ');
 
-		String matcher = this.concatVolltextWithSuchmodus(worte.length, suchmodus);
+		String matcher = this.getVolltextMatcher(worte.length, suchmodus);
 
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE " + matcher;
 
@@ -77,13 +121,28 @@ public class RaetselDaoImpl implements RaetselDao {
 		return anzahl;
 	}
 
+	/**
+	 * Gibt alle RAETSEL innerhalb des Paginators zurück, bei denen der Suchstring im Volltextindex enthalten ist. Dieser umfasst
+	 * NAME, KOMMENTAR, FRAGE und
+	 * LOESUNG. Bei mehreren Worten werden alle je nach suchmodus mit AND oder mit OR verknüpft.
+	 *
+	 * @param  suchstring
+	 * @param  suchmodus
+	 *                       SuchmodusVolltext mündet in AND oder OR, wenn der Suchstring aus mehr als einem Wort besteht.
+	 * @param  limit
+	 *                       int Anzahl Treffer in page
+	 * @param  offset
+	 *                       int Aufsetzpunkt für page
+	 * @param  sortDirection
+	 *                       SortDirection asc/desc
+	 * @return               List
+	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<PersistentesRaetsel> findRaetselVolltext(final String suchstring, final Suchmodus suchmodus, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
+	public List<PersistentesRaetsel> findRaetselVolltext(final String suchstring, final SuchmodusVolltext suchmodus, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
 
 		String[] worte = StringUtils.split(suchstring, ' ');
 
-		String matcher = this.concatVolltextWithSuchmodus(worte.length, suchmodus);
+		String matcher = this.getVolltextMatcher(worte.length, suchmodus);
 
 		String stmt = "SELECT * FROM RAETSEL r WHERE " + matcher;
 
@@ -110,17 +169,32 @@ public class RaetselDaoImpl implements RaetselDao {
 		return query.getResultList();
 	}
 
-	@Override
+	/**
+	 * Zählt alle Raetsel, deren Deskriptoren die deskriptorenIDs als Teilmenge enthalten oder nicht enthalten.
+	 *
+	 * @param  deskriptorenIDs
+	 *                               String die IDs der Deskriptoren
+	 * @param  suchmodusDeskriptoren
+	 *                               SuchmodusDeskriptoren
+	 * @return                       List
+	 */
 	@SuppressWarnings("unchecked")
-	public long countWithDeskriptoren(final String deskriptorenIDs, final boolean nurFreigegebene) {
+	public long countWithDeskriptoren(final String deskriptorenIDs, final SuchmodusDeskriptoren suchmodusDeskriptoren, final boolean nurFreigegebene) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
-		String stmt = "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
+
+		// System.out.println(wrappedDeskriptorenIds);
+
+		String stmt = suchmodusDeskriptoren == SuchmodusDeskriptoren.LIKE
+			? "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren"
+			: "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') NOT LIKE :deskriptoren";
 
 		if (nurFreigegebene) {
 
-			stmt = "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren AND STATUS = :status";
+			stmt += " AND STATUS = :status";
 		}
+
+		// System.out.println(stmt);
 
 		List<Long> trefferliste = null;
 
@@ -142,8 +216,22 @@ public class RaetselDaoImpl implements RaetselDao {
 		return anzahl;
 	}
 
-	@Override
-	public List<PersistentesRaetsel> findWithDeskriptoren(final String deskriptorenIDs, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
+	/**
+	 * Sucht alle Raetsel, deren Deskriptoren die deskriptorenIDs als Teilmenge enthalten oder nicht enthalten.
+	 *
+	 * @param  deskriptorenIDs
+	 *                               String die IDs der Deskriptoren
+	 * @param  suchmodusDeskriptoren
+	 *                               TODO
+	 * @param  limit
+	 *                               int Anzahl Treffer in page
+	 * @param  offset
+	 *                               int Aufsetzpunkt für page
+	 * @param  sortDirection
+	 *                               SortDirection asc/desc
+	 * @return                       List
+	 */
+	public List<PersistentesRaetsel> findWithDeskriptoren(final String deskriptorenIDs, final SuchmodusDeskriptoren suchmodusDeskriptoren, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
 
 		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
@@ -163,6 +251,8 @@ public class RaetselDaoImpl implements RaetselDao {
 
 		if (nurFreigegebene) {
 
+			System.out.println("mit status: " + wrappedDeskriptoren);
+
 			return entityManager.createNamedQuery(queryId, PersistentesRaetsel.class)
 				.setParameter("deskriptoren", wrappedDeskriptoren)
 				.setParameter("status", DomainEntityStatus.FREIGEGEBEN)
@@ -171,6 +261,8 @@ public class RaetselDaoImpl implements RaetselDao {
 				.getResultList();
 		}
 
+		System.out.println("alle: " + wrappedDeskriptoren);
+
 		return entityManager.createNamedQuery(queryId, PersistentesRaetsel.class)
 			.setParameter("deskriptoren", wrappedDeskriptoren)
 			.setFirstResult(offset)
@@ -178,15 +270,26 @@ public class RaetselDaoImpl implements RaetselDao {
 			.getResultList();
 	}
 
-	@Override
+	/**
+	 * Zählt alle RAETSEL, bei denen die Volltextsuche Treffer ergibt (Worte werden entweder mit AND oder mit OR verknüpft) und mit
+	 * Deskriptoren LIKE oder not LIKE. Der Volltextindex umfasst NAME, KOMMENTAR, FRAGE und LOESUNG.
+	 *
+	 * @param  suchstring
+	 *                         String Wort.
+	 * @param  deskriptorenIDs
+	 *                         String die IDs der Deskriptoren, kommasepariert
+	 * @param  suchmodus
+	 *                         SuchmodusVolltext
+	 * @return                 List
+	 */
 	@SuppressWarnings("unchecked")
-	public long countRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final Suchmodus suchmodus, final boolean nurFregegebene) {
+	public long countRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final SuchmodusVolltext suchmodus, final boolean nurFregegebene) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
 		String[] worte = StringUtils.split(suchstring, ' ');
 
-		String matcher = this.concatVolltextWithSuchmodus(worte.length, suchmodus)
+		String matcher = this.getVolltextMatcher(worte.length, suchmodus)
 			+ " AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
 
 		if (nurFregegebene) {
@@ -213,15 +316,33 @@ public class RaetselDaoImpl implements RaetselDao {
 		return anzahl;
 	}
 
+	/**
+	 * Zählt alle RAETSEL, bei denen die Volltextsuche Treffer ergibt (mehrere Worte werden entweder mit AND oder mit OR verknüpft)
+	 * und mit
+	 * Deskriptoren LIKE oder not LIKE. Der Volltextindex umfasst NAME, KOMMENTAR, FRAGE und LOESUNG.
+	 *
+	 * @param  suchstring
+	 *                         String Wort.
+	 * @param  deskriptorenIDs
+	 *                         String die IDs der Deskriptoren, kommasepariert
+	 * @param  suchmodus
+	 *                         SuchmodusVolltext
+	 * @param  limit
+	 *                         int Anzahl Treffer in page
+	 * @param  offset
+	 *                         int Aufsetzpunkt für page
+	 * @param  sortDirection
+	 *                         SortDirection asc/desc
+	 * @return                 List
+	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<PersistentesRaetsel> findRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final Suchmodus suchmodus, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
+	public List<PersistentesRaetsel> findRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final SuchmodusVolltext suchmodus, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
 		String[] worte = StringUtils.split(suchstring, ' ');
 
-		String matcher = this.concatVolltextWithSuchmodus(worte.length, suchmodus)
+		String matcher = this.getVolltextMatcher(worte.length, suchmodus)
 			+ " AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
 
 		if (nurFreigegebene) {
@@ -253,7 +374,10 @@ public class RaetselDaoImpl implements RaetselDao {
 		return query.getResultList();
 	}
 
-	@Override
+	/**
+	 * @param  status
+	 * @return        long
+	 */
 	public long countRaetselWithStatus(final DomainEntityStatus status) {
 
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE STATUS = :status";
@@ -266,8 +390,12 @@ public class RaetselDaoImpl implements RaetselDao {
 		return anzahl;
 	}
 
-	@Override
-	public int getMaximalSchluessel() {
+	/**
+	 * Gibt den maximalen in der DB existierenden RAETSEL.SCHLUESSEL zurück.
+	 *
+	 * @return String
+	 */
+	public int getMaximumOfAllSchluessel() {
 
 		String stmt = "SELECT max(r.schluessel) from RAETSEL r where SCHLUESSEL != :schluessel";
 
@@ -277,7 +405,10 @@ public class RaetselDaoImpl implements RaetselDao {
 		return Integer.valueOf(trefferliste.get(0)).intValue();
 	}
 
-	@Override
+	/**
+	 * @param  schluessel
+	 * @return            PersistentesRaetsel oder null
+	 */
 	public PersistentesRaetsel findWithSchluessel(final String schluessel) {
 
 		List<PersistentesRaetsel> trefferliste = entityManager
@@ -292,8 +423,18 @@ public class RaetselDaoImpl implements RaetselDao {
 		return trefferliste.isEmpty() ? null : trefferliste.get(0);
 	}
 
-	@Override
-	public List<PersistentesRaetsel> findWithSchluessel(final List<String> schluessel) {
+	/**
+	 * Selektiert alle Raetsel, deren SCHLUESSEL in der gegebenen Collection enthalten ist.<br>
+	 * <br>
+	 * <strong>Achtung:</strong> Es wird mit IN gesucht. Es gibt ein DB-Limit für die Länge der Liste. Das wird aktuell nicht
+	 * berücksichtigt. Es dürfte momentan auch so groß sein, dass es nicht durch irgendwelche Rätselgruppen gerissen werden kann. Es
+	 * gibt ein Issue diesbezüglich: https://github.com/heike2718/mathe-jung-alt/issues/105
+	 *
+	 * @param  schluessel
+	 *                    List
+	 * @return            List
+	 */
+	public List<PersistentesRaetsel> findWithSchluesselListe(final List<String> schluessel) {
 
 		return entityManager.createNamedQuery(PersistentesRaetsel.FIND_WITH_SCHLUESSEL_LIST, PersistentesRaetsel.class)
 			.setParameter("schluessel", schluessel).getResultList();
@@ -304,7 +445,7 @@ public class RaetselDaoImpl implements RaetselDao {
 	 * @param  suchmodus
 	 * @return
 	 */
-	String concatVolltextWithSuchmodus(final int anzahlWorte, final Suchmodus suchmodus) {
+	String getVolltextMatcher(final int anzahlWorte, final SuchmodusVolltext suchmodus) {
 
 		String part1 = "MATCH(SCHLUESSEL,NAME,KOMMENTAR,FRAGE,LOESUNG) AGAINST(:suchstring";
 

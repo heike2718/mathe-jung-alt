@@ -24,8 +24,6 @@ import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
-import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenDao;
-import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenService;
 import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
 import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
@@ -35,6 +33,7 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
+import de.egladil.mja_api.infrastructure.persistence.dao.RaetselgruppenDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
@@ -46,12 +45,12 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
- * RaetselgruppenServiceImpl
+ * RaetselgruppenService
  */
 @ApplicationScoped
-public class RaetselgruppenServiceImpl implements RaetselgruppenService {
+public class RaetselgruppenService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenService.class);
 
 	@Inject
 	AuthenticationContext authCtx;
@@ -68,7 +67,6 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 	@Inject
 	RaetselgruppeGeneratorService raetselgruppeFileService;
 
-	@Override
 	public RaetselgruppensucheTreffer findRaetselgruppen(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
 
 		RaetselgruppensucheTreffer result = new RaetselgruppensucheTreffer();
@@ -94,7 +92,14 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return result;
 	}
 
-	@Override
+	/**
+	 * @param  raetselgruppeID
+	 * @param  userId
+	 *                         String die ID des eingeloggten Users
+	 * @param  isAdmin
+	 *                         boolean
+	 * @return                 Optional
+	 */
 	public Optional<RaetselgruppeDetails> loadDetails(final String raetselgruppeID) {
 
 		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
@@ -129,7 +134,18 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return Optional.of(result);
 	}
 
-	@Override
+	/**
+	 * Erstellt eine neue Rätselgruppe. Dabei wird geprüft, ob es eine mit den Keys bereits gibt oder dem Namen. In diesem Fall
+	 * wird eine
+	 * WebApplicationException mit Status 409 - Conflict geworfen.
+	 *
+	 * @param  payload
+	 * @param  userId
+	 *                 String die ID des eingeloggten Users
+	 * @param  isAdmin
+	 *                 boolean
+	 * @return         RaetselgruppensucheTrefferItem
+	 */
 	@Transactional
 	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload) throws WebApplicationException {
 
@@ -174,7 +190,17 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return result;
 	}
 
-	@Override
+	/**
+	 * Ändert die Basisdaten einer Rätselgruppe. Dabei wird geprüft, ob es eine mit den Keys oder dem Namen bereits gibt. In
+	 * diesem Fall wird eine WebApplicationException mit Status 409 - Conflict geworfen.
+	 *
+	 * @param  payload
+	 * @param  userId
+	 *                 String die ID des eingeloggten Users
+	 * @param  isAdmin
+	 *                 boolean
+	 * @return         RaetselgruppensucheTrefferItem
+	 */
 	@Transactional
 	public RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(final EditRaetselgruppePayload payload) throws WebApplicationException {
 
@@ -285,7 +311,13 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		raetselgruppe.status = payload.getStatus();
 	}
 
-	@Override
+	/**
+	 * Legt ein neues Element an
+	 *
+	 * @param  raetselgruppeID
+	 * @param  payload
+	 * @return                 RaetselgruppeDetails
+	 */
 	public RaetselgruppeDetails elementAnlegen(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
 
 		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
@@ -369,7 +401,13 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return persisted;
 	}
 
-	@Override
+	/**
+	 * Ändert ein vorhandenes Element
+	 *
+	 * @param  raetselgruppeID
+	 * @param  payload
+	 * @return                 RaetselgruppeDetails
+	 */
 	@Transactional
 	public RaetselgruppeDetails elementAendern(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
 
@@ -444,7 +482,13 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		raetselgruppenDao.saveRaetselgruppenelement(persistentesElement);
 	}
 
-	@Override
+	/**
+	 * Löscht das gegebene Element der Rätselgruppe.
+	 *
+	 * @param  raetselgruppeID
+	 * @param  elementID
+	 * @return                 RaetselgruppeDetails
+	 */
 	public RaetselgruppeDetails elementLoeschen(final String raetselgruppeID, final String elementID) {
 
 		PersistenteRaetselgruppe raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
@@ -470,7 +514,19 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return opt.get();
 	}
 
-	@Override
+	/**
+	 * Generiert die Vorschau des Quiz als PDF. Dabei werden Aufgaben und Lösungen gemischt.
+	 * Bei Aufgaben ohne Antwortvorschläge wird keine Tabelle gedruckt.
+	 *
+	 * @param  raetselgruppeID
+	 * @param  font
+	 *                                  FontName
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
+	 * @param  layoutAntwortvorschlaege
+	 *                                  LayoutAntwortvorschlaege
+	 * @return
+	 */
 	public GeneratedFile printVorschau(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
@@ -487,7 +543,18 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 			schriftgroesse, layoutAntwortvorschlaege);
 	}
 
-	@Override
+	/**
+	 * Generiert eine Kartei. Für jedes Element wird auf eine Seite die Frage gedruckt, auf die folgende Seite die Lösung.
+	 *
+	 * @param  raetselgruppeID
+	 * @param  font
+	 *                                  FontName
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
+	 * @param  layoutAntwortvorschlaege
+	 *                                  LayoutAntwortvorschlaege
+	 * @return                          GeneratedFile
+	 */
 	public GeneratedFile printKartei(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
@@ -497,7 +564,19 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 			schriftgroesse, layoutAntwortvorschlaege);
 	}
 
-	@Override
+	/**
+	 * Generiert eine PDF-Datei mit Aufgabenblättern und Lösungen. Zuerst kommen die Aufgaben, danach, beginnend mit einer neuen
+	 * Seite, die Lösungen in der gewünschten Reihenfolge. Es wird generell ohne Auntwortvorschläge gedruckt.
+	 *
+	 * @param  raetselgruppeID
+	 * @param  font
+	 *                                  FontName
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
+	 * @param  layoutAntwortvorschlaege
+	 *                                  LayoutAntwortvorschlaege
+	 * @return                          GeneratedFile
+	 */
 	public GeneratedFile printArbeitsblattMitLoesungen(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
@@ -552,7 +631,13 @@ public class RaetselgruppenServiceImpl implements RaetselgruppenService {
 		return freigegebeneAufgaben;
 	}
 
-	@Override
+	/**
+	 * Generiert das LaTeX-File für die Raetselgruppe. Die Grafiken muss man sowieso lokal haben. Sollte sich mit kleineren
+	 * Textreplacements lokal compilieren lassen.
+	 *
+	 * @param  raetselgruppeID
+	 * @return                 GeneratedFile
+	 */
 	public GeneratedFile downloadLaTeXSource(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);

@@ -6,6 +6,11 @@ package de.egladil.mja_api.infrastructure.persistence.entities;
 
 import java.util.Date;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import de.egladil.mja_api.domain.DomainEntityStatus;
+import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
+import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,13 +26,6 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import de.egladil.mja_api.domain.DomainEntityStatus;
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-
 /**
  * PersistenteRaetselgruppe
  */
@@ -41,7 +39,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 		name = "PersistenteRaetselgruppe.FIND_BY_UNIQUE_KEY",
 		query = "select s from PersistenteRaetselgruppe s where s.referenztyp = :referenztyp and s. referenz = :referenz and s.schwierigkeitsgrad = :schwierigkeitsgrad")
 })
-public class PersistenteRaetselgruppe extends PanacheEntityBase implements PersistenteMjaEntity {
+public class PersistenteRaetselgruppe implements PersistenteMjaEntity {
 
 	public static final String FIND_BY_NAME = "PersistenteRaetselgruppe.FIND_BY_NAME";
 
@@ -50,7 +48,7 @@ public class PersistenteRaetselgruppe extends PanacheEntityBase implements Persi
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
 	@GenericGenerator(
-		name = "uuid_generator", strategy = "de.egladil.mja_api.infrastructure.persistence.entities.UuidGenerator")
+		name = "uuid_generator", type = UuidGenerator.class)
 	@NotNull
 	@Size(min = 1, max = 40)
 	@Column
@@ -94,6 +92,15 @@ public class PersistenteRaetselgruppe extends PanacheEntityBase implements Persi
 
 	@Transient
 	private String importierteUuid;
+
+	/**
+	 * @return
+	 */
+	@Override
+	public boolean isPersistent() {
+
+		return uuid != null;
+	}
 
 	@Override
 	public String getImportierteUuid() {
