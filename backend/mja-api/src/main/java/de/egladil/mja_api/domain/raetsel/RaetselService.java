@@ -102,8 +102,7 @@ public class RaetselService {
 
 		switch (suchfilterVariante) {
 
-		case COMPLETE -> anzahlGesamt = raetselDao.countRaetselWithFilter(suchfilter.getSuchstring(),
-			suchfilter.getDeskriptorenIds(), suchfilter.getModusVolltext(), nurFreigegebene);
+		case COMPLETE -> anzahlGesamt = raetselDao.countRaetselWithFilter(suchfilter, nurFreigegebene);
 		case DESKRIPTOREN -> anzahlGesamt = raetselDao.countWithDeskriptoren(suchfilter.getDeskriptorenIds(),
 			suchfilter.getModusDeskriptoren(),
 			nurFreigegebene);
@@ -119,10 +118,7 @@ public class RaetselService {
 
 		switch (suchfilterVariante) {
 
-		case COMPLETE -> trefferliste = raetselDao.findRaetselWithFilter(suchfilter.getSuchstring(),
-			suchfilter.getDeskriptorenIds(),
-			suchfilter.getModusVolltext(),
-			limit, offset, sortDirection, nurFreigegebene);
+		case COMPLETE -> trefferliste = raetselDao.findRaetselWithFilter(suchfilter, limit, offset, sortDirection, nurFreigegebene);
 		case DESKRIPTOREN -> trefferliste = raetselDao.findWithDeskriptoren(suchfilter.getDeskriptorenIds(),
 			suchfilter.getModusDeskriptoren(), limit,
 			offset, sortDirection, nurFreigegebene);

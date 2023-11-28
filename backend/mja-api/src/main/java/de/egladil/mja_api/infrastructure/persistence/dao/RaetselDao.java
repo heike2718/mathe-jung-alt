@@ -17,6 +17,7 @@ import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.dto.SortDirection;
+import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.domain.utils.SetOperationUtils;
@@ -315,25 +316,23 @@ public class RaetselDao {
 	 * Zählt alle RAETSEL, bei denen die Volltextsuche Treffer ergibt (Worte werden entweder mit AND oder mit OR verknüpft) und mit
 	 * Deskriptoren LIKE oder not LIKE. Der Volltextindex umfasst NAME, KOMMENTAR, FRAGE und LOESUNG.
 	 *
-	 * @param  suchstring
-	 *                         String Wort.
-	 * @param  deskriptorenIDs
-	 *                         String die IDs der Deskriptoren, kommasepariert
-	 * @param  suchmodus
-	 *                         SuchmodusVolltext
+	 * @param  suchfilter
+	 *                         Suchfilter
+	 * @param  nurFreigegebene
+	 *                         boolean
 	 * @return                 List
 	 */
 	@SuppressWarnings("unchecked")
-	public long countRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final SuchmodusVolltext suchmodus, final boolean nurFregegebene) {
+	public long countRaetselWithFilter(final Suchfilter suchfilter, final boolean nurFreigegebene) {
 
-		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
+		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(suchfilter.getDeskriptorenIds());
 
-		String[] worte = StringUtils.split(suchstring, ' ');
+		String[] worte = StringUtils.split(suchfilter.getSuchstring(), ' ');
 
-		String matcher = this.getVolltextMatcher(worte.length, suchmodus)
+		String matcher = this.getVolltextMatcher(worte.length, suchfilter.getModusVolltext())
 			+ " AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
 
-		if (nurFregegebene) {
+		if (nurFreigegebene) {
 
 			matcher += " AND STATUS = :status ";
 		}
@@ -346,7 +345,7 @@ public class RaetselDao {
 		Query query = this.createQueryAndReplaceSuchparameter(stmt, worte, Long.class).setParameter("deskriptoren",
 			wrappedDeskriptorenIds);
 
-		if (nurFregegebene) {
+		if (nurFreigegebene) {
 
 			query.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString());
 		}
@@ -362,28 +361,29 @@ public class RaetselDao {
 	 * und mit
 	 * Deskriptoren LIKE oder not LIKE. Der Volltextindex umfasst NAME, KOMMENTAR, FRAGE und LOESUNG.
 	 *
-	 * @param  suchstring
-	 *                         String Wort.
-	 * @param  deskriptorenIDs
-	 *                         String die IDs der Deskriptoren, kommasepariert
-	 * @param  suchmodus
-	 *                         SuchmodusVolltext
+	 * @param  suchfilter
+	 *                         Suchfilter
 	 * @param  limit
 	 *                         int Anzahl Treffer in page
 	 * @param  offset
 	 *                         int Aufsetzpunkt für page
 	 * @param  sortDirection
 	 *                         SortDirection asc/desc
+	 * @param  nurFreigegebene
+	 *                         boolean
 	 * @return                 List
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PersistentesRaetsel> findRaetselWithFilter(final String suchstring, final String deskriptorenIDs, final SuchmodusVolltext suchmodus, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
+	public List<PersistentesRaetsel> findRaetselWithFilter(final Suchfilter suchfilter, final int limit, final int offset, final SortDirection sortDirection, final boolean nurFreigegebene) {
 
-		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
+		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(suchfilter.getDeskriptorenIds());
 
-		String[] worte = StringUtils.split(suchstring, ' ');
+		String[] worte = StringUtils.split(suchfilter.getSuchstring(), ' ');
 
-		String matcher = this.getVolltextMatcher(worte.length, suchmodus)
+		LOGGER.debug("suchstring={}, deskriptoren={}, suchmodusVolltext={}, suchmodusDeskriptoren={}", suchfilter.getSuchstring(),
+			wrappedDeskriptorenIds, suchfilter.getModusVolltext(), suchfilter.getModusDeskriptoren());
+
+		String matcher = this.getVolltextMatcher(worte.length, suchfilter.getModusVolltext())
 			+ " AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
 
 		if (nurFreigegebene) {
@@ -400,9 +400,6 @@ public class RaetselDao {
 
 			stmt += " ORDER BY SCHLUESSEL";
 		}
-
-		System.out.println(stmt);
-		System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
 
 		Query query = this.createQueryAndReplaceSuchparameter(stmt, worte, PersistentesRaetsel.class).setParameter("deskriptoren",
 			wrappedDeskriptorenIds);

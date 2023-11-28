@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.dto.SortDirection;
+import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.junit.QuarkusTest;
@@ -52,10 +53,10 @@ public class RaetselDaoImplTest {
 	}
 
 	@Nested
-	class SucheVolltextTests {
+	class VolltextsucheTests {
 
 		@Test
-		void should_countRaetselVolltextReturnExpected_when_2WorteUndINTERSECTION() {
+		void should_countRaetselVolltextReturnExpected_when_INTERSECTION() {
 
 			// Arrange
 			String suchstring = "Kinder Schwester";
@@ -70,7 +71,7 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_countRaetselVolltextReturnExpected_when_2WorteUndUNIONUndNurFREIGEGEBEN() {
+		void should_countRaetselVolltextReturnExpected_when_UNIONUndNurFREIGEGEBEN() {
 
 			// Arrange
 			String suchstring = "Kinder Tiere";
@@ -85,7 +86,7 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_countRaetselVolltextReturnExpected_when_2WorteUndUNION() {
+		void should_countRaetselVolltextReturnExpected_when_UNION() {
 
 			// Arrange
 			String suchstring = "Kinder Tiere";
@@ -100,7 +101,7 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_findRaetselVolltextReturnExpected_when_2WorteUndINTERSECTION() {
+		void should_findRaetselVolltextReturnExpected_when_INTERSECTION() {
 
 			// Arrange
 			String suchstring = "Kinder Schwester";
@@ -117,7 +118,7 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_findRaetselVolltextReturnExpected_when_2WorteUndUNIONUndNurFreigegeben() {
+		void should_findRaetselVolltextReturnExpected_when_UNIONUndNurFreigegeben() {
 
 			// Arrange
 			String suchstring = "Kinder Tiere";
@@ -134,7 +135,7 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_findRaetselVolltextReturnExpected_when_2WorteUndUNION() {
+		void should_findRaetselVolltextReturnExpected_when_UNION() {
 
 			// Arrange
 			String suchstring = "Kinder Tiere";
@@ -479,16 +480,26 @@ public class RaetselDaoImplTest {
 	@Nested
 	class FilteredSucheTests {
 
+		private String suchstring = "Kinder Tiere pflanzen Kreis Monat Spielzeug Kekse Känguru";
+
+		private String deskriptoren = "8,11";
+
 		@Test
-		void should_countRaetselWithFilterReturnExpected_when_2WorteUndINTERSECTION() {
+		void should_countRaetselWithFilterReturnExpected_when_AlleINTERSECTIONUndDeskriptorenLIKE() {
 
 			// Arrange
-			String suchstring = "Kinder Schwester";
-			String deskriptoren = "1,2";
+			suchstring = "Kinder Schwester";
+			deskriptoren = "1,2";
 			SuchmodusVolltext suchmodus = SuchmodusVolltext.INTERSECTION;
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFregegebene = false;
+
+			Suchfilter suchfilter = new Suchfilter(suchstring, deskriptoren);
+			suchfilter.setModusDeskriptoren(suchmodusDeskriptoren);
+			suchfilter.setModusVolltext(suchmodus);
 
 			// Act
-			long anzahl = dao.countRaetselWithFilter(suchstring, deskriptoren, suchmodus, false);
+			long anzahl = dao.countRaetselWithFilter(suchfilter, nurFregegebene);
 
 			// Assert
 			assertEquals(1, anzahl);
@@ -496,49 +507,23 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_countRaetselWithFilterReturnExpected_when_2WorteUndUNION() {
+		void should_findRaetselWithFilterReturnExpected_when_AlleINTERSECTIONUndDeskriptorenLIKE() {
 
 			// Arrange
-			String suchstring = "Kinder Tiere";
-			String deskriptoren = "1,11";
-			SuchmodusVolltext suchmodus = SuchmodusVolltext.UNION;
-
-			// Act
-			long anzahl = dao.countRaetselWithFilter(suchstring, deskriptoren, suchmodus, false);
-
-			// Assert
-			assertEquals(2, anzahl);
-
-		}
-
-		@Test
-		void should_countRaetselWithFilterReturnExpected_when_2WorteUndUNIONNurFreigegeben() {
-
-			// Arrange
-			String suchstring = "Kinder Tiere";
-			String deskriptoren = "1,11";
-			SuchmodusVolltext suchmodus = SuchmodusVolltext.UNION;
-
-			// Act
-			long anzahl = dao.countRaetselWithFilter(suchstring, deskriptoren, suchmodus, true);
-
-			// Assert
-			assertEquals(1, anzahl);
-
-		}
-
-		@Test
-		void should_findRaetselWithFilterReturnExpected_when_2WorteUndINTERSECTION() {
-
-			// Arrange
-			String suchstring = "Kinder Schwester";
-			String deskriptoren = "1,2";
+			suchstring = "Kinder Schwester";
+			deskriptoren = "1,2";
 			SuchmodusVolltext suchmodus = SuchmodusVolltext.INTERSECTION;
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFregegebene = false;
+
+			Suchfilter suchfilter = new Suchfilter(suchstring, deskriptoren);
+			suchfilter.setModusDeskriptoren(suchmodusDeskriptoren);
+			suchfilter.setModusVolltext(suchmodus);
 
 			// Act
-			List<PersistentesRaetsel> treffer = dao.findRaetselWithFilter(suchstring, deskriptoren, suchmodus, 0, 10,
-				SortDirection.asc,
-				false);
+			List<PersistentesRaetsel> treffer = dao.findRaetselWithFilter(suchfilter, 0,
+				10,
+				SortDirection.asc, nurFregegebene);
 
 			// Assert
 			assertEquals(1, treffer.size());
@@ -548,42 +533,163 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_findRaetselWithFilterReturnExpected_when_2WorteUndUNION() {
+		void should_findRaetselWithFilterReturnExpected_when_AlleINTERSECTIONUndDeskriptorenLIKEDesc() {
 
 			// Arrange
-			String suchstring = "Kinder Tiere";
+			suchstring = "Kinder Schwester";
 			String deskriptoren = "1,2";
-			SuchmodusVolltext suchmodus = SuchmodusVolltext.UNION;
+			SuchmodusVolltext suchmodus = SuchmodusVolltext.INTERSECTION;
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFregegebene = false;
+
+			Suchfilter suchfilter = new Suchfilter(suchstring, deskriptoren);
+			suchfilter.setModusDeskriptoren(suchmodusDeskriptoren);
+			suchfilter.setModusVolltext(suchmodus);
 
 			// Act
-			List<PersistentesRaetsel> treffer = dao.findRaetselWithFilter(suchstring, deskriptoren, suchmodus, 0, 10,
-				SortDirection.asc,
-				false);
+			List<PersistentesRaetsel> treffer = dao.findRaetselWithFilter(suchfilter, 0,
+				10,
+				SortDirection.desc, nurFregegebene);
 
 			// Assert
-			assertEquals(3, treffer.size());
+			assertEquals(1, treffer.size());
 
-			assertEquals("02613", treffer.get(0).schluessel);
-			assertEquals("02621", treffer.get(1).schluessel);
-			assertEquals("02818", treffer.get(2).schluessel);
+			assertEquals("02621", treffer.get(0).schluessel);
 
 		}
 
 		@Test
-		void should_findRaetselWithFilterReturnExpected_when_2WorteUndUNIONUndNurFREIGEGEBEN() {
+		void should_countRaetselWithFilterReturnExpected_when_AlleUNIONUndDeskriptorenLIKE() {
 
 			// Arrange
-			String suchstring = "Kinder Tiere";
-			String deskriptoren = "1,2";
 			SuchmodusVolltext suchmodus = SuchmodusVolltext.UNION;
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFregegebene = false;
+
+			Suchfilter suchfilter = new Suchfilter(suchstring, deskriptoren);
+			suchfilter.setModusDeskriptoren(suchmodusDeskriptoren);
+			suchfilter.setModusVolltext(suchmodus);
 
 			// Act
-			List<PersistentesRaetsel> treffer = dao.findRaetselWithFilter(suchstring, deskriptoren, suchmodus, 0, 10,
-				SortDirection.asc,
-				true);
+			long anzahl = dao.countRaetselWithFilter(suchfilter,
+				nurFregegebene);
 
 			// Assert
-			assertEquals(1, treffer.size());
+			assertEquals(8, anzahl);
+
+		}
+
+		@Test
+		void should_findRaetselWithFilterReturnExpected_when_AlleUNIONAndDeskriptorenLIKE() {
+
+			// Arrange
+			SuchmodusVolltext suchmodus = SuchmodusVolltext.UNION;
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFregegebene = false;
+
+			Suchfilter suchfilter = new Suchfilter(suchstring, deskriptoren);
+			suchfilter.setModusDeskriptoren(suchmodusDeskriptoren);
+			suchfilter.setModusVolltext(suchmodus);
+
+			// Act
+			List<PersistentesRaetsel> treffer = dao.findRaetselWithFilter(suchfilter, 0,
+				8,
+				SortDirection.asc, nurFregegebene);
+
+			// Assert
+			assertEquals(8, treffer.size());
+
+			assertEquals("02604", treffer.get(0).schluessel);
+
+		}
+
+		@Test
+		void should_findRaetselWithFilterReturnExpected_when_AlleUNIONAndDeskriptorenLIKEDesc() {
+
+			// Arrange
+			SuchmodusVolltext suchmodus = SuchmodusVolltext.UNION;
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFregegebene = false;
+
+			Suchfilter suchfilter = new Suchfilter(suchstring, deskriptoren);
+			suchfilter.setModusDeskriptoren(suchmodusDeskriptoren);
+			suchfilter.setModusVolltext(suchmodus);
+			// Act
+			List<PersistentesRaetsel> treffer = dao.findRaetselWithFilter(suchfilter, 0,
+				8,
+				SortDirection.desc, nurFregegebene);
+
+			// Assert
+			assertEquals(8, treffer.size());
+
+			assertEquals("02816", treffer.get(0).schluessel);
+
+		}
+
+		@Test
+		void should_countRaetselWithFilterReturnExpected_when_UNIONUndDeskriptorenLIKEUndFREIGEGEBEN() {
+
+			// Arrange
+			SuchmodusVolltext suchmodus = SuchmodusVolltext.UNION;
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFregegebene = true;
+
+			Suchfilter suchfilter = new Suchfilter(suchstring, deskriptoren);
+			suchfilter.setModusDeskriptoren(suchmodusDeskriptoren);
+			suchfilter.setModusVolltext(suchmodus);
+
+			// Act
+			long anzahl = dao.countRaetselWithFilter(suchfilter,
+				nurFregegebene);
+
+			// Assert
+			assertEquals(3, anzahl);
+
+		}
+
+		@Test
+		void should_findRaetselWithFilterReturnExpected_when_UNIONUndDeskriptorenLIKEUndFREIGEGEBEN() {
+
+			// Arrange
+			SuchmodusVolltext suchmodus = SuchmodusVolltext.UNION;
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFregegebene = true;
+
+			Suchfilter suchfilter = new Suchfilter(suchstring, deskriptoren);
+			suchfilter.setModusDeskriptoren(suchmodusDeskriptoren);
+			suchfilter.setModusVolltext(suchmodus);
+
+			// Act
+			List<PersistentesRaetsel> treffer = dao.findRaetselWithFilter(suchfilter, 0,
+				10,
+				SortDirection.asc, nurFregegebene);
+
+			// Assert
+			assertEquals(3, treffer.size());
+
+			assertEquals("02604", treffer.get(0).schluessel);
+
+		}
+
+		@Test
+		void should_findRaetselWithFilterReturnExpected_when_UNIONUndDeskriptorenLIKEUndFREIGEGEBENDesc() {
+
+			// Arrange
+			SuchmodusVolltext suchmodus = SuchmodusVolltext.UNION;
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFregegebene = true;
+
+			Suchfilter suchfilter = new Suchfilter(suchstring, deskriptoren);
+			suchfilter.setModusDeskriptoren(suchmodusDeskriptoren);
+			suchfilter.setModusVolltext(suchmodus);
+
+			// Act
+			List<PersistentesRaetsel> treffer = dao.findRaetselWithFilter(suchfilter, 0,
+				10,
+				SortDirection.desc, nurFregegebene);
+
+			// Assert
+			assertEquals(3, treffer.size());
 
 			assertEquals("02613", treffer.get(0).schluessel);
 
