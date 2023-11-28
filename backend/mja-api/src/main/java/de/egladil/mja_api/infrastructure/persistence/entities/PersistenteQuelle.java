@@ -95,13 +95,6 @@ public class PersistenteQuelle implements PersistenteMjaEntity {
 		return uuid != null;
 	}
 
-	public static PersistenteQuelle getDefaultQuelle() {
-
-		Parameters params = Parameters.with("hw", true);
-
-		return (PersistenteQuelle) PersistenteQuelle.find("hw = :hw", params);
-	}
-
 	public void setImportierteUuid(final String importierteUuid) {
 
 		this.importierteUuid = importierteUuid;

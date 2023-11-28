@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.semantik.Repository;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelle;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -68,9 +67,5 @@ public class QuellenRepository {
 		PersistenteQuelleReadonly result = entityManager.find(PersistenteQuelleReadonly.class, id);
 
 		return result == null ? Optional.empty() : Optional.of(result);
-	}
-
-	public PersistenteQuelle getDefaultQuelle() {
-
 	}
 }
