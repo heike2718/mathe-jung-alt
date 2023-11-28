@@ -158,7 +158,7 @@ public class RaetselDaoImplTest {
 	class DeskriptorenSucheTests {
 
 		@Test
-		void should_countRaetselWithSeskriptorenReturnExpected_when_likeAndAll() {
+		void should_countRaetselWithDeskriptorenReturnExpected_when_likeAndAll() {
 
 			// Arrange
 			String deskriptoren = "8,11";
@@ -191,10 +191,79 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_countRaetselWithSeskriptorenReturnExpected_when_notLikeAndAll() {
+		void should_findRaetselWithDeskriptorenReturnExpected_when_likeAndAllDesc() {
 
 			// Arrange
-			String deskriptoren = "8,11,29";
+			String deskriptoren = "8,11";
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFreigegeben = false;
+
+			// Act
+			List<PersistentesRaetsel> trefferliste = dao.findWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, 20, 0,
+				SortDirection.desc, nurFreigegeben);
+
+			// Assert
+			assertFalse(trefferliste.isEmpty());
+			assertEquals("02816", trefferliste.get(0).schluessel);
+
+		}
+
+		@Test
+		void should_countRaetselWithDeskriptorenReturnExpected_when_likeAndFREIGEGEBEN() {
+
+			// Arrange
+			String deskriptoren = "8,11";
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFreigegeben = true;
+
+			// Act
+			long anzahl = dao.countWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, nurFreigegeben);
+
+			// Assert
+			assertEquals(6, anzahl);
+		}
+
+		@Test
+		void should_findRaetselWithDeskriptorenReturnExpected_when_likeAndFREIGEGEBEN() {
+
+			// Arrange
+			String deskriptoren = "8,11";
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFreigegeben = true;
+
+			// Act
+			List<PersistentesRaetsel> trefferliste = dao.findWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, 20, 0,
+				SortDirection.asc, nurFreigegeben);
+
+			// Assert
+			assertFalse(trefferliste.isEmpty());
+			assertEquals("02604", trefferliste.get(0).schluessel);
+
+		}
+
+		@Test
+		void should_findRaetselWithDeskriptorenReturnExpected_when_likeAndFREIGEGEBENDesc() {
+
+			// Arrange
+			String deskriptoren = "8,11";
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+			boolean nurFreigegeben = true;
+
+			// Act
+			List<PersistentesRaetsel> trefferliste = dao.findWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, 20, 0,
+				SortDirection.desc, nurFreigegeben);
+
+			// Assert
+			assertFalse(trefferliste.isEmpty());
+			assertEquals("02640", trefferliste.get(0).schluessel);
+
+		}
+
+		@Test
+		void should_countRaetselWithDeskriptorenReturnExpected_when_notLikeAndAll() {
+
+			// Arrange
+			String deskriptoren = "8,11";
 			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.NOT_LIKE;
 			boolean nurFreigegeben = false;
 
@@ -208,25 +277,42 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_countRaetselWithSeskriptorenReturnExpected_when_likeAndFREIGEGEBEN() {
+		void should_findRaetselWithDeskriptorenReturnExpected_when_notLikeAndAll() {
 
 			// Arrange
-			String deskriptoren = "8,11,29";
-			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
-			boolean nurFreigegeben = true;
+			String deskriptoren = "8,11";
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.NOT_LIKE;
+			boolean nurFreigegeben = false;
 
-			// Act
-			long anzahl = dao.countWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, nurFreigegeben);
+			List<PersistentesRaetsel> trefferliste = dao.findWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, 50, 0,
+				SortDirection.asc, nurFreigegeben);
 
 			// Assert
-			assertEquals(6, anzahl);
+			assertEquals(50, trefferliste.size());
+			assertEquals("00000", trefferliste.get(0).schluessel);
 		}
 
 		@Test
-		void should_countRaetselWithSeskriptorenReturnExpected_when_notLikeAndFREIGEGEBEN() {
+		void should_findRaetselWithDeskriptorenReturnExpected_when_notLikeAndAllDesc() {
 
 			// Arrange
-			String deskriptoren = "8,11,29";
+			String deskriptoren = "8,11";
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.NOT_LIKE;
+			boolean nurFreigegeben = false;
+
+			List<PersistentesRaetsel> trefferliste = dao.findWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, 50, 0,
+				SortDirection.desc, nurFreigegeben);
+
+			// Assert
+			assertEquals(50, trefferliste.size());
+			assertEquals("99999", trefferliste.get(0).schluessel);
+		}
+
+		@Test
+		void should_countRaetselWithDeskriptorenReturnExpected_when_notLikeAndFREIGEGEBEN() {
+
+			// Arrange
+			String deskriptoren = "8,11";
 			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.NOT_LIKE;
 			boolean nurFreigegeben = true;
 
@@ -234,10 +320,158 @@ public class RaetselDaoImplTest {
 			long anzahl = dao.countWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, nurFreigegeben);
 
 			// Assert
-			// da währen des gesamten Tests auch neue Rätsel generiert und freigegeben werden, kann man auf Basis der Ausgangsdaten
-			// nur eine untere
+			// da währen des gesamten Tests auch neue Rätsel generiert werden, kann man auf Basis der Ausgangsdaten nur eine untere
 			// Schranke erwarten.
 			assertTrue(anzahl >= 25);
+		}
+
+		@Test
+		void should_findRaetselWithDeskriptorenReturnExpected_when_notLikeAndFREIGEGEBEN() {
+
+			// Arrange
+			String deskriptoren = "8,11";
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.NOT_LIKE;
+			boolean nurFreigegeben = true;
+
+			List<PersistentesRaetsel> trefferliste = dao.findWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, 25, 0,
+				SortDirection.asc, nurFreigegeben);
+
+			// Assert
+			assertEquals(25, trefferliste.size());
+			assertEquals("01219", trefferliste.get(0).schluessel);
+		}
+
+		@Test
+		void should_findRaetselWithDeskriptorenReturnExpected_when_notLikeAndFREIGEGEBENDesc() {
+
+			// Arrange
+			String deskriptoren = "8,11";
+			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.NOT_LIKE;
+			boolean nurFreigegeben = true;
+
+			List<PersistentesRaetsel> trefferliste = dao.findWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, 25, 0,
+				SortDirection.desc, nurFreigegeben);
+
+			// Assert
+			assertEquals(25, trefferliste.size());
+			assertEquals("02641", trefferliste.get(0).schluessel);
+		}
+	}
+
+	@Nested
+	class SelectCorrectQueryTests {
+
+		@Test
+		void suchmodusLikeAllAsc() {
+
+			// Arrange
+			SuchmodusDeskriptoren suchmodus = SuchmodusDeskriptoren.LIKE;
+			SortDirection sortDirection = SortDirection.asc;
+			boolean nurFreigegebene = false;
+
+			// Assert
+			assertEquals(PersistentesRaetsel.FIND_WITH_DESKRIPTOREN,
+				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
+
+		}
+
+		@Test
+		void suchmodusLikeAllDesc() {
+
+			// Arrange
+			SuchmodusDeskriptoren suchmodus = SuchmodusDeskriptoren.LIKE;
+			SortDirection sortDirection = SortDirection.desc;
+			boolean nurFreigegebene = false;
+
+			// Assert
+			assertEquals(PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC,
+				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
+
+		}
+
+		@Test
+		void suchmodusLikeFreigegebeneAsc() {
+
+			// Arrange
+			SuchmodusDeskriptoren suchmodus = SuchmodusDeskriptoren.LIKE;
+			SortDirection sortDirection = SortDirection.asc;
+			boolean nurFreigegebene = true;
+
+			// Assert
+			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN,
+				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
+
+		}
+
+		@Test
+		void suchmodusLikeFreigegebeneDesc() {
+
+			// Arrange
+			SuchmodusDeskriptoren suchmodus = SuchmodusDeskriptoren.LIKE;
+			SortDirection sortDirection = SortDirection.desc;
+			boolean nurFreigegebene = true;
+
+			// Assert
+			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC,
+				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
+
+		}
+
+		// ////
+		@Test
+		void suchmodusNotLikeAllAsc() {
+
+			// Arrange
+			SuchmodusDeskriptoren suchmodus = SuchmodusDeskriptoren.NOT_LIKE;
+			SortDirection sortDirection = SortDirection.asc;
+			boolean nurFreigegebene = false;
+
+			// Assert
+			assertEquals(PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN,
+				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
+
+		}
+
+		@Test
+		void suchmodusNotLikeAllDesc() {
+
+			// Arrange
+			SuchmodusDeskriptoren suchmodus = SuchmodusDeskriptoren.NOT_LIKE;
+			SortDirection sortDirection = SortDirection.desc;
+			boolean nurFreigegebene = false;
+
+			// Assert
+			assertEquals(PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN_DESC,
+				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
+
+		}
+
+		@Test
+		void suchmodusNotLikeFreigegebeneAsc() {
+
+			// Arrange
+			SuchmodusDeskriptoren suchmodus = SuchmodusDeskriptoren.NOT_LIKE;
+			SortDirection sortDirection = SortDirection.asc;
+			boolean nurFreigegebene = true;
+
+			// Assert
+			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN,
+				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
+
+		}
+
+		@Test
+		void suchmodusNotLikeFreigegebeneDesc() {
+
+			// Arrange
+			SuchmodusDeskriptoren suchmodus = SuchmodusDeskriptoren.NOT_LIKE;
+			SortDirection sortDirection = SortDirection.desc;
+			boolean nurFreigegebene = true;
+
+			// Assert
+			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN_DESC,
+				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
+
 		}
 
 	}

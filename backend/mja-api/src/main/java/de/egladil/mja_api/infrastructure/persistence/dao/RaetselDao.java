@@ -26,7 +26,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
 
 /**
  * RaetselDao
@@ -236,37 +235,80 @@ public class RaetselDao {
 
 		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
-		LOGGER.debug("deskriptoren={}, suchmodus={}, limit={}, offset={}", wrappedDeskriptoren, suchmodusDeskriptoren, limit,
-			offset);
+		String queryName = queryNameFilteredSearch(suchmodusDeskriptoren, sortDirection, nurFreigegebene);
 
-		String queryName = null;
-
-		if (nurFreigegebene) {
-
-			queryName = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC
-				: PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN;
-		} else {
-
-			queryName = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC
-				: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN;
-		}
-
-		TypedQuery<PersistentesRaetsel> query = entityManager.createNamedQuery(queryName, PersistentesRaetsel.class)
-			.setParameter("deskriptoren", wrappedDeskriptoren);
+		LOGGER.info("deskriptoren={}, suchmodus={}, limit={}, offset={}, queryName={}", wrappedDeskriptoren, suchmodusDeskriptoren,
+			limit,
+			offset, queryName);
 
 		if (nurFreigegebene) {
 
-			return query
+			return entityManager.createNamedQuery(queryName, PersistentesRaetsel.class)
+				.setParameter("deskriptoren", wrappedDeskriptoren)
 				.setParameter("status", DomainEntityStatus.FREIGEGEBEN)
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.getResultList();
 		}
 
-		return query
+		return entityManager.createNamedQuery(queryName, PersistentesRaetsel.class)
+			.setParameter("deskriptoren", wrappedDeskriptoren)
 			.setFirstResult(offset)
 			.setMaxResults(limit)
 			.getResultList();
+	}
+
+	String queryNameFilteredSearch(final SuchmodusDeskriptoren suchmodusDeskriptoren, final SortDirection sortDirection, final boolean nurFreigegebene) {
+
+		switch (suchmodusDeskriptoren) {
+
+		case LIKE: {
+
+			switch (sortDirection) {
+
+			case asc: {
+
+				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN
+					: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN;
+			}
+
+			case desc: {
+
+				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC
+					: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC;
+			}
+
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + sortDirection);
+			}
+		}
+
+		case NOT_LIKE: {
+
+			switch (sortDirection) {
+
+			case asc: {
+
+				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN
+					: PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN;
+			}
+
+			case desc: {
+
+				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN_DESC
+					: PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN_DESC;
+			}
+
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + sortDirection);
+			}
+
+		}
+
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + suchmodusDeskriptoren);
+		}
+
 	}
 
 	/**
