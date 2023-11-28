@@ -26,6 +26,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 /**
  * RaetselDao
@@ -235,36 +236,34 @@ public class RaetselDao {
 
 		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
-		LOGGER.debug("[deskriptoren=" + wrappedDeskriptoren + "]");
+		LOGGER.debug("deskriptoren={}, suchmodus={}, limit={}, offset={}", wrappedDeskriptoren, suchmodusDeskriptoren, limit,
+			offset);
 
-		String queryId = null;
+		String queryName = null;
 
 		if (nurFreigegebene) {
 
-			queryId = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC
+			queryName = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC
 				: PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN;
 		} else {
 
-			queryId = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC
+			queryName = sortDirection == SortDirection.desc ? PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC
 				: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN;
 		}
 
+		TypedQuery<PersistentesRaetsel> query = entityManager.createNamedQuery(queryName, PersistentesRaetsel.class)
+			.setParameter("deskriptoren", wrappedDeskriptoren);
+
 		if (nurFreigegebene) {
 
-			System.out.println("mit status: " + wrappedDeskriptoren);
-
-			return entityManager.createNamedQuery(queryId, PersistentesRaetsel.class)
-				.setParameter("deskriptoren", wrappedDeskriptoren)
+			return query
 				.setParameter("status", DomainEntityStatus.FREIGEGEBEN)
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.getResultList();
 		}
 
-		System.out.println("alle: " + wrappedDeskriptoren);
-
-		return entityManager.createNamedQuery(queryId, PersistentesRaetsel.class)
-			.setParameter("deskriptoren", wrappedDeskriptoren)
+		return query
 			.setFirstResult(offset)
 			.setMaxResults(limit)
 			.getResultList();

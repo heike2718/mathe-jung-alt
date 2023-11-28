@@ -23,6 +23,7 @@ import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
+import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.quellen.QuellenService;
@@ -320,6 +321,14 @@ public class RaetselService {
 		if (raetsel == null) {
 
 			return null;
+		}
+
+		if (raetsel.filenameVorschauFrage == null || raetsel.filenameVorschauLoesung == null) {
+
+			LOGGER.error(
+				"{}: Datenfehler Filenames für Vorschau wurden noch nicht generiert und persistiert! Sollte auf PROD seit 2.3.2 nicht mehr vorkommen :)",
+				raetsel.schluessel);
+			throw new MjaRuntimeException("Filenames für Vorschau wurden noch nicht generiert und persistiert!");
 		}
 
 		Raetsel result = mapFromDB(raetsel);

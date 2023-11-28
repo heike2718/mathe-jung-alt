@@ -161,7 +161,7 @@ public class RaetselDaoImplTest {
 		void should_countRaetselWithSeskriptorenReturnExpected_when_likeAndAll() {
 
 			// Arrange
-			String deskriptoren = "8,11,29";
+			String deskriptoren = "8,11";
 			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
 			boolean nurFreigegeben = false;
 
@@ -176,17 +176,17 @@ public class RaetselDaoImplTest {
 		void should_findRaetselWithDeskriptorenReturnExpected_when_likeAndAll() {
 
 			// Arrange
-			String deskriptoren = "8,11,29";
+			String deskriptoren = "8,11";
 			SuchmodusDeskriptoren suchmodusDeskriptoren = SuchmodusDeskriptoren.LIKE;
 			boolean nurFreigegeben = false;
 
 			// Act
-			List<PersistentesRaetsel> trefferliste = dao.findWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, 0, 10,
+			List<PersistentesRaetsel> trefferliste = dao.findWithDeskriptoren(deskriptoren, suchmodusDeskriptoren, 20, 0,
 				SortDirection.asc, nurFreigegeben);
 
 			// Assert
 			assertFalse(trefferliste.isEmpty());
-			assertEquals("", trefferliste.get(0).schluessel);
+			assertEquals("02540", trefferliste.get(0).schluessel);
 
 		}
 

@@ -477,7 +477,7 @@ public class RaetselResourceTest {
 		// Methode RaetselResource.raetselPDFGenerieren()
 
 		given().accept(ContentType.JSON)
-			.get("PDF/69959982-83f9-482d-a26c-8eb4a92bd6ff/v1?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(400);
+			.get("PDF/69959982-83f9-482d-a26c-8eb4a92bd6ff/v1?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(500);
 
 	}
 
@@ -525,7 +525,7 @@ public class RaetselResourceTest {
 			.accept(ContentType.JSON)
 			.post("PNG/69959982-83f9-482d-a26c-8eb4a92bd6ff/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
 			.then()
-			.statusCode(400);
+			.statusCode(500);
 
 	}
 

@@ -20,7 +20,6 @@ import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
-import de.egladil.mja_api.domain.generatoren.RaetselGeneratorService;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
@@ -39,12 +38,12 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
- * RaetselGeneratorServiceImpl
+ * RaetselGeneratorService
  */
 @ApplicationScoped
-public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
+public class RaetselGeneratorService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselGeneratorServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselGeneratorService.class);
 
 	private static List<String> TEMPORARY_FILE_EXTENSIONS = Arrays.asList(new String[] { ".aux", ".log", ".out", ".tex", "" });
 
@@ -67,7 +66,18 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 	@Inject
 	RaetselFileService raetselFileService;
 
-	@Override
+	/**
+	 * Generiert den output des Raetsels im gewünschten Format und gibt die Url als String zurück. Nur user mit Änderungsrecht auf
+	 * das Rätsel dürfen diese Methode aufrufen.
+	 *
+	 * @param  raetselUuid
+	 *                                  String
+	 * @param  layoutAntwortvorschlaege
+	 *                                  AnzeigeAntwortvorschlaegeTyp
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
+	 * @return
+	 */
 	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
 
 		LOGGER.debug("start generate output");
@@ -184,7 +194,16 @@ public class RaetselGeneratorServiceImpl implements RaetselGeneratorService {
 		}
 	}
 
-	@Override
+	/**
+	 * Generiert das Rätsel als 2seitiges PDF: Frage auf Seite 1, Lösung auf Seite 2. Minderprivilegierte User bekommen nur bei
+	 * freigegebenen Rätseln ein PDF.
+	 *
+	 * @param  raetselUuid
+	 * @param  layoutAntwortvorschlaege
+	 * @param  schriftgroesse
+	 *                                  Schriftgroesse
+	 * @return                          GeneratedFile
+	 */
 	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
 
 		LOGGER.debug("start generate output");
