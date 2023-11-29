@@ -23,6 +23,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
+import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -36,25 +38,36 @@ import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import jakarta.persistence.EnumType;
 
 /**
- * RaetselResourceTest
+ * AdminRaetselResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(RaetselResource.class)
 @TestProfile(FullDatabaseTestProfile.class)
 @TestMethodOrder(OrderAnnotation.class)
-public class RaetselResourceTest {
+public class AdminRaetselResourceTest {
 
 	private static final String CSRF_TOKEN = "lqhidhqio";
 
+	private String suchstring = "Kinder%20Tiere%20pflanzen%20Kreis%20Monat%20Spielzeug%20Kekse%20Känguru";
+
+	private String deskriptoren = "8,11";
+
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
-	@Order(1)
-	void testFindRaetselMitDeskriptorenUndSuchstring() throws Exception {
+	@Order(3)
+	void testFindRaetselAdminDeskriptorenAlsStringUndSuchstring() throws Exception {
 
 		RaetselsucheTreffer suchergebnis = given()
-			.when().get("admin/v2?deskriptoren=Minikänguru,A-1&suchstring=zählen&typeDeskriptoren=STRING")
+			.queryParam("deskriptoren", "Minikänguru,A-1")
+			.queryParam("suchstring", "zählen")
+			.queryParam("modus", SuchmodusVolltext.UNION.toString())
+			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.LIKE.toString())
+			.queryParam("typeDeskriptoren", EnumType.STRING.toString())
+			.when()
+			.get("admin/v2")
 			.then()
 			.statusCode(200)
 			.and()
@@ -75,109 +88,17 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
-	@Order(2)
-	void testFindRaetselMitDeskriptorenNumerischUndSuchstring() throws Exception {
-
-		// Volltextsuche unterscheidet nicht zwischen zahlen und zählen!
-
-		RaetselsucheTreffer suchergebnis = given()
-			.when().get("admin/v2?deskriptoren=2,9,13&suchstring=zählen&typeDeskriptoren=ORDINAL")
-			.then()
-			.statusCode(200)
-			.and()
-			.extract()
-			.as(RaetselsucheTreffer.class);
-
-		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
-
-		assertEquals(6, alleRaetsel.size());
-		assertEquals(6, suchergebnis.getTrefferGesamt());
-
-		{
-
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(0);
-			assertEquals("4bfbb290-c808-4263-94f5-2fa19017cad1", raetsel.getId());
-			assertEquals("01219", raetsel.getSchluessel());
-		}
-
-		{
-
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(1);
-			assertEquals("08dc5237-505d-4db2-b5f9-3fd3d74981e0", raetsel.getId());
-			assertEquals("02602", raetsel.getSchluessel());
-		}
-
-		{
-
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(2);
-			assertEquals("a538e000-13a3-4f47-bd71-5d3cf48ad79e", raetsel.getId());
-			assertEquals("02624", raetsel.getSchluessel());
-		}
-	}
-
-	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
-	@Order(2)
-	void testFindRaetselMitDeskriptorenNumerischUndSuchstringAndUNION() throws Exception {
-
-		RaetselsucheTreffer suchergebnis = given()
-			.when().get("admin/v2?deskriptoren=1,2&suchstring=Äpfel%20Tiere&typeDeskriptoren=ORDINAL&modus=UNION")
-			.then()
-			.statusCode(200)
-			.and()
-			.extract()
-			.as(RaetselsucheTreffer.class);
-
-		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
-
-		assertEquals(3, alleRaetsel.size());
-		assertEquals(3, suchergebnis.getTrefferGesamt());
-
-		assertEquals("02613", alleRaetsel.get(0).getSchluessel());
-		assertEquals("02785", alleRaetsel.get(1).getSchluessel());
-		assertEquals("02818", alleRaetsel.get(2).getSchluessel());
-	}
-
-	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
-	@Order(3)
-	void testFindRaetselMitSuchstring() throws Exception {
-
-		RaetselsucheTreffer suchergebnis = given()
-			.when().get("admin/v2?suchstring=zählen&typeDeskriptoren=ORDINAL&modus=INTERSECTION")
-			.then()
-			.statusCode(200)
-			.and()
-			.extract()
-			.as(RaetselsucheTreffer.class);
-
-		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
-
-		assertEquals(17, alleRaetsel.size());
-		assertEquals(17, suchergebnis.getTrefferGesamt());
-
-		{
-
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(0);
-			assertEquals("4bfbb290-c808-4263-94f5-2fa19017cad1", raetsel.getId());
-			assertEquals("01219", raetsel.getSchluessel());
-		}
-
-		{
-
-			RaetselsucheTrefferItem raetsel = alleRaetsel.get(1);
-			assertEquals("57d53a52-9609-46b2-bbfb-7e3d9e1983b5", raetsel.getId());
-			assertEquals("02596", raetsel.getSchluessel());
-		}
-	}
-
-	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(4)
-	void testFindRaetselMitSuchstringKeinTreffer() {
+	void testFindRaetselAdminKeinTreffer() {
 
 		RaetselsucheTreffer suchergebnis = given()
-			.when().get("admin/v2?suchstring=holleriedidudeldö&typeDeskriptoren=STRING&modus=UNION")
+			.queryParam("deskriptoren", "Minikänguru,A-1")
+			.queryParam("suchstring", "holleriedidudeldö")
+			.queryParam("modus", SuchmodusVolltext.UNION.toString())
+			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.LIKE.toString())
+			.queryParam("typeDeskriptoren", EnumType.STRING.toString())
+			.when()
+			.get("admin/v2")
 			.then()
 			.statusCode(200)
 			.and()
@@ -191,9 +112,163 @@ public class RaetselResourceTest {
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
 	@Order(5)
+	void findRaetselAdmin_when_UNION_AND_LIKE() throws Exception {
+
+		RaetselsucheTreffer suchergebnis = given()
+			.queryParam("deskriptoren", deskriptoren)
+			.queryParam("suchstring", suchstring)
+			.queryParam("modus", SuchmodusVolltext.UNION.toString())
+			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.LIKE.toString())
+			.queryParam("typeDeskriptoren", EnumType.ORDINAL.toString())
+			.when()
+			.get("admin/v2")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
+
+		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+		assertEquals(8, alleRaetsel.size());
+		assertEquals(8, suchergebnis.getTrefferGesamt());
+
+		assertEquals("02604", alleRaetsel.get(0).getSchluessel());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@Order(5)
+	void findRaetselAdmin_when_fallbackToDefaults() throws Exception {
+
+		RaetselsucheTreffer suchergebnis = given()
+			.queryParam("deskriptoren", deskriptoren)
+			.queryParam("suchstring", suchstring)
+			.queryParam("typeDeskriptoren", EnumType.ORDINAL.toString())
+			.when()
+			.get("admin/v2")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
+
+		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+		assertEquals(8, alleRaetsel.size());
+		assertEquals(8, suchergebnis.getTrefferGesamt());
+
+		assertEquals("02604", alleRaetsel.get(0).getSchluessel());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@Order(5)
+	void findRaetselAdmin_when_deskriptorenUndSuchstringBlank() throws Exception {
+
+		RaetselsucheTreffer suchergebnis = given()
+			.queryParam("typeDeskriptoren", EnumType.ORDINAL.toString())
+			.when()
+			.get("admin/v2")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
+
+		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+		assertEquals(0, alleRaetsel.size());
+		assertEquals(0, suchergebnis.getTrefferGesamt());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@Order(6)
+	void findRaetselAdmin_when_UNION_AND_NOT_LIKE() throws Exception {
+
+		RaetselsucheTreffer suchergebnis = given()
+			.queryParam("deskriptoren", deskriptoren)
+			.queryParam("suchstring", suchstring)
+			.queryParam("modus", SuchmodusVolltext.UNION.toString())
+			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.NOT_LIKE.toString())
+			.queryParam("typeDeskriptoren", EnumType.ORDINAL.toString())
+			.queryParam("limit", "20")
+			.when()
+			.get("admin/v2")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
+
+		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+		assertEquals(16, alleRaetsel.size());
+		assertEquals(16, suchergebnis.getTrefferGesamt());
+
+		assertEquals("02516", alleRaetsel.get(0).getSchluessel());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@Order(7)
+	void findRaetselAdmin_when_INTERSECTION_AND_LIKE() throws Exception {
+
+		RaetselsucheTreffer suchergebnis = given()
+			.queryParam("deskriptoren", "8")
+			.queryParam("suchstring", "zahl%20känguru")
+			.queryParam("modus", SuchmodusVolltext.INTERSECTION.toString())
+			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.LIKE.toString())
+			.queryParam("typeDeskriptoren", EnumType.ORDINAL.toString())
+			.when()
+			.get("admin/v2")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
+
+		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+		assertEquals(3, alleRaetsel.size());
+		assertEquals(3, suchergebnis.getTrefferGesamt());
+
+		assertEquals("02604", alleRaetsel.get(0).getSchluessel());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@Order(8)
+	void findRaetselAdmin_when_INTERSECTION_AND_NOT_LIKE() throws Exception {
+
+		RaetselsucheTreffer suchergebnis = given()
+			.queryParam("deskriptoren", "6")
+			.queryParam("suchstring", "zahl%20känguru")
+			.queryParam("modus", SuchmodusVolltext.INTERSECTION.toString())
+			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.NOT_LIKE.toString())
+			.queryParam("typeDeskriptoren", EnumType.ORDINAL.toString())
+			.when()
+			.get("admin/v2")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(RaetselsucheTreffer.class);
+
+		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+		assertEquals(3, alleRaetsel.size());
+		assertEquals(3, suchergebnis.getTrefferGesamt());
+
+		assertEquals("02604", alleRaetsel.get(0).getSchluessel());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@Order(9)
 	void testFindFromMinikaenguruWithCoordinates() throws Exception {
 
-		RaetselsucheTreffer suchergebnis = given().when().get("admin/v2?deskriptoren=2,6,47,78&typeDeskriptoren=ORDINAL")
+		RaetselsucheTreffer suchergebnis = given()
+			.queryParam("deskriptoren", "2,6,47,78")
+			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.LIKE.toString())
+			.queryParam("typeDeskriptoren", EnumType.ORDINAL.toString())
+			.when()
+			.get("admin/v2")
 			.then()
 			.statusCode(200)
 			.and()
@@ -212,10 +287,15 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
-	@Order(6)
+	@Order(10)
 	void testFindWithSchluessel() throws Exception {
 
-		RaetselsucheTreffer suchergebnis = given().when().get("admin/v2?suchstring=02790&typeDeskriptoren=ORDINAL").then()
+		RaetselsucheTreffer suchergebnis = given()
+			.queryParam("suchstring", "02790")
+			.queryParam("typeDeskriptoren", EnumType.ORDINAL.toString())
+			.when()
+			.get("admin/v2")
+			.then()
 			.statusCode(200)
 			.and()
 			.extract()
@@ -233,7 +313,7 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR", "STANDARD" })
-	@Order(7)
+	@Order(11)
 	void testRaetselDetailsLadenFound() throws Exception {
 
 		Raetsel treffer = given()
@@ -249,7 +329,7 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
-	@Order(8)
+	@Order(12)
 	void testRaetselDetailsLadenNotFound() throws Exception {
 
 		given()
@@ -260,7 +340,7 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(9)
+	@Order(13)
 	void testRaetselAnlegen() throws Exception {
 
 		try (InputStream in = getClass().getResourceAsStream("/payloads/EditRaetselPayloadInsert.json");
@@ -300,7 +380,7 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(10)
+	@Order(14)
 	void testRaetselAendern() throws Exception {
 
 		try (InputStream in = getClass().getResourceAsStream("/payloads/EditRaetselPayloadUpdate.json");
@@ -340,7 +420,7 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(11)
+	@Order(15)
 	void testRaetselAendern404() throws Exception {
 
 		try (InputStream in = getClass().getResourceAsStream("/payloads/EditRaetselPayloadUpdate404.json");
@@ -372,7 +452,7 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(12)
+	@Order(16)
 	void testRaetselAnlegen409() throws Exception {
 
 		try (InputStream in = getClass().getResourceAsStream("/payloads/EditRaetselPayloadInsertUKViolation.json");
@@ -410,7 +490,7 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(13)
+	@Order(17)
 	void testRaetselAendern409() throws Exception {
 
 		try (InputStream in = getClass().getResourceAsStream("/payloads/EditRaetselPayloadUpdateUKViolation.json");
@@ -447,67 +527,91 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "standard", roles = { "STANDARD" })
-	@Order(14)
+	@Order(18)
 	void testGeneratePDF() {
 
 		// Methode RaetselResource.raetselPDFGenerieren()
 
 		given().accept(ContentType.JSON)
-			.get("PDF/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(200);
-
+			.queryParam("layoutAntwortvorschlaege", "ANKREUZTABELLE")
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.accept(ContentType.JSON)
+			.get("PDF/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON);
 	}
 
 	@Test
 	@TestSecurity(user = "standard", roles = { "STANDARD" })
-	@Order(14)
+	@Order(19)
 	void testGeneratePDFLaTeXKaputt() {
 
 		// Methode RaetselResource.raetselPDFGenerieren()
 
-		given().accept(ContentType.JSON)
-			.get("PDF/69682087-be49-498f-b9ee-1636978aefc0/v1?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(500);
+		given()
+			.queryParam("layoutAntwortvorschlaege", "ANKREUZTABELLE")
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.accept(ContentType.JSON)
+			.get("PDF/69682087-be49-498f-b9ee-1636978aefc0/v1")
+			.then()
+			.statusCode(500);
 
 	}
 
 	@Test
 	@TestSecurity(user = "standard", roles = { "STANDARD" })
-	@Order(14)
+	@Order(20)
 	void testGeneratePDFGrafikFehlt() {
 
 		// Methode RaetselResource.raetselPDFGenerieren()
 
-		given().accept(ContentType.JSON)
-			.get("PDF/69959982-83f9-482d-a26c-8eb4a92bd6ff/v1?layoutAntwortvorschlaege=ANKREUZTABELLE").then().statusCode(500);
+		given()
+			.queryParam("layoutAntwortvorschlaege", "ANKREUZTABELLE")
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.accept(ContentType.JSON)
+			.get("PDF/69959982-83f9-482d-a26c-8eb4a92bd6ff/v1")
+			.then()
+			.statusCode(500);
 
 	}
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(15)
+	@Order(21)
 	void testGeneratePNG() {
 
 		given()
+			.queryParam("layoutAntwortvorschlaege", "ANKREUZTABELLE")
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
-			.post("PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.post("PNG/a4c4d45e-4a81-4bde-a6a3-54464801716d/v1")
 			.then()
-			.statusCode(200);
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.and()
+			.extract()
+			.as(Images.class);
 
 	}
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(15)
+	@Order(22)
 	void testGeneratePNGLaTeXInvalid() {
 
 		given()
+			.queryParam("layoutAntwortvorschlaege", "ANKREUZTABELLE")
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
-			.post("PNG/69682087-be49-498f-b9ee-1636978aefc0/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.post("PNG/69682087-be49-498f-b9ee-1636978aefc0/v1")
 			.then()
 			.statusCode(500);
 
@@ -515,22 +619,22 @@ public class RaetselResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(15)
+	@Order(23)
 	void testGeneratePNGGrafikFehlt() {
 
 		given()
+			.queryParam("layoutAntwortvorschlaege", "ANKREUZTABELLE")
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
-			.post("PNG/69959982-83f9-482d-a26c-8eb4a92bd6ff/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
+			.post("PNG/69959982-83f9-482d-a26c-8eb4a92bd6ff/v1")
 			.then()
 			.statusCode(500);
 
 	}
 
 	@Test
-	@Order(16)
+	@Order(24)
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	void testLoadImages() {
 
@@ -538,42 +642,68 @@ public class RaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "lehrer", roles = { "LEHRER" })
-	@Order(17)
-	void testGeneratePDFKeinTreffer() {
-
-		given().get("PDF/2222222-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=BUCHSTABEN").then().statusCode(404);
-
-	}
-
-	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
-	@Order(18)
+	@Order(26)
 	void testGeneratePNGKeinTreffer() {
 
 		given()
+			.queryParam("layoutAntwortvorschlaege", "ANKREUZTABELLE")
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
-			.post("PNG/2222222-4a81-4bde-a6a3-54464801716d/v1?layoutAntwortvorschlaege=ANKREUZTABELLE")
-			.then().statusCode(404);
+			.post("PNG/2222222-4a81-4bde-a6a3-54464801716d/v1")
+			.then()
+			.statusCode(404);
 	}
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(19)
+	@Order(27)
 	void testLoadImagesKeinTreffer() throws Exception {
 
-		Response response = given().accept(ContentType.JSON).get("PNG/76767/v1");
-
-		response.then().statusCode(200);
-
-		String responsePayload = response.asString();
-		Images dto = new ObjectMapper().readValue(responsePayload, Images.class);
+		Images dto = given()
+			.accept(ContentType.JSON)
+			.get("PNG/76767/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.and()
+			.extract()
+			.as(Images.class);
 
 		assertNull(dto.getImageFrage());
 		assertNull(dto.getImageLoesung());
 	}
 
+	@Test
+	@TestSecurity(user = "lehrer", roles = { "LEHRER" })
+	@Order(25)
+	void testGeneratePDFKeinTreffer() {
+
+		given()
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.accept(ContentType.JSON)
+			.get("PDF/2222222-4a81-4bde-a6a3-54464801716d/v1")
+			.then()
+			.statusCode(404);
+
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(26)
+	void testDownloadLaTeXLogFiles() {
+
+		given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.accept(ContentType.JSON)
+			.get("latexlogs/02817/v1")
+			.then()
+			.statusCode(200);
+
+	}
 }

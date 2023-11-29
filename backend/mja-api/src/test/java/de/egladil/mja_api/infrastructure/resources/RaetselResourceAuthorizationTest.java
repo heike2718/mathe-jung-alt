@@ -22,7 +22,7 @@ import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 /**
- * RaetselResourceTest
+ * AdminRaetselResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(RaetselResource.class)

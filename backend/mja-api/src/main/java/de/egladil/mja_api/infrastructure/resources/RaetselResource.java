@@ -98,7 +98,7 @@ public class RaetselResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "deskriptoren",
-			description = "kommaseparierte Liste von Deskriptoren-Identifizierern. Je nach Modus wird mit AND oder OR gesucht."),
+			description = "kommaseparierte Liste von Deskriptoren-Identifizierern. Bei typeDeskriptoren=ORDINAL die technischen IDs sonst der Name. Je nach Modus wird mit AND oder OR gesucht."),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "modus", description = "INTERSECTION | UNION. Default ist UNION"),
@@ -107,15 +107,16 @@ public class RaetselResource {
 			name = "modusDeskriptoren", description = "LIKE | NOT_LIKE. Default ist LIKE"),
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
+			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden ORDINAL | STRING",
+			required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "limit",
-			description = "Pagination: pageSize"),
+			description = "Pagination: pageSize - default ist 20"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "offset",
-			description = "Pagination: pageIndex"),
+			description = "Pagination: pageIndex - default ist 0"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "sortDirection",
@@ -134,8 +135,8 @@ public class RaetselResource {
 		@QueryParam(value = "deskriptoren") @Pattern(
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
-		@QueryParam(value = "modus") final SuchmodusVolltext modus,
-		@QueryParam(value = "modusDeskriptoren") final SuchmodusDeskriptoren modusDeskriptoren,
+		@QueryParam(value = "modus") @DefaultValue("UNION") final SuchmodusVolltext modus,
+		@QueryParam(value = "modusDeskriptoren") @DefaultValue("LIKE") final SuchmodusDeskriptoren modusDeskriptoren,
 		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
@@ -158,13 +159,9 @@ public class RaetselResource {
 			theSuchstring = suchstring.replaceAll("%20", " ");
 		}
 
-		SuchmodusVolltext theModus = modus == null ? SuchmodusVolltext.getDefault() : modus;
-		SuchmodusDeskriptoren theModusDeskriptoren = modusDeskriptoren == null ? SuchmodusDeskriptoren.getDefault()
-			: modusDeskriptoren;
-
 		Suchfilter suchfilter = new Suchfilter(theSuchstring, deskriptorenOrdinal);
-		suchfilter.setModusVolltext(theModus);
-		suchfilter.setModusDeskriptoren(theModusDeskriptoren);
+		suchfilter.setModusVolltext(modus);
+		suchfilter.setModusDeskriptoren(modusDeskriptoren);
 
 		return raetselService.sucheRaetsel(suchfilter, limit, offset,
 			sortDirection);
@@ -181,15 +178,19 @@ public class RaetselResource {
 			name = "deskriptoren", description = "kommaseparierte Liste von Deskriptoren-Identifizierern"),
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)"),
+			name = "modusDeskriptoren", description = "LIKE | NOT_LIKE. Default ist LIKE"),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)",
+			required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "limit",
-			description = "Pagination: pageSize"),
+			description = "Pagination: pageSize - default ist 20"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "offset",
-			description = "Pagination: pageIndex"),
+			description = "Pagination: pageIndex - default ist 0"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "sortDirection",
@@ -209,6 +210,7 @@ public class RaetselResource {
 		@QueryParam(value = "deskriptoren") @Pattern(
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
+		@QueryParam(value = "modusDeskriptoren") @DefaultValue("LIKE") final SuchmodusDeskriptoren modusDeskriptoren,
 		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
@@ -224,7 +226,10 @@ public class RaetselResource {
 			return new RaetselsucheTreffer();
 		}
 
-		return raetselService.sucheRaetsel(new Suchfilter(null, deskriptorenOrdinal), limit, offset,
+		Suchfilter suchfilter = new Suchfilter(null, deskriptorenOrdinal);
+		suchfilter.setModusDeskriptoren(modusDeskriptoren);
+
+		return raetselService.sucheRaetsel(suchfilter, limit, offset,
 			sortDirection);
 	}
 
@@ -432,19 +437,15 @@ public class RaetselResource {
 	public Images raetselImagesGenerieren(
 		@Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
-		@QueryParam(value = "font") final FontName font,
-		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
+		@QueryParam(value = "font") @DefaultValue("STANDARD") final FontName font,
+		@QueryParam(value = "size") @DefaultValue("NORMAL") final Schriftgroesse schriftgroesse) {
 	// @formatter:on
 
 		this.delayService.pause();
 
-		FontName theFont = font != null ? font : FontName.STANDARD;
-		Schriftgroesse theSchriftgroesse = schriftgroesse != null ? schriftgroesse : Schriftgroesse.NORMAL;
+		LOGGER.debug("font={}, schriftgroesse={}", font, schriftgroesse);
 
-		LOGGER.info("font={}, theFont={}, schriftgroesse={}, theSchriftgroesse={}", font, theFont, schriftgroesse,
-			theSchriftgroesse);
-
-		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege, theFont, theSchriftgroesse);
+		Images result = generatorService.generatePNGsRaetsel(raetselUuid, layoutAntwortvorschlaege, font, schriftgroesse);
 
 		// jetzt liegt schluessel.png und evtl. schluessel_l.png im latex.base.dir und muss verschoben werden.
 
@@ -493,19 +494,16 @@ public class RaetselResource {
 	public GeneratedFile raetselPDFGenerieren(
 		@Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
-		@QueryParam(value = "font") final FontName font,
-		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
+		@QueryParam(value = "font") @DefaultValue("STANDARD") final FontName font,
+		@QueryParam(value = "size") @DefaultValue("NORMAL") final Schriftgroesse schriftgroesse) {
 	// @formatter:on
 
 		this.delayService.pause();
-		FontName theFont = font != null ? font : FontName.STANDARD;
-		Schriftgroesse theSchriftgroesse = schriftgroesse != null ? schriftgroesse : Schriftgroesse.NORMAL;
 
-		LOGGER.info("font={}, theFont={}, schriftgroesse={}, theSchriftgroesse={}", font, theFont, schriftgroesse,
-			theSchriftgroesse);
+		LOGGER.debug("font={}, schriftgroesse={}", font, schriftgroesse);
 
-		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege, theFont,
-			theSchriftgroesse);
+		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege, font,
+			schriftgroesse);
 		return result;
 	}
 

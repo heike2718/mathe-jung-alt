@@ -559,7 +559,7 @@ public class RaetselDaoImplTest {
 		}
 
 		@Test
-		void should_countRaetselWithFilterReturnExpected_when_AlleINTERSECTIONUndDeskriptorenLIKE_FREIGEGEBEN() {
+		void should_countRaetselWithFilterReturnExpected_when_INTERSECTIONUndDeskriptorenLIKE_FREIGEGEBEN() {
 
 			// Arrange
 			suchstring = "zahl känguru";

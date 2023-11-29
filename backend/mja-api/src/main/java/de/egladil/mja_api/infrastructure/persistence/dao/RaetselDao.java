@@ -184,7 +184,8 @@ public class RaetselDao {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
-		// System.out.println(wrappedDeskriptorenIds);
+		LOGGER.debug("deskriptoren={}, suchmodusDeskriptoren={}, nurFreigegebene={}",
+			wrappedDeskriptorenIds, suchmodusDeskriptoren, nurFreigegebene);
 
 		String stmt = suchmodusDeskriptoren == SuchmodusDeskriptoren.LIKE
 			? "SELECT count(*) FROM RAETSEL r WHERE CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren"
@@ -236,9 +237,12 @@ public class RaetselDao {
 
 		String wrappedDeskriptoren = new SetOperationUtils().prepareForDeskriptorenLikeSearch(deskriptorenIDs);
 
+		LOGGER.debug("deskriptoren={}, suchmodusDeskriptoren={}, nurFreigegebene={}",
+			wrappedDeskriptoren, suchmodusDeskriptoren, nurFreigegebene);
+
 		String queryName = queryNameFilteredSearch(suchmodusDeskriptoren, sortDirection, nurFreigegebene);
 
-		LOGGER.info("deskriptoren={}, suchmodus={}, limit={}, offset={}, queryName={}", wrappedDeskriptoren, suchmodusDeskriptoren,
+		LOGGER.debug("deskriptoren={}, suchmodus={}, limit={}, offset={}, queryName={}", wrappedDeskriptoren, suchmodusDeskriptoren,
 			limit,
 			offset, queryName);
 
@@ -327,6 +331,9 @@ public class RaetselDao {
 
 		String wrappedDeskriptorenIds = new SetOperationUtils().prepareForDeskriptorenLikeSearch(suchfilter.getDeskriptorenIds());
 
+		LOGGER.debug("suchstring={}, deskriptoren={}, suchmodusVolltext={}, suchmodusDeskriptoren={}", suchfilter.getSuchstring(),
+			wrappedDeskriptorenIds, suchfilter.getModusVolltext(), suchfilter.getModusDeskriptoren());
+
 		String[] worte = StringUtils.split(suchfilter.getSuchstring(), ' ');
 
 		String where = this.getVolltextMatcher(worte.length, suchfilter.getModusVolltext())
@@ -339,9 +346,6 @@ public class RaetselDao {
 		}
 
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE " + where;
-
-		// System.out.println(stmt);
-		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
 
 		Query query = this.createQueryAndReplaceSuchparameter(stmt, worte, Long.class).setParameter("deskriptoren",
 			wrappedDeskriptorenIds);

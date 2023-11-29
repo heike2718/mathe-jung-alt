@@ -7,6 +7,10 @@ package de.egladil.mja_api.domain.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
@@ -15,6 +19,8 @@ import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
  * PermissionUtils
  */
 public final class PermissionUtils {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PermissionUtils.class);
 
 	public static final String ROLE_ADMIN = "ADMIN";
 
@@ -33,6 +39,7 @@ public final class PermissionUtils {
 		if (authContext.isUserInRole(ROLE_ADMIN)) {
 
 			roles.add(ROLE_ADMIN);
+
 		}
 
 		if (authContext.isUserInRole(ROLE_AUTOR)) {
@@ -40,6 +47,7 @@ public final class PermissionUtils {
 			roles.add(ROLE_AUTOR);
 		}
 
+		LOGGER.debug("ROLES from authContext: {}", roles.stream().collect(Collectors.joining()));
 		return roles;
 
 	}
@@ -160,10 +168,19 @@ public final class PermissionUtils {
 	 */
 	public static boolean restrictSucheToFreigegeben(final List<String> roles) {
 
+		if (roles != null) {
+
+			LOGGER.debug("ROLES from authContext: {}", roles.stream().collect(Collectors.joining()));
+		}
+
 		if (PermissionUtils.isUserAdmin(roles) || PermissionUtils.isUserAutor(roles)) {
+
+			LOGGER.debug("alle Rätsel");
 
 			return false;
 		}
+
+		LOGGER.debug("nur freigegebene Rätsel");
 
 		return true;
 	}
