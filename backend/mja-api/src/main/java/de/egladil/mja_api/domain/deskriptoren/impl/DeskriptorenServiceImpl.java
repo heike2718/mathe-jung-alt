@@ -131,12 +131,12 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 		if (admin) {
 
 			List<DeskriptorUI> result = nurRaetsel.stream().map(d -> new DeskriptorUI(d.id, d.name)).toList();
-			LOGGER.info("Deskriptoren für admin: Anzahl={}", result.size());
+			LOGGER.debug("Deskriptoren für admin: Anzahl={}", result.size());
 			return result;
 		}
 
 		List<DeskriptorUI> result = nurRaetsel.stream().filter(d -> !d.admin).map(d -> new DeskriptorUI(d.id, d.name)).toList();
-		LOGGER.info("Deskriptoren für public: Anzahl={}", result.size());
+		LOGGER.debug("Deskriptoren für public: Anzahl={}", result.size());
 		return result;
 
 	}

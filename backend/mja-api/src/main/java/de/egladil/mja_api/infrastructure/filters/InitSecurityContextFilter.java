@@ -71,7 +71,8 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 		boolean openData = this.isPathOpenData(path);
 
-		LOGGER.info("stage={}, mockSession={}, path={}, openData={}", configService.getStage(), configService.isMockSession(), path,
+		LOGGER.debug("stage={}, mockSession={}, path={}, openData={}", configService.getStage(), configService.isMockSession(),
+			path,
 			openData);
 
 		if (openData) {

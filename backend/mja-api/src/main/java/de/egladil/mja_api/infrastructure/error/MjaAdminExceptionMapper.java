@@ -36,7 +36,7 @@ public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
 	@Override
 	public Response toResponse(final Throwable exception) {
 
-		LOGGER.info(exception.getMessage(), exception);
+		LOGGER.debug(exception.getMessage(), exception);
 
 		if (exception instanceof LaTeXCompileException) {
 

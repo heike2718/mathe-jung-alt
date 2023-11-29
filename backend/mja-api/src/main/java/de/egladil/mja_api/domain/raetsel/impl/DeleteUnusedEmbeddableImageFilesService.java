@@ -60,10 +60,10 @@ public class DeleteUnusedEmbeddableImageFilesService {
 
 					if (deleted) {
 
-						LOGGER.info("{} wurde geloescht.", pfad);
+						LOGGER.debug("{} wurde geloescht.", pfad);
 					} else {
 
-						LOGGER.info("{} wurde nicht geloescht. Ist vermutlich nicht mehr da gewesen.", pfad);
+						LOGGER.debug("{} wurde nicht geloescht. Ist vermutlich nicht mehr da gewesen.", pfad);
 
 					}
 				} catch (MjaRuntimeException e) {

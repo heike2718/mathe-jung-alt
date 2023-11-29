@@ -392,7 +392,7 @@ public class RaetselgruppenResource {
 		FontName theFont = font == null ? FontName.STANDARD : font;
 		Schriftgroesse theSchriftgroesse = schriftgroesse == null ? Schriftgroesse.NORMAL : schriftgroesse;
 
-		LOGGER.info("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
+		LOGGER.debug("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
 
 		return raetselgruppenService.printVorschau(raetselgruppeID, theFont, theSchriftgroesse, layoutAntwortvorschlaege);
 	}
@@ -492,7 +492,7 @@ public class RaetselgruppenResource {
 		LayoutAntwortvorschlaege theLayout = layoutAntwortvorschlaege == null ? LayoutAntwortvorschlaege.NOOP
 			: layoutAntwortvorschlaege;
 
-		LOGGER.info("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
+		LOGGER.debug("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
 
 		return raetselgruppenService.printArbeitsblattMitLoesungen(raetselgruppeID, theFont, theSchriftgroesse, theLayout);
 	}
@@ -551,7 +551,7 @@ public class RaetselgruppenResource {
 		LayoutAntwortvorschlaege theLayout = layoutAntwortvorschlaege == null ? LayoutAntwortvorschlaege.NOOP
 			: layoutAntwortvorschlaege;
 
-		LOGGER.info("font={}, theFont={}, size={}, theSize={}, theLayout={}", font, theFont, schriftgroesse, theSchriftgroesse,
+		LOGGER.debug("font={}, theFont={}, size={}, theSize={}, theLayout={}", font, theFont, schriftgroesse, theSchriftgroesse,
 			theLayout);
 
 		return raetselgruppenService.printKartei(raetselgruppeID, theFont, theSchriftgroesse, theLayout);

@@ -35,13 +35,13 @@ public class SPARouteFilter {
 	void apiFilter(final RoutingContext rc) {
 
 		final String path = rc.normalizedPath();
-		LOGGER.info("Check reroute with path: " + path);
+		LOGGER.debug("Check reroute with path: " + path);
 
 		if (path.startsWith(APP_PLUS_API_PREFIX)) {
 
 			// reroute to REST-API
 			String rerouted = path.replaceFirst(DEFAULT_APP, "/");
-			LOGGER.info("(2) rc.reroute: " + rerouted);
+			LOGGER.debug("(2) rc.reroute: " + rerouted);
 			rc.reroute(rerouted);
 		} else {
 
@@ -67,7 +67,7 @@ public class SPARouteFilter {
 
 						// /mja-app/ => 2 tokens!
 						String rerouted = "/" + tokens[1] + "/";
-						LOGGER.info("(7) Umleiten von deep Angular router links: {} nach {} ", path, rerouted);
+						LOGGER.debug("(7) Umleiten von deep Angular router links: {} nach {} ", path, rerouted);
 						rc.reroute(rerouted);
 					} else {
 

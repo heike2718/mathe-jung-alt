@@ -85,7 +85,7 @@ public class LaTeXTemplatesService {
 
 		if (templateDocumentPDFAufgabenblatt == null) {
 
-			LOGGER.info("Lade Template {}", TEMPLATE_PDF_AUFGABENBLATT);
+			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_AUFGABENBLATT);
 
 			templateDocumentPDFAufgabenblatt = MjaFileUtils.loadTemplate(TEMPLATE_PDF_AUFGABENBLATT);
 		}
@@ -97,7 +97,7 @@ public class LaTeXTemplatesService {
 
 		if (templateDocumentPDFAufgabenblattMitLoesungen == null) {
 
-			LOGGER.info("Lade Template {}", TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN);
+			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN);
 
 			templateDocumentPDFAufgabenblattMitLoesungen = MjaFileUtils.loadTemplate(TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN);
 		}
@@ -107,7 +107,7 @@ public class LaTeXTemplatesService {
 
 	public synchronized String getTemplateDocumentPDFKartei() {
 
-		LOGGER.info("Lade Template {}", TEMPLATE_PDF_KARTEI);
+		LOGGER.debug("Lade Template {}", TEMPLATE_PDF_KARTEI);
 
 		if (templateDocumentPDFKartei == null) {
 
@@ -121,7 +121,7 @@ public class LaTeXTemplatesService {
 
 		if (templatePDFRaetselFrage == null) {
 
-			LOGGER.info("Lade Template {}", TEMPLATE_PDF_RAETSEL_FRAGE);
+			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_RAETSEL_FRAGE);
 
 			templatePDFRaetselFrage = MjaFileUtils.loadTemplate(TEMPLATE_PDF_RAETSEL_FRAGE);
 		}
@@ -132,7 +132,7 @@ public class LaTeXTemplatesService {
 
 		if (templatePDFRaetselFrageLoesung == null) {
 
-			LOGGER.info("Lade Template {}", TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG);
+			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG);
 
 			templatePDFRaetselFrageLoesung = MjaFileUtils.loadTemplate(TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG);
 		}
@@ -143,7 +143,7 @@ public class LaTeXTemplatesService {
 
 		if (templatePDFRaetselLoesung == null) {
 
-			LOGGER.info("Lade Template {}", TEMPLATE_PDF_RAETSEL_LOESUNG);
+			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_RAETSEL_LOESUNG);
 
 			templatePDFRaetselLoesung = MjaFileUtils.loadTemplate(TEMPLATE_PDF_RAETSEL_LOESUNG);
 		}
@@ -155,7 +155,7 @@ public class LaTeXTemplatesService {
 
 		if (templateDocumentRaetselPDF == null) {
 
-			LOGGER.info("Lade Template {}", TEMPLATE_DOCUMENT_RAETSEL_PDF);
+			LOGGER.debug("Lade Template {}", TEMPLATE_DOCUMENT_RAETSEL_PDF);
 
 			templateDocumentRaetselPDF = MjaFileUtils.loadTemplate(TEMPLATE_DOCUMENT_RAETSEL_PDF);
 
@@ -168,7 +168,7 @@ public class LaTeXTemplatesService {
 
 		if (templateDocumentRaetselPNG == null) {
 
-			LOGGER.info("Lade Template {}", TEMPLATE_DOCUMENT_RAETSEL_PNG);
+			LOGGER.debug("Lade Template {}", TEMPLATE_DOCUMENT_RAETSEL_PNG);
 
 			templateDocumentRaetselPNG = MjaFileUtils.loadTemplate(TEMPLATE_DOCUMENT_RAETSEL_PNG);
 
@@ -181,7 +181,7 @@ public class LaTeXTemplatesService {
 
 		if (lizenzFontsFibel == null) {
 
-			LOGGER.info("Lade Template {}", LIZENZ_FONTS_FIBEL);
+			LOGGER.debug("Lade Template {}", LIZENZ_FONTS_FIBEL);
 
 			lizenzFontsFibel = MjaFileUtils.loadTemplate(LIZENZ_FONTS_FIBEL);
 
@@ -193,7 +193,7 @@ public class LaTeXTemplatesService {
 
 		if (lizenzFontsDruckschrift == null) {
 
-			LOGGER.info("Lade Template {}", LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK);
+			LOGGER.debug("Lade Template {}", LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK);
 
 			lizenzFontsDruckschrift = MjaFileUtils.loadTemplate(LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK);
 		}

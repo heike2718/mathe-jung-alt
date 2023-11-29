@@ -105,7 +105,7 @@ public class RaetselResource {
 			description = "sollen mehrere Worte mit AND (INTERSECTION) oder mit OR (UNION) gesucht werden?"),
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "search_mode_for_descriptors", description = "SQL-Operator mit dem nach Deskriptoren gesucht wird."),
+			name = "searchModeForDescriptors", description = "SQL-Operator mit dem nach Deskriptoren gesucht wird."),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet: die technischen IDs oder die Namen.",
@@ -392,7 +392,7 @@ public class RaetselResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	public Images raetselImagesLaden(@PathParam(value = "schluessel") final String schluessel) {
 
-		LOGGER.info("SCHLUESSEL=" + schluessel);
+		LOGGER.debug("SCHLUESSEL=" + schluessel);
 
 		return this.raetselService.findImagesZuSchluessel(schluessel);
 	}

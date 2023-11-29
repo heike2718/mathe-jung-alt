@@ -335,7 +335,7 @@ public class RaetselGeneratorService {
 
 		if (preserveTempFiles) {
 
-			LOGGER.info("tempfiles sollen aufgehoben werden, also fuer {} nicht loeschen", fileNameWithoutExtension);
+			LOGGER.debug("tempfiles sollen aufgehoben werden, also fuer {} nicht loeschen", fileNameWithoutExtension);
 
 			return;
 		}

@@ -114,13 +114,13 @@ public final class SessionUtils {
 
 		if (sessionIdFromHeader != null) {
 
-			LOGGER.info("sessionIdFromHeader={}", sessionIdFromHeader);
+			LOGGER.debug("sessionIdFromHeader={}", sessionIdFromHeader);
 			return sessionIdFromHeader;
 		}
 
 		LOGGER.debug("sessionIdFromHeader was null, try to get SessionId from Cookie");
 		String sessionIdFromCookie = getSessionIdFromCookie(requestContext);
-		LOGGER.info("sessionIdFromCookie={}", sessionIdFromCookie);
+		LOGGER.debug("sessionIdFromCookie={}", sessionIdFromCookie);
 
 		return sessionIdFromCookie;
 
