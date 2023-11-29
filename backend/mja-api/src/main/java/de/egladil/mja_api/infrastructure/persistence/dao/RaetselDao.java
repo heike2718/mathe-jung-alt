@@ -329,15 +329,16 @@ public class RaetselDao {
 
 		String[] worte = StringUtils.split(suchfilter.getSuchstring(), ' ');
 
-		String matcher = this.getVolltextMatcher(worte.length, suchfilter.getModusVolltext())
-			+ " AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
+		String where = this.getVolltextMatcher(worte.length, suchfilter.getModusVolltext())
+			+ " AND "
+			+ getWhereDeskriptoren(suchfilter.getModusDeskriptoren());
 
 		if (nurFreigegebene) {
 
-			matcher += " AND STATUS = :status ";
+			where += " AND STATUS = :status ";
 		}
 
-		String stmt = "SELECT count(*) FROM RAETSEL r WHERE " + matcher;
+		String stmt = "SELECT count(*) FROM RAETSEL r WHERE " + where;
 
 		// System.out.println(stmt);
 		// System.out.println("[suchstring=" + suchstring + ", deskriptoren=" + wrappedDeskriptorenIds + "]");
@@ -383,15 +384,16 @@ public class RaetselDao {
 		LOGGER.debug("suchstring={}, deskriptoren={}, suchmodusVolltext={}, suchmodusDeskriptoren={}", suchfilter.getSuchstring(),
 			wrappedDeskriptorenIds, suchfilter.getModusVolltext(), suchfilter.getModusDeskriptoren());
 
-		String matcher = this.getVolltextMatcher(worte.length, suchfilter.getModusVolltext())
-			+ " AND CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
+		String where = this.getVolltextMatcher(worte.length, suchfilter.getModusVolltext())
+			+ " AND "
+			+ getWhereDeskriptoren(suchfilter.getModusDeskriptoren());
 
 		if (nurFreigegebene) {
 
-			matcher += " AND STATUS = :status ";
+			where += " AND STATUS = :status ";
 		}
 
-		String stmt = "select * from RAETSEL WHERE " + matcher;
+		String stmt = "select * from RAETSEL WHERE " + where;
 
 		if (sortDirection == SortDirection.desc) {
 
@@ -497,6 +499,25 @@ public class RaetselDao {
 		}
 
 		return "(" + parts.stream().collect(Collectors.joining(suchmodus.getOperator())) + ")";
+	}
+
+	String getWhereDeskriptoren(final SuchmodusDeskriptoren suchmodusDeskriptoren) {
+
+		switch (suchmodusDeskriptoren) {
+
+		case LIKE: {
+
+			return "CONCAT(CONCAT(',', DESKRIPTOREN),',') LIKE :deskriptoren";
+		}
+
+		case NOT_LIKE: {
+
+			return "CONCAT(CONCAT(',', DESKRIPTOREN),',') NOT LIKE :deskriptoren";
+		}
+
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + suchmodusDeskriptoren);
+		}
 	}
 
 	Query createQueryAndReplaceSuchparameter(final String stmt, final String[] worte, @SuppressWarnings("rawtypes") final Class clazz) {
