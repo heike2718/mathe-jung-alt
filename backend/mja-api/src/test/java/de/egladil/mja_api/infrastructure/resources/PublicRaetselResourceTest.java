@@ -43,7 +43,7 @@ public class PublicRaetselResourceTest {
 
 		given()
 			.queryParam("deskriptoren", deskriptoren)
-			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.LIKE)
+			.queryParam("searchModeForDescriptors", SuchmodusDeskriptoren.LIKE)
 			.queryParam("typeDeskriptoren", EnumType.ORDINAL)
 			.when()
 			.get("v2")
@@ -58,7 +58,7 @@ public class PublicRaetselResourceTest {
 
 		RaetselsucheTreffer suchergebnis = given()
 			.queryParam("deskriptoren", deskriptoren)
-			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.LIKE)
+			.queryParam("searchModeForDescriptors", SuchmodusDeskriptoren.LIKE)
 			.queryParam("typeDeskriptoren", EnumType.ORDINAL)
 			.when()
 			.get("v2")
@@ -132,7 +132,7 @@ public class PublicRaetselResourceTest {
 
 		RaetselsucheTreffer suchergebnis = given()
 			.queryParam("deskriptoren", deskriptoren)
-			.queryParam("modusDeskriptoren", SuchmodusDeskriptoren.NOT_LIKE)
+			.queryParam("searchModeForDescriptors", SuchmodusDeskriptoren.NOT_LIKE)
 			.queryParam("typeDeskriptoren", EnumType.ORDINAL)
 			.when()
 			.get("v2")

@@ -4,6 +4,8 @@ export type Referenztyp = 'NOOP' | 'MINIKAENGURU' | 'SERIE';
 
 export const QUERY_PARAM_SUCHSTRING = 'suchstring';
 export const QUERY_PARAM_DESKRIPTOREN = 'deskriptoren';
+export const QUERY_PARAM_MODE_FULLTEXT_SEARCH = 'modeFullTextSearch';
+export const QUERY_PARAM_SEARCH_MODE_FOR_DESCRIPTORS = 'searchModeForDescriptors';
 export const QUERY_PARAM_TYPE_DESKRIPTOREN = 'typeDeskriptoren';
 export const QUERY_PARAM_LIMIT = 'limit';
 export const QUERY_PARAM_OFFSET = 'offset';

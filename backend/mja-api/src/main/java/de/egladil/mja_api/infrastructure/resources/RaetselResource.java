@@ -94,29 +94,30 @@ public class RaetselResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "suchstring",
-			description = "Freitext zum suchen. Es erfolgt eine Volltextsuche über Schlüssel, Name, Kommentar, Frage und Lösung. Mehrere Worte werden je nach Modus mit AND oder mit OR verknüft."),
+			description = "Freitext zum Suchen. Es erfolgt eine Volltextsuche über Schlüssel, Name, Kommentar, Frage und Lösung. Mehrere Worte werden je nach Modus mit AND oder mit OR verknüft."),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "deskriptoren",
-			description = "kommaseparierte Liste von Deskriptoren-Identifizierern. Bei typeDeskriptoren=ORDINAL die technischen IDs sonst der Name. Je nach Modus wird mit AND oder OR gesucht."),
+			description = "kommaseparierte Liste von Deskriptoren-Identifizierern. Bei typeDeskriptoren=ORDINAL die technischen IDs sonst der Name."),
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "modus", description = "INTERSECTION | UNION. Default ist UNION"),
+			name = "modeFullTextSearch",
+			description = "sollen mehrere Worte mit AND (INTERSECTION) oder mit OR (UNION) gesucht werden?"),
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "modusDeskriptoren", description = "LIKE | NOT_LIKE. Default ist LIKE"),
+			name = "search_mode_for_descriptors", description = "SQL-Operator mit dem nach Deskriptoren gesucht wird."),
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden ORDINAL | STRING",
+			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet: die technischen IDs oder die Namen.",
 			required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "limit",
-			description = "Pagination: pageSize - default ist 20"),
+			description = "Pagination: pageSize"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "offset",
-			description = "Pagination: pageIndex - default ist 0"),
+			description = "Pagination: pageIndex"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "sortDirection",
@@ -135,8 +136,8 @@ public class RaetselResource {
 		@QueryParam(value = "deskriptoren") @Pattern(
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
-		@QueryParam(value = "modus") @DefaultValue("UNION") final SuchmodusVolltext modus,
-		@QueryParam(value = "modusDeskriptoren") @DefaultValue("LIKE") final SuchmodusDeskriptoren modusDeskriptoren,
+		@QueryParam(value = "modeFullTextSearch") @DefaultValue("UNION") final SuchmodusVolltext modus,
+		@QueryParam(value = "searchModeForDescriptors") @DefaultValue("LIKE") final SuchmodusDeskriptoren modusDeskriptoren,
 		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset,
@@ -175,22 +176,23 @@ public class RaetselResource {
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "deskriptoren", description = "kommaseparierte Liste von Deskriptoren-Identifizierern"),
+			name = "deskriptoren",
+			description = "kommaseparierte Liste von Deskriptoren-Identifizierern. Bei typeDeskriptoren=ORDINAL die technischen IDs sonst der Name."),
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "modusDeskriptoren", description = "LIKE | NOT_LIKE. Default ist LIKE"),
+			name = "searchModeForDescriptors", description = "SQL-Operator mit dem nach Deskriptoren gesucht wird."),
 		@Parameter(
 			in = ParameterIn.QUERY,
-			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet werden (NAME oder ID)",
+			name = "typeDeskriptoren", description = "wie die Deskriptoren gesendet: die technischen IDs oder die Namen.",
 			required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "limit",
-			description = "Pagination: pageSize - default ist 20"),
+			description = "Pagination: pageSize"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "offset",
-			description = "Pagination: pageIndex - default ist 0"),
+			description = "Pagination: pageIndex"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "sortDirection",
@@ -210,7 +212,7 @@ public class RaetselResource {
 		@QueryParam(value = "deskriptoren") @Pattern(
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
-		@QueryParam(value = "modusDeskriptoren") @DefaultValue("LIKE") final SuchmodusDeskriptoren modusDeskriptoren,
+		@QueryParam(value = "searchModeForDescriptors") @DefaultValue("LIKE") final SuchmodusDeskriptoren modusDeskriptoren,
 		@QueryParam(value = "typeDeskriptoren") @NotNull(message = "Angabe typeDeskriptoren ist erforderlich") final EnumType typeDeskriptoren,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset,

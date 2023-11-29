@@ -5,10 +5,13 @@
         (inputChanged)="onSuchfilterSuchstringChanged($event)"
         (selectableItemsChanged)="onSelectItemsCompomentModelChanged($event)"></mja-raetsel-suchfilter-admin>
 
-    <p>Suchkriterien: {{suchfilter | json}}</p>   
+    <mat-checkbox [(ngModel)]="modeFullTextSearchUnion" (change)="onSuchmodusChanged($event.checked)" >Volltextsuche mit OR? (sonst AND)</mat-checkbox>
+    <mat-checkbox [(ngModel)]="searchModeForDescriptorsLike" (change)="onSuchmodusChanged($event.checked)">Suche nach Deskriptoren mit LIKE? (sonst NOT LIKE)</mat-checkbox>   
+
+    <p>Suchkriterien: {{suchfilter | json}}</p>
 </div>
 
-<div *ngIf="!isAutor"  class="grid-container-1">
+<div *ngIf="!isAutor" class="grid-container-1">
     <mja-select-items [model]="selectItemsCompomentModel"
         (modelChanged)="onSelectItemsCompomentModelChanged($event)"></mja-select-items>
 </div>

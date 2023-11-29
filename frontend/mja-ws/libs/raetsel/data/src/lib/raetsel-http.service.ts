@@ -9,7 +9,9 @@ import {
     PageDefinition,
     QUERY_PARAM_DESKRIPTOREN,
     QUERY_PARAM_LIMIT,
+    QUERY_PARAM_MODE_FULLTEXT_SEARCH,
     QUERY_PARAM_OFFSET,
+    QUERY_PARAM_SEARCH_MODE_FOR_DESCRIPTORS,
     QUERY_PARAM_SORT_DIRECTION,
     QUERY_PARAM_SUCHSTRING,
     QUERY_PARAM_TYPE_DESKRIPTOREN,
@@ -29,7 +31,12 @@ export class RaetselHttpService {
 
         const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
+        const modusVolltextsuche: string = suchfilter.modeFullTextSearch === 'UNION' ? 'UNION' : 'INTERSECTION';
+        const suchmodusFuerDeskriptoren: string = suchfilter.searchModeForDescriptors === 'LIKE' ? 'LIKE' : 'NOT_LIKE';
+
         let params = new HttpParams()
+            .set(QUERY_PARAM_MODE_FULLTEXT_SEARCH, modusVolltextsuche)
+            .set(QUERY_PARAM_SEARCH_MODE_FOR_DESCRIPTORS, suchmodusFuerDeskriptoren)
             .set(QUERY_PARAM_LIMIT, pageDefinition.pageSize)
             .set(QUERY_PARAM_OFFSET, offset)
             .set(QUERY_PARAM_SORT_DIRECTION, pageDefinition.sortDirection);

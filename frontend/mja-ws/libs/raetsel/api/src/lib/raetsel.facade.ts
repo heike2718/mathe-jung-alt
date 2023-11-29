@@ -14,7 +14,7 @@ import {
   SelectItemsCompomentModel
 } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
-import { EditRaetselPayload, initialRaetselDetails, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { EditRaetselPayload, initialRaetselDetails, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { deepClone, filterDefined } from '@mja-ws/shared/ngrx-utils';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -63,11 +63,11 @@ export class RaetselFacade {
 
   }
 
-  changeSuchfilterWithDeskriptoren(deskriptoren: DeskriptorUI[], suchstring: string) {
-    this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter: { deskriptoren, suchstring } }));
+  changeSuchfilterWithDeskriptoren(suchfilter: RaetselSuchfilter) {
+    this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
   }
 
-  changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string): void {
+  changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string, modeFullTextSearch: MODUS_VOLLTEXTSUCHE, searchModeForDescriptors: MODUS_SUCHE_MIT_DESKRIPTOREN ): void {
 
     const deskriptoren: DeskriptorUI[] = [];
     selectedItems.forEach(item => {
@@ -77,7 +77,9 @@ export class RaetselFacade {
 
     const suchfilter: RaetselSuchfilter = {
       suchstring: suchstring,
-      deskriptoren: deskriptoren
+      deskriptoren: deskriptoren,
+      modeFullTextSearch: modeFullTextSearch,
+      searchModeForDescriptors: searchModeForDescriptors
     };
 
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));

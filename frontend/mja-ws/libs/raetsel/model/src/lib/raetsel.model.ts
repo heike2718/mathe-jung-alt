@@ -1,14 +1,21 @@
 import { DeskriptorUI, GeneratedImages, noopQuelle, QuelleUI, STATUS } from "@mja-ws/core/model";
 import { EmbeddableImageInfo } from "@mja-ws/embeddable-images/model";
 
+export type MODUS_VOLLTEXTSUCHE = 'UNION' | 'INTERSECTION';
+export type MODUS_SUCHE_MIT_DESKRIPTOREN = 'LIKE' | 'NOT_LIKE';
+
 export interface RaetselSuchfilter {
   readonly suchstring: string;
   readonly deskriptoren: DeskriptorUI[];
+  readonly modeFullTextSearch: MODUS_VOLLTEXTSUCHE;
+  readonly searchModeForDescriptors: MODUS_SUCHE_MIT_DESKRIPTOREN;
 };
 
 export const initialRaetselSuchfilter: RaetselSuchfilter = {
   suchstring: '',
-  deskriptoren: []
+  deskriptoren: [],
+  modeFullTextSearch: 'UNION',
+  searchModeForDescriptors: 'LIKE'
 };
 
 export interface Antwortvorschlag {

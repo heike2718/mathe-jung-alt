@@ -480,7 +480,7 @@ public class RaetselDaoImplTest {
 	@Nested
 	class FilteredSucheTests {
 
-		private String suchstring = "Kinder Tiere pflanzen Kreis Monat Spielzeug Kekse Känguru";
+		private String suchstring = "Kinder Tiere Kreis Monat Spielzeug Kekse Känguru";
 
 		private String deskriptoren = "8,11";
 
