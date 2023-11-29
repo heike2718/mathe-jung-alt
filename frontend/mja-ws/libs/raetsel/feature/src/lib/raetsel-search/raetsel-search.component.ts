@@ -6,7 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
 import { RaetselDataSource, RaetselFacade } from '@mja-ws/raetsel/api';
-import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { initialSelectItemsComponentModel, PageDefinition, PaginationState, QuelleUI, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
 import { combineLatest, debounceTime, merge, Subscription, tap } from 'rxjs';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
@@ -229,8 +229,8 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
         ...
         this.suchfilter,
         suchstring: suchstring,
-        modeFullTextSearch: this.modeFullTextSearchUnion ? 'UNION' : 'INTERSECTION',
-        searchModeForDescriptors: this.searchModeForDescriptorsLike ? 'LIKE' : 'NOT_LIKE'
+        modeFullTextSearch: this.#modeFullTextSearch(),
+        searchModeForDescriptors: this.#searchModeForDescriptors()
       };
 
       this.#raetselFacade.changeSuchfilterWithDeskriptoren(theSuchfilter);
@@ -239,20 +239,13 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   onSelectItemsCompomentModelChanged(model: SelectItemsCompomentModel): void {
 
-    if (model.gewaehlteItems.length > 0) {
+    const selectableItems: SelectableItem[] = model.gewaehlteItems.length > 0 ? model.gewaehlteItems : [];
 
-      this.#raetselFacade.changeSuchfilterWithSelectableItems(
-        model.gewaehlteItems,
-        this.suchfilter.suchstring,
-        this.modeFullTextSearchUnion ? 'UNION' : 'INTERSECTION',
-        this.searchModeForDescriptorsLike ? 'LIKE' : 'NOT_LIKE');
-    } else {
-      this.#raetselFacade.changeSuchfilterWithSelectableItems(
-        [],
-        this.suchfilter.suchstring,
-        this.modeFullTextSearchUnion ? 'UNION' : 'INTERSECTION',
-        this.searchModeForDescriptorsLike ? 'LIKE' : 'NOT_LIKE');
-    }
+    this.#raetselFacade.changeSuchfilterWithSelectableItems(
+      selectableItems,
+      this.suchfilter.suchstring,
+      this.#modeFullTextSearch(),
+      this.#searchModeForDescriptors());
   }
 
   onSuchmodusChanged(_checked: boolean): void {
@@ -260,13 +253,13 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     const theSuchfilter: RaetselSuchfilter = {
       ...
       this.suchfilter,
-      modeFullTextSearch: this.modeFullTextSearchUnion ? 'UNION' : 'INTERSECTION',
-      searchModeForDescriptors: this.searchModeForDescriptorsLike ? 'LIKE' : 'NOT_LIKE'
+      modeFullTextSearch: this.#modeFullTextSearch(),
+      searchModeForDescriptors: this.#searchModeForDescriptors()
     };
 
     this.#raetselFacade.changeSuchfilterWithDeskriptoren(theSuchfilter);
 
-  } 
+  }
 
 
   #initPaginator(): void {
@@ -288,10 +281,18 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     const theSuchfilter: RaetselSuchfilter = {
       ...
       this.suchfilter,
-      modeFullTextSearch: this.modeFullTextSearchUnion ? 'UNION' : 'INTERSECTION',
-      searchModeForDescriptors: this.searchModeForDescriptorsLike ? 'LIKE' : 'NOT_LIKE'
+      modeFullTextSearch: this.#modeFullTextSearch(),
+      searchModeForDescriptors: this.#searchModeForDescriptors()
     };
 
     this.#raetselFacade.triggerSearch(this.isAutor, theSuchfilter, pageDefinition);
+  }
+
+  #modeFullTextSearch(): MODUS_VOLLTEXTSUCHE {
+    return this.modeFullTextSearchUnion ? 'UNION' : 'INTERSECTION';
+  }
+
+  #searchModeForDescriptors(): MODUS_SUCHE_MIT_DESKRIPTOREN {
+    return this.searchModeForDescriptorsLike ? 'LIKE' : 'NOT_LIKE';
   }
 }
