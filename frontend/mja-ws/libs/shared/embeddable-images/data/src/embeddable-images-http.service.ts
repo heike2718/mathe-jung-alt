@@ -27,7 +27,7 @@ export class EmbeddableImagesHttpService {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        return this.#httpClient.put<EmbeddableImageResponseDto>(this.#url + '/v1', requestDto, {
+        return this.#httpClient.post<EmbeddableImageResponseDto>(this.#url + '/v1', requestDto, {
             headers: headers
         });
     }
@@ -36,7 +36,7 @@ export class EmbeddableImagesHttpService {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        return this.#httpClient.post<EmbeddableImageResponseDto>(this.#url + '/v1', requestDto, {
+        return this.#httpClient.put<EmbeddableImageResponseDto>(this.#url + '/v1', requestDto, {
             headers: headers
         });
     }

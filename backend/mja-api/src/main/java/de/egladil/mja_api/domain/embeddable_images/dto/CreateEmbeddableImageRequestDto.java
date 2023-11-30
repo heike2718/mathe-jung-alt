@@ -23,6 +23,8 @@ public class CreateEmbeddableImageRequestDto {
 	private EmbeddableImageContext context;
 
 	@JsonProperty
+	@Valid
+	@Schema(description = "die hochgeladene Datei")
 	private UploadedFile file;
 
 	public EmbeddableImageContext getContext() {

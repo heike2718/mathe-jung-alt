@@ -4,11 +4,12 @@
 // =====================================================
 package de.egladil.mja_api.domain.quellen;
 
-import jakarta.validation.constraints.Pattern;
-
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import de.egladil.mja_api.domain.validation.MjaRegexps;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * QuelleMinimalDto ist das, was im Rätseleditor angezeigt wird (ID und Name). Mit jedem Rätel wird es nachgeladen
@@ -18,7 +19,7 @@ public class QuelleMinimalDto {
 	@JsonProperty
 	@Schema(description = "technische ID der Quelle")
 	@Pattern(
-		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "quelleID enthält ungültige Zeichen - muss eine UUID sein")
 	private String id;
 

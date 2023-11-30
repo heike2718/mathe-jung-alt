@@ -68,6 +68,12 @@ public class RaetselgruppensucheTrefferItem {
 		return name;
 	}
 
+	@Override
+	public String toString() {
+
+		return super.toString();
+	}
+
 	public void setName(final String name) {
 
 		this.name = name;

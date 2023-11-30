@@ -10,3 +10,13 @@ export function calculateFileSize(size: number): string {
 
     return result;
 };
+
+export function isValidFileName(fileName: string ) {
+
+    if (!fileName || fileName.length === 0) {
+        return true;
+    }
+
+    const regexp = new RegExp('^[\\da-zA-ZÄÖÜäöüß_\\-\\.]{1,100}$');
+    return regexp.test(fileName);
+};

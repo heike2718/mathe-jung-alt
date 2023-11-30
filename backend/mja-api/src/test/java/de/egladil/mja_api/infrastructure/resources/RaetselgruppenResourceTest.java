@@ -17,8 +17,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
@@ -36,7 +34,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 
 /**
  * RaetselgruppenResourceTest
@@ -55,10 +52,18 @@ public class RaetselgruppenResourceTest {
 	void testFindRaetselgruppen() throws Exception {
 
 		RaetselgruppensucheTreffer treffer = given()
-			.contentType(ContentType.JSON)
+			.queryParam("limit", "20")
+			.queryParam("offset", "0")
+			.queryParam("referenz", "2022")
+			.queryParam("referenztyp", "MINIKAENGURU")
+			.queryParam("schwierigkeitsgrad", "EINS")
+			.queryParam("sortAttribute", "name")
+			.queryParam("sortDirection", "asc")
 			.get(
-				"v1?limit=20&offset=0&referenz=2022&referenztyp=MINIKAENGURU&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc")
+				"v1")
 			.then()
+			.contentType(ContentType.JSON)
+			.and()
 			.extract()
 			.as(RaetselgruppensucheTreffer.class);
 
@@ -74,19 +79,23 @@ public class RaetselgruppenResourceTest {
 	@Order(2)
 	void testFindRaetselgruppenKeinTreffer() throws Exception {
 
-		Response response = given()
-			.contentType(ContentType.JSON)
+		RaetselgruppensucheTreffer treffer = given()
+			.queryParam("limit", "20")
+			.queryParam("offset", "0")
+			.queryParam("referenz", "2022")
+			.queryParam("referenztyp", "SERIE")
+			.queryParam("schwierigkeitsgrad", "EINS")
+			.queryParam("sortAttribute", "name")
+			.queryParam("sortDirection", "asc")
 			.get(
-				"v1?limit=20&offset=0&referenz=2022&referenztyp=SERIE&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc");
-
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(200, response.getStatusCode());
-
-		RaetselgruppensucheTreffer treffer = new ObjectMapper().readValue(responsePayload,
-			RaetselgruppensucheTreffer.class);
+				"v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.and()
+			.extract()
+			.as(RaetselgruppensucheTreffer.class);
 
 		assertEquals(0, treffer.getItems().size());
 		assertEquals(0l, treffer.getTrefferGesamt());
@@ -100,20 +109,16 @@ public class RaetselgruppenResourceTest {
 
 		String id = "13c62cfb-cfdd-41f1-b8a9-6c866e087718";
 
-		Response response = given()
+		RaetselgruppeDetails treffer = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.get(id + "/v1");
+			.get(id + "/v1")
+			.then()
+			.statusCode(200)
+			.extract()
+			.as(RaetselgruppeDetails.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(200, response.getStatusCode());
-
-		RaetselgruppeDetails treffer = new ObjectMapper().readValue(responsePayload,
-			RaetselgruppeDetails.class);
 		List<Raetselgruppenelement> elemente = treffer.getElemente();
 		assertEquals(6, elemente.size());
 	}
@@ -125,20 +130,19 @@ public class RaetselgruppenResourceTest {
 
 		String id = "07c62cfb-cfdd-41f1-b8a9-6c866e087718";
 
-		Response response = given()
+		MessagePayload responsePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.get(id + "/v1");
+			.get(id + "/v1")
+			.then()
+			.statusCode(404)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(404, response.getStatusCode());
-
-		new ObjectMapper().readValue(responsePayload, MessagePayload.class);
-		assertTrue(responsePayload.contains("kein Treffer"));
+		assertTrue(responsePayload.getMessage().contains("kein Treffer"));
 
 	}
 
@@ -147,31 +151,25 @@ public class RaetselgruppenResourceTest {
 	@Order(5)
 	void testRaetselgruppeAnlegenOhneReferenz() throws Exception {
 
-		Response response = null;
+		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		payload.setId("neu");
+		payload.setName("Kandidaten Minikänguru");
+		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
+		payload.setStatus(DomainEntityStatus.ERFASST);
 
-		{
+		RaetselgruppensucheTrefferItem responsePayload = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payload)
+			.post("v1")
+			.then()
+			.statusCode(201)
+			.and()
+			.extract()
+			.as(RaetselgruppensucheTrefferItem.class);
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-			payload.setId("neu");
-			payload.setName("Kandidaten Minikänguru");
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
-			payload.setStatus(DomainEntityStatus.ERFASST);
-
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
-				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.post("v1");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(201, response.getStatusCode());
-		}
+		System.out.println("=> " + responsePayload.toString());
 
 	}
 
@@ -180,32 +178,28 @@ public class RaetselgruppenResourceTest {
 	@Order(6)
 	void testRaetselgruppeAnlegenOhneReferenzGleicherNameAnderesLevel() throws Exception {
 
-		Response response = null;
+		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		payload.setId("neu");
+		payload.setName("Kandidaten Minikänguru");
+		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.VORSCHULE);
+		payload.setStatus(DomainEntityStatus.ERFASST);
 
-		{
+		MessagePayload responsePayload = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payload)
+			.post("v1")
+			.then()
+			.statusCode(409)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-			payload.setId("neu");
-			payload.setName("Kandidaten Minikänguru");
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.VORSCHULE);
-			payload.setStatus(DomainEntityStatus.ERFASST);
+		System.out.println("=> " + responsePayload.toString());
 
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
-				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.post("v1");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(409, response.getStatusCode());
-			assertTrue(responsePayload.contains("Es gibt bereits eine Rätselgruppe mit diesem Namen."));
-		}
+		assertTrue(responsePayload.getMessage().contains("Es gibt bereits eine Rätselgruppe mit diesem Namen."));
 
 	}
 
@@ -214,7 +208,6 @@ public class RaetselgruppenResourceTest {
 	@Order(7)
 	void testRaetselgruppeAnlegenUndAendern() throws Exception {
 
-		Response response = null;
 		RaetselgruppensucheTrefferItem raetselgruppensucheTrefferItem = null;
 		String expectedKommentar = "Kommentar aus dem Test";
 
@@ -228,42 +221,39 @@ public class RaetselgruppenResourceTest {
 			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
 			payload.setStatus(DomainEntityStatus.ERFASST);
 
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
+			raetselgruppensucheTrefferItem = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.post("v1");
+				.body(payload)
+				.post("v1")
+				.then()
+				.statusCode(201)
+				.extract()
+				.as(RaetselgruppensucheTrefferItem.class);
 
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(201, response.getStatusCode());
-
-			RaetselgruppensucheTrefferItem raetselgruppe = new ObjectMapper().readValue(responsePayload,
-				RaetselgruppensucheTrefferItem.class);
-			System.out.println(raetselgruppe.getId());
-			assertNotNull(raetselgruppe.getId());
+			assertNotNull(raetselgruppensucheTrefferItem.getId());
 		}
 
 		{
 
-			response = given()
+			RaetselgruppensucheTreffer treffer = given()
+				.queryParam("limit", "20")
+				.queryParam("offset", "0")
+				.queryParam("referenz", "2005")
+				.queryParam("referenztyp", "MINIKAENGURU")
+				.queryParam("schwierigkeitsgrad", "ZWEI")
+				.queryParam("sortAttribute", "name")
+				.queryParam("sortDirection", "asc")
 				.contentType(ContentType.JSON)
 				.get(
-					"v1/?limit=20&offset=0&referenz=2005&referenztyp=MINIKAENGURU&schwierigkeitsgrad=ZWEI&sortAttribute=name&sortDirection=asc");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(200, response.getStatusCode());
-
-			RaetselgruppensucheTreffer treffer = new ObjectMapper().readValue(responsePayload,
-				RaetselgruppensucheTreffer.class);
+					"v1")
+				.then()
+				.statusCode(200)
+				.and()
+				.contentType(ContentType.JSON)
+				.extract()
+				.as(RaetselgruppensucheTreffer.class);
 
 			raetselgruppensucheTrefferItem = treffer.getItems().get(0);
 
@@ -280,25 +270,21 @@ public class RaetselgruppenResourceTest {
 			payload.setSchwierigkeitsgrad(raetselgruppensucheTrefferItem.getSchwierigkeitsgrad());
 			payload.setStatus(raetselgruppensucheTrefferItem.getStatus());
 
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
+			RaetselgruppensucheTrefferItem theItem = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.put("v1");
+				.body(payload)
+				.put("v1")
+				.then()
+				.statusCode(200)
+				.and()
+				.contentType(ContentType.JSON)
+				.extract()
+				.as(RaetselgruppensucheTrefferItem.class);
 
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(200, response.getStatusCode());
-
-			RaetselgruppensucheTrefferItem raetselgruppe = new ObjectMapper().readValue(responsePayload,
-				RaetselgruppensucheTrefferItem.class);
-			System.out.println(raetselgruppe.getId());
-			assertEquals(raetselgruppensucheTrefferItem.getId(), raetselgruppe.getId());
+			System.out.println(theItem.getId());
+			assertEquals(raetselgruppensucheTrefferItem.getId(), theItem.getId());
 
 		}
 
@@ -309,36 +295,26 @@ public class RaetselgruppenResourceTest {
 	@Order(8)
 	void testRaetselgruppeAnlegenGleicherName() throws Exception {
 
-		Response response = null;
+		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		payload.setId("neu");
+		payload.setName("Minikänguru 2005 - Klasse 2");
+		payload.setReferenz("2003");
+		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
+		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
+		payload.setStatus(DomainEntityStatus.ERFASST);
 
-		{
+		MessagePayload messagePayload = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payload)
+			.post("v1")
+			.then()
+			.statusCode(409)
+			.extract()
+			.as(MessagePayload.class);
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-			payload.setId("neu");
-			payload.setName("Minikänguru 2005 - Klasse 2");
-			payload.setReferenz("2003");
-			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
-			payload.setStatus(DomainEntityStatus.ERFASST);
-
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
-				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.post("v1");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(409, response.getStatusCode());
-
-			new ObjectMapper().readValue(responsePayload, MessagePayload.class);
-			assertTrue(responsePayload.contains("Es gibt bereits eine Rätselgruppe mit diesem Namen."));
-		}
+		assertEquals("Es gibt bereits eine Rätselgruppe mit diesem Namen.", messagePayload.getMessage());
 
 	}
 
@@ -347,36 +323,26 @@ public class RaetselgruppenResourceTest {
 	@Order(9)
 	void testRaetselgruppeAnlegenGleicheReferenz() throws Exception {
 
-		Response response = null;
+		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		payload.setId("neu");
+		payload.setName("Rätselgruppe XY");
+		payload.setReferenz("2022");
+		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
+		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
+		payload.setStatus(DomainEntityStatus.ERFASST);
 
-		{
+		MessagePayload messagePayload = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payload)
+			.post("v1")
+			.then()
+			.statusCode(409)
+			.extract()
+			.as(MessagePayload.class);
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-			payload.setId("neu");
-			payload.setName("Rätselgruppe XY");
-			payload.setReferenz("2022");
-			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
-			payload.setStatus(DomainEntityStatus.ERFASST);
-
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
-				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.post("v1");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(409, response.getStatusCode());
-
-			new ObjectMapper().readValue(responsePayload, MessagePayload.class);
-			assertTrue(responsePayload.contains("Es gibt bereits eine Rätselgruppe mit der gleichen Referenz."));
-		}
+		assertEquals("Es gibt bereits eine Rätselgruppe mit der gleichen Referenz.", messagePayload.getMessage());
 
 	}
 
@@ -385,37 +351,26 @@ public class RaetselgruppenResourceTest {
 	@Order(10)
 	void testRaetselgruppeAnlegenIdNichtNeu() throws Exception {
 
-		Response response = null;
+		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		payload.setId("012345-abcde");
+		payload.setName("Rätselgruppe XY");
+		payload.setReferenz("2010");
+		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
+		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
+		payload.setStatus(DomainEntityStatus.ERFASST);
 
-		{
+		MessagePayload messagePayload = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payload)
+			.post("v1")
+			.then()
+			.statusCode(400)
+			.extract()
+			.as(MessagePayload.class);
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-			payload.setId("012345-abcde");
-			payload.setName("Rätselgruppe XY");
-			payload.setReferenz("2010");
-			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
-			payload.setStatus(DomainEntityStatus.ERFASST);
-
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
-				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.post("v1");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(400, response.getStatusCode());
-
-			new ObjectMapper().readValue(responsePayload, MessagePayload.class);
-			assertTrue(responsePayload.contains("POST darf nur mit id='neu' aufgerufen werden"));
-		}
-
+		assertEquals("POST darf nur mit id='neu' aufgerufen werden", messagePayload.getMessage());
 	}
 
 	@Test
@@ -423,36 +378,26 @@ public class RaetselgruppenResourceTest {
 	@Order(11)
 	void testRaetselgruppeAendernReferenzdublette() throws Exception {
 
-		Response response = null;
+		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		payload.setId("13c62cfb-cfdd-41f1-b8a9-6c866e087718");
+		payload.setName("Rätselgruppe XY");
+		payload.setReferenz("2022");
+		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
+		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
+		payload.setStatus(DomainEntityStatus.ERFASST);
 
-		{
+		MessagePayload messagePayload = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payload)
+			.put("v1")
+			.then()
+			.statusCode(409)
+			.extract()
+			.as(MessagePayload.class);
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-			payload.setId("13c62cfb-cfdd-41f1-b8a9-6c866e087718");
-			payload.setName("Rätselgruppe XY");
-			payload.setReferenz("2022");
-			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
-			payload.setStatus(DomainEntityStatus.ERFASST);
-
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
-				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.put("v1");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(409, response.getStatusCode());
-
-			new ObjectMapper().readValue(responsePayload, MessagePayload.class);
-			assertTrue(responsePayload.contains("Es gibt bereits eine Rätselgruppe mit der gleichen Referenz."));
-		}
+		assertEquals("Es gibt bereits eine Rätselgruppe mit der gleichen Referenz.", messagePayload.getMessage());
 
 	}
 
@@ -461,37 +406,26 @@ public class RaetselgruppenResourceTest {
 	@Order(12)
 	void testRaetselgruppeAendernNamendublette() throws Exception {
 
-		Response response = null;
+		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		payload.setId("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc");
+		payload.setName("Minikänguru 2022 - Inklusion");
+		payload.setReferenz("2022");
+		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
+		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
+		payload.setStatus(DomainEntityStatus.ERFASST);
 
-		{
+		MessagePayload messagePayload = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payload)
+			.put("v1")
+			.then()
+			.statusCode(409)
+			.extract()
+			.as(MessagePayload.class);
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-			payload.setId("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc");
-			payload.setName("Minikänguru 2022 - Inklusion");
-			payload.setReferenz("2022");
-			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
-			payload.setStatus(DomainEntityStatus.ERFASST);
-
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
-				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.put("v1");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(409, response.getStatusCode());
-
-			new ObjectMapper().readValue(responsePayload, MessagePayload.class);
-			assertTrue(responsePayload.contains("Es gibt bereits eine Rätselgruppe mit diesem Namen."));
-		}
-
+		assertEquals("Es gibt bereits eine Rätselgruppe mit diesem Namen.", messagePayload.getMessage());
 	}
 
 	@Test
@@ -499,37 +433,26 @@ public class RaetselgruppenResourceTest {
 	@Order(13)
 	void testRaetselgruppeAendernUnbekannt() throws Exception {
 
-		Response response = null;
+		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		payload.setId("00000000-0000-0000-0000-000000000000");
+		payload.setName("Minikänguru 2009 - Klasse 2");
+		payload.setReferenz("2009");
+		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
+		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
+		payload.setStatus(DomainEntityStatus.ERFASST);
 
-		{
+		MessagePayload messagePayload = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payload)
+			.put("v1")
+			.then()
+			.statusCode(404)
+			.extract()
+			.as(MessagePayload.class);
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-			payload.setId("eef9f6e3-9e25-41a1-887d-0c9e6e9f57dc");
-			payload.setName("Minikänguru 2009 - Klasse 2");
-			payload.setReferenz("2009");
-			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
-			payload.setStatus(DomainEntityStatus.ERFASST);
-
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
-				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
-				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.put("v1");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(404, response.getStatusCode());
-
-			new ObjectMapper().readValue(responsePayload, MessagePayload.class);
-			assertTrue(responsePayload.contains("Diese Rätselgruppe gibt es nicht."));
-		}
-
+		assertEquals("Diese Rätselgruppe gibt es nicht.", messagePayload.getMessage());
 	}
 
 	@Test
@@ -539,26 +462,23 @@ public class RaetselgruppenResourceTest {
 
 		String raetselgruppeUuid = "0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc";
 		String elementUuid = null;
-		Response response = null;
 
 		{
 
 			System.out.println("Details laden");
 
-			response = given()
+			RaetselgruppeDetails treffer = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
-				.get(raetselgruppeUuid + "/v1");
+				.get(raetselgruppeUuid + "/v1")
+				.then()
+				.statusCode(200)
+				.and()
+				.contentType(ContentType.JSON)
+				.extract()
+				.as(RaetselgruppeDetails.class);
 
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(200, response.getStatusCode());
-
-			RaetselgruppeDetails treffer = new ObjectMapper().readValue(responsePayload,
-				RaetselgruppeDetails.class);
 			List<Raetselgruppenelement> elemente = treffer.getElemente();
 			assertEquals(12, elemente.size());
 		}
@@ -573,23 +493,19 @@ public class RaetselgruppenResourceTest {
 			payload.setPunkte(300);
 			payload.setRaetselSchluessel("02618");
 
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			response = given()
+			RaetselgruppeDetails raetselgruppe = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.post(raetselgruppeUuid + "/elemente/v1");
+				.body(payload)
+				.post(raetselgruppeUuid + "/elemente/v1")
+				.then()
+				.contentType(ContentType.JSON)
+				.and()
+				.statusCode(200)
+				.extract()
+				.as(RaetselgruppeDetails.class);
 
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(200, response.getStatusCode());
-
-			RaetselgruppeDetails raetselgruppe = new ObjectMapper().readValue(responsePayload,
-				RaetselgruppeDetails.class);
 			System.out.println(raetselgruppe.getId());
 
 			List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
@@ -613,22 +529,19 @@ public class RaetselgruppenResourceTest {
 				payload.setPunkte(300);
 				payload.setRaetselSchluessel("02618");
 
-				String requestBody = new ObjectMapper().writeValueAsString(payload);
-				response = given()
+				RaetselgruppeDetails raetselgruppe = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
-					.body(requestBody)
-					.put(raetselgruppeUuid + "/elemente/v1");
+					.body(payload)
+					.put(raetselgruppeUuid + "/elemente/v1")
+					.then()
+					.contentType(ContentType.JSON)
+					.and()
+					.statusCode(200)
+					.extract()
+					.as(RaetselgruppeDetails.class);
 
-				String responsePayload = response.asString();
-
-				System.out.println("=> " + responsePayload);
-
-				assertEquals(200, response.getStatusCode());
-
-				RaetselgruppeDetails raetselgruppe = new ObjectMapper().readValue(responsePayload,
-					RaetselgruppeDetails.class);
 				System.out.println(raetselgruppe.getId());
 
 				List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
@@ -648,20 +561,18 @@ public class RaetselgruppenResourceTest {
 
 			if (elementUuid != null) {
 
-				response = given()
+				RaetselgruppeDetails raetselgruppe = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
-					.delete(raetselgruppeUuid + "/elemente/" + elementUuid + "/v1");
+					.delete(raetselgruppeUuid + "/elemente/" + elementUuid + "/v1")
+					.then()
+					.statusCode(200)
+					.and()
+					.contentType(ContentType.JSON)
+					.extract()
+					.as(RaetselgruppeDetails.class);
 
-				String responsePayload = response.asString();
-
-				System.out.println("=> " + responsePayload);
-
-				assertEquals(200, response.getStatusCode());
-
-				RaetselgruppeDetails raetselgruppe = new ObjectMapper().readValue(responsePayload,
-					RaetselgruppeDetails.class);
 				System.out.println(raetselgruppe.getId());
 
 				List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
@@ -671,7 +582,6 @@ public class RaetselgruppenResourceTest {
 				Optional<Raetselgruppenelement> opt = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
 					.findFirst();
 				assertTrue(opt.isEmpty());
-
 			}
 		}
 	}
@@ -681,25 +591,17 @@ public class RaetselgruppenResourceTest {
 	@Order(21)
 	void raetselgruppenelementLoeschenGruppeExistiertNicht() throws Exception {
 
-		Response response = null;
-
-		response = given()
+		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.delete("abcdef-012345/elemente/98765-fedcba/v1");
+			.delete("00000000-0000-0000-0000-000000000000/elemente/00000000-0000-0000-0000-000000000000/v1")
+			.then()
+			.statusCode(404)
+			.extract()
+			.as(MessagePayload.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(404, response.getStatusCode());
-
-		new ObjectMapper().readValue(responsePayload,
-			MessagePayload.class);
-
-		assertTrue(responsePayload.contains("Ups, da ist aber etwas komplett schiefgelaufen"));
-
+		assertEquals("Ups, da ist aber etwas komplett schiefgelaufen", messagePayload.getMessage());
 	}
 
 	@Test
@@ -707,22 +609,18 @@ public class RaetselgruppenResourceTest {
 	@Order(22)
 	void raetselgruppenelementLoeschenElementExistiertNicht() throws Exception {
 
-		Response response = null;
-
-		response = given()
+		RaetselgruppeDetails treffer = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.delete("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/98765-fedcba/v1");
+			.delete("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/00000000-0000-0000-0000-000000000000/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(RaetselgruppeDetails.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(200, response.getStatusCode());
-
-		RaetselgruppeDetails treffer = new ObjectMapper().readValue(responsePayload,
-			RaetselgruppeDetails.class);
 		List<Raetselgruppenelement> elemente = treffer.getElemente();
 		assertEquals(6, elemente.size());
 
@@ -745,26 +643,20 @@ public class RaetselgruppenResourceTest {
 		payload.setPunkte(300);
 		payload.setRaetselSchluessel("02789");
 
-		String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-		Response response = given()
+		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.body(requestBody)
-			.post("abcdef-987654/elemente/v1");
+			.body(payload)
+			.post("00000000-0000-0000-0000-000000000000/elemente/v1")
+			.then()
+			.statusCode(404)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(404, response.getStatusCode());
-
-		new ObjectMapper().readValue(responsePayload,
-			MessagePayload.class);
-
-		assertTrue(responsePayload.contains("Tja, diese Rätselgruppe gibt es gar nicht."));
-
+		assertEquals("Tja, diese Rätselgruppe gibt es gar nicht.", messagePayload.getMessage());
 	}
 
 	@Test
@@ -778,26 +670,19 @@ public class RaetselgruppenResourceTest {
 		payload.setPunkte(300);
 		payload.setRaetselSchluessel("77777");
 
-		String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-		Response response = given()
+		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.body(requestBody)
-			.post("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente/v1");
+			.body(payload)
+			.post("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente/v1").then()
+			.statusCode(404)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(404, response.getStatusCode());
-
-		new ObjectMapper().readValue(responsePayload,
-			MessagePayload.class);
-
-		assertTrue(responsePayload.contains("Tja, mit dem gewünschen Schlüssel gibt es gar kein Rätsel."));
-
+		assertEquals("Tja, mit dem gewünschen Schlüssel gibt es gar kein Rätsel.", messagePayload.getMessage());
 	}
 
 	@Test
@@ -811,25 +696,21 @@ public class RaetselgruppenResourceTest {
 		payload.setPunkte(300);
 		payload.setRaetselSchluessel("02621");
 
-		String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-		Response response = given()
+		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.body(requestBody)
-			.post("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1");
+			.body(payload)
+			.post("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1")
+			.then()
+			.statusCode(409)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(409, response.getStatusCode());
-
-		new ObjectMapper().readValue(responsePayload,
-			MessagePayload.class);
-
-		assertTrue(responsePayload.contains("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer"));
+		assertEquals("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer",
+			messagePayload.getMessage());
 
 	}
 
@@ -844,26 +725,21 @@ public class RaetselgruppenResourceTest {
 		payload.setPunkte(300);
 		payload.setRaetselSchluessel("02774");
 
-		String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-		Response response = given()
+		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.body(requestBody)
-			.post("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1");
+			.body(payload)
+			.post("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1")
+			.then()
+			.statusCode(409)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(409, response.getStatusCode());
-
-		new ObjectMapper().readValue(responsePayload,
-			MessagePayload.class);
-
-		assertTrue(responsePayload.contains("Das Rätsel gibt es in dieser Rätselgruppe schon."));
-
+		assertEquals("Das Rätsel gibt es in dieser Rätselgruppe schon.",
+			messagePayload.getMessage());
 	}
 
 	@Test
@@ -877,25 +753,21 @@ public class RaetselgruppenResourceTest {
 		payload.setPunkte(300);
 		payload.setRaetselSchluessel("02789");
 
-		String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-		Response response = given()
+		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.body(requestBody)
-			.put("abcdef-987654/elemente/v1");
+			.body(payload)
+			.put("00000000-0000-0000-0000-000000000000/elemente/v1")
+			.then()
+			.statusCode(404)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(404, response.getStatusCode());
-
-		new ObjectMapper().readValue(responsePayload,
-			MessagePayload.class);
-
-		assertTrue(responsePayload.contains("Tja, diese Rätselgruppe gibt es gar nicht."));
+		assertEquals("Tja, diese Rätselgruppe gibt es gar nicht.",
+			messagePayload.getMessage());
 
 	}
 
@@ -905,30 +777,26 @@ public class RaetselgruppenResourceTest {
 	void elementAendernElementExistiertNicht() throws Exception {
 
 		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
-		payload.setId("abcdef-24680");
+		payload.setId("00000000-0000-0000-0000-000000000000");
 		payload.setNummer("A-1");
 		payload.setPunkte(300);
 		payload.setRaetselSchluessel("02789");
 
-		String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-		Response response = given()
+		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.body(requestBody)
-			.put("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente/v1");
+			.body(payload)
+			.put("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente/v1")
+			.then()
+			.statusCode(404)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(404, response.getStatusCode());
-
-		new ObjectMapper().readValue(responsePayload,
-			MessagePayload.class);
-
-		assertTrue(responsePayload.contains("Tja, dieses Rätselgruppenelement gibt es gar nicht."));
+		assertEquals("Tja, dieses Rätselgruppenelement gibt es gar nicht.",
+			messagePayload.getMessage());
 
 	}
 
@@ -943,25 +811,20 @@ public class RaetselgruppenResourceTest {
 		payload.setPunkte(300);
 		payload.setRaetselSchluessel("02789");
 
-		String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-		Response response = given()
+		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.body(requestBody)
-			.put("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente/v1");
+			.body(payload)
+			.put("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc/elemente/v1")
+			.then()
+			.statusCode(409)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
 
-		String responsePayload = response.asString();
-
-		System.out.println("=> " + responsePayload);
-
-		assertEquals(409, response.getStatusCode());
-
-		new ObjectMapper().readValue(responsePayload,
-			MessagePayload.class);
-
-		assertTrue(responsePayload.contains("Rätselgruppenkonflikt"));
+		assertEquals("Rätselgruppenkonflikt", messagePayload.getMessage());
 
 	}
 
@@ -982,23 +845,18 @@ public class RaetselgruppenResourceTest {
 			payload.setPunkte(400);
 			payload.setRaetselSchluessel("02629");
 
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			Response response = given()
+			RaetselgruppeDetails raetselgruppe = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.post("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1");
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(200, response.getStatusCode());
-
-			RaetselgruppeDetails raetselgruppe = new ObjectMapper().readValue(responsePayload,
-				RaetselgruppeDetails.class);
+				.body(payload)
+				.post("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1")
+				.then()
+				.statusCode(200)
+				.and()
+				.contentType(ContentType.JSON)
+				.extract()
+				.as(RaetselgruppeDetails.class);
 
 			List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
 			elementUuid = elemente.stream().filter(el -> "B-3".equals(el.getNummer())).findFirst().get().getId();
@@ -1014,25 +872,22 @@ public class RaetselgruppenResourceTest {
 			payload.setPunkte(300);
 			payload.setRaetselSchluessel("02629");
 
-			String requestBody = new ObjectMapper().writeValueAsString(payload);
-
-			Response response = given()
+			MessagePayload messagePayload = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
-				.body(requestBody)
-				.put("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1");
+				.body(payload)
+				.put("13c62cfb-cfdd-41f1-b8a9-6c866e087718/elemente/v1")
+				.then()
+				.statusCode(409)
+				.and()
+				.contentType(ContentType.JSON)
+				.extract()
+				.as(MessagePayload.class);
 
-			String responsePayload = response.asString();
+			assertEquals("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer",
+				messagePayload.getMessage());
 
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(409, response.getStatusCode());
-
-			new ObjectMapper().readValue(responsePayload,
-				MessagePayload.class);
-
-			assertTrue(responsePayload.contains("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer"));
 		}
 
 	}

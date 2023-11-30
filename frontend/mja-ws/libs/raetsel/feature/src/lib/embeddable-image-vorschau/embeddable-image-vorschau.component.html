@@ -22,7 +22,7 @@
             [actualFileSize]="fileInfo.fileSize">
         </mja-file-info>
 
-        <button mat-raised-button color="primary" *ngIf="fileInfo" (click)="uploadFile()">Datei hochladen</button>
+        <button mat-raised-button color="primary" *ngIf="fileInfo" title="gewählte Datei hochladen" (click)="uploadFile()">Datei hochladen</button>
 
         <div class="button-container mt-2">
             <button mat-stroked-button color="primary" (click)="reset()">leeren</button>

@@ -33,6 +33,7 @@ import de.egladil.mja_api.domain.validation.MjaRegexps;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -108,7 +109,7 @@ public class EmbeddableImageService {
 	 * @param  dto
 	 * @return     MessagePayload
 	 */
-	public EmbeddableImageResponseDto replaceEmbeddedImage(final ReplaceEmbeddableImageRequestDto uploadRequestDto) {
+	public EmbeddableImageResponseDto replaceEmbeddedImage(@Valid final ReplaceEmbeddableImageRequestDto uploadRequestDto) {
 
 		String relativerPfad = uploadRequestDto.getRelativerPfad();
 		File file = new File(latexBaseDir + relativerPfad);
@@ -153,7 +154,7 @@ public class EmbeddableImageService {
 	 *                      UploadedFile
 	 * @return              EmbeddableImageResponseDto
 	 */
-	public EmbeddableImageResponseDto createAndEmbedImage(final EmbeddableImageContext context, final UploadedFile uploadedFile) {
+	public EmbeddableImageResponseDto createAndEmbedImage(final EmbeddableImageContext context, @Valid final UploadedFile uploadedFile) {
 
 		String uuid = UUID.randomUUID().toString();
 		String filenameUpload = uploadedFile.getName();

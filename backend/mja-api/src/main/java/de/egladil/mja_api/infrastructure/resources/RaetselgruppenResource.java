@@ -35,6 +35,7 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
+import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.NotNull;
@@ -215,7 +216,7 @@ public class RaetselgruppenResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public RaetselgruppeDetails raetselgruppeDetailsLaden(@PathParam(value = "raetselgruppeID") @Pattern(
-		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID) {
 
 		Optional<RaetselgruppeDetails> optDetails = raetselgruppenService.loadDetails(raetselgruppeID);
@@ -237,31 +238,35 @@ public class RaetselgruppenResource {
 		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Raetselgruppe.")
 	})
 	@APIResponse(
-		name = "CreateRaetselgruppenelementOKResponse",
+		name = "OKResponse",
 		responseCode = "201",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppeDetails.class)))
 	@APIResponse(
-		name = "CreateRaetselgruppenelementNotFoundResponse",
+		name = "BadRequestResponse",
+		responseCode = "400",
+		description = "fehlgeschlagene Input-Validierung")
+	@APIResponse(
+		name = "NotFoundResponse",
 		description = "Die Rätselgruppe oder das Rätsel mit dem fachlichen SCHLUESSEL gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
-		name = "CreateRaetselgruppenelementConflict",
+		name = "Conflict",
 		description = "Nummer würde doppelt vergeben",
 		responseCode = "409", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
-		name = "CreateRaetselgruppenelementServerError",
+		name = "ServerError",
 		description = "Serverfehler",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public RaetselgruppeDetails raetselgruppenelementAnlegen(@PathParam(value = "raetselgruppeID") @Pattern(
-		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
 		return this.raetselgruppenService.elementAnlegen(raetselgruppeID, element);
@@ -278,25 +283,29 @@ public class RaetselgruppenResource {
 		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Raetselgruppe.")
 	})
 	@APIResponse(
-		name = "UpdateRaetselgruppenelementOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppeDetails.class)))
 	@APIResponse(
-		name = "UpdateRaetselgruppenelementNotFoundResponse",
+		name = "BadRequestResponse",
+		responseCode = "400",
+		description = "fehlgeschlagene Input-Validierung")
+	@APIResponse(
+		name = "NotFoundResponse",
 		description = "Die Rätselgruppe oder das Element gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
-		name = "UpdateRaetselgruppenelementServerError",
+		name = "ServerError",
 		description = "Gibt es nicht",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public RaetselgruppeDetails raetselgruppenelementAendern(@PathParam(value = "raetselgruppeID") @Pattern(
-		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
 		return this.raetselgruppenService.elementAendern(raetselgruppeID, element);
@@ -320,6 +329,10 @@ public class RaetselgruppenResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppeDetails.class)))
 	@APIResponse(
+		name = "BadRequestResponse",
+		responseCode = "400",
+		description = "fehlgeschlagene Input-Validierung")
+	@APIResponse(
 		name = "DeleteRaetselgruppenelementNotFoundResponse",
 		description = "Die Rätselgruppe oder das Element gibt es nicht",
 		responseCode = "404", content = @Content(
@@ -332,9 +345,9 @@ public class RaetselgruppenResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public RaetselgruppeDetails raetselgruppenelementLoeschen(@PathParam(value = "raetselgruppeID") @Pattern(
-		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, @PathParam(value = "elementID") @Pattern(
-			regexp = "^[a-fA-F\\d\\-]{1,36}$",
+			regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 			message = "raetselgruppeID enthält ungültige Zeichen") final String elementID) {
 
 		return raetselgruppenService.elementLoeschen(raetselgruppeID, elementID);
@@ -383,7 +396,7 @@ public class RaetselgruppenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printVorschau(
-		@PathParam(value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam(value = "raetselgruppeID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
@@ -431,7 +444,7 @@ public class RaetselgruppenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile downloadLaTeX(
-		@PathParam( value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam( value = "raetselgruppeID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
    // @formatter:on
 
@@ -481,7 +494,7 @@ public class RaetselgruppenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printArbeitsblattMitLoesungen(
-		@PathParam(value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam(value = "raetselgruppeID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse,
 		@QueryParam(value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
@@ -540,7 +553,7 @@ public class RaetselgruppenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printKnobelkartei(
-		@PathParam(value = "raetselgruppeID") @Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam(value = "raetselgruppeID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse,
 		@QueryParam(value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {

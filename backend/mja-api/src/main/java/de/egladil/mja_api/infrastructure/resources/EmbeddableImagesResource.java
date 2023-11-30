@@ -92,7 +92,7 @@ public class EmbeddableImagesResource {
 		return Response.ok(result).build();
 	}
 
-	@PUT
+	@POST
 	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
@@ -136,7 +136,7 @@ public class EmbeddableImagesResource {
 		return Response.ok(result).build();
 	}
 
-	@POST
+	@PUT
 	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(

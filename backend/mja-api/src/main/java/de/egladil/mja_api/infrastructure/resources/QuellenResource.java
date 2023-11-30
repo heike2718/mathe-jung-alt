@@ -21,6 +21,7 @@ import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.quellen.QuellenListItem;
 import de.egladil.mja_api.domain.quellen.QuellenService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
+import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -59,7 +60,7 @@ public class QuellenResource {
 			name = "suchstring",
 			description = "Freitext zum suchen. Es wird mit like nach diesem Text gesucht") })
 	@APIResponse(
-		name = "FindQuellenOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
@@ -67,7 +68,7 @@ public class QuellenResource {
 	// @formatter:off
 	public List<QuellenListItem> findQuellenV2(
 		@QueryParam(value = "suchstring") @Pattern(
-		regexp = "^[\\w äöüß \\+ \\- \\. \\,]{1,30}$",
+		regexp = "^[\\w ÄÖÜäöüß \\+ \\- \\. \\,]{1,30}$",
 		message = "ungültige Eingabe: mindestens 1 höchstens 30 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen +-_.,") @Valid final String suchstring) {
 		// @formatter:on
 
@@ -136,7 +137,7 @@ public class QuellenResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public QuellenListItem findQuelleById(@Pattern(
-		regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "quelleId enthält ungültige Zeichen") @PathParam(
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "quelleId enthält ungültige Zeichen") @PathParam(
 			value = "quelleId") final String quelleId) {
 
 		this.delayService.pause();

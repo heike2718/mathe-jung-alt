@@ -64,7 +64,7 @@ public class Raetsel extends AbstractDomainEntity {
 	@JsonProperty
 	@Schema(description = "Referenz auf die Quelle des Rätsels")
 	@Pattern(
-		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "quelleID enthält ungültige Zeichen - muss eine UUID sein")
 	private String quelleId;
 

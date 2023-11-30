@@ -29,6 +29,7 @@ import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.generatoren.impl.RaetselGeneratorService;
+import de.egladil.mja_api.domain.raetsel.EmbeddedImagesService;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
@@ -85,6 +86,9 @@ public class RaetselResource {
 	@Inject
 	DeskriptorenService deskriptorenService;
 
+	@Inject
+	EmbeddedImagesService embeddedImagesService;
+
 	@GET
 	@Path("admin/v2")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
@@ -123,13 +127,28 @@ public class RaetselResource {
 			name = "sortDirection",
 			description = "Sortierung. Es wird nach SCHLUESSEL sortiert.") })
 	@APIResponse(
-		name = "FindRaetselAdminOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(type = SchemaType.ARRAY, implementation = RaetselsucheTreffer.class)))
+	@APIResponse(
+		name = "BadRequestResponse",
+		responseCode = "400",
+		description = "fehlgeschlagene Input-Validierung")
+	@APIResponse(
+		name = "Forbidden",
+		responseCode = "403",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "ServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
-	public RaetselsucheTreffer findRaetselAdmin(
+	public Response findRaetselAdmin(
 		@QueryParam(value = "suchstring") @Pattern(
 		regexp = MjaRegexps.VALID_SUCHSTRING,
 		message = "ungültige Eingabe: mindestens 4 höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring,
@@ -150,7 +169,7 @@ public class RaetselResource {
 
 		if (StringUtils.isAllBlank(suchstring, deskriptorenOrdinal)) {
 
-			return new RaetselsucheTreffer();
+			return Response.ok(new RaetselsucheTreffer()).build();
 		}
 
 		String theSuchstring = suchstring;
@@ -164,8 +183,10 @@ public class RaetselResource {
 		suchfilter.setModusVolltext(modus);
 		suchfilter.setModusDeskriptoren(modusDeskriptoren);
 
-		return raetselService.sucheRaetsel(suchfilter, limit, offset,
+		RaetselsucheTreffer treffer = raetselService.sucheRaetsel(suchfilter, limit, offset,
 			sortDirection);
+
+		return Response.ok(treffer).build();
 	}
 
 	@GET
@@ -198,17 +219,23 @@ public class RaetselResource {
 			name = "sortDirection",
 			description = "Sortierung. Es wird nach SCHLUESSEL sortiert.") })
 	@APIResponse(
-		name = "FindRaetselPublicOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(type = SchemaType.ARRAY, implementation = RaetselsucheTreffer.class)))
 	@APIResponse(
-		name = "FindRaetselPublicBadRequestResponse",
+		name = "BadRequestResponse",
 		responseCode = "400",
 		description = "fehlgeschlagene Input-Validierung")
+	@APIResponse(
+		name = "ServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
-	public RaetselsucheTreffer findRaetselPublic(
+	public Response findRaetselPublic(
 		@QueryParam(value = "deskriptoren") @Pattern(
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,
@@ -225,14 +252,15 @@ public class RaetselResource {
 
 		if (StringUtils.isBlank(deskriptorenOrdinal)) {
 
-			return new RaetselsucheTreffer();
+			return Response.ok(new RaetselsucheTreffer()).build();
 		}
 
 		Suchfilter suchfilter = new Suchfilter(null, deskriptorenOrdinal);
 		suchfilter.setModusDeskriptoren(modusDeskriptoren);
 
-		return raetselService.sucheRaetsel(suchfilter, limit, offset,
+		RaetselsucheTreffer treffer = raetselService.sucheRaetsel(suchfilter, limit, offset,
 			sortDirection);
+		return Response.ok(treffer).build();
 	}
 
 	@GET
@@ -242,13 +270,13 @@ public class RaetselResource {
 		operationId = "getAnzahlFreigegebenerRaetsel",
 		summary = "Gibt die Anzahl der zum Abfragezeitpunkt freigegebenen Rätsel zurück.")
 	@APIResponse(
-		name = "GetAnzahlFreigegebenerRaetselOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = AnzahlabfrageResponseDto.class)))
 	@APIResponse(
-		name = "GetAnzahlFreigegebenerRaetselServerError",
+		name = "ServerError",
 		responseCode = "500",
 		description = "Fehler aufgetreten",
 		content = @Content(
@@ -273,19 +301,19 @@ public class RaetselResource {
 			name = "raetselID",
 			description = "technische ID des Rätsels") })
 	@APIResponse(
-		name = "FindRaetselByIDOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = Raetsel.class)))
 	@APIResponse(
-		name = "RaetselByIDNotFound",
+		name = "NotFound",
 		description = "Gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public Response raetselDetailsLaden(@Pattern(
-		regexp = "^[a-fA-F\\d\\-]{1,36}$",
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid) {
 
 		this.delayService.pause();
@@ -308,11 +336,22 @@ public class RaetselResource {
 		operationId = "raetselAnlegen",
 		summary = "neues Rätsel anlegen")
 	@APIResponse(
-		name = "CreateRaetselOKResponse",
+		name = "OKResponse",
 		responseCode = "201",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = Raetsel.class)))
+	@APIResponse(
+		name = "Forbidden",
+		responseCode = "403",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "NotFoundResponse",
+		responseCode = "404",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "SchluesselConflict",
 		description = "der gewählte schluessel ist schon vergeben",
@@ -320,7 +359,7 @@ public class RaetselResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
-		name = "CreateRaetselServerError",
+		name = "ServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
@@ -342,19 +381,30 @@ public class RaetselResource {
 		operationId = "raetselAendern",
 		summary = "vorhandenes Rätsel ändern")
 	@APIResponse(
-		name = "UpdateRaetselOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = Raetsel.class)))
 	@APIResponse(
-		name = "SchluesselConflict",
+		name = "Forbidden",
+		responseCode = "403",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "NotFoundResponse",
+		responseCode = "404",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "Conflict",
 		description = "der geänderte schluessel ist schon vergeben",
 		responseCode = "409", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
-		name = "UpdateRaetselServerError",
+		name = "ServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
@@ -379,22 +429,24 @@ public class RaetselResource {
 			name = "schluessel",
 			description = "Fachlicher Schlüssel des Rätsels") })
 	@APIResponse(
-		name = "LoadImagesRaetselOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = Images.class)))
 	@APIResponse(
-		name = "LoadImagesRaetselServerError",
+		name = "ServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Images raetselImagesLaden(@PathParam(value = "schluessel") final String schluessel) {
+	public Response raetselImagesLaden(@Pattern(
+		regexp = MjaRegexps.VALID_SCHLUESSEL,
+		message = "schluessel enthält ungültige Zeichen") @PathParam(value = "schluessel") final String schluessel) {
 
 		LOGGER.debug("SCHLUESSEL=" + schluessel);
 
-		return this.raetselService.findImagesZuSchluessel(schluessel);
+		return Response.ok(this.raetselService.findImagesZuSchluessel(schluessel)).build();
 	}
 
 	@POST
@@ -424,20 +476,31 @@ public class RaetselResource {
 			description = "wird in LaTeX-Größenangaben umgewandelt.",
 			required = false) })
 	@APIResponse(
-		name = "GenerateImagesRaetselOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = Images.class)))
 	@APIResponse(
-		name = "GenerateImagesRaetselServerError",
+		name = "Forbidden",
+		responseCode = "403",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "NotFoundResponse",
+		responseCode = "404",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "ServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
-	public Images raetselImagesGenerieren(
-		@Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid,
+	public Response raetselImagesGenerieren(
+		@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
 		@QueryParam(value = "font") @DefaultValue("STANDARD") final FontName font,
 		@QueryParam(value = "size") @DefaultValue("NORMAL") final Schriftgroesse schriftgroesse) {
@@ -451,7 +514,7 @@ public class RaetselResource {
 
 		// jetzt liegt schluessel.png und evtl. schluessel_l.png im latex.base.dir und muss verschoben werden.
 
-		return result;
+		return Response.ok(result).build();
 	}
 
 	@GET
@@ -481,20 +544,31 @@ public class RaetselResource {
 			description = "wird in LaTeX-Größenangaben umgewandelt.",
 			required = false) })
 	@APIResponse(
-		name = "GeneratePDFRaetselOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
-		name = "GeneratePDFRaetselServerError",
+		name = "Forbidden",
+		responseCode = "403",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "NotFoundResponse",
+		responseCode = "404",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "ServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
-	public GeneratedFile raetselPDFGenerieren(
-		@Pattern(regexp = "^[a-fA-F\\d\\-]{1,36}$", message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid,
+	public Response raetselPDFGenerieren(
+		@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
 		@QueryParam(value = "font") @DefaultValue("STANDARD") final FontName font,
 		@QueryParam(value = "size") @DefaultValue("NORMAL") final Schriftgroesse schriftgroesse) {
@@ -506,7 +580,7 @@ public class RaetselResource {
 
 		GeneratedFile result = generatorService.generatePDFRaetsel(raetselUuid, layoutAntwortvorschlaege, font,
 			schriftgroesse);
-		return result;
+		return Response.ok(result).build();
 	}
 
 	@GET
@@ -526,11 +600,46 @@ public class RaetselResource {
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = GeneratedFile[].class)))
-	public GeneratedFile[] downloadLatexLogFiles(@Pattern(
-		regexp = "^[\\d]{5}$",
+	@APIResponse(
+		name = "ServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Response downloadLatexLogFiles(@Pattern(
+		regexp = MjaRegexps.VALID_SCHLUESSEL,
 		message = "schluessel muss aus genau 5 Ziffern bestehen") @PathParam(value = "schluessel") final String schluessel) {
 
-		return raetselFileService.getLaTeXLogs(schluessel);
+		return Response.ok(raetselFileService.getLaTeXLogs(schluessel)).build();
+	}
+
+	@GET
+	@Path("embedded-images/{raetselId}/v1")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Operation(
+		operationId = "getEmbeddedImages",
+		summary = "Läd die im Rätsel eingebetteten Grafikdateien herunter")
+	@Parameters({
+		@Parameter(
+			in = ParameterIn.PATH,
+			name = "raetselId",
+			description = "UUID eines Rätsels",
+			required = true) })
+	@APIResponse(
+		name = "OKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(type = SchemaType.ARRAY, implementation = GeneratedFile.class)))
+	@APIResponse(
+		name = "ServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Response getEmbeddedImages(@PathParam(value = "raetselId") final String raetselId) {
+
+		return Response.ok().build();
 	}
 
 	/**

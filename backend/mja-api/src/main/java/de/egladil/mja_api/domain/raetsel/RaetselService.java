@@ -240,7 +240,7 @@ public class RaetselService {
 			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", userId, persistentesRaetsel.schluessel,
 				persistentesRaetsel.owner);
 
-			throw new WebApplicationException(Status.UNAUTHORIZED);
+			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 
 		boolean schluesselExistiert = this.schluesselExists(payload);

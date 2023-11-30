@@ -48,8 +48,8 @@
                                 [disabled]="generierenDiabled()" (click)="printPDF()">PDF
                                 generieren</button></div>
                         <div *ngIf="raetselFacade.generateLatexError$ | async">
-                            <button class="label" mat-raised-button color="primary"
-                                (click)="downloadLatexLogs()">LaTeX-Logs</button>
+                            <button class="label" mat-raised-button color="primary" matTooltip="LaTeX: Logdatei herunterladen"
+                                (click)="downloadLatexLogs()">LaTeX-Log</button>
                         </div>
                         <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
                                 (click)="gotoRaetselUebersicht()">Rätselsuche</button>

@@ -99,7 +99,7 @@
 
                         <div class="mb-2">
                             <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-                            <mja-select-file *ngIf="!fileInfoFrage" [selectFileModel]="selectFileFrageModel"
+                            <mja-select-file [selectFileModel]="selectFileFrageModel"
                                 (fileSelected)="onFileSelected($event, 'FRAGE')"></mja-select-file>
 
                             <mja-file-info *ngIf="fileInfoFrage" [titel]="selectFileFrageModel.titel"
@@ -108,7 +108,7 @@
                                 [actualFileSize]="fileInfoFrage.fileSize">
                             </mja-file-info>
 
-                            <button mat-raised-button color="primary" *ngIf="fileInfoFrage"
+                            <button mat-raised-button color="primary" *ngIf="fileInfoFrage" title="gewählte Datei hochladen"
                                 (click)="uploadFile('FRAGE')">Datei hochladen</button>
                         </div>
                     </mat-expansion-panel>
@@ -152,7 +152,7 @@
                                 [actualFileSize]="fileInfoLoesung.fileSize">
                             </mja-file-info>
 
-                            <button mat-raised-button color="primary" *ngIf="fileInfoLoesung"
+                            <button mat-raised-button color="primary" *ngIf="fileInfoLoesung" title="gewählte Datei hochladen"
                                 (click)="uploadFile('LOESUNG')">Datei hochladen</button>
                         </div>
                     </mat-expansion-panel>
@@ -207,8 +207,8 @@
             <button mat-raised-button color="primary" [disabled]="generierenDiabled()"
                 matTooltip="PNG Frage und Lösung generieren" (click)="printPNG()">PNG
                 generieren</button>
-            <button *ngIf="raetselFacade.generateLatexError$ | async" fmat-raised-button color="primary"
-                matTooltip="Logdateien herunterladen" (click)="downloadLatexLogs()">LaTeX-Logs</button>
+            <button *ngIf="raetselFacade.generateLatexError$ | async" mat-raised-button color="primary"
+                matTooltip="LaTeX: Logdateie herunterladen" (click)="downloadLatexLogs()">LaTeX-Log</button>
             <button *ngIf="raetselDetails.id !== 'neu'" mat-raised-button color="primary"
                 matTooltip="zurück zur Detailansicht" (click)="cancelEdit()">Abbruch/Details</button>
             <button mat-raised-button color="primary" matTooltip="zurück zur Suche"

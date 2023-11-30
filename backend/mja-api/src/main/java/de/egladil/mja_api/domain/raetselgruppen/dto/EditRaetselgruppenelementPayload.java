@@ -4,12 +4,13 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetselgruppen.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import de.egladil.mja_api.domain.validation.MjaRegexps;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * EditRaetselgruppenelementPayload
@@ -36,7 +37,7 @@ public class EditRaetselgruppenelementPayload {
 
 	@JsonProperty
 	@Schema(description = "fachlicher SCHLUESSEL des Rätsels, nicht Teil der persistenten Daten. Nützlich für die Anzeige")
-	@Pattern(regexp = "^[\\d]{5}$", message = "schluessel muss aus genau 5 Ziffern bestehen")
+	@Pattern(regexp = MjaRegexps.VALID_SCHLUESSEL, message = "schluessel muss aus genau 5 Ziffern bestehen")
 	private String raetselSchluessel;
 
 	public String getId() {

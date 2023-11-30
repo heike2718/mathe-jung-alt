@@ -333,7 +333,7 @@ public class AdminRaetselResourceTest {
 	void testRaetselDetailsLadenNotFound() throws Exception {
 
 		given()
-			.when().get("f4369b22/v1")
+			.when().get("00000000-0000-0000-0000-000000000000/v1")
 			.then()
 			.statusCode(404);
 	}
@@ -646,14 +646,19 @@ public class AdminRaetselResourceTest {
 	@Order(26)
 	void testGeneratePNGKeinTreffer() {
 
-		given()
+		MessagePayload messagePayload = given()
 			.queryParam("layoutAntwortvorschlaege", "ANKREUZTABELLE")
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
-			.post("PNG/2222222-4a81-4bde-a6a3-54464801716d/v1")
+			.post("PNG/00000000-0000-0000-0000-000000000000/v1")
 			.then()
-			.statusCode(404);
+			.statusCode(404)
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("Es gibt kein Raetsel mit dieser UUID", messagePayload.getMessage());
 	}
 
 	@Test
@@ -681,14 +686,19 @@ public class AdminRaetselResourceTest {
 	@Order(25)
 	void testGeneratePDFKeinTreffer() {
 
-		given()
+		MessagePayload messagePayload = given()
 			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.accept(ContentType.JSON)
-			.get("PDF/2222222-4a81-4bde-a6a3-54464801716d/v1")
+			.get("PDF/00000000-0000-0000-0000-000000000000/v1")
 			.then()
-			.statusCode(404);
+			.statusCode(404)
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("Es gibt kein Raetsel mit dieser UUID", messagePayload.getMessage());
 
 	}
 

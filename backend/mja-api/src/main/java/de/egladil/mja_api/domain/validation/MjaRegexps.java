@@ -37,4 +37,6 @@ public interface MjaRegexps {
 
 	String VALID_SUCHSTRING = "^[\\w ÄÖÜäöüß \\% ; \\+ \\- \\. \\,]{4,200}$";
 
+	String VALID_DATEINAME = "^[\\da-zA-ZÄÖÜäöüß_\\-\\.]{1,100}$";
+
 }

@@ -28,7 +28,7 @@ export class FileInfoComponent implements OnInit {
     fileName = '';
 
     @Input()
-    maxSizeBytes! : number;
+    maxSizeBytes!: number;
 
     @Input()
     actualFileSize!: number;
@@ -39,22 +39,15 @@ export class FileInfoComponent implements OnInit {
     maxFileSizeInfo!: string;
     fileSize = '';
 
-    showMaxSizeExceeded = false;
-    errmMaxFileSize = 'die gewählte Datei ist zu groß. Bitte wählen Sie eine andere Datei.';
-
     ngOnInit(): void {
 
         const maxFileSizeInKB = this.maxSizeBytes / 1024;
         const maxFileSizeInMB = maxFileSizeInKB / 1024;
 
         this.maxFileSizeInfo = 'Maximale erlaubte Größe: ' + maxFileSizeInKB + ' kB bzw. ' + maxFileSizeInMB + ' MB';
-        
+
         if (this.actualFileSize) {
             this.fileSize = calculateFileSize(this.actualFileSize);
-        }
-
-        if (this.fileSize > this.maxFileSizeInfo) {
-            this.showMaxSizeExceeded = true;
         }
     }
 }

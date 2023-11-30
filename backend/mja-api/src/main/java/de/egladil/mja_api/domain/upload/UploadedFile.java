@@ -11,16 +11,24 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.egladil.mja_api.domain.validation.MjaRegexps;
+import jakarta.validation.constraints.Pattern;
+
 /**
  * UploadedFile
  */
-@Schema(description = "Daten der hochgeladenen Datei: der Name und die Daten als Base64-encodeter String")
+@Schema(description = "Daten der hochgeladenen Datei: die Daten als Base64-encodeter String")
 public class UploadedFile {
 
 	@JsonProperty
+	@Schema(description = "Name einer Datei", example = "bälle.png")
+	@Pattern(
+		regexp = MjaRegexps.VALID_DATEINAME,
+		message = "Der Name der Datei enthält ungültige Zeichen. Bitte nur Ziffern, Buchstaben des deutschen Alphabets sowie die Zeichen Minus, Punkt und Unterstrich verwenden. Auch Leerzeichen sind nicht erlaubt.")
 	private String name;
 
 	@JsonProperty
+	@Schema(description = "Daten der Datei Base64-Encoded", example = "ZGF0YUJhc2U2NA==")
 	private String dataBase64;
 
 	/**

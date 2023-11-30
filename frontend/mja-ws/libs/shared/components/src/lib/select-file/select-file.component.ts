@@ -5,6 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { FileInfoModel, SelectFileModel } from "./select-file.model";
 import { UploadedFile } from "@mja-ws/core/model";
 import { Configuration } from "@mja-ws/shared/config";
+import { isValidFileName } from "@mja-ws/shared/util";
 
 
 
@@ -35,9 +36,14 @@ export class SelectFileComponent implements OnInit {
     maxFileSizeInfo!: string;
     fileSize = '';
 
-    showMaxSizeExceeded = false;
-    errmMaxFileSize = 'die gewählte Datei ist zu groß. Bitte wählen Sie eine andere Datei.'
+    erlaubteDateinamenInfo = 'Der Dateiname darf nur Ziffern, Buchstaben des deutschen Alphabets sowie die Zeichen Minus, Punkt und Unterstrich enthalten. Auch Leerzeichen sind nicht erlaubt.';
 
+    showMaxSizeExceeded = false;
+    errmMaxFileSize = 'Die gewählte Datei ist zu groß. Bitte andere Datei wählen.';    
+
+    showInvalidFilename = false;
+    errmFilename = 'Der Name der gewählten Datei enthält ungültige Zeichen. Datei bitte umbenennen oder andere Datei auswählen.';
+    
     ngOnInit(): void {
         const maxFileSizeInKB = this.selectFileModel.maxSizeBytes / 1024;
         const maxFileSizeInMB = maxFileSizeInKB / 1024;
@@ -56,6 +62,7 @@ export class SelectFileComponent implements OnInit {
             if (size <= this.selectFileModel.maxSizeBytes) {
                 this.currentFile = selectedFiles[0];
                 this.showMaxSizeExceeded = false;
+                this.showInvalidFilename = false;
 
                 const filename = selectedFiles[0].name;
                 const fileReader = new FileReader();
@@ -70,10 +77,17 @@ export class SelectFileComponent implements OnInit {
                         dataBase64: base64String
                     }
 
-                    this.fileSelected.emit({ file: uploadedFile, fileSize: size });
+                    if (isValidFileName(filename)) {
+
+                        this.fileSelected.emit({ file: uploadedFile, fileSize: size });
+                    } else {
+                        this.currentFile = undefined;
+                        this.showInvalidFilename = true;
+                    }
                 }
 
             } else {
+                this.currentFile = undefined;
                 this.showMaxSizeExceeded = true;
             }
         }

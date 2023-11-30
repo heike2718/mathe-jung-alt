@@ -60,7 +60,7 @@ public class EmbeddableImagesResourceTest {
 			.contentType(ContentType.JSON)
 			.header("Accept", ContentType.JSON)
 			.body(requestDto)
-			.put("v1")
+			.post("v1")
 			.then()
 			.statusCode(200)
 			.and()
@@ -95,7 +95,7 @@ public class EmbeddableImagesResourceTest {
 			.contentType(ContentType.JSON)
 			.header("Accept", ContentType.JSON)
 			.body(requestDto)
-			.put("v1")
+			.post("v1")
 			.then()
 			.statusCode(400)
 			.and()
@@ -106,6 +106,40 @@ public class EmbeddableImagesResourceTest {
 
 		assertEquals("ERROR", result.getLevel());
 		assertEquals("die raetselId enthält ungültige Zeichen", result.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldCreateEmbeddableImageReturn400_when_filenameInvalid() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/00000.eps");
+		UploadedFile uploadedFile = new UploadedFile().withName("01138 (Kopie).eps")
+			.withData(data);
+
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("69959982-83f9-482d-a26c-8eb4a92bd6ff")
+			.withTextart(Textart.FRAGE);
+		CreateEmbeddableImageRequestDto requestDto = new CreateEmbeddableImageRequestDto();
+		requestDto.setContext(context);
+		requestDto.setFile(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.post("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals(
+			"Der Name der Datei enthält ungültige Zeichen. Bitte nur Ziffern, Buchstaben des deutschen Alphabets sowie die Zeichen Minus, Punkt und Unterstrich verwenden. Auch Leerzeichen sind nicht erlaubt.",
+			result.getMessage());
 	}
 
 	@Test
@@ -127,7 +161,7 @@ public class EmbeddableImagesResourceTest {
 			.contentType(ContentType.JSON)
 			.header("Accept", ContentType.JSON)
 			.body(requestDto)
-			.put("v1")
+			.post("v1")
 			.then()
 			.statusCode(400)
 			.and()
@@ -161,7 +195,7 @@ public class EmbeddableImagesResourceTest {
 			.contentType(ContentType.JSON)
 			.header("Accept", ContentType.JSON)
 			.body(requestDto)
-			.put("v1")
+			.post("v1")
 			.then()
 			.statusCode(400)
 			.and()
@@ -195,7 +229,7 @@ public class EmbeddableImagesResourceTest {
 			.contentType(ContentType.JSON)
 			.header("Accept", ContentType.JSON)
 			.body(requestDto)
-			.post("v1")
+			.put("v1")
 			.then()
 			.statusCode(200)
 			.and()
@@ -244,6 +278,42 @@ public class EmbeddableImagesResourceTest {
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
+	void shouldReplaceEmbeddableImageReturn400_when_filenameInvalid() throws Exception {
+
+		// Arrange
+		byte[] data = TestFileUtils.loadBytes("/eps/00000.eps");
+		UploadedFile uploadedFile = new UploadedFile().withName("01138 (Kopie).eps")
+			.withData(data);
+
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("69959982-83f9-482d-a26c-8eb4a92bd6ff")
+			.withTextart(Textart.FRAGE);
+
+		String relativerPfad = "/resources/001/01003.eps";
+
+		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
+			.withRelativerPfad(relativerPfad).withUpload(uploadedFile);
+
+		MessagePayload result = given().when()
+			.contentType(ContentType.JSON)
+			.header("Accept", ContentType.JSON)
+			.body(requestDto)
+			.put("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.assertThat()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", result.getLevel());
+		assertEquals(
+			"Der Name der Datei enthält ungültige Zeichen. Bitte nur Ziffern, Buchstaben des deutschen Alphabets sowie die Zeichen Minus, Punkt und Unterstrich verwenden. Auch Leerzeichen sind nicht erlaubt.",
+			result.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	void shouldReplaceEmbeddableImageReturn400_when_pfadNull() throws Exception {
 
 		// Arrange
@@ -251,7 +321,8 @@ public class EmbeddableImagesResourceTest {
 		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
 			.withData(data);
 
-		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("abcdef").withTextart(Textart.FRAGE);
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866")
+			.withTextart(Textart.FRAGE);
 
 		ReplaceEmbeddableImageRequestDto requestDto = new ReplaceEmbeddableImageRequestDto().withContext(context)
 			.withUpload(uploadedFile);
@@ -270,7 +341,7 @@ public class EmbeddableImagesResourceTest {
 			.as(MessagePayload.class);
 
 		assertEquals("ERROR", result.getLevel());
-		assertEquals("die raetselId enthält ungültige Zeichen", result.getMessage());
+		assertEquals("relativerPfad darf nicht leer sein", result.getMessage());
 	}
 
 	@Test
@@ -282,7 +353,8 @@ public class EmbeddableImagesResourceTest {
 		UploadedFile uploadedFile = new UploadedFile().withName("00000.eps")
 			.withData(data);
 
-		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("abcx").withTextart(Textart.FRAGE);
+		EmbeddableImageContext context = new EmbeddableImageContext().withRaetselId("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866")
+			.withTextart(Textart.FRAGE);
 
 		String relativerPfad = "/resources/e/001/01003.eps";
 
@@ -303,7 +375,7 @@ public class EmbeddableImagesResourceTest {
 			.as(MessagePayload.class);
 
 		assertEquals("ERROR", result.getLevel());
-		assertEquals("die raetselId enthält ungültige Zeichen", result.getMessage());
+		assertEquals("relativerPfad ist nicht akzeptabel", result.getMessage());
 	}
 
 	@Test
@@ -326,7 +398,7 @@ public class EmbeddableImagesResourceTest {
 			.contentType(ContentType.JSON)
 			.header("Accept", ContentType.JSON)
 			.body(requestDto)
-			.post("v1")
+			.put("v1")
 			.then()
 			.statusCode(400)
 			.and()
@@ -363,7 +435,7 @@ public class EmbeddableImagesResourceTest {
 			.contentType(ContentType.JSON)
 			.header("Accept", ContentType.JSON)
 			.body(requestDto)
-			.post("v1")
+			.put("v1")
 			.then()
 			.statusCode(400)
 			.and()

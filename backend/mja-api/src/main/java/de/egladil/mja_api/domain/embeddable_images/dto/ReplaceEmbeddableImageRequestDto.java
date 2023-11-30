@@ -29,12 +29,13 @@ public class ReplaceEmbeddableImageRequestDto {
 	@Schema(description = "Pfad einer vorhandenen eps-Datei relativ zu latex.base.dir")
 	@Pattern(
 		regexp = MjaRegexps.VAILD_RELATIVE_PATH_EPS,
-		message = "pfad ist nicht akzeptabel")
-	@NotBlank
+		message = "relativerPfad ist nicht akzeptabel")
+	@NotBlank(message = "relativerPfad darf nicht leer sein")
 	private String relativerPfad;
 
 	@JsonProperty
-	@Schema(description = "Daten des hochgeladenen Files: name und die Daten als Base64-encodeter String")
+	@Valid
+	@Schema(description = "die hochgeladene Datei")
 	private UploadedFile file;
 
 	public UploadedFile getFile() {
