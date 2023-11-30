@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '@mja-ws/shared/messaging/api';
 import { MatIconModule } from '@angular/material/icon';
-import { ScrollService } from '@mja-ws/shared/util';
+import { debounceTime, Subscription, tap } from 'rxjs';
 
 
 @Component({
@@ -12,13 +12,26 @@ import { ScrollService } from '@mja-ws/shared/util';
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss'],
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, OnDestroy {
 
-  messageService = inject(MessageService);
-  #scrollService = inject(ScrollService);
+  messageService = inject(MessageService); 
+  
+  #messageSubscription: Subscription = new Subscription();
 
   ngOnInit(): void {
-    this.#scrollService.scrollToTop();
+      this.#messageSubscription = this.messageService.message$.pipe(
+        debounceTime(3000),
+        tap((message) => {
+          if (message && message.level === 'INFO') {
+            this.close();
+          }
+        })
+        
+      ).subscribe();
+  }
+
+  ngOnDestroy(): void {
+      this.#messageSubscription.unsubscribe();
   }
 
   close(): void {

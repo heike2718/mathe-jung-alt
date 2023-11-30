@@ -1,9 +1,19 @@
+.cmn-message-section {
+    position: absolute;
+    width: 80%;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+
 .cmn-message {
-    border: 1px solid;    
+    border: 1px solid;
     padding: 0.5em;
     display: inline-block;
-	vertical-align: top;
-	width: 99%;
+    vertical-align: top;
+    width: 99%;
     cursor: pointer;
 }
 
@@ -33,5 +43,3 @@
     border-color: #bb0d24;
     border-radius: 0.1em;
 }
-
-
