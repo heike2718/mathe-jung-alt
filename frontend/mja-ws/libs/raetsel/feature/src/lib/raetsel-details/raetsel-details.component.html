@@ -47,14 +47,22 @@
                         <div><button class="label" mat-raised-button color="primary" matTooltip="PDF generieren"
                                 [disabled]="generierenDiabled()" (click)="printPDF()">PDF
                                 generieren</button></div>
-                        <div *ngIf="raetselFacade.generateLatexError$ | async">
-                            <button class="label" mat-raised-button color="primary" matTooltip="LaTeX: Logdateien herunterladen"
-                                (click)="downloadLatexLogs()">LaTeX-Logs</button>
-                        </div>
                         <div *ngIf="!raetsel.schreibgeschuetzt && raetsel.embeddableImageInfos.length !== 0">
-                            <button class="label" mat-raised-button color="primary" matTooltip="eingebette Grafikdateien herunterladen"
+                            <button class="label" mat-raised-button color="primary"
+                                matTooltip="eingebette Grafikdateien herunterladen"
                                 (click)="downloadEmbeddedImages()">EPS-Files</button>
                         </div>
+                        <div *ngIf="!raetsel.schreibgeschuetzt">
+                            <button class="label" mat-raised-button color="primary"
+                                matTooltip="texte des Rätsels herunterladen"
+                                (click)="downloadRaetselLaTeX()">TEX-Files</button>
+                        </div>
+                        <div *ngIf="raetselFacade.generateLatexError$ | async">
+                            <button class="label" mat-raised-button color="primary"
+                                matTooltip="LaTeX: Logdateien herunterladen"
+                                (click)="downloadLatexLogs()">LaTeX-Logs</button>
+                        </div>
+
                         <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
                                 (click)="gotoRaetselUebersicht()">Rätselsuche</button>
                         </div>
@@ -87,7 +95,8 @@
 
                             <mat-nav-list>
                                 <mat-list-item *ngFor="let embeddableImageInfo of raetsel.embeddableImageInfos">
-                                    <mja-ws-embeddable-image-info [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>                                    
+                                    <mja-ws-embeddable-image-info
+                                        [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
                                 </mat-list-item>
                             </mat-nav-list>
 

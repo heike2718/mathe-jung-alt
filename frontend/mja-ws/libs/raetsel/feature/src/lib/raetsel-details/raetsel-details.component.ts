@@ -124,6 +124,12 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  downloadRaetselLaTeX(): void {
+    if (this.#raetselDetails) {
+      this.raetselFacade.downloadRaetselLaTeX(this.#raetselDetails.id);
+    }
+  }
+
   #openPrintDialog(outputformat: OUTPUTFORMAT): void {
 
     const dialogData: SelectGeneratorParametersUIModelAutoren = {

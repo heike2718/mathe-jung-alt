@@ -72,3 +72,10 @@ Startscript: ~/bin/start-mja-test-db.sh
 Stopscript: ~/bin/start-mja-test-db.sh
 
 
+# IP-Adresse eines Docker-Containers
+
+```
+docker container inspect container-name | grep IPAddress
+```
+
+

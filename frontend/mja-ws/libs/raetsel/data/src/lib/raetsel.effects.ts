@@ -88,7 +88,7 @@ export class RaetselEffects {
 
         this.#actions.pipe(
             ofType(raetselActions.fIND_LATEXLOGS),
-            switchMap((action) => this.#raetselHttpService.findLatexLogs(action.schluessel)),
+            switchMap((action) => this.#raetselHttpService.downloadLatexLogs(action.schluessel)),
             map((files) => raetselActions.lATEXLOGS_FOUND({ files: files }))
         ));
 
@@ -114,7 +114,7 @@ export class RaetselEffects {
 
         this.#actions.pipe(
             ofType(raetselActions.fIND_EMBEDDED_IMAGES),
-            switchMap((action) => this.#raetselHttpService.findEmbeddedImages(action.raetselID)),
+            switchMap((action) => this.#raetselHttpService.downloadEmbeddedImages(action.raetselID)),
             map((files) => raetselActions.eMBEDDED_IMAGES_FOUND({ files: files }))
         ));
 
@@ -132,6 +132,32 @@ export class RaetselEffects {
                 }
                 else {
                     this.#messageService.warn('keine der referenzierten Grafik-Dateien existiert');
+                }
+            }),
+        ), { dispatch: false });
+
+    findRaetselLaTeX$ = createEffect(() =>
+
+        this.#actions.pipe(
+            ofType(raetselActions.fIND_RAETSEL_LATEX),
+            switchMap((action) => this.#raetselHttpService.downloadRaetselLatex(action.raetselID)),
+            map((files) => raetselActions.eMBEDDED_IMAGES_FOUND({ files: files }))
+        ));
+
+    raetselLaTeXFound$ = createEffect(() =>
+
+        this.#actions.pipe(
+            ofType(raetselActions.rAETSEL_LATEX_FOUND),
+            tap((action) => {
+
+                if (action.files.length > 0) {
+
+                    action.files.forEach((file: GeneratedFile) => {
+                        this.#fileDownloadService.downloadText(file.fileData, file.fileName);
+                    })
+                }
+                else {
+                    this.#messageService.warn('Das Rätsel hat keine Frage und keine Lösung. Spiel am besten Lotto.');
                 }
             }),
         ), { dispatch: false });

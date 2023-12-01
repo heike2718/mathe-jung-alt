@@ -35,6 +35,7 @@ import de.egladil.mja_api.domain.raetsel.EmbeddedImagesService;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
+import de.egladil.mja_api.domain.raetsel.RaetselTexteService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -90,6 +91,9 @@ public class RaetselResource {
 
 	@Inject
 	EmbeddedImagesService embeddedImagesService;
+
+	@Inject
+	RaetselTexteService raetselTexteService;
 
 	@GET
 	@Path("admin/v2")
@@ -668,6 +672,61 @@ public class RaetselResource {
 		List<GeneratedFile> embeddedImages = embeddedImagesService.getEmbeddedImages(raetselId);
 
 		return Response.ok(embeddedImages).build();
+	}
+
+	@GET
+	@Path("raetsel-texte/{raetselId}/v1")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Operation(
+		operationId = "downloadRaetselLaTeX",
+		summary = "Läd den Text für Frage und Lösung herunter. Ergebnis sind maximal 2 GeneratedFiles mit den Namen schluessel.tex und schluessel_l.tex.")
+	@Parameters({
+		@Parameter(
+			in = ParameterIn.PATH,
+			name = "raetselId",
+			description = "UUID eines Rätsels",
+			required = true) })
+	@APIResponse(
+		name = "OKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(type = SchemaType.ARRAY, implementation = GeneratedFile.class)))
+	@APIResponse(
+		name = "BadRequest",
+		description = "Input-Validierung schlug fehl",
+		responseCode = "400", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "Unauthorized",
+		description = "nur authentifizierte User dürfen die URL aufrufen",
+		responseCode = "401")
+	@APIResponse(
+		name = "Forbidden",
+		description = "User ist der Zugriff auf Ressourcen dieses Rätsels nicht erlaubt",
+		responseCode = "403", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "NotFound",
+		description = "NotFound",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "ServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Response downloadRaetselLaTeX(@Pattern(
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
+		message = "raetselId enthält ungültige Zeichen") @PathParam(value = "raetselId") final String raetselId) {
+
+		List<GeneratedFile> texte = raetselTexteService.getTexte(raetselId);
+
+		return Response.ok(texte).build();
 	}
 
 	/**

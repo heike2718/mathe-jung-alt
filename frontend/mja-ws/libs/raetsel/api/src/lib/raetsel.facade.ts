@@ -142,6 +142,10 @@ export class RaetselFacade {
   downloadEmbeddedImages(raetselID: string): void {
     this.#store.dispatch(raetselActions.fIND_EMBEDDED_IMAGES({raetselID}));
   }
+
+  downloadRaetselLaTeX(raetselID: string): void {
+    this.#store.dispatch(raetselActions.fIND_RAETSEL_LATEX({raetselID}));
+  }
   
   leaveEditMode() {
     this.#store.dispatch(raetselActions.fINISH_EDIT());

@@ -721,7 +721,7 @@ public class AdminRaetselResourceTest {
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(40)
-	@DisplayName("when the embedded-images is called with an invalid raetselId, I expect statuscode 400")
+	@DisplayName("when the URL embedded-images is called with an invalid raetselId, I expect statuscode 400")
 	void downloadEmbeddedImages_400() throws Exception {
 
 		MessagePayload messagePayload = given()
@@ -759,6 +759,58 @@ public class AdminRaetselResourceTest {
 		MessagePayload messagePayload = given()
 			.when()
 			.get("embedded-images/8763142b-bded-4fe6-8eb9-243e9156f51c/v1")
+			.then()
+			.statusCode(404)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", messagePayload.getLevel());
+		assertEquals("Tja, dieses Rätsel gibt es leider nicht.", messagePayload.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(44)
+	@DisplayName("when the URL raetsel-texte is called with an invalid raetselId, I expect statuscode 400")
+	void downloadRaetselLaTeX_400() throws Exception {
+
+		MessagePayload messagePayload = given()
+			.when()
+			.get("raetsel-texte/554d4994/v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", messagePayload.getLevel());
+		assertEquals("raetselId enthält ungültige Zeichen", messagePayload.getMessage());
+	}
+
+	@Test
+	@Order(45)
+	@DisplayName("when raetsel-texte is called without role, I expect statuscode 401")
+	void downloadRaetselLaTeX_401() throws Exception {
+
+		given()
+			.when()
+			.get("raetsel-texte/554d4994-90b1-4baf-a7a0-cb5cb3b54ac6/v1")
+			.then()
+			.statusCode(401);
+	}
+
+	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(46)
+	@DisplayName("when there is no raetsel with the UUID and raetsel-texte is called, I expect statuscode 404")
+	void downloadRaetselLaTeX_404() throws Exception {
+
+		MessagePayload messagePayload = given()
+			.when()
+			.get("raetsel-texte/8763142b-bded-4fe6-8eb9-243e9156f51c/v1")
 			.then()
 			.statusCode(404)
 			.and()

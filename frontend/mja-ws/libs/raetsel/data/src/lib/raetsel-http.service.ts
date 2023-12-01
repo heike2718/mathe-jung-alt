@@ -95,7 +95,7 @@ export class RaetselHttpService {
         return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
     }
 
-    findLatexLogs(schluessel: string): Observable<GeneratedFile[]> {
+    downloadLatexLogs(schluessel: string): Observable<GeneratedFile[]> {
 
         const url = this.#url + '/latexlogs/' + schluessel + '/v1';
 
@@ -104,9 +104,18 @@ export class RaetselHttpService {
         return this.#http.get<GeneratedFile[]>(url, { headers: headers });
     }
 
-    findEmbeddedImages(raetselID: string): Observable<GeneratedFile[]> {
+    downloadEmbeddedImages(raetselID: string): Observable<GeneratedFile[]> {
 
         const url = this.#url + '/embedded-images/' + raetselID + '/v1';
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+
+        return this.#http.get<GeneratedFile[]>(url, { headers: headers });
+    }
+
+    downloadRaetselLatex(raetselID: string): Observable<GeneratedFile[]> {
+
+        const url = this.#url + '/raetsel-texte/' + raetselID + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
