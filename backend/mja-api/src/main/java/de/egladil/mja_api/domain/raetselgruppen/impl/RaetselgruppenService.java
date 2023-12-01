@@ -185,7 +185,7 @@ public class RaetselgruppenService {
 		PersistenteRaetselgruppe persistierte = speichern(raetselgruppe);
 		RaetselgruppensucheTrefferItem result = mapFromDB(persistierte);
 
-		LOGGER.info("Rätselgruppe angelegt: {}, user={}", result.getId(), StringUtils.abbreviate(userId, 11));
+		LOGGER.info("Rätselgruppe angelegt: {}, admin={}", result.getId(), StringUtils.abbreviate(userId, 11));
 
 		return result;
 	}
@@ -244,7 +244,7 @@ public class RaetselgruppenService {
 		long anzahlElemente = raetselgruppenDao.countElementeRaetselgruppe(persistierte.uuid);
 		result.setAnzahlElemente(anzahlElemente);
 
-		LOGGER.info("Raetselgruppe geaendert: {}, user={}", result.getId(), StringUtils.abbreviate(userId, 11));
+		LOGGER.info("Raetselgruppe geaendert: {}, admin={}", result.getId(), StringUtils.abbreviate(userId, 11));
 
 		return result;
 	}
@@ -608,7 +608,7 @@ public class RaetselgruppenService {
 
 			if (freigegebeneAufgaben.isEmpty()) {
 
-				LOGGER.error("Rätselgruppe {} - {} hat keine freigegebenen Aufgaben. Aufruf durch user {}", raetselgruppeID,
+				LOGGER.error("Rätselgruppe {} - {} hat keine freigegebenen Aufgaben. Aufruf durch admin {}", raetselgruppeID,
 					dbResult.name, StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
 
 				throw new WebApplicationException(
@@ -620,7 +620,7 @@ public class RaetselgruppenService {
 
 		if (freigegebeneAufgaben.isEmpty()) {
 
-			LOGGER.error("Rätselgruppe {} - {} hat keine Aufgaben. Aufruf durch user {}", raetselgruppeID,
+			LOGGER.error("Rätselgruppe {} - {} hat keine Aufgaben. Aufruf durch admin {}", raetselgruppeID,
 				dbResult.name, StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
 
 			throw new WebApplicationException(

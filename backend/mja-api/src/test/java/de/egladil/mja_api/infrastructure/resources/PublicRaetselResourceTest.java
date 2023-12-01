@@ -52,7 +52,7 @@ public class PublicRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "standard", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(2)
 	void findRaetselPublic_when_Deskriptoren_LIKE() throws Exception {
 
@@ -79,7 +79,7 @@ public class PublicRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "standard", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(3)
 	void findRaetselPublic_when_fallbackToDefaultModusDeskriptoren() throws Exception {
 
@@ -105,7 +105,7 @@ public class PublicRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "standard", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(4)
 	void findRaetselPublic_when_deskriptorenBlank() throws Exception {
 
@@ -126,7 +126,7 @@ public class PublicRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "standard", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(5)
 	void findRaetselPublic_when_Deskriptoren_NOT_LIKE() throws Exception {
 
@@ -174,5 +174,4 @@ public class PublicRaetselResourceTest {
 		// Je nach Testkontext kann ein Rätsel hinzugekommen sein.
 		assertTrue(result.getErgebnis() >= 31);
 	}
-
 }

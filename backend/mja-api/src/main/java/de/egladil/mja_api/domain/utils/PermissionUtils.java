@@ -53,7 +53,7 @@ public final class PermissionUtils {
 	}
 
 	/**
-	 * Ermittelt, ob der user leseberechtigt für die Entity mit dem gegebenen Status ist.
+	 * Ermittelt, ob der admin leseberechtigt für die Entity mit dem gegebenen Status ist.
 	 *
 	 * @param  roles
 	 *                List<String> relevante Rollen
@@ -77,7 +77,7 @@ public final class PermissionUtils {
 	}
 
 	/**
-	 * Ermittelt, ob der user leseberechtigt für die Entity mit der gegebenen ownerId ist.
+	 * Ermittelt, ob der admin leseberechtigt für die Entity mit der gegebenen ownerId ist.
 	 *
 	 * @param  userId
 	 *                 String UUID des angemeldeten Users
@@ -162,7 +162,7 @@ public final class PermissionUtils {
 	/**
 	 * Checkt, ob die Suche auf Entities mit DomainEntityStatus.FREIGEGEBEN eingeschränkt werden muss.
 	 *
-	 * @param  user
+	 * @param  admin
 	 *              AuthenticatedUser
 	 * @return      boolen
 	 */

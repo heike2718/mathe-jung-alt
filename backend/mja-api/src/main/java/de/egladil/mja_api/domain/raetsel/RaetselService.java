@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -180,7 +181,7 @@ public class RaetselService {
 		result.setId(neuesRaetsel.uuid);
 		result.markiereAlsAenderbar();
 
-		LOGGER.info("Raetsel angelegt: [raetsel={}, user={}]", result.getId(),
+		LOGGER.info("Raetsel angelegt: [raetsel={}, admin={}]", result.getId(),
 			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
 
 		return result;
@@ -284,7 +285,7 @@ public class RaetselService {
 		// Nur löschen, wenn persist klar ging!
 		deleteImagesFileService.checkAndDeleteUnusedFiles(fragenLoesungenVo);
 
-		LOGGER.info("Raetsel geaendert: [raetsel={}, user={}]", raetselId,
+		LOGGER.info("Raetsel geaendert: [raetsel={}, admin={}]", raetselId,
 			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
 
 		return getRaetselZuId(raetselId);
@@ -329,21 +330,9 @@ public class RaetselService {
 
 		Raetsel result = mapFromDB(raetsel);
 
-		List<String> grafikLinksFrage = findPathsGrafikParser.findPaths(raetsel.frage);
-
-		if (!grafikLinksFrage.isEmpty()) {
-
-			List<EmbeddableImageInfo> grafikInfosFrage = getGrafikInfos(grafikLinksFrage, Textart.FRAGE);
-			result.addAllEmbeddableImageInfos(grafikInfosFrage);
-		}
-
-		List<String> grafikLinksLoesung = findPathsGrafikParser.findPaths(raetsel.loesung);
-
-		if (!grafikLinksLoesung.isEmpty()) {
-
-			List<EmbeddableImageInfo> grafikInfosLoesung = getGrafikInfos(grafikLinksLoesung, Textart.LOESUNG);
-			result.addAllEmbeddableImageInfos(grafikInfosLoesung);
-		}
+		Pair<List<EmbeddableImageInfo>, List<EmbeddableImageInfo>> embedaableImageInfos = loadEmbeddableImageInfos(raetsel);
+		result.addAllEmbeddableImageInfos(embedaableImageInfos.getLeft());
+		result.addAllEmbeddableImageInfos(embedaableImageInfos.getRight());
 
 		result.setImages(raetselFileService.findImages(raetsel.filenameVorschauFrage, raetsel.filenameVorschauLoesung));
 
@@ -355,6 +344,34 @@ public class RaetselService {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Parsed den Text von Frage und Lösung (sofern vorhanden) nach includegraphics-Statements und erzeugt daraus Listen von
+	 * EmbeddableImageInfos.
+	 *
+	 * @param  raetsel
+	 * @return         Pair left = grafikInfosFrage, right = grafikInfosLoesung. Sie sind nie null, höchstens leer.
+	 */
+	public Pair<List<EmbeddableImageInfo>, List<EmbeddableImageInfo>> loadEmbeddableImageInfos(final PersistentesRaetsel raetsel) {
+
+		List<String> grafikLinksFrage = findPathsGrafikParser.findPaths(raetsel.frage);
+		List<EmbeddableImageInfo> grafikInfosFrage = new ArrayList<>();
+		List<EmbeddableImageInfo> grafikInfosLoesung = new ArrayList<>();
+
+		if (!grafikLinksFrage.isEmpty()) {
+
+			grafikInfosFrage = getGrafikInfos(grafikLinksFrage, Textart.FRAGE);
+		}
+
+		List<String> grafikLinksLoesung = findPathsGrafikParser.findPaths(raetsel.loesung);
+
+		if (!grafikLinksLoesung.isEmpty()) {
+
+			grafikInfosLoesung = getGrafikInfos(grafikLinksLoesung, Textart.LOESUNG);
+		}
+
+		return Pair.of(grafikInfosFrage, grafikInfosLoesung);
 	}
 
 	/**

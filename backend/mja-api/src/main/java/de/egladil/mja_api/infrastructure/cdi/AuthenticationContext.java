@@ -12,7 +12,7 @@ import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 public interface AuthenticationContext {
 
 	/**
-	 * Der user wird vom InitSecurityContextFilter in den AuthenticationContext gepackt und hier dann herausgeholt.
+	 * Der admin wird vom InitSecurityContextFilter in den AuthenticationContext gepackt und hier dann herausgeholt.
 	 *
 	 * @return
 	 */

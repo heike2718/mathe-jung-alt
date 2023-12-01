@@ -120,7 +120,7 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 				Response.status(Status.FORBIDDEN).entity(MessagePayload.error("verbotene URL aufgerufen")).build());
 		}
 
-		boolean admin = user.isAdmin();
+		boolean admin = user.isAdminOrAutor();
 
 		List<Deskriptor> alle = deskriptorenRepository.listAll();
 		Collections.sort(alle, DESKRIPTOREN_COMPARATOR);

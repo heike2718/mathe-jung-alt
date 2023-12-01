@@ -19,16 +19,7 @@ public class EmbeddableImagesFilenameDelegate {
 
 	private static final String FIRST_SUBDIR = "/resources";
 
-	private final Pattern patternNameEpsHeike;
-
-	/**
-	 *
-	 */
-	private EmbeddableImagesFilenameDelegate() {
-
-		patternNameEpsHeike = Pattern.compile(MjaRegexps.REGEXP_EPS_HEIKE_WITH_FILE_SEPERATOR);
-
-	}
+	private final Pattern patternNameEpsHeike = Pattern.compile(MjaRegexps.REGEXP_EPS_HEIKE_WITH_FILE_SEPERATOR);
 
 	public String getRelativePathForEmbeddableImage(final String uuid, final String filenameImage) {
 

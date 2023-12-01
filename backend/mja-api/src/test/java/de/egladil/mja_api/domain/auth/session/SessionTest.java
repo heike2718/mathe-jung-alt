@@ -53,7 +53,7 @@ public class SessionTest {
 			fail("keine IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 
-			assertEquals("user null", e.getMessage());
+			assertEquals("admin null", e.getMessage());
 		}
 	}
 

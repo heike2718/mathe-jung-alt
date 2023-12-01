@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -526,7 +527,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "standard", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "STANDARD" })
 	@Order(18)
 	void testGeneratePDF() {
 
@@ -545,7 +546,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "standard", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "STANDARD" })
 	@Order(19)
 	void testGeneratePDFLaTeXKaputt() {
 
@@ -563,7 +564,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "standard", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "STANDARD" })
 	@Order(20)
 	void testGeneratePDFGrafikFehlt() {
 
@@ -715,5 +716,57 @@ public class AdminRaetselResourceTest {
 			.then()
 			.statusCode(200);
 
+	}
+
+	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(40)
+	@DisplayName("when the embedded-images is called with an invalid raetselId, I expect statuscode 400")
+	void downloadEmbeddedImages_400() throws Exception {
+
+		MessagePayload messagePayload = given()
+			.when()
+			.get("embedded-images/554d4994/v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", messagePayload.getLevel());
+		assertEquals("raetselId enthält ungültige Zeichen", messagePayload.getMessage());
+	}
+
+	@Test
+	@Order(41)
+	@DisplayName("when embedded-images is called without role, I expect statuscode 401")
+	void downloadEmbeddedImages_401() throws Exception {
+
+		given()
+			.when()
+			.get("embedded-images/554d4994-90b1-4baf-a7a0-cb5cb3b54ac6/v1")
+			.then()
+			.statusCode(401);
+	}
+
+	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(42)
+	@DisplayName("when there is no raetsel with the UUID and embedded-images is called, I expect statuscode 404")
+	void downloadEmbeddedImages_404() throws Exception {
+
+		MessagePayload messagePayload = given()
+			.when()
+			.get("embedded-images/8763142b-bded-4fe6-8eb9-243e9156f51c/v1")
+			.then()
+			.statusCode(404)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", messagePayload.getLevel());
+		assertEquals("Tja, dieses Rätsel gibt es leider nicht.", messagePayload.getMessage());
 	}
 }

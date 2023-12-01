@@ -32,7 +32,7 @@ public class Session {
 	@Override
 	public String toString() {
 
-		return "Session [sessionId=" + sessionId + ", expiresAt=" + expiresAt + ", user=" + user + "]";
+		return "Session [sessionId=" + sessionId + ", expiresAt=" + expiresAt + ", admin=" + user + "]";
 	}
 
 	@JsonIgnore
@@ -112,7 +112,7 @@ public class Session {
 	}
 
 	/**
-	 * @return the user
+	 * @return the admin
 	 */
 	public AuthenticatedUser getUser() {
 
@@ -123,7 +123,7 @@ public class Session {
 
 		if (user == null) {
 
-			throw new IllegalArgumentException("user null");
+			throw new IllegalArgumentException("admin null");
 		}
 
 		this.user = user;

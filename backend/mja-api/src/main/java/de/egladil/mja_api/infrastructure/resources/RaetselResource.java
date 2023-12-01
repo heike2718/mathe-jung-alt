@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
@@ -617,7 +619,7 @@ public class RaetselResource {
 	@Path("embedded-images/{raetselId}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "getEmbeddedImages",
+		operationId = "downloadEmbeddedImages",
 		summary = "Läd die im Rätsel eingebetteten Grafikdateien herunter")
 	@Parameters({
 		@Parameter(
@@ -632,14 +634,40 @@ public class RaetselResource {
 			mediaType = "application/json",
 			schema = @Schema(type = SchemaType.ARRAY, implementation = GeneratedFile.class)))
 	@APIResponse(
+		name = "BadRequest",
+		description = "Input-Validierung schlug fehl",
+		responseCode = "400", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "Unauthorized",
+		description = "nur authentifizierte User dürfen die URL aufrufen",
+		responseCode = "401")
+	@APIResponse(
+		name = "Forbidden",
+		description = "User ist der Zugriff auf Ressourcen dieses Rätsels nicht erlaubt",
+		responseCode = "403", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "NotFound",
+		description = "NotFound",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
 		name = "ServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response getEmbeddedImages(@PathParam(value = "raetselId") final String raetselId) {
+	public Response downloadEmbeddedImages(@Pattern(
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
+		message = "raetselId enthält ungültige Zeichen") @PathParam(value = "raetselId") final String raetselId) {
 
-		return Response.ok().build();
+		List<GeneratedFile> embeddedImages = embeddedImagesService.getEmbeddedImages(raetselId);
+
+		return Response.ok(embeddedImages).build();
 	}
 
 	/**

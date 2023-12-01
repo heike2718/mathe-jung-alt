@@ -67,7 +67,7 @@ public class RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	/**
-	 * Generiert den output des Raetsels im gewünschten Format und gibt die Url als String zurück. Nur user mit Änderungsrecht auf
+	 * Generiert den output des Raetsels im gewünschten Format und gibt die Url als String zurück. Nur admin mit Änderungsrecht auf
 	 * das Rätsel dürfen diese Methode aufrufen.
 	 *
 	 * @param  raetselUuid
@@ -88,7 +88,7 @@ public class RaetselGeneratorService {
 
 			String userId = authCtx.getUser().getName();
 
-			LOGGER.warn("user {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
+			LOGGER.warn("admin {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
 				raetsel.getSchluessel());
 
 			throw new WebApplicationException(Status.FORBIDDEN);
@@ -158,7 +158,7 @@ public class RaetselGeneratorService {
 							new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN + ".tex" });
 				}
 
-				LOGGER.info("Raetsel Images generiert: [raetsel={}, user={}]", raetselUuid,
+				LOGGER.info("Raetsel Images generiert: [raetsel={}, admin={}]", raetselUuid,
 					StringUtils.abbreviate(authCtx.getUser().getName(), 11));
 
 				return result;
@@ -216,7 +216,7 @@ public class RaetselGeneratorService {
 
 		if (!hasReadPermission) {
 
-			LOGGER.warn("user {} nicht berechtigt, PDF fuer Raetsel mit SCHLUESSEL={} zu generieren",
+			LOGGER.warn("admin {} nicht berechtigt, PDF fuer Raetsel mit SCHLUESSEL={} zu generieren",
 				authCtx.getUser().getName(),
 				raetsel.getSchluessel());
 
@@ -257,7 +257,7 @@ public class RaetselGeneratorService {
 				raetselFileService
 					.deleteTemporaryFiles(new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_PDF + ".tex" });
 
-				LOGGER.info("Raetsel PDF generiert: [raetsel={}, user={}]", raetselUuid,
+				LOGGER.info("Raetsel PDF generiert: [raetsel={}, admin={}]", raetselUuid,
 					StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
 
 				this.deleteTemporaryFiles(raetsel.getSchluessel());

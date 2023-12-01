@@ -4,8 +4,10 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetsel.dto;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
@@ -57,5 +59,13 @@ public class EmbeddableImageInfo {
 	public boolean isExistiert() {
 
 		return existiert;
+	}
+
+	@JsonIgnore
+	public String getFilename() {
+
+		String[] tokens = StringUtils.split(pfad, '/');
+		return tokens[tokens.length - 1];
+
 	}
 }

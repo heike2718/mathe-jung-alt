@@ -108,7 +108,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 						addUserToAuthAndSecurityContext(user, requestContext);
 					} else {
 
-						LOGGER.warn("path={}, user ist null, die Anwendung wird nicht funktionieren!", path);
+						LOGGER.warn("path={}, admin ist null, die Anwendung wird nicht funktionieren!", path);
 					}
 
 				}
@@ -159,7 +159,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 			}
 		});
 
-		LOGGER.debug("user {} added to AuthenticationContext and SecurityContext", user);
+		LOGGER.debug("admin {} added to AuthenticationContext and SecurityContext", user);
 
 	}
 
@@ -169,7 +169,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 			.withIdReference("bla").withRoles(new String[] { "ADMIN" }).withBenutzerart(Benutzerart.ADMIN);
 
 		authCtx.setUser(user);
-		LOGGER.warn("config property 'mock.session' is true => authCtx with mocked user: ");
+		LOGGER.warn("config property 'mock.session' is true => authCtx with mocked admin: ");
 	}
 
 	boolean isPathOpenData(final String path) {

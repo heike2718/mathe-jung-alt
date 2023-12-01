@@ -52,7 +52,7 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 		return "AuthenticatedUser [uuid=" + StringUtils.abbreviate(getName(), 11) + ", roles=" + Arrays.toString(roles) + "]";
 	}
 
-	public boolean isAdmin() {
+	public boolean isAdminOrAutor() {
 
 		return this.benutzerart == Benutzerart.ADMIN || this.benutzerart == Benutzerart.AUTOR;
 	}
