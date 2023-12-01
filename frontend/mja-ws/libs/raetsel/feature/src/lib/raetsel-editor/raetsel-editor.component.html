@@ -208,7 +208,7 @@
                 matTooltip="PNG Frage und Lösung generieren" (click)="printPNG()">PNG
                 generieren</button>
             <button *ngIf="raetselFacade.generateLatexError$ | async" mat-raised-button color="primary"
-                matTooltip="LaTeX: Logdateie herunterladen" (click)="downloadLatexLogs()">LaTeX-Log</button>
+                matTooltip="LaTeX: Logdateien herunterladen" (click)="downloadLatexLogs()">LaTeX-Logs</button>
             <button *ngIf="raetselDetails.id !== 'neu'" mat-raised-button color="primary"
                 matTooltip="zurück zur Detailansicht" (click)="cancelEdit()">Abbruch/Details</button>
             <button mat-raised-button color="primary" matTooltip="zurück zur Suche"

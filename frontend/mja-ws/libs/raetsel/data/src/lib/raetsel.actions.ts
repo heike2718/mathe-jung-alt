@@ -22,6 +22,8 @@ export const raetselActions = createActionGroup({
         'RAETSEL_SAVED': props<{raetselDetails: RaetselDetails}>(),
         'FIND_LATEXLOGS': props<{schluessel: string}>(),
         'LATEXLOGS_FOUND':props<{ files: GeneratedFile[] }>(),
+        'FIND_EMBEDDED_IMAGES': props<{raetselID: string}>(),
+        'EMBEDDED_IMAGES_FOUND':props<{ files: GeneratedFile[] }>(),
         'PREPARE_EDIT': emptyProps(),
         'FINISH_EDIT': emptyProps()
     }

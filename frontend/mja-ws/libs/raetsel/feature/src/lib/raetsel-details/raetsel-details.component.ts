@@ -118,6 +118,12 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  downloadEmbeddedImages(): void {
+    if (this.#raetselDetails && this.#raetselDetails.embeddableImageInfos.length > 0) {
+      this.raetselFacade.downloadEmbeddedImages(this.#raetselDetails.id);
+    }
+  }
+
   #openPrintDialog(outputformat: OUTPUTFORMAT): void {
 
     const dialogData: SelectGeneratorParametersUIModelAutoren = {

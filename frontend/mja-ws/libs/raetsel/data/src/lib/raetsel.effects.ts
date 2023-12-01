@@ -110,6 +110,32 @@ export class RaetselEffects {
             }),
         ), { dispatch: false });
 
+    findEmbeddedImages$ = createEffect(() =>
+
+        this.#actions.pipe(
+            ofType(raetselActions.fIND_EMBEDDED_IMAGES),
+            switchMap((action) => this.#raetselHttpService.findEmbeddedImages(action.raetselID)),
+            map((files) => raetselActions.eMBEDDED_IMAGES_FOUND({ files: files }))
+        ));
+
+    embeddedImagesFound$ = createEffect(() =>
+
+        this.#actions.pipe(
+            ofType(raetselActions.eMBEDDED_IMAGES_FOUND),
+            tap((action) => {
+
+                if (action.files.length > 0) {
+
+                    action.files.forEach((file: GeneratedFile) => {
+                        this.#fileDownloadService.downloadText(file.fileData, file.fileName);
+                    })
+                }
+                else {
+                    this.#messageService.warn('keine der referenzierten Grafik-Dateien existiert');
+                }
+            }),
+        ), { dispatch: false });
+
     cancelSelectiont$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselActions.rAETSEL_CANCEL_SELECTION),

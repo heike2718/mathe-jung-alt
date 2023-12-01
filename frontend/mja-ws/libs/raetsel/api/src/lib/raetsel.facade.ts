@@ -138,6 +138,10 @@ export class RaetselFacade {
   downloadLatexLogs(schluessel: string): void {
     this.#store.dispatch(raetselActions.fIND_LATEXLOGS({ schluessel: schluessel }));
   }
+
+  downloadEmbeddedImages(raetselID: string): void {
+    this.#store.dispatch(raetselActions.fIND_EMBEDDED_IMAGES({raetselID}));
+  }
   
   leaveEditMode() {
     this.#store.dispatch(raetselActions.fINISH_EDIT());

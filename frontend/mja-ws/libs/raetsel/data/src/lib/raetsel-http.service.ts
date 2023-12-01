@@ -104,6 +104,15 @@ export class RaetselHttpService {
         return this.#http.get<GeneratedFile[]>(url, { headers: headers });
     }
 
+    findEmbeddedImages(raetselID: string): Observable<GeneratedFile[]> {
+
+        const url = this.#url + '/embedded-images/' + raetselID + '/v1';
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+
+        return this.#http.get<GeneratedFile[]>(url, { headers: headers });
+    }
+
 
     saveRaetsel(editRaetselPayload: EditRaetselPayload): Observable<RaetselDetails> {
 
