@@ -19,25 +19,27 @@ public class LaTeXTemplatesService {
 
 	private static LaTeXTemplatesService instance;
 
-	private static final String TEMPLATE_PDF_RAETSEL_FRAGE = "/latex/template-pdf-frage.txt";
+	private static final String TEMPLATE_PDF_RAETSEL_FRAGE = "/latex/template-pdf-frage.tex";
 
-	private static final String TEMPLATE_PDF_RAETSEL_LOESUNG = "/latex/template-pdf-loesung.txt";
+	private static final String TEMPLATE_PDF_RAETSEL_LOESUNG = "/latex/template-pdf-loesung.tex";
 
-	private static final String TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG = "/latex/template-pdf-frage-loesung.txt";
+	private static final String TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG = "/latex/template-pdf-frage-loesung.tex";
 
-	private static final String TEMPLATE_PDF_AUFGABENBLATT = "/latex/template-document-aufgabenblatt-pdf.txt";
+	private static final String TEMPLATE_PDF_AUFGABENBLATT = "/latex/template-document-aufgabenblatt-pdf.tex";
 
-	private static final String TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN = "/latex/template-document-aufgabenblatt-mit-loesungen-pdf.txt";
+	private static final String TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN = "/latex/template-document-aufgabenblatt-mit-loesungen-pdf.tex";
 
-	private static final String TEMPLATE_PDF_KARTEI = "/latex/template-document-kartei-pdf.txt";
+	private static final String TEMPLATE_LATEX_MASTER = "/latex/template-latex-master.tex";
+
+	private static final String TEMPLATE_PDF_KARTEI = "/latex/template-document-kartei-pdf.tex";
 
 	private static final String TEMPLATE_DOCUMENT_RAETSEL_PDF = "/latex/template-document-raetsel-pdf.tex";
 
 	private static final String TEMPLATE_DOCUMENT_RAETSEL_PNG = "/latex/template-document-raetsel-png.tex";
 
-	private static final String LIZENZ_FONTS_FIBEL = "/latex/lizenz-fonts-fibel.txt";
+	private static final String LIZENZ_FONTS_FIBEL = "/latex/lizenz-fonts-fibel.tex";
 
-	private static final String LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK = "/latex/lizenz-fonts-by-wok.txt";
+	private static final String LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK = "/latex/lizenz-fonts-by-wok.tex";
 
 	private String templatePDFRaetselFrage;
 
@@ -48,6 +50,8 @@ public class LaTeXTemplatesService {
 	private String templateDocumentPDFAufgabenblatt;
 
 	private String templateDocumentPDFAufgabenblattMitLoesungen;
+
+	private String templateLaTeXMaster;
 
 	private String templateDocumentPDFKartei;
 
@@ -103,6 +107,18 @@ public class LaTeXTemplatesService {
 		}
 
 		return templateDocumentPDFAufgabenblattMitLoesungen;
+	}
+
+	public synchronized String getTemplateLaTeXMaster() {
+
+		if (templateLaTeXMaster == null) {
+
+			LOGGER.debug("Lade Template {}", TEMPLATE_LATEX_MASTER);
+
+			templateLaTeXMaster = MjaFileUtils.loadTemplate(TEMPLATE_LATEX_MASTER);
+		}
+
+		return templateLaTeXMaster;
 	}
 
 	public synchronized String getTemplateDocumentPDFKartei() {

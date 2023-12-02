@@ -33,12 +33,12 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
 /**
- * RaetselgruppeGeneratorService
+ * RaetselgruppePDFGeneratorService
  */
 @ApplicationScoped
-public class RaetselgruppeGeneratorService {
+public class RaetselgruppePDFGeneratorService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppeGeneratorService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppePDFGeneratorService.class);
 
 	private static List<String> TEMPORARY_FILE_EXTENSIONS = Arrays.asList(new String[] { ".aux", ".log", ".out", ".tex", "" });
 
@@ -57,6 +57,9 @@ public class RaetselgruppeGeneratorService {
 
 	@Inject
 	RaetselService raetselService;
+
+	@Inject
+	RaetselgruppeLaTeXGeneratorService generatorserviceDelegate;
 
 	/**
 	 * Generiert LaTeX für die gegebene raetselguppe.
@@ -81,8 +84,6 @@ public class RaetselgruppeGeneratorService {
 
 		LOGGER.debug("start generate output");
 
-		RaetselgruppeLaTeXGeneratorStrategy strategy = RaetselgruppeLaTeXGeneratorStrategy.getStrategy(verwendungszweck);
-
 		RaetselgruppeGeneratorInput input = new RaetselgruppeGeneratorInput()
 			.withAufgaben(aufgaben)
 			.withFont(font)
@@ -91,18 +92,18 @@ public class RaetselgruppeGeneratorService {
 			.withVerwendungszweck(verwendungszweck)
 			.withSchriftgroesse(schriftgroesse);
 
-		String template = strategy.generateLaTeX(input, raetselService, quizitemLaTeXGenerator);
+		if (Verwendungszweck.LATEX == verwendungszweck) {
 
-		if (verwendungszweck.compileToPDF()) {
-
-			String fileNameWithoutExtension = writeToDoc(template, raetselgruppe.uuid, raetselgruppe.name);
-			return generatePdf(fileNameWithoutExtension, raetselgruppe.uuid);
+			return generatorserviceDelegate.generateLaTeXArchive(raetselgruppe, input);
 		}
 
-		GeneratedFile result = new GeneratedFile();
-		result.setFileData(template.getBytes());
-		result.setFileName(MjaFileUtils.nameToFilenamePart(raetselgruppe.name) + ".tex");
-		return result;
+		RaetselgruppeLaTeXGeneratorStrategy strategy = RaetselgruppeLaTeXGeneratorStrategy.getStrategy(verwendungszweck);
+
+		String template = strategy.generateLaTeX(input, raetselService, quizitemLaTeXGenerator);
+
+		String fileNameWithoutExtension = writeToDoc(template, raetselgruppe.uuid, raetselgruppe.name);
+		return generatePdf(fileNameWithoutExtension, raetselgruppe.uuid);
+
 	}
 
 	String writeToDoc(final String template, final String raetselgruppeID, final String raetselgruppeName) {

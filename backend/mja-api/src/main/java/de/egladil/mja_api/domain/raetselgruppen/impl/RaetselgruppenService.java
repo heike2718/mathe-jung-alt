@@ -16,7 +16,7 @@ import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.generatoren.FontName;
-import de.egladil.mja_api.domain.generatoren.RaetselgruppeGeneratorService;
+import de.egladil.mja_api.domain.generatoren.RaetselgruppePDFGeneratorService;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.quiz.QuizService;
@@ -65,7 +65,7 @@ public class RaetselgruppenService {
 	QuizService quizService;
 
 	@Inject
-	RaetselgruppeGeneratorService raetselgruppeFileService;
+	RaetselgruppePDFGeneratorService raetselgruppeFileService;
 
 	public RaetselgruppensucheTreffer findRaetselgruppen(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
 

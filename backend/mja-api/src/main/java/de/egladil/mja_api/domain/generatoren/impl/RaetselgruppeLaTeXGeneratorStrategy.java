@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
 
+import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
@@ -32,11 +33,13 @@ public interface RaetselgruppeLaTeXGeneratorStrategy {
 
 		case ARBEITSBLATT:
 		case VORSCHAU:
-		case LATEX:
 			return new AufgabenLoesungenLaTeXGeneratorStrategy();
 
 		case KARTEI:
 			return new KarteiLaTeXGeneratorStrategy();
+
+		case LATEX:
+			throw new MjaRuntimeException("LaTeX wird als zip-Archiv generiert und verwendet andere Generatoren.");
 
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + verwendungszweck);

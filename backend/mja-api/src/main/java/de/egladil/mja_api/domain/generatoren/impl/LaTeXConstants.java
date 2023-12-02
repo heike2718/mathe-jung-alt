@@ -33,4 +33,8 @@ public interface LaTeXConstants {
 
 	String INCLUDEGRAPHICS_END = "} \\end{center}";
 
+	String INPUT_AUFGABE = "{\\bf Aufgabe {nummer} }\\\\ \\input{./{schluessel}}\\par\n";
+
+	String INPUT_LOESUNG = "{\\bf Lösung {nummer} }\\\\ \\input{./{schluessel}_l}\\par\n";
+
 }

@@ -29,6 +29,7 @@ import de.egladil.mja_api.domain.generatoren.ImageGeneratorService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.impl.IncludegraphicsTextGenerator;
 import de.egladil.mja_api.domain.upload.UploadedFile;
+import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -122,16 +123,8 @@ public class EmbeddableImageService {
 				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("404 - Datei nicht gefunden")).build());
 		}
 
-		try (FileOutputStream fos = new FileOutputStream(file);
-			InputStream in = new ByteArrayInputStream(uploadRequestDto.getFile().getDecodedData())) {
-
-			IOUtils.copy(in, fos);
-			fos.flush();
-		} catch (IOException e) {
-
-			LOGGER.error("Fehler beim Speichern im Filesystem: " + e.getMessage(), e);
-			throw new MjaRuntimeException("Konnte Image nicht ins Filesystem speichern: " + e.getMessage(), e);
-		}
+		byte[] data = uploadRequestDto.getFile().getDecodedData();
+		MjaFileUtils.writeBinaryFile(file, data);
 
 		LOGGER.info("Grafikdatei hochgeladen: {} - {}", StringUtils.abbreviate(authCtx.getUser().getName(), 11),
 			file.getAbsolutePath());

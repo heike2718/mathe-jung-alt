@@ -43,7 +43,7 @@ public class KarteiLaTeXGeneratorStrategy implements RaetselgruppeLaTeXGenerator
 		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
 
 		List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();
-		List<RaetselLaTeXDto> raetselLaTeX = raetselService.findRaetselLaTeXwithSchluessel(schluessel);
+		List<RaetselLaTeXDto> raetselLaTeX = raetselService.findRaetselLaTeXwithSchluesselliste(schluessel);
 
 		int count = 0;
 

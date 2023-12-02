@@ -11,15 +11,7 @@ public enum Verwendungszweck {
 
 	ARBEITSBLATT,
 	KARTEI,
-	LATEX {
-
-		@Override
-		public boolean compileToPDF() {
-
-			return false;
-		}
-
-	},
+	LATEX,
 	VORSCHAU {
 
 		@Override
@@ -27,16 +19,6 @@ public enum Verwendungszweck {
 
 			return true;
 		}
-	};
-
-	/**
-	 * Gibt an, ob gleich compiliert werden soll.
-	 *
-	 * @return
-	 */
-	public boolean compileToPDF() {
-
-		return true;
 	};
 
 	/**

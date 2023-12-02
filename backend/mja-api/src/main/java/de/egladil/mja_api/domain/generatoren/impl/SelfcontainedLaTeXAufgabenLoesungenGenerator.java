@@ -4,27 +4,29 @@
 // =====================================================
 package de.egladil.mja_api.domain.generatoren.impl;
 
-import java.util.Collections;
 import java.util.List;
 
 import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
-import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
-import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 
 /**
- * AufgabenLoesungenLaTeXGeneratorStrategy
+ * SelfcontainedLaTeXAufgabenLoesungenGenerator
  */
-public class AufgabenLoesungenLaTeXGeneratorStrategy implements RaetselgruppeLaTeXGeneratorStrategy {
+public class SelfcontainedLaTeXAufgabenLoesungenGenerator {
 
 	private final AufgabenLoesungenLaTeXGeneratorDelegate delegate = new AufgabenLoesungenLaTeXGeneratorDelegate();
 
-	@Override
-	public String generateLaTeX(final RaetselgruppeGeneratorInput input, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
-
-		List<Quizaufgabe> aufgaben = input.getAufgaben();
-		Collections.sort(aufgaben, new QuizaufgabeComparator());
+	/**
+	 * Generiert das LaTeX für ein vollständig expandiertes LaTex, in dem also Fragen und Lösungen nicht importiert werden.
+	 *
+	 * @param  aufgaben
+	 * @param  raetselLaTeX
+	 * @param  quizitemLaTeXGenerator
+	 * @param  input
+	 * @return
+	 */
+	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final RaetselgruppeGeneratorInput input) {
 
 		String template = LaTeXTemplatesService.getInstance().getTemplateDocumentPDFAufgabenblattMitLoesungen();
 
@@ -35,9 +37,6 @@ public class AufgabenLoesungenLaTeXGeneratorStrategy implements RaetselgruppeLaT
 		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_AUFGABEN.placeholder(), input.getRaetselgruppe().name);
 		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_LOESUNGEN.placeholder(), input.getRaetselgruppe().name);
 
-		List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();
-		List<RaetselLaTeXDto> raetselLaTeX = raetselService.findRaetselLaTeXwithSchluesselliste(schluessel);
-
 		String contentAufgaben = delegate.printContentAufgaben(aufgaben, raetselLaTeX, quizitemLaTeXGenerator, input);
 		String contentLoesungen = delegate.printContentLoesungen(aufgaben, raetselLaTeX, quizitemLaTeXGenerator, input);
 
@@ -45,27 +44,7 @@ public class AufgabenLoesungenLaTeXGeneratorStrategy implements RaetselgruppeLaT
 		template = template.replace(LaTeXPlaceholder.TRENNER_FRAGE_LOESUNG.placeholder(), LaTeXConstants.VALUE_NEWPAGE);
 		template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), contentLoesungen);
 
-		switch (input.getFont()) {
-
-		case DRUCK_BY_WOK:
-
-			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
-				LaTeXTemplatesService.getInstance().getLizenzFontsDruckschrift());
-			break;
-
-		case FIBEL_NORD:
-		case FIBEL_SUED:
-			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
-				LaTeXTemplatesService.getInstance().getLizenzFontsFibel());
-			break;
-
-		case STANDARD:
-			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), "");
-			break;
-
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + input.getFont());
-		}
+		template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), "");
 
 		return template;
 	}

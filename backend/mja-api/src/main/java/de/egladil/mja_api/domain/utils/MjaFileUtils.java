@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.utils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,6 +14,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -33,7 +37,7 @@ public class MjaFileUtils {
 	 * @param  template
 	 * @return          String
 	 */
-	public static void writeOutput(final File file, final String template, final String errorMessage) {
+	public static void writeOutput(final File file, final String template, final String errormessage) {
 
 		LOGGER.debug("file={}", file.getAbsolutePath());
 
@@ -44,10 +48,136 @@ public class MjaFileUtils {
 
 		} catch (IOException e) {
 
-			String message = "konnte kein LaTex-File schreiben: [" + errorMessage + "]";
+			String message = "konnte kein LaTex-File schreiben: [" + errormessage + "]";
 			LOGGER.error(message + ": " + e.getMessage(), e);
 			throw new MjaRuntimeException(message);
 
+		}
+	}
+
+	/**
+	 * @param file
+	 * @param data
+	 */
+	public static void writeBinaryFile(final File file, final byte[] data) {
+
+		try (FileOutputStream fos = new FileOutputStream(file);
+			InputStream in = new ByteArrayInputStream(data)) {
+
+			IOUtils.copy(in, fos);
+			fos.flush();
+		} catch (IOException e) {
+
+			LOGGER.error("Fehler beim Speichern im Filesystem: " + e.getMessage(), e);
+			throw new MjaRuntimeException("Konnte Image nicht ins Filesystem speichern: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Es wird ein flaches Verzeichnis gezipt - keine Unterverzeichnisse. Könnte man zwar machen, aber das ist unnötig komplex. Alle
+	 * Files stehen auf der gleichen Ebene im zu komprimierenden Verzeichnis.
+	 *
+	 * @param directoryToZip
+	 * @param errormessage
+	 */
+	public static final void createZipArchive(final File directoryToZip, final String errormessage) {
+
+		String zipFileName = directoryToZip.getName() + ".zip";
+
+		try (FileOutputStream fos = new FileOutputStream(zipFileName); ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+
+			zipDir(directoryToZip, zipOut);
+
+		} catch (IOException e) {
+
+			String message = "konnte kein Zip-Archiv erzeugen: [" + errormessage + "]";
+			LOGGER.error(message + ": " + e.getMessage(), e);
+			throw new MjaRuntimeException(message);
+		}
+	}
+
+	/**
+	 * @param directoryToZip
+	 * @param zipOut
+	 */
+	private static void zipDir(final File directoryToZip, final ZipOutputStream zipOut) throws IOException {
+
+		String filename = directoryToZip.getName();
+
+		if (filename.endsWith("/")) {
+
+			zipOut.putNextEntry(new ZipEntry(filename));
+			zipOut.closeEntry();
+		}
+
+		File[] children = directoryToZip.listFiles();
+
+		for (File childFile : children) {
+
+			filename = childFile.getName();
+
+			try (FileInputStream fis = new FileInputStream(childFile)) {
+
+				ZipEntry zipEntry = new ZipEntry(filename);
+				zipOut.putNextEntry(zipEntry);
+				byte[] bytes = new byte[1024];
+				int length;
+
+				while ((length = fis.read(bytes)) >= 0) {
+
+					zipOut.write(bytes, 0, length);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Legt ein Verzeichnis an.
+	 *
+	 * @param  path
+	 * @param  errorMessage
+	 * @return              File
+	 */
+	public static File createDirectory(final String path, final String errorMessage) throws MjaRuntimeException {
+
+		LOGGER.debug("path={}", path);
+
+		File directory = new File(path);
+
+		try {
+
+			FileUtils.forceMkdir(directory);
+
+			return directory;
+		} catch (IOException e) {
+
+			String message = "konnte kein Verzeichnis erzeugen: [" + errorMessage + "]";
+			LOGGER.error(message + ": " + e.getMessage(), e);
+			throw new MjaRuntimeException(message);
+		}
+
+	}
+
+	/**
+	 * Kopiert alle Dateien aus dem sourceDir in das targetDir.
+	 *
+	 * @param sourceDir
+	 * @param targetDir
+	 */
+	public static void copyFiles(final List<File> files, final File targetDir) {
+
+		for (File file : files) {
+
+			try {
+
+				FileUtils.copyFileToDirectory(file, targetDir);
+			} catch (IOException e) {
+
+				String message = "IOException beim Kopieren von " + file.getName() + " nach " + targetDir.getAbsolutePath();
+				LOGGER.error(message + ": " + e.getMessage(), e);
+				throw new MjaRuntimeException(message);
+
+			}
 		}
 	}
 

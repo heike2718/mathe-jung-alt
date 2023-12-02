@@ -394,13 +394,13 @@ public class RaetselService {
 	/**
 	 * Läd das, was als Input für ein LaTeX-File erforderlich ist.
 	 *
-	 * @param  schluessel
+	 * @param  schluesselliste
 	 *                    List eine Liste von Schlüsseln.
 	 * @return            List
 	 */
-	public List<RaetselLaTeXDto> findRaetselLaTeXwithSchluessel(final List<String> schluessel) {
+	public List<RaetselLaTeXDto> findRaetselLaTeXwithSchluesselliste(final List<String> schluesselliste) {
 
-		List<PersistentesRaetsel> trefferliste = raetselDao.findWithSchluesselListe(schluessel);
+		List<PersistentesRaetsel> trefferliste = raetselDao.findWithSchluesselListe(schluesselliste);
 
 		return trefferliste.stream().map(pr -> RaetselLaTeXDto.mapFromDB(pr)).toList();
 
