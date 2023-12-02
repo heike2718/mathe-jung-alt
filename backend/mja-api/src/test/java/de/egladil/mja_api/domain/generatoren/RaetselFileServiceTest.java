@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.generatoren.impl;
+package de.egladil.mja_api.domain.generatoren;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,8 +17,6 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.TestFileUtils;
-import de.egladil.mja_api.domain.generatoren.FontName;
-import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -27,20 +25,20 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
 /**
- * RaetselFileServiceImplTest
+ * RaetselFileServiceTest
  */
 @QuarkusTest
 @TestProfile(FullDatabaseTestProfile.class)
-public class RaetselFileServiceImplTest {
+public class RaetselFileServiceTest {
 
 	private static final String BASE_DIR = "/home/heike/test";
 
-	RaetselFileServiceImpl fileService;
+	RaetselFileService fileService;
 
 	@BeforeEach
 	void setUp() {
 
-		fileService = new RaetselFileServiceImpl();
+		fileService = new RaetselFileService();
 		fileService.setLatexBaseDir(BASE_DIR);
 	}
 

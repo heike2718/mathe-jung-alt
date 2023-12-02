@@ -342,6 +342,8 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
+		// System.out.println(messagePayload.toString());
+
 		assertEquals("Es gibt bereits eine Rätselgruppe mit der gleichen Referenz.", messagePayload.getMessage());
 
 	}
@@ -352,7 +354,7 @@ public class RaetselgruppenResourceTest {
 	void testRaetselgruppeAnlegenIdNichtNeu() throws Exception {
 
 		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
-		payload.setId("012345-abcde");
+		payload.setId("20582897-68be-41dd-ac28-63cc80b07f85");
 		payload.setName("Rätselgruppe XY");
 		payload.setReferenz("2010");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);

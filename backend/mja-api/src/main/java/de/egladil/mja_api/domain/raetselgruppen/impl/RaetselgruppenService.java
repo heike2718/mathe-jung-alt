@@ -638,7 +638,7 @@ public class RaetselgruppenService {
 	 * @param  raetselgruppeID
 	 * @return                 GeneratedFile
 	 */
-	public GeneratedFile downloadLaTeXSource(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile downloadLaTeXSources(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 

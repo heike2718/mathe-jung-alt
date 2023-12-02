@@ -38,6 +38,7 @@ import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -146,18 +147,28 @@ public class RaetselgruppenResource {
 		operationId = "raetselgruppeAnlegen",
 		summary = "neue Rätselgruppe anlegen")
 	@APIResponse(
-		name = "CreateRaetselgruppeOKResponse",
+		name = "OKResponse",
 		responseCode = "201",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppensucheTrefferItem.class)))
 	@APIResponse(
-		name = "CreateRaetselgruppeServerError",
+		name = "BadRequest",
+		description = "Input-Validierung schlug fehl",
+		responseCode = "400", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "Unauthorized",
+		description = "nur Admins und Autoren dürfen Rätselgruppen anlegen (vorerst)",
+		responseCode = "401")
+	@APIResponse(
+		name = "ServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselgruppeAnlegen(final EditRaetselgruppePayload requestPayload) {
+	public Response raetselgruppeAnlegen(@Valid final EditRaetselgruppePayload requestPayload) {
 
 		delayService.pause();
 
@@ -173,13 +184,29 @@ public class RaetselgruppenResource {
 		operationId = "raetselgruppeAendern",
 		summary = "neue Rätselgruppe anlegen")
 	@APIResponse(
-		name = "UpdateRaetselgruppeOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppensucheTrefferItem.class)))
 	@APIResponse(
-		name = "UpdateRaetselgruppeServerError",
+		name = "BadRequest",
+		description = "Input-Validierung schlug fehl",
+		responseCode = "400", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "Unauthorized",
+		description = "nur Admins und Autoren dürfen Rätselgruppen ändern (vorerst)",
+		responseCode = "401")
+	@APIResponse(
+		name = "Forbidden",
+		description = "Admins dürfen jede Rätselgruppe ändern, Autoren nur eigene.",
+		responseCode = "403", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "ServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
@@ -204,15 +231,31 @@ public class RaetselgruppenResource {
 			name = "raetselgruppeID",
 			description = "technische ID der Rätselgruppe") })
 	@APIResponse(
-		name = "FindRaetselgruppeByIDOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppeDetails.class)))
 	@APIResponse(
-		name = "RaetselgruppeByIDNotFound",
+		name = "BadRequest",
+		description = "Input-Validierung schlug fehl",
+		responseCode = "400", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "Unauthorized",
+		description = "nur Admins und Autoren dürfen Rätselgruppe laden",
+		responseCode = "401")
+	@APIResponse(
+		name = "NotFound",
 		description = "Gibt es nicht",
 		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "ServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public RaetselgruppeDetails raetselgruppeDetailsLaden(@PathParam(value = "raetselgruppeID") @Pattern(
@@ -244,11 +287,21 @@ public class RaetselgruppenResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppeDetails.class)))
 	@APIResponse(
-		name = "BadRequestResponse",
+		name = "BadRequest",
 		responseCode = "400",
 		description = "fehlgeschlagene Input-Validierung")
 	@APIResponse(
-		name = "NotFoundResponse",
+		name = "Unauthorized",
+		description = "nur Admins und Autoren dürfen Rätselgruppen ändern (vorerst)",
+		responseCode = "401")
+	@APIResponse(
+		name = "Forbidden",
+		description = "Admins dürfen jede Rätselgruppe ändern, Autoren nur eigene.",
+		responseCode = "403", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "NotFound",
 		description = "Die Rätselgruppe oder das Rätsel mit dem fachlichen SCHLUESSEL gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
@@ -289,11 +342,21 @@ public class RaetselgruppenResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppeDetails.class)))
 	@APIResponse(
-		name = "BadRequestResponse",
+		name = "BadRequest",
 		responseCode = "400",
 		description = "fehlgeschlagene Input-Validierung")
 	@APIResponse(
-		name = "NotFoundResponse",
+		name = "Unauthorized",
+		description = "nur Admins und Autoren dürfen Rätselgruppen ändern (vorerst)",
+		responseCode = "401")
+	@APIResponse(
+		name = "Forbidden",
+		description = "Admins dürfen jede Rätselgruppe ändern, Autoren nur eigene.",
+		responseCode = "403", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "NotFound",
 		description = "Die Rätselgruppe oder das Element gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
@@ -323,23 +386,33 @@ public class RaetselgruppenResource {
 			name = "raetselgruppeID",
 			description = "ID der Rätselgruppe") })
 	@APIResponse(
-		name = "DeleteRaetselgruppenelementOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = RaetselgruppeDetails.class)))
 	@APIResponse(
-		name = "BadRequestResponse",
+		name = "BadRequest",
 		responseCode = "400",
 		description = "fehlgeschlagene Input-Validierung")
 	@APIResponse(
-		name = "DeleteRaetselgruppenelementNotFoundResponse",
+		name = "Unauthorized",
+		description = "nur Admins und Autoren dürfen Rätselgruppen ändern (vorerst)",
+		responseCode = "401")
+	@APIResponse(
+		name = "Forbidden",
+		description = "Admins dürfen jede Rätselgruppe ändern, Autoren nur eigene.",
+		responseCode = "403", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "NotFound",
 		description = "Die Rätselgruppe oder das Element gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
-		name = "DeleteRaetselgruppenelementServerError",
+		name = "ServerError",
 		description = "Gibt es nicht",
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
@@ -379,18 +452,22 @@ public class RaetselgruppenResource {
 			required = false)
 	})
 	@APIResponse(
-		name = "PrintRaetselgruppeVorschauOKResponse",
+		name = "OKResponse",
 		description = "PDF erfolgreich generiert",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
-		name = "PrintRaetselgruppeVorschauNotFound",
+		name = "Unauthorized",
+		description = "nur Admins und Autoren dürfen eine Vorschau generieren",
+		responseCode = "401")
+	@APIResponse(
+		name = "NotFound",
 		description = "Gibt es nicht",
 		responseCode = "404")
 	@APIResponse(
-		name = "PrintRaetselgruppeVorschauServerError",
+		name = "ServerError",
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
@@ -416,7 +493,7 @@ public class RaetselgruppenResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "downloadLaTeXSource",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein LaTeX. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Zuerst werden alle Aufgaben gedruckt, dann alle Lösungen.")
+		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID mehrere LaTeX-Dateien. Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.",
@@ -427,18 +504,28 @@ public class RaetselgruppenResource {
 			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
 	})
 	@APIResponse(
-		name = "DownloadLaTeXSourceOKResponse",
+		name = "OKResponse",
 		description = "LaTeX erfolgreich generiert",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
-		name = "RaetselgruppeNotFound",
+		name = "Unauthorized",
+		description = "nur Admins und Autoren dürfen Rätselgruppen LaTeX herunterladen",
+		responseCode = "401")
+	@APIResponse(
+		name = "Forbidden",
+		description = "Admins dürfen das LaTeX jeder Rätselgruppe herunterladen, Autoren nur das der eigenen.",
+		responseCode = "403", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "NotFound",
 		description = "Gibt es nicht",
 		responseCode = "404")
 	@APIResponse(
-		name = "RaetselgruppeNotFound",
+		name = "Servererror",
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
@@ -448,7 +535,7 @@ public class RaetselgruppenResource {
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
    // @formatter:on
 
-		return raetselgruppenService.downloadLaTeXSource(raetselgruppeID, layoutAntwortvorschlaege);
+		return raetselgruppenService.downloadLaTeXSources(raetselgruppeID, layoutAntwortvorschlaege);
 	}
 
 	@GET
@@ -477,18 +564,22 @@ public class RaetselgruppenResource {
 			required = false)
 	})
 	@APIResponse(
-		name = "RaetselgruppenArbeitsblattOKResponse",
+		name = "OKResponse",
 		description = "Quiz erfolgreich geladen",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
-		name = "RaetselgruppenArbeitsblattNotFound",
+		name = "Unauthorized",
+		description = "nur authentifizierte Benutzer mit den erforderlichen Rollen dürfen Arbeitsblätter generieren",
+		responseCode = "401")
+	@APIResponse(
+		name = "NotFound",
 		description = "Gibt es nicht",
 		responseCode = "404")
 	@APIResponse(
-		name = "RaetselgruppenArbeitsblattServerError",
+		name = "ServerError",
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
@@ -536,18 +627,22 @@ public class RaetselgruppenResource {
 			required = false)
 	})
 	@APIResponse(
-		name = "RaetselgruppenArbeitsblattOKResponse",
+		name = "OKResponse",
 		description = "Quiz erfolgreich geladen",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = GeneratedFile.class)))
 	@APIResponse(
-		name = "RaetselgruppenArbeitsblattNotFound",
+		name = "Unauthorized",
+		description = "nur authentifizierte Benutzer mit den erforderlichen Rollen dürfen Knobelkarteien generieren",
+		responseCode = "401")
+	@APIResponse(
+		name = "NotFound",
 		description = "Gibt es nicht",
 		responseCode = "404")
 	@APIResponse(
-		name = "RaetselgruppenArbeitsblattServerError",
+		name = "ServerError",
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
