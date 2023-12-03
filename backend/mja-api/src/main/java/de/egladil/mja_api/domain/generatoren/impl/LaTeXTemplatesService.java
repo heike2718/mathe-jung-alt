@@ -25,8 +25,6 @@ public class LaTeXTemplatesService {
 
 	private static final String TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG = "/latex/template-pdf-frage-loesung.tex";
 
-	private static final String TEMPLATE_PDF_AUFGABENBLATT = "/latex/template-document-aufgabenblatt-pdf.tex";
-
 	private static final String TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN = "/latex/template-document-aufgabenblatt-mit-loesungen-pdf.tex";
 
 	private static final String TEMPLATE_MAIN_LATEX_DOCUMENT = "/latex/template-main-latex-document.tex";
@@ -46,8 +44,6 @@ public class LaTeXTemplatesService {
 	private String templatePDFRaetselLoesung;
 
 	private String templatePDFRaetselFrageLoesung;
-
-	private String templateDocumentPDFAufgabenblatt;
 
 	private String templateDocumentPDFAufgabenblattMitLoesungen;
 
@@ -80,21 +76,6 @@ public class LaTeXTemplatesService {
 		}
 
 		return instance;
-	}
-
-	/**
-	 * @return String
-	 */
-	public synchronized String getTemplateDocumentPDFAufgabenblatt() {
-
-		if (templateDocumentPDFAufgabenblatt == null) {
-
-			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_AUFGABENBLATT);
-
-			templateDocumentPDFAufgabenblatt = MjaFileUtils.loadTemplate(TEMPLATE_PDF_AUFGABENBLATT);
-		}
-
-		return templateDocumentPDFAufgabenblatt;
 	}
 
 	public synchronized String getTemplateDocumentPDFAufgabenblattMitLoesungen() {

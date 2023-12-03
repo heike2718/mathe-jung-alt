@@ -970,7 +970,7 @@ public class RaetselgruppenResourceTest {
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
-			.queryParam("font", "FIBEL_NORD")
+			.queryParam("font", "DRUCK_BY_WOK")
 			.queryParam("size", "LARGE")
 			.accept(ContentType.JSON)
 			.get(
