@@ -25,7 +25,7 @@ import de.egladil.mja_api.domain.utils.GeneratorUtils;
 /**
  * KarteiLaTeXGeneratorStrategy
  */
-public class KarteiLaTeXGeneratorStrategy implements RaetselgruppeLaTeXGeneratorStrategy {
+public class KarteiLaTeXGeneratorStrategy implements RaetselgruppeGeneratorStrategy {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KarteiLaTeXGeneratorStrategy.class);
 

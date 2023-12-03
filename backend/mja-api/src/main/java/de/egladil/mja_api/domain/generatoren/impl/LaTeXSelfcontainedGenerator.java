@@ -11,21 +11,14 @@ import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 
 /**
- * SelfcontainedLaTeXAufgabenLoesungenGenerator
+ * LaTeXSelfcontainedGenerator. Generiert das LaTeX für ein vollständig expandiertes LaTex, in dem also Fragen und Lösungen nicht
+ * importiert werden.
  */
-public class SelfcontainedLaTeXAufgabenLoesungenGenerator {
+public class LaTeXSelfcontainedGenerator implements LaTeXDocGeneratorStrategy {
 
 	private final AufgabenLoesungenLaTeXGeneratorDelegate delegate = new AufgabenLoesungenLaTeXGeneratorDelegate();
 
-	/**
-	 * Generiert das LaTeX für ein vollständig expandiertes LaTex, in dem also Fragen und Lösungen nicht importiert werden.
-	 *
-	 * @param  aufgaben
-	 * @param  raetselLaTeX
-	 * @param  quizitemLaTeXGenerator
-	 * @param  input
-	 * @return
-	 */
+	@Override
 	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final RaetselgruppeGeneratorInput input) {
 
 		String template = LaTeXTemplatesService.getInstance().getTemplateDocumentPDFAufgabenblattMitLoesungen();
@@ -44,7 +37,8 @@ public class SelfcontainedLaTeXAufgabenLoesungenGenerator {
 		template = template.replace(LaTeXPlaceholder.TRENNER_FRAGE_LOESUNG.placeholder(), LaTeXConstants.VALUE_NEWPAGE);
 		template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), contentLoesungen);
 
-		template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), "");
+		String textLizenzFont = new GeneratorFontsDelegate().getTextLizenzFont(input.getFont());
+		template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), textLizenzFont);
 
 		return template;
 	}

@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.raetselgruppen.impl;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,9 +17,11 @@ import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.generatoren.FontName;
+import de.egladil.mja_api.domain.generatoren.RaetselgruppeLaTeXGeneratorService;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppePDFGeneratorService;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
+import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -31,6 +34,7 @@ import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPay
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
 import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
+import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselgruppenDao;
@@ -65,7 +69,10 @@ public class RaetselgruppenService {
 	QuizService quizService;
 
 	@Inject
-	RaetselgruppePDFGeneratorService raetselgruppeFileService;
+	RaetselgruppePDFGeneratorService raetselgruppePDFGenerator;
+
+	@Inject
+	RaetselgruppeLaTeXGeneratorService raetselgruppenLaTeXGenerator;
 
 	public RaetselgruppensucheTreffer findRaetselgruppen(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
 
@@ -539,8 +546,10 @@ public class RaetselgruppenService {
 
 		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
 
-		return raetselgruppeFileService.generate(dbResult, aufgaben, Verwendungszweck.VORSCHAU, font,
-			schriftgroesse, layoutAntwortvorschlaege);
+		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.VORSCHAU, font, schriftgroesse,
+			layoutAntwortvorschlaege, dbResult, aufgaben);
+
+		return raetselgruppePDFGenerator.generate(input);
 	}
 
 	/**
@@ -560,8 +569,10 @@ public class RaetselgruppenService {
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
 
-		return raetselgruppeFileService.generate(dbResult, freigegebeneAufgaben, Verwendungszweck.KARTEI, font,
-			schriftgroesse, layoutAntwortvorschlaege);
+		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.KARTEI, font, schriftgroesse,
+			layoutAntwortvorschlaege, dbResult, freigegebeneAufgaben);
+
+		return raetselgruppePDFGenerator.generate(input);
 	}
 
 	/**
@@ -582,8 +593,10 @@ public class RaetselgruppenService {
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
 
-		return raetselgruppeFileService.generate(dbResult, freigegebeneAufgaben, Verwendungszweck.ARBEITSBLATT, font,
-			schriftgroesse, layoutAntwortvorschlaege);
+		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.ARBEITSBLATT, font, schriftgroesse,
+			layoutAntwortvorschlaege, dbResult, freigegebeneAufgaben);
+
+		return raetselgruppePDFGenerator.generate(input);
 	}
 
 	List<Quizaufgabe> vorbedingungenPublicResourcesPruefen(final PersistenteRaetselgruppe dbResult) throws WebApplicationException {
@@ -638,7 +651,7 @@ public class RaetselgruppenService {
 	 * @param  raetselgruppeID
 	 * @return                 GeneratedFile
 	 */
-	public GeneratedFile downloadLaTeXSources(final String raetselgruppeID, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public File downloadLaTeXSources(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByID(raetselgruppeID);
 
@@ -650,8 +663,30 @@ public class RaetselgruppenService {
 
 		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
 
-		return raetselgruppeFileService.generate(dbResult, aufgaben, Verwendungszweck.LATEX, FontName.STANDARD,
-			Schriftgroesse.NORMAL, layoutAntwortvorschlaege);
+		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.LATEX, font, schriftgroesse,
+			layoutAntwortvorschlaege, dbResult, aufgaben);
+
+		return raetselgruppenLaTeXGenerator.generateLaTeXArchive(input);
+	}
+
+	/**
+	 * @param  font
+	 * @param  schriftgroesse
+	 * @param  layoutAntwortvorschlaege
+	 * @param  dbResult
+	 * @param  aufgaben
+	 * @return
+	 */
+	private RaetselgruppeGeneratorInput createRaetselgruppeGeneratorInput(final Verwendungszweck verwendungszweck, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final PersistenteRaetselgruppe dbResult, final List<Quizaufgabe> aufgaben) {
+
+		RaetselgruppeGeneratorInput input = new RaetselgruppeGeneratorInput()
+			.withAufgaben(aufgaben)
+			.withFont(font)
+			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
+			.withRaetselgruppe(dbResult)
+			.withVerwendungszweck(verwendungszweck)
+			.withSchriftgroesse(schriftgroesse);
+		return input;
 	}
 
 	void checkPermission(final PersistenteRaetselgruppe ausDB) {
@@ -665,5 +700,15 @@ public class RaetselgruppenService {
 
 			throw new WebApplicationException(Status.FORBIDDEN);
 		}
+	}
+
+	GeneratedFile mapToGeneratedFile(final File file) {
+
+		byte[] bytes = MjaFileUtils.loadBinaryFile(file.getAbsolutePath(), false);
+
+		GeneratedFile result = new GeneratedFile();
+		result.setFileData(bytes);
+		result.setFileName(file.getName());
+		return result;
 	}
 }

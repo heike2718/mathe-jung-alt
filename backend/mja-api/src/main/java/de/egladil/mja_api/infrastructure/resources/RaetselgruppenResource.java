@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.resources;
 
+import java.io.File;
 import java.util.Optional;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -55,6 +56,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
@@ -490,7 +492,7 @@ public class RaetselgruppenResource {
 	@GET
 	@Path("{raetselgruppeID}/latex/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Operation(
 		operationId = "downloadLaTeXSource",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID mehrere LaTeX-Dateien. Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
@@ -502,14 +504,23 @@ public class RaetselgruppenResource {
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
 			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "font",
+			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
+			required = false),
+		@Parameter(
+			in = ParameterIn.QUERY,
+			name = "size",
+			description = "wird in LaTeX-Größenangaben umgewandelt.",
+			required = false)
 	})
 	@APIResponse(
 		name = "OKResponse",
 		description = "LaTeX erfolgreich generiert",
 		responseCode = "200",
 		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = GeneratedFile.class)))
+			mediaType = "application/octet-stram"))
 	@APIResponse(
 		name = "Unauthorized",
 		description = "nur Admins und Autoren dürfen Rätselgruppen LaTeX herunterladen",
@@ -530,12 +541,26 @@ public class RaetselgruppenResource {
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
-	public GeneratedFile downloadLaTeX(
+	public Response downloadLaTeX(
 		@PathParam( value = "raetselgruppeID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
-		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
+		@QueryParam(value = "font") final FontName font,
+		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
    // @formatter:on
 
-		return raetselgruppenService.downloadLaTeXSources(raetselgruppeID, layoutAntwortvorschlaege);
+		FontName theFont = font == null ? FontName.STANDARD : font;
+		Schriftgroesse theSchriftgroesse = schriftgroesse == null ? Schriftgroesse.NORMAL : schriftgroesse;
+
+		LOGGER.debug("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
+
+		File generatedFile = raetselgruppenService.downloadLaTeXSources(raetselgruppeID, theFont, theSchriftgroesse,
+			layoutAntwortvorschlaege);
+
+		LOGGER.info("zip generiert");
+
+		ResponseBuilder ok = Response.ok().header("Content-Disposition", "attachment;filename=" + generatedFile.getName());
+
+		return ok.entity((Object) generatedFile).build();
 	}
 
 	@GET

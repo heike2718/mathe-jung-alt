@@ -1,17 +1,18 @@
 import { inject, Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
 import {
     RaetselgruppenTreffer,
     RaetselgruppenSuchparameter,
     RaetselgruppeDetails,
     EditRaetselgruppenelementPayload,
     Raetselgruppenelement,
-    RaetselgruppenTrefferItem,
     EditRaetselgruppePayload,
     RaetselgruppeBasisdaten
 } from "@mja-ws/raetselgruppen/model";
 import { Observable } from "rxjs";
+import { map, switchMap } from 'rxjs/operators';
 import { FONT_NAME, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION, SCHRIFTGROESSE } from "@mja-ws/core/model";
+import { generateUUID } from "@mja-ws/shared/util";
 
 
 @Injectable({ providedIn: 'root' })
@@ -60,7 +61,7 @@ export class RaetselgruppenHttpService {
 
     saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
 
-       const url = this.#url + '/v1';
+        const url = this.#url + '/v1';
 
         if ('neu' === editRaetselgruppePayload.id) {
             return this.#insertRaetselgruppe(url, editRaetselgruppePayload);
@@ -81,14 +82,14 @@ export class RaetselgruppenHttpService {
     }
 
     deleteRaetselgruppenelement(raetselgruppeID: string, payload: Raetselgruppenelement): Observable<RaetselgruppeDetails> {
-        
+
         const url = this.#url + '/' + raetselgruppeID + '/elemente/' + payload.id + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.delete<RaetselgruppeDetails>(url, { headers });
     }
 
-    generiereVorschau(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege:LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereVorschau(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
 
         const url = this.#url + '/' + raetselgruppeID + '/vorschau/v1';
@@ -103,7 +104,7 @@ export class RaetselgruppenHttpService {
 
     }
 
-    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege:LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
 
         const url = this.#url + '/' + raetselgruppeID + '/knobelkartei/v1';
@@ -133,13 +134,24 @@ export class RaetselgruppenHttpService {
 
     }
 
-    generiereLaTeX(raetselgruppeID: string, layoutAntwortvorschlaege:LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereLaTeX(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<{ data: Blob, fileName: string }> {
 
         const url = this.#url + '/' + raetselgruppeID + '/latex/v1';
-        const headers = new HttpHeaders().set('Accept', 'application/json');
-        const params = new HttpParams().set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
+        const headers = new HttpHeaders().set('Accept', 'application/octet-stream');
+        const params = new HttpParams()
+            .set('font', font)
+            .set('size', schriftgroesse)
+            .set('layoutAntwortvorschlaege', layoutAntwortvorschlaege);
 
-        return this.#http.get<GeneratedFile>(url, { headers: headers, params: params });
+        const obs$ = this.#http.get(url, { headers: headers, params: params, responseType: 'blob', observe: 'response' });
+
+        return obs$.pipe(
+            map(response => {
+                const contentDispositionHeader = response.headers.get('Content-Disposition');
+                const fileName = this.#extractFileName(contentDispositionHeader);
+                return { data: response.body as Blob, fileName: fileName };
+            })
+        );
     }
 
     #insertRaetselgruppe(url: string, payload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
@@ -166,5 +178,15 @@ export class RaetselgruppenHttpService {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.put<RaetselgruppeDetails>(url, payload, { headers });
+    }
+
+    #extractFileName(contentDisposition: string | null): string {
+
+        if (contentDisposition === null) {
+            return generateUUID().substring(0, 8) + '.zip';
+        }
+
+        const matches = contentDisposition.match(/filename="(.*?)"/);
+        return matches ? matches[1] : generateUUID().substring(0, 8) + '.zip';
     }
 }

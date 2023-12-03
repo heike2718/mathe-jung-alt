@@ -6,6 +6,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { switchMap, map, tap } from "rxjs";
 import { RaetselgruppenHttpService } from "./raetselgruppen-http.service";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
+import { HttpResponse } from "@angular/common/http";
 
 @Injectable({ providedIn: 'root' })
 export class RaetselgruppenEffects {
@@ -110,14 +111,12 @@ export class RaetselgruppenEffects {
             map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
-
-
-
+    
     generiereLaTeX$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselgruppenActions.gENERIERE_LATEX),
-            switchMap((action) => this.#raetselgruppenHttpService.generiereLaTeX(action.raetselgruppeID, action.layoutAntwortvorschlaege)),
-            map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
+            switchMap((action) => this.#raetselgruppenHttpService.generiereLaTeX(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
+            map(({ data, fileName }) => raetselgruppenActions.bLOB_GENERATED({ data, fileName }))
         )
     );
 
@@ -125,5 +124,11 @@ export class RaetselgruppenEffects {
         this.#actions.pipe(
             ofType(raetselgruppenActions.fILE_GENERATED),
             tap((action) => this.#downloadService.downloadPdf(action.pdf.fileData, action.pdf.fileName)),
+        ), { dispatch: false });
+
+    downloadBlob$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.bLOB_GENERATED),
+            tap((action) => this.#downloadService.downloadZip(action.data, action.fileName )),
         ), { dispatch: false });
 }

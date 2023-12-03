@@ -5,11 +5,11 @@
 package de.egladil.mja_api.domain.generatoren;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -17,10 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
-import de.egladil.mja_api.domain.generatoren.impl.LaTeXMasterAufgabenGenerator;
-import de.egladil.mja_api.domain.generatoren.impl.LaTeXMasterLoesungenGenerator;
+import de.egladil.mja_api.domain.generatoren.impl.LaTeXDocGeneratorStrategy;
+import de.egladil.mja_api.domain.generatoren.impl.LaTeXDocGeneratorType;
 import de.egladil.mja_api.domain.generatoren.impl.QuizitemLaTeXGenerator;
-import de.egladil.mja_api.domain.generatoren.impl.SelfcontainedLaTeXAufgabenLoesungenGenerator;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.EmbeddedImagesService;
@@ -39,8 +38,6 @@ import jakarta.inject.Inject;
  */
 @ApplicationScoped
 public class RaetselgruppeLaTeXGeneratorService {
-
-	private static List<String> NAMES_INCLUDE_FILES = Arrays.asList(new String[] { "minimal.tex", "tikz.tex", "layout.tex" });
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppeLaTeXGeneratorService.class);
 
@@ -63,11 +60,12 @@ public class RaetselgruppeLaTeXGeneratorService {
 	 * Generiert ein LaTeX-Archiv, also eine zip-Datei, die alle Files enthält, die zum lokalen Compilieren der Rätselgruppe
 	 * erforderlich sind.
 	 *
-	 * @param  raetselgruppe
 	 * @param  input
-	 * @return               GeneratedFile
+	 * @return       GeneratedFile
 	 */
-	public GeneratedFile generateLaTeXArchive(final PersistenteRaetselgruppe raetselgruppe, final RaetselgruppeGeneratorInput input) {
+	public File generateLaTeXArchive(final RaetselgruppeGeneratorInput input) {
+
+		PersistenteRaetselgruppe persistenteRaetselgruppe = input.getRaetselgruppe();
 
 		List<Quizaufgabe> aufgaben = input.getAufgaben();
 		Collections.sort(aufgaben, new QuizaufgabeComparator());
@@ -76,19 +74,22 @@ public class RaetselgruppeLaTeXGeneratorService {
 		List<PersistentesRaetsel> trefferliste = raetselDao.findWithSchluesselListe(schluesselliste);
 		List<RaetselLaTeXDto> raetselLaTeX = trefferliste.stream().map(pr -> RaetselLaTeXDto.mapFromDB(pr)).toList();
 
-		String dirnameRaetselgruppe = MjaFileUtils.nameToFilenamePart(raetselgruppe.name) + "_"
+		String dirnameRaetselgruppe = MjaFileUtils.nameToFilenamePart(persistenteRaetselgruppe.name) + "_"
 			+ UUID.randomUUID().toString().substring(0, 8);
 
 		// schreiben die generierten Strings zunächst ins Filesystem und zipen dann das Verzeichnis dirnameRaetselgruppe.
 
-		String selfcontainedContent = new SelfcontainedLaTeXAufgabenLoesungenGenerator().generateLaTeX(aufgaben, raetselLaTeX,
+		String selfcontainedContent = LaTeXDocGeneratorStrategy.getStrategy(LaTeXDocGeneratorType.SELFCONTAINED).generateLaTeX(
+			aufgaben, raetselLaTeX,
 			quizitemLaTeXGenerator, input);
 
-		String laTeXContentAufgabenMaster = new LaTeXMasterAufgabenGenerator().generateLaTeX(aufgaben, raetselLaTeX,
-			quizitemLaTeXGenerator, input);
+		String laTeXContentAufgabenMaster = LaTeXDocGeneratorStrategy.getStrategy(LaTeXDocGeneratorType.MAIN_AUFGABEN)
+			.generateLaTeX(aufgaben, raetselLaTeX,
+				quizitemLaTeXGenerator, input);
 
-		String laTeXContentLoesungenMaster = new LaTeXMasterLoesungenGenerator().generateLaTeX(aufgaben, raetselLaTeX,
-			quizitemLaTeXGenerator, input);
+		String laTeXContentLoesungenMaster = LaTeXDocGeneratorStrategy.getStrategy(LaTeXDocGeneratorType.MAIN_LOESUNGEN)
+			.generateLaTeX(aufgaben, raetselLaTeX,
+				quizitemLaTeXGenerator, input);
 
 		String pathDirRaetselgruppe = latexBaseDir + File.separator + dirnameRaetselgruppe;
 
@@ -122,7 +123,8 @@ public class RaetselgruppeLaTeXGeneratorService {
 			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
 		}
 
-		copyIncludeFilesToTargetDir(dirRaetselgruppe);
+		File includeDir = new File(pathDirRaetselgruppe + File.separator + "include");
+		copyIncludeFilesToTargetDir(includeDir);
 
 		for (PersistentesRaetsel raetselDB : trefferliste) {
 
@@ -150,16 +152,39 @@ public class RaetselgruppeLaTeXGeneratorService {
 			}
 		}
 
-		MjaFileUtils.createZipArchive(dirRaetselgruppe, "Fehler beim Komprimieren");
+		checkAndMoveEPS(dirRaetselgruppe);
 
-		String filename = dirnameRaetselgruppe + ".zip";
+		File zip = MjaFileUtils.createZipArchive(dirRaetselgruppe);
 
-		byte[] bytes = MjaFileUtils.loadBinaryFile(filename, preserveTempFiles);
+		return zip;
+	}
 
-		GeneratedFile result = new GeneratedFile();
-		result.setFileData(bytes);
-		result.setFileName(filename);
-		return result;
+	/**
+	 * @param dirRaetselgruppe
+	 */
+	private void checkAndMoveEPS(final File dirRaetselgruppe) {
+
+		File[] epsFiles = dirRaetselgruppe.listFiles(new FilenameFilter() {
+
+			@Override
+			public boolean accept(final File dir, final String name) {
+
+				if (name.endsWith(".eps")) {
+
+					return true;
+				}
+
+				return false;
+			}
+		});
+
+		for (File epsFile : epsFiles) {
+
+			String subdirName = "resources" + File.separator + epsFile.getName().substring(0, 1);
+
+			File target = new File(dirRaetselgruppe + File.separator + subdirName + File.separator + epsFile.getName());
+			MjaFileUtils.moveFile(epsFile, target);
+		}
 	}
 
 	void copyIncludeFilesToTargetDir(final File targetDirectory) {
@@ -168,10 +193,7 @@ public class RaetselgruppeLaTeXGeneratorService {
 
 		File[] children = includeDir.listFiles();
 
-		List<File> files = Arrays.stream(children).filter(f -> NAMES_INCLUDE_FILES.contains(f.getName()))
-			.collect(Collectors.toList());
-
-		MjaFileUtils.copyFiles(files, targetDirectory);
+		MjaFileUtils.copyFiles(Arrays.asList(children), targetDirectory);
 	}
 
 }

@@ -16,12 +16,11 @@ import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 
 /**
- * LaTeXMasterLoesungenGenerator generiert ein LaTeX-File, in dem tex-Files mittels input integriert sind. Dies für alle
- * Lösungen-Texte.
+ * LaTeXMainDocLoesungenGenerator generiert ein LaTeX-File, in dem die tex-Files mit den Lösungen mittels input integriert sind.
  */
-public class LaTeXMasterLoesungenGenerator {
+public class LaTeXMainDocLoesungenGenerator implements LaTeXDocGeneratorStrategy {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXMasterLoesungenGenerator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXMainDocLoesungenGenerator.class);
 
 	/**
 	 * Generiert das LaTeX-Masterfile für die Lösungen. Es werden die input-Befehle zum Importieren der Lösungen-Files generiert.
@@ -34,7 +33,7 @@ public class LaTeXMasterLoesungenGenerator {
 	 */
 	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final RaetselgruppeGeneratorInput input) {
 
-		String template = LaTeXTemplatesService.getInstance().getTemplateLaTeXMaster();
+		String template = LaTeXTemplatesService.getInstance().getTemplateMainLaTeXDocument();
 
 		template = template.replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
 		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
@@ -45,6 +44,9 @@ public class LaTeXMasterLoesungenGenerator {
 		String content = printContentLoesungen(aufgaben, raetselLaTeX);
 
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), content);
+
+		String textLizenzFont = new GeneratorFontsDelegate().getTextLizenzFont(input.getFont());
+		template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), textLizenzFont);
 
 		return template;
 	}

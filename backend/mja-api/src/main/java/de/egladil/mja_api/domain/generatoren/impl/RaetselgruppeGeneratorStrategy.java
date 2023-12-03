@@ -10,9 +10,9 @@ import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 
 /**
- * RaetselgruppeLaTeXGeneratorStrategy. Erzeugt das LaTeX für eine Raetselgruppe.
+ * RaetselgruppeGeneratorStrategy. Erzeugt das LaTeX für eine Raetselgruppe.
  */
-public interface RaetselgruppeLaTeXGeneratorStrategy {
+public interface RaetselgruppeGeneratorStrategy {
 
 	/**
 	 * Generiert das LaTeX für die gegebene Raetselgruppe.
@@ -27,7 +27,7 @@ public interface RaetselgruppeLaTeXGeneratorStrategy {
 	 */
 	String generateLaTeX(RaetselgruppeGeneratorInput input, RaetselService raetselService, QuizitemLaTeXGenerator quizitemLaTeXGenerator);
 
-	static RaetselgruppeLaTeXGeneratorStrategy getStrategy(final Verwendungszweck verwendungszweck) {
+	static RaetselgruppeGeneratorStrategy getStrategy(final Verwendungszweck verwendungszweck) {
 
 		switch (verwendungszweck) {
 

@@ -44,6 +44,8 @@ import io.restassured.http.ContentType;
 @TestMethodOrder(OrderAnnotation.class)
 public class RaetselgruppenResourceTest {
 
+	private static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
+
 	private static final String CSRF_TOKEN = "lqhidhqio";
 
 	@Test
@@ -902,10 +904,10 @@ public class RaetselgruppenResourceTest {
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
-			.accept(ContentType.JSON)
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.accept(APPLICATION_OCTET_STREAM)
 			.get(
-				"10257506-71c5-423e-b355-bf90b5bb344d/latex/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"10257506-71c5-423e-b355-bf90b5bb344d/latex/v1")
 			.then().statusCode(200);
 	}
 
@@ -917,10 +919,10 @@ public class RaetselgruppenResourceTest {
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
-			.accept(ContentType.JSON)
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.accept(APPLICATION_OCTET_STREAM)
 			.get(
-				"33333333-71c5-423e-b355-bf90b5bb344d/latex/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"33333333-71c5-423e-b355-bf90b5bb344d/latex/v1")
 			.then()
 			.statusCode(404);
 	}
@@ -933,10 +935,12 @@ public class RaetselgruppenResourceTest {
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.queryParam("font", "FIBEL_NORD")
+			.queryParam("size", "LARGE")
 			.accept(ContentType.JSON)
 			.get(
-				"10257506-71c5-423e-b355-bf90b5bb344d/vorschau/v1?layoutAntwortvorschlaege=BUCHSTABEN&font=FIBEL_NORD&size=LARGE")
+				"10257506-71c5-423e-b355-bf90b5bb344d/vorschau/v1")
 			.then()
 			.statusCode(200);
 	}
@@ -965,10 +969,12 @@ public class RaetselgruppenResourceTest {
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.queryParam("font", "FIBEL_NORD")
+			.queryParam("size", "LARGE")
 			.accept(ContentType.JSON)
 			.get(
-				"10257506-71c5-423e-b355-bf90b5bb344d/arbeitsblatt/v1?font=FIBEL_NORD&size=LARGE")
+				"10257506-71c5-423e-b355-bf90b5bb344d/arbeitsblatt/v1")
 			.then()
 			.statusCode(200);
 	}
@@ -981,10 +987,12 @@ public class RaetselgruppenResourceTest {
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.contentType(ContentType.JSON)
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.queryParam("font", "FIBEL_SUED")
+			.queryParam("size", "LARGE")
 			.accept(ContentType.JSON)
 			.get(
-				"10257506-71c5-423e-b355-bf90b5bb344d/knobelkartei/v1?font=FIBEL_SUED&size=HUGE")
+				"10257506-71c5-423e-b355-bf90b5bb344d/knobelkartei/v1")
 			.then()
 			.statusCode(200);
 	}

@@ -14,6 +14,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -74,59 +75,66 @@ public class MjaFileUtils {
 	}
 
 	/**
-	 * Es wird ein flaches Verzeichnis gezipt - keine Unterverzeichnisse. Könnte man zwar machen, aber das ist unnötig komplex. Alle
-	 * Files stehen auf der gleichen Ebene im zu komprimierenden Verzeichnis.
+	 * Ein vorhandenes Verzeichnis wird unter Erhaltung der Filehierarchie gezipt.
 	 *
 	 * @param directoryToZip
-	 * @param errormessage
 	 */
-	public static final void createZipArchive(final File directoryToZip, final String errormessage) {
+	public static final File createZipArchive(final File directoryToZip) {
 
 		String zipFileName = directoryToZip.getName() + ".zip";
+		File zipFile = new File(directoryToZip.getParentFile().getAbsolutePath() + File.separator + zipFileName);
 
-		try (FileOutputStream fos = new FileOutputStream(zipFileName); ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+		try (FileOutputStream fos = new FileOutputStream(zipFile);
+			ZipOutputStream zipOut = new ZipOutputStream(fos)) {
 
-			zipDir(directoryToZip, zipOut);
+			zipFile(directoryToZip, directoryToZip.getName(), zipOut);
 
+			return zipFile;
 		} catch (IOException e) {
 
-			String message = "konnte kein Zip-Archiv erzeugen: [" + errormessage + "]";
+			String message = "konnte kein Zip-Archiv erzeugen: directoryToZip=" + directoryToZip.getAbsolutePath();
 			LOGGER.error(message + ": " + e.getMessage(), e);
 			throw new MjaRuntimeException(message);
 		}
 	}
 
-	/**
-	 * @param directoryToZip
-	 * @param zipOut
-	 */
-	private static void zipDir(final File directoryToZip, final ZipOutputStream zipOut) throws IOException {
+	private static void zipFile(final File fileToZip, final String fileName, final ZipOutputStream zipOut) throws IOException {
 
-		String filename = directoryToZip.getName();
+		if (fileToZip.isHidden()) {
 
-		if (filename.endsWith("/")) {
-
-			zipOut.putNextEntry(new ZipEntry(filename));
-			zipOut.closeEntry();
+			return;
 		}
 
-		File[] children = directoryToZip.listFiles();
+		if (fileToZip.isDirectory()) {
 
-		for (File childFile : children) {
+			if (fileName.endsWith("/")) {
 
-			filename = childFile.getName();
+				zipOut.putNextEntry(new ZipEntry(fileName));
+				zipOut.closeEntry();
+			} else {
 
-			try (FileInputStream fis = new FileInputStream(childFile)) {
+				zipOut.putNextEntry(new ZipEntry(fileName + "/"));
+				zipOut.closeEntry();
+			}
+			File[] children = fileToZip.listFiles();
 
-				ZipEntry zipEntry = new ZipEntry(filename);
-				zipOut.putNextEntry(zipEntry);
-				byte[] bytes = new byte[1024];
-				int length;
+			for (File childFile : children) {
 
-				while ((length = fis.read(bytes)) >= 0) {
+				zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
+			}
+			return;
+		}
 
-					zipOut.write(bytes, 0, length);
-				}
+		try (FileInputStream fis = new FileInputStream(fileToZip)) {
+
+			ZipEntry zipEntry = new ZipEntry(fileName);
+			zipOut.putNextEntry(zipEntry);
+			byte[] bytes = new byte[1024];
+			int length;
+
+			while ((length = fis.read(bytes)) >= 0) {
+
+				zipOut.write(bytes, 0, length);
 			}
 		}
 	}
@@ -166,6 +174,19 @@ public class MjaFileUtils {
 	 */
 	public static void copyFiles(final List<File> files, final File targetDir) {
 
+		if (!targetDir.exists() || !targetDir.isDirectory()) {
+
+			try {
+
+				FileUtils.forceMkdir(targetDir);
+			} catch (IOException e) {
+
+				String message = "IOException beim Erzeugen des Verzeichnissubtrees " + targetDir.getAbsolutePath();
+				LOGGER.error(message + ": " + e.getMessage(), e);
+				throw new MjaRuntimeException(message);
+			}
+		}
+
 		for (File file : files) {
 
 			try {
@@ -181,6 +202,12 @@ public class MjaFileUtils {
 		}
 	}
 
+	/**
+	 * Verschiebt eine Datei an einen anderen Ort.
+	 *
+	 * @param source
+	 * @param target
+	 */
 	public static void moveFile(final File source, final File target) {
 
 		if (source.isFile() && source.canRead()) {
@@ -197,7 +224,7 @@ public class MjaFileUtils {
 					LOGGER.debug("{} deleted", target.getAbsolutePath());
 				}
 
-				FileUtils.moveFile(source, target);
+				FileUtils.moveFile(source, target, StandardCopyOption.COPY_ATTRIBUTES);
 
 				LOGGER.debug("{} verschoben nach {}", source.getAbsolutePath(), target.getAbsolutePath());
 			} catch (IOException e) {

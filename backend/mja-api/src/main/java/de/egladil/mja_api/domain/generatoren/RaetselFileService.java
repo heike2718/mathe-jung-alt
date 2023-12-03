@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.mja_api.domain.generatoren.impl.AntwortvorschlagGeneratorStrategegy;
+import de.egladil.mja_api.domain.generatoren.impl.GeneratorFontsDelegate;
 import de.egladil.mja_api.domain.generatoren.impl.LaTeXPlaceholder;
 import de.egladil.mja_api.domain.generatoren.impl.LaTeXTemplatesService;
 import de.egladil.mja_api.domain.generatoren.impl.LoesungsbuchstabeTextGenerator;
@@ -156,27 +157,8 @@ public class RaetselFileService {
 		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), font.getLatexFileInputDefinition());
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), textRaetsel);
 
-		switch (font) {
-
-		case DRUCK_BY_WOK:
-
-			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
-				LaTeXTemplatesService.getInstance().getLizenzFontsDruckschrift());
-			break;
-
-		case FIBEL_NORD:
-		case FIBEL_SUED:
-			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
-				LaTeXTemplatesService.getInstance().getLizenzFontsFibel());
-			break;
-
-		case STANDARD:
-			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), "");
-			break;
-
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + font);
-		}
+		String textLizenzFont = new GeneratorFontsDelegate().getTextLizenzFont(font);
+		template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), textLizenzFont);
 
 		writeOutput(raetsel, file, template);
 		LOGGER.debug("latex file generated: " + path);

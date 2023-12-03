@@ -33,6 +33,11 @@ public class RaetselgruppenResourceAuthorizationTest {
 	/**
 	 *
 	 */
+	private static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
+
+	/**
+	 *
+	 */
 	private static final String CSRF_TOKEN = "lqhidhqio";
 
 	@Test
@@ -252,9 +257,10 @@ public class RaetselgruppenResourceAuthorizationTest {
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.accept(ContentType.JSON)
+			.accept(APPLICATION_OCTET_STREAM)
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
 			.get(
-				"10257506-71c5-423e-b355-bf90b5bb344d/latex/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"10257506-71c5-423e-b355-bf90b5bb344d/latex/v1")
 			.then()
 			.statusCode(401);
 	}
@@ -266,9 +272,10 @@ public class RaetselgruppenResourceAuthorizationTest {
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
-			.accept(ContentType.JSON)
+			.accept(APPLICATION_OCTET_STREAM)
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
 			.get(
-				"10257506-71c5-423e-b355-bf90b5bb344d/latex/v1?layoutAntwortvorschlaege=BUCHSTABEN")
+				"10257506-71c5-423e-b355-bf90b5bb344d/latex/v1")
 			.then()
 			.statusCode(403);
 	}

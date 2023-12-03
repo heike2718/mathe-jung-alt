@@ -16,7 +16,7 @@ import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 /**
  * AufgabenLoesungenLaTeXGeneratorStrategy
  */
-public class AufgabenLoesungenLaTeXGeneratorStrategy implements RaetselgruppeLaTeXGeneratorStrategy {
+public class AufgabenLoesungenLaTeXGeneratorStrategy implements RaetselgruppeGeneratorStrategy {
 
 	private final AufgabenLoesungenLaTeXGeneratorDelegate delegate = new AufgabenLoesungenLaTeXGeneratorDelegate();
 

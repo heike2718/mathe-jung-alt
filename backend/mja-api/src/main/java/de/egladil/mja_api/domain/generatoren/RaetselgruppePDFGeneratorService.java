@@ -19,9 +19,7 @@ import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
 import de.egladil.mja_api.domain.generatoren.impl.QuizitemLaTeXGenerator;
-import de.egladil.mja_api.domain.generatoren.impl.RaetselgruppeLaTeXGeneratorStrategy;
-import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
-import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
+import de.egladil.mja_api.domain.generatoren.impl.RaetselgruppeGeneratorStrategy;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
@@ -58,9 +56,6 @@ public class RaetselgruppePDFGeneratorService {
 	@Inject
 	RaetselService raetselService;
 
-	@Inject
-	RaetselgruppeLaTeXGeneratorService generatorserviceDelegate;
-
 	/**
 	 * Generiert LaTeX für die gegebene raetselguppe.
 	 *
@@ -80,24 +75,19 @@ public class RaetselgruppePDFGeneratorService {
 	 *                                  choice- Aufgaben auch Arbeitsblätter werden.
 	 * @return                          GeneratedFile - ein PDF oder eine LaTeX-Textdatei
 	 */
-	public GeneratedFile generate(final PersistenteRaetselgruppe raetselgruppe, final List<Quizaufgabe> aufgaben, final Verwendungszweck verwendungszweck, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile generate(final RaetselgruppeGeneratorInput input) {
 
 		LOGGER.debug("start generate output");
 
-		RaetselgruppeGeneratorInput input = new RaetselgruppeGeneratorInput()
-			.withAufgaben(aufgaben)
-			.withFont(font)
-			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
-			.withRaetselgruppe(raetselgruppe)
-			.withVerwendungszweck(verwendungszweck)
-			.withSchriftgroesse(schriftgroesse);
+		Verwendungszweck verwendungszweck = input.getVerwendungszweck();
 
 		if (Verwendungszweck.LATEX == verwendungszweck) {
 
-			return generatorserviceDelegate.generateLaTeXArchive(raetselgruppe, input);
+			throw new IllegalArgumentException("diese Methode funktioniert nicht für Verwendungszweck " + verwendungszweck);
 		}
 
-		RaetselgruppeLaTeXGeneratorStrategy strategy = RaetselgruppeLaTeXGeneratorStrategy.getStrategy(verwendungszweck);
+		PersistenteRaetselgruppe raetselgruppe = input.getRaetselgruppe();
+		RaetselgruppeGeneratorStrategy strategy = RaetselgruppeGeneratorStrategy.getStrategy(verwendungszweck);
 
 		String template = strategy.generateLaTeX(input, raetselService, quizitemLaTeXGenerator);
 

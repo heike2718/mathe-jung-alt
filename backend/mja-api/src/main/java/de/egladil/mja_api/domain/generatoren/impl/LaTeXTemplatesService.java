@@ -29,7 +29,7 @@ public class LaTeXTemplatesService {
 
 	private static final String TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN = "/latex/template-document-aufgabenblatt-mit-loesungen-pdf.tex";
 
-	private static final String TEMPLATE_LATEX_MASTER = "/latex/template-latex-master.tex";
+	private static final String TEMPLATE_MAIN_LATEX_DOCUMENT = "/latex/template-main-latex-document.tex";
 
 	private static final String TEMPLATE_PDF_KARTEI = "/latex/template-document-kartei-pdf.tex";
 
@@ -109,13 +109,13 @@ public class LaTeXTemplatesService {
 		return templateDocumentPDFAufgabenblattMitLoesungen;
 	}
 
-	public synchronized String getTemplateLaTeXMaster() {
+	public synchronized String getTemplateMainLaTeXDocument() {
 
 		if (templateLaTeXMaster == null) {
 
-			LOGGER.debug("Lade Template {}", TEMPLATE_LATEX_MASTER);
+			LOGGER.debug("Lade Template {}", TEMPLATE_MAIN_LATEX_DOCUMENT);
 
-			templateLaTeXMaster = MjaFileUtils.loadTemplate(TEMPLATE_LATEX_MASTER);
+			templateLaTeXMaster = MjaFileUtils.loadTemplate(TEMPLATE_MAIN_LATEX_DOCUMENT);
 		}
 
 		return templateLaTeXMaster;

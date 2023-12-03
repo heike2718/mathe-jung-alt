@@ -46,8 +46,8 @@ export class RaetselgruppenFacade {
         this.#store.dispatch(raetselgruppenActions.gENERIERE_VORSCHAU({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
-    generiereLaTeX(raetselgruppeID: string, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-        this.#store.dispatch(raetselgruppenActions.gENERIERE_LATEX({ raetselgruppeID, layoutAntwortvorschlaege }));
+    generiereLaTeX(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.#store.dispatch(raetselgruppenActions.gENERIERE_LATEX({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
     createAndEditRaetselgruppe(): void {

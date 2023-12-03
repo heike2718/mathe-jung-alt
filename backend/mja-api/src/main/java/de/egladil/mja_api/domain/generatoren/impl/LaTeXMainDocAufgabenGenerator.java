@@ -16,25 +16,21 @@ import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.utils.GeneratorUtils;
 
 /**
- * LaTeXMasterAufgabenGenerator generiert ein LaTeX-File, in dem tex-Files mittels input integriert sind. Dies für alle
- * Frage-Texte. Die Antwortvorschläge, sofern es sie gibt, werden als Ankreuztabelle integriert.
+ * LaTeXMainDocAufgabenGenerator generiert ein LaTeX-File, in dem tex-Files der Aufgabeb mittels input integriert sind. Die
+ * Antwortvorschläge, sofern es sie gibt, werden mit dem Layouttyp aus input integriert.
  */
-public class LaTeXMasterAufgabenGenerator {
+public class LaTeXMainDocAufgabenGenerator implements LaTeXDocGeneratorStrategy {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXMasterAufgabenGenerator.class);
+	private static final String AUFGABENTRENNER = "\n\n% ==================================================================\n\n";
 
-	/**
-	 * Generiert das LaTeX-Masterfile für die Lösungen. Es werden die input-Befehle zum Importieren der Lösungen-Files generiert.
-	 *
-	 * @param  aufgaben
-	 * @param  raetselLaTeX
-	 * @param  quizitemLaTeXGenerator
-	 * @param  input
-	 * @return
-	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXMainDocAufgabenGenerator.class);
+
+	@Override
 	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final RaetselgruppeGeneratorInput input) {
 
-		String template = LaTeXTemplatesService.getInstance().getTemplateLaTeXMaster();
+		LOGGER.warn("Font={}", input.getFont());
+
+		String template = LaTeXTemplatesService.getInstance().getTemplateMainLaTeXDocument();
 
 		template = template.replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
 		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
@@ -45,6 +41,9 @@ public class LaTeXMasterAufgabenGenerator {
 		String content = printContentAufgaben(aufgaben, raetselLaTeX, input);
 
 		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), content);
+
+		String textLizenzFont = new GeneratorFontsDelegate().getTextLizenzFont(input.getFont());
+		template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), textLizenzFont);
 
 		return template;
 	}
@@ -83,7 +82,7 @@ public class LaTeXMasterAufgabenGenerator {
 				}
 
 				sb.append(text);
-				sb.append("\n\n% ==================================================================\n\n");
+				sb.append(AUFGABENTRENNER);
 
 			} else {
 

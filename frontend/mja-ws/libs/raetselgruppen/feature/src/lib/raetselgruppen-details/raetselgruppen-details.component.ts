@@ -145,7 +145,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
           case 'Arbeitsblatt': this.raetselgruppenFacade.generiereArbeitsblatt(this.getRaetselgruppeID(), font, size, layout); break;
           case 'Knobelkartei': this.raetselgruppenFacade.generiereKnobelkartei(this.getRaetselgruppeID(), font, size, layout); break;
           case 'Vorschau': this.raetselgruppenFacade.generiereVorschau(this.getRaetselgruppeID(), font, size, layout); break;
-          case 'LaTeX': this.raetselgruppenFacade.generiereLaTeX(this.getRaetselgruppeID(), layout); break;
+          case 'LaTeX': this.raetselgruppenFacade.generiereLaTeX(this.getRaetselgruppeID(), font, size, layout); break;
         }
       }
     });
