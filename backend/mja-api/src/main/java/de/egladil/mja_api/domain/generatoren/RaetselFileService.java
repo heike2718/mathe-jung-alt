@@ -360,7 +360,7 @@ public class RaetselFileService {
 			+ ", uuid="
 			+ raetsel.getId() + "]";
 
-		MjaFileUtils.writeOutput(file, template, errorMessage);
+		MjaFileUtils.writeTextfile(file, template, errorMessage);
 	}
 
 	private void moveVorschauLoesung(final Raetsel raetsel) {

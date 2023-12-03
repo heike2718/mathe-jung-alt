@@ -37,7 +37,7 @@ public class MjaFileUtils {
 	 * @param  template
 	 * @return          String
 	 */
-	public static void writeOutput(final File file, final String template, final String errormessage) {
+	public static void writeTextfile(final File file, final String template, final String errormessage) {
 
 		LOGGER.debug("file={}", file.getAbsolutePath());
 

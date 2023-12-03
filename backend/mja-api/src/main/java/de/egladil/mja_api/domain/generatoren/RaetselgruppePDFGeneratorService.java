@@ -116,7 +116,7 @@ public class RaetselgruppePDFGeneratorService {
 
 		String errorMessage = "konnte kein LaTex-File schreiben Raetsel";
 
-		MjaFileUtils.writeOutput(file, template, errorMessage);
+		MjaFileUtils.writeTextfile(file, template, errorMessage);
 
 		return filenameWithoutExtension;
 

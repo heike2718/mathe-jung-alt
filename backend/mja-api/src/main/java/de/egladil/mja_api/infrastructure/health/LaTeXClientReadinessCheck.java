@@ -65,7 +65,7 @@ public class LaTeXClientReadinessCheck implements HealthCheck {
 		if (!healthCheckFile.isFile() || !healthCheckFile.canRead()) {
 
 			String template = MjaFileUtils.loadTemplate("/latex/" + HEALTHCHECK_FILENAME_WITHOUT_SUFFIX + ".tex");
-			MjaFileUtils.writeOutput(healthCheckFile, template,
+			MjaFileUtils.writeTextfile(healthCheckFile, template,
 				"konnte " + HEALTHCHECK_FILENAME_WITHOUT_SUFFIX + ".tex nicht anlegen");
 
 		}

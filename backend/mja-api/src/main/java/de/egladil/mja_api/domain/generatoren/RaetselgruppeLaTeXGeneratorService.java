@@ -100,7 +100,7 @@ public class RaetselgruppeLaTeXGeneratorService {
 		{
 
 			File file = new File(pathDirRaetselgruppe + File.separator + dirnameRaetselgruppe + "_selfcontained.tex");
-			MjaFileUtils.writeOutput(file, selfcontainedContent, "Fehler beim Schreiben des selfcontained LaTeX");
+			MjaFileUtils.writeTextfile(file, selfcontainedContent, "Fehler beim Schreiben des selfcontained LaTeX");
 
 			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
 
@@ -109,7 +109,7 @@ public class RaetselgruppeLaTeXGeneratorService {
 		{
 
 			File file = new File(pathDirRaetselgruppe + File.separator + dirnameRaetselgruppe + "_aufgaben.tex");
-			MjaFileUtils.writeOutput(file, laTeXContentAufgabenMaster, "Fehler beim Schreiben des laTeXContentAufgabenMaster");
+			MjaFileUtils.writeTextfile(file, laTeXContentAufgabenMaster, "Fehler beim Schreiben des laTeXContentAufgabenMaster");
 
 			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
 		}
@@ -117,7 +117,7 @@ public class RaetselgruppeLaTeXGeneratorService {
 		{
 
 			File file = new File(pathDirRaetselgruppe + File.separator + dirnameRaetselgruppe + "_loesungen.tex");
-			MjaFileUtils.writeOutput(file, laTeXContentLoesungenMaster, "Fehler beim Schreiben des laTeXContentLoesungenMaster");
+			MjaFileUtils.writeTextfile(file, laTeXContentLoesungenMaster, "Fehler beim Schreiben des laTeXContentLoesungenMaster");
 
 			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
 		}
@@ -127,14 +127,14 @@ public class RaetselgruppeLaTeXGeneratorService {
 		for (PersistentesRaetsel raetselDB : trefferliste) {
 
 			String pathAufgabe = pathDirRaetselgruppe + File.separator + raetselDB.schluessel + ".tex";
-			MjaFileUtils.writeOutput(new File(pathAufgabe), raetselDB.frage,
+			MjaFileUtils.writeTextfile(new File(pathAufgabe), raetselDB.frage,
 				"Fehler beim Schreiben der Frage von " + raetselDB.schluessel);
 			LOGGER.info("File {} fertig", pathAufgabe);
 
 			if (StringUtils.isNotBlank(raetselDB.loesung)) {
 
 				String pathLoesung = pathDirRaetselgruppe + File.separator + raetselDB.schluessel + "_l.tex";
-				MjaFileUtils.writeOutput(new File(pathLoesung), raetselDB.loesung,
+				MjaFileUtils.writeTextfile(new File(pathLoesung), raetselDB.loesung,
 					"Fehler beim Schreiben der Frage von " + raetselDB.schluessel);
 				LOGGER.info("File {} fertig", pathLoesung);
 			}

@@ -94,7 +94,7 @@ public class ImageGeneratorService {
 
 		String errorMessage = "konnte kein LaTex-File schreiben EmbeddableImageVorschau: [relativerPfad=" + relativerPfad + "]";
 
-		MjaFileUtils.writeOutput(file, template, errorMessage);
+		MjaFileUtils.writeTextfile(file, template, errorMessage);
 	}
 
 	void setLatexBaseDir(final String latexBaseDir) {
