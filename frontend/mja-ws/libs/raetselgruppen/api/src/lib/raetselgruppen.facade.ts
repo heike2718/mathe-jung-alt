@@ -34,6 +34,10 @@ export class RaetselgruppenFacade {
         this.#store.dispatch(raetselgruppenActions.uNSELECT_RAETSELGRUPPE());
     }
 
+    selectElementSchluessel(schluessel: string): void {
+        this.#store.dispatch(raetselgruppenActions.rAETSEL_SCHLUESSEL_SELECTED({schluessel}));
+    }
+
     generiereArbeitsblatt(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
         this.#store.dispatch(raetselgruppenActions.gENERIERE_ARBEITSBLATT({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }

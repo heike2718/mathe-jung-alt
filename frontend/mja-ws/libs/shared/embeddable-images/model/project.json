@@ -3,7 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/embeddable-images/model/src",
   "prefix": "mja-ws",
-  "tags": ["domain:shared:embeddable-images:model", "type:core:model", "type:model"],
+  "tags": ["domain:embeddable-images:model", "type:core:model", "type:model"],
   "projectType": "library",
   "targets": {
     "build": {

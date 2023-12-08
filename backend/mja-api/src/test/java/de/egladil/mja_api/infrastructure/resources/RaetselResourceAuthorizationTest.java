@@ -97,7 +97,7 @@ public class RaetselResourceAuthorizationTest {
 
 		given()
 			.when()
-			.get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1")
+			.get("05645/v1")
 			.then()
 			.statusCode(401);
 	}
@@ -108,7 +108,7 @@ public class RaetselResourceAuthorizationTest {
 
 		given()
 			.when()
-			.get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1")
+			.get("02622/v1")
 			.then()
 			.statusCode(200);
 	}

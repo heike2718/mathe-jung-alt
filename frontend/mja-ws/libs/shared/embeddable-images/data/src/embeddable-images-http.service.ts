@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { CreateEmbeddableImageRequestDto, EmbeddableImageResponseDto, EmbeddableImageVorschau, ReplaceEmbeddableImageRequestDto } from "@mja-ws/embeddable-images/model";
-import { Message } from "@mja-ws/shared/messaging/api";
 import { Observable } from "rxjs";
 
 

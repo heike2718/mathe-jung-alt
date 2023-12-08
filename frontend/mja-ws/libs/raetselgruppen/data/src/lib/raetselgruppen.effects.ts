@@ -7,6 +7,7 @@ import { switchMap, map, tap } from "rxjs";
 import { RaetselgruppenHttpService } from "./raetselgruppen-http.service";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
 import { HttpResponse } from "@angular/common/http";
+import { RaetselFacade } from "@mja-ws/raetsel/api";
 
 @Injectable({ providedIn: 'root' })
 export class RaetselgruppenEffects {
@@ -15,6 +16,7 @@ export class RaetselgruppenEffects {
     #raetselgruppenHttpService = inject(RaetselgruppenHttpService);
     #router = inject(Router);
     #downloadService = inject(FileDownloadService);
+    #raetselFacade = inject(RaetselFacade);
 
     findRaetselgruppen$ = createEffect(() => {
         return this.#actions.pipe(
@@ -111,7 +113,7 @@ export class RaetselgruppenEffects {
             map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
-    
+
     generiereLaTeX$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselgruppenActions.gENERIERE_LATEX),
@@ -129,6 +131,12 @@ export class RaetselgruppenEffects {
     downloadBlob$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselgruppenActions.bLOB_GENERATED),
-            tap((action) => this.#downloadService.downloadZip(action.data, action.fileName )),
+            tap((action) => this.#downloadService.downloadZip(action.data, action.fileName)),
+        ), { dispatch: false });
+
+    raetselSchluesselSelected$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(raetselgruppenActions.rAETSEL_SCHLUESSEL_SELECTED),
+            tap((action) => this.#raetselFacade.selectRaetsel(action.schluessel)),
         ), { dispatch: false });
 }

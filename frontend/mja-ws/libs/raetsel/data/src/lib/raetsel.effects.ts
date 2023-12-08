@@ -32,7 +32,7 @@ export class RaetselEffects {
 
         return this.#actions.pipe(
             ofType(raetselActions.rAETSEL_SELECTED),
-            switchMap((action) => this.#raetselHttpService.loadRaetselDetails(action.raetsel)),
+            switchMap((action) => this.#raetselHttpService.loadRaetselDetails(action.schluessel)),
             map((raetselDetails) => raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/details' }))
         );
     });

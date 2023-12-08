@@ -1,4 +1,3 @@
-import { HttpResponse } from '@angular/common/http';
 import { FONT_NAME, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, SCHRIFTGROESSE } from '@mja-ws/core/model';
 import { RaetselgruppenTreffer, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem, RaetselgruppeDetails, RaetselgruppeBasisdaten, EditRaetselgruppePayload, EditRaetselgruppenelementPayload, Raetselgruppenelement } from '@mja-ws/raetselgruppen/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
@@ -24,6 +23,7 @@ export const raetselgruppenActions = createActionGroup({
         'RAETSELGRUPPE_SAVED': props<{raetselgruppe: RaetselgruppeBasisdaten}>(),
         'SAVE_RAETSELGRUPPENELEMENT': props<{raetselgruppeID: string, payload: EditRaetselgruppenelementPayload}>(),
         'DELETE_RAETSELGRUPPENELEMENT': props<{raetselgruppeID: string, payload: Raetselgruppenelement}>(),
-        'RAETSELGRUPPENELEMENTE_CHANGED': props<{raetselgruppenDetails: RaetselgruppeDetails}>()
+        'RAETSELGRUPPENELEMENTE_CHANGED': props<{raetselgruppenDetails: RaetselgruppeDetails}>(),
+        'RAETSEL_SCHLUESSEL_SELECTED': props<{schluessel: string}>()
     }
 });

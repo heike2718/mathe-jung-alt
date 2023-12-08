@@ -66,6 +66,9 @@
 
         <div *ngIf="gruppe.elemente.length > 0">
             <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
+            <div *ngIf="schluessel.length > 0" class="mb-2">
+                <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
+            </div>
             <div *ngIf="images else imagesFehlen">
                 <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
             </div>

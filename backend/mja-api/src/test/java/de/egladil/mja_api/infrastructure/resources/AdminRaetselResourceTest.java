@@ -318,14 +318,34 @@ public class AdminRaetselResourceTest {
 	void testRaetselDetailsLadenFound() throws Exception {
 
 		Raetsel treffer = given()
-			.when().get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1").then()
+			.when().get("02622/v1").then()
 			.statusCode(200)
 			.and()
 			.extract()
 			.as(Raetsel.class);
 
+		assertEquals("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866", treffer.getId());
 		assertEquals("02622", treffer.getSchluessel());
 
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@Order(12)
+	void testRaetselDetailsLadenBadRequest() throws Exception {
+
+		MessagePayload messagePayload = given()
+			.when().get("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866/v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.contentType(ContentType.JSON)
+			.and()
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", messagePayload.getLevel());
+		assertEquals("schluessel enthält ungültige Zeichen", messagePayload.getMessage());
 	}
 
 	@Test
@@ -334,7 +354,7 @@ public class AdminRaetselResourceTest {
 	void testRaetselDetailsLadenNotFound() throws Exception {
 
 		given()
-			.when().get("00000000-0000-0000-0000-000000000000/v1")
+			.when().get("76356/v1")
 			.then()
 			.statusCode(404);
 	}

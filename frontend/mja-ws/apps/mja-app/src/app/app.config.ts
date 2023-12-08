@@ -10,7 +10,6 @@ import { provideRouterStore } from '@ngrx/router-store';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideStore } from '@ngrx/store';
-import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
 import {
   LocalStorageEffects,
@@ -38,6 +37,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { registerLocaleData } from '@angular/common';
 import { embeddableImagesDataProvider } from '@mja-ws/embeddable-images/api';
+import { raetselDataProvider } from '@mja-ws/raetsel/api';
 
 if (environment.production) {
   enableProdMode();
@@ -63,6 +63,7 @@ export const appConfig: ApplicationConfig = {
     coreDeskriptorenDataProvider,
     coreStatistikDataProvider,
     embeddableImagesDataProvider,
+    raetselDataProvider,
     provideAnimations(),
     provideRouter(appRoutes),
     provideRouterStore(),

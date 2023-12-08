@@ -24,6 +24,7 @@ import { CoreFacade } from '@mja-ws/core/api';
 import { RaetselgruppeEditComponent } from '../raetselgruppe-edit/raetselgruppe-edit.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
+import { RaetselFacade } from '@mja-ws/raetsel/api';
 
 @Component({
   selector: 'mja-raetselgruppen-details',
@@ -50,6 +51,7 @@ import { MatCardModule } from '@angular/material/card';
 export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
   raetselgruppenFacade = inject(RaetselgruppenFacade);
+  
   dialog = inject(MatDialog);
 
   images: GeneratedImages | undefined;
@@ -58,6 +60,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   punkte = '';
 
   #coreFacade = inject(CoreFacade);
+  #raetselFacade = inject(RaetselFacade);
 
   #raetselgruppeSubscription = new Subscription();
   #imagesSubscription = new Subscription();
@@ -65,7 +68,8 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   #raetselgruppeBasisdaten!: RaetselgruppeBasisdaten;
   #anzahlElemente = 0;
 
-  ngOnInit(): void {
+  ngOnInit(): void {   
+
     this.#raetselgruppeSubscription = this.raetselgruppenFacade.raetselgruppeDetails$.subscribe((raetselgruppe) => {
       this.#raetselgruppeBasisdaten = raetselgruppe;
       this.#anzahlElemente = raetselgruppe.elemente.length
@@ -83,6 +87,14 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
   gotoUebersicht(): void {
     this.raetselgruppenFacade.unselectRaetselgruppe();
+  }
+
+  gotoRaetselDetails(): void {
+
+    if (this.schluessel) {
+      this.#raetselFacade.selectRaetsel(this.schluessel);
+    }
+
   }
 
   openGenerateDialog(): void {
@@ -219,7 +231,6 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
     this.#imagesSubscription = this.#coreFacade.loadRaetselPNGs($element.raetselSchluessel).pipe(
       tap((images: GeneratedImages) => this.images = images)
     ).subscribe();
-
   }
 
   #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData): void {

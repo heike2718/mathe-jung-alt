@@ -66,6 +66,15 @@
                         <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
                                 (click)="gotoRaetselUebersicht()">Rätselsuche</button>
                         </div>
+
+                        <div *ngIf="authFacade.userIsAdmin$ | async">
+                            <div *ngIf="raetselgruppenFacade.raetselgruppeDetails$ | async as raetselgruppe"><button
+                                    class="label" mat-raised-button color="primary"
+                                    matTooltip="zur gewählten Rätselgruppe {{raetselgruppe.name}}"
+                                    (click)="gotoRaetselgruppe()">Rätselgruppe</button>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="grid-container-2 mt-2 mb-2">

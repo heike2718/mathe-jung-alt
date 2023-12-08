@@ -61,9 +61,9 @@ export class RaetselHttpService {
         return this.#http.get<RaetselsucheTreffer>(url, { headers, params });
     }
 
-    loadRaetselDetails(raetsel: Raetsel): Observable<RaetselDetails> {
+    loadRaetselDetails(schluessel: string): Observable<RaetselDetails> {
 
-        const url = this.#url + '/' + raetsel.id + '/v1';
+        const url = this.#url + '/' + schluessel + '/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
         return this.#http.get<RaetselDetails>(url, { headers: headers });

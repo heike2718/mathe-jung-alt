@@ -32,6 +32,7 @@ import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { Configuration } from '@mja-ws/shared/config';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
+import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -59,6 +60,7 @@ import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
 export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   raetselFacade = inject(RaetselFacade);
+  raetselgruppenFacade = inject(RaetselgruppenFacade);
   authFacade = inject(AuthFacade);
   dialog = inject(MatDialog);
 
@@ -70,6 +72,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   #raetselDetailsSubscription = new Subscription();
   #raetselDetails!: RaetselDetails;
+
+  
 
   ngOnInit(): void {
 
@@ -105,6 +109,10 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   gotoRaetselUebersicht(): void {
     this.#router.navigateByUrl('/raetsel');
+  }
+
+  gotoRaetselgruppe(): void {
+    this.#router.navigateByUrl('raetselgruppen/details');
   }
 
   generierenDiabled(): boolean {

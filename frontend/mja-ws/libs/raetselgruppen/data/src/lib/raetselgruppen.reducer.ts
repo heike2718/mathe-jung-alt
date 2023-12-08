@@ -10,6 +10,7 @@ export interface RaetselgruppenState {
     readonly paginationState: PaginationState;
     readonly raetselgruppeBasisdaten: RaetselgruppeBasisdaten| undefined;
     readonly raetselgruppeDetails: RaetselgruppeDetails | undefined;
+    readonly selectedRaetselSchluessel: string | undefined;
 };
 
 const initialRaetselgruppenState: RaetselgruppenState = {
@@ -18,7 +19,8 @@ const initialRaetselgruppenState: RaetselgruppenState = {
     page: [],
     paginationState: initialPaginationState,
     raetselgruppeBasisdaten: undefined,
-    raetselgruppeDetails: undefined
+    raetselgruppeDetails: undefined,
+    selectedRaetselSchluessel: undefined
 };
 
 export const raetselgruppenFeature = createFeature({

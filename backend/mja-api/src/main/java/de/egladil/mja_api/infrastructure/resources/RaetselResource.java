@@ -5,6 +5,7 @@
 package de.egladil.mja_api.infrastructure.resources;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -296,7 +297,7 @@ public class RaetselResource {
 	}
 
 	@GET
-	@Path("{raetselID}/v1")
+	@Path("{schluessel}/v1")
 	@Authenticated
 	@Operation(
 		operationId = "raetselDetailsLaden",
@@ -304,8 +305,8 @@ public class RaetselResource {
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.PATH,
-			name = "raetselID",
-			description = "technische ID des Rätsels") })
+			name = "schluessel",
+			description = "fachlicher Schlüssel des Rätsels") })
 	@APIResponse(
 		name = "OKResponse",
 		responseCode = "200",
@@ -319,12 +320,19 @@ public class RaetselResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public Response raetselDetailsLaden(@Pattern(
-		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "raetselID enthält ungültige Zeichen") @PathParam(value = "raetselID") final String raetselUuid) {
+		regexp = MjaRegexps.VALID_SCHLUESSEL,
+		message = "schluessel enthält ungültige Zeichen") @PathParam(value = "schluessel") final String schluessel) {
 
 		this.delayService.pause();
 
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
+		Optional<String> optRaetselId = raetselService.getRaetselIdWithSchluessel(schluessel);
+
+		if (optRaetselId.isEmpty()) {
+
+			return Response.status(404).build();
+		}
+
+		Raetsel raetsel = raetselService.getRaetselZuId(optRaetselId.get());
 
 		if (raetsel == null) {
 

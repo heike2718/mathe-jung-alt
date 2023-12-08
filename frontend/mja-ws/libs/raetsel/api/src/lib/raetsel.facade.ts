@@ -17,7 +17,7 @@ import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
 import { EditRaetselPayload, initialRaetselDetails, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { deepClone, filterDefined } from '@mja-ws/shared/ngrx-utils';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -43,8 +43,8 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.fIND_RAETSEL({admin, suchfilter, pageDefinition }));
   }
 
-  selectRaetsel(raetsel: Raetsel): void {
-    this.#store.dispatch(raetselActions.rAETSEL_SELECTED({ raetsel }));
+  selectRaetsel(schluessel: string): void {
+    this.#store.dispatch(raetselActions.rAETSEL_SELECTED({ schluessel }));
   }
 
   generiereRaetselOutput(raetselID: string, outputFormat: OUTPUTFORMAT, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {

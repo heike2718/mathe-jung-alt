@@ -49,6 +49,14 @@
                 ]
               },
               {
+                "sourceTag": "domain:embeddable-images:model",
+                "onlyDependsOnLibsWithTags": [
+                  "domain:embeddable-images:model",
+                  "type:shared:messaging:api"
+                  
+                ]
+              },
+              {
                 "sourceTag": "domain:embeddable-images:data",
                 "onlyDependsOnLibsWithTags": [
                   "domain:embeddable-images:model",
@@ -59,8 +67,7 @@
               {
                 "sourceTag": "domain:embeddable-images:api",
                 "onlyDependsOnLibsWithTags": [
-                  "domain:embeddable-images:model",
-                  "domain:embeddable-images:data"
+                  "type:core:model"
                 ]
               },
               {
@@ -128,7 +135,8 @@
                   "type:model",
                   "type:api",
                   "type:shared:util",
-                  "type:shared:ui"
+                  "type:shared:ui",
+                  "type:shared:config"
                 ],
                 "bannedExternalImports": ["@ngrx/**"]
               },
@@ -179,7 +187,8 @@
                   "type:core:model",
                   "type:core:api",
                   "type:shared:util",
-                  "type:shared:messaging:api"                  
+                  "type:shared:messaging:api",
+                  "type:shared:config"                  
                 ]
               },
               {

@@ -276,7 +276,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   cancelEdit() {
     this.raetselFacade.leaveEditMode();
     if (this.#raetselDetails && this.#raetselDetails.id !== 'neu') {
-      this.raetselFacade.selectRaetsel(this.#raetselDetails);
+      this.raetselFacade.selectRaetsel(this.#raetselDetails.schluessel);
     } else {
       this.raetselFacade.cancelSelection();
     }
