@@ -1,8 +1,12 @@
 # Release-Notes
 
+__2.3.4__
+
+[2023-Q4 completed](https://github.com/heike2718/mathe-jung-alt/milestone/7)
+
 __2.3.2__
 
-[2023-Q4 Teil 1](https://github.com/heike2718/mathe-jung-alt/milestone/7?closed=1)
+[2023-Q4 Teil 1](https://github.com/heike2718/mathe-jung-alt/milestone/7)
 
 __2.2.4__
 
