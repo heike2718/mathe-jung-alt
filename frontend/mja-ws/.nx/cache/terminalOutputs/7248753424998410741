@@ -1,0 +1,12 @@
+
+Linting "shared-messaging-ui"...
+
+ [31m>[39m [0m[7m[1m[31m NX [39m[22m[27m[0m  [31mlibs/shared/messaging/ui/.eslintrc.json » ../../../../.eslintrc.json#overrides[0]:[39m
+
+   	Configuration for rule "@nx/enforce-module-boundaries" is invalid:
+   	Value {"sourceTag":"domain:raetsel:model","onlyDependsOnLibsWithTags":["type:model","type:core:model"]} should NOT have additional properties.
+   	Value {"sourceTag":"domain:raetsel:model","onlyDependsOnLibsWithTags":["type:model","type:core:model"]} should NOT have additional properties.
+   	Value {"sourceTag":"domain:raetsel:model","onlyDependsOnLibsWithTags":["type:model","type:core:model"]} should match exactly one schema in oneOf.
+   
+   Pass --verbose to see the stacktrace.
+

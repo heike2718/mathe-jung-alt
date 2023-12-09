@@ -1,0 +1,318 @@
+{
+  "run": {
+    "command": "nx run-many --target=lint --all",
+    "startTime": "2023-12-09T07:49:06.816Z",
+    "endTime": "2023-12-09T07:49:32.706Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "core-model:lint",
+      "target": "lint",
+      "projectName": "core-model",
+      "hash": "17674333361312823745",
+      "startTime": "2023-12-09T07:49:10.592Z",
+      "endTime": "2023-12-09T07:49:12.743Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-messaging-api:lint",
+      "target": "lint",
+      "projectName": "shared-messaging-api",
+      "hash": "17317323322033405713",
+      "startTime": "2023-12-09T07:49:10.593Z",
+      "endTime": "2023-12-09T07:49:12.745Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-util:lint",
+      "target": "lint",
+      "projectName": "shared-util",
+      "hash": "3423809273855326456",
+      "startTime": "2023-12-09T07:49:10.593Z",
+      "endTime": "2023-12-09T07:49:12.825Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-auth-model:lint",
+      "target": "lint",
+      "projectName": "shared-auth-model",
+      "hash": "803869694647120986",
+      "startTime": "2023-12-09T07:49:12.745Z",
+      "endTime": "2023-12-09T07:49:14.910Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "core-data:lint",
+      "target": "lint",
+      "projectName": "core-data",
+      "hash": "265481032144093948",
+      "startTime": "2023-12-09T07:49:12.746Z",
+      "endTime": "2023-12-09T07:49:15.085Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "embeddable-images-model:lint",
+      "target": "lint",
+      "projectName": "embeddable-images-model",
+      "hash": "6484224337132656481",
+      "startTime": "2023-12-09T07:49:12.826Z",
+      "endTime": "2023-12-09T07:49:15.223Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-ngrx-utils:lint",
+      "target": "lint",
+      "projectName": "shared-ngrx-utils",
+      "hash": "7518008719243218280",
+      "startTime": "2023-12-09T07:49:14.910Z",
+      "endTime": "2023-12-09T07:49:17.087Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "core-api:lint",
+      "target": "lint",
+      "projectName": "core-api",
+      "hash": "10599567509481437448",
+      "startTime": "2023-12-09T07:49:15.086Z",
+      "endTime": "2023-12-09T07:49:17.242Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "raetsel-model:lint",
+      "target": "lint",
+      "projectName": "raetsel-model",
+      "hash": "13913759897951589507",
+      "startTime": "2023-12-09T07:49:15.224Z",
+      "endTime": "2023-12-09T07:49:17.389Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "raetselgruppen-model:lint",
+      "target": "lint",
+      "projectName": "raetselgruppen-model",
+      "hash": "14072884994463323881",
+      "startTime": "2023-12-09T07:49:17.243Z",
+      "endTime": "2023-12-09T07:49:19.393Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "raetsel-data:lint",
+      "target": "lint",
+      "projectName": "raetsel-data",
+      "hash": "919459052815707050",
+      "startTime": "2023-12-09T07:49:17.088Z",
+      "endTime": "2023-12-09T07:49:19.420Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-auth-data:lint",
+      "target": "lint",
+      "projectName": "shared-auth-data",
+      "hash": "6757512637180153859",
+      "startTime": "2023-12-09T07:49:17.390Z",
+      "endTime": "2023-12-09T07:49:19.721Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-config:lint",
+      "target": "lint",
+      "projectName": "shared-config",
+      "hash": "15966209177158715785",
+      "startTime": "2023-12-09T07:49:19.393Z",
+      "endTime": "2023-12-09T07:49:21.658Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "raetsel-api:lint",
+      "target": "lint",
+      "projectName": "raetsel-api",
+      "hash": "10545401189850573414",
+      "startTime": "2023-12-09T07:49:19.421Z",
+      "endTime": "2023-12-09T07:49:21.674Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "raetselgruppen-data:lint",
+      "target": "lint",
+      "projectName": "raetselgruppen-data",
+      "hash": "989834672313725848",
+      "startTime": "2023-12-09T07:49:19.721Z",
+      "endTime": "2023-12-09T07:49:22.002Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "raetselgruppen-api:lint",
+      "target": "lint",
+      "projectName": "raetselgruppen-api",
+      "hash": "6038955705156369584",
+      "startTime": "2023-12-09T07:49:21.674Z",
+      "endTime": "2023-12-09T07:49:23.836Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "embeddable-images-data:lint",
+      "target": "lint",
+      "projectName": "embeddable-images-data",
+      "hash": "16176681990917908954",
+      "startTime": "2023-12-09T07:49:21.659Z",
+      "endTime": "2023-12-09T07:49:24.185Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-components:lint",
+      "target": "lint",
+      "projectName": "shared-components",
+      "hash": "1904430890081356292",
+      "startTime": "2023-12-09T07:49:22.003Z",
+      "endTime": "2023-12-09T07:49:24.244Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-auth-api:lint",
+      "target": "lint",
+      "projectName": "shared-auth-api",
+      "hash": "15956629189220941983",
+      "startTime": "2023-12-09T07:49:23.836Z",
+      "endTime": "2023-12-09T07:49:26.254Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "raetselgruppen-feature:lint",
+      "target": "lint",
+      "projectName": "raetselgruppen-feature",
+      "hash": "4039270405787890266",
+      "startTime": "2023-12-09T07:49:24.244Z",
+      "endTime": "2023-12-09T07:49:26.864Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "embeddable-images-api:lint",
+      "target": "lint",
+      "projectName": "embeddable-images-api",
+      "hash": "7896233792647915097",
+      "startTime": "2023-12-09T07:49:24.185Z",
+      "endTime": "2023-12-09T07:49:26.889Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-messaging-ui:lint",
+      "target": "lint",
+      "projectName": "shared-messaging-ui",
+      "hash": "11417096975439484979",
+      "startTime": "2023-12-09T07:49:26.254Z",
+      "endTime": "2023-12-09T07:49:28.387Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "local-storage-data:lint",
+      "target": "lint",
+      "projectName": "local-storage-data",
+      "hash": "13464251684178373987",
+      "startTime": "2023-12-09T07:49:26.865Z",
+      "endTime": "2023-12-09T07:49:29.019Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "raetsel-feature:lint",
+      "target": "lint",
+      "projectName": "raetsel-feature",
+      "hash": "13178825715112547528",
+      "startTime": "2023-12-09T07:49:26.890Z",
+      "endTime": "2023-12-09T07:49:29.391Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-http:lint",
+      "target": "lint",
+      "projectName": "shared-http",
+      "hash": "3097533690049447440",
+      "startTime": "2023-12-09T07:49:28.388Z",
+      "endTime": "2023-12-09T07:49:30.629Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shared-layout:lint",
+      "target": "lint",
+      "projectName": "shared-layout",
+      "hash": "15606393449258087017",
+      "startTime": "2023-12-09T07:49:29.392Z",
+      "endTime": "2023-12-09T07:49:31.528Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "mja-app:lint",
+      "target": "lint",
+      "projectName": "mja-app",
+      "hash": "8858071420655786130",
+      "startTime": "2023-12-09T07:49:29.020Z",
+      "endTime": "2023-12-09T07:49:31.694Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "mja-app-e2e:lint",
+      "target": "lint",
+      "projectName": "mja-app-e2e",
+      "hash": "6755487680149939794",
+      "startTime": "2023-12-09T07:49:30.629Z",
+      "endTime": "2023-12-09T07:49:32.706Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    }
+  ]
+}

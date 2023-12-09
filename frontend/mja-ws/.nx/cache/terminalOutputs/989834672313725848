@@ -1,0 +1,15 @@
+
+Linting "raetselgruppen-data"...
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetselgruppen/data/src/lib/raetselgruppen-http.service.ts[24m[0m
+[0m   [2m2:47[22m  [33mwarning[39m  'HttpResponse' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m13:15[22m  [33mwarning[39m  'switchMap' is defined but never used     [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetselgruppen/data/src/lib/raetselgruppen.effects.ts[24m[0m
+[0m  [2m9:10[22m  [33mwarning[39m  'HttpResponse' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetselgruppen/data/src/lib/raetselgruppen.reducer.ts[24m[0m
+[0m  [2m63:66[22m  [33mwarning[39m  '_action' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 4 problems (0 errors, 4 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m

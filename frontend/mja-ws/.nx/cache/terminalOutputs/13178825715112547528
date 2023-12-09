@@ -1,0 +1,23 @@
+
+Linting "raetsel-feature"...
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetsel/feature/src/lib/embeddable-image-vorschau/embeddable-image-vorschau.component.ts[24m[0m
+[0m  [2m1:55[22m  [33mwarning[39m  'Output' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetsel/feature/src/lib/raetsel-details/raetsel-details.component.ts[24m[0m
+[0m  [2m7:10[22m  [33mwarning[39m  'MatIconModule' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetsel/feature/src/lib/raetsel-editor/raetsel-editor.component.ts[24m[0m
+[0m  [2m257:44[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m353:67[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m356:67[22m  [33mwarning[39m  Forbidden non-null assertion              [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m541:39[22m  [33mwarning[39m  '_result' is defined but never used       [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetsel/feature/src/lib/raetsel-search/raetsel-search.component.ts[24m[0m
+[0m  [2m251:22[22m  [33mwarning[39m  '_checked' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetsel/feature/src/lib/raetsel-suchfilter-admin/raetsel-suchfilter-admin.component.ts[24m[0m
+[0m  [2m1:88[22m  [33mwarning[39m  'OnInit' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 8 problems (0 errors, 8 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m

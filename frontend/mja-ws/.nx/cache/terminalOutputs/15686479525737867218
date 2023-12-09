@@ -1,0 +1,12 @@
+
+Linting "local-storage-data"...
+
+ >  NX   libs/local-storage-data/.eslintrc.json » ../../.eslintrc.json#overrides[0]:
+
+   	Configuration for rule "@nx/enforce-module-boundaries" is invalid:
+   	Value {"sourceTag":"domain:raetselgruppen:model","onlyDependsOnLibsWithTags":["type:model","type:core:model"]} should NOT have additional properties.
+   	Value {"sourceTag":"domain:raetselgruppen:model","onlyDependsOnLibsWithTags":["type:model","type:core:model"]} should NOT have additional properties.
+   	Value {"sourceTag":"domain:raetselgruppen:model","onlyDependsOnLibsWithTags":["type:model","type:core:model"]} should match exactly one schema in oneOf.
+   
+   Pass --verbose to see the stacktrace.
+

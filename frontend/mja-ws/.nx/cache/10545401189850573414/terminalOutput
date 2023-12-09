@@ -1,0 +1,12 @@
+
+Linting "raetsel-api"...
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetsel/api/src/lib/raetsel.datasource.ts[24m[0m
+[0m  [2m12:13[22m  [33mwarning[39m  '_collectionViewer' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m16:16[22m  [33mwarning[39m  '_collectionViewer' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetsel/api/src/lib/raetsel.facade.ts[24m[0m
+[0m  [2m20:22[22m  [33mwarning[39m  'of' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 3 problems (0 errors, 3 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m

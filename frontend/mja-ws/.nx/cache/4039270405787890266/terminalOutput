@@ -1,0 +1,11 @@
+
+Linting "raetselgruppen-feature"...
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetselgruppen/feature/src/lib/raetselgruppen-search/raetselgruppen-search.component.ts[24m[0m
+[0m  [2m13:239[22m  [33mwarning[39m  'SortOrder' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/raetselgruppen/feature/src/lib/raetselgruppenelement-dialog/raetselgruppenelement-dialog.component.ts[24m[0m
+[0m  [2m1:29[22m  [33mwarning[39m  'OnInit' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 2 problems (0 errors, 2 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
