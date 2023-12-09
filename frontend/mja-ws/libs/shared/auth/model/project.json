@@ -11,23 +11,18 @@
         "outputPath": "dist/libs/shared/auth/model",
         "main": "libs/shared/auth/model/src/index.ts",
         "tsConfig": "libs/shared/auth/model/tsconfig.lib.json",
-        "assets": ["libs/shared/auth/model/*.md"],
-        "updateBuildableProjectDepsInPackageJson": true
+        "assets": ["libs/shared/auth/model/*.md"]
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/shared/auth/model/**/*.ts"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/shared/auth/model"],
       "options": {
-        "jestConfig": "libs/shared/auth/model/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/auth/model/jest.config.ts"
       }
     }
   },

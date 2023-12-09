@@ -11,23 +11,18 @@
         "outputPath": "dist/libs/shared/http",
         "main": "libs/shared/http/src/index.ts",
         "tsConfig": "libs/shared/http/tsconfig.lib.json",
-        "assets": ["libs/shared/http/*.md"],
-        "updateBuildableProjectDepsInPackageJson": true
+        "assets": ["libs/shared/http/*.md"]
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/shared/http/**/*.ts"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/shared/http"],
       "options": {
-        "jestConfig": "libs/shared/http/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/http/jest.config.ts"
       }
     }
   },

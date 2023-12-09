@@ -13,6 +13,6 @@ export const environment = {
   withCredentials: true,
   assetsPath: '/mja-app/assets/',
   providers: [
-    provideStoreDevtools({ maxAge: 25 })
+    provideStoreDevtools({ maxAge: 25 , connectInZone: true})
   ],
 };

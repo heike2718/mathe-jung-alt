@@ -13,7 +13,7 @@ export const environment = {
     provideStoreDevtools({
       maxAge: 25,
       autoPause: true,
-    }),
+    connectInZone: true}),
   ],
 };
 

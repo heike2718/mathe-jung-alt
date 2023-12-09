@@ -11,23 +11,18 @@
         "outputPath": "dist/libs/core/model",
         "main": "libs/core/model/src/index.ts",
         "tsConfig": "libs/core/model/tsconfig.lib.json",
-        "assets": ["libs/core/model/*.md"],
-        "updateBuildableProjectDepsInPackageJson": true
+        "assets": ["libs/core/model/*.md"]
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/core/model/**/*.ts"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/core/model"],
       "options": {
-        "jestConfig": "libs/core/model/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/core/model/jest.config.ts"
       }
     }
   },
