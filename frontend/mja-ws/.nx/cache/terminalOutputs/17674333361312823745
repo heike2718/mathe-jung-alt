@@ -1,9 +1,0 @@
-
-Linting "core-model"...
-[0m[0m
-[0m[4m/home/heike/git/mathe-jung-alt/frontend/mja-ws/libs/core/model/src/lib/core-model.ts[24m[0m
-[0m  [2m222:65[22m  [33mwarning[39m  '_map' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
-[0m  [2m309:78[22m  [33mwarning[39m  '_map' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
-[0m[0m
-[0m[33m[1m✖ 2 problems (0 errors, 2 warnings)[22m[39m[0m
-[0m[33m[1m[22m[39m[0m

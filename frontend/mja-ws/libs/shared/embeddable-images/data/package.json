@@ -9,7 +9,6 @@
     "@ngrx/effects": "16.0.1",
     "@mja-ws/embeddable-images/model": "^0.0.1"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "sideEffects": false
 }

@@ -11,23 +11,18 @@
         "outputPath": "dist/libs/shared/messaging/api",
         "main": "libs/shared/messaging/api/src/index.ts",
         "tsConfig": "libs/shared/messaging/api/tsconfig.lib.json",
-        "assets": ["libs/shared/messaging/api/*.md"],
-        "updateBuildableProjectDepsInPackageJson": true
+        "assets": ["libs/shared/messaging/api/*.md"]
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/shared/messaging/api/**/*.ts"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/shared/messaging/api"],
       "options": {
-        "jestConfig": "libs/shared/messaging/api/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/messaging/api/jest.config.ts"
       }
     }
   },

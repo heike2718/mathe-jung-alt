@@ -11,23 +11,18 @@
         "outputPath": "dist/libs/raetselgruppen/feature",
         "main": "libs/raetselgruppen/feature/src/index.ts",
         "tsConfig": "libs/raetselgruppen/feature/tsconfig.lib.json",
-        "assets": ["libs/raetselgruppen/feature/*.md"],
-        "updateBuildableProjectDepsInPackageJson": true
+        "assets": ["libs/raetselgruppen/feature/*.md"]
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/raetselgruppen/feature/**/*.ts"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/raetselgruppen/feature"],
       "options": {
-        "jestConfig": "libs/raetselgruppen/feature/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/raetselgruppen/feature/jest.config.ts"
       }
     }
   },

@@ -11,23 +11,18 @@
         "outputPath": "dist/libs/raetsel/api",
         "main": "libs/raetsel/api/src/index.ts",
         "tsConfig": "libs/raetsel/api/tsconfig.lib.json",
-        "assets": ["libs/raetsel/api/*.md"],
-        "updateBuildableProjectDepsInPackageJson": true
+        "assets": ["libs/raetsel/api/*.md"]
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/raetsel/api/**/*.ts"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/raetsel/api"],
       "options": {
-        "jestConfig": "libs/raetsel/api/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/raetsel/api/jest.config.ts"
       }
     }
   },

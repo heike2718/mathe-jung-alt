@@ -15,10 +15,7 @@
         "polyfills": "apps/mja-app/src/polyfills.ts",
         "tsConfig": "apps/mja-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/mja-app/src/favicon.ico",
-          "apps/mja-app/src/assets"
-        ],
+        "assets": ["apps/mja-app/src/favicon.ico", "apps/mja-app/src/assets"],
         "styles": [
           "libs/shared/layout/src/lib/scss/theme.scss",
           "apps/mja-app/src/styles.scss",
@@ -113,10 +110,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "mja-app:build:production"
+          "buildTarget": "mja-app:build:production"
         },
         "development": {
-          "browserTarget": "mja-app:build:development"
+          "buildTarget": "mja-app:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -124,21 +121,17 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "mja-app:build"
+        "buildTarget": "mja-app:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["apps/mja-app/**/*.ts", "apps/mja-app/**/*.html"]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/mja-app"],
       "options": {
-        "jestConfig": "apps/mja-app/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "apps/mja-app/jest.config.ts"
       }
     }
   },
