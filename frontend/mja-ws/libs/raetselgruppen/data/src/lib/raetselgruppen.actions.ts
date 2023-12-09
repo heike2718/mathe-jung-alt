@@ -1,4 +1,4 @@
-import { FONT_NAME, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, SCHRIFTGROESSE } from '@mja-ws/core/model';
+import { FONT_NAME, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, SCHRIFTGROESSE, GeneratedImages } from '@mja-ws/core/model';
 import { RaetselgruppenTreffer, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem, RaetselgruppeDetails, RaetselgruppeBasisdaten, EditRaetselgruppePayload, EditRaetselgruppenelementPayload, Raetselgruppenelement } from '@mja-ws/raetselgruppen/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
@@ -21,9 +21,11 @@ export const raetselgruppenActions = createActionGroup({
         'EDIT_RAETSELGUPPE': props<{raetselgruppeBasisdaten: RaetselgruppeBasisdaten}>(),
         'SAVE_RAETSELGRUPPE': props<{editRaetselgruppePayload: EditRaetselgruppePayload}>(),
         'RAETSELGRUPPE_SAVED': props<{raetselgruppe: RaetselgruppeBasisdaten}>(),
+        'SELECT_RAETSELGRUPPENELEMENT': props<{raetselgruppenelement: Raetselgruppenelement}>(),
+        'ELEMENT_IMAGES_LOADED': props<{generatedImages: GeneratedImages}>(),
+        'UNSELECT_RAETSELGRUPPENELEMENT': emptyProps(),
         'SAVE_RAETSELGRUPPENELEMENT': props<{raetselgruppeID: string, payload: EditRaetselgruppenelementPayload}>(),
         'DELETE_RAETSELGRUPPENELEMENT': props<{raetselgruppeID: string, payload: Raetselgruppenelement}>(),
-        'RAETSELGRUPPENELEMENTE_CHANGED': props<{raetselgruppenDetails: RaetselgruppeDetails}>(),
-        'RAETSEL_SCHLUESSEL_SELECTED': props<{schluessel: string}>()
+        'RAETSELGRUPPENELEMENTE_CHANGED': props<{raetselgruppenDetails: RaetselgruppeDetails}>()
     }
 });

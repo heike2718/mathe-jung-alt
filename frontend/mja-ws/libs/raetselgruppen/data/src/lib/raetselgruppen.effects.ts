@@ -8,6 +8,7 @@ import { RaetselgruppenHttpService } from "./raetselgruppen-http.service";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
 import { HttpResponse } from "@angular/common/http";
 import { RaetselFacade } from "@mja-ws/raetsel/api";
+import { CoreFacade } from "@mja-ws/core/api";
 
 @Injectable({ providedIn: 'root' })
 export class RaetselgruppenEffects {
@@ -17,6 +18,7 @@ export class RaetselgruppenEffects {
     #router = inject(Router);
     #downloadService = inject(FileDownloadService);
     #raetselFacade = inject(RaetselFacade);
+    #coreFacade = inject(CoreFacade);
 
     findRaetselgruppen$ = createEffect(() => {
         return this.#actions.pipe(
@@ -134,9 +136,11 @@ export class RaetselgruppenEffects {
             tap((action) => this.#downloadService.downloadZip(action.data, action.fileName)),
         ), { dispatch: false });
 
-    raetselSchluesselSelected$ = createEffect(() =>
+    raetselgruppenelementSelected$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.rAETSEL_SCHLUESSEL_SELECTED),
-            tap((action) => this.#raetselFacade.selectRaetsel(action.schluessel)),
-        ), { dispatch: false });
+            ofType(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT),
+            switchMap((action) => this.#coreFacade.loadRaetselPNGs(action.raetselgruppenelement.raetselSchluessel)),
+            map((images) => raetselgruppenActions.eLEMENT_IMAGES_LOADED({ generatedImages: images }))
+        )
+    );
 }

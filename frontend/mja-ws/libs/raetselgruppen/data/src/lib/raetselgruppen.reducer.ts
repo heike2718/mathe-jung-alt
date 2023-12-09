@@ -1,5 +1,5 @@
-import { initialPaginationState, PaginationState } from "@mja-ws/core/model";
-import { RaetselgruppeBasisdaten, RaetselgruppeDetails, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
+import { GeneratedImages, initialPaginationState, PaginationState } from "@mja-ws/core/model";
+import { RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
 
@@ -10,7 +10,8 @@ export interface RaetselgruppenState {
     readonly paginationState: PaginationState;
     readonly raetselgruppeBasisdaten: RaetselgruppeBasisdaten| undefined;
     readonly raetselgruppeDetails: RaetselgruppeDetails | undefined;
-    readonly selectedRaetselSchluessel: string | undefined;
+    readonly selectedRaetselgruppenelement: Raetselgruppenelement | undefined;
+    readonly selectedElementImages: GeneratedImages | undefined;
 };
 
 const initialRaetselgruppenState: RaetselgruppenState = {
@@ -20,7 +21,8 @@ const initialRaetselgruppenState: RaetselgruppenState = {
     paginationState: initialPaginationState,
     raetselgruppeBasisdaten: undefined,
     raetselgruppeDetails: undefined,
-    selectedRaetselSchluessel: undefined
+    selectedRaetselgruppenelement: undefined,
+    selectedElementImages: undefined
 };
 
 export const raetselgruppenFeature = createFeature({
@@ -32,7 +34,9 @@ export const raetselgruppenFeature = createFeature({
                 ...state,
                 paginationState: { ...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt },
                 page: action.treffer.items,
-                loaded: true
+                loaded: true,
+                selectedRaetselgruppenelement: undefined,
+                selectedElementImages: undefined
             };
         }),
         on((raetselgruppenActions.rAETSELGRUPPEN_SELECT_PAGE), (state, action) => {
@@ -61,8 +65,10 @@ export const raetselgruppenFeature = createFeature({
             return {...state, raetselgruppeDetails: action.raetselgruppeDetails, raetselgruppeBasisdaten: undefined};
         }),
         on(raetselgruppenActions.uNSELECT_RAETSELGRUPPE, (state, _action) => {
-            return {...state, raetselgruppeDetails: undefined, raetselgruppeBasisdaten: undefined}
+            return {...state, raetselgruppeDetails: undefined, raetselgruppeBasisdaten: undefined, selectedRaetselgruppenelement: undefined, selectedElementImages: undefined}
         }),
         on(raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED, (state, action) => ({ ...state, raetselgruppeDetails: action.raetselgruppenDetails })),
+        on(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT, (state, action) => ({...state, selectedRaetselgruppenelement: action.raetselgruppenelement})),
+        on(raetselgruppenActions.eLEMENT_IMAGES_LOADED, (state, action) => ({...state, selectedElementImages: action.generatedImages}))
     )
 });

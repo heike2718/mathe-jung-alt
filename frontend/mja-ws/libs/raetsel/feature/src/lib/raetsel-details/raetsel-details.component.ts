@@ -33,6 +33,7 @@ import { Configuration } from '@mja-ws/shared/config';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
 import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
+import { RaetselgruppeDetails, RaetselgruppenTrefferItem } from '@mja-ws/raetselgruppen/model';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -72,8 +73,11 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   #raetselDetailsSubscription = new Subscription();
   #raetselDetails!: RaetselDetails;
+  #raetselgruppeDetailsSubscription = new Subscription();
 
-  
+  #selectedRaetselgruppe: RaetselgruppeDetails | undefined;
+
+
 
   ngOnInit(): void {
 
@@ -82,11 +86,15 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
         this.#raetselDetails = details;
       })
     ).subscribe();
+
+    this.#raetselgruppeDetailsSubscription = this.raetselgruppenFacade.raetselgruppeDetails$
+      .subscribe((gruppe) => this.#selectedRaetselgruppe = gruppe);
   }
 
   ngOnDestroy(): void {
     this.#raetselDetailsSubscription.unsubscribe();
     this.#embeddableImagesFacade.clearVorschau();
+    this.#raetselgruppeDetailsSubscription.unsubscribe();
   }
 
   startEdit(): void {
@@ -112,7 +120,22 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   gotoRaetselgruppe(): void {
-    this.#router.navigateByUrl('raetselgruppen/details');
+
+    if (this.#selectedRaetselgruppe) {
+      const trefferitem: RaetselgruppenTrefferItem = {
+        anzahlElemente: this.#selectedRaetselgruppe.elemente.length,
+        geaendertDurch: this.#selectedRaetselgruppe.geaendertDurch,
+        id: this.#selectedRaetselgruppe.id,
+        name: this.#selectedRaetselgruppe.name,
+        referenz: this.#selectedRaetselgruppe.referenz,
+        referenztyp: this.#selectedRaetselgruppe.referenztyp,
+        schwierigkeitsgrad: this.#selectedRaetselgruppe.schwierigkeitsgrad,
+        status: this.#selectedRaetselgruppe.status
+      };
+      this.raetselgruppenFacade.selectRaetselgruppe(trefferitem)
+    } else {
+      this.#router.navigateByUrl('raetselgruppen');
+    }
   }
 
   generierenDiabled(): boolean {

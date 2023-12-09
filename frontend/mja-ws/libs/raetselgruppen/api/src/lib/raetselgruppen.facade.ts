@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { FONT_NAME, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, SCHRIFTGROESSE, STATUS } from "@mja-ws/core/model";
+import { FONT_NAME, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, SCHRIFTGROESSE, STATUS } from "@mja-ws/core/model";
 import { fromRaetselgruppen, raetselgruppenActions } from "@mja-ws/raetselgruppen/data";
 import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/ngrx-utils";
@@ -19,6 +19,8 @@ export class RaetselgruppenFacade {
     raetselgruppeDetails$: Observable<RaetselgruppeDetails> = this.#store.select(fromRaetselgruppen.raetselgruppeDetails).pipe(filterDefined, deepClone);
     raetselgruppeBasisdaten$: Observable<RaetselgruppeBasisdaten> = this.#store.select(fromRaetselgruppen.raetselgruppeBasisdaten).pipe(filterDefined, deepClone);
     raetselgruppenelemente$: Observable<Raetselgruppenelement[]> = this.#store.select(fromRaetselgruppen.raetselgruppenelemente);
+    selectedRaetselgruppenelement$: Observable<Raetselgruppenelement> = this.#store.select(fromRaetselgruppen.selectedRaetselgruppenelement).pipe(filterDefined, deepClone);
+    selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromRaetselgruppen.selectedElementImages);
 
     triggerSearch(raetselgruppenSuchparameter: RaetselgruppenSuchparameter, pageDefinition: PageDefinition): void {
         this.#store.dispatch(raetselgruppenActions.rAETSELGRUPPEN_SELECT_PAGE({ pageDefinition }));
@@ -34,8 +36,8 @@ export class RaetselgruppenFacade {
         this.#store.dispatch(raetselgruppenActions.uNSELECT_RAETSELGRUPPE());
     }
 
-    selectElementSchluessel(schluessel: string): void {
-        this.#store.dispatch(raetselgruppenActions.rAETSEL_SCHLUESSEL_SELECTED({schluessel}));
+    selectRaetselgruppenelement(element: Raetselgruppenelement): void {
+        this.#store.dispatch(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT({ raetselgruppenelement: element }));
     }
 
     generiereArbeitsblatt(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {

@@ -14,7 +14,7 @@ import {
 } from '@mja-ws/core/model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
-import {MatBadgeModule} from '@angular/material/badge';
+import { MatBadgeModule } from '@angular/material/badge';
 import { Subscription, tap } from 'rxjs';
 import { EditRaetselgruppenelementPayload, RaetselgruppeBasisdaten, Raetselgruppenelement } from '@mja-ws/raetselgruppen/model';
 import { RaetselgruppenelementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
@@ -51,7 +51,7 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
 export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
   raetselgruppenFacade = inject(RaetselgruppenFacade);
-  
+
   dialog = inject(MatDialog);
 
   images: GeneratedImages | undefined;
@@ -59,26 +59,43 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   nummer = '';
   punkte = '';
 
-  #coreFacade = inject(CoreFacade);
   #raetselFacade = inject(RaetselFacade);
 
   #raetselgruppeSubscription = new Subscription();
   #imagesSubscription = new Subscription();
+  #raetselgruppenelementSubscription = new Subscription();
 
   #raetselgruppeBasisdaten!: RaetselgruppeBasisdaten;
   #anzahlElemente = 0;
 
-  ngOnInit(): void {   
+  ngOnInit(): void {
 
-    this.#raetselgruppeSubscription = this.raetselgruppenFacade.raetselgruppeDetails$.subscribe((raetselgruppe) => {
+      this.#raetselgruppeSubscription = this.raetselgruppenFacade.raetselgruppeDetails$.subscribe((raetselgruppe) => {
       this.#raetselgruppeBasisdaten = raetselgruppe;
       this.#anzahlElemente = raetselgruppe.elemente.length
     });
+
+    this.#raetselgruppenelementSubscription = this.raetselgruppenFacade.selectedRaetselgruppenelement$.subscribe(
+      (element) => {
+        if (element) {
+          this.schluessel = element.raetselSchluessel;
+          this.nummer = element.nummer;
+          this.punkte = '' + element.punkte;
+        } else {
+          this.schluessel = '';
+          this.nummer = '';
+          this.punkte = '';
+        }
+      }
+    );
+
+    this.#imagesSubscription = this.raetselgruppenFacade.selectedElementImages$.subscribe((images) => this.images = images);
   }
 
   ngOnDestroy(): void {
     this.#raetselgruppeSubscription.unsubscribe();
     this.#imagesSubscription.unsubscribe();
+    this.#raetselgruppenelementSubscription.unsubscribe();
   }
 
   getRaetselgruppeID(): string {
@@ -113,7 +130,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
       fontNamen: fontNamenSelectInput,
       selectedFontName: undefined,
       schriftgroessen: schriftgroessenSelectInput,
-      selectedSchriftgroesse: undefined,      
+      selectedSchriftgroesse: undefined,
     }
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
@@ -151,7 +168,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
             case 'Fibel Nord': font = 'FIBEL_NORD'; break;
             case 'Fibel Süd': font = 'FIBEL_SUED'; break;
           }
-        }        
+        }
 
         switch (dialogData.selectedVerwendungszweck) {
           case 'Arbeitsblatt': this.raetselgruppenFacade.generiereArbeitsblatt(this.getRaetselgruppeID(), font, size, layout); break;
@@ -223,14 +240,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
   onShowImagesElement($element: Raetselgruppenelement): void {
 
-    this.schluessel = $element.raetselSchluessel;
-    this.nummer = $element.nummer;
-    this.punkte = '' + $element.punkte;
-
-    this.#imagesSubscription.unsubscribe();
-    this.#imagesSubscription = this.#coreFacade.loadRaetselPNGs($element.raetselSchluessel).pipe(
-      tap((images: GeneratedImages) => this.images = images)
-    ).subscribe();
+    this.raetselgruppenFacade.selectRaetselgruppenelement($element);
   }
 
   #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData): void {

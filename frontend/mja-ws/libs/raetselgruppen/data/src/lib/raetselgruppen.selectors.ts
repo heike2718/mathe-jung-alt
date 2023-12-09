@@ -40,6 +40,16 @@ const raetselgruppenelemente = createSelector(
     (details) => details ? details.elemente : []
 );
 
+const selectedRaetselgruppenelement = createSelector(
+    selectRaetselgruppenState,
+    (state) => state ? state.selectedRaetselgruppenelement : undefined
+);
+
+const selectedElementImages = createSelector(
+    selectRaetselgruppenState,
+    (state) => state ? state.selectedElementImages : undefined
+);
+
 export const fromRaetselgruppen = {
     isLoaded,
     anzahlTrefferGesamt,
@@ -47,6 +57,8 @@ export const fromRaetselgruppen = {
     paginationState,
     raetselgruppeBasisdaten,
     raetselgruppeDetails,
-    raetselgruppenelemente
+    raetselgruppenelemente,
+    selectedRaetselgruppenelement,
+    selectedElementImages
 };
 

@@ -2,7 +2,8 @@
 
     <div *ngIf="raetselgruppenFacade.raetselgruppeDetails$ | async as gruppe else keineGruppe">
 
-        <h2>Rätselgruppe {{gruppe.name}} <span matBadge={{gruppe.elemente.length}} matBadgeColor="accent" class="ml-1"></span></h2>
+        <h2>Rätselgruppe {{gruppe.name}} <span matBadge={{gruppe.elemente.length}} matBadgeColor="accent"
+                class="ml-1"></span></h2>
 
         <div class="grid-container-2 mt-2 mb-2">
             <label>ID:</label>
@@ -68,7 +69,9 @@
             <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
             <div *ngIf="schluessel.length > 0" class="mb-2">
                 <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
-            </div>
+                <button *ngIf="raetselgruppenFacade.selectedRaetselgruppenelement$ | async as element" mat-raised-button
+                    color="primary" class="ml-2" (click)="onShowImagesElement(element)">neu laden</button>
+            </div>            
             <div *ngIf="images else imagesFehlen">
                 <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
             </div>
