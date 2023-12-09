@@ -74,6 +74,9 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "version")
 	String version;
 
+	@ConfigProperty(name = "latex.generator.preserve.tempfiles")
+	boolean preserveTempFiles;
+
 	void onStartup(@Observes final StartupEvent ev) {
 
 		LOGGER.info(" ===========> Version {} of the application is starting with profiles {}", version,
@@ -83,6 +86,7 @@ public class AppLifecycleBean {
 
 		LOGGER.info(" ===========>  session timeout nach {} min", sessionIdleTimeoutMinutes);
 		LOGGER.info(" ===========>  the latex.base.dir is {}", latexBaseDir);
+		LOGGER.info(" ===========>  preserve temporary files: {}", preserveTempFiles);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
 		LOGGER.info(" ===========>  jdbcUrl={}", jdbcUrl);
 		LOGGER.info(" ===========>  latexRestClientUrl={}", latexRestClientUrl);

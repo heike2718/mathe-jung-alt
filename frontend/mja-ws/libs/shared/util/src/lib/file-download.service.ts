@@ -33,24 +33,6 @@ export class FileDownloadService {
         link.download = `${fileName}`
         link.click();
     }
-
-    #extractFileName(contentDisposition: string): string {
-
-
-
-        const tokens: string[] = contentDisposition.split(';');
-
-        if (tokens.length >= 2) {
-            const theFilenameToken = tokens[1];
-
-            const startIdex = 'filename='.length;
-            return theFilenameToken.substring(startIdex, theFilenameToken.length - 1);
-        }
-
-        return generateUUID().substring(0, 8) + '.zip';
-    }
-
-
 };
 
 

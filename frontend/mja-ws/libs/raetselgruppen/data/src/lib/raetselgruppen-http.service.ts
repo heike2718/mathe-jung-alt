@@ -186,7 +186,11 @@ export class RaetselgruppenHttpService {
             return generateUUID().substring(0, 8) + '.zip';
         }
 
-        const matches = contentDisposition.match(/filename="(.*?)"/);
-        return matches ? matches[1] : generateUUID().substring(0, 8) + '.zip';
+        const tokens: string[] = contentDisposition.split(';');
+        if (tokens.length === 2 && tokens[1].startsWith('filename=')) {
+            return tokens[1].substring('filename='.length, tokens[1].length);
+        }
+
+        return generateUUID().substring(0, 8) + '.zip';
     }
 }

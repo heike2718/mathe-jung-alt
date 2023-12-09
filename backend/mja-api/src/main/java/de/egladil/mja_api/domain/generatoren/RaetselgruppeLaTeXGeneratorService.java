@@ -156,6 +156,8 @@ public class RaetselgruppeLaTeXGeneratorService {
 
 		File zip = MjaFileUtils.createZipArchive(dirRaetselgruppe);
 
+		MjaFileUtils.deleteDirectoryQuietly(dirRaetselgruppe);
+
 		return zip;
 	}
 

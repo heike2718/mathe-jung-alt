@@ -319,6 +319,18 @@ public class MjaFileUtils {
 		}
 	}
 
+	public static void deleteDirectoryQuietly(final File file) {
+
+		try {
+
+			FileUtils.deleteDirectory(file);
+		} catch (IOException e) {
+
+			LOGGER.warn("Verzeichnis {} wurde nicht gelöscht: {}", file.getAbsolutePath(), e.getMessage());
+
+		}
+	}
+
 	public static String nameToFilenamePart(final String name) {
 
 		String result = name.toLowerCase().replaceAll(" ", "_");
