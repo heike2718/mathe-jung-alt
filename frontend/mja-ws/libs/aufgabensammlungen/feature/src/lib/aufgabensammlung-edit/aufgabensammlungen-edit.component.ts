@@ -15,7 +15,7 @@ import { EditAufgabensammlungPayload, AufgabensammlungBasisdaten } from '@mja-ws
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'mja-raetselgruppe-edit',
+  selector: 'mja-aufgabensammlung-edit',
   standalone: true,
   imports: [
     CommonModule,

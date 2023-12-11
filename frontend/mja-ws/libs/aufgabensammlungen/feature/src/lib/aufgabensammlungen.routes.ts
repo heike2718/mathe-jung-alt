@@ -1,10 +1,10 @@
 import { Routes } from "@angular/router";
 import { AuthFacade } from '@mja-ws/shared/auth/api';
-import { AufgabensammlungenSearchComponent } from "./raetselgruppen-search/aufgabensammlungen-search.component";
+import { AufgabensammlungenSearchComponent } from "./aufgabensammlungen-search/aufgabensammlungen-search.component";
 import { aufgabensammlungenDataProvider } from '@mja-ws/aufgabensammlungen/api';
-import { AufgabensammlungDetailsComponent } from "./raetselgruppen-details/aufgabensammlungen-details.component";
+import { AufgabensammlungDetailsComponent } from "./aufgabensammlung-details/aufgabensammlungen-details.component";
 import { inject } from "@angular/core";
-import { AufgabensammlungEditComponent } from "./raetselgruppe-edit/aufgabensammlungen-edit.component";
+import { AufgabensammlungEditComponent } from "./aufgabensammlung-edit/aufgabensammlungen-edit.component";
 
 // siehe https://www.angulararchitects.io/en/aktuelles/modern-and-lightweight-angular-architectures-with-angulars-latest-innovations/
 

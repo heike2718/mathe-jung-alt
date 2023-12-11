@@ -65,9 +65,9 @@
 
         <h2>Elemente</h2>
 
-        <mja-Aufgabensammlungselemente [raetselgruppe]="gruppe" (showImages)="onShowImagesElement($event)"
+        <mja-aufgabensammlungselement [raetselgruppe]="gruppe" (showImages)="onShowImagesElement($event)"
             (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
-        </mja-Aufgabensammlungselemente>
+        </mja-aufgabensammlungselement>
 
         <div *ngIf="gruppe.elemente.length > 0">
             <h2>Vorschau {{nummer}} ({{schluessel}})</h2>

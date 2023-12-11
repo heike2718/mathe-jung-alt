@@ -1,5 +1,5 @@
 {
-  "name": "raetselgruppen-data",
+  "name": "aufgabensammlungen-data",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/aufgabensammlungen/data/src",
   "projectType": "library",

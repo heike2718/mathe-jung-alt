@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'raetselgruppen-model',
+  displayName: 'aufgabensammlungen-model',
   preset: '../../../jest.preset.js',
   globals: {},
   transform: {

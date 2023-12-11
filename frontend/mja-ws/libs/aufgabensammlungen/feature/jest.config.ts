@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'raetselgruppen-feature',
+  displayName: 'aufgabensammlungen-feature',
   preset: '../../../jest.preset.js',
   globals: {},
   transform: {

@@ -17,15 +17,15 @@ import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Subscription, tap } from 'rxjs';
 import { EditAufgabensammlungselementPayload, AufgabensammlungBasisdaten, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
-import { AufgabensammlungselementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
-import { AufgabensammlungselementDialogComponent } from '../raetselgruppenelement-dialog/aufgabensammlungenselement-dialog.component';
-import { AufgabensammlungselementeComponent } from '../raetselgruppenelemente/aufgabensammlungelemente.component';
+import { AufgabensammlungselementDialogData } from '../aufgabensammlungselement-dialog/raetselgruppenelement-dialog.data';
+import { AufgabensammlungselementDialogComponent } from '../aufgabensammlungselement-dialog/aufgabensammlungenselement-dialog.component';
+import { AufgabensammlungselementeComponent } from '../aufgabensammlungselement/aufgabensammlungelemente.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 
 @Component({
-  selector: 'mja-raetselgruppen-details',
+  selector: 'mja-aufgabensammlungen-details',
   standalone: true,
   imports: [
     CommonModule,

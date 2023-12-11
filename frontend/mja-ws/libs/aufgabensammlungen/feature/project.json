@@ -1,5 +1,5 @@
 {
-  "name": "raetselgruppen-feature",
+  "name": "aufgabensammlungen-feature",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/aufgabensammlungen/feature/src",
   "projectType": "library",

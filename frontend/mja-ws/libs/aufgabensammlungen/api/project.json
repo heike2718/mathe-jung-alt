@@ -1,5 +1,5 @@
 {
-  "name": "raetselgruppen-api",
+  "name": "aufgabensammlungen-api",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/aufgabensammlungen/api/src",
   "projectType": "library",

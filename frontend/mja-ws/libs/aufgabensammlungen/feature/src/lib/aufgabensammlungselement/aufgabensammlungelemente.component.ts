@@ -6,7 +6,7 @@ import { AufgabensammlungselementeDataSource } from './aufgabensammlungelemente.
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'mja-Aufgabensammlungselemente',
+  selector: 'mja-aufgabensammlungselement',
   standalone: true,
   imports: [
     CommonModule,

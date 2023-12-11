@@ -22,7 +22,7 @@ const REFERENZTYP = 'referenztyp';
 const REFERENZ = 'referenz';
 
 @Component({
-  selector: 'mja-raetselgruppen-search',
+  selector: 'mja-aufgabensammlungen-search',
   standalone: true,
   imports: [
     CommonModule,
