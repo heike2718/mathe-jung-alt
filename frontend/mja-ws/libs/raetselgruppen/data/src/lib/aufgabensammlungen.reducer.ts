@@ -3,7 +3,7 @@ import { AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungse
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { aufgabensammlungenActions } from "./aufgabensammlungen.actions";
 
-export interface RaetselgruppenState {
+export interface AufgabensammlungenState {
     readonly loaded: boolean;
     readonly anzahlTrefferGesamt: number;
     readonly page: AufgabensammlungTrefferItem[];
@@ -14,7 +14,7 @@ export interface RaetselgruppenState {
     readonly selectedElementImages: GeneratedImages | undefined;
 };
 
-const initialRaetselgruppenState: RaetselgruppenState = {
+const initialAufgabensammlungenState: AufgabensammlungenState = {
     loaded: false,
     anzahlTrefferGesamt: 0,
     page: [],
@@ -26,10 +26,10 @@ const initialRaetselgruppenState: RaetselgruppenState = {
 };
 
 export const aufgabensammlungenFeature = createFeature({
-    name: 'raetselgruppen',
+    name: 'aufgabensammlungen',
     reducer: createReducer(
-        initialRaetselgruppenState,
-        on(aufgabensammlungenActions.rAETSELGRUPPEN_FOUND, (state, action) => {
+        initialAufgabensammlungenState,
+        on(aufgabensammlungenActions.aUFGABENSAMMLUNGEN_FOUND, (state, action) => {
             return {
                 ...state,
                 paginationState: { ...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt },
@@ -39,7 +39,7 @@ export const aufgabensammlungenFeature = createFeature({
                 selectedElementImages: undefined
             };
         }),
-        on((aufgabensammlungenActions.rAETSELGRUPPEN_SELECT_PAGE), (state, action) => {
+        on((aufgabensammlungenActions.aUFGABENSAMMLUNGEN_SELECT_PAGE), (state, action) => {
             return {
                 ...state,
                 paginationState: { ...state.paginationState,
@@ -51,24 +51,24 @@ export const aufgabensammlungenFeature = createFeature({
                 }
             };
         }),
-        on(aufgabensammlungenActions.eDIT_RAETSELGUPPE, (state, action) => {
+        on(aufgabensammlungenActions.eDIT_AUFGABENSAMMLUNG, (state, action) => {
             return {
                 ...state,
                 aufgabensammlungBasisdaten: action.aufgabensammlungBasisdaten
             }
         }),
-        on(aufgabensammlungenActions.rAETSELGRUPPE_SAVED, (state, action) => {
-            const aufgabensammlungBasisdaten: AufgabensammlungBasisdaten = action.raetselgruppe;
+        on(aufgabensammlungenActions.aUFGABENSAMMLUNG_SAVED, (state, action) => {
+            const aufgabensammlungBasisdaten: AufgabensammlungBasisdaten = action.aufgabensammlung;
             return { ...state, aufgabensammlungBasisdaten: aufgabensammlungBasisdaten };
         }),
-        on(aufgabensammlungenActions.rAETSELGRUPPEDETAILS_LOADED, (state, action) => {
+        on(aufgabensammlungenActions.aUFGABENSAMMLUNGDETAILS_LOADED, (state, action) => {
             return {...state, aufgabensammlungDetails: action.aufgabensammlungDetails, aufgabensammlungBasisdaten: undefined};
         }),
-        on(aufgabensammlungenActions.uNSELECT_RAETSELGRUPPE, (state, _action) => {
+        on(aufgabensammlungenActions.uNSELECT_AUFGABENSAMMLUNG, (state, _action) => {
             return {...state, aufgabensammlungDetails: undefined, aufgabensammlungBasisdaten: undefined, selectedAufgabensammlungselement: undefined, selectedElementImages: undefined}
         }),
-        on(aufgabensammlungenActions.rAETSELGRUPPENELEMENTE_CHANGED, (state, action) => ({ ...state, aufgabensammlungDetails: action.raetselgruppenDetails })),
-        on(aufgabensammlungenActions.sELECT_RAETSELGRUPPENELEMENT, (state, action) => ({...state, selectedAufgabensammlungselement: action.aufgabensammlungselement})),
+        on(aufgabensammlungenActions.aUFGABENSAMMLUNGSELEMENTE_CHANGED, (state, action) => ({ ...state, aufgabensammlungDetails: action.aufgabensammlungDetails })),
+        on(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNGSELEMENT, (state, action) => ({...state, selectedAufgabensammlungselement: action.aufgabensammlungselement})),
         on(aufgabensammlungenActions.eLEMENT_IMAGES_LOADED, (state, action) => ({...state, selectedElementImages: action.generatedImages}))
     )
 });

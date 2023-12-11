@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 @Injectable({providedIn: 'root'})
 export class AufgabensammlungselementeDataSource extends DataSource<Aufgabensammlungselement> {
 
-    #raetselgruppenFacade = inject(AufgabensammlungenFacade);
+    #aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
 
     /**
    * Connect this data source to the table. The table will only update when
@@ -15,7 +15,7 @@ export class AufgabensammlungselementeDataSource extends DataSource<Aufgabensamm
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<Aufgabensammlungselement[]> {
-    return this.#raetselgruppenFacade.aufgabensammlungselemente$;
+    return this.#aufgabensammlungenFacade.aufgabensammlungselemente$;
   }  
 
   /**

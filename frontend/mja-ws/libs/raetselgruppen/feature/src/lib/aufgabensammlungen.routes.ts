@@ -8,7 +8,7 @@ import { AufgabensammlungEditComponent } from "./raetselgruppe-edit/aufgabensamm
 
 // siehe https://www.angulararchitects.io/en/aktuelles/modern-and-lightweight-angular-architectures-with-angulars-latest-innovations/
 
-export const raetselgruppenRoutes: Routes = [
+export const aufgabensammlungenRoutes: Routes = [
     {
         path: 'uebersicht',
         canActivate: [() => inject(AuthFacade).userIsAdmin$],

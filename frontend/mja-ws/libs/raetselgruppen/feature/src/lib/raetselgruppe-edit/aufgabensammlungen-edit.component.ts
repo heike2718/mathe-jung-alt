@@ -35,7 +35,7 @@ import { Subscription } from 'rxjs';
 })
 export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
 
-  raetselgruppenFacade = inject(AufgabensammlungenFacade);
+  aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
 
   selectStatusInput: string[] = ['ERFASST', 'FREIGEGEBEN'];
   selectSchwierigkeitsgradeInput: string[] = new GuiSchwierigkeitsgradeMap().getLabelsSorted();
@@ -56,7 +56,7 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.#aufgabensammlungBasisdatenSubscription = this.raetselgruppenFacade.aufgabensammlungBasisdaten$.subscribe((basisdaten) => {
+    this.#aufgabensammlungBasisdatenSubscription = this.aufgabensammlungenFacade.aufgabensammlungBasisdaten$.subscribe((basisdaten) => {
 
       this.#aufgabensammlungBasisdaten = basisdaten;
       this.#initForm();
@@ -74,7 +74,7 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
 
   submit(): void {
     const EditAufgabensammlungPayload: EditAufgabensammlungPayload = this.#readFormValues();
-    this.raetselgruppenFacade.saveAufgabensammlung(EditAufgabensammlungPayload);
+    this.aufgabensammlungenFacade.saveAufgabensammlung(EditAufgabensammlungPayload);
   }
 
   showBtnDetails(): boolean {
@@ -82,11 +82,11 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit(): void {
-    this.raetselgruppenFacade.cancelEdit(this.#aufgabensammlungBasisdaten);
+    this.aufgabensammlungenFacade.cancelEdit(this.#aufgabensammlungBasisdaten);
   }
 
   gotoUebersicht(): void {
-    this.raetselgruppenFacade.unselectAufgabensammlung();
+    this.aufgabensammlungenFacade.unselectAufgabensammlung();
     this.#router.navigateByUrl('aufgabensammlungen/uebersicht');      
   }
 

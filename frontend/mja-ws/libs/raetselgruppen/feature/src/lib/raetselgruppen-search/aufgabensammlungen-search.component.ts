@@ -68,7 +68,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   @ViewChild(MatSort) sort!: MatSort;
 
   #configuration = inject(Configuration);
-  #raetselgruppenFacade = inject(AufgabensammlungenFacade);
+  #aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
   
 
   #nameFilterSubscription = new Subscription();
@@ -102,7 +102,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
 
   ngOnInit(): void {
 
-    this.#paginationStateSubscription = this.#raetselgruppenFacade.paginationState$.subscribe(
+    this.#paginationStateSubscription = this.#aufgabensammlungenFacade.paginationState$.subscribe(
       (state: PaginationState) => {
         this.anzahlRaetselgruppen = state.anzahlTreffer;
         this.#pageIndex = state.pageDefinition.pageIndex;
@@ -254,11 +254,11 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   neueRaetselgruppe(): void {
-    this.#raetselgruppenFacade.createAndEditAufgabensammlung();
+    this.#aufgabensammlungenFacade.createAndEditAufgabensammlung();
   }
 
   onRowClicked(raetselgruppe: AufgabensammlungTrefferItem): void {
-    this.#raetselgruppenFacade.selectAufgabensammlung(raetselgruppe);
+    this.#aufgabensammlungenFacade.selectAufgabensammlung(raetselgruppe);
   }
 
   clearFilter(filterFormControl: FormControl): void {
@@ -298,6 +298,6 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
       sortDirection: this.sort ? this.sort.direction : this.#sortDirection
     }
 
-    this.#raetselgruppenFacade.triggerSearch(this.#suchparameter, pageDefinition)
+    this.#aufgabensammlungenFacade.triggerSearch(this.#suchparameter, pageDefinition)
   }
 }

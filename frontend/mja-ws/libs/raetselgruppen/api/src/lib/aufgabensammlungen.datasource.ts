@@ -8,10 +8,10 @@ import { AufgabensammlungenFacade } from "./aufgabensammlungen.facade";
 export class AufgabensammlungenDataSource implements DataSource<AufgabensammlungTrefferItem> {
 
 
-    #raetselgruppenFacade = inject(AufgabensammlungenFacade);
+    #aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
 
     connect(_collectionViewer: CollectionViewer): Observable<readonly AufgabensammlungTrefferItem[]> {
-        return this.#raetselgruppenFacade.page$;
+        return this.#aufgabensammlungenFacade.page$;
      }
  
      disconnect(_collectionViewer: CollectionViewer): void {

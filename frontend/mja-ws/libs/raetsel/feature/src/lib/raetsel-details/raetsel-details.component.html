@@ -68,7 +68,7 @@
                         </div>
 
                         <div *ngIf="authFacade.userIsAdmin$ | async">
-                            <div *ngIf="raetselgruppenFacade.aufgabensammlungDetails$ | async as aufgabensammlung"><button
+                            <div *ngIf="aufgabensammlungenFacade.aufgabensammlungDetails$ | async as aufgabensammlung"><button
                                     class="label" mat-raised-button color="primary"
                                     matTooltip="zur gewählten Aufgabensammlung {{aufgabensammlung.name}}"
                                     (click)="gotoAufgabensammlung()">Aufgabensammlung</button>

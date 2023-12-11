@@ -1,7 +1,7 @@
 import { createSelector } from "@ngrx/store";
 import { aufgabensammlungenFeature } from "./aufgabensammlungen.reducer";
 
-const { selectRaetselgruppenState: selectAufgabensammlungenState } = aufgabensammlungenFeature;
+const { selectAufgabensammlungenState: selectAufgabensammlungenState } = aufgabensammlungenFeature;
 
 const isLoaded = createSelector(
     selectAufgabensammlungenState,

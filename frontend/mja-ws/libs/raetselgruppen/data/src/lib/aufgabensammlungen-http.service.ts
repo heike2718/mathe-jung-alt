@@ -70,9 +70,9 @@ export class AufgabensammlungenHttpService {
         }
     }
 
-    saveAufgabensammlungselement(raetselgruppeID: string, payload: EditAufgabensammlungselementPayload): Observable<AufgabensammlungDetails> {
+    saveAufgabensammlungselement(aufgabensammlungID: string, payload: EditAufgabensammlungselementPayload): Observable<AufgabensammlungDetails> {
 
-        const url = this.#url + '/' + raetselgruppeID + '/elemente/v1';
+        const url = this.#url + '/' + aufgabensammlungID + '/elemente/v1';
 
         if (payload.id === 'neu') {
             return this.#insertAufgabensammlungselement(url, payload);
@@ -81,18 +81,18 @@ export class AufgabensammlungenHttpService {
         }
     }
 
-    deleteAufgabensammlungselement(raetselgruppeID: string, payload: Aufgabensammlungselement): Observable<AufgabensammlungDetails> {
+    deleteAufgabensammlungselement(aufgabensammlungID: string, payload: Aufgabensammlungselement): Observable<AufgabensammlungDetails> {
 
-        const url = this.#url + '/' + raetselgruppeID + '/elemente/' + payload.id + '/v1';
+        const url = this.#url + '/' + aufgabensammlungID + '/elemente/' + payload.id + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.delete<AufgabensammlungDetails>(url, { headers });
     }
 
-    generiereVorschau(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereVorschau(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
 
-        const url = this.#url + '/' + raetselgruppeID + '/vorschau/v1';
+        const url = this.#url + '/' + aufgabensammlungID + '/vorschau/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams()
             .set('font', font)
@@ -104,10 +104,10 @@ export class AufgabensammlungenHttpService {
 
     }
 
-    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereKnobelkartei(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
 
-        const url = this.#url + '/' + raetselgruppeID + '/knobelkartei/v1';
+        const url = this.#url + '/' + aufgabensammlungID + '/knobelkartei/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams()
             .set('font', font)
@@ -119,10 +119,10 @@ export class AufgabensammlungenHttpService {
 
     }
 
-    generiereArbeitsblattMitLoesungen(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereArbeitsblattMitLoesungen(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
 
 
-        const url = this.#url + '/' + raetselgruppeID + '/arbeitsblatt/v1';
+        const url = this.#url + '/' + aufgabensammlungID + '/arbeitsblatt/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const params = new HttpParams()
             .set('font', font)
@@ -134,9 +134,9 @@ export class AufgabensammlungenHttpService {
 
     }
 
-    generiereLaTeX(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<{ data: Blob, fileName: string }> {
+    generiereLaTeX(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<{ data: Blob, fileName: string }> {
 
-        const url = this.#url + '/' + raetselgruppeID + '/latex/v1';
+        const url = this.#url + '/' + aufgabensammlungID + '/latex/v1';
         const headers = new HttpHeaders().set('Accept', 'application/octet-stream');
         const params = new HttpParams()
             .set('font', font)

@@ -1,6 +1,6 @@
 <div class="mja-container">
 
-    <div *ngIf="raetselgruppenFacade.aufgabensammlungDetails$ | async as gruppe else keineGruppe">
+    <div *ngIf="aufgabensammlungenFacade.aufgabensammlungDetails$ | async as gruppe else keineGruppe">
 
         <h2>Aufgabensammlung {{gruppe.name}} <span matBadge={{gruppe.elemente.length}} matBadgeColor="accent"
                 class="ml-1"></span></h2>
@@ -73,7 +73,7 @@
             <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
             <div *ngIf="schluessel.length > 0" class="mb-2">
                 <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
-                <button *ngIf="raetselgruppenFacade.selectedAufgabensammlungselement$ | async as element" mat-raised-button
+                <button *ngIf="aufgabensammlungenFacade.selectedAufgabensammlungselement$ | async as element" mat-raised-button
                     color="primary" class="ml-2" (click)="onShowImagesElement(element)">neu laden</button>
             </div>            
             <div *ngIf="images else imagesFehlen">

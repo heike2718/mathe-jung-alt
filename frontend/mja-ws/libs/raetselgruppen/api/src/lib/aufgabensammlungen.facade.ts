@@ -23,37 +23,37 @@ export class AufgabensammlungenFacade {
     selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromRaetselgruppen.selectedElementImages);
 
     triggerSearch(aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): void {
-        this.#store.dispatch(aufgabensammlungenActions.rAETSELGRUPPEN_SELECT_PAGE({ pageDefinition }));
-        this.#store.dispatch(aufgabensammlungenActions.fIND_RAETSELGRUPPEN({ aufgabensammlungenSuchparameter, pageDefinition }));
+        this.#store.dispatch(aufgabensammlungenActions.aUFGABENSAMMLUNGEN_SELECT_PAGE({ pageDefinition }));
+        this.#store.dispatch(aufgabensammlungenActions.fIND_AUFGABENSAMMLUNGEN({ aufgabensammlungenSuchparameter, pageDefinition }));
     }
 
-    selectAufgabensammlung(raetselgruppe: AufgabensammlungTrefferItem): void {
+    selectAufgabensammlung(aufgabensammlung: AufgabensammlungTrefferItem): void {
 
-        this.#store.dispatch(aufgabensammlungenActions.sELECT_RAETSELGRUPPE({ raetselgruppe }));
+        this.#store.dispatch(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNG({ aufgabensammlung }));
     }
 
     unselectAufgabensammlung(): void {
-        this.#store.dispatch(aufgabensammlungenActions.uNSELECT_RAETSELGRUPPE());
+        this.#store.dispatch(aufgabensammlungenActions.uNSELECT_AUFGABENSAMMLUNG());
     }
 
     selectAufgabensammlungselement(element: Aufgabensammlungselement): void {
-        this.#store.dispatch(aufgabensammlungenActions.sELECT_RAETSELGRUPPENELEMENT({ aufgabensammlungselement: element }));
+        this.#store.dispatch(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNGSELEMENT({ aufgabensammlungselement: element }));
     }
 
-    generiereArbeitsblatt(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-        this.#store.dispatch(aufgabensammlungenActions.gENERIERE_ARBEITSBLATT({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
+    generiereArbeitsblatt(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.#store.dispatch(aufgabensammlungenActions.gENERIERE_ARBEITSBLATT({ aufgabensammlungID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
-    generiereKnobelkartei(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-        this.#store.dispatch(aufgabensammlungenActions.gENERIERE_KNOBELKARTEI({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
+    generiereKnobelkartei(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.#store.dispatch(aufgabensammlungenActions.gENERIERE_KNOBELKARTEI({ aufgabensammlungID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
-    generiereVorschau(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-        this.#store.dispatch(aufgabensammlungenActions.gENERIERE_VORSCHAU({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
+    generiereVorschau(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.#store.dispatch(aufgabensammlungenActions.gENERIERE_VORSCHAU({ aufgabensammlungID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
-    generiereLaTeX(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
-        this.#store.dispatch(aufgabensammlungenActions.gENERIERE_LATEX({ raetselgruppeID, font, schriftgroesse, layoutAntwortvorschlaege }));
+    generiereLaTeX(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+        this.#store.dispatch(aufgabensammlungenActions.gENERIERE_LATEX({ aufgabensammlungID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
     createAndEditAufgabensammlung(): void {
@@ -61,7 +61,7 @@ export class AufgabensammlungenFacade {
     }
 
     editAufgabensammlung(aufgabensammlung: AufgabensammlungBasisdaten): void {
-        this.#store.dispatch(aufgabensammlungenActions.eDIT_RAETSELGUPPE({ aufgabensammlungBasisdaten: aufgabensammlung }));
+        this.#store.dispatch(aufgabensammlungenActions.eDIT_AUFGABENSAMMLUNG({ aufgabensammlungBasisdaten: aufgabensammlung }));
     }
 
     reloadAufgabensammlung(aufgabensammlung: AufgabensammlungBasisdaten, anzahlElemente: number): void {
@@ -98,13 +98,13 @@ export class AufgabensammlungenFacade {
     }
 
     saveAufgabensammlung(editAufgabensammlungPayload: EditAufgabensammlungPayload): void {
-        this.#store.dispatch(aufgabensammlungenActions.sAVE_RAETSELGRUPPE({ editAufgabensammlungPayload }));
+        this.#store.dispatch(aufgabensammlungenActions.sAVE_AUFGABENSAMMLUNG({ editAufgabensammlungPayload }));
     }
 
     cancelEdit(aufgabensammlung: AufgabensammlungBasisdaten): void {
 
         if (aufgabensammlung.id === 'neu') {
-            this.#store.dispatch(aufgabensammlungenActions.uNSELECT_RAETSELGRUPPE());
+            this.#store.dispatch(aufgabensammlungenActions.uNSELECT_AUFGABENSAMMLUNG());
         } else {
             const rg: AufgabensammlungTrefferItem = {
                 id: aufgabensammlung.id,
@@ -117,15 +117,15 @@ export class AufgabensammlungenFacade {
                 geaendertDurch: aufgabensammlung.geaendertDurch,
                 anzahlElemente: 0
             };
-            this.#store.dispatch(aufgabensammlungenActions.sELECT_RAETSELGRUPPE({ raetselgruppe: rg }));
+            this.#store.dispatch(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNG({ aufgabensammlung: rg }));
         }
     }
 
-    saveAufgabensammlungselement(raetselgruppeID: string, payload: EditAufgabensammlungselementPayload): void {
-        this.#store.dispatch(aufgabensammlungenActions.sAVE_RAETSELGRUPPENELEMENT({ raetselgruppeID, payload }));
+    saveAufgabensammlungselement(aufgabensammlungID: string, payload: EditAufgabensammlungselementPayload): void {
+        this.#store.dispatch(aufgabensammlungenActions.sAVE_AUFGABENSAMMLUNGSELEMENT({ aufgabensammlungID, payload }));
     }
 
-    deleteAufgabensammlungselement(raetselgruppeID: string, payload: Aufgabensammlungselement): void {
-        this.#store.dispatch(aufgabensammlungenActions.dELETE_RAETSELGRUPPENELEMENT({ raetselgruppeID, payload }));
+    deleteAufgabensammlungselement(aufgabensammlungID: string, payload: Aufgabensammlungselement): void {
+        this.#store.dispatch(aufgabensammlungenActions.dELETE_AUFGABENSAMMLUNGSELEMENT({ aufgabensammlungID, payload }));
     }
 }

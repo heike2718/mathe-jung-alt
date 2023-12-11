@@ -19,7 +19,7 @@ export const appRoutes: Routes = [
       {
         path: 'aufgabensammlungen',
         loadChildren: () =>
-          import('@mja-ws/raetselgruppen/feature').then((m) => m.raetselgruppenRoutes),
+          import('@mja-ws/raetselgruppen/feature').then((m) => m.aufgabensammlungenRoutes),
       },
     ],
   },

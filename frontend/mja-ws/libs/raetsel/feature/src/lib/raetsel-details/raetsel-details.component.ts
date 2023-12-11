@@ -60,7 +60,7 @@ import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/ra
 export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   raetselFacade = inject(RaetselFacade);
-  raetselgruppenFacade = inject(AufgabensammlungenFacade);
+  aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
   authFacade = inject(AuthFacade);
   dialog = inject(MatDialog);
 
@@ -86,7 +86,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
       })
     ).subscribe();
 
-    this.#aufgabensammlungDetailsSubscription = this.raetselgruppenFacade.aufgabensammlungDetails$
+    this.#aufgabensammlungDetailsSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$
       .subscribe((gruppe) => this.#selectedRaetselgruppe = gruppe);
   }
 
@@ -132,7 +132,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
         freigegeben: this.#selectedRaetselgruppe.freigegeben,
         privat: this.#selectedRaetselgruppe.privat
       };
-      this.raetselgruppenFacade.selectAufgabensammlung(trefferitem)
+      this.aufgabensammlungenFacade.selectAufgabensammlung(trefferitem)
     } else {
       this.#router.navigateByUrl('aufgabensammlungen');
     }

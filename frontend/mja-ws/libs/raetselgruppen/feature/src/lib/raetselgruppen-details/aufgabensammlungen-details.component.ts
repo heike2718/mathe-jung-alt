@@ -47,7 +47,7 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
 })
 export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
-  raetselgruppenFacade = inject(AufgabensammlungenFacade);
+  aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
 
   dialog = inject(MatDialog);
 
@@ -67,12 +67,12 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-      this.#raetselgruppeSubscription = this.raetselgruppenFacade.aufgabensammlungDetails$.subscribe((raetselgruppe) => {
+      this.#raetselgruppeSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$.subscribe((raetselgruppe) => {
       this.#aufgabensammlungBasisdaten = raetselgruppe;
       this.#anzahlElemente = raetselgruppe.elemente.length
     });
 
-    this.#aufgabensammlungselementSubscription = this.raetselgruppenFacade.selectedAufgabensammlungselement$.subscribe(
+    this.#aufgabensammlungselementSubscription = this.aufgabensammlungenFacade.selectedAufgabensammlungselement$.subscribe(
       (element) => {
         if (element) {
           this.schluessel = element.raetselSchluessel;
@@ -86,7 +86,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.#imagesSubscription = this.raetselgruppenFacade.selectedElementImages$.subscribe((images) => this.images = images);
+    this.#imagesSubscription = this.aufgabensammlungenFacade.selectedElementImages$.subscribe((images) => this.images = images);
   }
 
   ngOnDestroy(): void {
@@ -100,7 +100,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   gotoUebersicht(): void {
-    this.raetselgruppenFacade.unselectAufgabensammlung();
+    this.aufgabensammlungenFacade.unselectAufgabensammlung();
   }
 
   gotoRaetselDetails(): void {
@@ -168,17 +168,17 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
         }
 
         switch (dialogData.selectedVerwendungszweck) {
-          case 'Arbeitsblatt': this.raetselgruppenFacade.generiereArbeitsblatt(this.getRaetselgruppeID(), font, size, layout); break;
-          case 'Knobelkartei': this.raetselgruppenFacade.generiereKnobelkartei(this.getRaetselgruppeID(), font, size, layout); break;
-          case 'Vorschau': this.raetselgruppenFacade.generiereVorschau(this.getRaetselgruppeID(), font, size, layout); break;
-          case 'LaTeX': this.raetselgruppenFacade.generiereLaTeX(this.getRaetselgruppeID(), font, size, layout); break;
+          case 'Arbeitsblatt': this.aufgabensammlungenFacade.generiereArbeitsblatt(this.getRaetselgruppeID(), font, size, layout); break;
+          case 'Knobelkartei': this.aufgabensammlungenFacade.generiereKnobelkartei(this.getRaetselgruppeID(), font, size, layout); break;
+          case 'Vorschau': this.aufgabensammlungenFacade.generiereVorschau(this.getRaetselgruppeID(), font, size, layout); break;
+          case 'LaTeX': this.aufgabensammlungenFacade.generiereLaTeX(this.getRaetselgruppeID(), font, size, layout); break;
         }
       }
     });
   }
 
   startEdit(): void {
-    this.raetselgruppenFacade.editAufgabensammlung(this.#aufgabensammlungBasisdaten);
+    this.aufgabensammlungenFacade.editAufgabensammlung(this.#aufgabensammlungBasisdaten);
   }
 
   reloadDisabled(): boolean {
@@ -186,7 +186,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   reload(): void {
-    this.raetselgruppenFacade.reloadAufgabensammlung(this.#aufgabensammlungBasisdaten, this.#anzahlElemente);
+    this.aufgabensammlungenFacade.reloadAufgabensammlung(this.#aufgabensammlungBasisdaten, this.#anzahlElemente);
   }
 
   toggleStatusDisabled(): boolean {
@@ -194,7 +194,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   toggleStatus(): void {
-    this.raetselgruppenFacade.toggleStatus(this.#aufgabensammlungBasisdaten);
+    this.aufgabensammlungenFacade.toggleStatus(this.#aufgabensammlungBasisdaten);
   }
 
   openNeuesAufgabensammlungselementDialog(): void {
@@ -237,7 +237,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
   onShowImagesElement($element: Aufgabensammlungselement): void {
 
-    this.raetselgruppenFacade.selectAufgabensammlungselement($element);
+    this.aufgabensammlungenFacade.selectAufgabensammlungselement($element);
   }
 
   #initAndOpenEditElementDialog(dialogData: AufgabensammlungselementDialogData): void {
@@ -265,7 +265,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
       punkte: data.punkte
     };
 
-    this.raetselgruppenFacade.saveAufgabensammlungselement(this.getRaetselgruppeID(), payload);
+    this.aufgabensammlungenFacade.saveAufgabensammlungselement(this.getRaetselgruppeID(), payload);
 
   }
 
@@ -284,7 +284,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.raetselgruppenFacade.deleteAufgabensammlungselement(this.getRaetselgruppeID(), element);
+        this.aufgabensammlungenFacade.deleteAufgabensammlungselement(this.getRaetselgruppeID(), element);
         this.images = undefined;
       }
     });
