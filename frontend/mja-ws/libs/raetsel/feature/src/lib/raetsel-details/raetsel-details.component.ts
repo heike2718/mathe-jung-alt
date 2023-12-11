@@ -74,9 +74,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   #raetselDetails!: RaetselDetails;
   #aufgabensammlungDetailsSubscription = new Subscription();
 
-  #selectedRaetselgruppe: AufgabensammlungDetails | undefined;
-
-
+  #selectedAufgabensammlung: AufgabensammlungDetails | undefined;
 
   ngOnInit(): void {
 
@@ -87,7 +85,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.#aufgabensammlungDetailsSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$
-      .subscribe((gruppe) => this.#selectedRaetselgruppe = gruppe);
+      .subscribe((aufgabensammlung) => this.#selectedAufgabensammlung = aufgabensammlung);
   }
 
   ngOnDestroy(): void {
@@ -120,17 +118,17 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   gotoAufgabensammlung(): void {
 
-    if (this.#selectedRaetselgruppe) {
+    if (this.#selectedAufgabensammlung) {
       const trefferitem: AufgabensammlungTrefferItem = {
-        anzahlElemente: this.#selectedRaetselgruppe.elemente.length,
-        geaendertDurch: this.#selectedRaetselgruppe.geaendertDurch,
-        id: this.#selectedRaetselgruppe.id,
-        name: this.#selectedRaetselgruppe.name,
-        referenz: this.#selectedRaetselgruppe.referenz,
-        referenztyp: this.#selectedRaetselgruppe.referenztyp,
-        schwierigkeitsgrad: this.#selectedRaetselgruppe.schwierigkeitsgrad,
-        freigegeben: this.#selectedRaetselgruppe.freigegeben,
-        privat: this.#selectedRaetselgruppe.privat
+        anzahlElemente: this.#selectedAufgabensammlung.elemente.length,
+        geaendertDurch: this.#selectedAufgabensammlung.geaendertDurch,
+        id: this.#selectedAufgabensammlung.id,
+        name: this.#selectedAufgabensammlung.name,
+        referenz: this.#selectedAufgabensammlung.referenz,
+        referenztyp: this.#selectedAufgabensammlung.referenztyp,
+        schwierigkeitsgrad: this.#selectedAufgabensammlung.schwierigkeitsgrad,
+        freigegeben: this.#selectedAufgabensammlung.freigegeben,
+        privat: this.#selectedAufgabensammlung.privat
       };
       this.aufgabensammlungenFacade.selectAufgabensammlung(trefferitem)
     } else {

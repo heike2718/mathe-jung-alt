@@ -50,7 +50,7 @@ const selectedElementImages = createSelector(
     (state) => state ? state.selectedElementImages : undefined
 );
 
-export const fromRaetselgruppen = {
+export const fromAufgabensammlungen = {
     isLoaded,
     anzahlTrefferGesamt,
     page,

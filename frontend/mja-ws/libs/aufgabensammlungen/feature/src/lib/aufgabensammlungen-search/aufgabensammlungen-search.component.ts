@@ -43,7 +43,7 @@ const REFERENZ = 'referenz';
 export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   dataSource = inject(AufgabensammlungenDataSource);
-  anzahlRaetselgruppen = 0;
+  anzahlSammlungen = 0;
 
 
   suchparameterStr = '';
@@ -104,7 +104,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
 
     this.#paginationStateSubscription = this.#aufgabensammlungenFacade.paginationState$.subscribe(
       (state: PaginationState) => {
-        this.anzahlRaetselgruppen = state.anzahlTreffer;
+        this.anzahlSammlungen = state.anzahlTreffer;
         this.#pageIndex = state.pageDefinition.pageIndex;
         this.#sortDirection = state.pageDefinition.sortDirection === 'asc' ? 'asc' : 'desc';
       }
@@ -253,12 +253,12 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
     return this.paginator === undefined;
   }
 
-  neueRaetselgruppe(): void {
+  neueAufgabensammlung(): void {
     this.#aufgabensammlungenFacade.createAndEditAufgabensammlung();
   }
 
-  onRowClicked(raetselgruppe: AufgabensammlungTrefferItem): void {
-    this.#aufgabensammlungenFacade.selectAufgabensammlung(raetselgruppe);
+  onRowClicked(aufgabensammlung: AufgabensammlungTrefferItem): void {
+    this.#aufgabensammlungenFacade.selectAufgabensammlung(aufgabensammlung);
   }
 
   clearFilter(filterFormControl: FormControl): void {

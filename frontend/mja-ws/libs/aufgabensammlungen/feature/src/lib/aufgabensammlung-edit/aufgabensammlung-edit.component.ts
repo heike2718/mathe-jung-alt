@@ -30,8 +30,8 @@ import { Subscription } from 'rxjs';
     TextFieldModule,
     ReactiveFormsModule
   ],
-  templateUrl: './aufgabensammlungen-edit.component.html',
-  styleUrls: ['./aufgabensammlungen-edit.component.scss'],
+  templateUrl: './aufgabensammlung-edit.component.html',
+  styleUrls: ['./aufgabensammlung-edit.component.scss'],
 })
 export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
 
@@ -68,7 +68,7 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
     this.#aufgabensammlungBasisdatenSubscription.unsubscribe();
   }
 
-  raetselgruppeDataError = (controlName: string, errorName: string) => {
+  aufgabensammlungDataError = (controlName: string, errorName: string) => {
     return this.form.controls[controlName].hasError(errorName);
   }
 

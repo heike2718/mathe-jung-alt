@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { FONT_NAME, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, SCHRIFTGROESSE } from "@mja-ws/core/model";
-import { fromRaetselgruppen, aufgabensammlungenActions } from "@mja-ws/aufgabensammlungen/data";
+import { fromAufgabensammlungen, aufgabensammlungenActions } from "@mja-ws/aufgabensammlungen/data";
 import { EditAufgabensammlungselementPayload, EditAufgabensammlungPayload, initialAufgabensammlungBasisdaten, AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem } from "@mja-ws/aufgabensammlungen/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/ngrx-utils";
 import { Store } from "@ngrx/store";
@@ -12,15 +12,15 @@ export class AufgabensammlungenFacade {
 
     #store = inject(Store);
 
-    page$: Observable<AufgabensammlungTrefferItem[]> = this.#store.select(fromRaetselgruppen.page);
-    anzahlTrefferGesamt$: Observable<number> = this.#store.select(fromRaetselgruppen.anzahlTrefferGesamt);
-    paginationState$: Observable<PaginationState> = this.#store.select(fromRaetselgruppen.paginationState);
-    editorContent$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromRaetselgruppen.aufgabensammlungBasisdaten).pipe(filterDefined, deepClone);
-    aufgabensammlungDetails$: Observable<AufgabensammlungDetails> = this.#store.select(fromRaetselgruppen.aufgabensammlungDetails).pipe(filterDefined, deepClone);
-    aufgabensammlungBasisdaten$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromRaetselgruppen.aufgabensammlungBasisdaten).pipe(filterDefined, deepClone);
-    aufgabensammlungselemente$: Observable<Aufgabensammlungselement[]> = this.#store.select(fromRaetselgruppen.aufgabensammlungselemente);
-    selectedAufgabensammlungselement$: Observable<Aufgabensammlungselement> = this.#store.select(fromRaetselgruppen.selectedAufgabensammlungselement).pipe(filterDefined, deepClone);
-    selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromRaetselgruppen.selectedElementImages);
+    page$: Observable<AufgabensammlungTrefferItem[]> = this.#store.select(fromAufgabensammlungen.page);
+    anzahlTrefferGesamt$: Observable<number> = this.#store.select(fromAufgabensammlungen.anzahlTrefferGesamt);
+    paginationState$: Observable<PaginationState> = this.#store.select(fromAufgabensammlungen.paginationState);
+    editorContent$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromAufgabensammlungen.aufgabensammlungBasisdaten).pipe(filterDefined, deepClone);
+    aufgabensammlungDetails$: Observable<AufgabensammlungDetails> = this.#store.select(fromAufgabensammlungen.aufgabensammlungDetails).pipe(filterDefined, deepClone);
+    aufgabensammlungBasisdaten$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromAufgabensammlungen.aufgabensammlungBasisdaten).pipe(filterDefined, deepClone);
+    aufgabensammlungselemente$: Observable<Aufgabensammlungselement[]> = this.#store.select(fromAufgabensammlungen.aufgabensammlungselemente);
+    selectedAufgabensammlungselement$: Observable<Aufgabensammlungselement> = this.#store.select(fromAufgabensammlungen.selectedAufgabensammlungselement).pipe(filterDefined, deepClone);
+    selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromAufgabensammlungen.selectedElementImages);
 
     triggerSearch(aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): void {
         this.#store.dispatch(aufgabensammlungenActions.aUFGABENSAMMLUNGEN_SELECT_PAGE({ pageDefinition }));
@@ -66,7 +66,7 @@ export class AufgabensammlungenFacade {
 
     reloadAufgabensammlung(aufgabensammlung: AufgabensammlungBasisdaten, anzahlElemente: number): void {
 
-        const raetselgruppe: AufgabensammlungTrefferItem = {
+        const theAufgabensammlung: AufgabensammlungTrefferItem = {
             anzahlElemente: anzahlElemente,
             geaendertDurch: aufgabensammlung.geaendertDurch,
             id: aufgabensammlung.id,
@@ -78,7 +78,7 @@ export class AufgabensammlungenFacade {
             privat: aufgabensammlung.privat
         };
 
-        this.selectAufgabensammlung(raetselgruppe);
+        this.selectAufgabensammlung(theAufgabensammlung);
     }
 
     toggleStatus(aufgabensammlung: AufgabensammlungBasisdaten): void {

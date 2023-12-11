@@ -1,49 +1,49 @@
 <div class="mja-container">
 
-    <div *ngIf="aufgabensammlungenFacade.aufgabensammlungDetails$ | async as gruppe else keineGruppe">
+    <div *ngIf="aufgabensammlungenFacade.aufgabensammlungDetails$ | async as sammlung else keineGruppe">
 
-        <h2>Aufgabensammlung {{gruppe.name}} <span matBadge={{gruppe.elemente.length}} matBadgeColor="accent"
+        <h2>Aufgabensammlung {{sammlung.name}} <span matBadge={{sammlung.elemente.length}} matBadgeColor="accent"
                 class="ml-1"></span></h2>
 
         <div class="grid-container-2 mt-2 mb-2">
             <label>ID:</label>
             <div>
-                {{gruppe.id}}
+                {{sammlung.id}}
             </div>
             <label>Kommentar:</label>
             <div>
-                {{gruppe.kommentar}}
+                {{sammlung.kommentar}}
             </div>
             <label>geändert durch:</label>
             <div>
-                {{gruppe.geaendertDurch}}
+                {{sammlung.geaendertDurch}}
             </div>
             <label>freigegeben:</label>
             <div>
-                {{gruppe.freigegeben}}
+                {{sammlung.freigegeben}}
             </div>
             <label>privat:</label>
             <div>
-                {{gruppe.privat}}
+                {{sammlung.privat}}
             </div>
             <label> Referenztyp:</label>
             <div>
-                {{gruppe.referenztyp}}
+                {{sammlung.referenztyp}}
             </div>
             <label>Referenz:</label>
             <div>
-                {{gruppe.referenz}}
+                {{sammlung.referenz}}
             </div>
         </div>
 
         <div class="button-container">
 
-            <div *ngIf="!(gruppe.schreibgeschuetzt)">
-                <button mat-raised-button color="primary" [disabled]="!getRaetselgruppeID()"
+            <div *ngIf="!(sammlung.schreibgeschuetzt)">
+                <button mat-raised-button color="primary" [disabled]="!getAufgabensammlungID()"
                     (click)="openNeuesAufgabensammlungselementDialog()">neues Element</button>
             </div>
 
-            <div *ngIf="!(gruppe.schreibgeschuetzt)">
+            <div *ngIf="!(sammlung.schreibgeschuetzt)">
                 <button mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button>
             </div>
 
@@ -65,11 +65,11 @@
 
         <h2>Elemente</h2>
 
-        <mja-aufgabensammlungselement [raetselgruppe]="gruppe" (showImages)="onShowImagesElement($event)"
+        <mja-aufgabensammlungselement [aufgabensammlung]="sammlung" (showImages)="onShowImagesElement($event)"
             (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
         </mja-aufgabensammlungselement>
 
-        <div *ngIf="gruppe.elemente.length > 0">
+        <div *ngIf="sammlung.elemente.length > 0">
             <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
             <div *ngIf="schluessel.length > 0" class="mb-2">
                 <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>

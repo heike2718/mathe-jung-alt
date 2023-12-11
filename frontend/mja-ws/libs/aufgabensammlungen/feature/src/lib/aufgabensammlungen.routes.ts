@@ -4,7 +4,7 @@ import { AufgabensammlungenSearchComponent } from "./aufgabensammlungen-search/a
 import { aufgabensammlungenDataProvider } from '@mja-ws/aufgabensammlungen/api';
 import { AufgabensammlungDetailsComponent } from "./aufgabensammlung-details/aufgabensammlungen-details.component";
 import { inject } from "@angular/core";
-import { AufgabensammlungEditComponent } from "./aufgabensammlung-edit/aufgabensammlungen-edit.component";
+import { AufgabensammlungEditComponent } from "./aufgabensammlung-edit/aufgabensammlung-edit.component";
 
 // siehe https://www.angulararchitects.io/en/aktuelles/modern-and-lightweight-angular-architectures-with-angulars-latest-innovations/
 

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
-import { AufgabensammlungselementDialogData } from './raetselgruppenelement-dialog.data';
+import { AufgabensammlungselementDialogData } from './aufgabensammlungselement-dialog.data';
 import { FormsModule } from '@angular/forms';
 
 @Component({

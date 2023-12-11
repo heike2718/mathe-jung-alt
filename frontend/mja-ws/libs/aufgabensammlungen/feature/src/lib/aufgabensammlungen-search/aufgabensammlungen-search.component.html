@@ -6,7 +6,7 @@
       [disabled]="buttonResetAllFiltersDisabled()">Filter leeren</button>
   </div>
   <div>
-    <button mat-raised-button color="primary" (click)="neueRaetselgruppe()" title="neue Aufgabensammlung anlegen">neue
+    <button mat-raised-button color="primary" (click)="neueAufgabensammlung()" title="neue Aufgabensammlung anlegen">neue
       Sammlung</button>
   </div>
 </div>
@@ -16,7 +16,7 @@
   <div>{{suchparameterStr}}</div>
 </div>
 
-<mat-paginator [length]="anzahlRaetselgruppen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
+<mat-paginator [length]="anzahlSammlungen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
 
 <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mt-2" matSort matSortActive="name"
   matSortDirection="asc" matSortDisableClear>
@@ -24,10 +24,10 @@
   <!-- status -->
   <ng-container matColumnDef="status">
     <mat-header-cell *matHeaderCellDef class="mat-header-cell__1"> </mat-header-cell>
-    <mat-cell *matCellDef="let gruppe" class="mat-cell__1"> <span *ngIf="!gruppe.freigegeben">
+    <mat-cell *matCellDef="let sammlung" class="mat-cell__1"> <span *ngIf="!sammlung.freigegeben">
         <mat-icon>block</mat-icon>
       </span>
-      <span *ngIf="gruppe.freigegeben">
+      <span *ngIf="sammlung.freigegeben">
         <mat-icon>check_circle_outline</mat-icon>
       </span>
     </mat-cell>
@@ -51,8 +51,8 @@
         </mat-form-field>
       </div>
     </mat-header-cell>
-    <mat-cell *matCellDef="let gruppe">
-      {{gruppe.name}} ({{gruppe.anzahlElemente}})
+    <mat-cell *matCellDef="let sammlung">
+      {{sammlung.name}} ({{sammlung.anzahlElemente}})
     </mat-cell>>
   </ng-container>
 
@@ -72,7 +72,7 @@
         </mat-form-field>
       </div>
     </mat-header-cell>
-    <mat-cell *matCellDef="let gruppe"> {{gruppe.schwierigkeitsgrad}} </mat-cell>
+    <mat-cell *matCellDef="let sammlung"> {{sammlung.schwierigkeitsgrad}} </mat-cell>
   </ng-container>
 
   <!-- referenztyp -->
@@ -91,7 +91,7 @@
         </mat-form-field>
       </div>
     </mat-header-cell>
-    <mat-cell *matCellDef="let gruppe" class="mat-cell__4"> {{gruppe.referenztyp}} </mat-cell>
+    <mat-cell *matCellDef="let sammlung" class="mat-cell__4"> {{sammlung.referenztyp}} </mat-cell>
   </ng-container>
 
   <!-- referenz -->
@@ -106,7 +106,7 @@
         </mat-form-field>
       </div>
     </mat-header-cell>
-    <mat-cell *matCellDef="let gruppe"> {{gruppe.referenz}} </mat-cell>
+    <mat-cell *matCellDef="let sammlung"> {{sammlung.referenz}} </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>

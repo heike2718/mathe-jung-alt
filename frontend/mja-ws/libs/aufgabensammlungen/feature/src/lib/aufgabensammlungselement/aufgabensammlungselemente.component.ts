@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, inject, Input, Output, ViewChil
 import { CommonModule } from '@angular/common';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { AufgabensammlungDetails, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
-import { AufgabensammlungselementeDataSource } from './aufgabensammlungelemente.datasource';
+import { AufgabensammlungselementeDataSource } from './aufgabensammlungselemente.datasource';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -13,13 +13,13 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
     MatTableModule
   ],
-  templateUrl: './aufgabensammlungelemente.component.html',
-  styleUrls: ['./aufgabensammlungelemente.component.scss'],
+  templateUrl: './aufgabensammlungselemente.component.html',
+  styleUrls: ['./aufgabensammlungselemente.component.scss'],
 })
 export class AufgabensammlungselementeComponent implements AfterViewInit {
  
   @Input()
-  raetselgruppe!: AufgabensammlungDetails;
+  aufgabensammlung!: AufgabensammlungDetails;
 
   @ViewChild(MatTable)
   table!: MatTable<Aufgabensammlungselement>
@@ -41,7 +41,7 @@ export class AufgabensammlungselementeComponent implements AfterViewInit {
 
   getDisplayedColumns(): string[] {
 
-    if (this.raetselgruppe.schreibgeschuetzt) {
+    if (this.aufgabensammlung.schreibgeschuetzt) {
       return ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'show'];
 
     } else {

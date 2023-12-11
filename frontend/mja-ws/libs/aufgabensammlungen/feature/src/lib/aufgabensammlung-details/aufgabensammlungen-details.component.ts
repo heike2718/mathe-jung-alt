@@ -17,9 +17,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Subscription, tap } from 'rxjs';
 import { EditAufgabensammlungselementPayload, AufgabensammlungBasisdaten, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
-import { AufgabensammlungselementDialogData } from '../aufgabensammlungselement-dialog/raetselgruppenelement-dialog.data';
+import { AufgabensammlungselementDialogData } from '../aufgabensammlungselement-dialog/aufgabensammlungselement-dialog.data';
 import { AufgabensammlungselementDialogComponent } from '../aufgabensammlungselement-dialog/aufgabensammlungenselement-dialog.component';
-import { AufgabensammlungselementeComponent } from '../aufgabensammlungselement/aufgabensammlungelemente.component';
+import { AufgabensammlungselementeComponent } from '../aufgabensammlungselement/aufgabensammlungselemente.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
@@ -58,7 +58,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
   #raetselFacade = inject(RaetselFacade);
 
-  #raetselgruppeSubscription = new Subscription();
+  #aufgabensammlungSubscription = new Subscription();
   #imagesSubscription = new Subscription();
   #aufgabensammlungselementSubscription = new Subscription();
 
@@ -67,9 +67,9 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-      this.#raetselgruppeSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$.subscribe((raetselgruppe) => {
-      this.#aufgabensammlungBasisdaten = raetselgruppe;
-      this.#anzahlElemente = raetselgruppe.elemente.length
+      this.#aufgabensammlungSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$.subscribe((aufgabensammlung) => {
+      this.#aufgabensammlungBasisdaten = aufgabensammlung;
+      this.#anzahlElemente = aufgabensammlung.elemente.length
     });
 
     this.#aufgabensammlungselementSubscription = this.aufgabensammlungenFacade.selectedAufgabensammlungselement$.subscribe(
@@ -90,12 +90,12 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.#raetselgruppeSubscription.unsubscribe();
+    this.#aufgabensammlungSubscription.unsubscribe();
     this.#imagesSubscription.unsubscribe();
     this.#aufgabensammlungselementSubscription.unsubscribe();
   }
 
-  getRaetselgruppeID(): string {
+  getAufgabensammlungID(): string {
     return this.#aufgabensammlungBasisdaten.id;
   }
 
@@ -113,7 +113,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
   openGenerateDialog(): void {
 
-    if (this.getRaetselgruppeID().length === 0) {
+    if (this.getAufgabensammlungID().length === 0) {
       return;
     }
 
@@ -168,10 +168,10 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
         }
 
         switch (dialogData.selectedVerwendungszweck) {
-          case 'Arbeitsblatt': this.aufgabensammlungenFacade.generiereArbeitsblatt(this.getRaetselgruppeID(), font, size, layout); break;
-          case 'Knobelkartei': this.aufgabensammlungenFacade.generiereKnobelkartei(this.getRaetselgruppeID(), font, size, layout); break;
-          case 'Vorschau': this.aufgabensammlungenFacade.generiereVorschau(this.getRaetselgruppeID(), font, size, layout); break;
-          case 'LaTeX': this.aufgabensammlungenFacade.generiereLaTeX(this.getRaetselgruppeID(), font, size, layout); break;
+          case 'Arbeitsblatt': this.aufgabensammlungenFacade.generiereArbeitsblatt(this.getAufgabensammlungID(), font, size, layout); break;
+          case 'Knobelkartei': this.aufgabensammlungenFacade.generiereKnobelkartei(this.getAufgabensammlungID(), font, size, layout); break;
+          case 'Vorschau': this.aufgabensammlungenFacade.generiereVorschau(this.getAufgabensammlungID(), font, size, layout); break;
+          case 'LaTeX': this.aufgabensammlungenFacade.generiereLaTeX(this.getAufgabensammlungID(), font, size, layout); break;
         }
       }
     });
@@ -212,7 +212,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   buttonsGenerierenDisabled(): boolean {
-    return this.getRaetselgruppeID().length === 0 || this.#anzahlElemente === 0;
+    return this.getAufgabensammlungID().length === 0 || this.#anzahlElemente === 0;
   }
 
   onEditElement($element: Aufgabensammlungselement): void {
@@ -251,12 +251,12 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
       if (result && this.#aufgabensammlungBasisdaten) {
         const data: AufgabensammlungselementDialogData = result as AufgabensammlungselementDialogData;
-        this.#saveReaetselgruppeElement(data);
+        this.#saveElement(data);
       }
     });
   }
 
-  #saveReaetselgruppeElement(data: AufgabensammlungselementDialogData): void {
+  #saveElement(data: AufgabensammlungselementDialogData): void {
 
     const payload: EditAufgabensammlungselementPayload = {
       id: data.id,
@@ -265,7 +265,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
       punkte: data.punkte
     };
 
-    this.aufgabensammlungenFacade.saveAufgabensammlungselement(this.getRaetselgruppeID(), payload);
+    this.aufgabensammlungenFacade.saveAufgabensammlungselement(this.getAufgabensammlungID(), payload);
 
   }
 
@@ -284,7 +284,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.aufgabensammlungenFacade.deleteAufgabensammlungselement(this.getRaetselgruppeID(), element);
+        this.aufgabensammlungenFacade.deleteAufgabensammlungselement(this.getAufgabensammlungID(), element);
         this.images = undefined;
       }
     });
