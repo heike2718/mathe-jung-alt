@@ -1,7 +1,7 @@
 import { GeneratedImages, initialPaginationState, PaginationState } from "@mja-ws/core/model";
 import { AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { raetselgruppenActions } from "./raetselgruppen.actions";
+import { raetselgruppenActions } from "./aufgabensammlungen.actions";
 
 export interface RaetselgruppenState {
     readonly loaded: boolean;

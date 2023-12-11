@@ -30,8 +30,8 @@ import { Subscription } from 'rxjs';
     TextFieldModule,
     ReactiveFormsModule
   ],
-  templateUrl: './raetselgruppe-edit.component.html',
-  styleUrls: ['./raetselgruppe-edit.component.scss'],
+  templateUrl: './aufgabensammlungen-edit.component.html',
+  styleUrls: ['./aufgabensammlungen-edit.component.scss'],
 })
 export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 

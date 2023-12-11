@@ -18,9 +18,9 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { Subscription, tap } from 'rxjs';
 import { EditAufgabensammlungselementPayload, AufgabensammlungBasisdaten, Aufgabensammlungselement } from '@mja-ws/raetselgruppen/model';
 import { AufgabensammlungselementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
-import { AufgabensammlungselementDialogComponent } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
-import { AufgabensammlungselementeComponent } from '../raetselgruppenelemente/raetselgruppenelemente.component';
-import { RaetselgruppeEditComponent } from '../raetselgruppe-edit/raetselgruppe-edit.component';
+import { AufgabensammlungselementDialogComponent } from '../raetselgruppenelement-dialog/aufgabensammlungenselement-dialog.component';
+import { AufgabensammlungselementeComponent } from '../raetselgruppenelemente/aufgabensammlungelemente.component';
+import { RaetselgruppeEditComponent } from '../raetselgruppe-edit/aufgabensammlungen-edit.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
@@ -44,8 +44,8 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
     AufgabensammlungselementeComponent,
     RaetselgruppeEditComponent
   ],
-  templateUrl: './raetselgruppen-details.component.html',
-  styleUrls: ['./raetselgruppen-details.component.scss'],
+  templateUrl: './aufgabensammlungen-details.component.html',
+  styleUrls: ['./aufgabensammlungen-details.component.scss'],
 })
 export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 

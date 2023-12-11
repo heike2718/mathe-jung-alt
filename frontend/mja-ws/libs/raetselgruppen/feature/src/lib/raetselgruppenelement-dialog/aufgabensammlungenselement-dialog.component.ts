@@ -16,8 +16,8 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     FormsModule
   ],
-  templateUrl: './raetselgruppenelement-dialog.component.html',
-  styleUrls: ['./raetselgruppenelement-dialog.component.scss'],
+  templateUrl: './aufgabensammlungenselement-dialog.component.html',
+  styleUrls: ['./aufgabensammlungenselement-dialog.component.scss'],
 })
 export class AufgabensammlungselementDialogComponent {
 

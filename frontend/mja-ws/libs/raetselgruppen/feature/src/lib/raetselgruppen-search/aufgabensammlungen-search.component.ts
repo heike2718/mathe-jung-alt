@@ -37,8 +37,8 @@ const REFERENZ = 'referenz';
     FormsModule,
     ReactiveFormsModule,
   ],
-  templateUrl: './raetselgruppen-search.component.html',
-  styleUrls: ['./raetselgruppen-search.component.scss'],
+  templateUrl: './aufgabensammlungen-search.component.html',
+  styleUrls: ['./aufgabensammlungen-search.component.scss'],
 })
 export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 

@@ -4,8 +4,8 @@ import { GeneratedFile } from "@mja-ws/core/model";
 import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { switchMap, map, tap } from "rxjs";
-import { RaetselgruppenHttpService } from "./raetselgruppen-http.service";
-import { raetselgruppenActions } from "./raetselgruppen.actions";
+import { AufgabensammlungenHttpService } from "./aufgabensammlungen-http.service";
+import { raetselgruppenActions } from "./aufgabensammlungen.actions";
 import { RaetselFacade } from "@mja-ws/raetsel/api";
 import { CoreFacade } from "@mja-ws/core/api";
 
@@ -13,7 +13,7 @@ import { CoreFacade } from "@mja-ws/core/api";
 export class RaetselgruppenEffects {
 
     #actions = inject(Actions);
-    #raetselgruppenHttpService = inject(RaetselgruppenHttpService);
+    #raetselgruppenHttpService = inject(AufgabensammlungenHttpService);
     #router = inject(Router);
     #downloadService = inject(FileDownloadService);
     #raetselFacade = inject(RaetselFacade);
@@ -22,7 +22,7 @@ export class RaetselgruppenEffects {
     findRaetselgruppen$ = createEffect(() => {
         return this.#actions.pipe(
             ofType(raetselgruppenActions.fIND_RAETSELGRUPPEN),
-            switchMap((action) => this.#raetselgruppenHttpService.findRaetselgruppen(action.aufgabensammlungenSuchparameter, action.pageDefinition)),
+            switchMap((action) => this.#raetselgruppenHttpService.findAufgabensammlungen(action.aufgabensammlungenSuchparameter, action.pageDefinition)),
             map((treffer) => raetselgruppenActions.rAETSELGRUPPEN_FOUND({ treffer }))
         );
     });
@@ -68,7 +68,7 @@ export class RaetselgruppenEffects {
 
         this.#actions.pipe(
             ofType(raetselgruppenActions.sAVE_RAETSELGRUPPE),
-            switchMap((action) => this.#raetselgruppenHttpService.saveRaetselgruppe(action.editAufgabensammlungPayload)),
+            switchMap((action) => this.#raetselgruppenHttpService.saveAufgabensammlung(action.editAufgabensammlungPayload)),
             map((raetselgruppe) => raetselgruppenActions.rAETSELGRUPPE_SAVED({ raetselgruppe }))
         )
     );

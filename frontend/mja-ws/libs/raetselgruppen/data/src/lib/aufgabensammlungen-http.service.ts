@@ -16,12 +16,12 @@ import { generateUUID } from "@mja-ws/shared/util";
 
 
 @Injectable({ providedIn: 'root' })
-export class RaetselgruppenHttpService {
+export class AufgabensammlungenHttpService {
 
     #http = inject(HttpClient);
     #url = '/mja-api/aufgabensammlungen';
 
-    findRaetselgruppen(suchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): Observable<AufgabensammlungenTreffer> {
+    findAufgabensammlungen(suchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): Observable<AufgabensammlungenTreffer> {
 
         const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
@@ -59,14 +59,14 @@ export class RaetselgruppenHttpService {
         return this.#http.get<AufgabensammlungDetails>(url, { headers });
     }
 
-    saveRaetselgruppe(EditAufgabensammlungPayload: EditAufgabensammlungPayload): Observable<AufgabensammlungBasisdaten> {
+    saveAufgabensammlung(EditAufgabensammlungPayload: EditAufgabensammlungPayload): Observable<AufgabensammlungBasisdaten> {
 
         const url = this.#url + '/v1';
 
         if ('neu' === EditAufgabensammlungPayload.id) {
-            return this.#insertRaetselgruppe(url, EditAufgabensammlungPayload);
+            return this.#insertAufgabensammlung(url, EditAufgabensammlungPayload);
         } else {
-            return this.#updateRaetselgruppe(url, EditAufgabensammlungPayload);
+            return this.#updateAufgabensammlung(url, EditAufgabensammlungPayload);
         }
     }
 
@@ -154,14 +154,14 @@ export class RaetselgruppenHttpService {
         );
     }
 
-    #insertRaetselgruppe(url: string, payload: EditAufgabensammlungPayload): Observable<AufgabensammlungBasisdaten> {
+    #insertAufgabensammlung(url: string, payload: EditAufgabensammlungPayload): Observable<AufgabensammlungBasisdaten> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.post<AufgabensammlungBasisdaten>(url, payload, { headers });
 
     }
 
-    #updateRaetselgruppe(url: string, payload: EditAufgabensammlungPayload): Observable<AufgabensammlungBasisdaten> {
+    #updateAufgabensammlung(url: string, payload: EditAufgabensammlungPayload): Observable<AufgabensammlungBasisdaten> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.put<AufgabensammlungBasisdaten>(url, payload, { headers });

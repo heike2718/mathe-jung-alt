@@ -1,6 +1,6 @@
-export { raetselgruppenActions } from './lib/raetselgruppen.actions';
-export { fromRaetselgruppen } from './lib/raetselgruppen.selectors';
+export { raetselgruppenActions } from './lib/aufgabensammlungen.actions';
+export { fromRaetselgruppen } from './lib/aufgabensammlungen.selectors';
 
 // exportieren, damit der dataProvider in die API kann.
-export { raetselgruppenFeature } from './lib/raetselgruppen.reducer';
-export { RaetselgruppenEffects } from './lib/raetselgruppen.effects';
+export { raetselgruppenFeature } from './lib/aufgabensammlungen.reducer';
+export { RaetselgruppenEffects } from './lib/aufgabensammlungen.effects';

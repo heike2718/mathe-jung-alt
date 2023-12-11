@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, inject, Input, Output, ViewChil
 import { CommonModule } from '@angular/common';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { AufgabensammlungDetails, Aufgabensammlungselement } from '@mja-ws/raetselgruppen/model';
-import { AufgabensammlungselementeDataSource } from './raetselgruppenelemente.datasource';
+import { AufgabensammlungselementeDataSource } from './aufgabensammlungelemente.datasource';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -13,8 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
     MatTableModule
   ],
-  templateUrl: './raetselgruppenelemente.component.html',
-  styleUrls: ['./raetselgruppenelemente.component.scss'],
+  templateUrl: './aufgabensammlungelemente.component.html',
+  styleUrls: ['./aufgabensammlungelemente.component.scss'],
 })
 export class AufgabensammlungselementeComponent implements AfterViewInit {
  

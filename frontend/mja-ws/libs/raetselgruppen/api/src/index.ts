@@ -1,3 +1,3 @@
-export { RaetselgruppenFacade } from './lib/raetselgruppen.facade';
-export { RaetselgruppenDataSource } from './lib/raetselgruppen.datasource';
-export { raetselgruppenDataProvider } from './lib/raetselgruppen-data.provider';
+export { RaetselgruppenFacade } from './lib/aufgabensammlungen.facade';
+export { RaetselgruppenDataSource } from './lib/aufgabensammlungen.datasource';
+export { raetselgruppenDataProvider } from './lib/aufgabensammlungen-data.provider';

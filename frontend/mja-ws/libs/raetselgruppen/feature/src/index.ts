@@ -1,1 +1,1 @@
-export { raetselgruppenRoutes } from './lib/raetselgruppen.routes';
+export { raetselgruppenRoutes } from './lib/aufgabensammlungen.routes';

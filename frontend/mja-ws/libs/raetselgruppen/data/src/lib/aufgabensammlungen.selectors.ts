@@ -1,5 +1,5 @@
 import { createSelector } from "@ngrx/store";
-import { raetselgruppenFeature } from "./raetselgruppen.reducer";
+import { raetselgruppenFeature } from "./aufgabensammlungen.reducer";
 
 const { selectRaetselgruppenState } = raetselgruppenFeature;
 
