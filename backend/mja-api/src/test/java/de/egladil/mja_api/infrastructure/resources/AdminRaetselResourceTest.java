@@ -327,7 +327,7 @@ public class AdminRaetselResourceTest {
 
 		assertEquals("0ce69e0e-e1f8-4400-a2b9-61d3d6b0a82e", treffer.getId());
 		assertEquals("02606", treffer.getSchluessel());
-		assertTrue(treffer.isFreigebeben());
+		assertTrue(treffer.isFreigegeben());
 		assertEquals(RaetselHerkunftTyp.EIGENKREATION, treffer.getHerkunft());
 	}
 

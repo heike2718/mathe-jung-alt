@@ -4,6 +4,8 @@ import { EmbeddableImageInfo } from "@mja-ws/embeddable-images/model";
 export type MODUS_VOLLTEXTSUCHE = 'UNION' | 'INTERSECTION';
 export type MODUS_SUCHE_MIT_DESKRIPTOREN = 'LIKE' | 'NOT_LIKE';
 
+export type RAETSELHERKUNFT = 'EIGENKREATION' | 'ZITAT' | 'ADAPTATION';
+
 export interface RaetselSuchfilter {
   readonly suchstring: string;
   readonly deskriptoren: DeskriptorUI[];
@@ -48,6 +50,7 @@ export interface RaetselDetails {
   readonly frage: string;
   readonly loesung: string | undefined;
   readonly kommentar: string | undefined;
+  readonly herkunft: RAETSELHERKUNFT;
   readonly quelle: QuelleUI;
   readonly antwortvorschlaege: Antwortvorschlag[];
   readonly deskriptoren: DeskriptorUI[];
@@ -70,6 +73,7 @@ export const initialRaetselDetails: RaetselDetails = {
   frage: '',
   loesung: '',
   kommentar: '',
+  herkunft: 'EIGENKREATION',
   quelle: noopQuelle,
   antwortvorschlaege: [],
   deskriptoren: [],

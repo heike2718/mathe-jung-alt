@@ -96,7 +96,7 @@ public class EditRaetselPayloadTest {
 		void deserialize() throws JsonMappingException, JsonProcessingException {
 
 			// Arrange
-			String json = "{\"latexHistorisieren\":false,\"raetsel\":{\"id\":\"neu\",\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigebeben\":true,\"quelleId\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quelle\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"name\":\"Ponder Stibbons\"},\"schreibgeschuetzt\":true,\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":3,\"name\":\"IKID\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":33,\"name\":\"A-2\",\"admin\":false,\"kontext\":\"RAETSEL\"}],\"embeddableImageInfos\":[],\"images\":null,\"raetselPDF\":null}}";
+			String json = "{\"latexHistorisieren\":false,\"raetsel\":{\"id\":\"neu\",\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigegeben\":true,\"quelleId\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quelle\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"name\":\"Ponder Stibbons\"},\"schreibgeschuetzt\":true,\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":3,\"name\":\"IKID\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":33,\"name\":\"A-2\",\"admin\":false,\"kontext\":\"RAETSEL\"}],\"embeddableImageInfos\":[],\"images\":null,\"raetselPDF\":null}}";
 
 			EditRaetselPayload payload = new ObjectMapper().readValue(json, EditRaetselPayload.class);
 
@@ -106,7 +106,7 @@ public class EditRaetselPayloadTest {
 			assertEquals("neu", raetsel.getId());
 			assertEquals(2, raetsel.getAntwortvorschlaege().length);
 			assertEquals(3, raetsel.getDeskriptoren().size());
-			assertTrue(raetsel.isFreigebeben());
+			assertTrue(raetsel.isFreigegeben());
 		}
 	}
 

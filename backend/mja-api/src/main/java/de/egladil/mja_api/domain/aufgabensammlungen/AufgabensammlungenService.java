@@ -619,7 +619,7 @@ public class AufgabensammlungenService {
 
 		if (PermissionUtils.isUserOrdinary(authCtx.getUser().getRoles())) {
 
-			freigegebeneAufgaben = aufgaben.stream().filter(a -> a.isFreigebeben())
+			freigegebeneAufgaben = aufgaben.stream().filter(a -> a.isFreigegeben())
 				.collect(Collectors.toList());
 
 			if (freigegebeneAufgaben.isEmpty()) {

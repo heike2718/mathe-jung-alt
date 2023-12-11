@@ -28,7 +28,7 @@ export class MjaAPIHttpInterceptor implements HttpInterceptor {
 
     const headers: HttpHeaders = req.headers.append('X-CLIENT-ID', this.#config.clientId).append('X-CORRELATION-ID', correlationId);
 
-    console.log('correlationId=' + correlationId);
+    // console.log('correlationId=' + correlationId);
 
     return next.handle(
       req.clone({

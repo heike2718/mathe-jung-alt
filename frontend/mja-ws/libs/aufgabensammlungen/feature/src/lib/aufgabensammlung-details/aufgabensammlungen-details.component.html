@@ -6,30 +6,33 @@
                 class="ml-1"></span></h2>
 
         <div class="grid-container-2 mt-2 mb-2">
-            <label>ID:</label>
-            <div>
+
+            <label *ngIf="authFacade.userIsAdmin$ | async">ID:</label>
+            <div *ngIf="authFacade.userIsAdmin$ | async">
                 {{sammlung.id}}
             </div>
+
             <label>Kommentar:</label>
             <div>
                 {{sammlung.kommentar}}
             </div>
-            <label>geändert durch:</label>
-            <div>
+
+            <label *ngIf="authFacade.userIsAdmin$ | async">geändert durch:</label>
+            <div *ngIf="authFacade.userIsAdmin$ | async">
                 {{sammlung.geaendertDurch}}
             </div>
+
             <label>freigegeben:</label>
-            <div>
-                {{sammlung.freigegeben}}
-            </div>
-            <label>privat:</label>
-            <div>
-                {{sammlung.privat}}
-            </div>
+            <mat-checkbox [(ngModel)]="freigegeben" [disabled]="true"></mat-checkbox>
+
+            <label>pivat:</label>
+            <mat-checkbox [(ngModel)]="privat" [disabled]="true"></mat-checkbox>
+
             <label> Referenztyp:</label>
             <div>
                 {{sammlung.referenztyp}}
             </div>
+
             <label>Referenz:</label>
             <div>
                 {{sammlung.referenz}}
@@ -73,9 +76,10 @@
             <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
             <div *ngIf="schluessel.length > 0" class="mb-2">
                 <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
-                <button *ngIf="aufgabensammlungenFacade.selectedAufgabensammlungselement$ | async as element" mat-raised-button
-                    color="primary" class="ml-2" (click)="onShowImagesElement(element)">neu laden</button>
-            </div>            
+                <button *ngIf="aufgabensammlungenFacade.selectedAufgabensammlungselement$ | async as element"
+                    mat-raised-button color="primary" class="ml-2" (click)="onShowImagesElement(element)">neu
+                    laden</button>
+            </div>
             <div *ngIf="images else imagesFehlen">
                 <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
             </div>

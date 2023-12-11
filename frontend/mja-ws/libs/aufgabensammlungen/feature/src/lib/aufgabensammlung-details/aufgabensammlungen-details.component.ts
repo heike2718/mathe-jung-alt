@@ -4,6 +4,7 @@ import { AufgabensammlungenFacade } from '@mja-ws/aufgabensammlungen/api';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
 import {
   anzeigeAntwortvorschlaegeSelectInput, FONT_NAME, fontNamenSelectInput, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
@@ -23,15 +24,19 @@ import { AufgabensammlungselementeComponent } from '../aufgabensammlungselement/
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
+import { FormsModule } from '@angular/forms';
+import { AuthFacade } from '@mja-ws/shared/auth/api';
 
 @Component({
   selector: 'mja-aufgabensammlungen-details',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatBadgeModule,
     MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
     MatDialogModule,
     MatGridListModule,
     MatInputModule,
@@ -48,6 +53,7 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
 export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
   aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
+  authFacade = inject(AuthFacade);
 
   dialog = inject(MatDialog);
 
@@ -55,6 +61,8 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   schluessel = '';
   nummer = '';
   punkte = '';
+  freigegeben = false;
+  privat = false;
 
   #raetselFacade = inject(RaetselFacade);
 
@@ -67,10 +75,13 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-      this.#aufgabensammlungSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$.subscribe((aufgabensammlung) => {
-      this.#aufgabensammlungBasisdaten = aufgabensammlung;
-      this.#anzahlElemente = aufgabensammlung.elemente.length
-    });
+    this.#aufgabensammlungSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$.subscribe(
+      (aufgabensammlung) => {
+        this.#aufgabensammlungBasisdaten = aufgabensammlung;
+        this.#anzahlElemente = aufgabensammlung.elemente.length;
+        this.freigegeben = aufgabensammlung.freigegeben;
+        this.privat = aufgabensammlung.privat;
+      });
 
     this.#aufgabensammlungselementSubscription = this.aufgabensammlungenFacade.selectedAufgabensammlungselement$.subscribe(
       (element) => {

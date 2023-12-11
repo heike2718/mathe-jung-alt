@@ -429,7 +429,7 @@ public class RaetselService {
 		persistentesRaetsel.quelle = daten.getQuelle().getId();
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
-		persistentesRaetsel.freigegeben = daten.isFreigebeben();
+		persistentesRaetsel.freigegeben = daten.isFreigegeben();
 		persistentesRaetsel.herkunft = daten.getHerkunft();
 		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
 	}

@@ -98,7 +98,7 @@ public class QuizService {
 		aufgabe.setAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(dbAufgabe.antwortvorschlaege));
 		aufgabe.setSchluessel(dbAufgabe.schluessel);
 		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.filenameVorschauFrage, dbAufgabe.filenameVorschauLoesung));
-		aufgabe.setFreigebeben(dbAufgabe.freigegeben);
+		aufgabe.setFreigegeben(dbAufgabe.freigegeben);
 		aufgabe.setQuelle(mapQuelle(dbAufgabe));
 		aufgabe.setNummer(dbAufgabe.nummer);
 		aufgabe.setPunkte(dbAufgabe.punkte);

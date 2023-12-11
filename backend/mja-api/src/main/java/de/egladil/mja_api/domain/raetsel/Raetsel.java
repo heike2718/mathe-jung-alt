@@ -52,7 +52,7 @@ public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
 	@Schema(description = "ob das Rätsel freigegeben ist.")
-	private boolean freigebeben;
+	private boolean freigegeben;
 
 	@JsonProperty
 	@Schema(description = "ob das Rätsel aus einer anderen Quelle zitiert wurde ist.")
@@ -300,14 +300,14 @@ public class Raetsel extends AbstractDomainEntity {
 		return this;
 	}
 
-	public boolean isFreigebeben() {
+	public boolean isFreigegeben() {
 
-		return freigebeben;
+		return freigegeben;
 	}
 
 	public Raetsel withFreigebeben(final boolean freigebeben) {
 
-		this.freigebeben = freigebeben;
+		this.freigegeben = freigebeben;
 		return this;
 	}
 
