@@ -29,6 +29,7 @@ import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
@@ -318,15 +319,16 @@ public class AdminRaetselResourceTest {
 	void testRaetselDetailsLadenFound() throws Exception {
 
 		Raetsel treffer = given()
-			.when().get("02622/v1").then()
+			.when().get("02606/v1").then()
 			.statusCode(200)
 			.and()
 			.extract()
 			.as(Raetsel.class);
 
-		assertEquals("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866", treffer.getId());
-		assertEquals("02622", treffer.getSchluessel());
-
+		assertEquals("0ce69e0e-e1f8-4400-a2b9-61d3d6b0a82e", treffer.getId());
+		assertEquals("02606", treffer.getSchluessel());
+		assertTrue(treffer.isFreigebeben());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, treffer.getHerkunft());
 	}
 
 	@Test
@@ -395,6 +397,12 @@ public class AdminRaetselResourceTest {
 			Raetsel raetsel = new ObjectMapper().readValue(responsePayload, Raetsel.class);
 			System.out.println(raetsel.getId());
 			assertNotNull(raetsel.getId());
+
+			String serialization = new ObjectMapper().writeValueAsString(raetsel);
+			System.out.println("==================");
+			System.out.println(serialization);
+			System.out.println("==================");
+
 		}
 
 	}

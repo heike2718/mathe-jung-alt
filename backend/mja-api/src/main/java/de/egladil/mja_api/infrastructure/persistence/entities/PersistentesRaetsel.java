@@ -10,8 +10,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -113,8 +116,12 @@ public class PersistentesRaetsel implements PersistenteMjaEntity {
 	@NotNull
 	public String owner;
 
-	@Column(name = "FREIGEGEBEN")
+	@Column
 	public boolean freigegeben;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	public RaetselHerkunftTyp herkunft;
 
 	@Column
 	@NotNull

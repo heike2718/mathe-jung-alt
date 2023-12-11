@@ -54,6 +54,10 @@ public class Raetsel extends AbstractDomainEntity {
 	@Schema(description = "ob das Rätsel freigegeben ist.")
 	private boolean freigebeben;
 
+	@JsonProperty
+	@Schema(description = "ob das Rätsel aus einer anderen Quelle zitiert wurde ist.")
+	private RaetselHerkunftTyp herkunft;
+
 	@JsonIgnore
 	private String filenameVorschauFrage;
 
@@ -304,6 +308,17 @@ public class Raetsel extends AbstractDomainEntity {
 	public Raetsel withFreigebeben(final boolean freigebeben) {
 
 		this.freigebeben = freigebeben;
+		return this;
+	}
+
+	public RaetselHerkunftTyp getHerkunft() {
+
+		return herkunft;
+	}
+
+	public Raetsel withHerkunft(final RaetselHerkunftTyp herkunft) {
+
+		this.herkunft = herkunft;
 		return this;
 	}
 }

@@ -5,6 +5,7 @@
 package de.egladil.mja_api.infrastructure.persistence.entities;
 
 import de.egladil.mja_api.domain.quellen.Quellenart;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,8 +35,12 @@ public class PersistenteAufgabeReadonly {
 	@Column
 	public String schluessel;
 
-	@Column(name = "FREIGEGEBEN")
+	@Column
 	public boolean freigegeben;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	public RaetselHerkunftTyp herkunft;
 
 	@Column
 	public String nummer;

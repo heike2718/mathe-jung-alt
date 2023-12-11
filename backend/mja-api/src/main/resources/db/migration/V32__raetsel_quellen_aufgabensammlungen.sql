@@ -1,12 +1,18 @@
-delete from DESKRIPTOREN where KONTEXT != 'RAETSEL';
+use mathe_jung_alt;
+
+delete from mathe_jung_alt.DESKRIPTOREN where KONTEXT != 'RAETSEL';
 
 drop VIEW mathe_jung_alt.VW_AUFGABEN;
 
-alter table mathe_jung_alt.RAETSEL add column `ZITAT` int(1) default 1 not null COMMENT 'Flag, das anzeigt, ob das Rätsel ein Zitat ist (1) oder eine Modifikation (0)';
+alter table mathe_jung_alt.RAETSEL add column `HERKUNFT` varchar(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'Typ der Herkunft des Rätsels: EIGENKREATION | ZITAT | ADAPTATION';
+update mathe_jung_alt.RAETSEL set HERKUNFT = 'EIGENKREATION';
+alter table mathe_jung_alt.RAETSEL modify column `HERKUNFT` varchar(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci not null COMMENT 'Typ der Herkunft des Rätsels: EIGENKREATION | ZITAT | ADAPTATION';
+
 alter table mathe_jung_alt.RAETSEL add column `FREIGEGEBEN` int(1) default 0 not null COMMENT 'Flag, das anzeigt, ob das Rätsel freigegeben ist';
 
 update mathe_jung_alt.RAETSEL set FREIGEGEBEN = 0 where STATUS = 'ERFASST';
 update mathe_jung_alt.RAETSEL set FREIGEGEBEN = 1 where STATUS = 'FREIGEGEBEN';
+
 
 alter table mathe_jung_alt.RAETSEL drop column STATUS;
 
@@ -45,7 +51,7 @@ SELECT q.UUID,
 	q.PERSON,
 	q.USER_ID
 FROM mathe_jung_alt.QUELLEN q
-	LEFT OUTER JOIN MEDIEN m ON q.MEDIUM = m.UUID;
+	LEFT OUTER JOIN mathe_jung_alt.MEDIEN m ON q.MEDIUM = m.UUID;
 
 
 alter table mathe_jung_alt.QUELLEN drop column DESKRIPTOREN;
@@ -61,6 +67,7 @@ select
 	r.FILENAME_VORSCHAU_FRAGE,
 	r.FILENAME_VORSCHAU_LOESUNG,
 	r.DESKRIPTOREN,
+	r.HERKUNFT,
 	e.NUMMER,
 	e.PUNKTE,
 	e.SAMMLUNG,
@@ -76,9 +83,9 @@ select
 	vq.PERSON,
 	vq.USER_ID
 from
-	RAETSEL r,
-	AUFGABENSAMMLUNGSELEMENTE e,
-	VW_QUELLEN vq
+	mathe_jung_alt.RAETSEL r,
+	mathe_jung_alt.AUFGABENSAMMLUNGSELEMENTE e,
+	mathe_jung_alt.VW_QUELLEN vq
 where
     e.RAETSEL = r.UUID
 	AND r.QUELLE = vq.UUID;

@@ -430,6 +430,7 @@ public class RaetselService {
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
 		persistentesRaetsel.freigegeben = daten.isFreigebeben();
+		persistentesRaetsel.herkunft = daten.getHerkunft();
 		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
 	}
 
@@ -444,6 +445,7 @@ public class RaetselService {
 			.withQuelleId(raetselDB.quelle)
 			.withSchluessel(raetselDB.schluessel)
 			.withFreigebeben(raetselDB.freigegeben)
+			.withHerkunft(raetselDB.herkunft)
 			.withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
 			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);
@@ -467,7 +469,8 @@ public class RaetselService {
 			.withName(raetselDB.name)
 			.withFreigegeben(raetselDB.freigegeben)
 			.withKommentar(raetselDB.kommentar)
-			.withSchluessel(raetselDB.schluessel);
+			.withSchluessel(raetselDB.schluessel)
+			.withHerkunft(raetselDB.herkunft);
 
 		return result;
 	}

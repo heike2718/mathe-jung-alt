@@ -9,6 +9,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { AuthFacade } from '@mja-ws/shared/auth/api';
 import { Router } from '@angular/router';
@@ -40,9 +42,11 @@ import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/au
   imports: [
     CommonModule,
     CdkAccordionModule,
-    MatExpansionModule,
-    MatChipsModule,
+    FormsModule,
+    MatExpansionModule,    
     MatButtonModule,
+    MatCheckboxModule,
+    MatChipsModule,
     MatDialogModule,
     MatFormFieldModule,
     MatListModule,
@@ -63,6 +67,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
   authFacade = inject(AuthFacade);
   dialog = inject(MatDialog);
+  freigegeben = false;
 
   #config = inject(Configuration);
   devMode = !this.#config.production;
@@ -81,6 +86,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.pipe(
       tap((details) => {
         this.#raetselDetails = details;
+        this.freigegeben = details.freigegeben;
       })
     ).subscribe();
 
