@@ -274,7 +274,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   #openConfirmLoeschenDialog(element: Aufgabensammlungselement): void {
 
     const dialogData: JaNeinDialogData = {
-      frage: 'Soll das Rätselgruppenelement wirklich gelöscht werden?',
+      frage: 'Soll das Element der Aufgabensammlung wirklich gelöscht werden?',
       hinweis: 'weg ist weg'
     }
 

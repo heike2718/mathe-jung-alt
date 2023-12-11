@@ -2,7 +2,7 @@
 
     <div *ngIf="raetselgruppenFacade.aufgabensammlungDetails$ | async as gruppe else keineGruppe">
 
-        <h2>Rätselgruppe {{gruppe.name}} <span matBadge={{gruppe.elemente.length}} matBadgeColor="accent"
+        <h2>Aufgabensammlung {{gruppe.name}} <span matBadge={{gruppe.elemente.length}} matBadgeColor="accent"
                 class="ml-1"></span></h2>
 
         <div class="grid-container-2 mt-2 mb-2">
@@ -83,8 +83,8 @@
     </div>
 
     <ng-template #keineGruppe>
-        <h2>Rätselgruppe Details</h2>
-        <p>keine Gruppe ausgewählt</p>
+        <h2>Aufgabensammlung Details</h2>
+        <p>keine Aufgabensammlung ausgewählt</p>
     </ng-template>
 
     <ng-template #imagesFehlen>
