@@ -1,0 +1,30 @@
+{
+  "name": "raetselgruppen-model",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/aufgabensammlungen/model/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/aufgabensammlungen/model",
+        "main": "libs/aufgabensammlungen/model/src/index.ts",
+        "tsConfig": "libs/aufgabensammlungen/model/tsconfig.lib.json",
+        "assets": ["libs/aufgabensammlungen/model/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/aufgabensammlungen/model"],
+      "options": {
+        "jestConfig": "libs/aufgabensammlungen/model/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["domain:aufgabensammlungen:model", "type:model"]
+}

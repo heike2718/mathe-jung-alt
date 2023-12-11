@@ -1,0 +1,30 @@
+{
+  "name": "raetselgruppen-data",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/aufgabensammlungen/data/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/aufgabensammlungen/data",
+        "main": "libs/aufgabensammlungen/data/src/index.ts",
+        "tsConfig": "libs/aufgabensammlungen/data/tsconfig.lib.json",
+        "assets": ["libs/aufgabensammlungen/data/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/aufgabensammlungen/data"],
+      "options": {
+        "jestConfig": "libs/aufgabensammlungen/data/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["domain:aufgabensammlungen:data", "type:data"]
+}

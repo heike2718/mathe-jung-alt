@@ -31,8 +31,8 @@ import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { Configuration } from '@mja-ws/shared/config';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
-import { AufgabensammlungenFacade } from '@mja-ws/raetselgruppen/api';
-import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/raetselgruppen/model';
+import { AufgabensammlungenFacade } from '@mja-ws/aufgabensammlungen/api';
+import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/aufgabensammlungen/model';
 
 @Component({
   selector: 'mja-raetsel-details',

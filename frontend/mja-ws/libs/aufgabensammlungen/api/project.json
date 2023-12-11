@@ -1,0 +1,30 @@
+{
+  "name": "raetselgruppen-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/aufgabensammlungen/api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/aufgabensammlungen/api",
+        "main": "libs/aufgabensammlungen/api/src/index.ts",
+        "tsConfig": "libs/aufgabensammlungen/api/tsconfig.lib.json",
+        "assets": ["libs/aufgabensammlungen/api/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/aufgabensammlungen/api"],
+      "options": {
+        "jestConfig": "libs/aufgabensammlungen/api/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["domain:aufgabensammlungen:api", "type:api"]
+}
