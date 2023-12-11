@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen;
+package de.egladil.mja_api.domain.aufgabensammlungen;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 

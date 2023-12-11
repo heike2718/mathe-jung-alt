@@ -14,11 +14,11 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Pattern;

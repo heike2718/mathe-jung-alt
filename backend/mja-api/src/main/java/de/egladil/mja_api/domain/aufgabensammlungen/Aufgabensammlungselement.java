@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen;
+package de.egladil.mja_api.domain.aufgabensammlungen;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -19,17 +19,17 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabe
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlugnselement;
 
 /**
- * Raetselgruppenelement
+ * Aufgabensammlungselement
  */
-@Schema(name = "Raetselgruppenelement", description = "Element einer Rätselgruppe")
-public class Raetselgruppenelement {
+@Schema(name = "Aufgabensammlungselement", description = "Element einer Aufgabensammlung")
+public class Aufgabensammlungselement {
 
 	@JsonProperty
 	@Schema(description = "technische ID, 'neu' für neues Element")
 	private String id;
 
 	@JsonProperty
-	@Schema(description = "Nummer, die die Reihenfolge innerhalb der Gruppe festlegt")
+	@Schema(description = "Nummer als Titel der Aufgabe in der Aufgabensammlung.")
 	private String nummer;
 
 	@JsonProperty
@@ -55,11 +55,11 @@ public class Raetselgruppenelement {
 	 *                 PersistenteAufgabeReadonly
 	 * @param  element
 	 *                 PersistentesAufgabensammlugnselement
-	 * @return         Raetselgruppenelement
+	 * @return         Aufgabensammlungselement
 	 */
-	public static Raetselgruppenelement merge(final PersistenteAufgabeReadonly aufgabe, final PersistentesAufgabensammlugnselement element) {
+	public static Aufgabensammlungselement merge(final PersistenteAufgabeReadonly aufgabe, final PersistentesAufgabensammlugnselement element) {
 
-		Raetselgruppenelement result = new Raetselgruppenelement();
+		Aufgabensammlungselement result = new Aufgabensammlungselement();
 		result.id = element.uuid;
 		result.nummer = element.nummer;
 		result.punkte = element.punkte;

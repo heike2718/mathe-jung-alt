@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
-import { RaetselgruppenelementDialogData } from './raetselgruppenelement-dialog.data';
+import { AufgabensammlungselementDialogData } from './raetselgruppenelement-dialog.data';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'mja-raetselgruppenelement',
+  selector: 'mja-Aufgabensammlungselement',
   standalone: true,
   imports: [
     CommonModule,
@@ -19,11 +19,11 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './raetselgruppenelement-dialog.component.html',
   styleUrls: ['./raetselgruppenelement-dialog.component.scss'],
 })
-export class RaetselgruppenelementDialogComponent {
+export class AufgabensammlungselementDialogComponent {
 
 
-  constructor(public dialogRef: MatDialogRef<RaetselgruppenelementDialogData>,
-    @Inject(MAT_DIALOG_DATA) public data: RaetselgruppenelementDialogData) {
+  constructor(public dialogRef: MatDialogRef<AufgabensammlungselementDialogData>,
+    @Inject(MAT_DIALOG_DATA) public data: AufgabensammlungselementDialogData) {
   }
 
   save(): void {

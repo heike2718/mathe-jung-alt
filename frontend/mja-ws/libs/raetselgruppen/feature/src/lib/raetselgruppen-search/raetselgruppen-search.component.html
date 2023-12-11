@@ -24,10 +24,10 @@
   <!-- status -->
   <ng-container matColumnDef="status">
     <mat-header-cell *matHeaderCellDef class="mat-header-cell__1"> </mat-header-cell>
-    <mat-cell *matCellDef="let gruppe" class="mat-cell__1"> <span *ngIf="gruppe.status === 'ERFASST'">
+    <mat-cell *matCellDef="let gruppe" class="mat-cell__1"> <span *ngIf="!gruppe.freigegeben">
         <mat-icon>block</mat-icon>
       </span>
-      <span *ngIf="gruppe.status === 'FREIGEGEBEN'">
+      <span *ngIf="gruppe.freigegeben">
         <mat-icon>check_circle_outline</mat-icon>
       </span>
     </mat-cell>

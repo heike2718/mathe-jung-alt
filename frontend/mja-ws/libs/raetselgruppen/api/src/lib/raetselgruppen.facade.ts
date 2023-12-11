@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
-import { FONT_NAME, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, SCHRIFTGROESSE, STATUS } from "@mja-ws/core/model";
+import { FONT_NAME, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, SCHRIFTGROESSE } from "@mja-ws/core/model";
 import { fromRaetselgruppen, raetselgruppenActions } from "@mja-ws/raetselgruppen/data";
-import { EditRaetselgruppenelementPayload, EditRaetselgruppePayload, initialRaetselgruppeBasisdaten, RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
+import { EditAufgabensammlungselementPayload, EditAufgabensammlungPayload, initialAufgabensammlungBasisdaten, AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/ngrx-utils";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -12,22 +12,22 @@ export class RaetselgruppenFacade {
 
     #store = inject(Store);
 
-    page$: Observable<RaetselgruppenTrefferItem[]> = this.#store.select(fromRaetselgruppen.page);
+    page$: Observable<AufgabensammlungTrefferItem[]> = this.#store.select(fromRaetselgruppen.page);
     anzahlTrefferGesamt$: Observable<number> = this.#store.select(fromRaetselgruppen.anzahlTrefferGesamt);
     paginationState$: Observable<PaginationState> = this.#store.select(fromRaetselgruppen.paginationState);
-    editorContent$: Observable<RaetselgruppeBasisdaten> = this.#store.select(fromRaetselgruppen.raetselgruppeBasisdaten).pipe(filterDefined, deepClone);
-    raetselgruppeDetails$: Observable<RaetselgruppeDetails> = this.#store.select(fromRaetselgruppen.raetselgruppeDetails).pipe(filterDefined, deepClone);
-    raetselgruppeBasisdaten$: Observable<RaetselgruppeBasisdaten> = this.#store.select(fromRaetselgruppen.raetselgruppeBasisdaten).pipe(filterDefined, deepClone);
-    raetselgruppenelemente$: Observable<Raetselgruppenelement[]> = this.#store.select(fromRaetselgruppen.raetselgruppenelemente);
-    selectedRaetselgruppenelement$: Observable<Raetselgruppenelement> = this.#store.select(fromRaetselgruppen.selectedRaetselgruppenelement).pipe(filterDefined, deepClone);
+    editorContent$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromRaetselgruppen.aufgabensammlungBasisdaten).pipe(filterDefined, deepClone);
+    aufgabensammlungDetails$: Observable<AufgabensammlungDetails> = this.#store.select(fromRaetselgruppen.aufgabensammlungDetails).pipe(filterDefined, deepClone);
+    aufgabensammlungBasisdaten$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromRaetselgruppen.aufgabensammlungBasisdaten).pipe(filterDefined, deepClone);
+    aufgabensammlungselemente$: Observable<Aufgabensammlungselement[]> = this.#store.select(fromRaetselgruppen.aufgabensammlungselemente);
+    selectedAufgabensammlungselement$: Observable<Aufgabensammlungselement> = this.#store.select(fromRaetselgruppen.selectedAufgabensammlungselement).pipe(filterDefined, deepClone);
     selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromRaetselgruppen.selectedElementImages);
 
-    triggerSearch(raetselgruppenSuchparameter: RaetselgruppenSuchparameter, pageDefinition: PageDefinition): void {
+    triggerSearch(aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): void {
         this.#store.dispatch(raetselgruppenActions.rAETSELGRUPPEN_SELECT_PAGE({ pageDefinition }));
-        this.#store.dispatch(raetselgruppenActions.fIND_RAETSELGRUPPEN({ raetselgruppenSuchparameter, pageDefinition }));
+        this.#store.dispatch(raetselgruppenActions.fIND_RAETSELGRUPPEN({ aufgabensammlungenSuchparameter, pageDefinition }));
     }
 
-    selectRaetselgruppe(raetselgruppe: RaetselgruppenTrefferItem): void {
+    selectRaetselgruppe(raetselgruppe: AufgabensammlungTrefferItem): void {
 
         this.#store.dispatch(raetselgruppenActions.sELECT_RAETSELGRUPPE({ raetselgruppe }));
     }
@@ -36,8 +36,8 @@ export class RaetselgruppenFacade {
         this.#store.dispatch(raetselgruppenActions.uNSELECT_RAETSELGRUPPE());
     }
 
-    selectRaetselgruppenelement(element: Raetselgruppenelement): void {
-        this.#store.dispatch(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT({ raetselgruppenelement: element }));
+    selectAufgabensammlungselement(element: Aufgabensammlungselement): void {
+        this.#store.dispatch(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT({ aufgabensammlungselement: element }));
     }
 
     generiereArbeitsblatt(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
@@ -57,72 +57,75 @@ export class RaetselgruppenFacade {
     }
 
     createAndEditRaetselgruppe(): void {
-        this.editRaetselgruppe(initialRaetselgruppeBasisdaten);
+        this.editRaetselgruppe(initialAufgabensammlungBasisdaten);
     }
 
-    editRaetselgruppe(raetselgruppeBasisdaten: RaetselgruppeBasisdaten): void {
-        this.#store.dispatch(raetselgruppenActions.eDIT_RAETSELGUPPE({ raetselgruppeBasisdaten }));
+    editRaetselgruppe(aufgabensammlung: AufgabensammlungBasisdaten): void {
+        this.#store.dispatch(raetselgruppenActions.eDIT_RAETSELGUPPE({ aufgabensammlungBasisdaten: aufgabensammlung }));
     }
 
-    reloadRaetselgruppe(raetselgruppeBasisdaten: RaetselgruppeBasisdaten, anzahlElemente: number): void {
+    reloadRaetselgruppe(aufgabensammlung: AufgabensammlungBasisdaten, anzahlElemente: number): void {
 
-        const raetselgruppe: RaetselgruppenTrefferItem = {
+        const raetselgruppe: AufgabensammlungTrefferItem = {
             anzahlElemente: anzahlElemente,
-            geaendertDurch: raetselgruppeBasisdaten.geaendertDurch,
-            id: raetselgruppeBasisdaten.id,
-            name: raetselgruppeBasisdaten.name,
-            referenz: raetselgruppeBasisdaten.referenz,
-            referenztyp: raetselgruppeBasisdaten.referenztyp,
-            schwierigkeitsgrad: raetselgruppeBasisdaten.schwierigkeitsgrad,
-            status: raetselgruppeBasisdaten.status
+            geaendertDurch: aufgabensammlung.geaendertDurch,
+            id: aufgabensammlung.id,
+            name: aufgabensammlung.name,
+            referenz: aufgabensammlung.referenz,
+            referenztyp: aufgabensammlung.referenztyp,
+            schwierigkeitsgrad: aufgabensammlung.schwierigkeitsgrad,
+            freigegeben: aufgabensammlung.freigegeben,
+            privat: aufgabensammlung.privat
         };
 
         this.selectRaetselgruppe(raetselgruppe);
     }
 
-    toggleStatus(raetselgruppeBasisdaten: RaetselgruppeBasisdaten): void {
+    toggleStatus(aufgabensammlung: AufgabensammlungBasisdaten): void {
 
-        const editRaetselgruppePayload: EditRaetselgruppePayload = {
-            id: raetselgruppeBasisdaten.id,
-            kommentar: raetselgruppeBasisdaten.kommentar,
-            name: raetselgruppeBasisdaten.name,
-            referenz: raetselgruppeBasisdaten.referenz,
-            referenztyp: raetselgruppeBasisdaten.referenztyp,
-            schwierigkeitsgrad: raetselgruppeBasisdaten.schwierigkeitsgrad,
-            status: raetselgruppeBasisdaten.status === "ERFASST" ? "FREIGEGEBEN" : "ERFASST"
+        const EditAufgabensammlungPayload: EditAufgabensammlungPayload = {
+            id: aufgabensammlung.id,
+            kommentar: aufgabensammlung.kommentar,
+            name: aufgabensammlung.name,
+            referenz: aufgabensammlung.referenz,
+            referenztyp: aufgabensammlung.referenztyp,
+            schwierigkeitsgrad: aufgabensammlung.schwierigkeitsgrad,
+            freigegeben: !aufgabensammlung.freigegeben,
+            privat: aufgabensammlung.privat
         };
 
-        this.saveRaetselgruppe(editRaetselgruppePayload);
+        this.saveRaetselgruppe(EditAufgabensammlungPayload);
     }
 
-    saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): void {
-        this.#store.dispatch(raetselgruppenActions.sAVE_RAETSELGRUPPE({ editRaetselgruppePayload }));
+    saveRaetselgruppe(editAufgabensammlungPayload: EditAufgabensammlungPayload): void {
+        this.#store.dispatch(raetselgruppenActions.sAVE_RAETSELGRUPPE({ editAufgabensammlungPayload }));
     }
 
-    cancelEdit(raetselgruppe: RaetselgruppeBasisdaten): void {
+    cancelEdit(aufgabensammlung: AufgabensammlungBasisdaten): void {
 
-        if (raetselgruppe.id === 'neu') {
+        if (aufgabensammlung.id === 'neu') {
             this.#store.dispatch(raetselgruppenActions.uNSELECT_RAETSELGRUPPE());
         } else {
-            const rg: RaetselgruppenTrefferItem = {
-                id: raetselgruppe.id,
+            const rg: AufgabensammlungTrefferItem = {
+                id: aufgabensammlung.id,
                 name: '',
-                schwierigkeitsgrad: raetselgruppe.schwierigkeitsgrad,
-                status: raetselgruppe.status,
-                referenztyp: raetselgruppe.referenztyp,
-                referenz: raetselgruppe.referenz,
-                geaendertDurch: raetselgruppe.geaendertDurch,
+                schwierigkeitsgrad: aufgabensammlung.schwierigkeitsgrad,
+                freigegeben: aufgabensammlung.freigegeben,
+                privat: aufgabensammlung.privat,
+                referenztyp: aufgabensammlung.referenztyp,
+                referenz: aufgabensammlung.referenz,
+                geaendertDurch: aufgabensammlung.geaendertDurch,
                 anzahlElemente: 0
             };
             this.#store.dispatch(raetselgruppenActions.sELECT_RAETSELGRUPPE({ raetselgruppe: rg }));
         }
     }
 
-    saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): void {
+    saveAufgabensammlungselement(raetselgruppeID: string, payload: EditAufgabensammlungselementPayload): void {
         this.#store.dispatch(raetselgruppenActions.sAVE_RAETSELGRUPPENELEMENT({ raetselgruppeID, payload }));
     }
 
-    deleteRaetselgruppenelement(raetselgruppeID: string, payload: Raetselgruppenelement): void {
+    deleteAufgabensammlungselement(raetselgruppeID: string, payload: Aufgabensammlungselement): void {
         this.#store.dispatch(raetselgruppenActions.dELETE_RAETSELGRUPPENELEMENT({ raetselgruppeID, payload }));
     }
 }

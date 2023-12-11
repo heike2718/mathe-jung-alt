@@ -6,7 +6,6 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { switchMap, map, tap } from "rxjs";
 import { RaetselgruppenHttpService } from "./raetselgruppen-http.service";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
-import { HttpResponse } from "@angular/common/http";
 import { RaetselFacade } from "@mja-ws/raetsel/api";
 import { CoreFacade } from "@mja-ws/core/api";
 
@@ -23,7 +22,7 @@ export class RaetselgruppenEffects {
     findRaetselgruppen$ = createEffect(() => {
         return this.#actions.pipe(
             ofType(raetselgruppenActions.fIND_RAETSELGRUPPEN),
-            switchMap((action) => this.#raetselgruppenHttpService.findRaetselgruppen(action.raetselgruppenSuchparameter, action.pageDefinition)),
+            switchMap((action) => this.#raetselgruppenHttpService.findRaetselgruppen(action.aufgabensammlungenSuchparameter, action.pageDefinition)),
             map((treffer) => raetselgruppenActions.rAETSELGRUPPEN_FOUND({ treffer }))
         );
     });
@@ -33,7 +32,7 @@ export class RaetselgruppenEffects {
         return this.#actions.pipe(
             ofType(raetselgruppenActions.sELECT_RAETSELGRUPPE),
             switchMap((action) => this.#raetselgruppenHttpService.findById(action.raetselgruppe.id)),
-            map((raetselgruppeDetails) => raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED({ raetselgruppeDetails: raetselgruppeDetails, navigateTo: 'raetselgruppen/details' }))
+            map((aufgabensammlungDetails) => raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED({ aufgabensammlungDetails: aufgabensammlungDetails, navigateTo: 'raetselgruppen/details' }))
         )
 
     });
@@ -69,25 +68,25 @@ export class RaetselgruppenEffects {
 
         this.#actions.pipe(
             ofType(raetselgruppenActions.sAVE_RAETSELGRUPPE),
-            switchMap((action) => this.#raetselgruppenHttpService.saveRaetselgruppe(action.editRaetselgruppePayload)),
+            switchMap((action) => this.#raetselgruppenHttpService.saveRaetselgruppe(action.editAufgabensammlungPayload)),
             map((raetselgruppe) => raetselgruppenActions.rAETSELGRUPPE_SAVED({ raetselgruppe }))
         )
     );
 
-    saveRaetselgruppenelement$ = createEffect(() =>
+    saveAufgabensammlungselement$ = createEffect(() =>
 
         this.#actions.pipe(
             ofType(raetselgruppenActions.sAVE_RAETSELGRUPPENELEMENT),
-            switchMap((action) => this.#raetselgruppenHttpService.saveRaetselgruppenelement(action.raetselgruppeID, action.payload)),
+            switchMap((action) => this.#raetselgruppenHttpService.saveAufgabensammlungselement(action.raetselgruppeID, action.payload)),
             map((raetselgruppenDetails) => raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED({ raetselgruppenDetails }))
         )
     );
 
-    deleteRaetselgruppenelement$ = createEffect(() =>
+    deleteAufgabensammlungselement$ = createEffect(() =>
 
         this.#actions.pipe(
             ofType(raetselgruppenActions.dELETE_RAETSELGRUPPENELEMENT),
-            switchMap((action) => this.#raetselgruppenHttpService.deleteRaetselgruppenelement(action.raetselgruppeID, action.payload)),
+            switchMap((action) => this.#raetselgruppenHttpService.deleteAufgabensammlungselement(action.raetselgruppeID, action.payload)),
             map((raetselgruppenDetails) => raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED({ raetselgruppenDetails }))
         )
     );
@@ -136,10 +135,10 @@ export class RaetselgruppenEffects {
             tap((action) => this.#downloadService.downloadZip(action.data, action.fileName)),
         ), { dispatch: false });
 
-    raetselgruppenelementSelected$ = createEffect(() =>
+    aufgabensammlungselementSelected$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT),
-            switchMap((action) => this.#coreFacade.loadRaetselPNGs(action.raetselgruppenelement.raetselSchluessel)),
+            switchMap((action) => this.#coreFacade.loadRaetselPNGs(action.aufgabensammlungselement.raetselSchluessel)),
             map((images) => raetselgruppenActions.eLEMENT_IMAGES_LOADED({ generatedImages: images }))
         )
     );

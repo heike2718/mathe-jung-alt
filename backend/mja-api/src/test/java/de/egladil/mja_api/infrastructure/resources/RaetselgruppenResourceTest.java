@@ -17,16 +17,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import de.egladil.mja_api.domain.aufgabensammlungen.Aufgabensammlungselement;
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungDetails;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTreffer;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTrefferItem;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungPayload;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungselementPayload;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
-import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
-import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPayload;
-import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
-import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
-import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -38,7 +38,7 @@ import io.restassured.http.ContentType;
  * RaetselgruppenResourceTest
  */
 @QuarkusTest
-@TestHTTPEndpoint(RaetselgruppenResource.class)
+@TestHTTPEndpoint(AufgabensammlungenResource.class)
 @TestProfile(FullDatabaseTestProfile.class)
 @TestMethodOrder(OrderAnnotation.class)
 public class RaetselgruppenResourceTest {
@@ -52,7 +52,7 @@ public class RaetselgruppenResourceTest {
 	@TestSecurity(user = "testuser", roles = { "AUTOR" })
 	void testFindRaetselgruppen() throws Exception {
 
-		RaetselgruppensucheTreffer treffer = given()
+		AufgabensammlungSucheTreffer treffer = given()
 			.queryParam("limit", "20")
 			.queryParam("offset", "0")
 			.queryParam("referenz", "2022")
@@ -66,7 +66,7 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.and()
 			.extract()
-			.as(RaetselgruppensucheTreffer.class);
+			.as(AufgabensammlungSucheTreffer.class);
 
 		assertEquals(1, treffer.getItems().size());
 		assertEquals(1l, treffer.getTrefferGesamt());
@@ -80,7 +80,7 @@ public class RaetselgruppenResourceTest {
 	@Order(2)
 	void testFindRaetselgruppenKeinTreffer() throws Exception {
 
-		RaetselgruppensucheTreffer treffer = given()
+		AufgabensammlungSucheTreffer treffer = given()
 			.queryParam("limit", "20")
 			.queryParam("offset", "0")
 			.queryParam("referenz", "2022")
@@ -96,7 +96,7 @@ public class RaetselgruppenResourceTest {
 			.contentType(ContentType.JSON)
 			.and()
 			.extract()
-			.as(RaetselgruppensucheTreffer.class);
+			.as(AufgabensammlungSucheTreffer.class);
 
 		assertEquals(0, treffer.getItems().size());
 		assertEquals(0l, treffer.getTrefferGesamt());
@@ -110,7 +110,7 @@ public class RaetselgruppenResourceTest {
 
 		String id = "13c62cfb-cfdd-41f1-b8a9-6c866e087718";
 
-		RaetselgruppeDetails treffer = given()
+		AufgabensammlungDetails treffer = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
@@ -118,9 +118,9 @@ public class RaetselgruppenResourceTest {
 			.then()
 			.statusCode(200)
 			.extract()
-			.as(RaetselgruppeDetails.class);
+			.as(AufgabensammlungDetails.class);
 
-		List<Raetselgruppenelement> elemente = treffer.getElemente();
+		List<Aufgabensammlungselement> elemente = treffer.getElemente();
 		assertEquals(6, elemente.size());
 	}
 
@@ -152,13 +152,13 @@ public class RaetselgruppenResourceTest {
 	@Order(5)
 	void testRaetselgruppeAnlegenOhneReferenz() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
 		payload.setFreigegeben(false);
 
-		RaetselgruppensucheTrefferItem responsePayload = given()
+		AufgabensammlungSucheTrefferItem responsePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
@@ -168,7 +168,7 @@ public class RaetselgruppenResourceTest {
 			.statusCode(201)
 			.and()
 			.extract()
-			.as(RaetselgruppensucheTrefferItem.class);
+			.as(AufgabensammlungSucheTrefferItem.class);
 
 		System.out.println("=> " + responsePayload.toString());
 
@@ -179,7 +179,7 @@ public class RaetselgruppenResourceTest {
 	@Order(6)
 	void testRaetselgruppeAnlegenOhneReferenzGleicherNameAnderesLevel() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.VORSCHULE);
@@ -209,12 +209,12 @@ public class RaetselgruppenResourceTest {
 	@Order(7)
 	void testRaetselgruppeAnlegenUndAendern() throws Exception {
 
-		RaetselgruppensucheTrefferItem raetselgruppensucheTrefferItem = null;
+		AufgabensammlungSucheTrefferItem raetselgruppensucheTrefferItem = null;
 		String expectedKommentar = "Kommentar aus dem Test";
 
 		{
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+			EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 			payload.setId("neu");
 			payload.setName("Minikänguru 2005 - Klasse 2");
 			payload.setReferenz("2005");
@@ -231,14 +231,14 @@ public class RaetselgruppenResourceTest {
 				.then()
 				.statusCode(201)
 				.extract()
-				.as(RaetselgruppensucheTrefferItem.class);
+				.as(AufgabensammlungSucheTrefferItem.class);
 
 			assertNotNull(raetselgruppensucheTrefferItem.getId());
 		}
 
 		{
 
-			RaetselgruppensucheTreffer treffer = given()
+			AufgabensammlungSucheTreffer treffer = given()
 				.queryParam("limit", "20")
 				.queryParam("offset", "0")
 				.queryParam("referenz", "2005")
@@ -254,7 +254,7 @@ public class RaetselgruppenResourceTest {
 				.and()
 				.contentType(ContentType.JSON)
 				.extract()
-				.as(RaetselgruppensucheTreffer.class);
+				.as(AufgabensammlungSucheTreffer.class);
 
 			raetselgruppensucheTrefferItem = treffer.getItems().get(0);
 
@@ -262,7 +262,7 @@ public class RaetselgruppenResourceTest {
 
 		if (raetselgruppensucheTrefferItem != null) {
 
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+			EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 			payload.setKommentar(expectedKommentar);
 			payload.setId(raetselgruppensucheTrefferItem.getId());
 			payload.setName(raetselgruppensucheTrefferItem.getName());
@@ -272,7 +272,7 @@ public class RaetselgruppenResourceTest {
 			payload.setFreigegeben(raetselgruppensucheTrefferItem.isFreigegeben());
 			payload.setPrivat(raetselgruppensucheTrefferItem.isPrivat());
 
-			RaetselgruppensucheTrefferItem theItem = given()
+			AufgabensammlungSucheTrefferItem theItem = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
@@ -283,7 +283,7 @@ public class RaetselgruppenResourceTest {
 				.and()
 				.contentType(ContentType.JSON)
 				.extract()
-				.as(RaetselgruppensucheTrefferItem.class);
+				.as(AufgabensammlungSucheTrefferItem.class);
 
 			System.out.println(theItem.getId());
 			assertEquals(raetselgruppensucheTrefferItem.getId(), theItem.getId());
@@ -297,7 +297,7 @@ public class RaetselgruppenResourceTest {
 	@Order(8)
 	void testRaetselgruppeAnlegenGleicherName() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
 		payload.setName("Minikänguru 2005 - Klasse 2");
 		payload.setReferenz("2003");
@@ -325,7 +325,7 @@ public class RaetselgruppenResourceTest {
 	@Order(9)
 	void testRaetselgruppeAnlegenGleicheReferenz() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
 		payload.setName("Rätselgruppe XY");
 		payload.setReferenz("2022");
@@ -355,7 +355,7 @@ public class RaetselgruppenResourceTest {
 	@Order(10)
 	void testRaetselgruppeAnlegenIdNichtNeu() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("20582897-68be-41dd-ac28-63cc80b07f85");
 		payload.setName("Rätselgruppe XY");
 		payload.setReferenz("2010");
@@ -382,7 +382,7 @@ public class RaetselgruppenResourceTest {
 	@Order(11)
 	void testRaetselgruppeAendernReferenzdublette() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("13c62cfb-cfdd-41f1-b8a9-6c866e087718");
 		payload.setName("Rätselgruppe XY");
 		payload.setReferenz("2022");
@@ -410,7 +410,7 @@ public class RaetselgruppenResourceTest {
 	@Order(12)
 	void testRaetselgruppeAendernNamendublette() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc");
 		payload.setName("Minikänguru 2022 - Inklusion");
 		payload.setReferenz("2022");
@@ -437,7 +437,7 @@ public class RaetselgruppenResourceTest {
 	@Order(13)
 	void testRaetselgruppeAendernUnbekannt() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("00000000-0000-0000-0000-000000000000");
 		payload.setName("Minikänguru 2009 - Klasse 2");
 		payload.setReferenz("2009");
@@ -471,7 +471,7 @@ public class RaetselgruppenResourceTest {
 
 			System.out.println("Details laden");
 
-			RaetselgruppeDetails treffer = given()
+			AufgabensammlungDetails treffer = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
@@ -481,9 +481,9 @@ public class RaetselgruppenResourceTest {
 				.and()
 				.contentType(ContentType.JSON)
 				.extract()
-				.as(RaetselgruppeDetails.class);
+				.as(AufgabensammlungDetails.class);
 
-			List<Raetselgruppenelement> elemente = treffer.getElemente();
+			List<Aufgabensammlungselement> elemente = treffer.getElemente();
 			assertEquals(12, elemente.size());
 		}
 
@@ -491,13 +491,13 @@ public class RaetselgruppenResourceTest {
 
 			System.out.println("Element anlegen");
 
-			EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+			EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 			payload.setId("neu");
 			payload.setNummer("A-5");
 			payload.setPunkte(300);
 			payload.setRaetselSchluessel("02618");
 
-			RaetselgruppeDetails raetselgruppe = given()
+			AufgabensammlungDetails raetselgruppe = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
@@ -508,15 +508,15 @@ public class RaetselgruppenResourceTest {
 				.and()
 				.statusCode(200)
 				.extract()
-				.as(RaetselgruppeDetails.class);
+				.as(AufgabensammlungDetails.class);
 
 			System.out.println(raetselgruppe.getId());
 
-			List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
+			List<Aufgabensammlungselement> elemente = raetselgruppe.getElemente();
 
 			assertEquals(13, elemente.size());
 
-			Optional<Raetselgruppenelement> optNeu = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
+			Optional<Aufgabensammlungselement> optNeu = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
 				.findFirst();
 			elementUuid = optNeu.get().getId();
 		}
@@ -527,13 +527,13 @@ public class RaetselgruppenResourceTest {
 
 			if (elementUuid != null) {
 
-				EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+				EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 				payload.setId(elementUuid);
 				payload.setNummer("B-5");
 				payload.setPunkte(300);
 				payload.setRaetselSchluessel("02618");
 
-				RaetselgruppeDetails raetselgruppe = given()
+				AufgabensammlungDetails raetselgruppe = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
@@ -544,14 +544,14 @@ public class RaetselgruppenResourceTest {
 					.and()
 					.statusCode(200)
 					.extract()
-					.as(RaetselgruppeDetails.class);
+					.as(AufgabensammlungDetails.class);
 
 				System.out.println(raetselgruppe.getId());
 
-				List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
+				List<Aufgabensammlungselement> elemente = raetselgruppe.getElemente();
 
 				assertEquals(13, elemente.size());
-				Optional<Raetselgruppenelement> opt = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
+				Optional<Aufgabensammlungselement> opt = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
 					.findFirst();
 
 				assertEquals("B-5", opt.get().getNummer());
@@ -565,7 +565,7 @@ public class RaetselgruppenResourceTest {
 
 			if (elementUuid != null) {
 
-				RaetselgruppeDetails raetselgruppe = given()
+				AufgabensammlungDetails raetselgruppe = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
@@ -575,15 +575,15 @@ public class RaetselgruppenResourceTest {
 					.and()
 					.contentType(ContentType.JSON)
 					.extract()
-					.as(RaetselgruppeDetails.class);
+					.as(AufgabensammlungDetails.class);
 
 				System.out.println(raetselgruppe.getId());
 
-				List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
+				List<Aufgabensammlungselement> elemente = raetselgruppe.getElemente();
 
 				assertEquals(12, elemente.size());
 
-				Optional<Raetselgruppenelement> opt = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
+				Optional<Aufgabensammlungselement> opt = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
 					.findFirst();
 				assertTrue(opt.isEmpty());
 			}
@@ -613,7 +613,7 @@ public class RaetselgruppenResourceTest {
 	@Order(22)
 	void raetselgruppenelementLoeschenElementExistiertNicht() throws Exception {
 
-		RaetselgruppeDetails treffer = given()
+		AufgabensammlungDetails treffer = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
@@ -623,12 +623,12 @@ public class RaetselgruppenResourceTest {
 			.and()
 			.contentType(ContentType.JSON)
 			.extract()
-			.as(RaetselgruppeDetails.class);
+			.as(AufgabensammlungDetails.class);
 
-		List<Raetselgruppenelement> elemente = treffer.getElemente();
+		List<Aufgabensammlungselement> elemente = treffer.getElemente();
 		assertEquals(6, elemente.size());
 
-		Raetselgruppenelement element = elemente.get(0);
+		Aufgabensammlungselement element = elemente.get(0);
 		assertEquals("02774", element.getRaetselSchluessel());
 		assertEquals(300, element.getPunkte());
 		assertEquals("A-1", element.getNummer());
@@ -641,7 +641,7 @@ public class RaetselgruppenResourceTest {
 	@Order(23)
 	void elementAnlegenGruppeExistiertNicht() throws Exception {
 
-		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("neu");
 		payload.setNummer("A-1");
 		payload.setPunkte(300);
@@ -668,7 +668,7 @@ public class RaetselgruppenResourceTest {
 	@Order(24)
 	void elementAnlegenRaetselExistiertNicht() throws Exception {
 
-		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("neu");
 		payload.setNummer("A-1");
 		payload.setPunkte(300);
@@ -694,7 +694,7 @@ public class RaetselgruppenResourceTest {
 	@Order(24)
 	void elementAnlegenNummerSchonEnthalten() throws Exception {
 
-		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("neu");
 		payload.setNummer("A-1");
 		payload.setPunkte(300);
@@ -723,7 +723,7 @@ public class RaetselgruppenResourceTest {
 	@Order(25)
 	void elementAnlegenRaetselSchonEnthalten() throws Exception {
 
-		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("neu");
 		payload.setNummer("A-5");
 		payload.setPunkte(300);
@@ -751,7 +751,7 @@ public class RaetselgruppenResourceTest {
 	@Order(26)
 	void elementAendernGruppeExistiertNicht() throws Exception {
 
-		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("bff1c941-1774-4489-bb3b-484361796cd2");
 		payload.setNummer("A-1");
 		payload.setPunkte(300);
@@ -780,7 +780,7 @@ public class RaetselgruppenResourceTest {
 	@Order(27)
 	void elementAendernElementExistiertNicht() throws Exception {
 
-		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("00000000-0000-0000-0000-000000000000");
 		payload.setNummer("A-1");
 		payload.setPunkte(300);
@@ -809,7 +809,7 @@ public class RaetselgruppenResourceTest {
 	@Order(28)
 	void elementAendernRaetselgruppenkonflikt() throws Exception {
 
-		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("bff1c941-1774-4489-bb3b-484361796cd2");
 		payload.setNummer("A-1");
 		payload.setPunkte(300);
@@ -843,13 +843,13 @@ public class RaetselgruppenResourceTest {
 
 			System.out.println("Element anlegen");
 
-			EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+			EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 			payload.setId("neu");
 			payload.setNummer("B-3");
 			payload.setPunkte(400);
 			payload.setRaetselSchluessel("02629");
 
-			RaetselgruppeDetails raetselgruppe = given()
+			AufgabensammlungDetails raetselgruppe = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
@@ -860,9 +860,9 @@ public class RaetselgruppenResourceTest {
 				.and()
 				.contentType(ContentType.JSON)
 				.extract()
-				.as(RaetselgruppeDetails.class);
+				.as(AufgabensammlungDetails.class);
 
-			List<Raetselgruppenelement> elemente = raetselgruppe.getElemente();
+			List<Aufgabensammlungselement> elemente = raetselgruppe.getElemente();
 			elementUuid = elemente.stream().filter(el -> "B-3".equals(el.getNummer())).findFirst().get().getId();
 		}
 
@@ -870,7 +870,7 @@ public class RaetselgruppenResourceTest {
 
 			System.out.println("Element ändern");
 
-			EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+			EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 			payload.setId(elementUuid);
 			payload.setNummer("B-2");
 			payload.setPunkte(300);

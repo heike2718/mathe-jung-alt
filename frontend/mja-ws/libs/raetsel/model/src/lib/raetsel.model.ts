@@ -1,4 +1,4 @@
-import { DeskriptorUI, GeneratedImages, noopQuelle, QuelleUI, STATUS } from "@mja-ws/core/model";
+import { DeskriptorUI, GeneratedImages, noopQuelle, QuelleUI } from "@mja-ws/core/model";
 import { EmbeddableImageInfo } from "@mja-ws/embeddable-images/model";
 
 export type MODUS_VOLLTEXTSUCHE = 'UNION' | 'INTERSECTION';
@@ -34,7 +34,7 @@ export interface Raetsel {
   readonly id: string;
   readonly schluessel: string;
   readonly name: string;
-  readonly status: STATUS;
+  readonly freigegeben: boolean;
   readonly kommentar: string | undefined;
   readonly deskriptoren: DeskriptorUI[];
 };
@@ -43,7 +43,7 @@ export interface RaetselDetails {
   readonly id: string;
   readonly schluessel: string;
   readonly name: string;
-  readonly status: STATUS;
+  readonly freigegeben: boolean;
   readonly schreibgeschuetzt: boolean;
   readonly frage: string;
   readonly loesung: string | undefined;
@@ -65,7 +65,7 @@ export const initialRaetselDetails: RaetselDetails = {
   id: 'neu',
   schluessel: '',
   name: '',
-  status: 'ERFASST',
+  freigegeben: false,
   schreibgeschuetzt: true,
   frage: '',
   loesung: '',

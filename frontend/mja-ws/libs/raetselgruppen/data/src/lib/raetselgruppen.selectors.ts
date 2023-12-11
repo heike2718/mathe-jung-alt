@@ -25,24 +25,24 @@ const paginationState = createSelector(
 
 // aus irgendwelchen Gründen ist nach F5 der ganze state undefined, obwohl es genauso aufgebaut ist wie in der raetsel-lib. 
 
-const raetselgruppeDetails = createSelector(
+const aufgabensammlungDetails = createSelector(
     selectRaetselgruppenState,
-    (state) => state ? state.raetselgruppeDetails : undefined
+    (state) => state ? state.aufgabensammlungDetails : undefined
 );
 
-const raetselgruppeBasisdaten = createSelector(
+const aufgabensammlungBasisdaten = createSelector(
     selectRaetselgruppenState,
-    (state) => state ? state.raetselgruppeBasisdaten : undefined
+    (state) => state ? state.aufgabensammlungBasisdaten : undefined
 );
 
-const raetselgruppenelemente = createSelector(
-    raetselgruppeDetails,
+const aufgabensammlungselemente = createSelector(
+    aufgabensammlungDetails,
     (details) => details ? details.elemente : []
 );
 
-const selectedRaetselgruppenelement = createSelector(
+const selectedAufgabensammlungselement = createSelector(
     selectRaetselgruppenState,
-    (state) => state ? state.selectedRaetselgruppenelement : undefined
+    (state) => state ? state.selectedAufgabensammlungselement : undefined
 );
 
 const selectedElementImages = createSelector(
@@ -55,10 +55,10 @@ export const fromRaetselgruppen = {
     anzahlTrefferGesamt,
     page,
     paginationState,
-    raetselgruppeBasisdaten,
-    raetselgruppeDetails,
-    raetselgruppenelemente,
-    selectedRaetselgruppenelement,
+    aufgabensammlungBasisdaten: aufgabensammlungBasisdaten,
+    aufgabensammlungDetails: aufgabensammlungDetails,
+    aufgabensammlungselemente,
+    selectedAufgabensammlungselement,
     selectedElementImages
 };
 

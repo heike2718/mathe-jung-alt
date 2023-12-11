@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen.dto;
+package de.egladil.mja_api.domain.aufgabensammlungen.dto;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -13,10 +13,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 /**
- * EditRaetselgruppenelementPayload
+ * EditAufgabensammlungselementPayload
  */
-@Schema(description = "Daten zum Anlegen und Ändern eines Rätselgruppenelements")
-public class EditRaetselgruppenelementPayload {
+@Schema(description = "Daten zum Anlegen und Ändern eines Aufgabensammlungselement")
+public class EditAufgabensammlungselementPayload {
 
 	@JsonProperty
 	@Schema(description = "technische ID, 'neu' für neues Element")
@@ -26,7 +26,7 @@ public class EditRaetselgruppenelementPayload {
 	private String id;
 
 	@JsonProperty
-	@Schema(description = "Nummer, die die Reihenfolge innerhalb der Gruppe festlegt")
+	@Schema(description = "Nummer als Titel der Aufgabe in der Aufgabensammlung.")
 	@Pattern(regexp = "^[a-zA-Z\\d\\-]{1,100}$", message = "Nur a-z,A-Z, Ziffern und Minus, höchstens 100")
 	@NotBlank
 	private String nummer;

@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen.impl;
+package de.egladil.mja_api.domain.aufgabensammlungen;
 
 import java.io.File;
 import java.util.List;
@@ -14,6 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungDetails;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTreffer;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTrefferItem;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungPayload;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungselementPayload;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.RaetselgruppeLaTeXGeneratorService;
@@ -26,17 +31,10 @@ import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
-import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
-import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
-import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
-import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPayload;
-import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
-import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
-import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
-import de.egladil.mja_api.infrastructure.persistence.dao.RaetselgruppenDao;
+import de.egladil.mja_api.infrastructure.persistence.dao.AufgabensammlungDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlugnselement;
@@ -48,18 +46,18 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
- * RaetselgruppenService
+ * AufgabensammlungenService
  */
 @ApplicationScoped
-public class RaetselgruppenService {
+public class AufgabensammlungenService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungenService.class);
 
 	@Inject
 	AuthenticationContext authCtx;
 
 	@Inject
-	RaetselgruppenDao raetselgruppenDao;
+	AufgabensammlungDao aufgabensammlungDao;
 
 	@Inject
 	RaetselService raetselService;
@@ -73,23 +71,23 @@ public class RaetselgruppenService {
 	@Inject
 	RaetselgruppeLaTeXGeneratorService raetselgruppenLaTeXGenerator;
 
-	public RaetselgruppensucheTreffer findRaetselgruppen(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
+	public AufgabensammlungSucheTreffer findRaetselgruppen(final AufgabensammlungenSuchparameter suchparameter, final int limit, final int offset) {
 
-		RaetselgruppensucheTreffer result = new RaetselgruppensucheTreffer();
-		long anzahlGesamt = raetselgruppenDao.countByFilter(suchparameter);
+		AufgabensammlungSucheTreffer result = new AufgabensammlungSucheTreffer();
+		long anzahlGesamt = aufgabensammlungDao.countByFilter(suchparameter);
 
 		if (anzahlGesamt == 0L) {
 
 			return result;
 		}
 
-		List<PersistenteAufgabensammlung> trefferliste = raetselgruppenDao.findByFilter(suchparameter, limit, offset);
+		List<PersistenteAufgabensammlung> trefferliste = aufgabensammlungDao.findByFilter(suchparameter, limit, offset);
 
 		for (PersistenteAufgabensammlung treffer : trefferliste) {
 
-			long anzahlElemente = raetselgruppenDao.countElementeRaetselgruppe(treffer.uuid);
+			long anzahlElemente = aufgabensammlungDao.countElementeRaetselgruppe(treffer.uuid);
 
-			RaetselgruppensucheTrefferItem item = mapFromDB(treffer);
+			AufgabensammlungSucheTrefferItem item = mapFromDB(treffer);
 			item.setAnzahlElemente(anzahlElemente);
 			result.addItem(item);
 		}
@@ -106,16 +104,16 @@ public class RaetselgruppenService {
 	 *                            boolean
 	 * @return                    Optional
 	 */
-	public Optional<RaetselgruppeDetails> loadDetails(final String raetselgruppeID) {
+	public Optional<AufgabensammlungDetails> loadDetails(final String raetselgruppeID) {
 
-		PersistenteAufgabensammlung raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung raetselgruppe = aufgabensammlungDao.findByID(raetselgruppeID);
 
 		if (raetselgruppe == null) {
 
 			return Optional.empty();
 		}
 
-		final RaetselgruppeDetails result = RaetselgruppeDetails.createFromDB(raetselgruppe);
+		final AufgabensammlungDetails result = AufgabensammlungDetails.createFromDB(raetselgruppe);
 
 		if (PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
 			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetselgruppe.owner)) {
@@ -123,8 +121,8 @@ public class RaetselgruppenService {
 			result.markiereAlsAenderbar();
 		}
 
-		List<PersistentesAufgabensammlugnselement> elementeDB = raetselgruppenDao.loadElementeRaetselgruppe(raetselgruppeID);
-		List<PersistenteAufgabeReadonly> aufgaben = raetselgruppenDao.loadAufgabenByReaetselgruppe(raetselgruppeID);
+		List<PersistentesAufgabensammlugnselement> elementeDB = aufgabensammlungDao.loadElementeRaetselgruppe(raetselgruppeID);
+		List<PersistenteAufgabeReadonly> aufgaben = aufgabensammlungDao.loadAufgabenByReaetselgruppe(raetselgruppeID);
 
 		elementeDB.forEach(r -> {
 
@@ -132,7 +130,7 @@ public class RaetselgruppenService {
 
 			if (optAufgabe.isPresent()) {
 
-				result.addElement(Raetselgruppenelement.merge(optAufgabe.get(), r));
+				result.addElement(Aufgabensammlungselement.merge(optAufgabe.get(), r));
 			}
 		});
 
@@ -150,10 +148,10 @@ public class RaetselgruppenService {
 	 *                 String die ID des eingeloggten Users
 	 * @param  isAdmin
 	 *                 boolean
-	 * @return         RaetselgruppensucheTrefferItem
+	 * @return         AufgabensammlungSucheTrefferItem
 	 */
 	@Transactional
-	public RaetselgruppensucheTrefferItem raetselgruppeAnlegen(final EditRaetselgruppePayload payload) throws WebApplicationException {
+	public AufgabensammlungSucheTrefferItem raetselgruppeAnlegen(final EditAufgabensammlungPayload payload) throws WebApplicationException {
 
 		String userId = authCtx.getUser().getName();
 
@@ -189,7 +187,7 @@ public class RaetselgruppenService {
 		raetselgruppe.owner = userId;
 
 		PersistenteAufgabensammlung persistierte = speichern(raetselgruppe);
-		RaetselgruppensucheTrefferItem result = mapFromDB(persistierte);
+		AufgabensammlungSucheTrefferItem result = mapFromDB(persistierte);
 
 		LOGGER.info("Rätselgruppe angelegt: {}, admin={}", result.getId(), StringUtils.abbreviate(userId, 11));
 
@@ -205,10 +203,10 @@ public class RaetselgruppenService {
 	 *                 String die ID des eingeloggten Users
 	 * @param  isAdmin
 	 *                 boolean
-	 * @return         RaetselgruppensucheTrefferItem
+	 * @return         AufgabensammlungSucheTrefferItem
 	 */
 	@Transactional
-	public RaetselgruppensucheTrefferItem raetselgruppeBasisdatenAendern(final EditRaetselgruppePayload payload) throws WebApplicationException {
+	public AufgabensammlungSucheTrefferItem raetselgruppeBasisdatenAendern(final EditAufgabensammlungPayload payload) throws WebApplicationException {
 
 		String userId = authCtx.getUser().getName();
 
@@ -228,7 +226,7 @@ public class RaetselgruppenService {
 					.build());
 		}
 
-		PersistenteAufgabensammlung ausDB = raetselgruppenDao.findByID(payload.getId());
+		PersistenteAufgabensammlung ausDB = aufgabensammlungDao.findByID(payload.getId());
 
 		if (ausDB == null) {
 
@@ -245,9 +243,9 @@ public class RaetselgruppenService {
 
 		PersistenteAufgabensammlung persistierte = speichern(ausDB);
 
-		RaetselgruppensucheTrefferItem result = mapFromDB(persistierte);
+		AufgabensammlungSucheTrefferItem result = mapFromDB(persistierte);
 
-		long anzahlElemente = raetselgruppenDao.countElementeRaetselgruppe(persistierte.uuid);
+		long anzahlElemente = aufgabensammlungDao.countElementeRaetselgruppe(persistierte.uuid);
 		result.setAnzahlElemente(anzahlElemente);
 
 		LOGGER.info("Raetselgruppe geaendert: {}, admin={}", result.getId(), StringUtils.abbreviate(userId, 11));
@@ -257,17 +255,17 @@ public class RaetselgruppenService {
 
 	PersistenteAufgabensammlung speichern(final PersistenteAufgabensammlung raetselgruppe) {
 
-		return raetselgruppenDao.saveRaetselgruppe(raetselgruppe);
+		return aufgabensammlungDao.saveRaetselgruppe(raetselgruppe);
 	}
 
-	boolean dupletteNachKeysExistiert(final EditRaetselgruppePayload payload) {
+	boolean dupletteNachKeysExistiert(final EditAufgabensammlungPayload payload) {
 
 		if (payload.getReferenztyp() == null) {
 
 			return false;
 		}
 
-		PersistenteAufgabensammlung persistente = raetselgruppenDao.findByUniqueKey(payload.getReferenztyp(),
+		PersistenteAufgabensammlung persistente = aufgabensammlungDao.findByUniqueKey(payload.getReferenztyp(),
 			payload.getReferenz(), payload.getSchwierigkeitsgrad());
 
 		if (persistente == null) {
@@ -281,7 +279,7 @@ public class RaetselgruppenService {
 
 	boolean namensdubletteExistiert(final String name, final String uuid) {
 
-		PersistenteAufgabensammlung persistente = raetselgruppenDao.findByName(name);
+		PersistenteAufgabensammlung persistente = aufgabensammlungDao.findByName(name);
 
 		if (persistente == null) {
 
@@ -291,9 +289,9 @@ public class RaetselgruppenService {
 		return !uuid.equals(persistente.uuid);
 	}
 
-	RaetselgruppensucheTrefferItem mapFromDB(final PersistenteAufgabensammlung ausDB) {
+	AufgabensammlungSucheTrefferItem mapFromDB(final PersistenteAufgabensammlung ausDB) {
 
-		RaetselgruppensucheTrefferItem result = new RaetselgruppensucheTrefferItem();
+		AufgabensammlungSucheTrefferItem result = new AufgabensammlungSucheTrefferItem();
 		result.setId(ausDB.uuid);
 		result.setKommentar(ausDB.kommentar);
 		result.setName(ausDB.name);
@@ -308,7 +306,7 @@ public class RaetselgruppenService {
 
 	}
 
-	void mergeFromPayload(final PersistenteAufgabensammlung raetselgruppe, final EditRaetselgruppePayload payload) {
+	void mergeFromPayload(final PersistenteAufgabensammlung raetselgruppe, final EditAufgabensammlungPayload payload) {
 
 		raetselgruppe.kommentar = payload.getKommentar();
 		raetselgruppe.name = payload.getName();
@@ -324,11 +322,11 @@ public class RaetselgruppenService {
 	 *
 	 * @param  aufgabensammlungID
 	 * @param  payload
-	 * @return                    RaetselgruppeDetails
+	 * @return                    AufgabensammlungDetails
 	 */
-	public RaetselgruppeDetails elementAnlegen(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
+	public AufgabensammlungDetails elementAnlegen(final String raetselgruppeID, final EditAufgabensammlungselementPayload payload) {
 
-		PersistenteAufgabensammlung raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung raetselgruppe = aufgabensammlungDao.findByID(raetselgruppeID);
 
 		if (raetselgruppe == null) {
 
@@ -350,7 +348,7 @@ public class RaetselgruppenService {
 			throw new WebApplicationException(response);
 		}
 
-		List<PersistentesAufgabensammlugnselement> persistenteElemente = raetselgruppenDao
+		List<PersistentesAufgabensammlugnselement> persistenteElemente = aufgabensammlungDao
 			.loadElementeRaetselgruppe(raetselgruppeID);
 
 		Optional<PersistentesAufgabensammlugnselement> optElementMitGleicherNummer = persistenteElemente.stream()
@@ -382,7 +380,7 @@ public class RaetselgruppenService {
 		this.createAndPersistNeuesRaetselgruppenelement(raetselgruppeID,
 			optRaetselId.get(), payload);
 
-		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
+		Optional<AufgabensammlungDetails> opt = this.loadDetails(raetselgruppeID);
 
 		if (opt.isEmpty()) {
 
@@ -397,7 +395,7 @@ public class RaetselgruppenService {
 	}
 
 	@Transactional
-	PersistentesAufgabensammlugnselement createAndPersistNeuesRaetselgruppenelement(final String raetselgruppeID, final String raetselID, final EditRaetselgruppenelementPayload payload) {
+	PersistentesAufgabensammlugnselement createAndPersistNeuesRaetselgruppenelement(final String raetselgruppeID, final String raetselID, final EditAufgabensammlungselementPayload payload) {
 
 		PersistentesAufgabensammlugnselement neues = new PersistentesAufgabensammlugnselement();
 		neues.nummer = payload.getNummer();
@@ -405,7 +403,7 @@ public class RaetselgruppenService {
 		neues.aufgabensammlungID = raetselgruppeID;
 		neues.raetselID = raetselID;
 
-		PersistentesAufgabensammlugnselement persisted = raetselgruppenDao.saveRaetselgruppenelement(neues);
+		PersistentesAufgabensammlugnselement persisted = aufgabensammlungDao.saveRaetselgruppenelement(neues);
 
 		return persisted;
 	}
@@ -415,12 +413,12 @@ public class RaetselgruppenService {
 	 *
 	 * @param  aufgabensammlungID
 	 * @param  payload
-	 * @return                    RaetselgruppeDetails
+	 * @return                    AufgabensammlungDetails
 	 */
 	@Transactional
-	public RaetselgruppeDetails elementAendern(final String raetselgruppeID, final EditRaetselgruppenelementPayload payload) {
+	public AufgabensammlungDetails elementAendern(final String raetselgruppeID, final EditAufgabensammlungselementPayload payload) {
 
-		PersistentesAufgabensammlugnselement persistentesElement = raetselgruppenDao.findElementById(payload.getId());
+		PersistentesAufgabensammlugnselement persistentesElement = aufgabensammlungDao.findElementById(payload.getId());
 
 		if (persistentesElement == null) {
 
@@ -430,7 +428,7 @@ public class RaetselgruppenService {
 			throw new WebApplicationException(response);
 		}
 
-		PersistenteAufgabensammlung raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung raetselgruppe = aufgabensammlungDao.findByID(raetselgruppeID);
 
 		if (raetselgruppe == null) {
 
@@ -453,7 +451,7 @@ public class RaetselgruppenService {
 			throw new WebApplicationException(response);
 		}
 
-		List<PersistentesAufgabensammlugnselement> persistenteElemente = raetselgruppenDao
+		List<PersistentesAufgabensammlugnselement> persistenteElemente = aufgabensammlungDao
 			.loadElementeRaetselgruppe(raetselgruppeID);
 
 		Optional<PersistentesAufgabensammlugnselement> optElementMitGleicherNummer = persistenteElemente.stream()
@@ -470,7 +468,7 @@ public class RaetselgruppenService {
 
 		mergeAndSaveRaetselgruppenelement(persistentesElement, payload);
 
-		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
+		Optional<AufgabensammlungDetails> opt = this.loadDetails(raetselgruppeID);
 
 		if (opt.isEmpty()) {
 
@@ -484,12 +482,12 @@ public class RaetselgruppenService {
 		return opt.get();
 	}
 
-	void mergeAndSaveRaetselgruppenelement(final PersistentesAufgabensammlugnselement persistentesElement, final EditRaetselgruppenelementPayload payload) {
+	void mergeAndSaveRaetselgruppenelement(final PersistentesAufgabensammlugnselement persistentesElement, final EditAufgabensammlungselementPayload payload) {
 
 		persistentesElement.nummer = payload.getNummer();
 		persistentesElement.punkte = payload.getPunkte();
 
-		raetselgruppenDao.saveRaetselgruppenelement(persistentesElement);
+		aufgabensammlungDao.saveRaetselgruppenelement(persistentesElement);
 	}
 
 	/**
@@ -497,20 +495,20 @@ public class RaetselgruppenService {
 	 *
 	 * @param  aufgabensammlungID
 	 * @param  elementID
-	 * @return                    RaetselgruppeDetails
+	 * @return                    AufgabensammlungDetails
 	 */
-	public RaetselgruppeDetails elementLoeschen(final String raetselgruppeID, final String elementID) {
+	public AufgabensammlungDetails elementLoeschen(final String raetselgruppeID, final String elementID) {
 
-		PersistenteAufgabensammlung raetselgruppe = raetselgruppenDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung raetselgruppe = aufgabensammlungDao.findByID(raetselgruppeID);
 
 		if (raetselgruppe != null) {
 
 			checkPermission(raetselgruppe);
 		}
 
-		raetselgruppenDao.deleteRaetselgruppenelement(elementID);
+		aufgabensammlungDao.deleteRaetselgruppenelement(elementID);
 
-		Optional<RaetselgruppeDetails> opt = this.loadDetails(raetselgruppeID);
+		Optional<AufgabensammlungDetails> opt = this.loadDetails(raetselgruppeID);
 
 		if (opt.isEmpty()) {
 
@@ -539,7 +537,7 @@ public class RaetselgruppenService {
 	 */
 	public GeneratedFile printVorschau(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		PersistenteAufgabensammlung dbResult = raetselgruppenDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(raetselgruppeID);
 
 		if (dbResult == null) {
 
@@ -569,7 +567,7 @@ public class RaetselgruppenService {
 	 */
 	public GeneratedFile printKartei(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		PersistenteAufgabensammlung dbResult = raetselgruppenDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(raetselgruppeID);
 		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
 
 		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.KARTEI, font, schriftgroesse,
@@ -593,7 +591,7 @@ public class RaetselgruppenService {
 	 */
 	public GeneratedFile printArbeitsblattMitLoesungen(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		PersistenteAufgabensammlung dbResult = raetselgruppenDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(raetselgruppeID);
 		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
 
 		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.ARBEITSBLATT, font, schriftgroesse,
@@ -656,7 +654,7 @@ public class RaetselgruppenService {
 	 */
 	public File downloadLaTeXSources(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		PersistenteAufgabensammlung dbResult = raetselgruppenDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(raetselgruppeID);
 
 		if (dbResult == null) {
 

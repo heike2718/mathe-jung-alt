@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen.dto;
+package de.egladil.mja_api.domain.aufgabensammlungen.dto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +13,10 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * RaetselgruppensucheTreffer
+ * AufgabensammlungSucheTreffer
  */
-@Schema(name = "RaetselgruppensucheTreffer", description = "Teilmenge der Treffer einer Suchanfrage")
-public class RaetselgruppensucheTreffer {
+@Schema(name = "AufgabensammlungSucheTreffer", description = "Teilmenge der Treffer einer Suchanfrage")
+public class AufgabensammlungSucheTreffer {
 
 	@JsonProperty
 	@Schema(description = "Gesamtzahl aller Treffer der Suchanfrage")
@@ -24,16 +24,16 @@ public class RaetselgruppensucheTreffer {
 
 	@JsonProperty
 	@Schema(
-		type = SchemaType.ARRAY, implementation = RaetselgruppensucheTrefferItem.class,
+		type = SchemaType.ARRAY, implementation = AufgabensammlungSucheTrefferItem.class,
 		description = "die abgefragte Teilmenge aller Treffer der Suchanfrage (Page)")
-	private List<RaetselgruppensucheTrefferItem> items = new ArrayList<>();
+	private List<AufgabensammlungSucheTrefferItem> items = new ArrayList<>();
 
 	public void setTrefferGesamt(final long trefferGesamt) {
 
 		this.trefferGesamt = trefferGesamt;
 	}
 
-	public void addItem(final RaetselgruppensucheTrefferItem item) {
+	public void addItem(final AufgabensammlungSucheTrefferItem item) {
 
 		items.add(item);
 	}
@@ -43,7 +43,7 @@ public class RaetselgruppensucheTreffer {
 		return trefferGesamt;
 	}
 
-	public List<RaetselgruppensucheTrefferItem> getItems() {
+	public List<AufgabensammlungSucheTrefferItem> getItems() {
 
 		return items;
 	}

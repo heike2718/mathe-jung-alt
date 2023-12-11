@@ -1,16 +1,16 @@
 import { GeneratedImages, initialPaginationState, PaginationState } from "@mja-ws/core/model";
-import { RaetselgruppeBasisdaten, RaetselgruppeDetails, Raetselgruppenelement, RaetselgruppenTrefferItem } from "@mja-ws/raetselgruppen/model";
+import { AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselgruppenActions } from "./raetselgruppen.actions";
 
 export interface RaetselgruppenState {
     readonly loaded: boolean;
     readonly anzahlTrefferGesamt: number;
-    readonly page: RaetselgruppenTrefferItem[];
+    readonly page: AufgabensammlungTrefferItem[];
     readonly paginationState: PaginationState;
-    readonly raetselgruppeBasisdaten: RaetselgruppeBasisdaten| undefined;
-    readonly raetselgruppeDetails: RaetselgruppeDetails | undefined;
-    readonly selectedRaetselgruppenelement: Raetselgruppenelement | undefined;
+    readonly aufgabensammlungBasisdaten: AufgabensammlungBasisdaten| undefined;
+    readonly aufgabensammlungDetails: AufgabensammlungDetails | undefined;
+    readonly selectedAufgabensammlungselement: Aufgabensammlungselement | undefined;
     readonly selectedElementImages: GeneratedImages | undefined;
 };
 
@@ -19,9 +19,9 @@ const initialRaetselgruppenState: RaetselgruppenState = {
     anzahlTrefferGesamt: 0,
     page: [],
     paginationState: initialPaginationState,
-    raetselgruppeBasisdaten: undefined,
-    raetselgruppeDetails: undefined,
-    selectedRaetselgruppenelement: undefined,
+    aufgabensammlungBasisdaten: undefined,
+    aufgabensammlungDetails: undefined,
+    selectedAufgabensammlungselement: undefined,
     selectedElementImages: undefined
 };
 
@@ -35,7 +35,7 @@ export const raetselgruppenFeature = createFeature({
                 paginationState: { ...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt },
                 page: action.treffer.items,
                 loaded: true,
-                selectedRaetselgruppenelement: undefined,
+                selectedAufgabensammlungselement: undefined,
                 selectedElementImages: undefined
             };
         }),
@@ -54,21 +54,21 @@ export const raetselgruppenFeature = createFeature({
         on(raetselgruppenActions.eDIT_RAETSELGUPPE, (state, action) => {
             return {
                 ...state,
-                raetselgruppeBasisdaten: action.raetselgruppeBasisdaten
+                aufgabensammlungBasisdaten: action.aufgabensammlungBasisdaten
             }
         }),
         on(raetselgruppenActions.rAETSELGRUPPE_SAVED, (state, action) => {
-            const raetselgruppeBasisdaten: RaetselgruppeBasisdaten = action.raetselgruppe;
-            return { ...state, raetselgruppeBasisdaten: raetselgruppeBasisdaten };
+            const aufgabensammlungBasisdaten: AufgabensammlungBasisdaten = action.raetselgruppe;
+            return { ...state, aufgabensammlungBasisdaten: aufgabensammlungBasisdaten };
         }),
         on(raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED, (state, action) => {
-            return {...state, raetselgruppeDetails: action.raetselgruppeDetails, raetselgruppeBasisdaten: undefined};
+            return {...state, aufgabensammlungDetails: action.aufgabensammlungDetails, aufgabensammlungBasisdaten: undefined};
         }),
         on(raetselgruppenActions.uNSELECT_RAETSELGRUPPE, (state, _action) => {
-            return {...state, raetselgruppeDetails: undefined, raetselgruppeBasisdaten: undefined, selectedRaetselgruppenelement: undefined, selectedElementImages: undefined}
+            return {...state, aufgabensammlungDetails: undefined, aufgabensammlungBasisdaten: undefined, selectedAufgabensammlungselement: undefined, selectedElementImages: undefined}
         }),
-        on(raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED, (state, action) => ({ ...state, raetselgruppeDetails: action.raetselgruppenDetails })),
-        on(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT, (state, action) => ({...state, selectedRaetselgruppenelement: action.raetselgruppenelement})),
+        on(raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED, (state, action) => ({ ...state, aufgabensammlungDetails: action.raetselgruppenDetails })),
+        on(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT, (state, action) => ({...state, selectedAufgabensammlungselement: action.aufgabensammlungselement})),
         on(raetselgruppenActions.eLEMENT_IMAGES_LOADED, (state, action) => ({...state, selectedElementImages: action.generatedImages}))
     )
 });

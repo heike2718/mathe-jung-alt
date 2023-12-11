@@ -10,10 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.aufgabensammlungen.AufgabensammlungenSuchparameter;
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
-import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
@@ -28,13 +28,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * RaetselgruppenDao
+ * AufgabensammlungDao
  */
 @Repository
 @ApplicationScoped
-public class RaetselgruppenDao {
+public class AufgabensammlungDao {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenDao.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungDao.class);
 
 	@Inject
 	EntityManager entityManager;
@@ -46,7 +46,7 @@ public class RaetselgruppenDao {
 	 * @param  suchparameter
 	 * @return               long
 	 */
-	public long countByFilter(final RaetselgruppenSuchparameter suchparameter) {
+	public long countByFilter(final AufgabensammlungenSuchparameter suchparameter) {
 
 		String stmt = "select count(*) from PersistenteAufgabensammlung g";
 		String whereStmt = createWhereCondition(suchparameter);
@@ -83,7 +83,7 @@ public class RaetselgruppenDao {
 	 * @param  offset
 	 * @return               List
 	 */
-	public List<PersistenteAufgabensammlung> findByFilter(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
+	public List<PersistenteAufgabensammlung> findByFilter(final AufgabensammlungenSuchparameter suchparameter, final int limit, final int offset) {
 
 		String stmt = "select g from PersistenteAufgabensammlung g";
 		String whereStmt = createWhereCondition(suchparameter);
@@ -109,7 +109,7 @@ public class RaetselgruppenDao {
 		return query.getResultList();
 	}
 
-	String createWhereCondition(final RaetselgruppenSuchparameter suchparameter) {
+	String createWhereCondition(final AufgabensammlungenSuchparameter suchparameter) {
 
 		String whereStmt = "";
 
@@ -160,7 +160,7 @@ public class RaetselgruppenDao {
 		return whereStmt;
 	}
 
-	void setParameters(final Query query, final RaetselgruppenSuchparameter suchparameter) {
+	void setParameters(final Query query, final AufgabensammlungenSuchparameter suchparameter) {
 
 		if (StringUtils.isNotBlank(suchparameter.name())) {
 

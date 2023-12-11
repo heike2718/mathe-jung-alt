@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GuiReferenztypenMap, GuiRefereztyp, GuiSchwierigkeitsgrad, GuiSchwierigkeitsgradeMap, initialGuiReferenztyp, initialGuiSchwierigkeitsgrad, initialPaginationState, PageDefinition, PaginationState, Referenztyp, Schwierigkeitsgrad, SortOrder } from '@mja-ws/core/model';
-import { initialRaetselgruppenSuchparameter, isInitialRaetselgruppenSuchparameter, RaetselgruppenSuchparameter, RaetselgruppenTrefferItem } from '@mja-ws/raetselgruppen/model';
+import { initialAufgabensammlungenSuchparameter, isInitialAufgabensammlungenSuchparameter, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem } from '@mja-ws/raetselgruppen/model';
 import { MatSelectModule } from '@angular/material/select';
 import { Configuration } from '@mja-ws/shared/config';
 
@@ -80,7 +80,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   #paginationStateSubscription: Subscription = new Subscription();
 
 
-  #suchparameter: RaetselgruppenSuchparameter = initialRaetselgruppenSuchparameter;
+  #suchparameter: AufgabensammlungenSuchparameter = initialAufgabensammlungenSuchparameter;
   #paginationState: PaginationState = initialPaginationState;
   #pageIndex = 0;
   #sortDirection: SortDirection = 'asc';
@@ -246,7 +246,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
 
   buttonResetAllFiltersDisabled(): boolean {
 
-    if (isInitialRaetselgruppenSuchparameter(this.#suchparameter)) {
+    if (isInitialAufgabensammlungenSuchparameter(this.#suchparameter)) {
       return true;
     }
 
@@ -257,7 +257,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
     this.#raetselgruppenFacade.createAndEditRaetselgruppe();
   }
 
-  onRowClicked(raetselgruppe: RaetselgruppenTrefferItem): void {
+  onRowClicked(raetselgruppe: AufgabensammlungTrefferItem): void {
     this.#raetselgruppenFacade.selectRaetselgruppe(raetselgruppe);
   }
 

@@ -1,11 +1,11 @@
 import { DataSource } from '@angular/cdk/collections';
 import { inject, Injectable } from '@angular/core';
 import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
-import { Raetselgruppenelement } from "@mja-ws/raetselgruppen/model";
+import { Aufgabensammlungselement } from "@mja-ws/raetselgruppen/model";
 import { Observable } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
-export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppenelement> {
+export class AufgabensammlungselementeDataSource extends DataSource<Aufgabensammlungselement> {
 
     #raetselgruppenFacade = inject(RaetselgruppenFacade);
 
@@ -14,8 +14,8 @@ export class RaetselgruppenelementeDataSource extends DataSource<Raetselgruppene
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<Raetselgruppenelement[]> {
-    return this.#raetselgruppenFacade.raetselgruppenelemente$;
+  connect(): Observable<Aufgabensammlungselement[]> {
+    return this.#raetselgruppenFacade.aufgabensammlungselemente$;
   }  
 
   /**

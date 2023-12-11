@@ -1,4 +1,4 @@
-export type STATUS = 'ERFASST' | 'FREIGEGEBEN';
+//export type STATUS = 'ERFASST' | 'FREIGEGEBEN';
 export type SortOrder = 'asc' | 'desc';
 export type Referenztyp = 'NOOP' | 'MINIKAENGURU' | 'SERIE';
 

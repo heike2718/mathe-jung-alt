@@ -8,8 +8,8 @@ import java.util.Date;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

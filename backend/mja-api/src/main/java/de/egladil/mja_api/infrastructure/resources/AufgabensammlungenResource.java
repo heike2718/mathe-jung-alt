@@ -19,22 +19,22 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.aufgabensammlungen.AufgabensammlungenService;
+import de.egladil.mja_api.domain.aufgabensammlungen.AufgabensammlungenSortattribute;
+import de.egladil.mja_api.domain.aufgabensammlungen.AufgabensammlungenSuchparameter;
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungDetails;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTreffer;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTrefferItem;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungPayload;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungselementPayload;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
-import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSortattribute;
-import de.egladil.mja_api.domain.raetselgruppen.RaetselgruppenSuchparameter;
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
-import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
-import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPayload;
-import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppeDetails;
-import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTreffer;
-import de.egladil.mja_api.domain.raetselgruppen.dto.RaetselgruppensucheTrefferItem;
-import de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenService;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
@@ -60,20 +60,20 @@ import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
- * RaetselgruppenResource
+ * AufgabensammlungenResource
  */
-@Path("mja-api/raetselgruppen")
+@Path("mja-api/aufgabensammlungen")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Raetselgruppen")
-public class RaetselgruppenResource {
+public class AufgabensammlungenResource {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppenResource.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungenResource.class);
 
 	@Inject
 	DevDelayService delayService;
 
 	@Inject
-	RaetselgruppenService raetselgruppenService;
+	AufgabensammlungenService aufgabensammlungenService;
 
 	@GET
 	@Path("v1")
@@ -118,16 +118,16 @@ public class RaetselgruppenResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(type = SchemaType.ARRAY, implementation = RaetselgruppensucheTreffer.class)))
+			schema = @Schema(type = SchemaType.ARRAY, implementation = AufgabensammlungSucheTreffer.class)))
 	// @formatter:off
-	public RaetselgruppensucheTreffer findGruppen(
+	public AufgabensammlungSucheTreffer findGruppen(
 		@QueryParam(value = "name") @Pattern(regexp = "[\\w äöüß\\:\\-\\.\\,]*", message = "name enthält unerlaubte Zeichen")
 		@Size(min = 1, max = 100, message = "nicht mehr als 100 Zeichen") final String name,
 		@QueryParam(value = "schwierigkeitsgrad") final Schwierigkeitsgrad schwierigkeitsgrad,
 		@QueryParam(value = "referenztyp") final Referenztyp referenztyp,
 		@QueryParam(value = "referenz") @Pattern(regexp = "^[\\w äöüß]{1,20}$" , message = "referenz enthält unerlaubte Zeichen")
 		@Size(min = 1, max = 36, message = "nicht mehr als 36 Zeichen") final String referenz,
-		@QueryParam(value = "sortAttribute") @DefaultValue("name") final RaetselgruppenSortattribute sortAttribute,
+		@QueryParam(value = "sortAttribute") @DefaultValue("name") final AufgabensammlungenSortattribute sortAttribute,
 		@QueryParam(value = "sortDirection") @DefaultValue("asc")  final SortDirection sortDirection,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset) {
@@ -137,8 +137,8 @@ public class RaetselgruppenResource {
 			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("nicht mehr als 50 auf einmal abfragen.")).build());
 		}
 
-		RaetselgruppenSuchparameter suchparameter = new RaetselgruppenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz, sortAttribute, sortDirection);
-		return raetselgruppenService.findRaetselgruppen(suchparameter, limit, offset);
+		AufgabensammlungenSuchparameter suchparameter = new AufgabensammlungenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz, sortAttribute, sortDirection);
+		return aufgabensammlungenService.findRaetselgruppen(suchparameter, limit, offset);
 	}
 
 	@POST
@@ -153,7 +153,7 @@ public class RaetselgruppenResource {
 		responseCode = "201",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = RaetselgruppensucheTrefferItem.class)))
+			schema = @Schema(implementation = AufgabensammlungSucheTrefferItem.class)))
 	@APIResponse(
 		name = "BadRequest",
 		description = "Input-Validierung schlug fehl",
@@ -170,11 +170,11 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselgruppeAnlegen(@Valid final EditRaetselgruppePayload requestPayload) {
+	public Response raetselgruppeAnlegen(@Valid final EditAufgabensammlungPayload requestPayload) {
 
 		delayService.pause();
 
-		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeAnlegen(requestPayload);
+		AufgabensammlungSucheTrefferItem raetselsammlung = aufgabensammlungenService.raetselgruppeAnlegen(requestPayload);
 		return Response.status(201).entity(raetselsammlung).build();
 	}
 
@@ -190,7 +190,7 @@ public class RaetselgruppenResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = RaetselgruppensucheTrefferItem.class)))
+			schema = @Schema(implementation = AufgabensammlungSucheTrefferItem.class)))
 	@APIResponse(
 		name = "BadRequest",
 		description = "Input-Validierung schlug fehl",
@@ -213,11 +213,11 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselgruppeAendern(final EditRaetselgruppePayload requestPayload) {
+	public Response raetselgruppeAendern(final EditAufgabensammlungPayload requestPayload) {
 
 		delayService.pause();
 
-		RaetselgruppensucheTrefferItem raetselsammlung = raetselgruppenService.raetselgruppeBasisdatenAendern(requestPayload);
+		AufgabensammlungSucheTrefferItem raetselsammlung = aufgabensammlungenService.raetselgruppeBasisdatenAendern(requestPayload);
 		return Response.status(200).entity(raetselsammlung).build();
 	}
 
@@ -237,7 +237,7 @@ public class RaetselgruppenResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = RaetselgruppeDetails.class)))
+			schema = @Schema(implementation = AufgabensammlungDetails.class)))
 	@APIResponse(
 		name = "BadRequest",
 		description = "Input-Validierung schlug fehl",
@@ -260,11 +260,11 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public RaetselgruppeDetails raetselgruppeDetailsLaden(@PathParam(value = "aufgabensammlungID") @Pattern(
+	public AufgabensammlungDetails raetselgruppeDetailsLaden(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID) {
 
-		Optional<RaetselgruppeDetails> optDetails = raetselgruppenService.loadDetails(raetselgruppeID);
+		Optional<AufgabensammlungDetails> optDetails = aufgabensammlungenService.loadDetails(raetselgruppeID);
 
 		if (optDetails.isEmpty()) {
 			throw new WebApplicationException(Response.status(404).entity(MessagePayload.error("kein Treffer")).build());
@@ -287,7 +287,7 @@ public class RaetselgruppenResource {
 		responseCode = "201",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = RaetselgruppeDetails.class)))
+			schema = @Schema(implementation = AufgabensammlungDetails.class)))
 	@APIResponse(
 		name = "BadRequest",
 		responseCode = "400",
@@ -320,11 +320,11 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public RaetselgruppeDetails raetselgruppenelementAnlegen(@PathParam(value = "aufgabensammlungID") @Pattern(
+	public AufgabensammlungDetails raetselgruppenelementAnlegen(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, final EditAufgabensammlungselementPayload element) {
 
-		return this.raetselgruppenService.elementAnlegen(raetselgruppeID, element);
+		return this.aufgabensammlungenService.elementAnlegen(raetselgruppeID, element);
 	}
 
 
@@ -342,7 +342,7 @@ public class RaetselgruppenResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = RaetselgruppeDetails.class)))
+			schema = @Schema(implementation = AufgabensammlungDetails.class)))
 	@APIResponse(
 		name = "BadRequest",
 		responseCode = "400",
@@ -369,11 +369,11 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public RaetselgruppeDetails raetselgruppenelementAendern(@PathParam(value = "aufgabensammlungID") @Pattern(
+	public AufgabensammlungDetails raetselgruppenelementAendern(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, final EditAufgabensammlungselementPayload element) {
 
-		return this.raetselgruppenService.elementAendern(raetselgruppeID, element);
+		return this.aufgabensammlungenService.elementAendern(raetselgruppeID, element);
 	}
 
 	@DELETE
@@ -392,7 +392,7 @@ public class RaetselgruppenResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = RaetselgruppeDetails.class)))
+			schema = @Schema(implementation = AufgabensammlungDetails.class)))
 	@APIResponse(
 		name = "BadRequest",
 		responseCode = "400",
@@ -419,13 +419,13 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public RaetselgruppeDetails raetselgruppenelementLoeschen(@PathParam(value = "aufgabensammlungID") @Pattern(
+	public AufgabensammlungDetails raetselgruppenelementLoeschen(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, @PathParam(value = "elementID") @Pattern(
 			regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 			message = "aufgabensammlungID enthält ungültige Zeichen") final String elementID) {
 
-		return raetselgruppenService.elementLoeschen(raetselgruppeID, elementID);
+		return aufgabensammlungenService.elementLoeschen(raetselgruppeID, elementID);
 	}
 
 	@GET
@@ -486,7 +486,7 @@ public class RaetselgruppenResource {
 
 		LOGGER.debug("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
 
-		return raetselgruppenService.printVorschau(raetselgruppeID, theFont, theSchriftgroesse, layoutAntwortvorschlaege);
+		return aufgabensammlungenService.printVorschau(raetselgruppeID, theFont, theSchriftgroesse, layoutAntwortvorschlaege);
 	}
 
 	@GET
@@ -498,7 +498,8 @@ public class RaetselgruppenResource {
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID mehrere LaTeX-Dateien. Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
 	@Parameters({
 		@Parameter(
-			in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.",
+			in = ParameterIn.PATH, name = "aufgabensammlungID",
+			description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.",
 			required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
@@ -553,7 +554,7 @@ public class RaetselgruppenResource {
 
 		LOGGER.debug("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
 
-		File generatedFile = raetselgruppenService.downloadLaTeXSources(raetselgruppeID, theFont, theSchriftgroesse,
+		File generatedFile = aufgabensammlungenService.downloadLaTeXSources(raetselgruppeID, theFont, theSchriftgroesse,
 			layoutAntwortvorschlaege);
 
 		LOGGER.info("zip generiert");
@@ -571,7 +572,8 @@ public class RaetselgruppenResource {
 		operationId = "printArbeitsblatt",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
-		@Parameter(name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
+		@Parameter(
+			name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
@@ -623,7 +625,7 @@ public class RaetselgruppenResource {
 
 		LOGGER.debug("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
 
-		return raetselgruppenService.printArbeitsblattMitLoesungen(raetselgruppeID, theFont, theSchriftgroesse, theLayout);
+		return aufgabensammlungenService.printArbeitsblattMitLoesungen(raetselgruppeID, theFont, theSchriftgroesse, theLayout);
 	}
 
 	@GET
@@ -634,7 +636,8 @@ public class RaetselgruppenResource {
 		operationId = "printKnobelkartei",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF, in dem jede Seite genau ein Rätsel enthält. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
-		@Parameter(name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
+		@Parameter(
+			name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
@@ -687,7 +690,7 @@ public class RaetselgruppenResource {
 		LOGGER.debug("font={}, theFont={}, size={}, theSize={}, theLayout={}", font, theFont, schriftgroesse, theSchriftgroesse,
 			theLayout);
 
-		return raetselgruppenService.printKartei(raetselgruppeID, theFont, theSchriftgroesse, theLayout);
+		return aufgabensammlungenService.printKartei(raetselgruppeID, theFont, theSchriftgroesse, theLayout);
 	}
 
 }

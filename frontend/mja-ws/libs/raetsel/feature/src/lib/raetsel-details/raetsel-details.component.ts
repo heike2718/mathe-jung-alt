@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
@@ -33,7 +32,7 @@ import { Configuration } from '@mja-ws/shared/config';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
 import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
-import { RaetselgruppeDetails, RaetselgruppenTrefferItem } from '@mja-ws/raetselgruppen/model';
+import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/raetselgruppen/model';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -73,9 +72,9 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   #raetselDetailsSubscription = new Subscription();
   #raetselDetails!: RaetselDetails;
-  #raetselgruppeDetailsSubscription = new Subscription();
+  #aufgabensammlungDetailsSubscription = new Subscription();
 
-  #selectedRaetselgruppe: RaetselgruppeDetails | undefined;
+  #selectedRaetselgruppe: AufgabensammlungDetails | undefined;
 
 
 
@@ -87,14 +86,14 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
       })
     ).subscribe();
 
-    this.#raetselgruppeDetailsSubscription = this.raetselgruppenFacade.raetselgruppeDetails$
+    this.#aufgabensammlungDetailsSubscription = this.raetselgruppenFacade.aufgabensammlungDetails$
       .subscribe((gruppe) => this.#selectedRaetselgruppe = gruppe);
   }
 
   ngOnDestroy(): void {
     this.#raetselDetailsSubscription.unsubscribe();
     this.#embeddableImagesFacade.clearVorschau();
-    this.#raetselgruppeDetailsSubscription.unsubscribe();
+    this.#aufgabensammlungDetailsSubscription.unsubscribe();
   }
 
   startEdit(): void {
@@ -119,10 +118,10 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     this.#router.navigateByUrl('/raetsel');
   }
 
-  gotoRaetselgruppe(): void {
+  gotoAufgabensammlung(): void {
 
     if (this.#selectedRaetselgruppe) {
-      const trefferitem: RaetselgruppenTrefferItem = {
+      const trefferitem: AufgabensammlungTrefferItem = {
         anzahlElemente: this.#selectedRaetselgruppe.elemente.length,
         geaendertDurch: this.#selectedRaetselgruppe.geaendertDurch,
         id: this.#selectedRaetselgruppe.id,
@@ -130,7 +129,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
         referenz: this.#selectedRaetselgruppe.referenz,
         referenztyp: this.#selectedRaetselgruppe.referenztyp,
         schwierigkeitsgrad: this.#selectedRaetselgruppe.schwierigkeitsgrad,
-        status: this.#selectedRaetselgruppe.status
+        freigegeben: this.#selectedRaetselgruppe.freigegeben,
+        privat: this.#selectedRaetselgruppe.privat
       };
       this.raetselgruppenFacade.selectRaetselgruppe(trefferitem)
     } else {

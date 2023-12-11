@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { RaetselgruppeDetails, Raetselgruppenelement } from '@mja-ws/raetselgruppen/model';
-import { RaetselgruppenelementeDataSource } from './raetselgruppenelemente.datasource';
+import { AufgabensammlungDetails, Aufgabensammlungselement } from '@mja-ws/raetselgruppen/model';
+import { AufgabensammlungselementeDataSource } from './raetselgruppenelemente.datasource';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'mja-raetselgruppenelemente',
+  selector: 'mja-Aufgabensammlungselemente',
   standalone: true,
   imports: [
     CommonModule,
@@ -16,24 +16,24 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './raetselgruppenelemente.component.html',
   styleUrls: ['./raetselgruppenelemente.component.scss'],
 })
-export class RaetselgruppenelementeComponent implements AfterViewInit {
+export class AufgabensammlungselementeComponent implements AfterViewInit {
  
   @Input()
-  raetselgruppe!: RaetselgruppeDetails;
+  raetselgruppe!: AufgabensammlungDetails;
 
   @ViewChild(MatTable)
-  table!: MatTable<Raetselgruppenelement>
+  table!: MatTable<Aufgabensammlungselement>
 
-  dataSource = inject(RaetselgruppenelementeDataSource);  
-
-  @Output()
-  showImages: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
+  dataSource = inject(AufgabensammlungselementeDataSource);  
 
   @Output()
-  editElement: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
+  showImages: EventEmitter<Aufgabensammlungselement> = new EventEmitter<Aufgabensammlungselement>();
 
   @Output()
-  deleteElement: EventEmitter<Raetselgruppenelement> = new EventEmitter<Raetselgruppenelement>();
+  editElement: EventEmitter<Aufgabensammlungselement> = new EventEmitter<Aufgabensammlungselement>();
+
+  @Output()
+  deleteElement: EventEmitter<Aufgabensammlungselement> = new EventEmitter<Aufgabensammlungselement>();
 
   ngAfterViewInit(): void {
     this.table.dataSource = this.dataSource;
@@ -49,15 +49,15 @@ export class RaetselgruppenelementeComponent implements AfterViewInit {
     }
   }
 
-  showImagesClicked(element: Raetselgruppenelement): void {
+  showImagesClicked(element: Aufgabensammlungselement): void {
     this.showImages.emit(element);
   }
 
-  editElementClicked(element: Raetselgruppenelement): void {
+  editElementClicked(element: Aufgabensammlungselement): void {
     this.editElement.emit(element);
   }
 
-  deleteElementClicked(element: Raetselgruppenelement): void {
+  deleteElementClicked(element: Aufgabensammlungselement): void {
     this.deleteElement.emit(element);
   }
 }

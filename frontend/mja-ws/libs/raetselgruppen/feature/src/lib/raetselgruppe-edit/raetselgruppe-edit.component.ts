@@ -9,9 +9,9 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatListModule } from '@angular/material/list';
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { STATUS, GuiSchwierigkeitsgradeMap, GuiReferenztypenMap, initialGuiSchwierigkeitsgrad, initialGuiReferenztyp, GuiSchwierigkeitsgrad, GuiRefereztyp, Referenztyp, Schwierigkeitsgrad } from '@mja-ws/core/model';
+import { GuiSchwierigkeitsgradeMap, GuiReferenztypenMap, initialGuiSchwierigkeitsgrad, initialGuiReferenztyp, GuiSchwierigkeitsgrad, GuiRefereztyp, Referenztyp, Schwierigkeitsgrad } from '@mja-ws/core/model';
 import { Router } from '@angular/router';
-import { EditRaetselgruppePayload, RaetselgruppeBasisdaten } from '@mja-ws/raetselgruppen/model';
+import { EditAufgabensammlungPayload, AufgabensammlungBasisdaten } from '@mja-ws/raetselgruppen/model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -37,7 +37,7 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
   raetselgruppenFacade = inject(RaetselgruppenFacade);
 
-  selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
+  selectStatusInput: string[] = ['ERFASST', 'FREIGEGEBEN'];
   selectSchwierigkeitsgradeInput: string[] = new GuiSchwierigkeitsgradeMap().getLabelsSorted();
   selectReferenztypenSelectContent: string[] = new GuiReferenztypenMap().getLabelsSorted();
 
@@ -46,9 +46,9 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
   #formBuilder = inject(FormBuilder);
   #router = inject(Router);
 
-  #raetselgruppeBasisdaten!: RaetselgruppeBasisdaten;
+  #aufgabensammlungBasisdaten!: AufgabensammlungBasisdaten;
 
-  #raetselgruppeBasisdatenSubscription = new Subscription();
+  #aufgabensammlungBasisdatenSubscription = new Subscription();
 
   constructor() {
     this.#createForm();
@@ -56,16 +56,16 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.#raetselgruppeBasisdatenSubscription = this.raetselgruppenFacade.raetselgruppeBasisdaten$.subscribe((basisdaten) => {
+    this.#aufgabensammlungBasisdatenSubscription = this.raetselgruppenFacade.aufgabensammlungBasisdaten$.subscribe((basisdaten) => {
 
-      this.#raetselgruppeBasisdaten = basisdaten;
+      this.#aufgabensammlungBasisdaten = basisdaten;
       this.#initForm();
 
     });
   }
 
   ngOnDestroy(): void {
-    this.#raetselgruppeBasisdatenSubscription.unsubscribe();
+    this.#aufgabensammlungBasisdatenSubscription.unsubscribe();
   }
 
   raetselgruppeDataError = (controlName: string, errorName: string) => {
@@ -73,16 +73,16 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
   }
 
   submit(): void {
-    const editRaetselgruppePayload: EditRaetselgruppePayload = this.#readFormValues();
-    this.raetselgruppenFacade.saveRaetselgruppe(editRaetselgruppePayload);
+    const EditAufgabensammlungPayload: EditAufgabensammlungPayload = this.#readFormValues();
+    this.raetselgruppenFacade.saveRaetselgruppe(EditAufgabensammlungPayload);
   }
 
   showBtnDetails(): boolean {
-    return this.#raetselgruppeBasisdaten.id !== 'neu';
+    return this.#aufgabensammlungBasisdaten.id !== 'neu';
   }
 
   cancelEdit(): void {
-    this.raetselgruppenFacade.cancelEdit(this.#raetselgruppeBasisdaten);
+    this.raetselgruppenFacade.cancelEdit(this.#aufgabensammlungBasisdaten);
   }
 
   gotoUebersicht(): void {
@@ -108,6 +108,9 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
   }
 
   #createForm(): void {
+
+    // TODO: checkbox privat muss noch in die form
+
     this.form = this.#formBuilder.group({
       id: [''],
       user: [''],
@@ -122,46 +125,49 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
   #initForm() {
 
-    this.form.controls['id'].setValue(this.#raetselgruppeBasisdaten.id);
-    this.form.controls['user'].setValue(this.#raetselgruppeBasisdaten.geaendertDurch ? this.#raetselgruppeBasisdaten.geaendertDurch : ' ');
-    this.form.controls['name'].setValue(this.#raetselgruppeBasisdaten.name ? this.#raetselgruppeBasisdaten.name : '');
-    this.form.controls['status'].setValue(this.#raetselgruppeBasisdaten.status);
-    this.form.controls['kommentar'].setValue(this.#raetselgruppeBasisdaten.kommentar ? this.#raetselgruppeBasisdaten.kommentar : '');
+    const theStatus: string = this.#aufgabensammlungBasisdaten.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';
+
+    this.form.controls['id'].setValue(this.#aufgabensammlungBasisdaten.id);
+    this.form.controls['user'].setValue(this.#aufgabensammlungBasisdaten.geaendertDurch ? this.#aufgabensammlungBasisdaten.geaendertDurch : ' ');
+    this.form.controls['name'].setValue(this.#aufgabensammlungBasisdaten.name ? this.#aufgabensammlungBasisdaten.name : '');
+    this.form.controls['status'].setValue(theStatus);
+    this.form.controls['kommentar'].setValue(this.#aufgabensammlungBasisdaten.kommentar ? this.#aufgabensammlungBasisdaten.kommentar : '');
 
 
-    const guiSchwierigkeitsrad: GuiSchwierigkeitsgrad = this.#raetselgruppeBasisdaten && this.#raetselgruppeBasisdaten.schwierigkeitsgrad ? new GuiSchwierigkeitsgradeMap().getGuiSchwierigkeitsgrade(this.#raetselgruppeBasisdaten.schwierigkeitsgrad)
+    const guiSchwierigkeitsrad: GuiSchwierigkeitsgrad = this.#aufgabensammlungBasisdaten && this.#aufgabensammlungBasisdaten.schwierigkeitsgrad ? new GuiSchwierigkeitsgradeMap().getGuiSchwierigkeitsgrade(this.#aufgabensammlungBasisdaten.schwierigkeitsgrad)
       : initialGuiSchwierigkeitsgrad;
     this.form.controls['schwierigkeitsgrad'].setValue(guiSchwierigkeitsrad.label);
 
     let guiReferenztyp: GuiRefereztyp = initialGuiReferenztyp;
 
-    if (this.#raetselgruppeBasisdaten && this.#raetselgruppeBasisdaten.referenztyp) {
-      guiReferenztyp = new GuiReferenztypenMap().getGuiRefereztyp(this.#raetselgruppeBasisdaten.referenztyp);
+    if (this.#aufgabensammlungBasisdaten && this.#aufgabensammlungBasisdaten.referenztyp) {
+      guiReferenztyp = new GuiReferenztypenMap().getGuiRefereztyp(this.#aufgabensammlungBasisdaten.referenztyp);
     }
 
     this.form.controls['referenztyp'].setValue(guiReferenztyp.label);
 
-    this.form.controls['referenz'].setValue(this.#raetselgruppeBasisdaten.referenz ? this.#raetselgruppeBasisdaten.referenz : '');
+    this.form.controls['referenz'].setValue(this.#aufgabensammlungBasisdaten.referenz ? this.#aufgabensammlungBasisdaten.referenz : '');
   }
 
-  #readFormValues(): EditRaetselgruppePayload {
+  #readFormValues(): EditAufgabensammlungPayload {
 
     const formValue = this.form.value;
 
     const referenztyp: Referenztyp = new GuiReferenztypenMap().getReferenztypOfLabel(formValue['referenztyp']);
     const schwierigkeitsgrad: Schwierigkeitsgrad = new GuiSchwierigkeitsgradeMap().getSchwierigkeitsgradOfLabel(formValue['schwierigkeitsgrad']);
 
-    const editRaetselgruppePayload: EditRaetselgruppePayload = {
-      id: this.#raetselgruppeBasisdaten.id,
+    const EditAufgabensammlungPayload: EditAufgabensammlungPayload = {
+      id: this.#aufgabensammlungBasisdaten.id,
       name: formValue['name'].trim(),
       referenz: formValue['referenz'] && formValue['referenz'].trim().length > 0 ? formValue['referenz'].trim() : undefined,
       referenztyp: referenztyp === 'NOOP' ? undefined : referenztyp,
       schwierigkeitsgrad: schwierigkeitsgrad,
-      status: formValue['status'],
+      freigegeben: formValue['status'] === 'FREIGEGEBEN',
+      privat: false,
       kommentar: formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined
     };
 
-    return editRaetselgruppePayload;
+    return EditAufgabensammlungPayload;
 
   }
 }

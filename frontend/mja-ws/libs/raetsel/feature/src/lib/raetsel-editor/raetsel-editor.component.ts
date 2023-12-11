@@ -16,7 +16,7 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { Antwortvorschlag, EditRaetselPayload, RaetselDetails } from '@mja-ws/raetsel/model';
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, STATUS, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
+import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel, FileInfoComponent, FileInfoModel, ImageDialogComponent, ImageDialogModel } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
@@ -83,7 +83,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
-  selectStatusInput: STATUS[] = ['ERFASST', 'FREIGEGEBEN'];
+  selectStatusInput: string[] = ['ERFASST', 'FREIGEGEBEN'];
 
   selectItemsCompomentModel!: SelectItemsCompomentModel;
   dialog = inject(MatDialog);
@@ -361,10 +361,12 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     const raetsel = this.#raetselDetails;
 
+    const theStatus = raetsel.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';
+
     this.form.controls['schluessel'].setValue(raetsel.schluessel);
     this.form.controls['name'].setValue(raetsel.name);
     this.form.controls['quelleId'].setValue(raetsel.quelle.id);
-    this.form.controls['status'].setValue(raetsel.status);
+    this.form.controls['status'].setValue(theStatus);
     this.form.controls['frage'].setValue(raetsel.frage);
     this.form.controls['loesung'].setValue(raetsel.loesung);
     this.form.controls['kommentar'].setValue(raetsel.kommentar);
@@ -407,13 +409,13 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
 
-    const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : ''
+    const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : '';
 
     const raetselDetails: RaetselDetails = {
       ...this.#raetselDetails,
       schluessel: c_schluessel,
       name: formValue['name'] !== null ? formValue['name'].trim() : '',
-      status: formValue['status'],
+      freigegeben: formValue['status'] === 'FREIGEGEBEN',
       kommentar: formValue['kommentar'] !== null ? formValue['kommentar'].trim() : null,
       frage: formValue['frage'] !== null ? formValue['frage'].trim() : '',
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,

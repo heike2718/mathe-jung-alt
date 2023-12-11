@@ -2,19 +2,19 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen.dto;
+package de.egladil.mja_api.domain.aufgabensammlungen.dto;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 
 /**
- * RaetselgruppensucheTrefferItem
+ * AufgabensammlungSucheTrefferItem
  */
-public class RaetselgruppensucheTrefferItem {
+public class AufgabensammlungSucheTrefferItem {
 
 	@JsonProperty
 	@Schema(description = "technische ID")

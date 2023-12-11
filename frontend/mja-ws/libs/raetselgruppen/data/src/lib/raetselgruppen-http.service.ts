@@ -1,13 +1,13 @@
 import { inject, Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
 import {
-    RaetselgruppenTreffer,
-    RaetselgruppenSuchparameter,
-    RaetselgruppeDetails,
-    EditRaetselgruppenelementPayload,
-    Raetselgruppenelement,
-    EditRaetselgruppePayload,
-    RaetselgruppeBasisdaten
+    AufgabensammlungenTreffer,
+    AufgabensammlungenSuchparameter,
+    AufgabensammlungDetails,
+    EditAufgabensammlungselementPayload,
+    Aufgabensammlungselement,
+    EditAufgabensammlungPayload,
+    AufgabensammlungBasisdaten
 } from "@mja-ws/raetselgruppen/model";
 import { Observable } from "rxjs";
 import { map, switchMap } from 'rxjs/operators';
@@ -19,9 +19,9 @@ import { generateUUID } from "@mja-ws/shared/util";
 export class RaetselgruppenHttpService {
 
     #http = inject(HttpClient);
-    #url = '/mja-api/raetselgruppen';
+    #url = '/mja-api/aufgabensammlungen';
 
-    findRaetselgruppen(suchparameter: RaetselgruppenSuchparameter, pageDefinition: PageDefinition): Observable<RaetselgruppenTreffer> {
+    findRaetselgruppen(suchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): Observable<AufgabensammlungenTreffer> {
 
         const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
@@ -50,43 +50,43 @@ export class RaetselgruppenHttpService {
         const url = this.#url + '/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        return this.#http.get<RaetselgruppenTreffer>(url, { headers, params });
+        return this.#http.get<AufgabensammlungenTreffer>(url, { headers, params });
     }
 
-    findById(uuid: string): Observable<RaetselgruppeDetails> {
+    findById(uuid: string): Observable<AufgabensammlungDetails> {
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const url = this.#url + '/' + uuid + '/v1';
-        return this.#http.get<RaetselgruppeDetails>(url, { headers });
+        return this.#http.get<AufgabensammlungDetails>(url, { headers });
     }
 
-    saveRaetselgruppe(editRaetselgruppePayload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
+    saveRaetselgruppe(EditAufgabensammlungPayload: EditAufgabensammlungPayload): Observable<AufgabensammlungBasisdaten> {
 
         const url = this.#url + '/v1';
 
-        if ('neu' === editRaetselgruppePayload.id) {
-            return this.#insertRaetselgruppe(url, editRaetselgruppePayload);
+        if ('neu' === EditAufgabensammlungPayload.id) {
+            return this.#insertRaetselgruppe(url, EditAufgabensammlungPayload);
         } else {
-            return this.#updateRaetselgruppe(url, editRaetselgruppePayload);
+            return this.#updateRaetselgruppe(url, EditAufgabensammlungPayload);
         }
     }
 
-    saveRaetselgruppenelement(raetselgruppeID: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+    saveAufgabensammlungselement(raetselgruppeID: string, payload: EditAufgabensammlungselementPayload): Observable<AufgabensammlungDetails> {
 
         const url = this.#url + '/' + raetselgruppeID + '/elemente/v1';
 
         if (payload.id === 'neu') {
-            return this.#insertRaetselgruppenelement(url, payload);
+            return this.#insertAufgabensammlungselement(url, payload);
         } else {
-            return this.#updateRaetselgruppenelement(url, payload);
+            return this.#updateAufgabensammlungselement(url, payload);
         }
     }
 
-    deleteRaetselgruppenelement(raetselgruppeID: string, payload: Raetselgruppenelement): Observable<RaetselgruppeDetails> {
+    deleteAufgabensammlungselement(raetselgruppeID: string, payload: Aufgabensammlungselement): Observable<AufgabensammlungDetails> {
 
         const url = this.#url + '/' + raetselgruppeID + '/elemente/' + payload.id + '/v1';
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        return this.#http.delete<RaetselgruppeDetails>(url, { headers });
+        return this.#http.delete<AufgabensammlungDetails>(url, { headers });
     }
 
     generiereVorschau(raetselgruppeID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
@@ -154,30 +154,30 @@ export class RaetselgruppenHttpService {
         );
     }
 
-    #insertRaetselgruppe(url: string, payload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
+    #insertRaetselgruppe(url: string, payload: EditAufgabensammlungPayload): Observable<AufgabensammlungBasisdaten> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        return this.#http.post<RaetselgruppeBasisdaten>(url, payload, { headers });
+        return this.#http.post<AufgabensammlungBasisdaten>(url, payload, { headers });
 
     }
 
-    #updateRaetselgruppe(url: string, payload: EditRaetselgruppePayload): Observable<RaetselgruppeBasisdaten> {
+    #updateRaetselgruppe(url: string, payload: EditAufgabensammlungPayload): Observable<AufgabensammlungBasisdaten> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        return this.#http.put<RaetselgruppeBasisdaten>(url, payload, { headers });
+        return this.#http.put<AufgabensammlungBasisdaten>(url, payload, { headers });
 
     }
 
-    #insertRaetselgruppenelement(url: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+    #insertAufgabensammlungselement(url: string, payload: EditAufgabensammlungselementPayload): Observable<AufgabensammlungDetails> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        return this.#http.post<RaetselgruppeDetails>(url, payload, { headers });
+        return this.#http.post<AufgabensammlungDetails>(url, payload, { headers });
     }
 
-    #updateRaetselgruppenelement(url: string, payload: EditRaetselgruppenelementPayload): Observable<RaetselgruppeDetails> {
+    #updateAufgabensammlungselement(url: string, payload: EditAufgabensammlungselementPayload): Observable<AufgabensammlungDetails> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        return this.#http.put<RaetselgruppeDetails>(url, payload, { headers });
+        return this.#http.put<AufgabensammlungDetails>(url, payload, { headers });
     }
 
     #extractFileName(contentDisposition: string | null): string {

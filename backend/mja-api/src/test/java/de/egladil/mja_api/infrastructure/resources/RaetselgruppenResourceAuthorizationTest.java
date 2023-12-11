@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungPayload;
+import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungselementPayload;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
-import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
-import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppenelementPayload;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -25,7 +25,7 @@ import io.restassured.http.ContentType;
  * RaetselgruppenResourceTest
  */
 @QuarkusTest
-@TestHTTPEndpoint(RaetselgruppenResource.class)
+@TestHTTPEndpoint(AufgabensammlungenResource.class)
 @TestProfile(FullDatabaseTestProfile.class)
 public class RaetselgruppenResourceAuthorizationTest {
 
@@ -93,7 +93,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 	@Test
 	void testRaetselgruppeAnlegenUnauthorized() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
@@ -115,7 +115,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 	@TestSecurity(user = "testuser", roles = { "LEHRER" })
 	void testRaetselgruppeAnlegenForbidden() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
@@ -136,7 +136,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 	@Test
 	void testRaetselgruppeAendernUnauthorized() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
@@ -158,7 +158,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 	@TestSecurity(user = "testuser", roles = { "LEHRER" })
 	void testRaetselgruppeAendernForbidden() throws Exception {
 
-		EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
@@ -208,7 +208,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 	@Test
 	void elementAnlegenUnauthorized() throws Exception {
 
-		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("neu");
 		payload.setNummer("A-1");
 		payload.setPunkte(300);
@@ -231,7 +231,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	void elementAnlegenForbidden() throws Exception {
 
-		EditRaetselgruppenelementPayload payload = new EditRaetselgruppenelementPayload();
+		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("neu");
 		payload.setNummer("A-1");
 		payload.setPunkte(300);

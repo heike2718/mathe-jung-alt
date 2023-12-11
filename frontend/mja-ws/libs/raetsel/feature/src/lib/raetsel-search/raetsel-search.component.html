@@ -34,10 +34,10 @@
 
     <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef class="mat-header-cell__1"></mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" class="mat-cell__1"><span *ngIf="raetsel.status === 'ERFASST'">
+        <mat-cell *matCellDef="let raetsel" class="mat-cell__1"><span *ngIf="!raetsel.freigegeben">
                 <mat-icon>block</mat-icon>
             </span>
-            <span *ngIf="raetsel.status === 'FREIGEGEBEN'">
+            <span *ngIf="raetsel.freigegeben">
                 <mat-icon>check_circle_outline</mat-icon>
             </span>
         </mat-cell>

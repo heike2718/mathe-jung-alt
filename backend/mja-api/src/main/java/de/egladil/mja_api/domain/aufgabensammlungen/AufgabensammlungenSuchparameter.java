@@ -2,23 +2,23 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen;
+package de.egladil.mja_api.domain.aufgabensammlungen;
 
 import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.mja_api.domain.dto.SortDirection;
 
 /**
- * RaetselgruppenSuchparameter
+ * AufgabensammlungenSuchparameter
  */
 
-public record RaetselgruppenSuchparameter(
+public record AufgabensammlungenSuchparameter(
 // @formatter:off
 	String name,
 	Schwierigkeitsgrad schwierigkeitsgrad,
 	Referenztyp referenztyp,
 	String referenz,
-	RaetselgruppenSortattribute sortAttribute,
+	AufgabensammlungenSortattribute sortAttribute,
 	SortDirection sortDirection
 	) {
 	// @formatter:on

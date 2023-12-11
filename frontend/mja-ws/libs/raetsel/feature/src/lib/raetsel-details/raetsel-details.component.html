@@ -68,10 +68,10 @@
                         </div>
 
                         <div *ngIf="authFacade.userIsAdmin$ | async">
-                            <div *ngIf="raetselgruppenFacade.raetselgruppeDetails$ | async as raetselgruppe"><button
+                            <div *ngIf="raetselgruppenFacade.aufgabensammlungDetails$ | async as aufgabensammlung"><button
                                     class="label" mat-raised-button color="primary"
-                                    matTooltip="zur gewählten Rätselgruppe {{raetselgruppe.name}}"
-                                    (click)="gotoRaetselgruppe()">Rätselgruppe</button>
+                                    matTooltip="zur gewählten Aufgabensammlung {{aufgabensammlung.name}}"
+                                    (click)="gotoAufgabensammlung()">Aufgabensammlung</button>
                             </div>
                         </div>
 
@@ -88,8 +88,9 @@
                         <label>Quelle:</label>
                         <div>{{raetsel.quelle.name}}</div>
 
-                        <label>Status:</label>
-                        <div>{{raetsel.status}}</div>
+                        <!-- TODO: hier slider oder checkbox-->
+                        <label>freigegeben:</label>
+                        <div>{{raetsel.freigegeben}</div>
                     </div>
 
                     <mat-accordion>

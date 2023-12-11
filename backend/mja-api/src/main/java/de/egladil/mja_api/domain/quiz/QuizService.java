@@ -11,15 +11,15 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.AntwortvorschlaegeMapper;
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
-import de.egladil.mja_api.infrastructure.persistence.dao.RaetselgruppenDao;
+import de.egladil.mja_api.infrastructure.persistence.dao.AufgabensammlungDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
@@ -37,7 +37,7 @@ public class QuizService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(QuizService.class);
 
 	@Inject
-	RaetselgruppenDao raetselgruppenDao;
+	AufgabensammlungDao aufgabensammlungDao;
 
 	@Inject
 	RaetselFileService raetselFileService;
@@ -57,7 +57,7 @@ public class QuizService {
 	public Optional<Quiz> generateQuiz(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
 
 		LOGGER.debug(" ==> (1)");
-		PersistenteAufgabensammlung dbResult = raetselgruppenDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
 
 		LOGGER.debug(" ==> (4)");
 
@@ -78,7 +78,7 @@ public class QuizService {
 
 	public List<Quizaufgabe> getItemsAsQuizaufgaben(final String raetselgruppeID) {
 
-		List<PersistenteAufgabeReadonly> aufgabenReadonly = raetselgruppenDao.loadAufgabenByReaetselgruppe(raetselgruppeID);
+		List<PersistenteAufgabeReadonly> aufgabenReadonly = aufgabensammlungDao.loadAufgabenByReaetselgruppe(raetselgruppeID);
 		List<Quizaufgabe> aufgaben = new ArrayList<>();
 
 		aufgabenReadonly.forEach(aufgabeDB -> {

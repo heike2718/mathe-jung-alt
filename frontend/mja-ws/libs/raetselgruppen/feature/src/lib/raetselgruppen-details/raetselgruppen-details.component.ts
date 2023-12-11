@@ -16,11 +16,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Subscription, tap } from 'rxjs';
-import { EditRaetselgruppenelementPayload, RaetselgruppeBasisdaten, Raetselgruppenelement } from '@mja-ws/raetselgruppen/model';
-import { RaetselgruppenelementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
-import { RaetselgruppenelementDialogComponent } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
-import { RaetselgruppenelementeComponent } from '../raetselgruppenelemente/raetselgruppenelemente.component';
-import { CoreFacade } from '@mja-ws/core/api';
+import { EditAufgabensammlungselementPayload, AufgabensammlungBasisdaten, Aufgabensammlungselement } from '@mja-ws/raetselgruppen/model';
+import { AufgabensammlungselementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
+import { AufgabensammlungselementDialogComponent } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.component';
+import { AufgabensammlungselementeComponent } from '../raetselgruppenelemente/raetselgruppenelemente.component';
 import { RaetselgruppeEditComponent } from '../raetselgruppe-edit/raetselgruppe-edit.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -41,8 +40,8 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
     MatFormFieldModule,
     FrageLoesungImagesComponent,
     GeneratorParametersDialogAutorenComponent,
-    RaetselgruppenelementDialogComponent,
-    RaetselgruppenelementeComponent,
+    AufgabensammlungselementDialogComponent,
+    AufgabensammlungselementeComponent,
     RaetselgruppeEditComponent
   ],
   templateUrl: './raetselgruppen-details.component.html',
@@ -63,19 +62,19 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
   #raetselgruppeSubscription = new Subscription();
   #imagesSubscription = new Subscription();
-  #raetselgruppenelementSubscription = new Subscription();
+  #aufgabensammlungselementSubscription = new Subscription();
 
-  #raetselgruppeBasisdaten!: RaetselgruppeBasisdaten;
+  #aufgabensammlungBasisdaten!: AufgabensammlungBasisdaten;
   #anzahlElemente = 0;
 
   ngOnInit(): void {
 
-      this.#raetselgruppeSubscription = this.raetselgruppenFacade.raetselgruppeDetails$.subscribe((raetselgruppe) => {
-      this.#raetselgruppeBasisdaten = raetselgruppe;
+      this.#raetselgruppeSubscription = this.raetselgruppenFacade.aufgabensammlungDetails$.subscribe((raetselgruppe) => {
+      this.#aufgabensammlungBasisdaten = raetselgruppe;
       this.#anzahlElemente = raetselgruppe.elemente.length
     });
 
-    this.#raetselgruppenelementSubscription = this.raetselgruppenFacade.selectedRaetselgruppenelement$.subscribe(
+    this.#aufgabensammlungselementSubscription = this.raetselgruppenFacade.selectedAufgabensammlungselement$.subscribe(
       (element) => {
         if (element) {
           this.schluessel = element.raetselSchluessel;
@@ -95,11 +94,11 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.#raetselgruppeSubscription.unsubscribe();
     this.#imagesSubscription.unsubscribe();
-    this.#raetselgruppenelementSubscription.unsubscribe();
+    this.#aufgabensammlungselementSubscription.unsubscribe();
   }
 
   getRaetselgruppeID(): string {
-    return this.#raetselgruppeBasisdaten.id;
+    return this.#aufgabensammlungBasisdaten.id;
   }
 
   gotoUebersicht(): void {
@@ -181,7 +180,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   }
 
   startEdit(): void {
-    this.raetselgruppenFacade.editRaetselgruppe(this.#raetselgruppeBasisdaten);
+    this.raetselgruppenFacade.editRaetselgruppe(this.#aufgabensammlungBasisdaten);
   }
 
   reloadDisabled(): boolean {
@@ -189,7 +188,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   }
 
   reload(): void {
-    this.raetselgruppenFacade.reloadRaetselgruppe(this.#raetselgruppeBasisdaten, this.#anzahlElemente);
+    this.raetselgruppenFacade.reloadRaetselgruppe(this.#aufgabensammlungBasisdaten, this.#anzahlElemente);
   }
 
   toggleStatusDisabled(): boolean {
@@ -197,12 +196,12 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   }
 
   toggleStatus(): void {
-    this.raetselgruppenFacade.toggleStatus(this.#raetselgruppeBasisdaten);
+    this.raetselgruppenFacade.toggleStatus(this.#aufgabensammlungBasisdaten);
   }
 
-  openNeuesRaetselgruppenelementDialog(): void {
+  openNeuesAufgabensammlungselementDialog(): void {
 
-    const dialogData: RaetselgruppenelementDialogData = {
+    const dialogData: AufgabensammlungselementDialogData = {
       titel: 'Neues Element',
       id: 'neu',
       modusAendern: false,
@@ -218,9 +217,9 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
     return this.getRaetselgruppeID().length === 0 || this.#anzahlElemente === 0;
   }
 
-  onEditElement($element: Raetselgruppenelement): void {
+  onEditElement($element: Aufgabensammlungselement): void {
 
-    const dialogData: RaetselgruppenelementDialogData = {
+    const dialogData: AufgabensammlungselementDialogData = {
       titel: 'Element ändern',
       id: $element.id,
       modusAendern: true,
@@ -232,19 +231,19 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
     this.#initAndOpenEditElementDialog(dialogData);
   }
 
-  onDeleteElement($element: Raetselgruppenelement): void {
-    if (this.#raetselgruppeBasisdaten) {
+  onDeleteElement($element: Aufgabensammlungselement): void {
+    if (this.#aufgabensammlungBasisdaten) {
       this.#openConfirmLoeschenDialog($element);
     }
   }
 
-  onShowImagesElement($element: Raetselgruppenelement): void {
+  onShowImagesElement($element: Aufgabensammlungselement): void {
 
-    this.raetselgruppenFacade.selectRaetselgruppenelement($element);
+    this.raetselgruppenFacade.selectAufgabensammlungselement($element);
   }
 
-  #initAndOpenEditElementDialog(dialogData: RaetselgruppenelementDialogData): void {
-    const dialogRef = this.dialog.open(RaetselgruppenelementDialogComponent, {
+  #initAndOpenEditElementDialog(dialogData: AufgabensammlungselementDialogData): void {
+    const dialogRef = this.dialog.open(AufgabensammlungselementDialogComponent, {
       height: '400px',
       width: '500px',
       data: dialogData
@@ -252,27 +251,27 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if (result && this.#raetselgruppeBasisdaten) {
-        const data: RaetselgruppenelementDialogData = result as RaetselgruppenelementDialogData;
+      if (result && this.#aufgabensammlungBasisdaten) {
+        const data: AufgabensammlungselementDialogData = result as AufgabensammlungselementDialogData;
         this.#saveReaetselgruppeElement(data);
       }
     });
   }
 
-  #saveReaetselgruppeElement(data: RaetselgruppenelementDialogData): void {
+  #saveReaetselgruppeElement(data: AufgabensammlungselementDialogData): void {
 
-    const payload: EditRaetselgruppenelementPayload = {
+    const payload: EditAufgabensammlungselementPayload = {
       id: data.id,
       raetselSchluessel: data.schluessel,
       nummer: data.nummer,
       punkte: data.punkte
     };
 
-    this.raetselgruppenFacade.saveRaetselgruppenelement(this.getRaetselgruppeID(), payload);
+    this.raetselgruppenFacade.saveAufgabensammlungselement(this.getRaetselgruppeID(), payload);
 
   }
 
-  #openConfirmLoeschenDialog(element: Raetselgruppenelement): void {
+  #openConfirmLoeschenDialog(element: Aufgabensammlungselement): void {
 
     const dialogData: JaNeinDialogData = {
       frage: 'Soll das Rätselgruppenelement wirklich gelöscht werden?',
@@ -287,7 +286,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.raetselgruppenFacade.deleteRaetselgruppenelement(this.getRaetselgruppeID(), element);
+        this.raetselgruppenFacade.deleteAufgabensammlungselement(this.getRaetselgruppeID(), element);
         this.images = undefined;
       }
     });
@@ -295,7 +294,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
 
   #basisdatenLoaded(): boolean {
 
-    if (this.#raetselgruppeBasisdaten) {
+    if (this.#aufgabensammlungBasisdaten) {
       return true;
     }
 

@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen.dto;
+package de.egladil.mja_api.domain.aufgabensammlungen.dto;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,15 +10,15 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import io.quarkus.test.junit.QuarkusTest;
 
 /**
- * EditRaetselgruppePayloadTest
+ * EditAufgabensammlungPayloadTest
  */
 @QuarkusTest
-public class EditRaetselgruppePayloadTest {
+public class EditAufgabensammlungPayloadTest {
 
 	@Nested
 	class JsonMappingTests {
@@ -27,7 +27,7 @@ public class EditRaetselgruppePayloadTest {
 		void testSerialize() throws JsonProcessingException {
 
 			// Arrange
-			EditRaetselgruppePayload payload = new EditRaetselgruppePayload();
+			EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 			payload.setId("neu");
 			payload.setName("Minikänguruwettbewerb 2022 - Klasse 1");
 			payload.setReferenz("2022");

@@ -2,14 +2,14 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen.dto;
+package de.egladil.mja_api.domain.aufgabensammlungen.dto;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,15 +17,15 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
- * EditRaetselgruppePayload
+ * EditAufgabensammlungPayload
  */
 @Schema(
-	name = "EditRaetselgruppePayload",
-	description = "Payload zum Anlegen und Ändern einer Rätselgruppe ohne Elemente.")
-public class EditRaetselgruppePayload {
+	name = "EditAufgabensammlungPayload",
+	description = "Payload zum Anlegen und Ändern einer Aufgabensammlung ohne Elemente.")
+public class EditAufgabensammlungPayload {
 
 	@JsonProperty
-	@Schema(description = "technische ID, 'neu' für neue Rätselgruppen")
+	@Schema(description = "technische ID, 'neu' für neue Aufgabensammlung")
 	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält ungültige Zeichen")
 	private String id;
 
@@ -33,7 +33,7 @@ public class EditRaetselgruppePayload {
 	@Pattern(regexp = "[\\w äöüß\\:\\-\\.\\,]*", message = "name enthält ungültige Zeichen")
 	@Size(min = 1, max = 100, message = "name darf nicht länger als 100 Zeichen sein")
 	@NotBlank(message = "name darf nicht leer sein")
-	@Schema(description = "Name der Rätselgruppe", example = "Serie 42")
+	@Schema(description = "Name der Aufgabensammlung", example = "Serie 42")
 	private String name;
 
 	@JsonProperty
@@ -44,7 +44,7 @@ public class EditRaetselgruppePayload {
 
 	@JsonProperty
 	@NotNull(message = "schwierigkeitsgrad darf nicht null sein")
-	@Schema(description = "Schwierigkeitsgrad, für den diese Rätselgruppe gedacht ist. (enum Schwierigkeitsgrad)")
+	@Schema(description = "Schwierigkeitsgrad, für den diese Aufgabensammlung gedacht ist. (enum Schwierigkeitsgrad)")
 	private Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@JsonProperty

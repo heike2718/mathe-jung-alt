@@ -1,4 +1,4 @@
-export interface RaetselgruppenelementDialogData {
+export interface AufgabensammlungselementDialogData {
     readonly titel: string;
     readonly id: string;
     readonly modusAendern: boolean;

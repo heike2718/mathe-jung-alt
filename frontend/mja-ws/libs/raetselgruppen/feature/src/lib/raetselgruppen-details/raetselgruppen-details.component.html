@@ -1,6 +1,6 @@
 <div class="mja-container">
 
-    <div *ngIf="raetselgruppenFacade.raetselgruppeDetails$ | async as gruppe else keineGruppe">
+    <div *ngIf="raetselgruppenFacade.aufgabensammlungDetails$ | async as gruppe else keineGruppe">
 
         <h2>Rätselgruppe {{gruppe.name}} <span matBadge={{gruppe.elemente.length}} matBadgeColor="accent"
                 class="ml-1"></span></h2>
@@ -18,9 +18,13 @@
             <div>
                 {{gruppe.geaendertDurch}}
             </div>
-            <label>Status:</label>
+            <label>freigegeben:</label>
             <div>
-                {{gruppe.status}}
+                {{gruppe.freigegeben}}
+            </div>
+            <label>privat:</label>
+            <div>
+                {{gruppe.privat}}
             </div>
             <label> Referenztyp:</label>
             <div>
@@ -36,7 +40,7 @@
 
             <div *ngIf="!(gruppe.schreibgeschuetzt)">
                 <button mat-raised-button color="primary" [disabled]="!getRaetselgruppeID()"
-                    (click)="openNeuesRaetselgruppenelementDialog()">neues Element</button>
+                    (click)="openNeuesAufgabensammlungselementDialog()">neues Element</button>
             </div>
 
             <div *ngIf="!(gruppe.schreibgeschuetzt)">
@@ -61,15 +65,15 @@
 
         <h2>Elemente</h2>
 
-        <mja-raetselgruppenelemente [raetselgruppe]="gruppe" (showImages)="onShowImagesElement($event)"
+        <mja-Aufgabensammlungselemente [raetselgruppe]="gruppe" (showImages)="onShowImagesElement($event)"
             (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
-        </mja-raetselgruppenelemente>
+        </mja-Aufgabensammlungselemente>
 
         <div *ngIf="gruppe.elemente.length > 0">
             <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
             <div *ngIf="schluessel.length > 0" class="mb-2">
                 <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
-                <button *ngIf="raetselgruppenFacade.selectedRaetselgruppenelement$ | async as element" mat-raised-button
+                <button *ngIf="raetselgruppenFacade.selectedAufgabensammlungselement$ | async as element" mat-raised-button
                     color="primary" class="ml-2" (click)="onShowImagesElement(element)">neu laden</button>
             </div>            
             <div *ngIf="images else imagesFehlen">

@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.raetselgruppen.dto;
+package de.egladil.mja_api.domain.aufgabensammlungen.dto;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,19 +13,19 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
-import de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenelementComparator;
+import de.egladil.mja_api.domain.aufgabensammlungen.Aufgabensammlungselement;
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.aufgabensammlungen.impl.AufgabensammlungselementComparator;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 
 /**
- * RaetselgruppeDetails
+ * AufgabensammlungDetails
  */
 @Schema(
-	name = "RaetselgruppeDetails",
+	name = "AufgabensammlungDetails",
 	description = "Details einer Rätselgruppe für die Anzeige oder zum Generieren von PDF oder LaTeX. Eine Rätselruppe ist eine freie Zusammenstellung von Rätseln. Ziel ist die Erzeugung eines PDFs. Die Rästel werden in der Reihenfolge gedruckt, in der sie in der Rätselgruppe eingetragen werden.")
-public class RaetselgruppeDetails {
+public class AufgabensammlungDetails {
 
 	@JsonProperty
 	@Schema(description = "technische ID")
@@ -71,11 +71,11 @@ public class RaetselgruppeDetails {
 
 	@JsonProperty
 	@Schema(type = SchemaType.ARRAY, description = "Elemente der Rätselgruppe")
-	private List<Raetselgruppenelement> elemente = new ArrayList<>();
+	private List<Aufgabensammlungselement> elemente = new ArrayList<>();
 
-	public static RaetselgruppeDetails createFromDB(final PersistenteAufgabensammlung gruppeDB) {
+	public static AufgabensammlungDetails createFromDB(final PersistenteAufgabensammlung gruppeDB) {
 
-		RaetselgruppeDetails result = new RaetselgruppeDetails();
+		AufgabensammlungDetails result = new AufgabensammlungDetails();
 		result.geaendertDurch = gruppeDB.geaendertDurch;
 		result.id = gruppeDB.uuid;
 		result.kommentar = gruppeDB.kommentar;
@@ -88,14 +88,14 @@ public class RaetselgruppeDetails {
 		return result;
 	}
 
-	public void addElement(final Raetselgruppenelement element) {
+	public void addElement(final Aufgabensammlungselement element) {
 
 		this.elemente.add(element);
 	}
 
 	public void sortElemente() {
 
-		Collections.sort(elemente, new RaetselgruppenelementComparator());
+		Collections.sort(elemente, new AufgabensammlungselementComparator());
 	}
 
 	public String getId() {
@@ -133,7 +133,7 @@ public class RaetselgruppeDetails {
 		return geaendertDurch;
 	}
 
-	public List<Raetselgruppenelement> getElemente() {
+	public List<Aufgabensammlungselement> getElemente() {
 
 		return elemente;
 	}
