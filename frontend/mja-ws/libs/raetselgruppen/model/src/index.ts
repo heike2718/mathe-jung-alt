@@ -1,1 +1,1 @@
-export * from './lib/raetselgruppen-model';
+export * from './lib/aufgabensammlungen-model';

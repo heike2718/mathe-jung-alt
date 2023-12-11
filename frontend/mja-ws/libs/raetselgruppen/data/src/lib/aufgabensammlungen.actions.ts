@@ -3,7 +3,7 @@ import { AufgabensammlungenTreffer, AufgabensammlungenSuchparameter, Aufgabensam
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 
-export const raetselgruppenActions = createActionGroup({
+export const aufgabensammlungenActions = createActionGroup({
     source: 'raetselgruppen',
     events: {
         'FIND_RAETSELGRUPPEN': props<{aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition}>(),

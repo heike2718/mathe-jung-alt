@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
+import { AufgabensammlungenFacade } from '@mja-ws/raetselgruppen/api';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -33,9 +33,9 @@ import { Subscription } from 'rxjs';
   templateUrl: './aufgabensammlungen-edit.component.html',
   styleUrls: ['./aufgabensammlungen-edit.component.scss'],
 })
-export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
+export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
 
-  raetselgruppenFacade = inject(RaetselgruppenFacade);
+  raetselgruppenFacade = inject(AufgabensammlungenFacade);
 
   selectStatusInput: string[] = ['ERFASST', 'FREIGEGEBEN'];
   selectSchwierigkeitsgradeInput: string[] = new GuiSchwierigkeitsgradeMap().getLabelsSorted();
@@ -74,7 +74,7 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
   submit(): void {
     const EditAufgabensammlungPayload: EditAufgabensammlungPayload = this.#readFormValues();
-    this.raetselgruppenFacade.saveRaetselgruppe(EditAufgabensammlungPayload);
+    this.raetselgruppenFacade.saveAufgabensammlung(EditAufgabensammlungPayload);
   }
 
   showBtnDetails(): boolean {
@@ -86,7 +86,7 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
   }
 
   gotoUebersicht(): void {
-    this.raetselgruppenFacade.unselectRaetselgruppe();
+    this.raetselgruppenFacade.unselectAufgabensammlung();
     this.#router.navigateByUrl('aufgabensammlungen/uebersicht');      
   }
 

@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
-import { RaetselgruppenDataSource, RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
+import { AufgabensammlungenDataSource, AufgabensammlungenFacade } from '@mja-ws/raetselgruppen/api';
 import { debounceTime, distinctUntilChanged, merge, Subscription, tap } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -40,9 +40,9 @@ const REFERENZ = 'referenz';
   templateUrl: './aufgabensammlungen-search.component.html',
   styleUrls: ['./aufgabensammlungen-search.component.scss'],
 })
-export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  dataSource = inject(RaetselgruppenDataSource);
+  dataSource = inject(AufgabensammlungenDataSource);
   anzahlRaetselgruppen = 0;
 
 
@@ -68,7 +68,7 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   @ViewChild(MatSort) sort!: MatSort;
 
   #configuration = inject(Configuration);
-  #raetselgruppenFacade = inject(RaetselgruppenFacade);
+  #raetselgruppenFacade = inject(AufgabensammlungenFacade);
   
 
   #nameFilterSubscription = new Subscription();
@@ -254,11 +254,11 @@ export class RaetselgruppenSearchComponent implements OnInit, AfterViewInit, OnD
   }
 
   neueRaetselgruppe(): void {
-    this.#raetselgruppenFacade.createAndEditRaetselgruppe();
+    this.#raetselgruppenFacade.createAndEditAufgabensammlung();
   }
 
   onRowClicked(raetselgruppe: AufgabensammlungTrefferItem): void {
-    this.#raetselgruppenFacade.selectRaetselgruppe(raetselgruppe);
+    this.#raetselgruppenFacade.selectAufgabensammlung(raetselgruppe);
   }
 
   clearFilter(filterFormControl: FormControl): void {

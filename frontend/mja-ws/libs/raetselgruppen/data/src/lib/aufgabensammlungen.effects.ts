@@ -5,34 +5,32 @@ import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { switchMap, map, tap } from "rxjs";
 import { AufgabensammlungenHttpService } from "./aufgabensammlungen-http.service";
-import { raetselgruppenActions } from "./aufgabensammlungen.actions";
-import { RaetselFacade } from "@mja-ws/raetsel/api";
+import { aufgabensammlungenActions } from "./aufgabensammlungen.actions";
 import { CoreFacade } from "@mja-ws/core/api";
 
 @Injectable({ providedIn: 'root' })
-export class RaetselgruppenEffects {
+export class AufgabensammlungenEffects {
 
     #actions = inject(Actions);
-    #raetselgruppenHttpService = inject(AufgabensammlungenHttpService);
+    #aufgabensammlungenHttpService = inject(AufgabensammlungenHttpService);
     #router = inject(Router);
     #downloadService = inject(FileDownloadService);
-    #raetselFacade = inject(RaetselFacade);
     #coreFacade = inject(CoreFacade);
 
     findRaetselgruppen$ = createEffect(() => {
         return this.#actions.pipe(
-            ofType(raetselgruppenActions.fIND_RAETSELGRUPPEN),
-            switchMap((action) => this.#raetselgruppenHttpService.findAufgabensammlungen(action.aufgabensammlungenSuchparameter, action.pageDefinition)),
-            map((treffer) => raetselgruppenActions.rAETSELGRUPPEN_FOUND({ treffer }))
+            ofType(aufgabensammlungenActions.fIND_RAETSELGRUPPEN),
+            switchMap((action) => this.#aufgabensammlungenHttpService.findAufgabensammlungen(action.aufgabensammlungenSuchparameter, action.pageDefinition)),
+            map((treffer) => aufgabensammlungenActions.rAETSELGRUPPEN_FOUND({ treffer }))
         );
     });
 
     selectRaetselgruppe$ = createEffect(() => {
 
         return this.#actions.pipe(
-            ofType(raetselgruppenActions.sELECT_RAETSELGRUPPE),
-            switchMap((action) => this.#raetselgruppenHttpService.findById(action.raetselgruppe.id)),
-            map((aufgabensammlungDetails) => raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED({ aufgabensammlungDetails: aufgabensammlungDetails, navigateTo: 'aufgabensammlungen/details' }))
+            ofType(aufgabensammlungenActions.sELECT_RAETSELGRUPPE),
+            switchMap((action) => this.#aufgabensammlungenHttpService.findById(action.raetselgruppe.id)),
+            map((aufgabensammlungDetails) => aufgabensammlungenActions.rAETSELGRUPPEDETAILS_LOADED({ aufgabensammlungDetails: aufgabensammlungDetails, navigateTo: 'aufgabensammlungen/details' }))
         )
 
     });
@@ -40,7 +38,7 @@ export class RaetselgruppenEffects {
     showDetails$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED),
+            ofType(aufgabensammlungenActions.rAETSELGRUPPEDETAILS_LOADED),
             tap((action) => {
                 this.#router.navigateByUrl(action.navigateTo);
             }),
@@ -49,7 +47,7 @@ export class RaetselgruppenEffects {
     unselectRaetselgruppe$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.uNSELECT_RAETSELGRUPPE),
+            ofType(aufgabensammlungenActions.uNSELECT_RAETSELGRUPPE),
             tap(() => {
                 this.#router.navigateByUrl('aufgabensammlungen');
             }),
@@ -58,7 +56,7 @@ export class RaetselgruppenEffects {
     editRaetselgruppe$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.eDIT_RAETSELGUPPE),
+            ofType(aufgabensammlungenActions.eDIT_RAETSELGUPPE),
             tap(() => {
                 this.#router.navigateByUrl('aufgabensammlungen/edit');
             }),
@@ -67,79 +65,79 @@ export class RaetselgruppenEffects {
     saveRaetselgruppe$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.sAVE_RAETSELGRUPPE),
-            switchMap((action) => this.#raetselgruppenHttpService.saveAufgabensammlung(action.editAufgabensammlungPayload)),
-            map((raetselgruppe) => raetselgruppenActions.rAETSELGRUPPE_SAVED({ raetselgruppe }))
+            ofType(aufgabensammlungenActions.sAVE_RAETSELGRUPPE),
+            switchMap((action) => this.#aufgabensammlungenHttpService.saveAufgabensammlung(action.editAufgabensammlungPayload)),
+            map((raetselgruppe) => aufgabensammlungenActions.rAETSELGRUPPE_SAVED({ raetselgruppe }))
         )
     );
 
     saveAufgabensammlungselement$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.sAVE_RAETSELGRUPPENELEMENT),
-            switchMap((action) => this.#raetselgruppenHttpService.saveAufgabensammlungselement(action.raetselgruppeID, action.payload)),
-            map((raetselgruppenDetails) => raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED({ raetselgruppenDetails }))
+            ofType(aufgabensammlungenActions.sAVE_RAETSELGRUPPENELEMENT),
+            switchMap((action) => this.#aufgabensammlungenHttpService.saveAufgabensammlungselement(action.raetselgruppeID, action.payload)),
+            map((raetselgruppenDetails) => aufgabensammlungenActions.rAETSELGRUPPENELEMENTE_CHANGED({ raetselgruppenDetails }))
         )
     );
 
     deleteAufgabensammlungselement$ = createEffect(() =>
 
         this.#actions.pipe(
-            ofType(raetselgruppenActions.dELETE_RAETSELGRUPPENELEMENT),
-            switchMap((action) => this.#raetselgruppenHttpService.deleteAufgabensammlungselement(action.raetselgruppeID, action.payload)),
-            map((raetselgruppenDetails) => raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED({ raetselgruppenDetails }))
+            ofType(aufgabensammlungenActions.dELETE_RAETSELGRUPPENELEMENT),
+            switchMap((action) => this.#aufgabensammlungenHttpService.deleteAufgabensammlungselement(action.raetselgruppeID, action.payload)),
+            map((raetselgruppenDetails) => aufgabensammlungenActions.rAETSELGRUPPENELEMENTE_CHANGED({ raetselgruppenDetails }))
         )
     );
 
     generiereArbeitsblatt$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.gENERIERE_ARBEITSBLATT),
-            switchMap((action) => this.#raetselgruppenHttpService.generiereArbeitsblattMitLoesungen(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
-            map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
+            ofType(aufgabensammlungenActions.gENERIERE_ARBEITSBLATT),
+            switchMap((action) => this.#aufgabensammlungenHttpService.generiereArbeitsblattMitLoesungen(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
+            map((genaratedFile: GeneratedFile) => aufgabensammlungenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
 
     generiereKnobelkartei$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.gENERIERE_KNOBELKARTEI),
-            switchMap((action) => this.#raetselgruppenHttpService.generiereKnobelkartei(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
-            map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
+            ofType(aufgabensammlungenActions.gENERIERE_KNOBELKARTEI),
+            switchMap((action) => this.#aufgabensammlungenHttpService.generiereKnobelkartei(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
+            map((genaratedFile: GeneratedFile) => aufgabensammlungenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
 
     generiereVorschau$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.gENERIERE_VORSCHAU),
-            switchMap((action) => this.#raetselgruppenHttpService.generiereVorschau(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
-            map((genaratedFile: GeneratedFile) => raetselgruppenActions.fILE_GENERATED({ pdf: genaratedFile }))
+            ofType(aufgabensammlungenActions.gENERIERE_VORSCHAU),
+            switchMap((action) => this.#aufgabensammlungenHttpService.generiereVorschau(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
+            map((genaratedFile: GeneratedFile) => aufgabensammlungenActions.fILE_GENERATED({ pdf: genaratedFile }))
         )
     );
 
     generiereLaTeX$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.gENERIERE_LATEX),
-            switchMap((action) => this.#raetselgruppenHttpService.generiereLaTeX(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
-            map(({ data, fileName }) => raetselgruppenActions.bLOB_GENERATED({ data, fileName }))
+            ofType(aufgabensammlungenActions.gENERIERE_LATEX),
+            switchMap((action) => this.#aufgabensammlungenHttpService.generiereLaTeX(action.raetselgruppeID, action.font, action.schriftgroesse, action.layoutAntwortvorschlaege)),
+            map(({ data, fileName }) => aufgabensammlungenActions.bLOB_GENERATED({ data, fileName }))
         )
     );
 
     downloadPDF$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.fILE_GENERATED),
+            ofType(aufgabensammlungenActions.fILE_GENERATED),
             tap((action) => this.#downloadService.downloadPdf(action.pdf.fileData, action.pdf.fileName)),
         ), { dispatch: false });
 
     downloadBlob$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.bLOB_GENERATED),
+            ofType(aufgabensammlungenActions.bLOB_GENERATED),
             tap((action) => this.#downloadService.downloadZip(action.data, action.fileName)),
         ), { dispatch: false });
 
     aufgabensammlungselementSelected$ = createEffect(() =>
         this.#actions.pipe(
-            ofType(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT),
+            ofType(aufgabensammlungenActions.sELECT_RAETSELGRUPPENELEMENT),
             switchMap((action) => this.#coreFacade.loadRaetselPNGs(action.aufgabensammlungselement.raetselSchluessel)),
-            map((images) => raetselgruppenActions.eLEMENT_IMAGES_LOADED({ generatedImages: images }))
+            map((images) => aufgabensammlungenActions.eLEMENT_IMAGES_LOADED({ generatedImages: images }))
         )
     );
 }

@@ -1,7 +1,7 @@
 import { GeneratedImages, initialPaginationState, PaginationState } from "@mja-ws/core/model";
 import { AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { raetselgruppenActions } from "./aufgabensammlungen.actions";
+import { aufgabensammlungenActions } from "./aufgabensammlungen.actions";
 
 export interface RaetselgruppenState {
     readonly loaded: boolean;
@@ -25,11 +25,11 @@ const initialRaetselgruppenState: RaetselgruppenState = {
     selectedElementImages: undefined
 };
 
-export const raetselgruppenFeature = createFeature({
+export const aufgabensammlungenFeature = createFeature({
     name: 'raetselgruppen',
     reducer: createReducer(
         initialRaetselgruppenState,
-        on(raetselgruppenActions.rAETSELGRUPPEN_FOUND, (state, action) => {
+        on(aufgabensammlungenActions.rAETSELGRUPPEN_FOUND, (state, action) => {
             return {
                 ...state,
                 paginationState: { ...state.paginationState, anzahlTreffer: action.treffer.trefferGesamt },
@@ -39,7 +39,7 @@ export const raetselgruppenFeature = createFeature({
                 selectedElementImages: undefined
             };
         }),
-        on((raetselgruppenActions.rAETSELGRUPPEN_SELECT_PAGE), (state, action) => {
+        on((aufgabensammlungenActions.rAETSELGRUPPEN_SELECT_PAGE), (state, action) => {
             return {
                 ...state,
                 paginationState: { ...state.paginationState,
@@ -51,24 +51,24 @@ export const raetselgruppenFeature = createFeature({
                 }
             };
         }),
-        on(raetselgruppenActions.eDIT_RAETSELGUPPE, (state, action) => {
+        on(aufgabensammlungenActions.eDIT_RAETSELGUPPE, (state, action) => {
             return {
                 ...state,
                 aufgabensammlungBasisdaten: action.aufgabensammlungBasisdaten
             }
         }),
-        on(raetselgruppenActions.rAETSELGRUPPE_SAVED, (state, action) => {
+        on(aufgabensammlungenActions.rAETSELGRUPPE_SAVED, (state, action) => {
             const aufgabensammlungBasisdaten: AufgabensammlungBasisdaten = action.raetselgruppe;
             return { ...state, aufgabensammlungBasisdaten: aufgabensammlungBasisdaten };
         }),
-        on(raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED, (state, action) => {
+        on(aufgabensammlungenActions.rAETSELGRUPPEDETAILS_LOADED, (state, action) => {
             return {...state, aufgabensammlungDetails: action.aufgabensammlungDetails, aufgabensammlungBasisdaten: undefined};
         }),
-        on(raetselgruppenActions.uNSELECT_RAETSELGRUPPE, (state, _action) => {
+        on(aufgabensammlungenActions.uNSELECT_RAETSELGRUPPE, (state, _action) => {
             return {...state, aufgabensammlungDetails: undefined, aufgabensammlungBasisdaten: undefined, selectedAufgabensammlungselement: undefined, selectedElementImages: undefined}
         }),
-        on(raetselgruppenActions.rAETSELGRUPPENELEMENTE_CHANGED, (state, action) => ({ ...state, aufgabensammlungDetails: action.raetselgruppenDetails })),
-        on(raetselgruppenActions.sELECT_RAETSELGRUPPENELEMENT, (state, action) => ({...state, selectedAufgabensammlungselement: action.aufgabensammlungselement})),
-        on(raetselgruppenActions.eLEMENT_IMAGES_LOADED, (state, action) => ({...state, selectedElementImages: action.generatedImages}))
+        on(aufgabensammlungenActions.rAETSELGRUPPENELEMENTE_CHANGED, (state, action) => ({ ...state, aufgabensammlungDetails: action.raetselgruppenDetails })),
+        on(aufgabensammlungenActions.sELECT_RAETSELGRUPPENELEMENT, (state, action) => ({...state, selectedAufgabensammlungselement: action.aufgabensammlungselement})),
+        on(aufgabensammlungenActions.eLEMENT_IMAGES_LOADED, (state, action) => ({...state, selectedElementImages: action.generatedImages}))
     )
 });

@@ -31,7 +31,7 @@ import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { Configuration } from '@mja-ws/shared/config';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
-import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
+import { AufgabensammlungenFacade } from '@mja-ws/raetselgruppen/api';
 import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/raetselgruppen/model';
 
 @Component({
@@ -60,7 +60,7 @@ import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/ra
 export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   raetselFacade = inject(RaetselFacade);
-  raetselgruppenFacade = inject(RaetselgruppenFacade);
+  raetselgruppenFacade = inject(AufgabensammlungenFacade);
   authFacade = inject(AuthFacade);
   dialog = inject(MatDialog);
 
@@ -132,7 +132,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
         freigegeben: this.#selectedRaetselgruppe.freigegeben,
         privat: this.#selectedRaetselgruppe.privat
       };
-      this.raetselgruppenFacade.selectRaetselgruppe(trefferitem)
+      this.raetselgruppenFacade.selectAufgabensammlung(trefferitem)
     } else {
       this.#router.navigateByUrl('aufgabensammlungen');
     }

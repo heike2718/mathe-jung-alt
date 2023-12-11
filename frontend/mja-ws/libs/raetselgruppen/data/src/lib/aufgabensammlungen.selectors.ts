@@ -1,37 +1,37 @@
 import { createSelector } from "@ngrx/store";
-import { raetselgruppenFeature } from "./aufgabensammlungen.reducer";
+import { aufgabensammlungenFeature } from "./aufgabensammlungen.reducer";
 
-const { selectRaetselgruppenState } = raetselgruppenFeature;
+const { selectRaetselgruppenState: selectAufgabensammlungenState } = aufgabensammlungenFeature;
 
 const isLoaded = createSelector(
-    selectRaetselgruppenState,
+    selectAufgabensammlungenState,
     (state) => state.loaded
 );
 
 const anzahlTrefferGesamt = createSelector(
-    selectRaetselgruppenState,
+    selectAufgabensammlungenState,
     (state) => state.anzahlTrefferGesamt
 )
 
 const page = createSelector(
-    selectRaetselgruppenState,
+    selectAufgabensammlungenState,
     (state) => state.page
 );
 
 const paginationState = createSelector(
-    selectRaetselgruppenState,
+    selectAufgabensammlungenState,
     (state) => state.paginationState
 );
 
 // aus irgendwelchen Gründen ist nach F5 der ganze state undefined, obwohl es genauso aufgebaut ist wie in der raetsel-lib. 
 
 const aufgabensammlungDetails = createSelector(
-    selectRaetselgruppenState,
+    selectAufgabensammlungenState,
     (state) => state ? state.aufgabensammlungDetails : undefined
 );
 
 const aufgabensammlungBasisdaten = createSelector(
-    selectRaetselgruppenState,
+    selectAufgabensammlungenState,
     (state) => state ? state.aufgabensammlungBasisdaten : undefined
 );
 
@@ -41,12 +41,12 @@ const aufgabensammlungselemente = createSelector(
 );
 
 const selectedAufgabensammlungselement = createSelector(
-    selectRaetselgruppenState,
+    selectAufgabensammlungenState,
     (state) => state ? state.selectedAufgabensammlungselement : undefined
 );
 
 const selectedElementImages = createSelector(
-    selectRaetselgruppenState,
+    selectAufgabensammlungenState,
     (state) => state ? state.selectedElementImages : undefined
 );
 

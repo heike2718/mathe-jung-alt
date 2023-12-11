@@ -1,13 +1,13 @@
 import { DataSource } from '@angular/cdk/collections';
 import { inject, Injectable } from '@angular/core';
-import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
+import { AufgabensammlungenFacade } from '@mja-ws/raetselgruppen/api';
 import { Aufgabensammlungselement } from "@mja-ws/raetselgruppen/model";
 import { Observable } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class AufgabensammlungselementeDataSource extends DataSource<Aufgabensammlungselement> {
 
-    #raetselgruppenFacade = inject(RaetselgruppenFacade);
+    #raetselgruppenFacade = inject(AufgabensammlungenFacade);
 
     /**
    * Connect this data source to the table. The table will only update when

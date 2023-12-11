@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
+import { AufgabensammlungenFacade } from '@mja-ws/raetselgruppen/api';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,7 +20,6 @@ import { EditAufgabensammlungselementPayload, AufgabensammlungBasisdaten, Aufgab
 import { AufgabensammlungselementDialogData } from '../raetselgruppenelement-dialog/raetselgruppenelement-dialog.data';
 import { AufgabensammlungselementDialogComponent } from '../raetselgruppenelement-dialog/aufgabensammlungenselement-dialog.component';
 import { AufgabensammlungselementeComponent } from '../raetselgruppenelemente/aufgabensammlungelemente.component';
-import { RaetselgruppeEditComponent } from '../raetselgruppe-edit/aufgabensammlungen-edit.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
@@ -41,15 +40,14 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
     FrageLoesungImagesComponent,
     GeneratorParametersDialogAutorenComponent,
     AufgabensammlungselementDialogComponent,
-    AufgabensammlungselementeComponent,
-    RaetselgruppeEditComponent
+    AufgabensammlungselementeComponent
   ],
   templateUrl: './aufgabensammlungen-details.component.html',
   styleUrls: ['./aufgabensammlungen-details.component.scss'],
 })
-export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
+export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
-  raetselgruppenFacade = inject(RaetselgruppenFacade);
+  raetselgruppenFacade = inject(AufgabensammlungenFacade);
 
   dialog = inject(MatDialog);
 
@@ -102,7 +100,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   }
 
   gotoUebersicht(): void {
-    this.raetselgruppenFacade.unselectRaetselgruppe();
+    this.raetselgruppenFacade.unselectAufgabensammlung();
   }
 
   gotoRaetselDetails(): void {
@@ -180,7 +178,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   }
 
   startEdit(): void {
-    this.raetselgruppenFacade.editRaetselgruppe(this.#aufgabensammlungBasisdaten);
+    this.raetselgruppenFacade.editAufgabensammlung(this.#aufgabensammlungBasisdaten);
   }
 
   reloadDisabled(): boolean {
@@ -188,7 +186,7 @@ export class RaetselgruppenDetailsComponent implements OnInit, OnDestroy {
   }
 
   reload(): void {
-    this.raetselgruppenFacade.reloadRaetselgruppe(this.#aufgabensammlungBasisdaten, this.#anzahlElemente);
+    this.raetselgruppenFacade.reloadAufgabensammlung(this.#aufgabensammlungBasisdaten, this.#anzahlElemente);
   }
 
   toggleStatusDisabled(): boolean {

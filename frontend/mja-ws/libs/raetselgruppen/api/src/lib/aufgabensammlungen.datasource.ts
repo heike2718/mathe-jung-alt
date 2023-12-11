@@ -2,13 +2,13 @@ import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { inject, Injectable } from "@angular/core";
 import { AufgabensammlungTrefferItem } from "@mja-ws/raetselgruppen/model";
 import { Observable } from "rxjs";
-import { RaetselgruppenFacade } from "./aufgabensammlungen.facade";
+import { AufgabensammlungenFacade } from "./aufgabensammlungen.facade";
 
 @Injectable({providedIn: 'root'})
-export class RaetselgruppenDataSource implements DataSource<AufgabensammlungTrefferItem> {
+export class AufgabensammlungenDataSource implements DataSource<AufgabensammlungTrefferItem> {
 
 
-    #raetselgruppenFacade = inject(RaetselgruppenFacade);
+    #raetselgruppenFacade = inject(AufgabensammlungenFacade);
 
     connect(_collectionViewer: CollectionViewer): Observable<readonly AufgabensammlungTrefferItem[]> {
         return this.#raetselgruppenFacade.page$;

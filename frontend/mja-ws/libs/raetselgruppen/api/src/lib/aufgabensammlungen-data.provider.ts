@@ -1,9 +1,9 @@
 import { provideEffects } from "@ngrx/effects";
 import { provideState } from "@ngrx/store";
-import { raetselgruppenFeature, RaetselgruppenEffects} from '@mja-ws/raetselgruppen/data';
+import { aufgabensammlungenFeature, AufgabensammlungenEffects} from '@mja-ws/raetselgruppen/data';
  
 
-export const raetselgruppenDataProvider = [
-    provideState(raetselgruppenFeature),
-    provideEffects(RaetselgruppenEffects)
+export const aufgabensammlungenDataProvider = [
+    provideState(aufgabensammlungenFeature),
+    provideEffects(AufgabensammlungenEffects)
 ];
