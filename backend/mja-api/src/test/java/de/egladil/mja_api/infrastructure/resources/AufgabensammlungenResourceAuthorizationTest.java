@@ -22,12 +22,12 @@ import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 /**
- * RaetselgruppenResourceTest
+ * AufgabensammlungenResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(AufgabensammlungenResource.class)
 @TestProfile(FullDatabaseTestProfile.class)
-public class RaetselgruppenResourceAuthorizationTest {
+public class AufgabensammlungenResourceAuthorizationTest {
 
 	/**
 	 *
@@ -40,7 +40,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 	private static final String CSRF_TOKEN = "lqhidhqio";
 
 	@Test
-	void testFindRaetselgruppenUnauthorized() throws Exception {
+	void testFindAufgabensammlungenUnauthorized() throws Exception {
 
 		given()
 			.contentType(ContentType.JSON)
@@ -52,7 +52,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	void testFindRaetselgruppenForbidden() throws Exception {
+	void testFindAufgabensammlungenForbidden() throws Exception {
 
 		given()
 			.contentType(ContentType.JSON)
@@ -91,7 +91,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 	}
 
 	@Test
-	void testRaetselgruppeAnlegenUnauthorized() throws Exception {
+	void testAufgabensammlungAnlegenUnauthorized() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
@@ -113,7 +113,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "LEHRER" })
-	void testRaetselgruppeAnlegenForbidden() throws Exception {
+	void testAufgabensammlungAnlegenForbidden() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
@@ -134,7 +134,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 	}
 
 	@Test
-	void testRaetselgruppeAendernUnauthorized() throws Exception {
+	void testAufgabensammlungAendernUnauthorized() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
@@ -156,7 +156,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "LEHRER" })
-	void testRaetselgruppeAendernForbidden() throws Exception {
+	void testAufgabensammlungAendernForbidden() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
@@ -177,30 +177,30 @@ public class RaetselgruppenResourceAuthorizationTest {
 	}
 
 	@Test
-	void raetselgruppenelementLoeschenUnauthorized() throws Exception {
+	void elementLoeschenUnauthorized() throws Exception {
 
-		String raetselgruppeUuid = "0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc";
+		String aufgabensammlungUuid = "0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc";
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.delete(raetselgruppeUuid + "/elemente/abcdef/v1")
+			.delete(aufgabensammlungUuid + "/elemente/abcdef/v1")
 			.then()
 			.statusCode(401);
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	void raetselgruppenelementLoeschenForbidden() throws Exception {
+	void elementLoeschenForbidden() throws Exception {
 
-		String raetselgruppeUuid = "0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc";
+		String aufgabensammlungUuid = "0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc";
 
 		given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 			.contentType(ContentType.JSON)
-			.delete(raetselgruppeUuid + "/elemente/abcdef/v1")
+			.delete(aufgabensammlungUuid + "/elemente/abcdef/v1")
 			.then()
 			.statusCode(403);
 	}

@@ -10,7 +10,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.utils.GeneratorUtils;
@@ -26,7 +26,7 @@ public class LaTeXMainDocAufgabenGenerator implements LaTeXDocGeneratorStrategy 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXMainDocAufgabenGenerator.class);
 
 	@Override
-	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final RaetselgruppeGeneratorInput input) {
+	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
 
 		LOGGER.warn("Font={}", input.getFont());
 
@@ -36,7 +36,7 @@ public class LaTeXMainDocAufgabenGenerator implements LaTeXDocGeneratorStrategy 
 		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
 			input.getSchriftgroesse().getLaTeXReplacement());
 		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
-		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), input.getRaetselgruppe().name + " (Aufgaben)");
+		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), input.getAufgabensammlung().name + " (Aufgaben)");
 
 		String content = printContentAufgaben(aufgaben, raetselLaTeX, input);
 
@@ -48,7 +48,7 @@ public class LaTeXMainDocAufgabenGenerator implements LaTeXDocGeneratorStrategy 
 		return template;
 	}
 
-	String printContentAufgaben(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final RaetselgruppeGeneratorInput input) {
+	String printContentAufgaben(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final AufgabensammlungGeneratorInput input) {
 
 		AntwortvorschlagGeneratorStrategegy antwortvorschlaegeGeneratorStrategy = AntwortvorschlagGeneratorStrategegy
 			.create(input.getLayoutAntwortvorschlaege());

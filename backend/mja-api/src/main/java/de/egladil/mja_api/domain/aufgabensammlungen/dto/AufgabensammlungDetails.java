@@ -24,7 +24,7 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabe
  */
 @Schema(
 	name = "AufgabensammlungDetails",
-	description = "Details einer Rätselgruppe für die Anzeige oder zum Generieren von PDF oder LaTeX. Eine Rätselruppe ist eine freie Zusammenstellung von Rätseln. Ziel ist die Erzeugung eines PDFs. Die Rästel werden in der Reihenfolge gedruckt, in der sie in der Rätselgruppe eingetragen werden.")
+	description = "Details einer Aufgabensammlung für die Anzeige oder zum Generieren von PDF oder LaTeX. Eine Rätselruppe ist eine freie Zusammenstellung von Rätseln. Ziel ist die Erzeugung eines PDFs. Die Rästel werden in der Reihenfolge gedruckt, in der sie in der Aufgabensammlung eingetragen werden.")
 public class AufgabensammlungDetails {
 
 	@JsonProperty
@@ -32,7 +32,7 @@ public class AufgabensammlungDetails {
 	private String id;
 
 	@JsonProperty
-	@Schema(description = "Name der Rätselgruppe")
+	@Schema(description = "Name der Aufgabensammlung")
 	private String name;
 
 	@JsonProperty
@@ -40,7 +40,7 @@ public class AufgabensammlungDetails {
 	private String kommentar;
 
 	@JsonProperty
-	@Schema(description = "Schwierigkeitsgrad, für das diese Rätselgruppe gedacht ist")
+	@Schema(description = "Schwierigkeitsgrad, für das diese Aufgabensammlung gedacht ist")
 	private Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@JsonProperty
@@ -66,25 +66,25 @@ public class AufgabensammlungDetails {
 	// änderbar ist.
 
 	@JsonProperty
-	@Schema(description = "Teil der UUID der Person, die die Rätselgruppe angelegt oder geändert hat")
+	@Schema(description = "Teil der UUID der Person, die die Aufgabensammlung angelegt oder geändert hat")
 	private String geaendertDurch;
 
 	@JsonProperty
-	@Schema(type = SchemaType.ARRAY, description = "Elemente der Rätselgruppe")
+	@Schema(type = SchemaType.ARRAY, description = "Elemente der Aufgabensammlung")
 	private List<Aufgabensammlungselement> elemente = new ArrayList<>();
 
-	public static AufgabensammlungDetails createFromDB(final PersistenteAufgabensammlung gruppeDB) {
+	public static AufgabensammlungDetails createFromDB(final PersistenteAufgabensammlung aufgabensammlungDB) {
 
 		AufgabensammlungDetails result = new AufgabensammlungDetails();
-		result.geaendertDurch = gruppeDB.geaendertDurch;
-		result.id = gruppeDB.uuid;
-		result.kommentar = gruppeDB.kommentar;
-		result.name = gruppeDB.name;
-		result.referenz = gruppeDB.referenz;
-		result.referenztyp = gruppeDB.referenztyp;
-		result.schwierigkeitsgrad = gruppeDB.schwierigkeitsgrad;
-		result.freigegeben = gruppeDB.freigegeben;
-		result.privat = gruppeDB.privat;
+		result.geaendertDurch = aufgabensammlungDB.geaendertDurch;
+		result.id = aufgabensammlungDB.uuid;
+		result.kommentar = aufgabensammlungDB.kommentar;
+		result.name = aufgabensammlungDB.name;
+		result.referenz = aufgabensammlungDB.referenz;
+		result.referenztyp = aufgabensammlungDB.referenztyp;
+		result.schwierigkeitsgrad = aufgabensammlungDB.schwierigkeitsgrad;
+		result.freigegeben = aufgabensammlungDB.freigegeben;
+		result.privat = aufgabensammlungDB.privat;
 		return result;
 	}
 

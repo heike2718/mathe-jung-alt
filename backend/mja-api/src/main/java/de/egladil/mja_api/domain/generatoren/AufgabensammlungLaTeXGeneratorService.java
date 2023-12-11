@@ -16,7 +16,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.generatoren.impl.LaTeXDocGeneratorStrategy;
 import de.egladil.mja_api.domain.generatoren.impl.LaTeXDocGeneratorType;
 import de.egladil.mja_api.domain.generatoren.impl.QuizitemLaTeXGenerator;
@@ -33,13 +33,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 /**
- * RaetselgruppeLaTeXGeneratorService generiert für eine Rätselgruppe ein zip-Archiv, das alles LaTeX-Files und eingebetteten
+ * AufgabensammlungLaTeXGeneratorService generiert für eine Aufgabensammlung ein zip-Archiv, das alles LaTeX-Files und eingebetteten
  * Grafiken enthält.
  */
 @ApplicationScoped
-public class RaetselgruppeLaTeXGeneratorService {
+public class AufgabensammlungLaTeXGeneratorService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppeLaTeXGeneratorService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungLaTeXGeneratorService.class);
 
 	@ConfigProperty(name = "latex.base.dir")
 	String latexBaseDir;
@@ -57,15 +57,15 @@ public class RaetselgruppeLaTeXGeneratorService {
 	EmbeddedImagesService embeddedImagesService;
 
 	/**
-	 * Generiert ein LaTeX-Archiv, also eine zip-Datei, die alle Files enthält, die zum lokalen Compilieren der Rätselgruppe
+	 * Generiert ein LaTeX-Archiv, also eine zip-Datei, die alle Files enthält, die zum lokalen Compilieren der Aufgabensammlung
 	 * erforderlich sind.
 	 *
 	 * @param  input
 	 * @return       GeneratedFile
 	 */
-	public File generateLaTeXArchive(final RaetselgruppeGeneratorInput input) {
+	public File generateLaTeXArchive(final AufgabensammlungGeneratorInput input) {
 
-		PersistenteAufgabensammlung persistenteRaetselgruppe = input.getRaetselgruppe();
+		PersistenteAufgabensammlung persistenteAufgabensammlung = input.getAufgabensammlung();
 
 		List<Quizaufgabe> aufgaben = input.getAufgaben();
 		Collections.sort(aufgaben, new QuizaufgabeComparator());
@@ -74,10 +74,10 @@ public class RaetselgruppeLaTeXGeneratorService {
 		List<PersistentesRaetsel> trefferliste = raetselDao.findWithSchluesselListe(schluesselliste);
 		List<RaetselLaTeXDto> raetselLaTeX = trefferliste.stream().map(pr -> RaetselLaTeXDto.mapFromDB(pr)).toList();
 
-		String dirnameRaetselgruppe = MjaFileUtils.nameToFilenamePart(persistenteRaetselgruppe.name) + "_"
+		String dirNameAufgabensammlung = MjaFileUtils.nameToFilenamePart(persistenteAufgabensammlung.name) + "_"
 			+ UUID.randomUUID().toString().substring(0, 8);
 
-		// schreiben die generierten Strings zunächst ins Filesystem und zipen dann das Verzeichnis dirnameRaetselgruppe.
+		// schreiben die generierten Strings zunächst ins Filesystem und zipen dann das Verzeichnis dirNameAufgabensammlung.
 
 		String selfcontainedContent = LaTeXDocGeneratorStrategy.getStrategy(LaTeXDocGeneratorType.SELFCONTAINED).generateLaTeX(
 			aufgaben, raetselLaTeX,
@@ -91,16 +91,16 @@ public class RaetselgruppeLaTeXGeneratorService {
 			.generateLaTeX(aufgaben, raetselLaTeX,
 				quizitemLaTeXGenerator, input);
 
-		String pathDirRaetselgruppe = latexBaseDir + File.separator + dirnameRaetselgruppe;
+		String pathDirAufgabensammlung = latexBaseDir + File.separator + dirNameAufgabensammlung;
 
-		File dirRaetselgruppe = MjaFileUtils.createDirectory(pathDirRaetselgruppe,
-			"Fehler beim Erzeugen eines Verzeichnisses für die Raetselgruppe");
+		File dirAufgabensammlung = MjaFileUtils.createDirectory(pathDirAufgabensammlung,
+			"Fehler beim Erzeugen eines Verzeichnisses für die Aufgabensammlung");
 
-		LOGGER.info("Verzeichnis {} angelegt", pathDirRaetselgruppe);
+		LOGGER.info("Verzeichnis {} angelegt", pathDirAufgabensammlung);
 
 		{
 
-			File file = new File(pathDirRaetselgruppe + File.separator + dirnameRaetselgruppe + "_selfcontained.tex");
+			File file = new File(pathDirAufgabensammlung + File.separator + dirNameAufgabensammlung + "_selfcontained.tex");
 			MjaFileUtils.writeTextfile(file, selfcontainedContent, "Fehler beim Schreiben des selfcontained LaTeX");
 
 			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
@@ -109,7 +109,7 @@ public class RaetselgruppeLaTeXGeneratorService {
 
 		{
 
-			File file = new File(pathDirRaetselgruppe + File.separator + dirnameRaetselgruppe + "_aufgaben.tex");
+			File file = new File(pathDirAufgabensammlung + File.separator + dirNameAufgabensammlung + "_aufgaben.tex");
 			MjaFileUtils.writeTextfile(file, laTeXContentAufgabenMaster, "Fehler beim Schreiben des laTeXContentAufgabenMaster");
 
 			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
@@ -117,25 +117,25 @@ public class RaetselgruppeLaTeXGeneratorService {
 
 		{
 
-			File file = new File(pathDirRaetselgruppe + File.separator + dirnameRaetselgruppe + "_loesungen.tex");
+			File file = new File(pathDirAufgabensammlung + File.separator + dirNameAufgabensammlung + "_loesungen.tex");
 			MjaFileUtils.writeTextfile(file, laTeXContentLoesungenMaster, "Fehler beim Schreiben des laTeXContentLoesungenMaster");
 
 			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
 		}
 
-		File includeDir = new File(pathDirRaetselgruppe + File.separator + "include");
+		File includeDir = new File(pathDirAufgabensammlung + File.separator + "include");
 		copyIncludeFilesToTargetDir(includeDir);
 
 		for (PersistentesRaetsel raetselDB : trefferliste) {
 
-			String pathAufgabe = pathDirRaetselgruppe + File.separator + raetselDB.schluessel + ".tex";
+			String pathAufgabe = pathDirAufgabensammlung + File.separator + raetselDB.schluessel + ".tex";
 			MjaFileUtils.writeTextfile(new File(pathAufgabe), raetselDB.frage,
 				"Fehler beim Schreiben der Frage von " + raetselDB.schluessel);
 			LOGGER.info("File {} fertig", pathAufgabe);
 
 			if (StringUtils.isNotBlank(raetselDB.loesung)) {
 
-				String pathLoesung = pathDirRaetselgruppe + File.separator + raetselDB.schluessel + "_l.tex";
+				String pathLoesung = pathDirAufgabensammlung + File.separator + raetselDB.schluessel + "_l.tex";
 				MjaFileUtils.writeTextfile(new File(pathLoesung), raetselDB.loesung,
 					"Fehler beim Schreiben der Frage von " + raetselDB.schluessel);
 				LOGGER.info("File {} fertig", pathLoesung);
@@ -145,28 +145,28 @@ public class RaetselgruppeLaTeXGeneratorService {
 
 			for (GeneratedFile generatedFile : embeddedImages) {
 
-				String pathImage = pathDirRaetselgruppe + File.separator + generatedFile.getFileName();
+				String pathImage = pathDirAufgabensammlung + File.separator + generatedFile.getFileName();
 				MjaFileUtils.writeBinaryFile(new File(pathImage), generatedFile.getFileData());
 				LOGGER.info("File {} fertig", pathImage);
 
 			}
 		}
 
-		checkAndMoveEPS(dirRaetselgruppe);
+		checkAndMoveEPS(dirAufgabensammlung);
 
-		File zip = MjaFileUtils.createZipArchive(dirRaetselgruppe);
+		File zip = MjaFileUtils.createZipArchive(dirAufgabensammlung);
 
-		MjaFileUtils.deleteDirectoryQuietly(dirRaetselgruppe);
+		MjaFileUtils.deleteDirectoryQuietly(dirAufgabensammlung);
 
 		return zip;
 	}
 
 	/**
-	 * @param dirRaetselgruppe
+	 * @param dirAufgabensammlung
 	 */
-	private void checkAndMoveEPS(final File dirRaetselgruppe) {
+	private void checkAndMoveEPS(final File dirAufgabensammlung) {
 
-		File[] epsFiles = dirRaetselgruppe.listFiles(new FilenameFilter() {
+		File[] epsFiles = dirAufgabensammlung.listFiles(new FilenameFilter() {
 
 			@Override
 			public boolean accept(final File dir, final String name) {
@@ -184,7 +184,7 @@ public class RaetselgruppeLaTeXGeneratorService {
 
 			String subdirName = "resources" + File.separator + epsFile.getName().substring(0, 1);
 
-			File target = new File(dirRaetselgruppe + File.separator + subdirName + File.separator + epsFile.getName());
+			File target = new File(dirAufgabensammlung + File.separator + subdirName + File.separator + epsFile.getName());
 			MjaFileUtils.moveFile(epsFile, target);
 		}
 	}

@@ -11,7 +11,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
  */
 @Schema(
 	name = "Schwierigkeitsgrad",
-	description = "enum Schwierigkeitsgrad für Rätselgruppen oder Quiz(e)")
+	description = "enum Schwierigkeitsgrad für Aufgabensammlungen oder Quiz(e)")
 public enum Schwierigkeitsgrad {
 
 	ALLE("von Vorschule bis Erwachsene"),

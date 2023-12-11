@@ -6,7 +6,7 @@ package de.egladil.mja_api.domain.generatoren.impl;
 
 import java.util.List;
 
-import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 
@@ -19,7 +19,7 @@ public class LaTeXSelfcontainedGenerator implements LaTeXDocGeneratorStrategy {
 	private final AufgabenLoesungenLaTeXGeneratorDelegate delegate = new AufgabenLoesungenLaTeXGeneratorDelegate();
 
 	@Override
-	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final RaetselgruppeGeneratorInput input) {
+	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
 
 		String template = LaTeXTemplatesService.getInstance().getTemplateDocumentPDFAufgabenblattMitLoesungen();
 
@@ -27,8 +27,8 @@ public class LaTeXSelfcontainedGenerator implements LaTeXDocGeneratorStrategy {
 		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
 			input.getSchriftgroesse().getLaTeXReplacement());
 		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
-		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_AUFGABEN.placeholder(), input.getRaetselgruppe().name);
-		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_LOESUNGEN.placeholder(), input.getRaetselgruppe().name);
+		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_AUFGABEN.placeholder(), input.getAufgabensammlung().name);
+		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_LOESUNGEN.placeholder(), input.getAufgabensammlung().name);
 
 		String contentAufgaben = delegate.printContentAufgaben(aufgaben, raetselLaTeX, quizitemLaTeXGenerator, input);
 		String contentLoesungen = delegate.printContentLoesungen(aufgaben, raetselLaTeX, quizitemLaTeXGenerator, input);

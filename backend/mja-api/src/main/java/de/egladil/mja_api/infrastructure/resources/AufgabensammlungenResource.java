@@ -64,7 +64,7 @@ import jakarta.ws.rs.core.Response.Status;
  */
 @Path("mja-api/aufgabensammlungen")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-@Tag(name = "Raetselgruppen")
+@Tag(name = "Aufgabensammlungen")
 public class AufgabensammlungenResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungenResource.class);
@@ -79,7 +79,8 @@ public class AufgabensammlungenResource {
 	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findGruppen", summary = "Gibt alle Rätselgruppen zurück, die auf die gegebene Suchanfrage passen.")
+		operationId = "findAufgabensammlungen",
+		summary = "Gibt alle Aufgabensammlungen zurück, die auf die gegebene Suchanfrage passen.")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.QUERY,
@@ -88,7 +89,7 @@ public class AufgabensammlungenResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "schwierigkeitsgrad",
-			description = "Klassenstufe, für die die Rätselgruppe gedacht ist (enum)"),
+			description = "Klassenstufe, für die die Aufgabensammlung gedacht ist (enum)"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "referenztyp",
@@ -114,13 +115,13 @@ public class AufgabensammlungenResource {
 			name = "offset",
 			description = "Pagination: pageIndex") })
 	@APIResponse(
-		name = "FindRaetselgruppenOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(type = SchemaType.ARRAY, implementation = AufgabensammlungSucheTreffer.class)))
 	// @formatter:off
-	public AufgabensammlungSucheTreffer findGruppen(
+	public AufgabensammlungSucheTreffer findAufgabensammlungen(
 		@QueryParam(value = "name") @Pattern(regexp = "[\\w äöüß\\:\\-\\.\\,]*", message = "name enthält unerlaubte Zeichen")
 		@Size(min = 1, max = 100, message = "nicht mehr als 100 Zeichen") final String name,
 		@QueryParam(value = "schwierigkeitsgrad") final Schwierigkeitsgrad schwierigkeitsgrad,
@@ -138,7 +139,7 @@ public class AufgabensammlungenResource {
 		}
 
 		AufgabensammlungenSuchparameter suchparameter = new AufgabensammlungenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz, sortAttribute, sortDirection);
-		return aufgabensammlungenService.findRaetselgruppen(suchparameter, limit, offset);
+		return aufgabensammlungenService.findAufgabensammlungen(suchparameter, limit, offset);
 	}
 
 	@POST
@@ -146,8 +147,8 @@ public class AufgabensammlungenResource {
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(
-		operationId = "raetselgruppeAnlegen",
-		summary = "neue Rätselgruppe anlegen")
+		operationId = "aufgabensammlungAnlegen",
+		summary = "neue Aufgabensammlung anlegen")
 	@APIResponse(
 		name = "OKResponse",
 		responseCode = "201",
@@ -162,7 +163,7 @@ public class AufgabensammlungenResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "Unauthorized",
-		description = "nur Admins und Autoren dürfen Rätselgruppen anlegen (vorerst)",
+		description = "nur Admins und Autoren dürfen Aufgabensammlungen anlegen (vorerst)",
 		responseCode = "401")
 	@APIResponse(
 		name = "ServerError",
@@ -170,11 +171,11 @@ public class AufgabensammlungenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselgruppeAnlegen(@Valid final EditAufgabensammlungPayload requestPayload) {
+	public Response aufgabensammlungAnlegen(@Valid final EditAufgabensammlungPayload requestPayload) {
 
 		delayService.pause();
 
-		AufgabensammlungSucheTrefferItem raetselsammlung = aufgabensammlungenService.raetselgruppeAnlegen(requestPayload);
+		AufgabensammlungSucheTrefferItem raetselsammlung = aufgabensammlungenService.aufgabensammlungAnlegen(requestPayload);
 		return Response.status(201).entity(raetselsammlung).build();
 	}
 
@@ -183,8 +184,8 @@ public class AufgabensammlungenResource {
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(
-		operationId = "raetselgruppeAendern",
-		summary = "neue Rätselgruppe anlegen")
+		operationId = "aufgabensammlungAendern",
+		summary = "neue Aufgabensammlung anlegen")
 	@APIResponse(
 		name = "OKResponse",
 		responseCode = "200",
@@ -199,11 +200,11 @@ public class AufgabensammlungenResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "Unauthorized",
-		description = "nur Admins und Autoren dürfen Rätselgruppen ändern (vorerst)",
+		description = "nur Admins und Autoren dürfen Aufgabensammlungen ändern (vorerst)",
 		responseCode = "401")
 	@APIResponse(
 		name = "Forbidden",
-		description = "Admins dürfen jede Rätselgruppe ändern, Autoren nur eigene.",
+		description = "Admins dürfen jede Aufgabensammlung ändern, Autoren nur eigene.",
 		responseCode = "403", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
@@ -213,11 +214,11 @@ public class AufgabensammlungenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselgruppeAendern(final EditAufgabensammlungPayload requestPayload) {
+	public Response aufgabensammlungAendern(final EditAufgabensammlungPayload requestPayload) {
 
 		delayService.pause();
 
-		AufgabensammlungSucheTrefferItem raetselsammlung = aufgabensammlungenService.raetselgruppeBasisdatenAendern(requestPayload);
+		AufgabensammlungSucheTrefferItem raetselsammlung = aufgabensammlungenService.aufgabensammlungBasisdatenAendern(requestPayload);
 		return Response.status(200).entity(raetselsammlung).build();
 	}
 
@@ -225,13 +226,13 @@ public class AufgabensammlungenResource {
 	@Path("{aufgabensammlungID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "raetselgruppeDetailsLaden",
-		summary = "Läd die Details der Rätselgruppe mit der gegebenen ID")
+		operationId = "aufgabensammlungDetailsLaden",
+		summary = "Läd die Details der Aufgabensammlung mit der gegebenen ID")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.PATH,
 			name = "aufgabensammlungID",
-			description = "technische ID der Rätselgruppe") })
+			description = "technische ID der Aufgabensammlung") })
 	@APIResponse(
 		name = "OKResponse",
 		responseCode = "200",
@@ -246,7 +247,7 @@ public class AufgabensammlungenResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "Unauthorized",
-		description = "nur Admins und Autoren dürfen Rätselgruppe laden",
+		description = "nur Admins und Autoren dürfen Aufgabensammlung laden",
 		responseCode = "401")
 	@APIResponse(
 		name = "NotFound",
@@ -260,11 +261,11 @@ public class AufgabensammlungenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public AufgabensammlungDetails raetselgruppeDetailsLaden(@PathParam(value = "aufgabensammlungID") @Pattern(
+	public AufgabensammlungDetails aufgabensammlungDetailsLaden(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID) {
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String aufgabensammlungID) {
 
-		Optional<AufgabensammlungDetails> optDetails = aufgabensammlungenService.loadDetails(raetselgruppeID);
+		Optional<AufgabensammlungDetails> optDetails = aufgabensammlungenService.loadDetails(aufgabensammlungID);
 
 		if (optDetails.isEmpty()) {
 			throw new WebApplicationException(Response.status(404).entity(MessagePayload.error("kein Treffer")).build());
@@ -277,10 +278,10 @@ public class AufgabensammlungenResource {
 	@Path("{aufgabensammlungID}/elemente/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "raetselgruppenelementAnlegen",
-		summary = "Legt ein neues Element in einer Rätselgruppe an")
+		operationId = "elementAnlegen",
+		summary = "Legt ein neues Element in einer Aufgabensammlung an")
 	@Parameters({
-		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Raetselgruppe.")
+		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Aufgabensammlung.")
 	})
 	@APIResponse(
 		name = "OKResponse",
@@ -294,17 +295,17 @@ public class AufgabensammlungenResource {
 		description = "fehlgeschlagene Input-Validierung")
 	@APIResponse(
 		name = "Unauthorized",
-		description = "nur Admins und Autoren dürfen Rätselgruppen ändern (vorerst)",
+		description = "nur Admins und Autoren dürfen Aufgabensammlungen ändern (vorerst)",
 		responseCode = "401")
 	@APIResponse(
 		name = "Forbidden",
-		description = "Admins dürfen jede Rätselgruppe ändern, Autoren nur eigene.",
+		description = "Admins dürfen jede Aufgabensammlung ändern, Autoren nur eigene.",
 		responseCode = "403", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "NotFound",
-		description = "Die Rätselgruppe oder das Rätsel mit dem fachlichen SCHLUESSEL gibt es nicht",
+		description = "Die Aufgabensammlung oder das Rätsel mit dem fachlichen SCHLUESSEL gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
@@ -320,11 +321,11 @@ public class AufgabensammlungenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public AufgabensammlungDetails raetselgruppenelementAnlegen(@PathParam(value = "aufgabensammlungID") @Pattern(
+	public AufgabensammlungDetails elementAnlegen(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, final EditAufgabensammlungselementPayload element) {
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String aufgabensammlungID, final EditAufgabensammlungselementPayload element) {
 
-		return this.aufgabensammlungenService.elementAnlegen(raetselgruppeID, element);
+		return this.aufgabensammlungenService.elementAnlegen(aufgabensammlungID, element);
 	}
 
 
@@ -332,10 +333,10 @@ public class AufgabensammlungenResource {
 	@Path("{aufgabensammlungID}/elemente/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "raetselgruppenelementAendern",
-		summary = "Ändert das Element einer Rätselgruppe. Es können nur Nummer und Punkte geändert werden. Wenn der Schlüssel nicht stimmt, muss es gelöscht und neu angelegt werden.")
+		operationId = "elementAendern",
+		summary = "Ändert das Element einer Aufgabensammlung. Es können nur Nummer und Punkte geändert werden. Wenn der Schlüssel nicht stimmt, muss es gelöscht und neu angelegt werden.")
 	@Parameters({
-		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Raetselgruppe.")
+		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Aufgabensammlung.")
 	})
 	@APIResponse(
 		name = "OKResponse",
@@ -349,17 +350,17 @@ public class AufgabensammlungenResource {
 		description = "fehlgeschlagene Input-Validierung")
 	@APIResponse(
 		name = "Unauthorized",
-		description = "nur Admins und Autoren dürfen Rätselgruppen ändern (vorerst)",
+		description = "nur Admins und Autoren dürfen Aufgabensammlungen ändern (vorerst)",
 		responseCode = "401")
 	@APIResponse(
 		name = "Forbidden",
-		description = "Admins dürfen jede Rätselgruppe ändern, Autoren nur eigene.",
+		description = "Admins dürfen jede Aufgabensammlung ändern, Autoren nur eigene.",
 		responseCode = "403", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "NotFound",
-		description = "Die Rätselgruppe oder das Element gibt es nicht",
+		description = "Die Aufgabensammlung oder das Element gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
@@ -369,24 +370,24 @@ public class AufgabensammlungenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public AufgabensammlungDetails raetselgruppenelementAendern(@PathParam(value = "aufgabensammlungID") @Pattern(
+	public AufgabensammlungDetails elementAendern(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, final EditAufgabensammlungselementPayload element) {
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String aufgabensammlungID, final EditAufgabensammlungselementPayload element) {
 
-		return this.aufgabensammlungenService.elementAendern(raetselgruppeID, element);
+		return this.aufgabensammlungenService.elementAendern(aufgabensammlungID, element);
 	}
 
 	@DELETE
 	@Path("{aufgabensammlungID}/elemente/{elementID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "raetselgruppenelementLoeschen",
-		summary = "Löscht das Element einer Rätselgruppe")
+		operationId = "elementLoeschen",
+		summary = "Löscht das Element einer Aufgabensammlung")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.PATH,
 			name = "aufgabensammlungID",
-			description = "ID der Rätselgruppe") })
+			description = "ID der Aufgabensammlung") })
 	@APIResponse(
 		name = "OKResponse",
 		responseCode = "200",
@@ -399,17 +400,17 @@ public class AufgabensammlungenResource {
 		description = "fehlgeschlagene Input-Validierung")
 	@APIResponse(
 		name = "Unauthorized",
-		description = "nur Admins und Autoren dürfen Rätselgruppen ändern (vorerst)",
+		description = "nur Admins und Autoren dürfen Aufgabensammlungen ändern (vorerst)",
 		responseCode = "401")
 	@APIResponse(
 		name = "Forbidden",
-		description = "Admins dürfen jede Rätselgruppe ändern, Autoren nur eigene.",
+		description = "Admins dürfen jede Aufgabensammlung ändern, Autoren nur eigene.",
 		responseCode = "403", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "NotFound",
-		description = "Die Rätselgruppe oder das Element gibt es nicht",
+		description = "Die Aufgabensammlung oder das Element gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
@@ -419,13 +420,13 @@ public class AufgabensammlungenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public AufgabensammlungDetails raetselgruppenelementLoeschen(@PathParam(value = "aufgabensammlungID") @Pattern(
+	public AufgabensammlungDetails elementLoeschen(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, @PathParam(value = "elementID") @Pattern(
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String aufgabensammlungID, @PathParam(value = "elementID") @Pattern(
 			regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 			message = "aufgabensammlungID enthält ungültige Zeichen") final String elementID) {
 
-		return aufgabensammlungenService.elementLoeschen(raetselgruppeID, elementID);
+		return aufgabensammlungenService.elementLoeschen(aufgabensammlungID, elementID);
 	}
 
 	@GET
@@ -433,10 +434,10 @@ public class AufgabensammlungenResource {
 	@Path("{aufgabensammlungID}/vorschau/v1")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
-		operationId = "printRaetselgruppeVorschau",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt. . Es wird immer mit ANKREUTZABELLE gedruckt")
+		operationId = "printVorschau",
+		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein PDF. Diese API funktioniert für Aufgabensammlungen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt. . Es wird immer mit ANKREUTZABELLE gedruckt")
 	@Parameters({
-		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird."),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
@@ -475,7 +476,7 @@ public class AufgabensammlungenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printVorschau(
-		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String aufgabensammlungID,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
@@ -486,7 +487,7 @@ public class AufgabensammlungenResource {
 
 		LOGGER.debug("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
 
-		return aufgabensammlungenService.printVorschau(raetselgruppeID, theFont, theSchriftgroesse, layoutAntwortvorschlaege);
+		return aufgabensammlungenService.printVorschau(aufgabensammlungID, theFont, theSchriftgroesse, layoutAntwortvorschlaege);
 	}
 
 	@GET
@@ -495,11 +496,11 @@ public class AufgabensammlungenResource {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Operation(
 		operationId = "downloadLaTeXSource",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID mehrere LaTeX-Dateien. Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
+		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID mehrere LaTeX-Dateien. Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.PATH, name = "aufgabensammlungID",
-			description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.",
+			description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.",
 			required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
@@ -524,11 +525,11 @@ public class AufgabensammlungenResource {
 			mediaType = "application/octet-stram"))
 	@APIResponse(
 		name = "Unauthorized",
-		description = "nur Admins und Autoren dürfen Rätselgruppen LaTeX herunterladen",
+		description = "nur Admins und Autoren dürfen Aufgabensammlungen LaTeX herunterladen",
 		responseCode = "401")
 	@APIResponse(
 		name = "Forbidden",
-		description = "Admins dürfen das LaTeX jeder Rätselgruppe herunterladen, Autoren nur das der eigenen.",
+		description = "Admins dürfen das LaTeX jeder Aufgabensammlung herunterladen, Autoren nur das der eigenen.",
 		responseCode = "403", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
@@ -543,7 +544,7 @@ public class AufgabensammlungenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public Response downloadLaTeX(
-		@PathParam( value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam( value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String aufgabensammlungID,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
@@ -554,7 +555,7 @@ public class AufgabensammlungenResource {
 
 		LOGGER.debug("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
 
-		File generatedFile = aufgabensammlungenService.downloadLaTeXSources(raetselgruppeID, theFont, theSchriftgroesse,
+		File generatedFile = aufgabensammlungenService.downloadLaTeXSources(aufgabensammlungID, theFont, theSchriftgroesse,
 			layoutAntwortvorschlaege);
 
 		LOGGER.info("zip generiert");
@@ -570,10 +571,10 @@ public class AufgabensammlungenResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printArbeitsblatt",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
+		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein PDF. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
 		@Parameter(
-			name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
+			name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.", required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
@@ -612,7 +613,7 @@ public class AufgabensammlungenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printArbeitsblattMitLoesungen(
-		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String aufgabensammlungID,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse,
 		@QueryParam(value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
@@ -625,7 +626,7 @@ public class AufgabensammlungenResource {
 
 		LOGGER.debug("font={}, theFont={}, size={}, theSize={}", font, theFont, schriftgroesse, theSchriftgroesse);
 
-		return aufgabensammlungenService.printArbeitsblattMitLoesungen(raetselgruppeID, theFont, theSchriftgroesse, theLayout);
+		return aufgabensammlungenService.printArbeitsblattMitLoesungen(aufgabensammlungID, theFont, theSchriftgroesse, theLayout);
 	}
 
 	@GET
@@ -634,10 +635,10 @@ public class AufgabensammlungenResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printKnobelkartei",
-		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF, in dem jede Seite genau ein Rätsel enthält. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
+		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein PDF, in dem jede Seite genau ein Rätsel enthält. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
 		@Parameter(
-			name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
+			name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.", required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
@@ -676,7 +677,7 @@ public class AufgabensammlungenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printKnobelkartei(
-		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String aufgabensammlungID,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse,
 		@QueryParam(value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
@@ -690,7 +691,7 @@ public class AufgabensammlungenResource {
 		LOGGER.debug("font={}, theFont={}, size={}, theSize={}, theLayout={}", font, theFont, schriftgroesse, theSchriftgroesse,
 			theLayout);
 
-		return aufgabensammlungenService.printKartei(raetselgruppeID, theFont, theSchriftgroesse, theLayout);
+		return aufgabensammlungenService.printKartei(aufgabensammlungID, theFont, theSchriftgroesse, theLayout);
 	}
 
 }

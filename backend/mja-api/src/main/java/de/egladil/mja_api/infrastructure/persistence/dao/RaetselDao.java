@@ -470,7 +470,8 @@ public class RaetselDao {
 	 * Selektiert alle Raetsel, deren SCHLUESSEL in der gegebenen Collection enthalten ist.<br>
 	 * <br>
 	 * <strong>Achtung:</strong> Es wird mit IN gesucht. Es gibt ein DB-Limit für die Länge der Liste. Das wird aktuell nicht
-	 * berücksichtigt. Es dürfte momentan auch so groß sein, dass es nicht durch irgendwelche Rätselgruppen gerissen werden kann. Es
+	 * berücksichtigt. Es dürfte momentan auch so groß sein, dass es nicht durch irgendwelche Aufgabensammlungen gerissen werden
+	 * kann. Es
 	 * gibt ein Issue diesbezüglich: https://github.com/heike2718/mathe-jung-alt/issues/105
 	 *
 	 * @param  schluessel

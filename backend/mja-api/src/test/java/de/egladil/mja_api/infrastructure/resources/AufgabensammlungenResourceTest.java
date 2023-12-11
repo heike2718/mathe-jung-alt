@@ -35,13 +35,13 @@ import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 /**
- * RaetselgruppenResourceTest
+ * AufgabensammlungenResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(AufgabensammlungenResource.class)
 @TestProfile(FullDatabaseTestProfile.class)
 @TestMethodOrder(OrderAnnotation.class)
-public class RaetselgruppenResourceTest {
+public class AufgabensammlungenResourceTest {
 
 	private static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
 
@@ -50,7 +50,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@Order(1)
 	@TestSecurity(user = "testuser", roles = { "AUTOR" })
-	void testFindRaetselgruppen() throws Exception {
+	void testFindAufgabensammlungen() throws Exception {
 
 		AufgabensammlungSucheTreffer treffer = given()
 			.queryParam("limit", "20")
@@ -78,7 +78,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(2)
-	void testFindRaetselgruppenKeinTreffer() throws Exception {
+	void testFindAufgabensammlungenKeinTreffer() throws Exception {
 
 		AufgabensammlungSucheTreffer treffer = given()
 			.queryParam("limit", "20")
@@ -150,7 +150,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(5)
-	void testRaetselgruppeAnlegenOhneReferenz() throws Exception {
+	void testAufgabensammlungeAnlegenOhneReferenz() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
@@ -177,7 +177,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(6)
-	void testRaetselgruppeAnlegenOhneReferenzGleicherNameAnderesLevel() throws Exception {
+	void testAufgabensammlungeAnlegenOhneReferenzGleicherNameAnderesLevel() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
@@ -200,16 +200,16 @@ public class RaetselgruppenResourceTest {
 
 		System.out.println("=> " + responsePayload.toString());
 
-		assertTrue(responsePayload.getMessage().contains("Es gibt bereits eine Rätselgruppe mit diesem Namen."));
+		assertTrue(responsePayload.getMessage().contains("Es gibt bereits eine Aufgabensammlung mit diesem Namen."));
 
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(7)
-	void testRaetselgruppeAnlegenUndAendern() throws Exception {
+	void testAufgabensammlungeAnlegenUndAendern() throws Exception {
 
-		AufgabensammlungSucheTrefferItem raetselgruppensucheTrefferItem = null;
+		AufgabensammlungSucheTrefferItem trefferitem = null;
 		String expectedKommentar = "Kommentar aus dem Test";
 
 		{
@@ -222,7 +222,7 @@ public class RaetselgruppenResourceTest {
 			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
 			payload.setFreigegeben(false);
 
-			raetselgruppensucheTrefferItem = given()
+			trefferitem = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
@@ -233,7 +233,7 @@ public class RaetselgruppenResourceTest {
 				.extract()
 				.as(AufgabensammlungSucheTrefferItem.class);
 
-			assertNotNull(raetselgruppensucheTrefferItem.getId());
+			assertNotNull(trefferitem.getId());
 		}
 
 		{
@@ -256,21 +256,21 @@ public class RaetselgruppenResourceTest {
 				.extract()
 				.as(AufgabensammlungSucheTreffer.class);
 
-			raetselgruppensucheTrefferItem = treffer.getItems().get(0);
+			trefferitem = treffer.getItems().get(0);
 
 		}
 
-		if (raetselgruppensucheTrefferItem != null) {
+		if (trefferitem != null) {
 
 			EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 			payload.setKommentar(expectedKommentar);
-			payload.setId(raetselgruppensucheTrefferItem.getId());
-			payload.setName(raetselgruppensucheTrefferItem.getName());
-			payload.setReferenz(raetselgruppensucheTrefferItem.getReferenz());
-			payload.setReferenztyp(raetselgruppensucheTrefferItem.getReferenztyp());
-			payload.setSchwierigkeitsgrad(raetselgruppensucheTrefferItem.getSchwierigkeitsgrad());
-			payload.setFreigegeben(raetselgruppensucheTrefferItem.isFreigegeben());
-			payload.setPrivat(raetselgruppensucheTrefferItem.isPrivat());
+			payload.setId(trefferitem.getId());
+			payload.setName(trefferitem.getName());
+			payload.setReferenz(trefferitem.getReferenz());
+			payload.setReferenztyp(trefferitem.getReferenztyp());
+			payload.setSchwierigkeitsgrad(trefferitem.getSchwierigkeitsgrad());
+			payload.setFreigegeben(trefferitem.isFreigegeben());
+			payload.setPrivat(trefferitem.isPrivat());
 
 			AufgabensammlungSucheTrefferItem theItem = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -286,7 +286,7 @@ public class RaetselgruppenResourceTest {
 				.as(AufgabensammlungSucheTrefferItem.class);
 
 			System.out.println(theItem.getId());
-			assertEquals(raetselgruppensucheTrefferItem.getId(), theItem.getId());
+			assertEquals(trefferitem.getId(), theItem.getId());
 
 		}
 
@@ -295,7 +295,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "AUTOR" })
 	@Order(8)
-	void testRaetselgruppeAnlegenGleicherName() throws Exception {
+	void testAufgabensammlungeAnlegenGleicherName() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
@@ -316,18 +316,18 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Es gibt bereits eine Rätselgruppe mit diesem Namen.", messagePayload.getMessage());
+		assertEquals("Es gibt bereits eine Aufgabensammlung mit diesem Namen.", messagePayload.getMessage());
 
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(9)
-	void testRaetselgruppeAnlegenGleicheReferenz() throws Exception {
+	void testAufgabensammlungeAnlegenGleicheReferenz() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("neu");
-		payload.setName("Rätselgruppe XY");
+		payload.setName("Aufgabensammlung XY");
 		payload.setReferenz("2022");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
@@ -346,18 +346,18 @@ public class RaetselgruppenResourceTest {
 
 		// System.out.println(messagePayload.toString());
 
-		assertEquals("Es gibt bereits eine Rätselgruppe mit der gleichen Referenz.", messagePayload.getMessage());
+		assertEquals("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz.", messagePayload.getMessage());
 
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(10)
-	void testRaetselgruppeAnlegenIdNichtNeu() throws Exception {
+	void testAufgabensammlungeAnlegenIdNichtNeu() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("20582897-68be-41dd-ac28-63cc80b07f85");
-		payload.setName("Rätselgruppe XY");
+		payload.setName("Aufgabensammlung XY");
 		payload.setReferenz("2010");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
@@ -380,11 +380,11 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(11)
-	void testRaetselgruppeAendernReferenzdublette() throws Exception {
+	void testAufgabensammlungeAendernReferenzdublette() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("13c62cfb-cfdd-41f1-b8a9-6c866e087718");
-		payload.setName("Rätselgruppe XY");
+		payload.setName("Aufgabensammlung XY");
 		payload.setReferenz("2022");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
@@ -401,14 +401,14 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Es gibt bereits eine Rätselgruppe mit der gleichen Referenz.", messagePayload.getMessage());
+		assertEquals("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz.", messagePayload.getMessage());
 
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(12)
-	void testRaetselgruppeAendernNamendublette() throws Exception {
+	void testAufgabensammlungeAendernNamendublette() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc");
@@ -429,13 +429,13 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Es gibt bereits eine Rätselgruppe mit diesem Namen.", messagePayload.getMessage());
+		assertEquals("Es gibt bereits eine Aufgabensammlung mit diesem Namen.", messagePayload.getMessage());
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(13)
-	void testRaetselgruppeAendernUnbekannt() throws Exception {
+	void testAufgabensammlungeAendernUnbekannt() throws Exception {
 
 		EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
 		payload.setId("00000000-0000-0000-0000-000000000000");
@@ -456,15 +456,15 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Diese Rätselgruppe gibt es nicht.", messagePayload.getMessage());
+		assertEquals("Diese Aufgabensammlung gibt es nicht.", messagePayload.getMessage());
 	}
 
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN" })
 	@Order(20)
-	void raetselgruppenelementAnlegenAendernLoeschen() throws Exception {
+	void elementAnlegenAendernLoeschen() throws Exception {
 
-		String raetselgruppeUuid = "0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc";
+		String aufgabensammlungUuid = "0af9f6e3-9e25-41a1-887d-0c9e6e9f57dc";
 		String elementUuid = null;
 
 		{
@@ -475,7 +475,7 @@ public class RaetselgruppenResourceTest {
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
-				.get(raetselgruppeUuid + "/v1")
+				.get(aufgabensammlungUuid + "/v1")
 				.then()
 				.statusCode(200)
 				.and()
@@ -497,12 +497,12 @@ public class RaetselgruppenResourceTest {
 			payload.setPunkte(300);
 			payload.setRaetselSchluessel("02618");
 
-			AufgabensammlungDetails raetselgruppe = given()
+			AufgabensammlungDetails aufgabensammlung = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
 				.body(payload)
-				.post(raetselgruppeUuid + "/elemente/v1")
+				.post(aufgabensammlungUuid + "/elemente/v1")
 				.then()
 				.contentType(ContentType.JSON)
 				.and()
@@ -510,9 +510,9 @@ public class RaetselgruppenResourceTest {
 				.extract()
 				.as(AufgabensammlungDetails.class);
 
-			System.out.println(raetselgruppe.getId());
+			System.out.println(aufgabensammlung.getId());
 
-			List<Aufgabensammlungselement> elemente = raetselgruppe.getElemente();
+			List<Aufgabensammlungselement> elemente = aufgabensammlung.getElemente();
 
 			assertEquals(13, elemente.size());
 
@@ -533,12 +533,12 @@ public class RaetselgruppenResourceTest {
 				payload.setPunkte(300);
 				payload.setRaetselSchluessel("02618");
 
-				AufgabensammlungDetails raetselgruppe = given()
+				AufgabensammlungDetails aufgabensammlung = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(payload)
-					.put(raetselgruppeUuid + "/elemente/v1")
+					.put(aufgabensammlungUuid + "/elemente/v1")
 					.then()
 					.contentType(ContentType.JSON)
 					.and()
@@ -546,9 +546,9 @@ public class RaetselgruppenResourceTest {
 					.extract()
 					.as(AufgabensammlungDetails.class);
 
-				System.out.println(raetselgruppe.getId());
+				System.out.println(aufgabensammlung.getId());
 
-				List<Aufgabensammlungselement> elemente = raetselgruppe.getElemente();
+				List<Aufgabensammlungselement> elemente = aufgabensammlung.getElemente();
 
 				assertEquals(13, elemente.size());
 				Optional<Aufgabensammlungselement> opt = elemente.stream().filter(el -> "02618".equals(el.getRaetselSchluessel()))
@@ -565,11 +565,11 @@ public class RaetselgruppenResourceTest {
 
 			if (elementUuid != null) {
 
-				AufgabensammlungDetails raetselgruppe = given()
+				AufgabensammlungDetails aufgabensammlung = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
-					.delete(raetselgruppeUuid + "/elemente/" + elementUuid + "/v1")
+					.delete(aufgabensammlungUuid + "/elemente/" + elementUuid + "/v1")
 					.then()
 					.statusCode(200)
 					.and()
@@ -577,9 +577,9 @@ public class RaetselgruppenResourceTest {
 					.extract()
 					.as(AufgabensammlungDetails.class);
 
-				System.out.println(raetselgruppe.getId());
+				System.out.println(aufgabensammlung.getId());
 
-				List<Aufgabensammlungselement> elemente = raetselgruppe.getElemente();
+				List<Aufgabensammlungselement> elemente = aufgabensammlung.getElemente();
 
 				assertEquals(12, elemente.size());
 
@@ -593,7 +593,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "AUTOR", "STANDARD" })
 	@Order(21)
-	void raetselgruppenelementLoeschenGruppeExistiertNicht() throws Exception {
+	void elementLoeschenGruppeExistiertNicht() throws Exception {
 
 		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -611,7 +611,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(22)
-	void raetselgruppenelementLoeschenElementExistiertNicht() throws Exception {
+	void elementLoeschenElementExistiertNicht() throws Exception {
 
 		AufgabensammlungDetails treffer = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -660,7 +660,7 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Tja, diese Rätselgruppe gibt es gar nicht.", messagePayload.getMessage());
+		assertEquals("Tja, diese Aufgabensammlung gibt es gar nicht.", messagePayload.getMessage());
 	}
 
 	@Test
@@ -713,7 +713,7 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer",
+		assertEquals("In dieser Aufgabensammlung gibt es bereits ein Element mit der gewählten Nummer",
 			messagePayload.getMessage());
 
 	}
@@ -742,7 +742,7 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Das Rätsel gibt es in dieser Rätselgruppe schon.",
+		assertEquals("Das Rätsel gibt es in dieser Aufgabensammlung schon.",
 			messagePayload.getMessage());
 	}
 
@@ -770,7 +770,7 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Tja, diese Rätselgruppe gibt es gar nicht.",
+		assertEquals("Tja, diese Aufgabensammlung gibt es gar nicht.",
 			messagePayload.getMessage());
 
 	}
@@ -799,7 +799,7 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Tja, dieses Rätselgruppenelement gibt es gar nicht.",
+		assertEquals("Tja, dieses Element gibt es gar nicht.",
 			messagePayload.getMessage());
 
 	}
@@ -807,7 +807,7 @@ public class RaetselgruppenResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "ADMIN", "STANDARD" })
 	@Order(28)
-	void elementAendernRaetselgruppenkonflikt() throws Exception {
+	void elementAendernKonflikt() throws Exception {
 
 		EditAufgabensammlungselementPayload payload = new EditAufgabensammlungselementPayload();
 		payload.setId("bff1c941-1774-4489-bb3b-484361796cd2");
@@ -828,7 +828,7 @@ public class RaetselgruppenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Rätselgruppenkonflikt", messagePayload.getMessage());
+		assertEquals("Konflikt", messagePayload.getMessage());
 
 	}
 
@@ -849,7 +849,7 @@ public class RaetselgruppenResourceTest {
 			payload.setPunkte(400);
 			payload.setRaetselSchluessel("02629");
 
-			AufgabensammlungDetails raetselgruppe = given()
+			AufgabensammlungDetails aufgabensammlung = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 				.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 				.contentType(ContentType.JSON)
@@ -862,7 +862,7 @@ public class RaetselgruppenResourceTest {
 				.extract()
 				.as(AufgabensammlungDetails.class);
 
-			List<Aufgabensammlungselement> elemente = raetselgruppe.getElemente();
+			List<Aufgabensammlungselement> elemente = aufgabensammlung.getElemente();
 			elementUuid = elemente.stream().filter(el -> "B-3".equals(el.getNummer())).findFirst().get().getId();
 		}
 
@@ -889,7 +889,7 @@ public class RaetselgruppenResourceTest {
 				.extract()
 				.as(MessagePayload.class);
 
-			assertEquals("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer",
+			assertEquals("In dieser Aufgabensammlung gibt es bereits ein Element mit der gewählten Nummer",
 				messagePayload.getMessage());
 
 		}

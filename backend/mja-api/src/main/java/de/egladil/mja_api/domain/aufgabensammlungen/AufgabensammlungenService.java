@@ -20,12 +20,12 @@ import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTre
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungPayload;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungselementPayload;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.generatoren.AufgabensammlungLaTeXGeneratorService;
+import de.egladil.mja_api.domain.generatoren.AufgabensammlungPDFGeneratorService;
 import de.egladil.mja_api.domain.generatoren.FontName;
-import de.egladil.mja_api.domain.generatoren.RaetselgruppeLaTeXGeneratorService;
-import de.egladil.mja_api.domain.generatoren.RaetselgruppePDFGeneratorService;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
-import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -66,12 +66,12 @@ public class AufgabensammlungenService {
 	QuizService quizService;
 
 	@Inject
-	RaetselgruppePDFGeneratorService raetselgruppePDFGenerator;
+	AufgabensammlungPDFGeneratorService aufgabensammlungPDFGenerator;
 
 	@Inject
-	RaetselgruppeLaTeXGeneratorService raetselgruppenLaTeXGenerator;
+	AufgabensammlungLaTeXGeneratorService aufgabensammlungLaTeXGenerator;
 
-	public AufgabensammlungSucheTreffer findRaetselgruppen(final AufgabensammlungenSuchparameter suchparameter, final int limit, final int offset) {
+	public AufgabensammlungSucheTreffer findAufgabensammlungen(final AufgabensammlungenSuchparameter suchparameter, final int limit, final int offset) {
 
 		AufgabensammlungSucheTreffer result = new AufgabensammlungSucheTreffer();
 		long anzahlGesamt = aufgabensammlungDao.countByFilter(suchparameter);
@@ -85,7 +85,7 @@ public class AufgabensammlungenService {
 
 		for (PersistenteAufgabensammlung treffer : trefferliste) {
 
-			long anzahlElemente = aufgabensammlungDao.countElementeRaetselgruppe(treffer.uuid);
+			long anzahlElemente = aufgabensammlungDao.countElementeAufgabensammlung(treffer.uuid);
 
 			AufgabensammlungSucheTrefferItem item = mapFromDB(treffer);
 			item.setAnzahlElemente(anzahlElemente);
@@ -104,25 +104,26 @@ public class AufgabensammlungenService {
 	 *                            boolean
 	 * @return                    Optional
 	 */
-	public Optional<AufgabensammlungDetails> loadDetails(final String raetselgruppeID) {
+	public Optional<AufgabensammlungDetails> loadDetails(final String aufgabensammlungID) {
 
-		PersistenteAufgabensammlung raetselgruppe = aufgabensammlungDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung aufgabensammlung = aufgabensammlungDao.findByID(aufgabensammlungID);
 
-		if (raetselgruppe == null) {
+		if (aufgabensammlung == null) {
 
 			return Optional.empty();
 		}
 
-		final AufgabensammlungDetails result = AufgabensammlungDetails.createFromDB(raetselgruppe);
+		final AufgabensammlungDetails result = AufgabensammlungDetails.createFromDB(aufgabensammlung);
 
 		if (PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetselgruppe.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), aufgabensammlung.owner)) {
 
 			result.markiereAlsAenderbar();
 		}
 
-		List<PersistentesAufgabensammlugnselement> elementeDB = aufgabensammlungDao.loadElementeRaetselgruppe(raetselgruppeID);
-		List<PersistenteAufgabeReadonly> aufgaben = aufgabensammlungDao.loadAufgabenByReaetselgruppe(raetselgruppeID);
+		List<PersistentesAufgabensammlugnselement> elementeDB = aufgabensammlungDao
+			.loadElementeAufgabensammlung(aufgabensammlungID);
+		List<PersistenteAufgabeReadonly> aufgaben = aufgabensammlungDao.loadAufgabenByAufgabensammlung(aufgabensammlungID);
 
 		elementeDB.forEach(r -> {
 
@@ -139,7 +140,7 @@ public class AufgabensammlungenService {
 	}
 
 	/**
-	 * Erstellt eine neue Rätselgruppe. Dabei wird geprüft, ob es eine mit den Keys bereits gibt oder dem Namen. In diesem Fall
+	 * Erstellt eine neue Aufgabensammlung. Dabei wird geprüft, ob es eine mit den Keys bereits gibt oder dem Namen. In diesem Fall
 	 * wird eine
 	 * WebApplicationException mit Status 409 - Conflict geworfen.
 	 *
@@ -151,7 +152,7 @@ public class AufgabensammlungenService {
 	 * @return         AufgabensammlungSucheTrefferItem
 	 */
 	@Transactional
-	public AufgabensammlungSucheTrefferItem raetselgruppeAnlegen(final EditAufgabensammlungPayload payload) throws WebApplicationException {
+	public AufgabensammlungSucheTrefferItem aufgabensammlungAnlegen(final EditAufgabensammlungPayload payload) throws WebApplicationException {
 
 		String userId = authCtx.getUser().getName();
 
@@ -168,7 +169,7 @@ public class AufgabensammlungenService {
 
 			throw new WebApplicationException(
 				Response.status(Status.CONFLICT)
-					.entity(MessagePayload.error("Es gibt bereits eine Rätselgruppe mit der gleichen Referenz."))
+					.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz."))
 					.build());
 		}
 
@@ -176,26 +177,26 @@ public class AufgabensammlungenService {
 
 			throw new WebApplicationException(
 				Response.status(Status.CONFLICT)
-					.entity(MessagePayload.error("Es gibt bereits eine Rätselgruppe mit diesem Namen."))
+					.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit diesem Namen."))
 					.build());
 		}
 
-		PersistenteAufgabensammlung raetselgruppe = new PersistenteAufgabensammlung();
-		mergeFromPayload(raetselgruppe, payload);
-		raetselgruppe.geaendertDurch = userId;
-		raetselgruppe.freigegeben = false;
-		raetselgruppe.owner = userId;
+		PersistenteAufgabensammlung aufgabensammlung = new PersistenteAufgabensammlung();
+		mergeFromPayload(aufgabensammlung, payload);
+		aufgabensammlung.geaendertDurch = userId;
+		aufgabensammlung.freigegeben = false;
+		aufgabensammlung.owner = userId;
 
-		PersistenteAufgabensammlung persistierte = speichern(raetselgruppe);
+		PersistenteAufgabensammlung persistierte = speichern(aufgabensammlung);
 		AufgabensammlungSucheTrefferItem result = mapFromDB(persistierte);
 
-		LOGGER.info("Rätselgruppe angelegt: {}, admin={}", result.getId(), StringUtils.abbreviate(userId, 11));
+		LOGGER.info("Aufgabensammlung angelegt: {}, admin={}", result.getId(), StringUtils.abbreviate(userId, 11));
 
 		return result;
 	}
 
 	/**
-	 * Ändert die Basisdaten einer Rätselgruppe. Dabei wird geprüft, ob es eine mit den Keys oder dem Namen bereits gibt. In
+	 * Ändert die Basisdaten einer Aufgabensammlung. Dabei wird geprüft, ob es eine mit den Keys oder dem Namen bereits gibt. In
 	 * diesem Fall wird eine WebApplicationException mit Status 409 - Conflict geworfen.
 	 *
 	 * @param  payload
@@ -206,7 +207,7 @@ public class AufgabensammlungenService {
 	 * @return         AufgabensammlungSucheTrefferItem
 	 */
 	@Transactional
-	public AufgabensammlungSucheTrefferItem raetselgruppeBasisdatenAendern(final EditAufgabensammlungPayload payload) throws WebApplicationException {
+	public AufgabensammlungSucheTrefferItem aufgabensammlungBasisdatenAendern(final EditAufgabensammlungPayload payload) throws WebApplicationException {
 
 		String userId = authCtx.getUser().getName();
 
@@ -214,7 +215,7 @@ public class AufgabensammlungenService {
 
 			throw new WebApplicationException(
 				Response.status(Status.CONFLICT)
-					.entity(MessagePayload.error("Es gibt bereits eine Rätselgruppe mit der gleichen Referenz."))
+					.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz."))
 					.build());
 		}
 
@@ -222,7 +223,7 @@ public class AufgabensammlungenService {
 
 			throw new WebApplicationException(
 				Response.status(Status.CONFLICT)
-					.entity(MessagePayload.error("Es gibt bereits eine Rätselgruppe mit diesem Namen."))
+					.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit diesem Namen."))
 					.build());
 		}
 
@@ -232,7 +233,7 @@ public class AufgabensammlungenService {
 
 			throw new WebApplicationException(
 				Response.status(Status.NOT_FOUND)
-					.entity(MessagePayload.error("Diese Rätselgruppe gibt es nicht."))
+					.entity(MessagePayload.error("Diese Aufgabensammlung gibt es nicht."))
 					.build());
 		}
 
@@ -245,17 +246,17 @@ public class AufgabensammlungenService {
 
 		AufgabensammlungSucheTrefferItem result = mapFromDB(persistierte);
 
-		long anzahlElemente = aufgabensammlungDao.countElementeRaetselgruppe(persistierte.uuid);
+		long anzahlElemente = aufgabensammlungDao.countElementeAufgabensammlung(persistierte.uuid);
 		result.setAnzahlElemente(anzahlElemente);
 
-		LOGGER.info("Raetselgruppe geaendert: {}, admin={}", result.getId(), StringUtils.abbreviate(userId, 11));
+		LOGGER.info("Aufgabensammlung geaendert: {}, admin={}", result.getId(), StringUtils.abbreviate(userId, 11));
 
 		return result;
 	}
 
-	PersistenteAufgabensammlung speichern(final PersistenteAufgabensammlung raetselgruppe) {
+	PersistenteAufgabensammlung speichern(final PersistenteAufgabensammlung aufgabensammlung) {
 
-		return aufgabensammlungDao.saveRaetselgruppe(raetselgruppe);
+		return aufgabensammlungDao.saveAufgabensammlung(aufgabensammlung);
 	}
 
 	boolean dupletteNachKeysExistiert(final EditAufgabensammlungPayload payload) {
@@ -306,15 +307,15 @@ public class AufgabensammlungenService {
 
 	}
 
-	void mergeFromPayload(final PersistenteAufgabensammlung raetselgruppe, final EditAufgabensammlungPayload payload) {
+	void mergeFromPayload(final PersistenteAufgabensammlung aufgabensammlung, final EditAufgabensammlungPayload payload) {
 
-		raetselgruppe.kommentar = payload.getKommentar();
-		raetselgruppe.name = payload.getName();
-		raetselgruppe.referenz = payload.getReferenz();
-		raetselgruppe.referenztyp = payload.getReferenztyp();
-		raetselgruppe.schwierigkeitsgrad = payload.getSchwierigkeitsgrad();
-		raetselgruppe.freigegeben = payload.isFreigegeben();
-		raetselgruppe.privat = payload.isPrivat();
+		aufgabensammlung.kommentar = payload.getKommentar();
+		aufgabensammlung.name = payload.getName();
+		aufgabensammlung.referenz = payload.getReferenz();
+		aufgabensammlung.referenztyp = payload.getReferenztyp();
+		aufgabensammlung.schwierigkeitsgrad = payload.getSchwierigkeitsgrad();
+		aufgabensammlung.freigegeben = payload.isFreigegeben();
+		aufgabensammlung.privat = payload.isPrivat();
 	}
 
 	/**
@@ -324,19 +325,19 @@ public class AufgabensammlungenService {
 	 * @param  payload
 	 * @return                    AufgabensammlungDetails
 	 */
-	public AufgabensammlungDetails elementAnlegen(final String raetselgruppeID, final EditAufgabensammlungselementPayload payload) {
+	public AufgabensammlungDetails elementAnlegen(final String aufgabensammlungID, final EditAufgabensammlungselementPayload payload) {
 
-		PersistenteAufgabensammlung raetselgruppe = aufgabensammlungDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung aufgabensammlung = aufgabensammlungDao.findByID(aufgabensammlungID);
 
-		if (raetselgruppe == null) {
+		if (aufgabensammlung == null) {
 
 			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Tja, diese Rätselgruppe gibt es gar nicht."))
+				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht."))
 				.build();
 			throw new WebApplicationException(response);
 		}
 
-		checkPermission(raetselgruppe);
+		checkPermission(aufgabensammlung);
 
 		Optional<String> optRaetselId = raetselService.getRaetselIdWithSchluessel(payload.getRaetselSchluessel());
 
@@ -349,7 +350,7 @@ public class AufgabensammlungenService {
 		}
 
 		List<PersistentesAufgabensammlugnselement> persistenteElemente = aufgabensammlungDao
-			.loadElementeRaetselgruppe(raetselgruppeID);
+			.loadElementeAufgabensammlung(aufgabensammlungID);
 
 		Optional<PersistentesAufgabensammlugnselement> optElementMitGleicherNummer = persistenteElemente.stream()
 			.filter(el -> el.nummer.equalsIgnoreCase(payload.getNummer())).findFirst();
@@ -357,7 +358,7 @@ public class AufgabensammlungenService {
 		if (optElementMitGleicherNummer.isPresent()) {
 
 			Response response = Response.status(Status.CONFLICT)
-				.entity(MessagePayload.error("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer"))
+				.entity(MessagePayload.error("In dieser Aufgabensammlung gibt es bereits ein Element mit der gewählten Nummer"))
 				.build();
 			throw new WebApplicationException(response);
 
@@ -371,20 +372,20 @@ public class AufgabensammlungenService {
 		if (optElementMitGleichemRaetsel.isPresent()) {
 
 			Response response = Response.status(Status.CONFLICT)
-				.entity(MessagePayload.error("Das Rätsel gibt es in dieser Rätselgruppe schon."))
+				.entity(MessagePayload.error("Das Rätsel gibt es in dieser Aufgabensammlung schon."))
 				.build();
 			throw new WebApplicationException(response);
 
 		}
 
-		this.createAndPersistNeuesRaetselgruppenelement(raetselgruppeID,
+		this.createAndPersistNeuesElement(aufgabensammlungID,
 			optRaetselId.get(), payload);
 
-		Optional<AufgabensammlungDetails> opt = this.loadDetails(raetselgruppeID);
+		Optional<AufgabensammlungDetails> opt = this.loadDetails(aufgabensammlungID);
 
 		if (opt.isEmpty()) {
 
-			LOGGER.error("Raetselgruppe mit der UUID={} wurde ein paar Zeilen später nicht mehr gefunden", raetselgruppeID);
+			LOGGER.error("Aufgabensammlung mit der UUID={} wurde ein paar Zeilen später nicht mehr gefunden", aufgabensammlungID);
 			Response response = Response.status(Status.INTERNAL_SERVER_ERROR)
 				.entity(MessagePayload.error("Ups, da ist aber etwas komplett schiefgelaufen"))
 				.build();
@@ -395,15 +396,15 @@ public class AufgabensammlungenService {
 	}
 
 	@Transactional
-	PersistentesAufgabensammlugnselement createAndPersistNeuesRaetselgruppenelement(final String raetselgruppeID, final String raetselID, final EditAufgabensammlungselementPayload payload) {
+	PersistentesAufgabensammlugnselement createAndPersistNeuesElement(final String aufgabensammlungID, final String raetselID, final EditAufgabensammlungselementPayload payload) {
 
 		PersistentesAufgabensammlugnselement neues = new PersistentesAufgabensammlugnselement();
 		neues.nummer = payload.getNummer();
 		neues.punkte = payload.getPunkte();
-		neues.aufgabensammlungID = raetselgruppeID;
+		neues.aufgabensammlungID = aufgabensammlungID;
 		neues.raetselID = raetselID;
 
-		PersistentesAufgabensammlugnselement persisted = aufgabensammlungDao.saveRaetselgruppenelement(neues);
+		PersistentesAufgabensammlugnselement persisted = aufgabensammlungDao.saveElement(neues);
 
 		return persisted;
 	}
@@ -416,43 +417,43 @@ public class AufgabensammlungenService {
 	 * @return                    AufgabensammlungDetails
 	 */
 	@Transactional
-	public AufgabensammlungDetails elementAendern(final String raetselgruppeID, final EditAufgabensammlungselementPayload payload) {
+	public AufgabensammlungDetails elementAendern(final String aufgabensammlungID, final EditAufgabensammlungselementPayload payload) {
 
 		PersistentesAufgabensammlugnselement persistentesElement = aufgabensammlungDao.findElementById(payload.getId());
 
 		if (persistentesElement == null) {
 
 			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Tja, dieses Rätselgruppenelement gibt es gar nicht."))
+				.entity(MessagePayload.error("Tja, dieses Element gibt es gar nicht."))
 				.build();
 			throw new WebApplicationException(response);
 		}
 
-		PersistenteAufgabensammlung raetselgruppe = aufgabensammlungDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung aufgabensammlung = aufgabensammlungDao.findByID(aufgabensammlungID);
 
-		if (raetselgruppe == null) {
+		if (aufgabensammlung == null) {
 
 			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Tja, diese Rätselgruppe gibt es gar nicht."))
+				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht."))
 				.build();
 			throw new WebApplicationException(response);
 		}
 
-		checkPermission(raetselgruppe);
+		checkPermission(aufgabensammlung);
 
-		if (!raetselgruppeID.equals(persistentesElement.aufgabensammlungID)) {
+		if (!aufgabensammlungID.equals(persistentesElement.aufgabensammlungID)) {
 
-			LOGGER.error("Raetselgruppenkonflikt: persistentesElement.raetselgruppeID={}, aufgabensammlungID={}",
-				persistentesElement.aufgabensammlungID, raetselgruppeID);
+			LOGGER.error("Konflikt: persistentesElement.aufgabensammlungID={}, aufgabensammlungID={}",
+				persistentesElement.aufgabensammlungID, aufgabensammlungID);
 
 			Response response = Response.status(Status.CONFLICT)
-				.entity(MessagePayload.error("Rätselgruppenkonflikt"))
+				.entity(MessagePayload.error("Konflikt"))
 				.build();
 			throw new WebApplicationException(response);
 		}
 
 		List<PersistentesAufgabensammlugnselement> persistenteElemente = aufgabensammlungDao
-			.loadElementeRaetselgruppe(raetselgruppeID);
+			.loadElementeAufgabensammlung(aufgabensammlungID);
 
 		Optional<PersistentesAufgabensammlugnselement> optElementMitGleicherNummer = persistenteElemente.stream()
 			.filter(el -> el.nummer.equalsIgnoreCase(payload.getNummer()) && !el.uuid.equals(payload.getId())).findFirst();
@@ -460,21 +461,21 @@ public class AufgabensammlungenService {
 		if (optElementMitGleicherNummer.isPresent()) {
 
 			Response response = Response.status(Status.CONFLICT)
-				.entity(MessagePayload.error("In dieser Rätselgruppe gibt es bereits ein Element mit der gewählten Nummer"))
+				.entity(MessagePayload.error("In dieser Aufgabensammlung gibt es bereits ein Element mit der gewählten Nummer"))
 				.build();
 			throw new WebApplicationException(response);
 
 		}
 
-		mergeAndSaveRaetselgruppenelement(persistentesElement, payload);
+		mergeAndSaveElement(persistentesElement, payload);
 
-		Optional<AufgabensammlungDetails> opt = this.loadDetails(raetselgruppeID);
+		Optional<AufgabensammlungDetails> opt = this.loadDetails(aufgabensammlungID);
 
 		if (opt.isEmpty()) {
 
-			LOGGER.error("Raetselgruppe mit der UUID={} wurde ein paar Zeilen später nicht mehr gefunden", raetselgruppeID);
+			LOGGER.error("Aufgabensammlung mit der UUID={} wurde ein paar Zeilen später nicht mehr gefunden", aufgabensammlungID);
 			Response response = Response.status(Status.INTERNAL_SERVER_ERROR)
-				.entity(MessagePayload.error("Tja, diese Rätselgruppe gibt es gar nicht."))
+				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht."))
 				.build();
 			throw new WebApplicationException(response);
 		}
@@ -482,37 +483,37 @@ public class AufgabensammlungenService {
 		return opt.get();
 	}
 
-	void mergeAndSaveRaetselgruppenelement(final PersistentesAufgabensammlugnselement persistentesElement, final EditAufgabensammlungselementPayload payload) {
+	void mergeAndSaveElement(final PersistentesAufgabensammlugnselement persistentesElement, final EditAufgabensammlungselementPayload payload) {
 
 		persistentesElement.nummer = payload.getNummer();
 		persistentesElement.punkte = payload.getPunkte();
 
-		aufgabensammlungDao.saveRaetselgruppenelement(persistentesElement);
+		aufgabensammlungDao.saveElement(persistentesElement);
 	}
 
 	/**
-	 * Löscht das gegebene Element der Rätselgruppe.
+	 * Löscht das gegebene Element der Aufgabensammlung.
 	 *
 	 * @param  aufgabensammlungID
 	 * @param  elementID
 	 * @return                    AufgabensammlungDetails
 	 */
-	public AufgabensammlungDetails elementLoeschen(final String raetselgruppeID, final String elementID) {
+	public AufgabensammlungDetails elementLoeschen(final String aufgabensammlungID, final String elementID) {
 
-		PersistenteAufgabensammlung raetselgruppe = aufgabensammlungDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung aufgabensammlung = aufgabensammlungDao.findByID(aufgabensammlungID);
 
-		if (raetselgruppe != null) {
+		if (aufgabensammlung != null) {
 
-			checkPermission(raetselgruppe);
+			checkPermission(aufgabensammlung);
 		}
 
-		aufgabensammlungDao.deleteRaetselgruppenelement(elementID);
+		aufgabensammlungDao.deleteElement(elementID);
 
-		Optional<AufgabensammlungDetails> opt = this.loadDetails(raetselgruppeID);
+		Optional<AufgabensammlungDetails> opt = this.loadDetails(aufgabensammlungID);
 
 		if (opt.isEmpty()) {
 
-			LOGGER.error("Raetselgruppe mit der UUID={} gibt es nicht", raetselgruppeID);
+			LOGGER.error("Aufgabensammlung mit der UUID={} gibt es nicht", aufgabensammlungID);
 			Response response = Response.status(Status.NOT_FOUND)
 				.entity(MessagePayload.error("Ups, da ist aber etwas komplett schiefgelaufen"))
 				.build();
@@ -535,22 +536,22 @@ public class AufgabensammlungenService {
 	 *                                  LayoutAntwortvorschlaege
 	 * @return
 	 */
-	public GeneratedFile printVorschau(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile printVorschau(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
 
 		if (dbResult == null) {
 
 			throw new WebApplicationException(
-				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Rätselgruppe gibt es nicht.")).build());
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Aufgabensammlung gibt es nicht.")).build());
 		}
 
-		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
+		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(aufgabensammlungID);
 
-		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.VORSCHAU, font, schriftgroesse,
+		AufgabensammlungGeneratorInput input = createAufgabensammlungGeneratorInput(Verwendungszweck.VORSCHAU, font, schriftgroesse,
 			layoutAntwortvorschlaege, dbResult, aufgaben);
 
-		return raetselgruppePDFGenerator.generate(input);
+		return aufgabensammlungPDFGenerator.generate(input);
 	}
 
 	/**
@@ -565,15 +566,15 @@ public class AufgabensammlungenService {
 	 *                                  LayoutAntwortvorschlaege
 	 * @return                          GeneratedFile
 	 */
-	public GeneratedFile printKartei(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile printKartei(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
 		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
 
-		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.KARTEI, font, schriftgroesse,
+		AufgabensammlungGeneratorInput input = createAufgabensammlungGeneratorInput(Verwendungszweck.KARTEI, font, schriftgroesse,
 			layoutAntwortvorschlaege, dbResult, freigegebeneAufgaben);
 
-		return raetselgruppePDFGenerator.generate(input);
+		return aufgabensammlungPDFGenerator.generate(input);
 	}
 
 	/**
@@ -589,15 +590,16 @@ public class AufgabensammlungenService {
 	 *                                  LayoutAntwortvorschlaege
 	 * @return                          GeneratedFile
 	 */
-	public GeneratedFile printArbeitsblattMitLoesungen(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile printArbeitsblattMitLoesungen(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
 		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
 
-		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.ARBEITSBLATT, font, schriftgroesse,
+		AufgabensammlungGeneratorInput input = createAufgabensammlungGeneratorInput(Verwendungszweck.ARBEITSBLATT, font,
+			schriftgroesse,
 			layoutAntwortvorschlaege, dbResult, freigegebeneAufgaben);
 
-		return raetselgruppePDFGenerator.generate(input);
+		return aufgabensammlungPDFGenerator.generate(input);
 	}
 
 	List<Quizaufgabe> vorbedingungenPublicResourcesPruefen(final PersistenteAufgabensammlung dbResult) throws WebApplicationException {
@@ -605,14 +607,14 @@ public class AufgabensammlungenService {
 		if (dbResult == null) {
 
 			throw new WebApplicationException(
-				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Rätselgruppe gibt es nicht.")).build());
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Aufgabensammlung gibt es nicht.")).build());
 		}
 
 		checkPermission(dbResult);
 
-		String raetselgruppeID = dbResult.uuid;
+		String aufgabensammlungID = dbResult.uuid;
 
-		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
+		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(aufgabensammlungID);
 		List<Quizaufgabe> freigegebeneAufgaben = aufgaben;
 
 		if (PermissionUtils.isUserOrdinary(authCtx.getUser().getRoles())) {
@@ -622,7 +624,7 @@ public class AufgabensammlungenService {
 
 			if (freigegebeneAufgaben.isEmpty()) {
 
-				LOGGER.error("Rätselgruppe {} - {} hat keine freigegebenen Aufgaben. Aufruf durch admin {}", raetselgruppeID,
+				LOGGER.error("Aufgabensammlung {} - {} hat keine freigegebenen Aufgaben. Aufruf durch admin {}", aufgabensammlungID,
 					dbResult.name, StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
 
 				throw new WebApplicationException(
@@ -634,40 +636,40 @@ public class AufgabensammlungenService {
 
 		if (freigegebeneAufgaben.isEmpty()) {
 
-			LOGGER.error("Rätselgruppe {} - {} hat keine Aufgaben. Aufruf durch admin {}", raetselgruppeID,
+			LOGGER.error("Aufgabensammlung {} - {} hat keine Aufgaben. Aufruf durch admin {}", aufgabensammlungID,
 				dbResult.name, StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
 
 			throw new WebApplicationException(
 				Response.status(Status.BAD_REQUEST)
-					.entity(MessagePayload.error("Drucken einer Kartei nicht möglich. Rätselgruppe ist leer.")).build());
+					.entity(MessagePayload.error("Drucken einer Kartei nicht möglich. Aufgabensammlung ist leer.")).build());
 		}
 
 		return freigegebeneAufgaben;
 	}
 
 	/**
-	 * Generiert das LaTeX-File für die Raetselgruppe. Die Grafiken muss man sowieso lokal haben. Sollte sich mit kleineren
+	 * Generiert das LaTeX-File für die Aufgabensammlung. Die Grafiken muss man sowieso lokal haben. Sollte sich mit kleineren
 	 * Textreplacements lokal compilieren lassen.
 	 *
 	 * @param  aufgabensammlungID
 	 * @return                    GeneratedFile
 	 */
-	public File downloadLaTeXSources(final String raetselgruppeID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public File downloadLaTeXSources(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(raetselgruppeID);
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
 
 		if (dbResult == null) {
 
 			throw new WebApplicationException(
-				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Rätselgruppe gibt es nicht.")).build());
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Aufgabensammlung gibt es nicht.")).build());
 		}
 
-		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(raetselgruppeID);
+		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(aufgabensammlungID);
 
-		RaetselgruppeGeneratorInput input = createRaetselgruppeGeneratorInput(Verwendungszweck.LATEX, font, schriftgroesse,
+		AufgabensammlungGeneratorInput input = createAufgabensammlungGeneratorInput(Verwendungszweck.LATEX, font, schriftgroesse,
 			layoutAntwortvorschlaege, dbResult, aufgaben);
 
-		return raetselgruppenLaTeXGenerator.generateLaTeXArchive(input);
+		return aufgabensammlungLaTeXGenerator.generateLaTeXArchive(input);
 	}
 
 	/**
@@ -678,13 +680,13 @@ public class AufgabensammlungenService {
 	 * @param  aufgaben
 	 * @return
 	 */
-	private RaetselgruppeGeneratorInput createRaetselgruppeGeneratorInput(final Verwendungszweck verwendungszweck, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final PersistenteAufgabensammlung dbResult, final List<Quizaufgabe> aufgaben) {
+	private AufgabensammlungGeneratorInput createAufgabensammlungGeneratorInput(final Verwendungszweck verwendungszweck, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final PersistenteAufgabensammlung dbResult, final List<Quizaufgabe> aufgaben) {
 
-		RaetselgruppeGeneratorInput input = new RaetselgruppeGeneratorInput()
+		AufgabensammlungGeneratorInput input = new AufgabensammlungGeneratorInput()
 			.withAufgaben(aufgaben)
 			.withFont(font)
 			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
-			.withRaetselgruppe(dbResult)
+			.withAufgabensammlung(dbResult)
 			.withVerwendungszweck(verwendungszweck)
 			.withSchriftgroesse(schriftgroesse);
 		return input;
@@ -693,9 +695,9 @@ public class AufgabensammlungenService {
 	void checkPermission(final PersistenteAufgabensammlung ausDB) {
 
 		if (!PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), ausDB.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), ausDB.owner)) {
 
-			LOGGER.warn("User {} hat versucht, Raetselgruppe {} mit Owner {} zu aendern oder zu drucken",
+			LOGGER.warn("User {} hat versucht, Aufgabensammlung {} mit Owner {} zu aendern oder zu drucken",
 				authCtx.getUser().getName(), ausDB.uuid,
 				ausDB.owner);
 

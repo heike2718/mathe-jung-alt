@@ -21,7 +21,7 @@ public class AufgabensammlungSucheTrefferItem {
 	private String id;
 
 	@JsonProperty
-	@Schema(description = "Name der Rätselgruppe")
+	@Schema(description = "Name der Aufgabensammlung")
 	private String name;
 
 	@JsonProperty
@@ -29,7 +29,7 @@ public class AufgabensammlungSucheTrefferItem {
 	private String kommentar;
 
 	@JsonProperty
-	@Schema(name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Rätselgruppe gedacht ist")
+	@Schema(name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Aufgabensammlung gedacht ist")
 	private Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@JsonProperty

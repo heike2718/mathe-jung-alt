@@ -34,7 +34,7 @@ import jakarta.ws.rs.core.Response.Status;
  * QuizzResource
  */
 @Path("mja-api/quiz")
-@Tag(name = "Quiz", description = "Stellt Aufgaben von Rätselgruppen in verschiedenen Formen als Quiz zur Verfügung.")
+@Tag(name = "Quiz", description = "Stellt Aufgaben von Aufgabensammlungen in verschiedenen Formen als Quiz zur Verfügung.")
 public class QuizzResource {
 
 	@Inject
@@ -46,7 +46,7 @@ public class QuizzResource {
 	@PermitAll
 	@Operation(
 		operationId = "generateQuizWithUniqueKey",
-		summary = "Generiert ein JSON-Objekt mit allen Aufgaben und Lösungen der Rätselgruppe, die durch die fachlichen Parameter eindeutig bestimmt ist. Das ist eine Methode, um auf die Minikänguru-Wettbewerbe zuzugreifen, ohne deren ID zu kennen. Die API liefert nur Quiz mit dem Status FREIGEGEBEN zurück.")
+		summary = "Generiert ein JSON-Objekt mit allen Aufgaben und Lösungen der Aufgabensammlung, die durch die fachlichen Parameter eindeutig bestimmt ist. Das ist eine Methode, um auf die Minikänguru-Wettbewerbe zuzugreifen, ohne deren ID zu kennen. Die API liefert nur Quiz mit dem Status FREIGEGEBEN zurück.")
 	@Parameters({
 		@Parameter(name = "referenztyp", description = "Kontext zur Interpretation der Referenz"),
 		@Parameter(name = "referenz", description = "ID im alten Aufgabenarchiv"),
@@ -54,18 +54,18 @@ public class QuizzResource {
 			name = "schwierigkeitsgrad",
 			description = "Klassenstufe, für die das Quiz gedacht ist") })
 	@APIResponse(
-		name = "LoadQuizOKResponse",
+		name = "OKResponse",
 		description = "Quiz erfolgreich geladen",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = Quiz.class)))
 	@APIResponse(
-		name = "QuizNotFound",
+		name = "NotFound",
 		description = "Gibt es nicht",
 		responseCode = "404")
 	@APIResponse(
-		name = "QuizServerError",
+		name = "ServerError",
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))

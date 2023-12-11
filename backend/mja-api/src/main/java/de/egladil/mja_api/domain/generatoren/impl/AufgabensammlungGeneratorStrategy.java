@@ -6,28 +6,28 @@ package de.egladil.mja_api.domain.generatoren.impl;
 
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
-import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 
 /**
- * RaetselgruppeGeneratorStrategy. Erzeugt das LaTeX für eine Raetselgruppe.
+ * AufgabensammlungGeneratorStrategy. Erzeugt das LaTeX für eine Aufgabensammlung.
  */
-public interface RaetselgruppeGeneratorStrategy {
+public interface AufgabensammlungGeneratorStrategy {
 
 	/**
-	 * Generiert das LaTeX für die gegebene Raetselgruppe.
+	 * Generiert das LaTeX für die gegebene Aufgabensammlung.
 	 *
 	 * @param  input
-	 *                                RaetselgruppeGeneratorInput - die Parameter für das Generieren.
+	 *                                AufgabensammlungGeneratorInput - die Parameter für das Generieren.
 	 * @param  raetselDao
 	 *                                RaetselService
 	 * @param  quizitemLaTeXGenerator
 	 *                                QuizitemLaTeXGenerator
 	 * @return
 	 */
-	String generateLaTeX(RaetselgruppeGeneratorInput input, RaetselService raetselService, QuizitemLaTeXGenerator quizitemLaTeXGenerator);
+	String generateLaTeX(AufgabensammlungGeneratorInput input, RaetselService raetselService, QuizitemLaTeXGenerator quizitemLaTeXGenerator);
 
-	static RaetselgruppeGeneratorStrategy getStrategy(final Verwendungszweck verwendungszweck) {
+	static AufgabensammlungGeneratorStrategy getStrategy(final Verwendungszweck verwendungszweck) {
 
 		switch (verwendungszweck) {
 

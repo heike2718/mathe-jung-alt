@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.generatoren.TrennerartFrageLoesung;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.generatoren.dto.RaetselGeneratorinput;
-import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -25,12 +25,12 @@ import de.egladil.mja_api.domain.utils.GeneratorUtils;
 /**
  * KarteiLaTeXGeneratorStrategy
  */
-public class KarteiLaTeXGeneratorStrategy implements RaetselgruppeGeneratorStrategy {
+public class KarteiLaTeXGeneratorStrategy implements AufgabensammlungGeneratorStrategy {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KarteiLaTeXGeneratorStrategy.class);
 
 	@Override
-	public String generateLaTeX(final RaetselgruppeGeneratorInput input, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
+	public String generateLaTeX(final AufgabensammlungGeneratorInput input, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
 
 		List<Quizaufgabe> aufgaben = input.getAufgaben();
 		Collections.sort(aufgaben, new QuizaufgabeComparator());

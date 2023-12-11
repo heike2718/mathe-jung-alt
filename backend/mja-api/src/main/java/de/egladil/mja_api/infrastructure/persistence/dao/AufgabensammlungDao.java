@@ -75,7 +75,7 @@ public class AufgabensammlungDao {
 	}
 
 	/**
-	 * Sucht die Rätselgruppen die den Filterkriterien entsprechen, sortiert nach name. Die Parameter können null sein. Bei name
+	 * Sucht die Aufgabensammlung die den Filterkriterien entsprechen, sortiert nach name. Die Parameter können null sein. Bei name
 	 * und kommentar wird mit like gesucht, alle anderen mit equal.
 	 *
 	 * @param  suchparameter
@@ -215,9 +215,9 @@ public class AufgabensammlungDao {
 	 * @param  aufgabensammlungID
 	 * @return
 	 */
-	public PersistenteAufgabensammlung findByID(final String raetselgruppeID) {
+	public PersistenteAufgabensammlung findByID(final String aufgabensammlungID) {
 
-		return entityManager.find(PersistenteAufgabensammlung.class, raetselgruppeID);
+		return entityManager.find(PersistenteAufgabensammlung.class, aufgabensammlungID);
 	}
 
 	/**
@@ -242,56 +242,56 @@ public class AufgabensammlungDao {
 	}
 
 	/**
-	 * Gibt alle Elemente der gegebenen Rästelgruppe zurück.
+	 * Gibt alle Elemente der gegebenen Aufgabensammlung zurück.
 	 *
-	 * @param  gruppeID
-	 * @return          List
+	 * @param  aufgabensammlungID
+	 * @return                    List
 	 */
-	public List<PersistentesAufgabensammlugnselement> loadElementeRaetselgruppe(final String gruppeID) {
+	public List<PersistentesAufgabensammlugnselement> loadElementeAufgabensammlung(final String aufgabensammlungID) {
 
 		return entityManager
 			.createNamedQuery(PersistentesAufgabensammlugnselement.LOAD_BY_AUFGABENSAMMLUNG,
 				PersistentesAufgabensammlugnselement.class)
-			.setParameter("aufgabensammlungID", gruppeID).getResultList();
+			.setParameter("aufgabensammlungID", aufgabensammlungID).getResultList();
 	}
 
 	/**
-	 * Läd alle Aufgaben der gegebenen Rätselgruppe.
+	 * Läd alle Aufgaben der gegebenen Aufgabensammlungen.
 	 *
-	 * @param  raetselgruppeId
-	 * @return                 List
+	 * @param  aufgabensammlungID
+	 * @return                    List
 	 */
-	public List<PersistenteAufgabeReadonly> loadAufgabenByReaetselgruppe(final String raetselgruppeId) {
+	public List<PersistenteAufgabeReadonly> loadAufgabenByAufgabensammlung(final String aufgabensammlungID) {
 
 		return entityManager
 			.createNamedQuery(PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG, PersistenteAufgabeReadonly.class)
-			.setParameter("sammlung", raetselgruppeId).getResultList();
+			.setParameter("sammlung", aufgabensammlungID).getResultList();
 	}
 
 	/**
-	 * Speichert die gegebene Rätselgruppe und gibt die gespeicherte Entity zurück.
+	 * Speichert die gegebene Aufgabensammlung und gibt die gespeicherte Entity zurück.
 	 *
 	 * @param  sammlung
 	 *                  PersistenteAufgabensammlung
 	 * @return          PersistenteAufgabensammlung
 	 */
-	public PersistenteAufgabensammlung saveRaetselgruppe(final PersistenteAufgabensammlung gruppe) {
+	public PersistenteAufgabensammlung saveAufgabensammlung(final PersistenteAufgabensammlung aufgabensammlung) {
 
-		if (gruppe.isPersistent()) {
+		if (aufgabensammlung.isPersistent()) {
 
-			return entityManager.merge(gruppe);
+			return entityManager.merge(aufgabensammlung);
 		}
 
-		entityManager.persist(gruppe);
+		entityManager.persist(aufgabensammlung);
 
-		return gruppe;
+		return aufgabensammlung;
 	}
 
 	/**
 	 * @param  uuid
 	 * @return
 	 */
-	public long countElementeRaetselgruppe(@NotNull @Size(min = 1, max = 40) final String uuid) {
+	public long countElementeAufgabensammlung(@NotNull @Size(min = 1, max = 40) final String uuid) {
 
 		String stmt = "SELECT COUNT(*) from AUFGABENSAMMLUNGSELEMENTE e WHERE e.SAMMLUNG = :sammlung";
 
@@ -302,19 +302,19 @@ public class AufgabensammlungDao {
 	}
 
 	/**
-	 * @param  raetselgruppenelementID
+	 * @param  elementID
 	 * @return                         PersistentesAufgabensammlugnselement
 	 */
-	public PersistentesAufgabensammlugnselement findElementById(final String raetselgruppenelementID) {
+	public PersistentesAufgabensammlugnselement findElementById(final String elementID) {
 
-		return entityManager.find(PersistentesAufgabensammlugnselement.class, raetselgruppenelementID);
+		return entityManager.find(PersistentesAufgabensammlugnselement.class, elementID);
 	}
 
 	/**
 	 * @param  element
 	 * @return         PersistentesAufgabensammlugnselement
 	 */
-	public PersistentesAufgabensammlugnselement saveRaetselgruppenelement(final PersistentesAufgabensammlugnselement element) {
+	public PersistentesAufgabensammlugnselement saveElement(final PersistentesAufgabensammlugnselement element) {
 
 		if (element.isPersistent()) {
 
@@ -329,7 +329,7 @@ public class AufgabensammlungDao {
 	 * @param element
 	 */
 	@Transactional
-	public void deleteRaetselgruppenelement(final String elementID) {
+	public void deleteElement(final String elementID) {
 
 		final PersistentesAufgabensammlugnselement element = entityManager.find(PersistentesAufgabensammlugnselement.class,
 			elementID);

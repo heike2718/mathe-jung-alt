@@ -17,9 +17,9 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
-import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.impl.AufgabensammlungGeneratorStrategy;
 import de.egladil.mja_api.domain.generatoren.impl.QuizitemLaTeXGenerator;
-import de.egladil.mja_api.domain.generatoren.impl.RaetselgruppeGeneratorStrategy;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
@@ -31,12 +31,12 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
 /**
- * RaetselgruppePDFGeneratorService
+ * AufgabensammlungPDFGeneratorService
  */
 @ApplicationScoped
-public class RaetselgruppePDFGeneratorService {
+public class AufgabensammlungPDFGeneratorService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselgruppePDFGeneratorService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungPDFGeneratorService.class);
 
 	private static List<String> TEMPORARY_FILE_EXTENSIONS = Arrays.asList(new String[] { ".aux", ".log", ".out", ".tex", "" });
 
@@ -59,23 +59,11 @@ public class RaetselgruppePDFGeneratorService {
 	/**
 	 * Generiert LaTeX für die gegebene raetselguppe.
 	 *
-	 * @param  raetselgruppe
-	 *                                  PersistenteAufgabensammlung Berechtigungsprüfung nimmr aufrufender Service vor.
-	 * @param  aufgaben
-	 *                                  List nur die Aufgaben, die gedruckt werden sollen. Vorauswahl trifft aufrufender Service.
-	 * @param  verwendungszweck
-	 *                                  Verwendungszweck entscheidet über die Gruppierung der Aufgaben.
-	 * @param  font
-	 *                                  FontName
-	 * @param  schriftgroesse
-	 *                                  Schriftgroesse
-	 * @param  layoutAntwortvorschlaege
-	 *                                  LayoutAntwortvorschlaege wenn NOOP, werden keine Antwortvorschläge gedruckt. So können aus
-	 *                                  multiple
-	 *                                  choice- Aufgaben auch Arbeitsblätter werden.
-	 * @return                          GeneratedFile - ein PDF oder eine LaTeX-Textdatei
+	 * @param  input
+	 *               AufgabensammlungGeneratorInput
+	 * @return       GeneratedFile - ein PDF oder eine LaTeX-Textdatei
 	 */
-	public GeneratedFile generate(final RaetselgruppeGeneratorInput input) {
+	public GeneratedFile generate(final AufgabensammlungGeneratorInput input) {
 
 		LOGGER.debug("start generate output");
 
@@ -86,19 +74,19 @@ public class RaetselgruppePDFGeneratorService {
 			throw new IllegalArgumentException("diese Methode funktioniert nicht für Verwendungszweck " + verwendungszweck);
 		}
 
-		PersistenteAufgabensammlung raetselgruppe = input.getRaetselgruppe();
-		RaetselgruppeGeneratorStrategy strategy = RaetselgruppeGeneratorStrategy.getStrategy(verwendungszweck);
+		PersistenteAufgabensammlung aufgabensammlung = input.getAufgabensammlung();
+		AufgabensammlungGeneratorStrategy strategy = AufgabensammlungGeneratorStrategy.getStrategy(verwendungszweck);
 
 		String template = strategy.generateLaTeX(input, raetselService, quizitemLaTeXGenerator);
 
-		String fileNameWithoutExtension = writeToDoc(template, raetselgruppe.uuid, raetselgruppe.name);
-		return generatePdf(fileNameWithoutExtension, raetselgruppe.uuid);
+		String fileNameWithoutExtension = writeToDoc(template, aufgabensammlung.uuid, aufgabensammlung.name);
+		return generatePdf(fileNameWithoutExtension, aufgabensammlung.uuid);
 
 	}
 
-	String writeToDoc(final String template, final String raetselgruppeID, final String raetselgruppeName) {
+	String writeToDoc(final String template, final String aufgabensammlungID, final String aufgabensammlungName) {
 
-		String filenameWithoutExtension = getFilenameWithoutExcension(raetselgruppeName);
+		String filenameWithoutExtension = getFilenameWithoutExcension(aufgabensammlungName);
 		String fileName = filenameWithoutExtension + ".tex";
 
 		String path = latexBaseDir + File.separator + fileName;
@@ -113,17 +101,17 @@ public class RaetselgruppePDFGeneratorService {
 	}
 
 	/**
-	 * @param  raetselgruppeName
+	 * @param  aufgabensammlungName
 	 * @return
 	 */
-	String getFilenameWithoutExcension(final String raetselgruppeName) {
+	String getFilenameWithoutExcension(final String aufgabensammlungName) {
 
-		String filenameWithoutExtension = MjaFileUtils.nameToFilenamePart(raetselgruppeName) + "-"
+		String filenameWithoutExtension = MjaFileUtils.nameToFilenamePart(aufgabensammlungName) + "-"
 			+ UUID.randomUUID().toString().substring(0, 8);
 		return filenameWithoutExtension;
 	}
 
-	GeneratedFile generatePdf(final String fileNameWithoutExtension, final String raetselgruppeID) {
+	GeneratedFile generatePdf(final String fileNameWithoutExtension, final String aufgabensammlungID) {
 
 		Response response = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");
@@ -145,7 +133,7 @@ public class RaetselgruppePDFGeneratorService {
 
 				if (pdf == null) {
 
-					String msg = "Das generierte PDF zur Raetselgruppe [uuid=" + raetselgruppeID
+					String msg = "Das generierte PDF zur Aufgabensammlung [uuid=" + aufgabensammlungID
 						+ "] konnte nicht geladen werden. Bitte mal das doc-Verzeichnis prüfen.";
 					LOGGER.error(msg);
 					throw new MjaRuntimeException(msg);
@@ -172,7 +160,7 @@ public class RaetselgruppePDFGeneratorService {
 			throw e;
 		} catch (Exception e) {
 
-			String msg = "Beim Generieren des Outputs " + Outputformat.PDF + " zu Raetselgruppe [uuid=" + raetselgruppeID
+			String msg = "Beim Generieren des Outputs " + Outputformat.PDF + " zu Aufgabensammlung [uuid=" + aufgabensammlungID
 				+ "] ist ein Fehler aufgetreten: " + e.getMessage();
 			LOGGER.error(msg, e);
 			throw new MjaRuntimeException(msg, e);

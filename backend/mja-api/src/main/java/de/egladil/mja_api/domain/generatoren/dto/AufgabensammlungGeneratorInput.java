@@ -14,14 +14,14 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 
 /**
- * RaetselgruppeGeneratorInput kapselt die Parameter für den Auftrag zum Generieren einer Rätselgruppe.
+ * AufgabensammlungGeneratorInput kapselt die Parameter für den Auftrag zum Generieren einer Aufgabensammlung.
  */
-public class RaetselgruppeGeneratorInput {
+public class AufgabensammlungGeneratorInput {
 
 	/**
-	 * raetselgruppe PersistenteAufgabensammlung - die zu druckende Rätselgruppe
+	 * aufgabensammlung PersistenteAufgabensammlung - die zu druckende Aufgabensammlung
 	 */
-	private PersistenteAufgabensammlung raetselgruppe;
+	private PersistenteAufgabensammlung aufgabensammlung;
 
 	/**
 	 * aufgaben List - die Quizaufgaben, die gedruckt werden sollen.
@@ -49,14 +49,14 @@ public class RaetselgruppeGeneratorInput {
 	 */
 	private Schriftgroesse schriftgroesse;
 
-	public PersistenteAufgabensammlung getRaetselgruppe() {
+	public PersistenteAufgabensammlung getAufgabensammlung() {
 
-		return raetselgruppe;
+		return aufgabensammlung;
 	}
 
-	public RaetselgruppeGeneratorInput withRaetselgruppe(final PersistenteAufgabensammlung raetselgruppe) {
+	public AufgabensammlungGeneratorInput withAufgabensammlung(final PersistenteAufgabensammlung aufgabensammlung) {
 
-		this.raetselgruppe = raetselgruppe;
+		this.aufgabensammlung = aufgabensammlung;
 		return this;
 	}
 
@@ -65,7 +65,7 @@ public class RaetselgruppeGeneratorInput {
 		return aufgaben;
 	}
 
-	public RaetselgruppeGeneratorInput withAufgaben(final List<Quizaufgabe> aufgaben) {
+	public AufgabensammlungGeneratorInput withAufgaben(final List<Quizaufgabe> aufgaben) {
 
 		this.aufgaben = aufgaben;
 		return this;
@@ -76,7 +76,7 @@ public class RaetselgruppeGeneratorInput {
 		return layoutAntwortvorschlaege;
 	}
 
-	public RaetselgruppeGeneratorInput withLayoutAntwortvorschlaege(final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public AufgabensammlungGeneratorInput withLayoutAntwortvorschlaege(final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		this.layoutAntwortvorschlaege = layoutAntwortvorschlaege;
 		return this;
@@ -87,7 +87,7 @@ public class RaetselgruppeGeneratorInput {
 		return font;
 	}
 
-	public RaetselgruppeGeneratorInput withFont(final FontName font) {
+	public AufgabensammlungGeneratorInput withFont(final FontName font) {
 
 		this.font = font;
 		return this;
@@ -98,7 +98,7 @@ public class RaetselgruppeGeneratorInput {
 		return verwendungszweck;
 	}
 
-	public RaetselgruppeGeneratorInput withVerwendungszweck(final Verwendungszweck verwendungszweck) {
+	public AufgabensammlungGeneratorInput withVerwendungszweck(final Verwendungszweck verwendungszweck) {
 
 		this.verwendungszweck = verwendungszweck;
 		return this;
@@ -109,7 +109,7 @@ public class RaetselgruppeGeneratorInput {
 		return schriftgroesse;
 	}
 
-	public RaetselgruppeGeneratorInput withSchriftgroesse(final Schriftgroesse schriftgroesse) {
+	public AufgabensammlungGeneratorInput withSchriftgroesse(final Schriftgroesse schriftgroesse) {
 
 		this.schriftgroesse = schriftgroesse;
 		return this;

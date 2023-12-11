@@ -98,7 +98,7 @@ public class RaetselService {
 		long anzahlGesamt = 0L;
 
 		boolean nurFreigegebene = PermissionUtils
-			.restrictSucheToFreigegeben(PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx));
+			.restrictSucheToFreigegeben(PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx));
 
 		switch (suchfilterVariante) {
 
@@ -235,7 +235,7 @@ public class RaetselService {
 		}
 
 		if (!PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), persistentesRaetsel.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), persistentesRaetsel.owner)) {
 
 			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", userId, persistentesRaetsel.schluessel,
 				persistentesRaetsel.owner);
@@ -449,7 +449,7 @@ public class RaetselService {
 			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);
 
 		boolean hasWritePermission = PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetselDB.owner);
+			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), raetselDB.owner);
 
 		if (hasWritePermission) {
 

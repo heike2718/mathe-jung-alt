@@ -31,7 +31,7 @@ public final class PermissionUtils {
 	 * @param  authContext
 	 * @return
 	 */
-	public static List<String> getRolesWithWriteRaetselAndRaetselgruppenPermission(final AuthenticationContext authContext) {
+	public static List<String> getRolesWithWriteRaetselAndAufgabensammlungenPermission(final AuthenticationContext authContext) {
 
 		List<String> roles = new ArrayList<>();
 

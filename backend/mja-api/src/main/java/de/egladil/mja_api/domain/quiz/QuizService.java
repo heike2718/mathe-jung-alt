@@ -76,9 +76,9 @@ public class QuizService {
 		return Optional.of(quiz);
 	}
 
-	public List<Quizaufgabe> getItemsAsQuizaufgaben(final String raetselgruppeID) {
+	public List<Quizaufgabe> getItemsAsQuizaufgaben(final String aufgabensammlungID) {
 
-		List<PersistenteAufgabeReadonly> aufgabenReadonly = aufgabensammlungDao.loadAufgabenByReaetselgruppe(raetselgruppeID);
+		List<PersistenteAufgabeReadonly> aufgabenReadonly = aufgabensammlungDao.loadAufgabenByAufgabensammlung(aufgabensammlungID);
 		List<Quizaufgabe> aufgaben = new ArrayList<>();
 
 		aufgabenReadonly.forEach(aufgabeDB -> {

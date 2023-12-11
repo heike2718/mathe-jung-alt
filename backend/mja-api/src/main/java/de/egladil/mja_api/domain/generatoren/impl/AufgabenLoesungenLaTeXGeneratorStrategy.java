@@ -7,7 +7,7 @@ package de.egladil.mja_api.domain.generatoren.impl;
 import java.util.Collections;
 import java.util.List;
 
-import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
@@ -16,12 +16,12 @@ import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 /**
  * AufgabenLoesungenLaTeXGeneratorStrategy
  */
-public class AufgabenLoesungenLaTeXGeneratorStrategy implements RaetselgruppeGeneratorStrategy {
+public class AufgabenLoesungenLaTeXGeneratorStrategy implements AufgabensammlungGeneratorStrategy {
 
 	private final AufgabenLoesungenLaTeXGeneratorDelegate delegate = new AufgabenLoesungenLaTeXGeneratorDelegate();
 
 	@Override
-	public String generateLaTeX(final RaetselgruppeGeneratorInput input, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
+	public String generateLaTeX(final AufgabensammlungGeneratorInput input, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
 
 		List<Quizaufgabe> aufgaben = input.getAufgaben();
 		Collections.sort(aufgaben, new QuizaufgabeComparator());
@@ -32,8 +32,8 @@ public class AufgabenLoesungenLaTeXGeneratorStrategy implements RaetselgruppeGen
 		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
 			input.getSchriftgroesse().getLaTeXReplacement());
 		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
-		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_AUFGABEN.placeholder(), input.getRaetselgruppe().name);
-		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_LOESUNGEN.placeholder(), input.getRaetselgruppe().name);
+		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_AUFGABEN.placeholder(), input.getAufgabensammlung().name);
+		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT_LOESUNGEN.placeholder(), input.getAufgabensammlung().name);
 
 		List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();
 		List<RaetselLaTeXDto> raetselLaTeX = raetselService.findRaetselLaTeXwithSchluesselliste(schluessel);

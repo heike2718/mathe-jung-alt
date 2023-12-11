@@ -81,7 +81,7 @@ public class EmbeddableImageUplodService {
 		PersistentesRaetsel raetsel = raetselDao.findById(uploadContext.getRaetselId());
 
 		if (raetsel != null && !PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetsel.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), raetsel.owner)) {
 
 			LOGGER.warn("User {} hat versucht, zu Raetsel {} mit Owner {} eine EmbeddableImageVorschau hochzuladen", userId,
 				raetsel.schluessel,
@@ -146,7 +146,7 @@ public class EmbeddableImageUplodService {
 		}
 
 		if (!PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetsel.owner)) {
+			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), raetsel.owner)) {
 
 			LOGGER.warn("User {} hat versucht, zu Raetsel {} mit Owner {} eine EmbeddableImageVorschau hochzuladen", userId,
 				raetsel.schluessel,
