@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import io.quarkus.test.junit.QuarkusTest;
@@ -34,7 +33,8 @@ public class EditRaetselgruppePayloadTest {
 			payload.setReferenz("2022");
 			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.IKID);
-			payload.setStatus(DomainEntityStatus.ERFASST);
+			payload.setFreigegeben(false);
+			payload.setPrivat(false);
 
 			// Act
 			String json = new ObjectMapper().writeValueAsString(payload);

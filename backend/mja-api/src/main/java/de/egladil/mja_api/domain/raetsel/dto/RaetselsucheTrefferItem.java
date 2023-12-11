@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 
 /**
@@ -31,7 +30,7 @@ public class RaetselsucheTrefferItem {
 	private String kommentar;
 
 	@JsonProperty
-	private DomainEntityStatus status;
+	private boolean freigegeben;
 
 	@JsonProperty
 	private List<Deskriptor> deskriptoren;
@@ -97,14 +96,14 @@ public class RaetselsucheTrefferItem {
 		return this;
 	}
 
-	public DomainEntityStatus getStatus() {
+	public boolean isFreigegeben() {
 
-		return status;
+		return freigegeben;
 	}
 
-	public RaetselsucheTrefferItem withStatus(final DomainEntityStatus status) {
+	public RaetselsucheTrefferItem withFreigegeben(final boolean freigegeben) {
 
-		this.status = status;
+		this.freigegeben = freigegeben;
 		return this;
 	}
 

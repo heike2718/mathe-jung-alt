@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 
 /**
@@ -61,7 +60,7 @@ public final class PermissionUtils {
 	 *                DomainEntityStatus
 	 * @return        boolean
 	 */
-	public static boolean hasReadPermission(final List<String> roles, final DomainEntityStatus status) {
+	public static boolean hasReadPermission(final List<String> roles, final boolean freigegeben) {
 
 		if (roles == null) {
 
@@ -73,7 +72,7 @@ public final class PermissionUtils {
 			return true;
 		}
 
-		return status == DomainEntityStatus.FREIGEGEBEN;
+		return freigegeben;
 	}
 
 	/**
@@ -163,8 +162,8 @@ public final class PermissionUtils {
 	 * Checkt, ob die Suche auf Entities mit DomainEntityStatus.FREIGEGEBEN eingeschränkt werden muss.
 	 *
 	 * @param  admin
-	 *              AuthenticatedUser
-	 * @return      boolen
+	 *               AuthenticatedUser
+	 * @return       boolen
 	 */
 	public static boolean restrictSucheToFreigegeben(final List<String> roles) {
 

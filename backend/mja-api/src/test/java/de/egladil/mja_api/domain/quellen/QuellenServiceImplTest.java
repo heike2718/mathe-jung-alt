@@ -2,12 +2,13 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.quellen.impl;
+package de.egladil.mja_api.domain.quellen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,8 +20,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
-import de.egladil.mja_api.domain.quellen.QuellenListItem;
-import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
@@ -43,7 +42,7 @@ public class QuellenServiceImplTest {
 	DeskriptorenService deskriptorenService;
 
 	@Inject
-	QuellenServiceImpl service;
+	QuellenService service;
 
 	@Test
 	void should_findQuellenReturnThrowIllegalArgumentException_when_parameterBlank() {
@@ -71,7 +70,6 @@ public class QuellenServiceImplTest {
 
 		// Arrange
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
-		persistenteQuelle.setDeskriptoren("1,3");
 		persistenteQuelle.setPerson("Heike Winkelvoß");
 		persistenteQuelle.setQuellenart(Quellenart.PERSON);
 		persistenteQuelle.setSortNumber(1);
@@ -88,7 +86,7 @@ public class QuellenServiceImplTest {
 		assertEquals(1, result.size());
 		QuellenListItem quelle = result.get(0);
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
+		verify(deskriptorenService, never()).mapToDeskriptoren(anyString());
 
 		assertEquals(0, quelle.getDeskriptoren().size());
 		assertEquals("q-uuid-1", quelle.getId());
@@ -137,7 +135,6 @@ public class QuellenServiceImplTest {
 
 		// Arrange
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
-		persistenteQuelle.setDeskriptoren("1,3");
 		persistenteQuelle.setMediumTitel("alpha");
 		persistenteQuelle.setQuellenart(Quellenart.ZEITSCHRIFT);
 		persistenteQuelle.setJahrgang("1978");
@@ -158,7 +155,7 @@ public class QuellenServiceImplTest {
 		assertEquals(1, result.size());
 		QuellenListItem quelle = result.get(0);
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
+		verify(deskriptorenService, never()).mapToDeskriptoren(anyString());
 
 		assertEquals(0, quelle.getDeskriptoren().size());
 		assertEquals("q-uuid-2", quelle.getId());
@@ -173,7 +170,6 @@ public class QuellenServiceImplTest {
 
 		// Arrange
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
-		persistenteQuelle.setDeskriptoren("1,3");
 		persistenteQuelle.setMediumTitel("2x3 und Spaß dabei");
 		persistenteQuelle.setMediumUuid("m-uuid-2");
 		persistenteQuelle.setQuellenart(Quellenart.BUCH);
@@ -192,7 +188,7 @@ public class QuellenServiceImplTest {
 		assertEquals(1, result.size());
 		QuellenListItem quelle = result.get(0);
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(persistenteQuelle.getDeskriptoren());
+		verify(deskriptorenService, never()).mapToDeskriptoren(anyString());
 
 		assertEquals(0, quelle.getDeskriptoren().size());
 		assertEquals("q-uuid-3", quelle.getId());

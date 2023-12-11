@@ -24,7 +24,7 @@ import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -60,7 +60,7 @@ public class RaetselgruppePDFGeneratorService {
 	 * Generiert LaTeX für die gegebene raetselguppe.
 	 *
 	 * @param  raetselgruppe
-	 *                                  PersistenteRaetselgruppe Berechtigungsprüfung nimmr aufrufender Service vor.
+	 *                                  PersistenteAufgabensammlung Berechtigungsprüfung nimmr aufrufender Service vor.
 	 * @param  aufgaben
 	 *                                  List nur die Aufgaben, die gedruckt werden sollen. Vorauswahl trifft aufrufender Service.
 	 * @param  verwendungszweck
@@ -86,7 +86,7 @@ public class RaetselgruppePDFGeneratorService {
 			throw new IllegalArgumentException("diese Methode funktioniert nicht für Verwendungszweck " + verwendungszweck);
 		}
 
-		PersistenteRaetselgruppe raetselgruppe = input.getRaetselgruppe();
+		PersistenteAufgabensammlung raetselgruppe = input.getRaetselgruppe();
 		RaetselgruppeGeneratorStrategy strategy = RaetselgruppeGeneratorStrategy.getStrategy(verwendungszweck);
 
 		String template = strategy.generateLaTeX(input, raetselService, quizitemLaTeXGenerator);

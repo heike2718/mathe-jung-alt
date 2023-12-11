@@ -15,7 +15,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
@@ -395,8 +394,8 @@ public class RaetselService {
 	 * Läd das, was als Input für ein LaTeX-File erforderlich ist.
 	 *
 	 * @param  schluesselliste
-	 *                    List eine Liste von Schlüsseln.
-	 * @return            List
+	 *                         List eine Liste von Schlüsseln.
+	 * @return                 List
 	 */
 	public List<RaetselLaTeXDto> findRaetselLaTeXwithSchluesselliste(final List<String> schluesselliste) {
 
@@ -430,7 +429,7 @@ public class RaetselService {
 		persistentesRaetsel.quelle = daten.getQuelle().getId();
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
-		persistentesRaetsel.status = daten.getStatus();
+		persistentesRaetsel.freigegeben = daten.isFreigebeben();
 		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
 	}
 
@@ -444,7 +443,7 @@ public class RaetselService {
 			.withLoesung(raetselDB.loesung)
 			.withQuelleId(raetselDB.quelle)
 			.withSchluessel(raetselDB.schluessel)
-			.withStatus(raetselDB.status)
+			.withFreigebeben(raetselDB.freigegeben)
 			.withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
 			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);
@@ -466,7 +465,7 @@ public class RaetselService {
 			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
 			.withId(raetselDB.uuid)
 			.withName(raetselDB.name)
-			.withStatus(raetselDB.status)
+			.withFreigegeben(raetselDB.freigegeben)
 			.withKommentar(raetselDB.kommentar)
 			.withSchluessel(raetselDB.schluessel);
 
@@ -489,7 +488,7 @@ public class RaetselService {
 	 */
 	public AnzahlabfrageResponseDto zaehleFreigegebeneRaetsel() {
 
-		long anzahl = raetselDao.countRaetselWithStatus(DomainEntityStatus.FREIGEGEBEN);
+		long anzahl = raetselDao.countRaetselWithStatus(true);
 		AnzahlabfrageResponseDto result = new AnzahlabfrageResponseDto();
 		result.setErgebnis(anzahl);
 

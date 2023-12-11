@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.persistence.entities;
 
+import de.egladil.mja_api.domain.quellen.Quellenart;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,8 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-
-import de.egladil.mja_api.domain.quellen.Quellenart;
 
 /**
  * PersistenteQuelleReadonly
@@ -26,10 +25,7 @@ import de.egladil.mja_api.domain.quellen.Quellenart;
 		query = "select q from PersistenteQuelleReadonly q where q.mediumTitel like :suchstring or q.person like :suchstring order by q.sortNumber"),
 	@NamedQuery(
 		name = "PersistenteQuelleReadonly.FIND_WITH_USER_ID",
-		query = "select q from PersistenteQuelleReadonly q where q.userId = :userId"),
-	@NamedQuery(
-		name = "PersistenteQuelleReadonly.FIND_WITH_DESKRIPTOREN",
-		query = "select q from PersistenteQuelleReadonly q where CONCAT(CONCAT(',', q.deskriptoren),',') like :deskriptoren order by q.sortNumber")
+		query = "select q from PersistenteQuelleReadonly q where q.userId = :userId")
 
 })
 public class PersistenteQuelleReadonly {
@@ -37,8 +33,6 @@ public class PersistenteQuelleReadonly {
 	public static final String FIND_LIKE_MEDIUM_PERSON = "PersistenteQuelleReadonly.FIND_LIKE_MEDIUM_PERSON";
 
 	public static final String FIND_WITH_USER_ID = "PersistenteQuelleReadonly.FIND_WITH_USER_ID";
-
-	public static final String FIND_WITH_DESKRIPTOREN = "PersistenteQuelleReadonly.FIND_WITH_DESKRIPTOREN";
 
 	@Id
 	public String uuid;
@@ -70,9 +64,6 @@ public class PersistenteQuelleReadonly {
 
 	@Column(name = "SEITE")
 	public String seite;
-
-	@Column(name = "DESKRIPTOREN")
-	public String deskriptoren;
 
 	/**
 	 * @return the uuid
@@ -208,23 +199,6 @@ public class PersistenteQuelleReadonly {
 	public void setSeite(final String seite) {
 
 		this.seite = seite;
-	}
-
-	/**
-	 * @return the deskriptoren
-	 */
-	public String getDeskriptoren() {
-
-		return deskriptoren;
-	}
-
-	/**
-	 * @param deskriptoren
-	 *                     the deskriptoren to set
-	 */
-	public void setDeskriptoren(final String deskriptoren) {
-
-		this.deskriptoren = deskriptoren;
 	}
 
 	/**

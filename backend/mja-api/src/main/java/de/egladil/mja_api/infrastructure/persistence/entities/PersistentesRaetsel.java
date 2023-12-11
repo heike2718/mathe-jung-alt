@@ -10,11 +10,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,17 +42,17 @@ import jakarta.validation.constraints.Size;
 		name = "PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN_DESC",
 		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') not like :deskriptoren order by r.schluessel desc"),
 	@NamedQuery(
-		name = "PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN",
-		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren and r.status = :status order by r.schluessel"),
+		name = "PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN",
+		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren and r.freigegeben = :freigegeben order by r.schluessel"),
 	@NamedQuery(
-		name = "PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN",
-		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') not like :deskriptoren and r.status = :status order by r.schluessel"),
+		name = "PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN",
+		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') not like :deskriptoren and r.freigegeben = :freigegeben order by r.schluessel"),
 	@NamedQuery(
-		name = "PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC",
-		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren and r.status = :status order by r.schluessel desc"),
+		name = "PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN_DESC",
+		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren and r.freigegeben = :freigegeben order by r.schluessel desc"),
 	@NamedQuery(
-		name = "PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN_DESC",
-		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') not like :deskriptoren and r.status = :status order by r.schluessel desc"),
+		name = "PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN_DESC",
+		query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') not like :deskriptoren and r.freigegeben = :freigegeben order by r.schluessel desc"),
 	@NamedQuery(
 		name = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL",
 		query = "select r from PersistentesRaetsel r where r.schluessel = :schluessel"),
@@ -69,17 +66,17 @@ public class PersistentesRaetsel implements PersistenteMjaEntity {
 
 	public static final String FIND_WITH_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC";
 
-	public static final String FIND_WITH_STATUS_AND_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN";
+	public static final String FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN";
 
-	public static final String FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC";
+	public static final String FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN_DESC";
 
 	public static final String FIND_NOT_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN";
 
 	public static final String FIND_NOT_WITH_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN_DESC";
 
-	public static final String FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN";
+	public static final String FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN";
 
-	public static final String FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN_DESC";
+	public static final String FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN_DESC = "PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN_DESC";
 
 	public static final String FIND_WITH_SCHLUESSEL = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL";
 
@@ -116,10 +113,8 @@ public class PersistentesRaetsel implements PersistenteMjaEntity {
 	@NotNull
 	public String owner;
 
-	@Column
-	@Enumerated(EnumType.STRING)
-	@NotNull
-	public DomainEntityStatus status;
+	@Column(name = "FREIGEGEBEN")
+	public boolean freigegeben;
 
 	@Column
 	@NotNull

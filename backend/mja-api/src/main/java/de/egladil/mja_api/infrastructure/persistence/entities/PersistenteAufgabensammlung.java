@@ -8,7 +8,6 @@ import java.util.Date;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import jakarta.persistence.Column;
@@ -27,23 +26,23 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * PersistenteRaetselgruppe
+ * PersistenteAufgabensammlung
  */
 @Entity
-@Table(name = "RAETSELGRUPPEN")
+@Table(name = "AUFGABENSAMMLUNGEN")
 @NamedQueries({
 	@NamedQuery(
-		name = "PersistenteRaetselgruppe.FIND_BY_NAME",
-		query = "select s from PersistenteRaetselgruppe s where s.name = :name"),
+		name = "PersistenteAufgabensammlung.FIND_BY_NAME",
+		query = "select s from PersistenteAufgabensammlung s where s.name = :name"),
 	@NamedQuery(
-		name = "PersistenteRaetselgruppe.FIND_BY_UNIQUE_KEY",
-		query = "select s from PersistenteRaetselgruppe s where s.referenztyp = :referenztyp and s. referenz = :referenz and s.schwierigkeitsgrad = :schwierigkeitsgrad")
+		name = "PersistenteAufgabensammlung.FIND_BY_UNIQUE_KEY",
+		query = "select s from PersistenteAufgabensammlung s where s.referenztyp = :referenztyp and s. referenz = :referenz and s.schwierigkeitsgrad = :schwierigkeitsgrad")
 })
-public class PersistenteRaetselgruppe implements PersistenteMjaEntity {
+public class PersistenteAufgabensammlung implements PersistenteMjaEntity {
 
-	public static final String FIND_BY_NAME = "PersistenteRaetselgruppe.FIND_BY_NAME";
+	public static final String FIND_BY_NAME = "PersistenteAufgabensammlung.FIND_BY_NAME";
 
-	public static final String FIND_BY_UNIQUE_KEY = "PersistenteRaetselgruppe.FIND_BY_UNIQUE_KEY";
+	public static final String FIND_BY_UNIQUE_KEY = "PersistenteAufgabensammlung.FIND_BY_UNIQUE_KEY";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
@@ -68,9 +67,11 @@ public class PersistenteRaetselgruppe implements PersistenteMjaEntity {
 	@Column(name = "REFERENZ")
 	public String referenz;
 
-	@Column
-	@Enumerated(EnumType.STRING)
-	public DomainEntityStatus status;
+	@Column(name = "PRIVAT")
+	public boolean privat;
+
+	@Column(name = "FREIGEGEBEN")
+	public boolean freigegeben;
 
 	@Column
 	public String kommentar;

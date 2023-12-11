@@ -209,7 +209,7 @@ public class RaetselGeneratorService {
 
 		List<String> relevantRoles = PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx);
 		boolean hasReadPermission = PermissionUtils.hasReadPermission(relevantRoles,
-			raetsel.getStatus());
+			raetsel.isFreigebeben());
 
 		if (!hasReadPermission) {
 

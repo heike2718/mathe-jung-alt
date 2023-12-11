@@ -4,16 +4,36 @@
 // =====================================================
 package de.egladil.mja_api.domain.quellen;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
+
+import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
+import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
 import de.egladil.mja_api.domain.semantik.DomainService;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
+import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * QuellenService
  */
 @DomainService
-public interface QuellenService {
+@ApplicationScoped
+public class QuellenService {
+
+	@Inject
+	AuthenticationContext authCtx;
+
+	@Inject
+	QuellenRepository quellenRepository;
+
+	@Inject
+	DeskriptorenService deskriptorenService;
 
 	/**
 	 * Sucht Quellen mitdem gegebenen Suchstring im Namen.
@@ -21,7 +41,47 @@ public interface QuellenService {
 	 * @param  suchstring
 	 * @return            List
 	 */
-	List<QuellenListItem> findQuellen(String suchstring);
+	public List<QuellenListItem> findQuellen(final String suchstring) {
+
+		if (StringUtils.isBlank(suchstring)) {
+
+			throw new IllegalArgumentException("suchstring erforderlich");
+		}
+
+		List<PersistenteQuelleReadonly> trefferliste = quellenRepository.findQuellenLikeMediumOrPerson(suchstring);
+
+		if (trefferliste == null || trefferliste.isEmpty()) {
+
+			return new ArrayList<>();
+		}
+
+		List<QuellenListItem> result = trefferliste.stream().map(pq -> mapFromDB(pq)).toList();
+
+		return result;
+	}
+
+	/**
+	 * Sucht die Quelle mit der gegebenen userId.
+	 *
+	 * @return Optional
+	 */
+	public Optional<QuelleMinimalDto> findQuelleForUser() {
+
+		String userId = authCtx.getUser().getUuid();
+		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithUserId(userId);
+
+		if (optAusDB.isEmpty()) {
+
+			return Optional.empty();
+		}
+
+		PersistenteQuelleReadonly ausDB = optAusDB.get();
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.getQuellenart());
+
+		QuelleMinimalDto result = new QuelleMinimalDto().withId(ausDB.getUuid()).withName(nameStrategie.getName(ausDB));
+
+		return Optional.of(result);
+	}
 
 	/**
 	 * Sucht die Quelle mit der gegebenen id.
@@ -30,14 +90,21 @@ public interface QuellenService {
 	 *            String
 	 * @return    Optional
 	 */
-	Optional<QuellenListItem> sucheQuelleMitId(String id);
+	public Optional<QuellenListItem> sucheQuelleMitId(final String id) {
 
-	/**
-	 * Sucht die Quelle mit der gegebenen userId.
-	 *
-	 * @return Optional
-	 */
-	Optional<QuelleMinimalDto> findQuelleForUser();
+		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findById(id);
+
+		return optAusDB.isEmpty() ? Optional.empty() : Optional.of(mapFromDB(optAusDB.get()));
+	}
+
+	QuellenListItem mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
+
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(persistenteQuelle.getQuellenart());
+
+		return new QuellenListItem(persistenteQuelle.getUuid())
+			.withSortNumber(persistenteQuelle.getSortNumber()).withQuellenart(persistenteQuelle.getQuellenart())
+			.withName(nameStrategie.getName(persistenteQuelle)).withMediumIdentifier(persistenteQuelle.getMediumUuid());
+	}
 
 	/**
 	 * Läd die minimalen Attribute einer Quelle.
@@ -45,5 +112,20 @@ public interface QuellenService {
 	 * @param  quelleId
 	 * @return          QuelleMinimalDto
 	 */
-	Optional<QuelleMinimalDto> loadQuelleMinimal(String quelleId);
+	public Optional<QuelleMinimalDto> loadQuelleMinimal(final String quelleId) {
+
+		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findById(quelleId);
+
+		if (optAusDB.isEmpty()) {
+
+			return Optional.empty();
+		}
+
+		PersistenteQuelleReadonly quelle = optAusDB.get();
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(quelle.getQuellenart());
+
+		QuelleMinimalDto result = new QuelleMinimalDto().withId(quelle.uuid).withName(nameStrategie.getName(quelle));
+		return Optional.of(result);
+	}
+
 }

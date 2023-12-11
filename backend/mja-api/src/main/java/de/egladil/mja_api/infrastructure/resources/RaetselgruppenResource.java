@@ -222,7 +222,7 @@ public class RaetselgruppenResource {
 	}
 
 	@GET
-	@Path("{raetselgruppeID}/v1")
+	@Path("{aufgabensammlungID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppeDetailsLaden",
@@ -230,7 +230,7 @@ public class RaetselgruppenResource {
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.PATH,
-			name = "raetselgruppeID",
+			name = "aufgabensammlungID",
 			description = "technische ID der Rätselgruppe") })
 	@APIResponse(
 		name = "OKResponse",
@@ -260,9 +260,9 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public RaetselgruppeDetails raetselgruppeDetailsLaden(@PathParam(value = "raetselgruppeID") @Pattern(
+	public RaetselgruppeDetails raetselgruppeDetailsLaden(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID) {
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID) {
 
 		Optional<RaetselgruppeDetails> optDetails = raetselgruppenService.loadDetails(raetselgruppeID);
 
@@ -274,13 +274,13 @@ public class RaetselgruppenResource {
 	}
 
 	@POST
-	@Path("{raetselgruppeID}/elemente/v1")
+	@Path("{aufgabensammlungID}/elemente/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementAnlegen",
 		summary = "Legt ein neues Element in einer Rätselgruppe an")
 	@Parameters({
-		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Raetselgruppe.")
+		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Raetselgruppe.")
 	})
 	@APIResponse(
 		name = "OKResponse",
@@ -320,22 +320,22 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public RaetselgruppeDetails raetselgruppenelementAnlegen(@PathParam(value = "raetselgruppeID") @Pattern(
+	public RaetselgruppeDetails raetselgruppenelementAnlegen(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
 		return this.raetselgruppenService.elementAnlegen(raetselgruppeID, element);
 	}
 
 
 	@PUT
-	@Path("{raetselgruppeID}/elemente/v1")
+	@Path("{aufgabensammlungID}/elemente/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementAendern",
 		summary = "Ändert das Element einer Rätselgruppe. Es können nur Nummer und Punkte geändert werden. Wenn der Schlüssel nicht stimmt, muss es gelöscht und neu angelegt werden.")
 	@Parameters({
-		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Raetselgruppe.")
+		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Raetselgruppe.")
 	})
 	@APIResponse(
 		name = "OKResponse",
@@ -369,15 +369,15 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public RaetselgruppeDetails raetselgruppenelementAendern(@PathParam(value = "raetselgruppeID") @Pattern(
+	public RaetselgruppeDetails raetselgruppenelementAendern(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, final EditRaetselgruppenelementPayload element) {
 
 		return this.raetselgruppenService.elementAendern(raetselgruppeID, element);
 	}
 
 	@DELETE
-	@Path("{raetselgruppeID}/elemente/{elementID}/v1")
+	@Path("{aufgabensammlungID}/elemente/{elementID}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselgruppenelementLoeschen",
@@ -385,7 +385,7 @@ public class RaetselgruppenResource {
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.PATH,
-			name = "raetselgruppeID",
+			name = "aufgabensammlungID",
 			description = "ID der Rätselgruppe") })
 	@APIResponse(
 		name = "OKResponse",
@@ -419,24 +419,24 @@ public class RaetselgruppenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public RaetselgruppeDetails raetselgruppenelementLoeschen(@PathParam(value = "raetselgruppeID") @Pattern(
+	public RaetselgruppeDetails raetselgruppenelementLoeschen(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "raetselgruppeID enthält ungültige Zeichen") final String raetselgruppeID, @PathParam(value = "elementID") @Pattern(
+		message = "aufgabensammlungID enthält ungültige Zeichen") final String raetselgruppeID, @PathParam(value = "elementID") @Pattern(
 			regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-			message = "raetselgruppeID enthält ungültige Zeichen") final String elementID) {
+			message = "aufgabensammlungID enthält ungültige Zeichen") final String elementID) {
 
 		return raetselgruppenService.elementLoeschen(raetselgruppeID, elementID);
 	}
 
 	@GET
 	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Path("{raetselgruppeID}/vorschau/v1")
+	@Path("{aufgabensammlungID}/vorschau/v1")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printRaetselgruppeVorschau",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Diese API funktioniert für Rätselgruppen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt. . Es wird immer mit ANKREUTZABELLE gedruckt")
 	@Parameters({
-		@Parameter(in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
+		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird."),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
@@ -475,7 +475,7 @@ public class RaetselgruppenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printVorschau(
-		@PathParam(value = "raetselgruppeID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
@@ -490,7 +490,7 @@ public class RaetselgruppenResource {
 	}
 
 	@GET
-	@Path("{raetselgruppeID}/latex/v1")
+	@Path("{aufgabensammlungID}/latex/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Operation(
@@ -498,7 +498,7 @@ public class RaetselgruppenResource {
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID mehrere LaTeX-Dateien. Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
 	@Parameters({
 		@Parameter(
-			in = ParameterIn.PATH, name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.",
+			in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.",
 			required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
@@ -542,7 +542,7 @@ public class RaetselgruppenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public Response downloadLaTeX(
-		@PathParam( value = "raetselgruppeID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam( value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "layoutAntwortvorschlaege") @NotNull final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse) {
@@ -564,14 +564,14 @@ public class RaetselgruppenResource {
 	}
 
 	@GET
-	@Path("{raetselgruppeID}/arbeitsblatt/v1")
+	@Path("{aufgabensammlungID}/arbeitsblatt/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printArbeitsblatt",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
-		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
+		@Parameter(name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
@@ -610,7 +610,7 @@ public class RaetselgruppenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printArbeitsblattMitLoesungen(
-		@PathParam(value = "raetselgruppeID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse,
 		@QueryParam(value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
@@ -627,14 +627,14 @@ public class RaetselgruppenResource {
 	}
 
 	@GET
-	@Path("{raetselgruppeID}/knobelkartei/v1")
+	@Path("{aufgabensammlungID}/knobelkartei/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printKnobelkartei",
 		summary = "Generiert aus der Rätselgruppe mit der gegebenen ID ein PDF, in dem jede Seite genau ein Rätsel enthält. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Rätselgruppe berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
-		@Parameter(name = "raetselgruppeID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
+		@Parameter(name = "aufgabensammlungID", description = "ID der Rätselgruppe, für das ein Quiz gedruckt wird.", required = true),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "layoutAntwortvorschlaege",
@@ -673,7 +673,7 @@ public class RaetselgruppenResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printKnobelkartei(
-		@PathParam(value = "raetselgruppeID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
+		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String raetselgruppeID,
 		@QueryParam(value = "font") final FontName font,
 		@QueryParam(value = "size") final Schriftgroesse schriftgroesse,
 		@QueryParam(value = "layoutAntwortvorschlaege") final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {

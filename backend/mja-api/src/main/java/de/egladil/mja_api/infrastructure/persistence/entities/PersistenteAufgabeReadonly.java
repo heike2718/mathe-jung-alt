@@ -4,7 +4,6 @@
 // =====================================================
 package de.egladil.mja_api.infrastructure.persistence.entities;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * PersistenteAufgabeReadonly
@@ -23,12 +21,12 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "VW_AUFGABEN")
 @NamedQueries({
 	@NamedQuery(
-		name = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_GRUPPE",
-		query = "select a from PersistenteAufgabeReadonly a where a.gruppe = :gruppe")
+		name = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG",
+		query = "select a from PersistenteAufgabeReadonly a where a.sammlung = :sammlung")
 })
 public class PersistenteAufgabeReadonly {
 
-	public static final String LOAD_AUFGABEN_IN_GRUPPE = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_GRUPPE";
+	public static final String LOAD_AUFGABEN_IN_SAMMLUNG = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG";
 
 	@Id
 	public String uuid;
@@ -36,10 +34,8 @@ public class PersistenteAufgabeReadonly {
 	@Column
 	public String schluessel;
 
-	@Column
-	@Enumerated(EnumType.STRING)
-	@NotNull
-	public DomainEntityStatus status;
+	@Column(name = "FREIGEGEBEN")
+	public boolean freigegeben;
 
 	@Column
 	public String nummer;
@@ -51,7 +47,7 @@ public class PersistenteAufgabeReadonly {
 	public int punkte;
 
 	@Column
-	public String gruppe;
+	public String sammlung;
 
 	@Column
 	public String antwortvorschlaege;

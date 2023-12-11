@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
@@ -157,7 +156,7 @@ public class RaetselgruppenResourceTest {
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		RaetselgruppensucheTrefferItem responsePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -184,7 +183,7 @@ public class RaetselgruppenResourceTest {
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.VORSCHULE);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		MessagePayload responsePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -221,7 +220,7 @@ public class RaetselgruppenResourceTest {
 			payload.setReferenz("2005");
 			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
-			payload.setStatus(DomainEntityStatus.ERFASST);
+			payload.setFreigegeben(false);
 
 			raetselgruppensucheTrefferItem = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -270,7 +269,8 @@ public class RaetselgruppenResourceTest {
 			payload.setReferenz(raetselgruppensucheTrefferItem.getReferenz());
 			payload.setReferenztyp(raetselgruppensucheTrefferItem.getReferenztyp());
 			payload.setSchwierigkeitsgrad(raetselgruppensucheTrefferItem.getSchwierigkeitsgrad());
-			payload.setStatus(raetselgruppensucheTrefferItem.getStatus());
+			payload.setFreigegeben(raetselgruppensucheTrefferItem.isFreigegeben());
+			payload.setPrivat(raetselgruppensucheTrefferItem.isPrivat());
 
 			RaetselgruppensucheTrefferItem theItem = given()
 				.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -303,7 +303,7 @@ public class RaetselgruppenResourceTest {
 		payload.setReferenz("2003");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -331,7 +331,7 @@ public class RaetselgruppenResourceTest {
 		payload.setReferenz("2022");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -361,7 +361,7 @@ public class RaetselgruppenResourceTest {
 		payload.setReferenz("2010");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -388,7 +388,7 @@ public class RaetselgruppenResourceTest {
 		payload.setReferenz("2022");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -416,7 +416,7 @@ public class RaetselgruppenResourceTest {
 		payload.setReferenz("2022");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.EINS);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
@@ -443,7 +443,7 @@ public class RaetselgruppenResourceTest {
 		payload.setReferenz("2009");
 		payload.setReferenztyp(Referenztyp.MINIKAENGURU);
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.ZWEI);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		MessagePayload messagePayload = given()
 			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)

@@ -13,12 +13,11 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetselgruppen.Raetselgruppenelement;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.raetselgruppen.impl.RaetselgruppenelementComparator;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 
 /**
  * RaetselgruppeDetails
@@ -53,8 +52,12 @@ public class RaetselgruppeDetails {
 	private String referenz;
 
 	@JsonProperty
-	@Schema(description = "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar")
-	private DomainEntityStatus status;
+	@Schema(description = "Ob die Aufgabensammlung freigegeben ist. Nur freigegebene sind über die Open-Data-API abrufbar")
+	private boolean freigegeben;
+
+	@JsonProperty
+	@Schema(description = "Ob die Aufgabensammlung privat ist, also keinem Autor gehört.")
+	private boolean privat;
 
 	@JsonProperty
 	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
@@ -70,7 +73,7 @@ public class RaetselgruppeDetails {
 	@Schema(type = SchemaType.ARRAY, description = "Elemente der Rätselgruppe")
 	private List<Raetselgruppenelement> elemente = new ArrayList<>();
 
-	public static RaetselgruppeDetails createFromDB(final PersistenteRaetselgruppe gruppeDB) {
+	public static RaetselgruppeDetails createFromDB(final PersistenteAufgabensammlung gruppeDB) {
 
 		RaetselgruppeDetails result = new RaetselgruppeDetails();
 		result.geaendertDurch = gruppeDB.geaendertDurch;
@@ -80,7 +83,8 @@ public class RaetselgruppeDetails {
 		result.referenz = gruppeDB.referenz;
 		result.referenztyp = gruppeDB.referenztyp;
 		result.schwierigkeitsgrad = gruppeDB.schwierigkeitsgrad;
-		result.status = gruppeDB.status;
+		result.freigegeben = gruppeDB.freigegeben;
+		result.privat = gruppeDB.privat;
 		return result;
 	}
 
@@ -124,11 +128,6 @@ public class RaetselgruppeDetails {
 		return referenz;
 	}
 
-	public DomainEntityStatus getStatus() {
-
-		return status;
-	}
-
 	public String getGeaendertDurch() {
 
 		return geaendertDurch;
@@ -147,5 +146,15 @@ public class RaetselgruppeDetails {
 	public void markiereAlsAenderbar() {
 
 		this.schreibgeschuetzt = false;
+	}
+
+	public boolean isFreigegeben() {
+
+		return freigegeben;
+	}
+
+	public boolean isPrivat() {
+
+		return privat;
 	}
 }

@@ -16,8 +16,8 @@ import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlugnselement;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -48,7 +48,7 @@ public class RaetselgruppenDao {
 	 */
 	public long countByFilter(final RaetselgruppenSuchparameter suchparameter) {
 
-		String stmt = "select count(*) from PersistenteRaetselgruppe g";
+		String stmt = "select count(*) from PersistenteAufgabensammlung g";
 		String whereStmt = createWhereCondition(suchparameter);
 
 		if (StringUtils.isNotBlank(whereStmt)) {
@@ -83,9 +83,9 @@ public class RaetselgruppenDao {
 	 * @param  offset
 	 * @return               List
 	 */
-	public List<PersistenteRaetselgruppe> findByFilter(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
+	public List<PersistenteAufgabensammlung> findByFilter(final RaetselgruppenSuchparameter suchparameter, final int limit, final int offset) {
 
-		String stmt = "select g from PersistenteRaetselgruppe g";
+		String stmt = "select g from PersistenteAufgabensammlung g";
 		String whereStmt = createWhereCondition(suchparameter);
 
 		if (StringUtils.isNotBlank(whereStmt)) {
@@ -98,8 +98,8 @@ public class RaetselgruppenDao {
 
 		stmt += sortStmt;
 
-		TypedQuery<PersistenteRaetselgruppe> query = entityManager.createQuery(stmt,
-			PersistenteRaetselgruppe.class).setFirstResult(offset)
+		TypedQuery<PersistenteAufgabensammlung> query = entityManager.createQuery(stmt,
+			PersistenteAufgabensammlung.class).setFirstResult(offset)
 			.setMaxResults(limit);
 
 		setParameters(query, suchparameter);
@@ -187,16 +187,19 @@ public class RaetselgruppenDao {
 	 * @param  referenztyp
 	 * @param  referenz
 	 * @param  schwierigkeitsgrad
-	 * @return                    PersistenteRaetselgruppe oder null
+	 * @return                    PersistenteAufgabensammlung oder null
 	 */
-	public PersistenteRaetselgruppe findByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
+	public PersistenteAufgabensammlung findByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
 
-		List<PersistenteRaetselgruppe> trefferliste = entityManager
-			.createNamedQuery(PersistenteRaetselgruppe.FIND_BY_UNIQUE_KEY, PersistenteRaetselgruppe.class)
+		LOGGER.debug(" ==> (2)");
+		List<PersistenteAufgabensammlung> trefferliste = entityManager
+			.createNamedQuery(PersistenteAufgabensammlung.FIND_BY_UNIQUE_KEY, PersistenteAufgabensammlung.class)
 			.setParameter("schwierigkeitsgrad", schwierigkeitsgrad)
 			.setParameter("referenztyp", referenztyp)
 			.setParameter("referenz", referenz)
 			.getResultList();
+
+		LOGGER.debug(" ==> (3)");
 
 		if (trefferliste.size() > 1) {
 
@@ -209,22 +212,23 @@ public class RaetselgruppenDao {
 	}
 
 	/**
-	 * @param  raetselgruppeID
+	 * @param  aufgabensammlungID
 	 * @return
 	 */
-	public PersistenteRaetselgruppe findByID(final String raetselgruppeID) {
+	public PersistenteAufgabensammlung findByID(final String raetselgruppeID) {
 
-		return entityManager.find(PersistenteRaetselgruppe.class, raetselgruppeID);
+		return entityManager.find(PersistenteAufgabensammlung.class, raetselgruppeID);
 	}
 
 	/**
 	 * @param  name
-	 * @return      PersistenteRaetselgruppe oder null
+	 * @return      PersistenteAufgabensammlung oder null
 	 */
-	public PersistenteRaetselgruppe findByName(final String name) {
+	public PersistenteAufgabensammlung findByName(final String name) {
 
-		List<PersistenteRaetselgruppe> trefferliste = entityManager
-			.createNamedQuery(PersistenteRaetselgruppe.FIND_BY_NAME, PersistenteRaetselgruppe.class).setParameter("name", name)
+		List<PersistenteAufgabensammlung> trefferliste = entityManager
+			.createNamedQuery(PersistenteAufgabensammlung.FIND_BY_NAME, PersistenteAufgabensammlung.class)
+			.setParameter("name", name)
 			.getResultList();
 
 		if (trefferliste.size() > 1) {
@@ -243,11 +247,12 @@ public class RaetselgruppenDao {
 	 * @param  gruppeID
 	 * @return          List
 	 */
-	public List<PersistentesRaetselgruppenelement> loadElementeRaetselgruppe(final String gruppeID) {
+	public List<PersistentesAufgabensammlugnselement> loadElementeRaetselgruppe(final String gruppeID) {
 
 		return entityManager
-			.createNamedQuery(PersistentesRaetselgruppenelement.LOAD_BY_GRUPPE, PersistentesRaetselgruppenelement.class)
-			.setParameter("raetselgruppeID", gruppeID).getResultList();
+			.createNamedQuery(PersistentesAufgabensammlugnselement.LOAD_BY_AUFGABENSAMMLUNG,
+				PersistentesAufgabensammlugnselement.class)
+			.setParameter("aufgabensammlungID", gruppeID).getResultList();
 	}
 
 	/**
@@ -258,18 +263,19 @@ public class RaetselgruppenDao {
 	 */
 	public List<PersistenteAufgabeReadonly> loadAufgabenByReaetselgruppe(final String raetselgruppeId) {
 
-		return entityManager.createNamedQuery(PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_GRUPPE, PersistenteAufgabeReadonly.class)
-			.setParameter("gruppe", raetselgruppeId).getResultList();
+		return entityManager
+			.createNamedQuery(PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG, PersistenteAufgabeReadonly.class)
+			.setParameter("sammlung", raetselgruppeId).getResultList();
 	}
 
 	/**
 	 * Speichert die gegebene Rätselgruppe und gibt die gespeicherte Entity zurück.
 	 *
-	 * @param  gruppe
-	 *                PersistenteRaetselgruppe
-	 * @return        PersistenteRaetselgruppe
+	 * @param  sammlung
+	 *                  PersistenteAufgabensammlung
+	 * @return          PersistenteAufgabensammlung
 	 */
-	public PersistenteRaetselgruppe saveRaetselgruppe(final PersistenteRaetselgruppe gruppe) {
+	public PersistenteAufgabensammlung saveRaetselgruppe(final PersistenteAufgabensammlung gruppe) {
 
 		if (gruppe.isPersistent()) {
 
@@ -287,28 +293,28 @@ public class RaetselgruppenDao {
 	 */
 	public long countElementeRaetselgruppe(@NotNull @Size(min = 1, max = 40) final String uuid) {
 
-		String stmt = "SELECT COUNT(*) from RAETSELGRUPPENELEMENTE e WHERE e.GRUPPE = :gruppe";
+		String stmt = "SELECT COUNT(*) from AUFGABENSAMMLUNGSELEMENTE e WHERE e.SAMMLUNG = :sammlung";
 
 		@SuppressWarnings("unchecked")
-		List<Long> trefferliste = entityManager.createNativeQuery(stmt).setParameter("gruppe", uuid).getResultList();
+		List<Long> trefferliste = entityManager.createNativeQuery(stmt).setParameter("sammlung", uuid).getResultList();
 
 		return trefferliste.get(0).longValue();
 	}
 
 	/**
 	 * @param  raetselgruppenelementID
-	 * @return                         PersistentesRaetselgruppenelement
+	 * @return                         PersistentesAufgabensammlugnselement
 	 */
-	public PersistentesRaetselgruppenelement findElementById(final String raetselgruppenelementID) {
+	public PersistentesAufgabensammlugnselement findElementById(final String raetselgruppenelementID) {
 
-		return entityManager.find(PersistentesRaetselgruppenelement.class, raetselgruppenelementID);
+		return entityManager.find(PersistentesAufgabensammlugnselement.class, raetselgruppenelementID);
 	}
 
 	/**
 	 * @param  element
-	 * @return         PersistentesRaetselgruppenelement
+	 * @return         PersistentesAufgabensammlugnselement
 	 */
-	public PersistentesRaetselgruppenelement saveRaetselgruppenelement(final PersistentesRaetselgruppenelement element) {
+	public PersistentesAufgabensammlugnselement saveRaetselgruppenelement(final PersistentesAufgabensammlugnselement element) {
 
 		if (element.isPersistent()) {
 
@@ -325,7 +331,8 @@ public class RaetselgruppenDao {
 	@Transactional
 	public void deleteRaetselgruppenelement(final String elementID) {
 
-		final PersistentesRaetselgruppenelement element = entityManager.find(PersistentesRaetselgruppenelement.class, elementID);
+		final PersistentesAufgabensammlugnselement element = entityManager.find(PersistentesAufgabensammlugnselement.class,
+			elementID);
 
 		if (element != null) {
 

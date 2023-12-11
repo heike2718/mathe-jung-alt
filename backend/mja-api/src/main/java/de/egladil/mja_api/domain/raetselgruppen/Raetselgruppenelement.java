@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselgruppenelement;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlugnselement;
 
 /**
  * Raetselgruppenelement
@@ -54,10 +54,10 @@ public class Raetselgruppenelement {
 	 * @param  aufgabe
 	 *                 PersistenteAufgabeReadonly
 	 * @param  element
-	 *                 PersistentesRaetselgruppenelement
+	 *                 PersistentesAufgabensammlugnselement
 	 * @return         Raetselgruppenelement
 	 */
-	public static Raetselgruppenelement merge(final PersistenteAufgabeReadonly aufgabe, final PersistentesRaetselgruppenelement element) {
+	public static Raetselgruppenelement merge(final PersistenteAufgabeReadonly aufgabe, final PersistentesAufgabensammlugnselement element) {
 
 		Raetselgruppenelement result = new Raetselgruppenelement();
 		result.id = element.uuid;

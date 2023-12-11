@@ -27,7 +27,7 @@ import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -65,7 +65,7 @@ public class RaetselgruppeLaTeXGeneratorService {
 	 */
 	public File generateLaTeXArchive(final RaetselgruppeGeneratorInput input) {
 
-		PersistenteRaetselgruppe persistenteRaetselgruppe = input.getRaetselgruppe();
+		PersistenteAufgabensammlung persistenteRaetselgruppe = input.getRaetselgruppe();
 
 		List<Quizaufgabe> aufgaben = input.getAufgaben();
 		Collections.sort(aufgaben, new QuizaufgabeComparator());

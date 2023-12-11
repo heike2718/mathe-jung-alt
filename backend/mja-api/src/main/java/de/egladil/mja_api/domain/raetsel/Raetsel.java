@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -52,8 +51,8 @@ public class Raetsel extends AbstractDomainEntity {
 	private String kommentar;
 
 	@JsonProperty
-	@Schema(description = "Veröffentlichungsstatus des Rätsels, nur freigegebene können in der mja-app gefunden werden.")
-	private DomainEntityStatus status;
+	@Schema(description = "ob das Rätsel freigegeben ist.")
+	private boolean freigebeben;
 
 	@JsonIgnore
 	private String filenameVorschauFrage;
@@ -245,17 +244,6 @@ public class Raetsel extends AbstractDomainEntity {
 		this.images = images;
 	}
 
-	public DomainEntityStatus getStatus() {
-
-		return status;
-	}
-
-	public Raetsel withStatus(final DomainEntityStatus status) {
-
-		this.status = status;
-		return this;
-	}
-
 	public List<EmbeddableImageInfo> getEmbeddableImageInfos() {
 
 		return embeddableImageInfos;
@@ -305,6 +293,17 @@ public class Raetsel extends AbstractDomainEntity {
 	public Raetsel withFilenameVorschauLoesung(final String filenameVorschauLoesung) {
 
 		this.filenameVorschauLoesung = filenameVorschauLoesung;
+		return this;
+	}
+
+	public boolean isFreigebeben() {
+
+		return freigebeben;
+	}
+
+	public Raetsel withFreigebeben(final boolean freigebeben) {
+
+		this.freigebeben = freigebeben;
 		return this;
 	}
 }

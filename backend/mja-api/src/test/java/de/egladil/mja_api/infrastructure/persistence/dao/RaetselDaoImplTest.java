@@ -399,7 +399,7 @@ public class RaetselDaoImplTest {
 			boolean nurFreigegebene = true;
 
 			// Assert
-			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN,
+			assertEquals(PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN,
 				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
 
 		}
@@ -413,7 +413,7 @@ public class RaetselDaoImplTest {
 			boolean nurFreigegebene = true;
 
 			// Assert
-			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC,
+			assertEquals(PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN_DESC,
 				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
 
 		}
@@ -456,7 +456,7 @@ public class RaetselDaoImplTest {
 			boolean nurFreigegebene = true;
 
 			// Assert
-			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN,
+			assertEquals(PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN,
 				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
 
 		}
@@ -470,7 +470,7 @@ public class RaetselDaoImplTest {
 			boolean nurFreigegebene = true;
 
 			// Assert
-			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN_DESC,
+			assertEquals(PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN_DESC,
 				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
 
 		}

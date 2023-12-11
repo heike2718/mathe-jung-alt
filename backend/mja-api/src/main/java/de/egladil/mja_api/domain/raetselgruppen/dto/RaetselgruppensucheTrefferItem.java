@@ -8,7 +8,6 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 
@@ -42,8 +41,12 @@ public class RaetselgruppensucheTrefferItem {
 	private String referenz;
 
 	@JsonProperty
-	@Schema(description = "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar")
-	private DomainEntityStatus status;
+	@Schema(description = "Ob die Aufgabensammlung freigegeben ist. Nur freigegebene sind über die Open-Data-API abrufbar")
+	private boolean freigegeben;
+
+	@JsonProperty
+	@Schema(description = "Ob die Aufgabensammlung privat ist, also keinem Autor gehört.")
+	private boolean privat;
 
 	@JsonProperty
 	@Schema(description = "ID des Änderers")
@@ -119,16 +122,6 @@ public class RaetselgruppensucheTrefferItem {
 		this.referenz = referenz;
 	}
 
-	public DomainEntityStatus getStatus() {
-
-		return status;
-	}
-
-	public void setStatus(final DomainEntityStatus status) {
-
-		this.status = status;
-	}
-
 	public long getAnzahlElemente() {
 
 		return anzahlElemente;
@@ -147,6 +140,26 @@ public class RaetselgruppensucheTrefferItem {
 	public void setGeaendertDurch(final String geaendertDurch) {
 
 		this.geaendertDurch = geaendertDurch;
+	}
+
+	public boolean isFreigegeben() {
+
+		return freigegeben;
+	}
+
+	public void setFreigegeben(final boolean freigegeben) {
+
+		this.freigegeben = freigegeben;
+	}
+
+	public boolean isPrivat() {
+
+		return privat;
+	}
+
+	public void setPrivat(final boolean privat) {
+
+		this.privat = privat;
 	}
 
 }

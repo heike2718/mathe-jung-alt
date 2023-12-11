@@ -20,18 +20,18 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * PersistentesRaetselgruppenelement
+ * PersistentesAufgabensammlugnselement
  */
 @Entity
-@Table(name = "RAETSELGRUPPENELEMENTE")
+@Table(name = "AUFGABENSAMMLUNGSELEMENTE")
 @NamedQueries({
 	@NamedQuery(
-		name = "PersistentesRaetselgruppenelement.LOAD_BY_GRUPPE",
-		query = "select e from PersistentesRaetselgruppenelement e where e.raetselgruppeID = :raetselgruppeID")
+		name = "PersistentesAufgabensammlugnselement.LOAD_BY_AUFGABENSAMMLUNG",
+		query = "select e from PersistentesAufgabensammlugnselement e where e.aufgabensammlungID = :aufgabensammlungID")
 })
-public class PersistentesRaetselgruppenelement implements PersistenteMjaEntity {
+public class PersistentesAufgabensammlugnselement implements PersistenteMjaEntity {
 
-	public static final String LOAD_BY_GRUPPE = "PersistentesRaetselgruppenelement.LOAD_BY_GRUPPE";
+	public static final String LOAD_BY_AUFGABENSAMMLUNG = "PersistentesAufgabensammlugnselement.LOAD_BY_AUFGABENSAMMLUNG";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
@@ -45,8 +45,8 @@ public class PersistentesRaetselgruppenelement implements PersistenteMjaEntity {
 	@Column
 	public String nummer;
 
-	@Column(name = "GRUPPE")
-	public String raetselgruppeID;
+	@Column(name = "SAMMLUNG")
+	public String aufgabensammlungID;
 
 	@Column(name = "RAETSEL")
 	public String raetselID;

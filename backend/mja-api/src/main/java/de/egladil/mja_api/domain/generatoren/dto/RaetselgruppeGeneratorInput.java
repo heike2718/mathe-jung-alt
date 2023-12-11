@@ -11,7 +11,7 @@ import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 
 /**
  * RaetselgruppeGeneratorInput kapselt die Parameter für den Auftrag zum Generieren einer Rätselgruppe.
@@ -19,9 +19,9 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetsel
 public class RaetselgruppeGeneratorInput {
 
 	/**
-	 * raetselgruppe PersistenteRaetselgruppe - die zu druckende Rätselgruppe
+	 * raetselgruppe PersistenteAufgabensammlung - die zu druckende Rätselgruppe
 	 */
-	private PersistenteRaetselgruppe raetselgruppe;
+	private PersistenteAufgabensammlung raetselgruppe;
 
 	/**
 	 * aufgaben List - die Quizaufgaben, die gedruckt werden sollen.
@@ -49,12 +49,12 @@ public class RaetselgruppeGeneratorInput {
 	 */
 	private Schriftgroesse schriftgroesse;
 
-	public PersistenteRaetselgruppe getRaetselgruppe() {
+	public PersistenteAufgabensammlung getRaetselgruppe() {
 
 		return raetselgruppe;
 	}
 
-	public RaetselgruppeGeneratorInput withRaetselgruppe(final PersistenteRaetselgruppe raetselgruppe) {
+	public RaetselgruppeGeneratorInput withRaetselgruppe(final PersistenteAufgabensammlung raetselgruppe) {
 
 		this.raetselgruppe = raetselgruppe;
 		return this;

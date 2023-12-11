@@ -15,7 +15,6 @@ import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import io.quarkus.test.junit.QuarkusTest;
 
 /**
@@ -34,7 +33,7 @@ public class PermissionUtilsTest {
 			List<String> roles = null;
 
 			// Act
-			boolean result = PermissionUtils.hasReadPermission(roles, DomainEntityStatus.FREIGEGEBEN);
+			boolean result = PermissionUtils.hasReadPermission(roles, true);
 
 			// Assert
 			assertFalse(result);
@@ -47,7 +46,7 @@ public class PermissionUtilsTest {
 			List<String> roles = null;
 
 			// Act
-			boolean result = PermissionUtils.hasReadPermission(roles, DomainEntityStatus.ERFASST);
+			boolean result = PermissionUtils.hasReadPermission(roles, false);
 
 			// Assert
 			assertFalse(result);
@@ -60,7 +59,7 @@ public class PermissionUtilsTest {
 			List<String> roles = new ArrayList<>();
 
 			// Act
-			boolean result = PermissionUtils.hasReadPermission(roles, DomainEntityStatus.FREIGEGEBEN);
+			boolean result = PermissionUtils.hasReadPermission(roles, true);
 
 			// Assert
 			assertTrue(result);
@@ -73,7 +72,7 @@ public class PermissionUtilsTest {
 			List<String> roles = new ArrayList<>();
 
 			// Act
-			boolean result = PermissionUtils.hasReadPermission(roles, DomainEntityStatus.ERFASST);
+			boolean result = PermissionUtils.hasReadPermission(roles, false);
 
 			// Assert
 			assertFalse(result);
@@ -86,7 +85,7 @@ public class PermissionUtilsTest {
 			List<String> roles = Collections.singletonList("AUTOR");
 
 			// Act
-			boolean result = PermissionUtils.hasReadPermission(roles, DomainEntityStatus.FREIGEGEBEN);
+			boolean result = PermissionUtils.hasReadPermission(roles, true);
 
 			// Assert
 			assertTrue(result);
@@ -99,7 +98,7 @@ public class PermissionUtilsTest {
 			List<String> roles = Collections.singletonList("AUTOR");
 
 			// Act
-			boolean result = PermissionUtils.hasReadPermission(roles, DomainEntityStatus.ERFASST);
+			boolean result = PermissionUtils.hasReadPermission(roles, false);
 
 			// Assert
 			assertTrue(result);
@@ -112,7 +111,7 @@ public class PermissionUtilsTest {
 			List<String> roles = Collections.singletonList("ADMIN");
 
 			// Act
-			boolean result = PermissionUtils.hasReadPermission(roles, DomainEntityStatus.FREIGEGEBEN);
+			boolean result = PermissionUtils.hasReadPermission(roles, true);
 
 			// Assert
 			assertTrue(result);
@@ -125,7 +124,7 @@ public class PermissionUtilsTest {
 			List<String> roles = Collections.singletonList("ADMIN");
 
 			// Act
-			boolean result = PermissionUtils.hasReadPermission(roles, DomainEntityStatus.ERFASST);
+			boolean result = PermissionUtils.hasReadPermission(roles, false);
 
 			// Assert
 			assertTrue(result);

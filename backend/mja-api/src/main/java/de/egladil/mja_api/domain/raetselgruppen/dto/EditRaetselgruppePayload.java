@@ -8,7 +8,6 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
@@ -59,8 +58,12 @@ public class EditRaetselgruppePayload {
 	private String referenz;
 
 	@JsonProperty
-	@Schema(description = "Veröffentlichungsstatus der Rätselgruppe. Nur freigegebene sind über die Open-Data-API abrufbar")
-	private DomainEntityStatus status;
+	@Schema(description = "Ob die Aufgabensammlung freigegeben ist. Nur freigegebene sind über die Open-Data-API abrufbar")
+	private boolean freigegeben;
+
+	@JsonProperty
+	@Schema(description = "Ob die Aufgabensammlung privat ist, also keinem Autor gehört.")
+	private boolean privat;
 
 	public String getId() {
 
@@ -90,11 +93,6 @@ public class EditRaetselgruppePayload {
 	public String getReferenz() {
 
 		return referenz;
-	}
-
-	public DomainEntityStatus getStatus() {
-
-		return status;
 	}
 
 	public void setId(final String id) {
@@ -127,8 +125,23 @@ public class EditRaetselgruppePayload {
 		this.referenz = referenz;
 	}
 
-	public void setStatus(final DomainEntityStatus status) {
+	public boolean isFreigegeben() {
 
-		this.status = status;
+		return freigegeben;
+	}
+
+	public void setFreigegeben(final boolean freigegeben) {
+
+		this.freigegeben = freigegeben;
+	}
+
+	public boolean isPrivat() {
+
+		return privat;
+	}
+
+	public void setPrivat(final boolean privat) {
+
+		this.privat = privat;
 	}
 }

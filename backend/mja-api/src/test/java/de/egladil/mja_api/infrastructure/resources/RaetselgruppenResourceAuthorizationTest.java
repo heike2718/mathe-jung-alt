@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.raetselgruppen.dto.EditRaetselgruppePayload;
@@ -98,7 +97,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
@@ -120,7 +119,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
@@ -141,7 +140,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
@@ -163,7 +162,7 @@ public class RaetselgruppenResourceAuthorizationTest {
 		payload.setId("neu");
 		payload.setName("Kandidaten Minikänguru");
 		payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.GRUNDSCHULE);
-		payload.setStatus(DomainEntityStatus.ERFASST);
+		payload.setFreigegeben(false);
 
 		String requestBody = new ObjectMapper().writeValueAsString(payload);
 
