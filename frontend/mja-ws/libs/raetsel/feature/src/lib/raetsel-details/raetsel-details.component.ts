@@ -134,7 +134,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
       };
       this.raetselgruppenFacade.selectRaetselgruppe(trefferitem)
     } else {
-      this.#router.navigateByUrl('raetselgruppen');
+      this.#router.navigateByUrl('aufgabensammlungen');
     }
   }
 

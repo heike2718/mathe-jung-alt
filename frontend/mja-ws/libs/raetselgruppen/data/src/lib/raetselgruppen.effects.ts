@@ -32,7 +32,7 @@ export class RaetselgruppenEffects {
         return this.#actions.pipe(
             ofType(raetselgruppenActions.sELECT_RAETSELGRUPPE),
             switchMap((action) => this.#raetselgruppenHttpService.findById(action.raetselgruppe.id)),
-            map((aufgabensammlungDetails) => raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED({ aufgabensammlungDetails: aufgabensammlungDetails, navigateTo: 'raetselgruppen/details' }))
+            map((aufgabensammlungDetails) => raetselgruppenActions.rAETSELGRUPPEDETAILS_LOADED({ aufgabensammlungDetails: aufgabensammlungDetails, navigateTo: 'aufgabensammlungen/details' }))
         )
 
     });
@@ -51,7 +51,7 @@ export class RaetselgruppenEffects {
         this.#actions.pipe(
             ofType(raetselgruppenActions.uNSELECT_RAETSELGRUPPE),
             tap(() => {
-                this.#router.navigateByUrl('raetselgruppen');
+                this.#router.navigateByUrl('aufgabensammlungen');
             }),
         ), { dispatch: false });
 
@@ -60,7 +60,7 @@ export class RaetselgruppenEffects {
         this.#actions.pipe(
             ofType(raetselgruppenActions.eDIT_RAETSELGUPPE),
             tap(() => {
-                this.#router.navigateByUrl('raetselgruppen/edit');
+                this.#router.navigateByUrl('aufgabensammlungen/edit');
             }),
         ), { dispatch: false });
 

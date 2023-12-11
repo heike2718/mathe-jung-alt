@@ -26,5 +26,5 @@
       }
     }
   },
-  "tags": ["domain:raetselgruppen:model", "type:model"]
+  "tags": ["domain:aufgabensammlungen:model", "type:model"]
 }

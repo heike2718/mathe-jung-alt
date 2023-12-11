@@ -87,7 +87,7 @@ export class RaetselgruppeEditComponent implements OnInit, OnDestroy {
 
   gotoUebersicht(): void {
     this.raetselgruppenFacade.unselectRaetselgruppe();
-    this.#router.navigateByUrl('raetselgruppen/uebersicht');      
+    this.#router.navigateByUrl('aufgabensammlungen/uebersicht');      
   }
 
   formInvalid(): boolean {

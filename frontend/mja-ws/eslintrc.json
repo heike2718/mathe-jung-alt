@@ -81,26 +81,26 @@
                 ]
               },
               {
-                "sourceTag": "domain:raetselgruppen:model",
+                "sourceTag": "domain:aufgabensammlungen:model",
                 "onlyDependsOnLibsWithTags": ["type:core:model"]
               },
               {
-                "sourceTag": "domain:raetselgruppen:data",
-                "onlyDependsOnLibsWithTags": ["domain:raetselgruppen:model"]
+                "sourceTag": "domain:aufgabensammlungen:data",
+                "onlyDependsOnLibsWithTags": ["domain:aufgabensammlungen:model"]
               },
               {
-                "sourceTag": "domain:raetselgruppen:api",
+                "sourceTag": "domain:aufgabensammlungen:api",
                 "onlyDependsOnLibsWithTags": [
-                  "domain:raetselgruppen:model",
-                  "domain:raetselgruppen:data",
+                  "domain:aufgabensammlungen:model",
+                  "domain:aufgabensammlungen:data",
                   "type:core:api"
                 ]
               },
               {
-                "sourceTag": "domain:raetselgruppen:feature",
+                "sourceTag": "domain:aufgabensammlungen:feature",
                 "onlyDependsOnLibsWithTags": [
-                  "domain:raetselgruppen:model",
-                  "domain:raetselgruppen:api",
+                  "domain:aufgabensammlungen:model",
+                  "domain:aufgabensammlungen:api",
                   "domain:raetsel:api"
                 ]
               },

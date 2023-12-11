@@ -26,5 +26,5 @@
       }
     }
   },
-  "tags": ["domain:raetselgruppen:api", "type:api"]
+  "tags": ["domain:aufgabensammlungen:api", "type:api"]
 }
