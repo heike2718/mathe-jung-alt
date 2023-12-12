@@ -6,14 +6,10 @@ package de.egladil.mja_api.domain.quellen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -39,118 +35,78 @@ public class QuellenServiceTest {
 	QuellenService service;
 
 	@Test
-	void should_findQuellenReturnThrowIllegalArgumentException_when_parameterBlank() {
+	void should_getQuelleWithId_work_whenPerson() {
 
 		// Arrange
-		String suchstring = "  ";
+		String uuid = "q-uuid-1";
 
-		// Act
-		try {
-
-			service.findQuellen(suchstring);
-			fail("keine IllegalArgumentException");
-		} catch (IllegalArgumentException e) {
-
-			assertEquals("suchstring erforderlich", e.getMessage());
-		}
-
-		// Assert
-		verify(quellenRepository, never()).findQuellenLikeMediumOrPerson(suchstring);
-	}
-
-	@Test
-	void should_findQuellenReturnQuelle_when_einTrefferMitPerson() {
-
-		// Arrange
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
 		persistenteQuelle.person = "Heike Winkelvoß";
+		persistenteQuelle.userId = "u-uuid-1";
 		persistenteQuelle.quellenart = Quellenart.PERSON;
 		persistenteQuelle.sortNumber = 1;
-		persistenteQuelle.uuid = "q-uuid-1";
+		persistenteQuelle.uuid = uuid;
 
-		String suchstring = "Winkel";
-		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
-			.thenReturn(Collections.singletonList(persistenteQuelle));
+		when(quellenRepository.findQuelleReadonlyById(uuid)).thenReturn(persistenteQuelle);
 
 		// Act
-		List<QuellenListItem> result = service.findQuellen(suchstring);
+		Optional<Quelle> optQuelle = service.getQuelleWithId(uuid);
 
 		// Assert
-		assertEquals(1, result.size());
-		QuellenListItem quelle = result.get(0);
-		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
+		verify(quellenRepository).findQuelleReadonlyById(uuid);
 
-		assertEquals(0, quelle.getDeskriptoren().size());
-		assertEquals("q-uuid-1", quelle.getId());
+		Quelle quelle = optQuelle.get();
+
+		assertEquals(uuid, quelle.getId());
 		assertNull(quelle.getMediumUuid());
-		assertEquals("Heike Winkelvoß", quelle.getName());
+		assertEquals("Heike Winkelvoß", quelle.getPerson());
+		assertEquals("u-uuid-1", quelle.getUserId());
 		assertEquals(Quellenart.PERSON, quelle.getQuellenart());
-
+		assertNull(quelle.getAusgabe());
+		assertNull(quelle.getJahr());
+		assertNull(quelle.getKlasse());
+		assertNull(quelle.getMediumUuid());
+		// assertNull(quelle.getOwner()); // FIXME owner wird möglicherweise benötigt.
+		assertNull(quelle.getSeite());
+		assertNull(quelle.getStufe());
 	}
 
 	@Test
-	void should_findQuellenReturnEmptyList_when_treffermengeLeer() {
+	void should_getQuelleWithId_work_whenZeitschrift() {
 
 		// Arrange
-		String suchstring = "Winkel";
-		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
-			.thenReturn(new ArrayList<>());
+		String uuid = "q-uuid-2";
 
-		// Act
-		List<QuellenListItem> result = service.findQuellen(suchstring);
-
-		// Assert
-		assertEquals(0, result.size());
-		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-	}
-
-	@Test
-	void should_findQuellenReturnEmptyList_when_treffermengeNull() {
-
-		// Arrange
-		String suchstring = "Winkel";
-		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
-			.thenReturn(null);
-
-		// Act
-		List<QuellenListItem> result = service.findQuellen(suchstring);
-
-		// Assert
-		assertEquals(0, result.size());
-		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-	}
-
-	@Test
-	void should_findQuellenReturnQuelle_when_einTrefferMitZeitschriftUndSeitennummer() {
-
-		// Arrange
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
-		persistenteQuelle.mediumTitel = "alpha";
 		persistenteQuelle.quellenart = Quellenart.ZEITSCHRIFT;
 		persistenteQuelle.jahr = "1978";
 		persistenteQuelle.mediumUuid = "m-uuid-1";
 		persistenteQuelle.ausgabe = "3";
 		persistenteQuelle.seite = "13";
 		persistenteQuelle.sortNumber = 1;
-		persistenteQuelle.uuid = "q-uuid-2";
+		persistenteQuelle.uuid = uuid;
 
-		String suchstring = "alpha";
-		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
-			.thenReturn(Collections.singletonList(persistenteQuelle));
+		when(quellenRepository.findQuelleReadonlyById(uuid)).thenReturn(persistenteQuelle);
 
 		// Act
-		List<QuellenListItem> result = service.findQuellen(suchstring);
+		Optional<Quelle> optQuelle = service.getQuelleWithId(uuid);
 
 		// Assert
-		assertEquals(1, result.size());
-		QuellenListItem quelle = result.get(0);
-		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
+		verify(quellenRepository).findQuelleReadonlyById(uuid);
 
-		assertEquals(0, quelle.getDeskriptoren().size());
-		assertEquals("q-uuid-2", quelle.getId());
+		Quelle quelle = optQuelle.get();
+
+		assertEquals(uuid, quelle.getId());
 		assertEquals("m-uuid-1", quelle.getMediumUuid());
-		assertEquals("alpha (3) 1978, S.13", quelle.getName());
+		assertNull(quelle.getPerson());
+		assertNull(quelle.getUserId());
 		assertEquals(Quellenart.ZEITSCHRIFT, quelle.getQuellenart());
+		assertEquals("3", quelle.getAusgabe());
+		assertEquals("1978", quelle.getJahr());
+		assertNull(quelle.getKlasse());
+		// assertNull(quelle.getOwner()); // FIXME owner wird möglicherweise benötigt.
+		assertEquals("13", quelle.getSeite());
+		assertNull(quelle.getStufe());
 
 	}
 
@@ -158,66 +114,73 @@ public class QuellenServiceTest {
 	void should_findQuellenReturnQuelle_when_einTrefferMitBuch() {
 
 		// Arrange
+		String uuid = "q-uuid-3";
+
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
-		persistenteQuelle.mediumTitel = "2x3 und Spaß dabei";
-		persistenteQuelle.autor = "Johannes Lehmann";
 		persistenteQuelle.mediumUuid = "m-uuid-2";
 		persistenteQuelle.quellenart = Quellenart.BUCH;
 		persistenteQuelle.seite = "42";
 		persistenteQuelle.sortNumber = 1;
-		persistenteQuelle.uuid = "q-uuid-3";
+		persistenteQuelle.uuid = uuid;
 
-		String suchstring = "2x3";
-		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
-			.thenReturn(Collections.singletonList(persistenteQuelle));
+		when(quellenRepository.findQuelleReadonlyById(uuid)).thenReturn(persistenteQuelle);
 
 		// Act
-		List<QuellenListItem> result = service.findQuellen(suchstring);
+		Optional<Quelle> optQuelle = service.getQuelleWithId(uuid);
 
 		// Assert
-		assertEquals(1, result.size());
-		QuellenListItem quelle = result.get(0);
-		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
+		verify(quellenRepository).findQuelleReadonlyById(uuid);
 
-		assertEquals(0, quelle.getDeskriptoren().size());
-		assertEquals("q-uuid-3", quelle.getId());
+		Quelle quelle = optQuelle.get();
+
+		assertEquals(uuid, quelle.getId());
 		assertEquals("m-uuid-2", quelle.getMediumUuid());
-		assertEquals("Johannes Lehmann: 2x3 und Spaß dabei, S.42", quelle.getName());
+		assertNull(quelle.getPerson());
+		assertNull(quelle.getUserId());
 		assertEquals(Quellenart.BUCH, quelle.getQuellenart());
-
+		assertNull(quelle.getAusgabe());
+		assertNull(quelle.getJahr());
+		assertNull(quelle.getKlasse());
+		// assertNull(quelle.getOwner()); // FIXME owner wird möglicherweise benötigt.
+		assertEquals("42", quelle.getSeite());
+		assertNull(quelle.getStufe());
 	}
 
 	@Test
 	void should_findQuellenReturnQuelle_when_einTrefferInternetVollstaendig() {
 
 		// Arrange
+		String uuid = "q-uuid-4";
+
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
-		persistenteQuelle.mediumTitel = "Herbstolympiade Russland";
 		persistenteQuelle.jahr = "2013";
 		persistenteQuelle.mediumUuid = "m-uuid-4";
 		persistenteQuelle.quellenart = Quellenart.INTERNET;
 		persistenteQuelle.klasse = "Klasse 1";
 		persistenteQuelle.stufe = "Stufe 2";
-		persistenteQuelle.sortNumber = 1;
-		persistenteQuelle.uuid = "q-uuid-4";
+		persistenteQuelle.uuid = uuid;
 
-		String suchstring = "Herbstolympiade";
-		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
-			.thenReturn(Collections.singletonList(persistenteQuelle));
+		when(quellenRepository.findQuelleReadonlyById(uuid)).thenReturn(persistenteQuelle);
 
 		// Act
-		List<QuellenListItem> result = service.findQuellen(suchstring);
+		Optional<Quelle> optQuelle = service.getQuelleWithId(uuid);
 
 		// Assert
-		assertEquals(1, result.size());
-		QuellenListItem quelle = result.get(0);
-		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
+		verify(quellenRepository).findQuelleReadonlyById(uuid);
 
-		assertEquals(0, quelle.getDeskriptoren().size());
-		assertEquals("q-uuid-4", quelle.getId());
+		Quelle quelle = optQuelle.get();
+
+		assertEquals(uuid, quelle.getId());
 		assertEquals("m-uuid-4", quelle.getMediumUuid());
-		assertEquals("Herbstolympiade Russland (2013), Klasse 1, Stufe 2", quelle.getName());
+		assertNull(quelle.getPerson());
+		assertNull(quelle.getUserId());
 		assertEquals(Quellenart.INTERNET, quelle.getQuellenart());
+		assertNull(quelle.getAusgabe());
+		assertEquals("2013", quelle.getJahr());
+		assertEquals("Klasse 1", quelle.getKlasse());
+		// assertNull(quelle.getOwner()); // FIXME owner wird möglicherweise benötigt.
+		assertEquals("Stufe 2", quelle.getStufe());
+		assertNull(quelle.getSeite());
 
 	}
 }

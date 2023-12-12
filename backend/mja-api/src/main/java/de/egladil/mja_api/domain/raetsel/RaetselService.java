@@ -25,7 +25,7 @@ import de.egladil.mja_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
-import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
+import de.egladil.mja_api.domain.quellen.QuellenangabeRaetsel;
 import de.egladil.mja_api.domain.quellen.QuellenService;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
@@ -335,7 +335,7 @@ public class RaetselService {
 
 		result.setImages(raetselFileService.findImages(raetsel.filenameVorschauFrage, raetsel.filenameVorschauLoesung));
 
-		Optional<QuelleMinimalDto> optQuelle = quellenServive.loadQuelleMinimal(raetsel.quelle);
+		Optional<QuellenangabeRaetsel> optQuelle = quellenServive.getQuellenangabeRaetselWithId(raetsel.quelle);
 
 		if (optQuelle.isPresent()) {
 

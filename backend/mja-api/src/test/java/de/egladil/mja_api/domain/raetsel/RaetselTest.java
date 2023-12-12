@@ -16,7 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
+import de.egladil.mja_api.domain.quellen.QuellenangabeRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -70,7 +70,7 @@ public class RaetselTest {
 
 			String quelleId = "8ef4d9b8-62a6-4643-8674-73ebaec52d98";
 
-			QuelleMinimalDto quelle = new QuelleMinimalDto().withId(quelleId).withName("Ponder");
+			QuellenangabeRaetsel quelle = new QuellenangabeRaetsel().withId(quelleId).withName("Ponder");
 
 			Raetsel raetsel = new Raetsel("df5d4136-8fa6-4fac-b566-470ff7c3c869").withAntwortvorschlaege(antwortvorschlage)
 				.withDeskriptoren(deskriptoren).withFrage("Wie viele Meter sind es bis zur Schule?")

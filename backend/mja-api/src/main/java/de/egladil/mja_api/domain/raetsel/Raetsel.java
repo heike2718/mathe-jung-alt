@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
-import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
+import de.egladil.mja_api.domain.quellen.QuellenangabeRaetsel;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
@@ -26,7 +26,7 @@ import jakarta.validation.constraints.Pattern;
  * Raetsel
  */
 @AggregateRoot
-@Schema(name = "Raetsel", description = "Stammdaten eines Rätsels")
+@Schema(name = "Raetsel", description = "Die Details eines Rätsels - der Einfachheit halber mit Quellenangabe.")
 public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
@@ -69,11 +69,12 @@ public class Raetsel extends AbstractDomainEntity {
 	@Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "quelleID enthält ungültige Zeichen - muss eine UUID sein")
+	@Deprecated
 	private String quelleId;
 
 	@JsonProperty
-	@Schema(description = "Referenz auf die Quelle des Rätsels sowie ein Name zum Anzeigen")
-	private QuelleMinimalDto quelle;
+	@Schema(description = "Quellenangabe für dieses Rätsel zum Anzeigen in den Details oder zum Ausdrucken im PDF.")
+	private QuellenangabeRaetsel quelle;
 
 	@JsonProperty
 	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
@@ -268,12 +269,12 @@ public class Raetsel extends AbstractDomainEntity {
 		this.schreibgeschuetzt = false;
 	}
 
-	public QuelleMinimalDto getQuelle() {
+	public QuellenangabeRaetsel getQuelle() {
 
 		return quelle;
 	}
 
-	public void setQuelle(final QuelleMinimalDto quelle) {
+	public void setQuelle(final QuellenangabeRaetsel quelle) {
 
 		this.quelle = quelle;
 	}

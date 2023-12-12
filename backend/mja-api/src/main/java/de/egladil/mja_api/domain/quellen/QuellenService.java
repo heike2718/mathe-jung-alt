@@ -4,11 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.quellen;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-
-import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
 import de.egladil.mja_api.domain.semantik.DomainService;
@@ -32,36 +28,11 @@ public class QuellenService {
 	QuellenRepository quellenRepository;
 
 	/**
-	 * Sucht Quellen mitdem gegebenen Suchstring im Namen.
-	 *
-	 * @param  suchstring
-	 * @return            List
-	 */
-	public List<QuellenListItem> findQuellen(final String suchstring) {
-
-		if (StringUtils.isBlank(suchstring)) {
-
-			throw new IllegalArgumentException("suchstring erforderlich");
-		}
-
-		List<PersistenteQuelleReadonly> trefferliste = quellenRepository.findQuellenLikeMediumOrPerson(suchstring);
-
-		if (trefferliste == null || trefferliste.isEmpty()) {
-
-			return new ArrayList<>();
-		}
-
-		List<QuellenListItem> result = trefferliste.stream().map(pq -> mapFromDB(pq)).toList();
-
-		return result;
-	}
-
-	/**
 	 * Sucht die Quelle mit der gegebenen userId.
 	 *
 	 * @return Optional
 	 */
-	public Optional<QuelleMinimalDto> findQuelleForUser() {
+	public Optional<QuellenangabeRaetsel> findQuelleForUser() {
 
 		String userId = authCtx.getUser().getUuid();
 		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithUserId(userId);
@@ -74,53 +45,66 @@ public class QuellenService {
 		PersistenteQuelleReadonly ausDB = optAusDB.get();
 		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
 
-		QuelleMinimalDto result = new QuelleMinimalDto().withId(ausDB.uuid).withName(nameStrategie.getName(ausDB));
+		QuellenangabeRaetsel result = new QuellenangabeRaetsel().withId(ausDB.uuid).withName(nameStrategie.getName(ausDB))
+			.withQuellenart(ausDB.quellenart);
 
 		return Optional.of(result);
 	}
 
 	/**
-	 * Sucht die Quelle mit der gegebenen id.
+	 * Gibt die Quelle mit der gegebenen UUID zurück.
 	 *
 	 * @param  id
 	 *            String
 	 * @return    Optional
 	 */
-	public Optional<QuellenListItem> sucheQuelleMitId(final String id) {
+	public Optional<Quelle> getQuelleWithId(final String id) {
 
-		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findById(id);
+		PersistenteQuelleReadonly ausDB = this.quellenRepository.findQuelleReadonlyById(id);
 
-		return optAusDB.isEmpty() ? Optional.empty() : Optional.of(mapFromDB(optAusDB.get()));
+		return ausDB == null ? Optional.empty() : Optional.of(mapFromDB(ausDB));
 	}
 
-	QuellenListItem mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
+	Quelle mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
 
-		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(persistenteQuelle.quellenart);
-
-		return new QuellenListItem(persistenteQuelle.uuid)
-			.withSortNumber(persistenteQuelle.sortNumber).withQuellenart(persistenteQuelle.quellenart)
-			.withName(nameStrategie.getName(persistenteQuelle)).withMediumIdentifier(persistenteQuelle.mediumUuid);
+		// @formatter: off
+		return new Quelle(persistenteQuelle.uuid)
+			.withAusgabe(persistenteQuelle.ausgabe)
+			.withJahr(persistenteQuelle.jahr)
+			.withKlasse(persistenteQuelle.klasse)
+			.withMediumUuid(persistenteQuelle.mediumUuid)
+			.withPerson(persistenteQuelle.person)
+			.withQuellenart(persistenteQuelle.quellenart)
+			.withSeite(persistenteQuelle.seite)
+			.withStufe(persistenteQuelle.stufe)
+			.withUserId(persistenteQuelle.userId);
+		// @formatter: on
 	}
 
 	/**
-	 * Läd die minimalen Attribute einer Quelle.
+	 * Läd das von der Quelle, das im Rätsel oder in zugehörigen PDFs angezeigt wird nebst der ID zum navigieren zu einem Medizm.
 	 *
 	 * @param  quelleId
-	 * @return          QuelleMinimalDto
+	 * @return          QuellenangabeRaetsel
 	 */
-	public Optional<QuelleMinimalDto> loadQuelleMinimal(final String quelleId) {
+	public Optional<QuellenangabeRaetsel> getQuellenangabeRaetselWithId(final String quelleId) {
 
-		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findById(quelleId);
+		PersistenteQuelleReadonly ausDB = this.quellenRepository.findQuelleReadonlyById(quelleId);
 
-		if (optAusDB.isEmpty()) {
+		if (ausDB == null) {
 
 			return Optional.empty();
 		}
 
-		PersistenteQuelleReadonly quelle = optAusDB.get();
-		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(quelle.quellenart);
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
 
-		QuelleMinimalDto result = new QuelleMinimalDto().withId(quelle.uuid).withName(nameStrategie.getName(quelle));
+		// @formatter: off
+		QuellenangabeRaetsel result = new QuellenangabeRaetsel()
+			.withId(ausDB.uuid)
+			.withQuellenart(ausDB.quellenart)
+			.withName(nameStrategie.getName(ausDB))
+			.withMediumUuid(ausDB.mediumUuid);
+		// @formatter: on
 		return Optional.of(result);
 	}
 
