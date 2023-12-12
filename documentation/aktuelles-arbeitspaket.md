@@ -2,6 +2,12 @@
 
 Damit ich mich nach einigen Tagen Pause wieder erinnere, wo ich weitermachen muss.
 
+## 11.12.2023
+
+siehe [Aufgabensammlungen](./konzepte/aufgabensammlungen.md)
+
+siehe [Quellen und Medien](./konzepte/quellen-und-medien.md)
+
 ## 19.12.2023
 
 Volltextsuche ist auf OR umgestellt, aber nur im Backend, weil das jetzt default ist

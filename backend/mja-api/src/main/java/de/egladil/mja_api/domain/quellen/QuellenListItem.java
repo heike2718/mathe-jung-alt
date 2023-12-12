@@ -27,10 +27,10 @@ public class QuellenListItem extends AbstractDomainEntity {
 	@Schema(description = "Zahl zum Sortieren")
 	private long sortNumber;
 
-	@Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe")
+	@Schema(description = "Vollständige Quellenangabe")
 	private String name;
 
-	@Schema(description = "Referenz auf ein Buch oder eine Zeitschrift")
+	@Schema(description = "Referenz auf ein Buch, eine Zeitschrift oder etwas im Internet")
 	private String mediumUuid;
 
 	@Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class, description = "Deskriptoren, für die Quelle")

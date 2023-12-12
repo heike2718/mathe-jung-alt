@@ -87,15 +87,29 @@ public class QuellenResource {
 		operationId = "getQuelleEingeloggterAdmin",
 		summary = "Gibt die Quelle zurück, die zu der eingeloggten Person gehört")
 	@APIResponse(
-		name = "GetQuelleEingeloggterAdminOKResponse",
+		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = QuellenListItem.class)))
 	@APIResponse(
-		name = "OwnQuelleNotFound",
+		name = "Unauthorized",
+		description = "nicht authentifiziert",
+		responseCode = "401")
+	@APIResponse(
+		name = "Forbidden",
+		description = "nicht autorisiert",
+		responseCode = "403")
+	@APIResponse(
+		name = "NotFound",
 		description = "Gibt es nicht",
 		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "ServerError",
+		description = "unerwartete Exception",
+		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	public QuelleMinimalDto getQuelleEingeloggterAdmin() {

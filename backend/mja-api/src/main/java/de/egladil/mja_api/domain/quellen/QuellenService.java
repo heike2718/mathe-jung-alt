@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 
-import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
@@ -31,9 +30,6 @@ public class QuellenService {
 
 	@Inject
 	QuellenRepository quellenRepository;
-
-	@Inject
-	DeskriptorenService deskriptorenService;
 
 	/**
 	 * Sucht Quellen mitdem gegebenen Suchstring im Namen.
@@ -76,9 +72,9 @@ public class QuellenService {
 		}
 
 		PersistenteQuelleReadonly ausDB = optAusDB.get();
-		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.getQuellenart());
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
 
-		QuelleMinimalDto result = new QuelleMinimalDto().withId(ausDB.getUuid()).withName(nameStrategie.getName(ausDB));
+		QuelleMinimalDto result = new QuelleMinimalDto().withId(ausDB.uuid).withName(nameStrategie.getName(ausDB));
 
 		return Optional.of(result);
 	}
@@ -99,11 +95,11 @@ public class QuellenService {
 
 	QuellenListItem mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
 
-		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(persistenteQuelle.getQuellenart());
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(persistenteQuelle.quellenart);
 
-		return new QuellenListItem(persistenteQuelle.getUuid())
-			.withSortNumber(persistenteQuelle.getSortNumber()).withQuellenart(persistenteQuelle.getQuellenart())
-			.withName(nameStrategie.getName(persistenteQuelle)).withMediumIdentifier(persistenteQuelle.getMediumUuid());
+		return new QuellenListItem(persistenteQuelle.uuid)
+			.withSortNumber(persistenteQuelle.sortNumber).withQuellenart(persistenteQuelle.quellenart)
+			.withName(nameStrategie.getName(persistenteQuelle)).withMediumIdentifier(persistenteQuelle.mediumUuid);
 	}
 
 	/**
@@ -122,7 +118,7 @@ public class QuellenService {
 		}
 
 		PersistenteQuelleReadonly quelle = optAusDB.get();
-		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(quelle.getQuellenart());
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(quelle.quellenart);
 
 		QuelleMinimalDto result = new QuelleMinimalDto().withId(quelle.uuid).withName(nameStrategie.getName(quelle));
 		return Optional.of(result);

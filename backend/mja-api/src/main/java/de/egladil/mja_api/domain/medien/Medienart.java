@@ -10,6 +10,7 @@ package de.egladil.mja_api.domain.medien;
 public enum Medienart {
 
 	BUCH,
+	INTERNET,
 	ZEITSCHRIFT;
 
 }

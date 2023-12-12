@@ -11,42 +11,42 @@ import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 
 /**
- * ZeitschriftquelleNameStrategie
+ * InternetquelleNameStrategie
  */
-public class ZeitschriftquelleNameStrategie implements QuelleNameStrategie {
+public class InternetquelleNameStrategie implements QuelleNameStrategie {
 
 	@Override
 	public String getName(final PersistenteQuelleReadonly quelle) {
 
-		if (quelle.quellenart != Quellenart.ZEITSCHRIFT) {
+		if (quelle.quellenart != Quellenart.INTERNET) {
 
-			throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.ZEITSCHRIFT);
+			throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.INTERNET);
 		}
 
 		if (StringUtils.isBlank(quelle.mediumTitel)) {
 
-			throw new MjaRuntimeException("Bei Quellenart ZEITSCHRIFT darf mediumTitel nicht blank sein.");
+			throw new MjaRuntimeException("Bei Quellenart INTERNET darf mediumTitel nicht blank sein.");
 		}
 
-		StringBuffer sb = new StringBuffer(quelle.mediumTitel);
-
-		if (StringUtils.isNotBlank(quelle.ausgabe)) {
-
-			sb.append(" (");
-			sb.append(quelle.ausgabe);
-			sb.append(")");
-		}
+		StringBuilder sb = new StringBuilder(quelle.mediumTitel);
 
 		if (StringUtils.isNotBlank(quelle.jahr)) {
 
-			sb.append(" ");
+			sb.append(" (");
 			sb.append(quelle.jahr);
+			sb.append(")");
 		}
 
-		if (StringUtils.isNotBlank(quelle.seite)) {
+		if (StringUtils.isNotBlank(quelle.klasse)) {
 
-			sb.append(", S.");
-			sb.append(quelle.seite);
+			sb.append(", ");
+			sb.append(quelle.klasse);
+		}
+
+		if (StringUtils.isNotBlank(quelle.stufe)) {
+
+			sb.append(", ");
+			sb.append(quelle.stufe);
 		}
 
 		return sb.toString();

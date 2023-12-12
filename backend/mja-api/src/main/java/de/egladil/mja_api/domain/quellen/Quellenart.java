@@ -10,6 +10,7 @@ package de.egladil.mja_api.domain.quellen;
 public enum Quellenart {
 
 	BUCH,
+	INTERNET,
 	PERSON,
 	ZEITSCHRIFT;
 }

@@ -7,8 +7,6 @@ package de.egladil.mja_api.domain.quellen;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,7 +17,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
@@ -29,17 +26,14 @@ import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;
 
 /**
- * QuellenServiceImplTest
+ * QuellenServiceTest
  */
 @QuarkusTest
 @TestProfile(FullDatabaseTestProfile.class)
-public class QuellenServiceImplTest {
+public class QuellenServiceTest {
 
 	@InjectMock
 	QuellenRepository quellenRepository;
-
-	@InjectMock
-	DeskriptorenService deskriptorenService;
 
 	@Inject
 	QuellenService service;
@@ -62,7 +56,6 @@ public class QuellenServiceImplTest {
 
 		// Assert
 		verify(quellenRepository, never()).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(any());
 	}
 
 	@Test
@@ -70,10 +63,10 @@ public class QuellenServiceImplTest {
 
 		// Arrange
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
-		persistenteQuelle.setPerson("Heike Winkelvoß");
-		persistenteQuelle.setQuellenart(Quellenart.PERSON);
-		persistenteQuelle.setSortNumber(1);
-		persistenteQuelle.setUuid("q-uuid-1");
+		persistenteQuelle.person = "Heike Winkelvoß";
+		persistenteQuelle.quellenart = Quellenart.PERSON;
+		persistenteQuelle.sortNumber = 1;
+		persistenteQuelle.uuid = "q-uuid-1";
 
 		String suchstring = "Winkel";
 		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
@@ -86,7 +79,6 @@ public class QuellenServiceImplTest {
 		assertEquals(1, result.size());
 		QuellenListItem quelle = result.get(0);
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(anyString());
 
 		assertEquals(0, quelle.getDeskriptoren().size());
 		assertEquals("q-uuid-1", quelle.getId());
@@ -110,7 +102,6 @@ public class QuellenServiceImplTest {
 		// Assert
 		assertEquals(0, result.size());
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(any());
 	}
 
 	@Test
@@ -127,22 +118,21 @@ public class QuellenServiceImplTest {
 		// Assert
 		assertEquals(0, result.size());
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(any());
 	}
 
 	@Test
-	void should_findQuellenReturnQuelle_when_einTrefferMitZeitschrift() {
+	void should_findQuellenReturnQuelle_when_einTrefferMitZeitschriftUndSeitennummer() {
 
 		// Arrange
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
-		persistenteQuelle.setMediumTitel("alpha");
-		persistenteQuelle.setQuellenart(Quellenart.ZEITSCHRIFT);
-		persistenteQuelle.setJahrgang("1978");
-		persistenteQuelle.setMediumUuid("m-uuid-1");
-		persistenteQuelle.setAusgabe("3");
-		persistenteQuelle.setSeite("13");
-		persistenteQuelle.setSortNumber(1);
-		persistenteQuelle.setUuid("q-uuid-2");
+		persistenteQuelle.mediumTitel = "alpha";
+		persistenteQuelle.quellenart = Quellenart.ZEITSCHRIFT;
+		persistenteQuelle.jahr = "1978";
+		persistenteQuelle.mediumUuid = "m-uuid-1";
+		persistenteQuelle.ausgabe = "3";
+		persistenteQuelle.seite = "13";
+		persistenteQuelle.sortNumber = 1;
+		persistenteQuelle.uuid = "q-uuid-2";
 
 		String suchstring = "alpha";
 		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
@@ -155,7 +145,6 @@ public class QuellenServiceImplTest {
 		assertEquals(1, result.size());
 		QuellenListItem quelle = result.get(0);
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(anyString());
 
 		assertEquals(0, quelle.getDeskriptoren().size());
 		assertEquals("q-uuid-2", quelle.getId());
@@ -170,12 +159,13 @@ public class QuellenServiceImplTest {
 
 		// Arrange
 		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
-		persistenteQuelle.setMediumTitel("2x3 und Spaß dabei");
-		persistenteQuelle.setMediumUuid("m-uuid-2");
-		persistenteQuelle.setQuellenart(Quellenart.BUCH);
-		persistenteQuelle.setSeite("42");
-		persistenteQuelle.setSortNumber(3);
-		persistenteQuelle.setUuid("q-uuid-3");
+		persistenteQuelle.mediumTitel = "2x3 und Spaß dabei";
+		persistenteQuelle.autor = "Johannes Lehmann";
+		persistenteQuelle.mediumUuid = "m-uuid-2";
+		persistenteQuelle.quellenart = Quellenart.BUCH;
+		persistenteQuelle.seite = "42";
+		persistenteQuelle.sortNumber = 1;
+		persistenteQuelle.uuid = "q-uuid-3";
 
 		String suchstring = "2x3";
 		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
@@ -188,13 +178,46 @@ public class QuellenServiceImplTest {
 		assertEquals(1, result.size());
 		QuellenListItem quelle = result.get(0);
 		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
-		verify(deskriptorenService, never()).mapToDeskriptoren(anyString());
 
 		assertEquals(0, quelle.getDeskriptoren().size());
 		assertEquals("q-uuid-3", quelle.getId());
 		assertEquals("m-uuid-2", quelle.getMediumUuid());
-		assertEquals("2x3 und Spaß dabei, S.42", quelle.getName());
+		assertEquals("Johannes Lehmann: 2x3 und Spaß dabei, S.42", quelle.getName());
 		assertEquals(Quellenart.BUCH, quelle.getQuellenart());
+
+	}
+
+	@Test
+	void should_findQuellenReturnQuelle_when_einTrefferInternetVollstaendig() {
+
+		// Arrange
+		PersistenteQuelleReadonly persistenteQuelle = new PersistenteQuelleReadonly();
+		persistenteQuelle.mediumTitel = "Herbstolympiade Russland";
+		persistenteQuelle.jahr = "2013";
+		persistenteQuelle.mediumUuid = "m-uuid-4";
+		persistenteQuelle.quellenart = Quellenart.INTERNET;
+		persistenteQuelle.klasse = "Klasse 1";
+		persistenteQuelle.stufe = "Stufe 2";
+		persistenteQuelle.sortNumber = 1;
+		persistenteQuelle.uuid = "q-uuid-4";
+
+		String suchstring = "Herbstolympiade";
+		when(quellenRepository.findQuellenLikeMediumOrPerson(suchstring))
+			.thenReturn(Collections.singletonList(persistenteQuelle));
+
+		// Act
+		List<QuellenListItem> result = service.findQuellen(suchstring);
+
+		// Assert
+		assertEquals(1, result.size());
+		QuellenListItem quelle = result.get(0);
+		verify(quellenRepository).findQuellenLikeMediumOrPerson(suchstring);
+
+		assertEquals(0, quelle.getDeskriptoren().size());
+		assertEquals("q-uuid-4", quelle.getId());
+		assertEquals("m-uuid-4", quelle.getMediumUuid());
+		assertEquals("Herbstolympiade Russland (2013), Klasse 1, Stufe 2", quelle.getName());
+		assertEquals(Quellenart.INTERNET, quelle.getQuellenart());
 
 	}
 }

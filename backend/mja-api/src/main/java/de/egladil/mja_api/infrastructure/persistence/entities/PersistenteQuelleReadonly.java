@@ -44,177 +44,34 @@ public class PersistenteQuelleReadonly {
 	@Column(name = "SORTNR")
 	public long sortNumber;
 
-	@Column(name = "PERSON")
-	public String person;
-
-	@Column(name = "USER_ID")
-	public String userId;
-
 	@Column(name = "MEDIUM_UUID")
 	public String mediumUuid;
 
 	@Column(name = "MEDIUM_TITEL")
 	public String mediumTitel;
 
-	@Column(name = "JAHRGANG")
-	public String jahrgang;
+	@Column
+	public String autor;
 
-	@Column(name = "AUSGABE")
+	@Column
 	public String ausgabe;
 
-	@Column(name = "SEITE")
+	@Column
+	public String jahr;
+
+	@Column
+	public String klasse;
+
+	@Column
+	public String stufe;
+
+	@Column
 	public String seite;
 
-	/**
-	 * @return the uuid
-	 */
-	public String getUuid() {
+	@Column
+	public String person;
 
-		return uuid;
-	}
+	@Column(name = "USER_ID")
+	public String userId;
 
-	/**
-	 * @param uuid
-	 *             the uuid to set
-	 */
-	public void setUuid(final String uuid) {
-
-		this.uuid = uuid;
-	}
-
-	/**
-	 * @return the quellenart
-	 */
-	public Quellenart getQuellenart() {
-
-		return quellenart;
-	}
-
-	/**
-	 * @param quellenart
-	 *                   the quellenart to set
-	 */
-	public void setQuellenart(final Quellenart quellenart) {
-
-		this.quellenart = quellenart;
-	}
-
-	/**
-	 * @return the sortNumber
-	 */
-	public long getSortNumber() {
-
-		return sortNumber;
-	}
-
-	/**
-	 * @param sortNumber
-	 *                   the sortNumber to set
-	 */
-	public void setSortNumber(final long sortNumber) {
-
-		this.sortNumber = sortNumber;
-	}
-
-	/**
-	 * @return the person
-	 */
-	public String getPerson() {
-
-		return person;
-	}
-
-	/**
-	 * @param person
-	 *               the person to set
-	 */
-	public void setPerson(final String person) {
-
-		this.person = person;
-	}
-
-	/**
-	 * @return the medium
-	 */
-	public String getMediumTitel() {
-
-		return mediumTitel;
-	}
-
-	/**
-	 * @param medium
-	 *               the medium to set
-	 */
-	public void setMediumTitel(final String medium) {
-
-		this.mediumTitel = medium;
-	}
-
-	/**
-	 * @return the jahrgang
-	 */
-	public String getJahrgang() {
-
-		return jahrgang;
-	}
-
-	/**
-	 * @param jahrgang
-	 *                 the jahrgang to set
-	 */
-	public void setJahrgang(final String jahrgang) {
-
-		this.jahrgang = jahrgang;
-	}
-
-	/**
-	 * @return the ausgabe
-	 */
-	public String getAusgabe() {
-
-		return ausgabe;
-	}
-
-	/**
-	 * @param ausgabe
-	 *                the ausgabe to set
-	 */
-	public void setAusgabe(final String ausgabe) {
-
-		this.ausgabe = ausgabe;
-	}
-
-	/**
-	 * @return the seite
-	 */
-	public String getSeite() {
-
-		return seite;
-	}
-
-	/**
-	 * @param seite
-	 *              the seite to set
-	 */
-	public void setSeite(final String seite) {
-
-		this.seite = seite;
-	}
-
-	/**
-	 * @return the mediumUuid
-	 */
-	public String getMediumUuid() {
-
-		return mediumUuid;
-	}
-
-	/**
-	 * @param mediumUuid
-	 *                   the mediumUuid to set
-	 */
-	public void setMediumUuid(final String mediumUuid) {
-
-		this.mediumUuid = mediumUuid;
-	}
 }

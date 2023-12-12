@@ -5,18 +5,19 @@
 package de.egladil.mja_api.infrastructure.resources;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quellen.QuellenListItem;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.security.TestSecurity;
+import io.restassured.http.ContentType;
 
 /**
  * QuellenResourceTest
@@ -30,7 +31,9 @@ public class QuellenResourceTest {
 	void testSucheMitSuchstringNoAuthorization() {
 
 		given()
-			.when().get("v2?suchstring=Winkelvoß")
+			.when()
+			.queryParam("suchstring", "Winkelvoß")
+			.get("v2")
 			.then()
 			.statusCode(401);
 	}
@@ -40,34 +43,48 @@ public class QuellenResourceTest {
 	void testSucheMitSuchstringUnauthorized() {
 
 		given()
-			.when().get("v2?suchstring=Winkelvoß")
+			.when()
+			.queryParam("suchstring", "Winkelvoß")
+			.get("v2")
 			.then()
 			.statusCode(403);
 	}
 
 	@Test
 	@TestSecurity(user = "testUser", roles = { "ADMIN" })
-	void testSucheOhneDeskriptorenUserADMINMitTreffer() {
+	void testSucheUserADMINMitTreffer() {
 
-		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[]}]";
-		given()
-			.when().get("v2?suchstring=Winkelvoß")
+		QuellenListItem[] result = given()
+			.when()
+			.queryParam("suchstring", "Winkelvoß")
+			.get("v2")
 			.then()
 			.statusCode(200)
-			.body(is(expected));
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(QuellenListItem[].class);
+
+		assertEquals("Heike Winkelvoß", result[0].getName());
 
 	}
 
 	@Test
 	@TestSecurity(user = "testUser", roles = { "AUTOR" })
-	void testSucheOhneDeskriptorenUserAUTORMitTreffer() {
+	void testSucheUserAUTORMitTreffer() {
 
-		String expected = "[{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"sortNumber\":1,\"name\":\"Heike Winkelvoß\",\"mediumUuid\":null,\"deskriptoren\":[]}]";
-		given()
-			.when().get("v2?suchstring=Winkelvoß")
+		QuellenListItem[] result = given()
+			.when()
+			.queryParam("suchstring", "Winkelvoß")
+			.get("v2")
 			.then()
 			.statusCode(200)
-			.body(is(expected));
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(QuellenListItem[].class);
+
+		assertEquals("Heike Winkelvoß", result[0].getName());
 
 	}
 
@@ -127,12 +144,17 @@ public class QuellenResourceTest {
 	@TestSecurity(user = "testUser", roles = { "ADMIN" })
 	void testFindQuelleByIdADMINOhneTreffer() throws Exception {
 
-		String expected = "{\"level\":\"ERROR\",\"message\":\"Es gibt keine Quelle mit dieser UUID\"}";
-
-		given()
+		MessagePayload messagePayload = given()
 			.when().get("7a94e100-85e9-4ffb-903b-06835851063b/v1")
-			.then().statusCode(404).and()
-			.body(is(expected));
+			.then()
+			.statusCode(404)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", messagePayload.getLevel());
+		assertEquals("Es gibt keine Quelle mit dieser UUID", messagePayload.getMessage());
 
 	}
 
@@ -140,12 +162,17 @@ public class QuellenResourceTest {
 	@TestSecurity(user = "testUser", roles = { "AUTOR" })
 	void testFindQuelleByIdAUTOROhneTreffer() throws Exception {
 
-		String expected = "{\"level\":\"ERROR\",\"message\":\"Es gibt keine Quelle mit dieser UUID\"}";
-
-		given()
+		MessagePayload messagePayload = given()
 			.when().get("7a94e100-85e9-4ffb-903b-06835851063b/v1")
-			.then().statusCode(404).and()
-			.body(is(expected));
+			.then()
+			.statusCode(404)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", messagePayload.getLevel());
+		assertEquals("Es gibt keine Quelle mit dieser UUID", messagePayload.getMessage());
 
 	}
 

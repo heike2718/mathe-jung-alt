@@ -38,6 +38,15 @@ FOREIGN KEY (SAMMLUNG) REFERENCES mathe_jung_alt.AUFGABENSAMMLUNGEN (UUID)
 ON DELETE CASCADE
 ON UPDATE RESTRICT;
 
+ALTER TABLE mathe_jung_alt.MEDIEN drop column DESKRIPTOREN;
+ALTER TABLE mathe_jung_alt.MEDIEN add column AUTOR varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'Autor eines Buches';
+ALTER TABLE mathe_jung_alt.MEDIEN add column URL varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'URL, falls bekannt bei Art INTERNET';
+ALTER TABLE mathe_jung_alt.MEDIEN modify column PFAD varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'relativer Pfad auf device, z.B. /mathe/... zeigt auf /media/veracrypt2/mathe/...';
+
+ALTER TABLE mathe_jung_alt.QUELLEN add column KLASSE varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'Klassenstufe bei Wettbewerben, z.B. Klasse 2';
+ALTER TABLE mathe_jung_alt.QUELLEN add column STUFE varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'Stufe bei Wettbewerben, z.B. Stufe 3';
+ALTER TABLE mathe_jung_alt.QUELLEN change JAHRGANG JAHR varchar(4) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'bei Zeitschriften das Erscheinungsjahr, bei Wettbewerben das Wettbewerbsjahr';
+
 CREATE OR REPLACE VIEW mathe_jung_alt.VW_QUELLEN
 AS
 SELECT q.UUID,
@@ -45,8 +54,11 @@ SELECT q.UUID,
 	q.ART,
 	m.UUID as MEDIUM_UUID,
 	m.TITEL AS MEDIUM_TITEL,
+	m.AUTOR,
 	q.AUSGABE,
-	q.JAHRGANG,
+	q.JAHR,
+	q.KLASSE,
+	q.STUFE,
 	q.SEITE,
 	q.PERSON,
 	q.USER_ID
@@ -77,9 +89,12 @@ select
 	r.ANTWORTVORSCHLAEGE,
 	vq.ART as QUELLE_ART,
 	vq.MEDIUM_TITEL,
+	vq.AUTOR,
 	vq.SEITE,
 	vq.AUSGABE,
-	vq.JAHRGANG,
+	vq.JAHR,
+	vq.KLASSE,
+	vq.STUFE,
 	vq.PERSON,
 	vq.USER_ID
 from

@@ -33,7 +33,7 @@ public class PersistentesMedium implements PersistenteMjaEntity {
 		name = "uuid_generator", type = UuidGenerator.class)
 	@NotNull
 	@Size(min = 1, max = 40)
-	@Column(name = "UUID")
+	@Column
 	public String uuid;
 
 	@Column(name = "SORTNR")
@@ -47,10 +47,13 @@ public class PersistentesMedium implements PersistenteMjaEntity {
 	public String titel;
 
 	@Column
-	public String deskriptoren;
+	public String pfad;
 
 	@Column
-	public String pfad;
+	public String autor;
+
+	@Column
+	public String url;
 
 	@Column
 	public String kommentar;
@@ -92,5 +95,4 @@ public class PersistentesMedium implements PersistenteMjaEntity {
 
 		this.importierteUuid = importierteUuid;
 	}
-
 }

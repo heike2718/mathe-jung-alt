@@ -36,6 +36,12 @@ public class PersistenteAufgabeReadonly {
 	public String schluessel;
 
 	@Column
+	public String name;
+
+	@Column(name = "SORTNR")
+	public long sortNumber;
+
+	@Column
 	public boolean freigegeben;
 
 	@Column
@@ -44,9 +50,6 @@ public class PersistenteAufgabeReadonly {
 
 	@Column
 	public String nummer;
-
-	@Column
-	public String name;
 
 	@Column
 	public int punkte;
@@ -67,22 +70,40 @@ public class PersistenteAufgabeReadonly {
 	@Enumerated(EnumType.STRING)
 	public Quellenart quellenart;
 
-	@Column(name = "PERSON")
+	@Column
 	public String person;
+
+	@Column(name = "USER_ID")
+	public String userId;
 
 	@Column(name = "MEDIUM_TITEL")
 	public String mediumTitel;
 
-	@Column(name = "JAHRGANG")
-	public String jahrgang;
+	@Column
+	public String autor;
 
-	@Column(name = "AUSGABE")
+	@Column
+	public String klasse;
+
+	@Column
+	public String stufe;
+
+	@Column
+	public String jahr;
+
+	@Column
 	public String ausgabe;
 
-	@Column(name = "SEITE")
+	@Column
 	public String seite;
 
 	@Column(name = "DESKRIPTOREN")
 	public String deskriptoren;
+
+	@Column
+	private boolean seitenumbruch;
+
+	@Column(name = "MARGIN_BOTTOM")
+	private int marginBottom;
 
 }

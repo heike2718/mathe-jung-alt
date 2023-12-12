@@ -131,7 +131,7 @@ public class QuizService {
 
 		case ZEITSCHRIFT: {
 
-			return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahrgang;
+			return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahr;
 		}
 
 		default:
