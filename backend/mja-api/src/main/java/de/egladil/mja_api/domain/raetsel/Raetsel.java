@@ -65,16 +65,8 @@ public class Raetsel extends AbstractDomainEntity {
 	private String filenameVorschauLoesung;
 
 	@JsonProperty
-	@Schema(description = "Referenz auf die Quelle des Rätsels")
-	@Pattern(
-		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "quelleID enthält ungültige Zeichen - muss eine UUID sein")
-	@Deprecated
-	private String quelleId;
-
-	@JsonProperty
 	@Schema(description = "Quellenangabe für dieses Rätsel zum Anzeigen in den Details oder zum Ausdrucken im PDF.")
-	private QuellenangabeRaetsel quelle;
+	private QuellenangabeRaetsel quelleUI;
 
 	@JsonProperty
 	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
@@ -206,17 +198,6 @@ public class Raetsel extends AbstractDomainEntity {
 		return this;
 	}
 
-	public String getQuelleId() {
-
-		return quelle.getId();
-	}
-
-	public Raetsel withQuelleId(final String quelleId) {
-
-		this.quelleId = quelleId;
-		return this;
-	}
-
 	public Antwortvorschlag[] getAntwortvorschlaege() {
 
 		return antwortvorschlaege;
@@ -269,14 +250,14 @@ public class Raetsel extends AbstractDomainEntity {
 		this.schreibgeschuetzt = false;
 	}
 
-	public QuellenangabeRaetsel getQuelle() {
+	public QuellenangabeRaetsel getQuelleUI() {
 
-		return quelle;
+		return quelleUI;
 	}
 
-	public void setQuelle(final QuellenangabeRaetsel quelle) {
+	public void setQuelleUI(final QuellenangabeRaetsel quelle) {
 
-		this.quelle = quelle;
+		this.quelleUI = quelle;
 	}
 
 	public String getFilenameVorschauFrage() {

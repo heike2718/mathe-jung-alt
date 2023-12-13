@@ -33,5 +33,11 @@
         "admin": false
       }
     ]
+  },
+  "quelle": {
+    "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+    "quellenart": "PERSON",
+    "person": "Heike Winkelvoß",
+    "userId": "b865fc75-1bcf-40c7-96c3-33744826e49f"
   }
 }

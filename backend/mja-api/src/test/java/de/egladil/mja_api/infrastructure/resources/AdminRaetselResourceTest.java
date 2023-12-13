@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -28,6 +29,8 @@ import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.quellen.QuellenangabeRaetsel;
+import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -329,6 +332,12 @@ public class AdminRaetselResourceTest {
 		assertEquals("02606", treffer.getSchluessel());
 		assertTrue(treffer.isFreigegeben());
 		assertEquals(RaetselHerkunftTyp.EIGENKREATION, treffer.getHerkunft());
+
+		QuellenangabeRaetsel quelleUI = treffer.getQuelleUI();
+		assertEquals("Heike Winkelvoß", quelleUI.getName());
+		assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
+		assertNull(quelleUI.getMediumUuid());
+		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelleUI.getId());
 	}
 
 	@Test
@@ -373,35 +382,34 @@ public class AdminRaetselResourceTest {
 
 			String requestBody = sw.toString();
 
-			Response response = null;
-
 			try {
 
-				response = given()
+				Raetsel raetsel = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.post("v1");
+					.post("v1")
+					.then()
+					.statusCode(201)
+					.and()
+					.contentType(ContentType.JSON)
+					.extract()
+					.as(Raetsel.class);
+
+				assertNotNull(raetsel.getId());
+
+				QuellenangabeRaetsel quelleUI = raetsel.getQuelleUI();
+				assertEquals("Heike Winkelvoß", quelleUI.getName());
+				assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
+				assertNull(quelleUI.getMediumUuid());
+				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelleUI.getId());
+
 			} catch (Exception e) {
 
+				fail(e.getMessage());
 				e.printStackTrace();
 			}
-
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(201, response.getStatusCode());
-
-			Raetsel raetsel = new ObjectMapper().readValue(responsePayload, Raetsel.class);
-			System.out.println(raetsel.getId());
-			assertNotNull(raetsel.getId());
-
-			String serialization = new ObjectMapper().writeValueAsString(raetsel);
-			System.out.println("==================");
-			System.out.println(serialization);
-			System.out.println("==================");
 
 		}
 
@@ -419,32 +427,35 @@ public class AdminRaetselResourceTest {
 
 			String requestBody = sw.toString();
 
-			Response response = null;
-
 			try {
 
-				response = given()
+				Raetsel raetsel = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.put("v1");
+					.put("v1")
+					.then()
+					.statusCode(200)
+					.and()
+					.contentType(ContentType.JSON)
+					.extract()
+					.as(Raetsel.class);
+
+				assertEquals("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866", raetsel.getId());
+
+				QuellenangabeRaetsel quelleUI = raetsel.getQuelleUI();
+				assertEquals("Heike Winkelvoß", quelleUI.getName());
+				assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
+				assertNull(quelleUI.getMediumUuid());
+				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelleUI.getId());
+
 			} catch (Exception e) {
 
+				fail(e.getMessage());
 				e.printStackTrace();
 			}
-
-			String responsePayload = response.asString();
-
-			assertEquals(200, response.getStatusCode());
-
-			Raetsel raetsel = new ObjectMapper().readValue(responsePayload, Raetsel.class);
-			assertEquals(5, raetsel.getAntwortvorschlaege().length);
-			assertEquals("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866", raetsel.getId());
-
-			System.out.println("=> " + responsePayload);
 		}
-
 	}
 
 	@Test

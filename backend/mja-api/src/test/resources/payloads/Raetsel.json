@@ -7,10 +7,10 @@
 	"kommentar": "Minikänguru 2022 Klasse 1",
 	"freigegeben": false,
 	"herkunft": "EIGENKREATION",
-	"quelleId": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
-	"quelle": {
+	"quelleUI": {
 		"id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
-		"name": "Ponder Stibbons"
+		"name": "Heike Winkelvoß",
+		"quellenart": "PERSON"
 	},
 	"schreibgeschuetzt": false,
 	"antwortvorschlaege": [
