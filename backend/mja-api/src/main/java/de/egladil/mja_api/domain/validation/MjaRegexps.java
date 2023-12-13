@@ -39,4 +39,14 @@ public interface MjaRegexps {
 
 	String VALID_DATEINAME = "^[\\da-zA-ZÄÖÜäöüß_\\-\\.]{1,100}$";
 
+	String VALID_JAHR = "^[\\d]{4}$";
+
+	String VALID_AUSGABE = "^[\\d]{0,5}$";
+
+	String VALID_KLASSE_STUFE = "^[\\w ]{0,10}$";
+
+	String VALID_SEITE = "^[\\w -]{0,4}$";
+
+	String VALID_PERSON = "^[^<>/#~%$]{0,100}$";
+
 }

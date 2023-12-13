@@ -13,10 +13,10 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { Antwortvorschlag, EditRaetselPayload, RaetselDetails } from '@mja-ws/raetsel/model';
+import { Antwortvorschlag, EditRaetselPayload, QuelleDto, RaetselDetails } from '@mja-ws/raetsel/model';
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE } from '@mja-ws/core/model';
+import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE, HerkunftRaetsel } from '@mja-ws/core/model';
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel, FileInfoComponent, FileInfoModel, ImageDialogComponent, ImageDialogModel } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
@@ -103,6 +103,9 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   panelGrafikenFrageOpen = false;
   panelGrafikenLoesungOpen = false;
 
+  herkunftEigenkreation!: HerkunftRaetsel;
+  person!: string;
+
 
   selectFileFrageModel: SelectFileModel = {
     maxSizeBytes: 2097152,
@@ -146,8 +149,17 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.#combinedSubscription = combineLatest([this.raetselFacade.raetselDetails$, this.#coreFacade.alleDeskriptoren$, this.#authFacade.userIsRoot$])
-      .subscribe(([raetselDetails, alleDeskriptoren, root]) => {
+    this.#combinedSubscription = combineLatest([this.raetselFacade.raetselDetails$,
+      this.#coreFacade.alleDeskriptoren$,
+      this.#coreFacade.herkunftEigenkreation$,
+      this.#authFacade.userIsRoot$,
+      this.#authFacade.user$])
+      .subscribe(([raetselDetails,
+        alleDeskriptoren,
+        herkunftEigenkreation,
+        root,
+        user
+      ]) => {
 
         this.#raetselDetails = { ...raetselDetails };
         this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
@@ -157,6 +169,9 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
         this.embeddableImageInfosLoesung = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
 
         this.isRoot = root;
+
+        this.herkunftEigenkreation = herkunftEigenkreation;
+        this.person = user.fullName;
         this.#initForm();
       });
 
@@ -365,7 +380,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     this.form.controls['schluessel'].setValue(raetsel.schluessel);
     this.form.controls['name'].setValue(raetsel.name);
-    this.form.controls['quelleId'].setValue(raetsel.quelle.id);
+    this.form.controls['quelleId'].setValue(this.herkunftEigenkreation.id);
     this.form.controls['status'].setValue(theStatus);
     this.form.controls['frage'].setValue(raetsel.frage);
     this.form.controls['loesung'].setValue(raetsel.loesung);
@@ -373,6 +388,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.form.controls['anzahlAntwortvorschlaege'].setValue(raetsel.antwortvorschlaege.length + '');
 
     this.#addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
+
+    this.form.controls['quelleId'].disable();
 
     if (!this.isRoot) {
       this.form.controls['schluessel'].disable();
@@ -450,9 +467,21 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #doSubmit(raetsel: RaetselDetails, latexHistorisieren: boolean) {
 
+    const quelle: QuelleDto = {
+      id: this.herkunftEigenkreation.id,
+      person: this.person,
+      quellenart: this.herkunftEigenkreation.quellenart,
+      ausgabe: undefined,
+      jahr: undefined,
+      klasse: undefined,
+      seite: undefined,
+      stufe: undefined     
+    };
+
     const editRaetselPayload: EditRaetselPayload = {
       latexHistorisieren: latexHistorisieren,
-      raetsel: raetsel
+      raetsel: raetsel,
+      quelle: quelle
     };
 
     this.raetselFacade.saveRaetsel(editRaetselPayload);

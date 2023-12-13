@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { coreDeskriptorenActions, coreQuelleActions, fromCoreQuelle, fromCoreDeskriptoren, ImagesHttpService, fromStatistik, coreStatistikActions } from "@mja-ws/core/data";
-import { DeskriptorUI, GeneratedImages, QuelleUI } from "@mja-ws/core/model";
+import { DeskriptorUI, GeneratedImages, HerkunftRaetsel } from "@mja-ws/core/model";
 import { BENUTZERART, User } from "@mja-ws/shared/auth/model";
 import { Store } from "@ngrx/store";
 import { Observable, tap } from "rxjs";
@@ -17,9 +17,9 @@ export class CoreFacade {
 
     #deskriptorenLoaded = false;
 
-    existsQuelleAdmin$: Observable<boolean> = this.#store.select(fromCoreQuelle.existsQuelleAdmin);
-    notExistsQuelleAdmin$: Observable<boolean> = this.#store.select(fromCoreQuelle.notExistsQuelleAdmin);
-    quelleAdmin$: Observable<QuelleUI> = this.#store.select(fromCoreQuelle.quelleAdmin);
+    existsHerkunftEigenkreation$: Observable<boolean> = this.#store.select(fromCoreQuelle.existsHerkunftEigenkreation);
+    notExistsHerkunftEigenkreation$: Observable<boolean> = this.#store.select(fromCoreQuelle.notExistsHerkunftEigenkreation);
+    herkunftEigenkreation$: Observable<HerkunftRaetsel> = this.#store.select(fromCoreQuelle.herkunftEigenkreation);
 
     deskriptorenUILoaded$: Observable<boolean> = this.#store.select(fromCoreDeskriptoren.isDeskriptorenUILoaded);
     alleDeskriptoren$: Observable<DeskriptorUI[]> = this.#store.select(fromCoreDeskriptoren.deskriptotrenUI);
@@ -33,13 +33,13 @@ export class CoreFacade {
         ).subscribe();
     }
 
-    public loadQuelleAngemeldeterAdmin(benutzerart: BENUTZERART): void {
+    public loadAutor(benutzerart: BENUTZERART): void {
 
         if (benutzerart === 'ANONYM' || benutzerart === 'STANDARD') {
             return;
         }
 
-        this.#store.dispatch(coreQuelleActions.lOAD_QUELLE_ADMIN());
+        this.#store.dispatch(coreQuelleActions.lOAD_AUTOR());
     }
 
     public loadDeskriptoren(): void {
@@ -55,7 +55,7 @@ export class CoreFacade {
 
     public handleLogout(): void {        
         this.#removeCoreDeskriptoren();
-        this.#removeQuelleAngemeldeterAdmin;
+        this.#removeAutor;
         this.#router.navigateByUrl('/');
     }
 
@@ -63,9 +63,9 @@ export class CoreFacade {
         return this.#imagesHttpService.loadRaetselPNGs(schluessel);
     }
 
-    #removeQuelleAngemeldeterAdmin(): void {
-        this.#store.dispatch(coreQuelleActions.cORE_QUELLE_ADMIN_REMOVE());
-        console.log('coreQuelleActions.cORE_QUELLE_ADMIN_REMOVE() called')
+    #removeAutor(): void {
+        this.#store.dispatch(coreQuelleActions.rEMOVE_AUTOR());
+        console.log('coreQuelleActions.rEMOVE_AUTOR() called')
     }
 
     #removeCoreDeskriptoren(): void {       

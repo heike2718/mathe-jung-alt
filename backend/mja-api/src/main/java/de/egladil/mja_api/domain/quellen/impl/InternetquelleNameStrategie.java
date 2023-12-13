@@ -16,7 +16,7 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleR
 public class InternetquelleNameStrategie implements QuelleNameStrategie {
 
 	@Override
-	public String getName(final PersistenteQuelleReadonly quelle) {
+	public String getText(final PersistenteQuelleReadonly quelle) {
 
 		if (quelle.quellenart != Quellenart.INTERNET) {
 

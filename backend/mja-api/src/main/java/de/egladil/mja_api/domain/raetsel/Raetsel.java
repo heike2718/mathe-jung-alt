@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
-import de.egladil.mja_api.domain.quellen.QuellenangabeRaetsel;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
@@ -54,10 +53,6 @@ public class Raetsel extends AbstractDomainEntity {
 	@Schema(description = "ob das Rätsel freigegeben ist.")
 	private boolean freigegeben;
 
-	@JsonProperty
-	@Schema(description = "ob das Rätsel aus einer anderen Quelle zitiert wurde ist.")
-	private RaetselHerkunftTyp herkunft;
-
 	@JsonIgnore
 	private String filenameVorschauFrage;
 
@@ -65,14 +60,13 @@ public class Raetsel extends AbstractDomainEntity {
 	private String filenameVorschauLoesung;
 
 	@JsonProperty
-	@Schema(description = "Quellenangabe für dieses Rätsel zum Anzeigen in den Details oder zum Ausdrucken im PDF.")
-	private QuellenangabeRaetsel quelleUI;
+	@Schema(description = "Herkunft für dieses Rätsel zum Anzeigen in den Details oder zum Ausdrucken im PDF.")
+	private HerkunftRaetsel herkunft;
 
 	@JsonProperty
 	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
 	private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird entschieden, ob es
-												// durch den User
-	// änderbar ist.
+												// durch den User änderbar ist.
 
 	@JsonProperty
 	@Schema(
@@ -250,14 +244,14 @@ public class Raetsel extends AbstractDomainEntity {
 		this.schreibgeschuetzt = false;
 	}
 
-	public QuellenangabeRaetsel getQuelleUI() {
+	public HerkunftRaetsel getHerkunft() {
 
-		return quelleUI;
+		return herkunft;
 	}
 
-	public void setQuelleUI(final QuellenangabeRaetsel quelle) {
+	public void setHerkunft(final HerkunftRaetsel quelle) {
 
-		this.quelleUI = quelle;
+		this.herkunft = quelle;
 	}
 
 	public String getFilenameVorschauFrage() {
@@ -290,17 +284,6 @@ public class Raetsel extends AbstractDomainEntity {
 	public Raetsel withFreigebeben(final boolean freigebeben) {
 
 		this.freigegeben = freigebeben;
-		return this;
-	}
-
-	public RaetselHerkunftTyp getHerkunft() {
-
-		return herkunft;
-	}
-
-	public Raetsel withHerkunft(final RaetselHerkunftTyp herkunft) {
-
-		this.herkunft = herkunft;
 		return this;
 	}
 }

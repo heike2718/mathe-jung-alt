@@ -6,12 +6,13 @@
 	"loesung": "alle 2022 umranden, dann zählen",
 	"kommentar": "Minikänguru 2022 Klasse 1",
 	"freigegeben": false,
-	"herkunft": "EIGENKREATION",
-	"quelleUI": {
-		"id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
-		"name": "Heike Winkelvoß",
-		"quellenart": "PERSON"
-	},
+    "herkunft": {
+      "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+      "quellenart": "PERSON",
+      "herkunftstyp": "EIGENKREATION",
+      "text": "Heike Winkelvoß",
+      "mediumUuid": null
+    },
 	"schreibgeschuetzt": false,
 	"antwortvorschlaege": [
 		{

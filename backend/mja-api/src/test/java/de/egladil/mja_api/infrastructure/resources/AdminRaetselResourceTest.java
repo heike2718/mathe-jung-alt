@@ -29,8 +29,8 @@ import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.quellen.QuellenangabeRaetsel;
 import de.egladil.mja_api.domain.quellen.Quellenart;
+import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -331,13 +331,13 @@ public class AdminRaetselResourceTest {
 		assertEquals("0ce69e0e-e1f8-4400-a2b9-61d3d6b0a82e", treffer.getId());
 		assertEquals("02606", treffer.getSchluessel());
 		assertTrue(treffer.isFreigegeben());
-		assertEquals(RaetselHerkunftTyp.EIGENKREATION, treffer.getHerkunft());
 
-		QuellenangabeRaetsel quelleUI = treffer.getQuelleUI();
-		assertEquals("Heike Winkelvoß", quelleUI.getName());
-		assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
-		assertNull(quelleUI.getMediumUuid());
-		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelleUI.getId());
+		HerkunftRaetsel herkunftRaetsel = treffer.getHerkunft();
+		assertEquals("Heike Winkelvoß", herkunftRaetsel.getText());
+		assertEquals(Quellenart.PERSON, herkunftRaetsel.getQuellenart());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, herkunftRaetsel.getHerkunftstyp());
+		assertNull(herkunftRaetsel.getMediumUuid());
+		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", herkunftRaetsel.getId());
 	}
 
 	@Test
@@ -399,8 +399,8 @@ public class AdminRaetselResourceTest {
 
 				assertNotNull(raetsel.getId());
 
-				QuellenangabeRaetsel quelleUI = raetsel.getQuelleUI();
-				assertEquals("Heike Winkelvoß", quelleUI.getName());
+				HerkunftRaetsel quelleUI = raetsel.getHerkunft();
+				assertEquals("Heike Winkelvoß", quelleUI.getText());
 				assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
 				assertNull(quelleUI.getMediumUuid());
 				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelleUI.getId());
@@ -444,8 +444,8 @@ public class AdminRaetselResourceTest {
 
 				assertEquals("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866", raetsel.getId());
 
-				QuellenangabeRaetsel quelleUI = raetsel.getQuelleUI();
-				assertEquals("Heike Winkelvoß", quelleUI.getName());
+				HerkunftRaetsel quelleUI = raetsel.getHerkunft();
+				assertEquals("Heike Winkelvoß", quelleUI.getText());
 				assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
 				assertNull(quelleUI.getMediumUuid());
 				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelleUI.getId());

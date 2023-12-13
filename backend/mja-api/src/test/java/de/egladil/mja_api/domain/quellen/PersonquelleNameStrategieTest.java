@@ -32,7 +32,7 @@ public class PersonquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getName(quelle);
+			strategie.getText(quelle);
 			fail("keine IllegalStateException");
 		} catch (IllegalStateException e) {
 
@@ -52,7 +52,7 @@ public class PersonquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getName(quelle);
+			strategie.getText(quelle);
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
@@ -69,7 +69,7 @@ public class PersonquelleNameStrategieTest {
 		quelle.quellenart = Quellenart.PERSON;
 
 		// Act
-		String name = strategie.getName(quelle);
+		String name = strategie.getText(quelle);
 
 		// Assert
 		assertEquals("Hans Manz", name);

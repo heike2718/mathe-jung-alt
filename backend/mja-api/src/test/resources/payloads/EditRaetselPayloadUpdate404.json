@@ -6,11 +6,16 @@
     "schluessel": "02622",
     "name": "Bälle in Kisten",
     "freigegeben": false,
-    "herkunft": "EIGENKREATION",
+    "herkunft": {
+      "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+      "quellenart": "PERSON",
+      "herkunftstyp": "EIGENKREATION",
+      "text": "Heike Winkelvoß",
+      "mediumUuid": null
+    },
     "frage": "\\begin{center}{\\Large \\bf 99 Bälle}\\end{center} Wie viele waren es vorher?",
     "loesung": "100",
     "kommentar": "Irgendeine Serie",
-    "quelleId": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
     "antwortvorschlaege": [{"buchstabe":"A","text":"8","korrekt":false},{"buchstabe":"B","text":"7","korrekt":false},{"buchstabe":"C","text":"13","korrekt":false},{"buchstabe":"D","text":"6","korrekt":true},{"buchstabe":"E","text":"3","korrekt":false}],
     "deskriptoren": [
       {
@@ -36,7 +41,6 @@
   "quelle": {
     "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
     "quellenart": "PERSON",
-    "person": "Heike Winkelvoß",
-    "userId": "b865fc75-1bcf-40c7-96c3-33744826e49f"
+    "person": "Heike Winkelvoß"
   }
 }

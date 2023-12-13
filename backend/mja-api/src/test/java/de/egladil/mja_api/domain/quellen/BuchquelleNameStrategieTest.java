@@ -32,7 +32,7 @@ public class BuchquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getName(quelle);
+			strategie.getText(quelle);
 			fail("keine IllegalStateException");
 		} catch (IllegalStateException e) {
 
@@ -52,7 +52,7 @@ public class BuchquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getName(quelle);
+			strategie.getText(quelle);
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
@@ -72,7 +72,7 @@ public class BuchquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getName(quelle);
+			strategie.getText(quelle);
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
@@ -92,7 +92,7 @@ public class BuchquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getName(quelle);
+			strategie.getText(quelle);
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
@@ -111,7 +111,7 @@ public class BuchquelleNameStrategieTest {
 		String expected = "Johannes Lehmann: Grunschulolympiade 2x2, S.42";
 
 		// Act
-		String name = strategie.getName(quelle);
+		String name = strategie.getText(quelle);
 
 		// Assert
 		assertEquals(expected, name);

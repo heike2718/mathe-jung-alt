@@ -11,8 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.quellen.QuellenangabeRaetsel;
 import de.egladil.mja_api.domain.quellen.Quellenart;
+import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -89,9 +90,9 @@ public class QuellenResourceTest {
 
 	@Test
 	@TestSecurity(user = "testUser", roles = { "ADMIN" })
-	void testGetQuelleEingeloggterAdmin() {
+	void testGetHerkunftEigenkreationen() {
 
-		QuellenangabeRaetsel result = given()
+		HerkunftRaetsel result = given()
 			.when()
 			.get("admin/v2")
 			.then()
@@ -99,12 +100,13 @@ public class QuellenResourceTest {
 			.and()
 			.contentType(ContentType.JSON)
 			.extract()
-			.as(QuellenangabeRaetsel.class);
+			.as(HerkunftRaetsel.class);
 
-		assertEquals("Heike Winkelvoß", result.getName());
+		assertEquals("Heike Winkelvoß", result.getText());
 		assertEquals(Quellenart.PERSON, result.getQuellenart());
 		assertNull(result.getMediumUuid());
 		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", result.getId());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, result.getHerkunftstyp());
 	}
 
 }

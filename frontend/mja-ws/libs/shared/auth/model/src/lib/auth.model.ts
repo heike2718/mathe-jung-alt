@@ -13,3 +13,4 @@ export interface User {
   readonly isAdmin: boolean,
   readonly anonym: boolean
 };
+

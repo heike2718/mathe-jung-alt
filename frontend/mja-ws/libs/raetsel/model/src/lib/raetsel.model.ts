@@ -1,10 +1,19 @@
-import { DeskriptorUI, GeneratedImages, noopQuelle, QuelleUI } from "@mja-ws/core/model";
+import { DeskriptorUI, GeneratedImages, HerkunftRaetsel, Herkunftstyp, Quellenart, initialHerkunftRaetsel } from "@mja-ws/core/model";
 import { EmbeddableImageInfo } from "@mja-ws/embeddable-images/model";
 
 export type MODUS_VOLLTEXTSUCHE = 'UNION' | 'INTERSECTION';
 export type MODUS_SUCHE_MIT_DESKRIPTOREN = 'LIKE' | 'NOT_LIKE';
 
-export type RAETSELHERKUNFT = 'EIGENKREATION' | 'ZITAT' | 'ADAPTATION';
+export interface QuelleDto {
+  readonly id: string;
+  readonly quellenart: Quellenart;
+  readonly klasse: string | undefined;
+  readonly stufe: string | undefined;
+  readonly ausgabe: string | undefined;
+  readonly jahr: string | undefined;
+  readonly seite: string| undefined;
+  readonly person: string | undefined;
+};
 
 export interface RaetselSuchfilter {
   readonly suchstring: string;
@@ -50,8 +59,8 @@ export interface RaetselDetails {
   readonly frage: string;
   readonly loesung: string | undefined;
   readonly kommentar: string | undefined;
-  readonly herkunft: RAETSELHERKUNFT;
-  readonly quelle: QuelleUI;
+  readonly herkunftstyp: Herkunftstyp;
+  readonly herkunft: HerkunftRaetsel;
   readonly antwortvorschlaege: Antwortvorschlag[];
   readonly deskriptoren: DeskriptorUI[];
   readonly images: GeneratedImages | null;
@@ -62,6 +71,7 @@ export interface RaetselDetails {
 export interface EditRaetselPayload {
   readonly latexHistorisieren: boolean;
   readonly raetsel: RaetselDetails;
+  readonly quelle: QuelleDto;
 };
 
 export const initialRaetselDetails: RaetselDetails = {
@@ -73,8 +83,8 @@ export const initialRaetselDetails: RaetselDetails = {
   frage: '',
   loesung: '',
   kommentar: '',
-  herkunft: 'EIGENKREATION',
-  quelle: noopQuelle,
+  herkunftstyp: initialHerkunftRaetsel.herkunftstyp,
+  herkunft: initialHerkunftRaetsel,
   antwortvorschlaege: [],
   deskriptoren: [],
   images: null,

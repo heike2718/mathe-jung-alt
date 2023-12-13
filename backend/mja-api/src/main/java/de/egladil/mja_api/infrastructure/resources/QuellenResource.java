@@ -15,9 +15,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.quellen.Quelle;
 import de.egladil.mja_api.domain.quellen.QuellenService;
-import de.egladil.mja_api.domain.quellen.QuellenangabeRaetsel;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
+import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
@@ -50,14 +50,14 @@ public class QuellenResource {
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
-		operationId = "getQuelleEingeloggterAdmin",
-		summary = "Gibt die Quelle zurück, die zu der eingeloggten Person gehört.")
+		operationId = "getHerkunftEigenkreationen",
+		summary = "Angaben zum Autor eines als Eigenkreation erstellten Rätsels. Diese gehört zu dem Eintrag des angemeldeten Admins/Autors als Quelle.")
 	@APIResponse(
 		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = QuellenangabeRaetsel.class)))
+			schema = @Schema(implementation = HerkunftRaetsel.class)))
 	@APIResponse(
 		name = "Unauthorized",
 		description = "nicht authentifiziert",
@@ -78,11 +78,11 @@ public class QuellenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public QuellenangabeRaetsel getQuelleEingeloggterAdmin() {
+	public HerkunftRaetsel getHerkunftEigenkreationen() {
 
 		this.delayService.pause();
 
-		Optional<QuellenangabeRaetsel> result = this.quellenService.findQuelleForUser();
+		Optional<HerkunftRaetsel> result = this.quellenService.findQuelleForUser();
 
 		if (result.isEmpty()) {
 
@@ -109,20 +109,20 @@ public class QuellenResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = Quelle.class)))
+			schema = @Schema(implementation = QuelleDto.class)))
 	@APIResponse(
 		name = "QuelleByIDNotFound",
 		description = "Gibt es nicht",
 		responseCode = "404", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Quelle findQuelleById(@Pattern(
+	public QuelleDto findQuelleById(@Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "quelleId enthält ungültige Zeichen") @PathParam(
 			value = "quelleId") final String quelleId) {
 
 		this.delayService.pause();
 
-		Optional<Quelle> optQuelle = this.quellenService.getQuelleWithId(quelleId);
+		Optional<QuelleDto> optQuelle = this.quellenService.getQuelleWithId(quelleId);
 
 		if (optQuelle.isEmpty()) {
 

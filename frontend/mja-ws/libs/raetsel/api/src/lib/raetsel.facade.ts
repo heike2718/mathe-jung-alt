@@ -8,7 +8,7 @@ import {
   OUTPUTFORMAT,
   PageDefinition,
   PaginationState,
-  QuelleUI,
+  HerkunftRaetsel,
   SCHRIFTGROESSE,
   SelectableItem,
   SelectItemsCompomentModel
@@ -94,14 +94,14 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSEL_CANCEL_SELECTION());
   }
 
-  createAndEditRaetsel(quelle: QuelleUI | undefined): void {
+  createAndEditRaetsel(quelle: HerkunftRaetsel | undefined): void {
 
     if (quelle === undefined) {
       // TODO: Exception werfen!!!
       return;
     }
     this.#enterEditMode();
-    const raetselDetails: RaetselDetails = { ...initialRaetselDetails, quelle: quelle };
+    const raetselDetails: RaetselDetails = { ...initialRaetselDetails };
     this.#store.dispatch(raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
   }
 

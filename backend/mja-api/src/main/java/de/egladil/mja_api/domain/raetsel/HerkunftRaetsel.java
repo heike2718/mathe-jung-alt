@@ -2,19 +2,20 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.quellen;
+package de.egladil.mja_api.domain.raetsel;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.validation.constraints.Pattern;
 
 /**
- * QuellenangabeRaetsel ist das, was im Rätseleditor angezeigt wird (ID und Name). Mit jedem Rätel wird es nachgeladen
+ * HerkunftRaetsel gibt Auskunft über die Herkunft des Rätsels.
  */
-public class QuellenangabeRaetsel {
+public class HerkunftRaetsel {
 
 	@JsonProperty
 	@Schema(description = "technische ID der Quelle")
@@ -26,8 +27,11 @@ public class QuellenangabeRaetsel {
 	@Schema(description = "Art der Quelle: Mensch, Buch, Zeitschrift")
 	private Quellenart quellenart;
 
+	@Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
+	private RaetselHerkunftTyp herkunftstyp;
+
 	@Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe")
-	private String name;
+	private String text;
 
 	@Schema(description = "optional Referenz auf ein Buch, eine Zeitschrift oder etwas im Internet")
 	private String mediumUuid;
@@ -37,20 +41,20 @@ public class QuellenangabeRaetsel {
 		return id;
 	}
 
-	public QuellenangabeRaetsel withId(final String id) {
+	public HerkunftRaetsel withId(final String id) {
 
 		this.id = id;
 		return this;
 	}
 
-	public String getName() {
+	public String getText() {
 
-		return name;
+		return text;
 	}
 
-	public QuellenangabeRaetsel withName(final String name) {
+	public HerkunftRaetsel withText(final String text) {
 
-		this.name = name;
+		this.text = text;
 		return this;
 	}
 
@@ -59,7 +63,7 @@ public class QuellenangabeRaetsel {
 		return quellenart;
 	}
 
-	public QuellenangabeRaetsel withQuellenart(final Quellenart quellenart) {
+	public HerkunftRaetsel withQuellenart(final Quellenart quellenart) {
 
 		this.quellenart = quellenart;
 		return this;
@@ -70,9 +74,20 @@ public class QuellenangabeRaetsel {
 		return mediumUuid;
 	}
 
-	public QuellenangabeRaetsel withMediumUuid(final String mediumUuid) {
+	public HerkunftRaetsel withMediumUuid(final String mediumUuid) {
 
 		this.mediumUuid = mediumUuid;
+		return this;
+	}
+
+	public RaetselHerkunftTyp getHerkunftstyp() {
+
+		return herkunftstyp;
+	}
+
+	public HerkunftRaetsel withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
+
+		this.herkunftstyp = herkunftstyp;
 		return this;
 	}
 

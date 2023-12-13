@@ -32,7 +32,7 @@ public class ZeitschriftquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getName(quelle);
+			strategie.getText(quelle);
 			fail("keine IllegalStateException");
 		} catch (IllegalStateException e) {
 
@@ -52,7 +52,7 @@ public class ZeitschriftquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getName(quelle);
+			strategie.getText(quelle);
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
@@ -74,7 +74,7 @@ public class ZeitschriftquelleNameStrategieTest {
 		String expected = "Grunschulolympiade 2x2";
 
 		// Act
-		String name = strategie.getName(quelle);
+		String name = strategie.getText(quelle);
 
 		// Assert
 		assertEquals(expected, name);
@@ -93,7 +93,7 @@ public class ZeitschriftquelleNameStrategieTest {
 		String expected = "Grunschulolympiade 2x2 1987";
 
 		// Act
-		String name = strategie.getName(quelle);
+		String name = strategie.getText(quelle);
 
 		// Assert
 		assertEquals(expected, name);
@@ -111,7 +111,7 @@ public class ZeitschriftquelleNameStrategieTest {
 		String expected = "Grunschulolympiade 2x2 (11) 1987";
 
 		// Act
-		String name = strategie.getName(quelle);
+		String name = strategie.getText(quelle);
 
 		// Assert
 		assertEquals(expected, name);
@@ -128,7 +128,7 @@ public class ZeitschriftquelleNameStrategieTest {
 		String expected = "Grunschulolympiade 2x2 (11) 1987, S.42";
 
 		// Act
-		String name = strategie.getName(quelle);
+		String name = strategie.getText(quelle);
 
 		// Assert
 		assertEquals(expected, name);

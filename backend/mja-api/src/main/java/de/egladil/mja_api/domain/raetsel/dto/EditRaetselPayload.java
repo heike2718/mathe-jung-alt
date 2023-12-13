@@ -6,7 +6,7 @@ package de.egladil.mja_api.domain.raetsel.dto;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import de.egladil.mja_api.domain.quellen.Quelle;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 
 /**
@@ -23,7 +23,7 @@ public class EditRaetselPayload {
 	private Raetsel raetsel;
 
 	@Schema(description = "Die Quelle für dieses Rätsel")
-	private Quelle quelle;
+	private QuelleDto quelle;
 
 	public boolean isLatexHistorisieren() {
 
@@ -45,12 +45,12 @@ public class EditRaetselPayload {
 		this.raetsel = raetsel;
 	}
 
-	public Quelle getQuelle() {
+	public QuelleDto getQuelle() {
 
 		return quelle;
 	}
 
-	public void setQuelle(final Quelle quelle) {
+	public void setQuelle(final QuelleDto quelle) {
 
 		this.quelle = quelle;
 	}

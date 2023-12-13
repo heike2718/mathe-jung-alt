@@ -6,7 +6,10 @@ package de.egladil.mja_api.domain.quellen;
 
 import java.util.Optional;
 
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
+import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
@@ -32,7 +35,7 @@ public class QuellenService {
 	 *
 	 * @return Optional
 	 */
-	public Optional<QuellenangabeRaetsel> findQuelleForUser() {
+	public Optional<HerkunftRaetsel> findQuelleForUser() {
 
 		String userId = authCtx.getUser().getUuid();
 		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithUserId(userId);
@@ -45,8 +48,8 @@ public class QuellenService {
 		PersistenteQuelleReadonly ausDB = optAusDB.get();
 		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
 
-		QuellenangabeRaetsel result = new QuellenangabeRaetsel().withId(ausDB.uuid).withName(nameStrategie.getName(ausDB))
-			.withQuellenart(ausDB.quellenart);
+		HerkunftRaetsel result = new HerkunftRaetsel().withId(ausDB.uuid).withText(nameStrategie.getText(ausDB))
+			.withQuellenart(ausDB.quellenart).withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION);
 
 		return Optional.of(result);
 	}
@@ -58,54 +61,38 @@ public class QuellenService {
 	 *            String
 	 * @return    Optional
 	 */
-	public Optional<Quelle> getQuelleWithId(final String id) {
+	public Optional<QuelleDto> getQuelleWithId(final String id) {
 
 		PersistenteQuelleReadonly ausDB = this.quellenRepository.findQuelleReadonlyById(id);
 
 		return ausDB == null ? Optional.empty() : Optional.of(mapFromDB(ausDB));
 	}
 
-	Quelle mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
+	QuelleDto mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
+
+		QuelleDto quelle = new QuelleDto();
+		quelle.setAusgabe(persistenteQuelle.ausgabe);
+		quelle.setId(persistenteQuelle.uuid);
+		quelle.setJahr(persistenteQuelle.jahr);
+		quelle.setKlasse(persistenteQuelle.klasse);
+		quelle.setMediumUuid(persistenteQuelle.mediumUuid);
+		quelle.setPerson(persistenteQuelle.person);
+		quelle.setQuellenart(persistenteQuelle.quellenart);
+		quelle.setSeite(persistenteQuelle.seite);
+		quelle.setStufe(persistenteQuelle.stufe);
+		return quelle;
 
 		// @formatter: off
-		return new Quelle(persistenteQuelle.uuid)
-			.withAusgabe(persistenteQuelle.ausgabe)
-			.withJahr(persistenteQuelle.jahr)
-			.withKlasse(persistenteQuelle.klasse)
-			.withMediumUuid(persistenteQuelle.mediumUuid)
-			.withPerson(persistenteQuelle.person)
-			.withQuellenart(persistenteQuelle.quellenart)
-			.withSeite(persistenteQuelle.seite)
-			.withStufe(persistenteQuelle.stufe)
-			.withUserId(persistenteQuelle.userId);
+		// return new Quelle(persistenteQuelle.uuid)
+		// .withAusgabe(persistenteQuelle.ausgabe)
+		// .withJahr(persistenteQuelle.jahr)
+		// .withKlasse(persistenteQuelle.klasse)
+		// .withMediumUuid(persistenteQuelle.mediumUuid)
+		// .withPerson(persistenteQuelle.person)
+		// .withQuellenart(persistenteQuelle.quellenart)
+		// .withSeite(persistenteQuelle.seite)
+		// .withStufe(persistenteQuelle.stufe)
+		// .withUserId(persistenteQuelle.userId);
 		// @formatter: on
 	}
-
-	/**
-	 * Läd das von der Quelle, das im Rätsel oder in zugehörigen PDFs angezeigt wird nebst der ID zum navigieren zu einem Medizm.
-	 *
-	 * @param  quelleId
-	 * @return          QuellenangabeRaetsel
-	 */
-	public Optional<QuellenangabeRaetsel> getQuellenangabeRaetselWithId(final String quelleId) {
-
-		PersistenteQuelleReadonly ausDB = this.quellenRepository.findQuelleReadonlyById(quelleId);
-
-		if (ausDB == null) {
-
-			return Optional.empty();
-		}
-
-		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
-
-		// @formatter: off
-		QuellenangabeRaetsel result = new QuellenangabeRaetsel()
-			.withId(ausDB.uuid)
-			.withQuellenart(ausDB.quellenart)
-			.withName(nameStrategie.getName(ausDB))
-			.withMediumUuid(ausDB.mediumUuid);
-		// @formatter: on
-		return Optional.of(result);
-	}
-
 }

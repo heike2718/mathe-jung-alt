@@ -16,10 +16,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mja_api.domain.quellen.Quelle;
 import de.egladil.mja_api.domain.quellen.Quellenart;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
+import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -70,16 +72,23 @@ public class EditRaetselPayloadTest {
 
 		String quelleId = "8ef4d9b8-62a6-4643-8674-73ebaec52d98";
 
-		Quelle quelle = new Quelle(quelleId)
+		QuelleDto quelle = new QuelleDto();
+		quelle.setId(quelleId);
+		quelle.setPerson("Heike Winkelvoß");
+		quelle.setQuellenart(Quellenart.PERSON);
+
+		HerkunftRaetsel herkunft = new HerkunftRaetsel()
+			.withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION)
+			.withId(quelleId)
 			.withQuellenart(Quellenart.PERSON)
-			.withPerson("Heike Winkelvoß")
-			.withUserId("b865fc75-1bcf-40c7-96c3-33744826e49f");
+			.withText("Heike Winkelvoß");
 
 		Raetsel raetsel = new Raetsel("neu").withAntwortvorschlaege(antwortvorschlage)
 			.withDeskriptoren(deskriptoren).withFrage("Wie viele Meter sind es bis zur Schule?")
 			.withKommentar("Minikänguru 2021").withSchluessel("02565")
 			.withName("Schulweglänge")
 			.withFreigebeben(true);
+		raetsel.setHerkunft(herkunft);
 
 		EditRaetselPayload payload = new EditRaetselPayload();
 		payload.setLatexHistorisieren(false);
@@ -98,7 +107,8 @@ public class EditRaetselPayloadTest {
 	void deserialize() throws JsonMappingException, JsonProcessingException {
 
 		// Arrange
-		String json = "{\"latexHistorisieren\":false,\"raetsel\":{\"id\":\"neu\",\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigegeben\":true,\"herkunft\":null,\"quelleUI\":null,\"schreibgeschuetzt\":true,\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":3,\"name\":\"IKID\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":33,\"name\":\"A-2\",\"admin\":false,\"kontext\":\"RAETSEL\"}],\"embeddableImageInfos\":[],\"images\":null,\"raetselPDF\":null},\"quelle\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"klasse\":null,\"stufe\":null,\"ausgabe\":null,\"jahr\":null,\"seite\":null,\"person\":\"Heike Winkelvoß\",\"userId\":\"b865fc75-1bcf-40c7-96c3-33744826e49f\",\"owner\":null,\"mediumUuid\":null}}";
+		String json = "{\"latexHistorisieren\":false,\"raetsel\":{\"id\":\"neu\",\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigegeben\":true,\"herkunft\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"herkunftstyp\":\"EIGENKREATION\",\"text\":\"Heike Winkelvoß\",\"mediumUuid\":null},\"schreibgeschuetzt\":true,\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":3,\"name\":\"IKID\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":33,\"name\":\"A-2\",\"admin\":false,\"kontext\":\"RAETSEL\"}],\"embeddableImageInfos\":[],\"images\":null,\"raetselPDF\":null},\"quelle\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"klasse\":null,\"stufe\":null,\"ausgabe\":null,\"jahr\":null,\"seite\":null,\"person\":\"Heike Winkelvoß\",\"mediumUuid\":null}}";
+
 		EditRaetselPayload payload = new ObjectMapper().readValue(json, EditRaetselPayload.class);
 
 		// Assert

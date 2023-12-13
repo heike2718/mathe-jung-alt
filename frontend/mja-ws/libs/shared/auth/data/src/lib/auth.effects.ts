@@ -64,7 +64,7 @@ export class AuthEffects {
             switchMap((action) => of(action.session)),
             tap((session) => {
                 if (session.user) {
-                    this.#coreFacade.loadQuelleAngemeldeterAdmin(session.user.benutzerart);
+                    this.#coreFacade.loadAutor(session.user.benutzerart);
                     this.#coreFacade.loadDeskriptoren();
                 }
             })

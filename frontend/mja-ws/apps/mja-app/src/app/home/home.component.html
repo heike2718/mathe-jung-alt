@@ -14,9 +14,9 @@
 </div>
 
 <div *ngIf="authFacade.userIsAdmin$ | async">
-    <p *ngIf="(coreFacade.existsQuelleAdmin$ | async)">na dann mal los :)
+    <p *ngIf="(coreFacade.existsHerkunftEigenkreation$ | async)">na dann mal los :)
     </p>
-    <p *ngIf="coreFacade.notExistsQuelleAdmin$ | async">Es gibt noch keine Quelle für Sie als Autor:in. Lassen Sie
+    <p *ngIf="coreFacade.notExistsHerkunftEigenkreation$ | async">Es gibt noch keine Quelle für Sie als Autor:in. Lassen Sie
         bitte eine anlegen,
         damit Sie Rätsel erstellen dürfen.
     </p>

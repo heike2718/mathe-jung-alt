@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
@@ -50,23 +51,21 @@ public class QuellenServiceTest {
 		when(quellenRepository.findQuelleReadonlyById(uuid)).thenReturn(persistenteQuelle);
 
 		// Act
-		Optional<Quelle> optQuelle = service.getQuelleWithId(uuid);
+		Optional<QuelleDto> optQuelle = service.getQuelleWithId(uuid);
 
 		// Assert
 		verify(quellenRepository).findQuelleReadonlyById(uuid);
 
-		Quelle quelle = optQuelle.get();
+		QuelleDto quelle = optQuelle.get();
 
 		assertEquals(uuid, quelle.getId());
 		assertNull(quelle.getMediumUuid());
 		assertEquals("Heike Winkelvoß", quelle.getPerson());
-		assertEquals("u-uuid-1", quelle.getUserId());
 		assertEquals(Quellenart.PERSON, quelle.getQuellenart());
 		assertNull(quelle.getAusgabe());
 		assertNull(quelle.getJahr());
 		assertNull(quelle.getKlasse());
 		assertNull(quelle.getMediumUuid());
-		// assertNull(quelle.getOwner()); // FIXME owner wird möglicherweise benötigt.
 		assertNull(quelle.getSeite());
 		assertNull(quelle.getStufe());
 	}
@@ -89,22 +88,20 @@ public class QuellenServiceTest {
 		when(quellenRepository.findQuelleReadonlyById(uuid)).thenReturn(persistenteQuelle);
 
 		// Act
-		Optional<Quelle> optQuelle = service.getQuelleWithId(uuid);
+		Optional<QuelleDto> optQuelle = service.getQuelleWithId(uuid);
 
 		// Assert
 		verify(quellenRepository).findQuelleReadonlyById(uuid);
 
-		Quelle quelle = optQuelle.get();
+		QuelleDto quelle = optQuelle.get();
 
 		assertEquals(uuid, quelle.getId());
 		assertEquals("m-uuid-1", quelle.getMediumUuid());
 		assertNull(quelle.getPerson());
-		assertNull(quelle.getUserId());
 		assertEquals(Quellenart.ZEITSCHRIFT, quelle.getQuellenart());
 		assertEquals("3", quelle.getAusgabe());
 		assertEquals("1978", quelle.getJahr());
 		assertNull(quelle.getKlasse());
-		// assertNull(quelle.getOwner()); // FIXME owner wird möglicherweise benötigt.
 		assertEquals("13", quelle.getSeite());
 		assertNull(quelle.getStufe());
 
@@ -126,22 +123,20 @@ public class QuellenServiceTest {
 		when(quellenRepository.findQuelleReadonlyById(uuid)).thenReturn(persistenteQuelle);
 
 		// Act
-		Optional<Quelle> optQuelle = service.getQuelleWithId(uuid);
+		Optional<QuelleDto> optQuelle = service.getQuelleWithId(uuid);
 
 		// Assert
 		verify(quellenRepository).findQuelleReadonlyById(uuid);
 
-		Quelle quelle = optQuelle.get();
+		QuelleDto quelle = optQuelle.get();
 
 		assertEquals(uuid, quelle.getId());
 		assertEquals("m-uuid-2", quelle.getMediumUuid());
 		assertNull(quelle.getPerson());
-		assertNull(quelle.getUserId());
 		assertEquals(Quellenart.BUCH, quelle.getQuellenart());
 		assertNull(quelle.getAusgabe());
 		assertNull(quelle.getJahr());
 		assertNull(quelle.getKlasse());
-		// assertNull(quelle.getOwner()); // FIXME owner wird möglicherweise benötigt.
 		assertEquals("42", quelle.getSeite());
 		assertNull(quelle.getStufe());
 	}
@@ -163,22 +158,20 @@ public class QuellenServiceTest {
 		when(quellenRepository.findQuelleReadonlyById(uuid)).thenReturn(persistenteQuelle);
 
 		// Act
-		Optional<Quelle> optQuelle = service.getQuelleWithId(uuid);
+		Optional<QuelleDto> optQuelle = service.getQuelleWithId(uuid);
 
 		// Assert
 		verify(quellenRepository).findQuelleReadonlyById(uuid);
 
-		Quelle quelle = optQuelle.get();
+		QuelleDto quelle = optQuelle.get();
 
 		assertEquals(uuid, quelle.getId());
 		assertEquals("m-uuid-4", quelle.getMediumUuid());
 		assertNull(quelle.getPerson());
-		assertNull(quelle.getUserId());
 		assertEquals(Quellenart.INTERNET, quelle.getQuellenart());
 		assertNull(quelle.getAusgabe());
 		assertEquals("2013", quelle.getJahr());
 		assertEquals("Klasse 1", quelle.getKlasse());
-		// assertNull(quelle.getOwner()); // FIXME owner wird möglicherweise benötigt.
 		assertEquals("Stufe 2", quelle.getStufe());
 		assertNull(quelle.getSeite());
 

@@ -6,14 +6,15 @@
     "schluessel": "99998",
     "name": "Welches Kind ist das aelteste?",
     "freigegeben": false,
-    "herkunft": "EIGENKREATION",
     "frage": "Anton, Beate, Carola und Dennis sind in einer Klasse. Welches Kind ist am ältesten? In welcher Reihenfolge kommen die anderen Kinder?",
     "loesung": "Dennis ist am ältesten. Danach kommen Beate, Anton und Carola.",
     "kommentar": "Serie Serie-1, 1, Serie-65, 65",
-    "quelleId": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
-    "quelle": {
+    "herkunft": {
       "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
-      "name": "Ponder Stibbons"
+      "quellenart": "PERSON",
+      "herkunftstyp": "EIGENKREATION",
+      "text": "Heike Winkelvoß",
+      "mediumUuid": null
     },
     "antwortvorschlaege": [],
     "deskriptoren": [
@@ -37,7 +38,6 @@
   "quelle": {
     "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
     "quellenart": "PERSON",
-    "person": "Heike Winkelvoß",
-    "userId": "b865fc75-1bcf-40c7-96c3-33744826e49f"
+    "person": "Heike Winkelvoß"
   }
 }

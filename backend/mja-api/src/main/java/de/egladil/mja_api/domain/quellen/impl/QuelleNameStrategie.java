@@ -18,7 +18,7 @@ public interface QuelleNameStrategie {
 	 * @param  quelle
 	 * @return        String
 	 */
-	String getName(PersistenteQuelleReadonly quelle);
+	String getText(PersistenteQuelleReadonly quelle);
 
 	static QuelleNameStrategie getStrategie(final Quellenart quellenart) {
 

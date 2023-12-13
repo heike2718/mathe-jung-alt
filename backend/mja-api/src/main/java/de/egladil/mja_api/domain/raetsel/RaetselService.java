@@ -27,7 +27,9 @@ import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.quellen.Quelle;
 import de.egladil.mja_api.domain.quellen.QuellenService;
-import de.egladil.mja_api.domain.quellen.QuellenangabeRaetsel;
+import de.egladil.mja_api.domain.quellen.Quellenart;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
+import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -41,6 +43,7 @@ import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -68,7 +71,7 @@ public class RaetselService {
 	RaetselFileService raetselFileService;
 
 	@Inject
-	QuellenService quellenServive;
+	QuellenService quellenService;
 
 	@Inject
 	QuellenRepository quellenRepository;
@@ -188,16 +191,28 @@ public class RaetselService {
 		neuesRaetsel.filenameVorschauFrage = generateFilenameVorschau();
 		neuesRaetsel.filenameVorschauLoesung = generateFilenameVorschau();
 
-		Quelle quelle = payload.getQuelle();
+		QuelleDto datenQuelle = payload.getQuelle();
 
 		String quelleId = null;
 
+		Quelle quelle = new Quelle(datenQuelle.getId())
+			.withDatenQuelle(datenQuelle)
+			.withOwner(userId);
+
 		if ("neu".equals(quelle.getId())) {
 
-			// TODO: hier Quelle anlegen! quelleId = ....
+			if (Quellenart.PERSON == datenQuelle.getQuellenart() && RaetselHerkunftTyp.EIGENKREATION == neuesRaetsel.herkunft) {
+
+				// Dann ist die userId klar. In anderen Fällen handelt es sich um eine von ein von einer anderen Person erfundenes
+				// Rätsel.
+				quelle.setUserId(userId);
+			}
+
+			// TODO: hier Quelle anlegen! An quellenservice übergeben.
+			// dann quelleId = ...
 		} else {
 
-			quelleId = quelle.getId();
+			quelleId = datenQuelle.getId();
 		}
 
 		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
@@ -311,7 +326,7 @@ public class RaetselService {
 
 		}
 
-		Quelle quelle = payload.getQuelle();
+		QuelleDto quelle = payload.getQuelle();
 
 		String quelleId = null;
 
@@ -378,14 +393,54 @@ public class RaetselService {
 
 		result.setImages(raetselFileService.findImages(raetsel.filenameVorschauFrage, raetsel.filenameVorschauLoesung));
 
-		Optional<QuellenangabeRaetsel> optQuelle = quellenServive.getQuellenangabeRaetselWithId(raetsel.quelle);
+		Optional<HerkunftRaetsel> optQuelle = getHerkunftRaetsel(raetsel.quelle, raetsel);
 
 		if (optQuelle.isPresent()) {
 
-			result.setQuelleUI(optQuelle.get());
+			result.setHerkunft(optQuelle.get());
+		} else {
+
+			LOGGER.error("Datenfehler: Rätsel mit SCHLUESSEL={} - keinen Eintrag in QUELLEN mit UUID={} gefunden.",
+				raetsel.schluessel, raetsel.quelle);
+			throw new MjaRuntimeException("Datenfehler: es gibt keinen Eintrag in QUELLEN mit uuid=" + raetsel.quelle);
 		}
 
 		return result;
+	}
+
+	Optional<HerkunftRaetsel> getHerkunftRaetsel(final String quelleId, final PersistentesRaetsel raetsel) {
+
+		PersistenteQuelleReadonly ausDB = this.quellenRepository.findQuelleReadonlyById(quelleId);
+
+		if (ausDB == null) {
+
+			return Optional.empty();
+		}
+
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
+		String text = nameStrategie.getText(ausDB);
+
+		if (raetsel.herkunft == RaetselHerkunftTyp.ADAPTATION) {
+
+			Optional<PersistenteQuelleReadonly> optQuelle = quellenRepository.findQuelleWithUserId(raetsel.owner);
+
+			if (optQuelle.isPresent()) {
+
+				PersistenteQuelleReadonly quelle = optQuelle.get();
+				text = quelle.person + " (basierend auf einer Idee aus " + text + ")";
+			}
+
+		}
+
+		// @formatter: off
+		HerkunftRaetsel result = new HerkunftRaetsel()
+			.withId(ausDB.uuid)
+			.withQuellenart(ausDB.quellenart)
+			.withText(text)
+			.withHerkunftstyp(raetsel.herkunft)
+			.withMediumUuid(ausDB.mediumUuid);
+		// @formatter: on
+		return Optional.of(result);
 	}
 
 	/**
@@ -472,7 +527,7 @@ public class RaetselService {
 		persistentesRaetsel.schluessel = daten.getSchluessel();
 		persistentesRaetsel.name = daten.getName();
 		persistentesRaetsel.freigegeben = daten.isFreigegeben();
-		persistentesRaetsel.herkunft = daten.getHerkunft();
+		persistentesRaetsel.herkunft = daten.getHerkunft().getHerkunftstyp();
 		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
 	}
 
@@ -486,7 +541,6 @@ public class RaetselService {
 			.withLoesung(raetselDB.loesung)
 			.withSchluessel(raetselDB.schluessel)
 			.withFreigebeben(raetselDB.freigegeben)
-			.withHerkunft(raetselDB.herkunft)
 			.withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
 			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);
