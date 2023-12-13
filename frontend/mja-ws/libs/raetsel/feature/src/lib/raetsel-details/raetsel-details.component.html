@@ -28,6 +28,11 @@
                     </mat-accordion>
                 </div>
 
+                <div class="grid-container-2 mt-2 mb-2">
+                    <label>Autor:in / Herkunft:</label>
+                    <div>{{raetsel.herkunft.text}}</div>
+                </div>               
+
                 <div *ngIf="!user.isAdmin" class="button-container">
                     <button class="label" mat-raised-button color="primary"
                         (click)="gotoRaetselUebersicht()">Suche</button>
@@ -68,8 +73,8 @@
                         </div>
 
                         <div *ngIf="authFacade.userIsAdmin$ | async">
-                            <div *ngIf="aufgabensammlungenFacade.aufgabensammlungDetails$ | async as aufgabensammlung"><button
-                                    class="label" mat-raised-button color="primary"
+                            <div *ngIf="aufgabensammlungenFacade.aufgabensammlungDetails$ | async as aufgabensammlung">
+                                <button class="label" mat-raised-button color="primary"
                                     matTooltip="zur gewählten Aufgabensammlung {{aufgabensammlung.name}}"
                                     (click)="gotoAufgabensammlung()">Aufgabensammlung</button>
                             </div>
@@ -84,9 +89,6 @@
 
                         <label>Name:</label>
                         <div>{{raetsel.name}}</div>
-
-                        <label>Herkunft:</label>
-                        <div>{{raetsel.herkunft.text}}</div>
 
                         <label>freigegeben:</label>
                         <mat-checkbox [(ngModel)]="freigegeben" [disabled]="true"></mat-checkbox>

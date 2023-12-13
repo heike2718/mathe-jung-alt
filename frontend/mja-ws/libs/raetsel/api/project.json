@@ -26,5 +26,5 @@
       }
     }
   },
-  "tags": ["domain:raetsel:api", "type:api"]
+  "tags": ["domain:raetsel:api"]
 }

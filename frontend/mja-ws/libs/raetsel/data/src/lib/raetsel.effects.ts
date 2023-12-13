@@ -6,7 +6,8 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { map, switchMap, tap, catchError, of } from "rxjs";
 import { RaetselHttpService } from "./raetsel-http.service";
 import { raetselActions } from "./raetsel.actions";
-import { GeneratedFile, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE } from "@mja-ws/core/model";
+import { GeneratedFile, HerkunftRaetsel } from "@mja-ws/core/model";
+import { CoreFacade } from "@mja-ws/core/api";
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,7 @@ export class RaetselEffects {
     #router = inject(Router);
     #fileDownloadService = inject(FileDownloadService);
     #messageService = inject(MessageService);
+    #coreFacade = inject(CoreFacade);
 
     findRaetsel$ = createEffect(() => {
 
@@ -180,6 +182,14 @@ export class RaetselEffects {
     raetselSaved$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselActions.rAETSEL_SAVED),
-            tap(() => this.#messageService.info('Rätsel erfolgreich gespeichert')),
+            tap((raetselDetails) => {
+                const herkunft: HerkunftRaetsel = raetselDetails.raetselDetails.herkunft;
+
+                if (herkunft.herkunftstyp === 'EIGENKREATION') {
+                    this.#coreFacade.replaceAutor(herkunft);
+                }
+
+                this.#messageService.info('Rätsel erfolgreich gespeichert');
+            }),
         ), { dispatch: false });
 }

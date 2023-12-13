@@ -16,10 +16,6 @@
 <div *ngIf="authFacade.userIsAdmin$ | async">
     <p *ngIf="(coreFacade.existsHerkunftEigenkreation$ | async)">na dann mal los :)
     </p>
-    <p *ngIf="coreFacade.notExistsHerkunftEigenkreation$ | async">Es gibt noch keine Quelle für Sie als Autor:in. Lassen Sie
-        bitte eine anlegen,
-        damit Sie Rätsel erstellen dürfen.
-    </p>
 </div>
 
 <div *ngIf="authFacade.userIsPublic$ | async">

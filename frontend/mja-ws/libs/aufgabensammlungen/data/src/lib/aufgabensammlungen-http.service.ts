@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import {
     AufgabensammlungenTreffer,
     AufgabensammlungenSuchparameter,
@@ -10,7 +10,7 @@ import {
     AufgabensammlungBasisdaten
 } from "@mja-ws/aufgabensammlungen/model";
 import { Observable } from "rxjs";
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { FONT_NAME, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION, SCHRIFTGROESSE } from "@mja-ws/core/model";
 import { generateUUID } from "@mja-ws/shared/util";
 

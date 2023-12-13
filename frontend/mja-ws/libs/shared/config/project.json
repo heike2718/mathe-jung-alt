@@ -26,5 +26,5 @@
       }
     }
   },
-  "tags": ["domain:shared", "type:shared:config"]
+  "tags": ["type:shared:config"]
 }

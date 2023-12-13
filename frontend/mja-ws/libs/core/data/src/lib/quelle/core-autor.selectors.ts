@@ -25,7 +25,7 @@ const notExistsHerkunftEigenkreation = createSelector(
     (q, l) => l && q.id === 'NOOP'
 );
 
-export const fromCoreQuelle = {
+export const fromCoreAutor = {
     herkunftEigenkreation,
     existsHerkunftEigenkreation,
     notExistsHerkunftEigenkreation

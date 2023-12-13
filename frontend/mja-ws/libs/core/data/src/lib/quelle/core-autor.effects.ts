@@ -9,7 +9,7 @@ import { coreQuelleActions } from './core-autor.actions';
 @Injectable({
     providedIn: 'root'
 })
-export class CoreQuelleEffects {
+export class CoreAutorEffects {
 
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);

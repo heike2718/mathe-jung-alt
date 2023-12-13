@@ -2,6 +2,7 @@ import { GeneratedImages, initialPaginationState, PaginationState } from "@mja-w
 import { AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungTrefferItem } from "@mja-ws/aufgabensammlungen/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { aufgabensammlungenActions } from "./aufgabensammlungen.actions";
+import { swallowEmptyArgument } from "@mja-ws/shared/util";
 
 export interface AufgabensammlungenState {
     readonly loaded: boolean;
@@ -64,7 +65,8 @@ export const aufgabensammlungenFeature = createFeature({
         on(aufgabensammlungenActions.aUFGABENSAMMLUNGDETAILS_LOADED, (state, action) => {
             return {...state, aufgabensammlungDetails: action.aufgabensammlungDetails, aufgabensammlungBasisdaten: undefined};
         }),
-        on(aufgabensammlungenActions.uNSELECT_AUFGABENSAMMLUNG, (state, _action) => {
+        on(aufgabensammlungenActions.uNSELECT_AUFGABENSAMMLUNG, (state, action) => {
+            swallowEmptyArgument(action, false);
             return {...state, aufgabensammlungDetails: undefined, aufgabensammlungBasisdaten: undefined, selectedAufgabensammlungselement: undefined, selectedElementImages: undefined}
         }),
         on(aufgabensammlungenActions.aUFGABENSAMMLUNGSELEMENTE_CHANGED, (state, action) => ({ ...state, aufgabensammlungDetails: action.aufgabensammlungDetails })),

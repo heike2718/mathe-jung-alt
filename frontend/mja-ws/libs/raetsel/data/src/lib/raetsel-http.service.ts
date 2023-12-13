@@ -17,7 +17,7 @@ import {
     QUERY_PARAM_TYPE_DESKRIPTOREN,
     SCHRIFTGROESSE
 } from "@mja-ws/core/model";
-import { EditRaetselPayload, Raetsel, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
+import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })

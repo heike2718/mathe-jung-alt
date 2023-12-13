@@ -67,4 +67,38 @@ public class QuellenRepository {
 		return entityManager.find(PersistenteQuelle.class, id);
 
 	}
+
+	/**
+	 * Gibt die maximale in der DB existierende QUELLEN.SORTNR zurück.
+	 *
+	 * @return int
+	 */
+	public int getMaximumOfAllSortNumbers() {
+
+		String stmt = "SELECT max(q.SORTNR) from QUELLEN q";
+
+		@SuppressWarnings("unchecked")
+		List<Long> trefferliste = entityManager.createNativeQuery(stmt).getResultList();
+
+		return trefferliste.get(0).intValue();
+	}
+
+	/**
+	 * Speichert eine Quelle.
+	 *
+	 * @param  quelle
+	 * @return        PersistenteQuelle
+	 */
+	public PersistenteQuelle save(final PersistenteQuelle quelle) {
+
+		if (quelle.isPersistent()) {
+
+			return entityManager.merge(quelle);
+		} else {
+
+			entityManager.persist(quelle);
+			return quelle;
+		}
+
+	}
 }

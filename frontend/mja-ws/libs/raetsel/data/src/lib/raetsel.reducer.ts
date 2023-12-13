@@ -2,6 +2,7 @@ import { GeneratedImages, initialPaginationState, PaginationState, SelectableIte
 import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
+import { swallowEmptyArgument } from "@mja-ws/shared/util";
 
 export interface RaetselState {
     readonly loaded: boolean;
@@ -98,7 +99,10 @@ export const raetselFeature = createFeature({
                 generateLatexError: false
             };
         }),
-        on(raetselActions.rESET_RAETSELSUCHFILTER, (state, _action): RaetselState => {
+        on(raetselActions.rESET_RAETSELSUCHFILTER, (state, action): RaetselState => {
+            
+            swallowEmptyArgument(action, false);
+
             return {
                 ...state,
                 loaded: false,
@@ -109,16 +113,30 @@ export const raetselFeature = createFeature({
                 paginationState: initialPaginationState
             };
         }),
-        on(raetselActions.rAETSEL_CANCEL_SELECTION, (state, _action) => {
+        on(raetselActions.rAETSEL_CANCEL_SELECTION, (state, action) => {
+            swallowEmptyArgument(action, false);
             return {...state, raetselDetails: undefined, selectableDeskriptoren: [], generateLatexError: false}
         }),
-        on(raetselActions.lATEX_ERRORS_DETECTED, (state, _action) => {
+        on(raetselActions.lATEX_ERRORS_DETECTED, (state, action) => {
+            swallowEmptyArgument(action, false);
             return {
                 ...state,
                 generateLatexError: true
             }
         }),
-        on(raetselActions.pREPARE_EDIT, (state, _action) => ({ ...state, editModus: true })),
-        on(raetselActions.fINISH_EDIT, (state, _action) => ({ ...state, editModus: false })),
+        on(raetselActions.pREPARE_EDIT, (state, action) => {
+            swallowEmptyArgument(action, false);
+            return {
+                ...state,
+                editModus: true
+            }
+        }),
+        on(raetselActions.fINISH_EDIT, (state, action) => {
+            swallowEmptyArgument(action, false);
+            return {
+                ...state,
+                editModus: false
+            }
+        }),
     )
 });

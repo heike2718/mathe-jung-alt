@@ -47,23 +47,23 @@
               },
               {
                 "sourceTag": "type:api",
-                "onlyDependOnLibWithTags": ["type:model", "type:data"]
+                "onlyDependOnLibsWithTags": ["type:model", "type:data"]
               },
               {
                 "sourceTag": "type:data",
-                "onlyDependOnLibWithTags": ["type:model"]
+                "onlyDependOnLibsWithTags": ["type:model"]
               },
               {
                 "sourceTag": "domain:raetsel:model",
-                "onlyDependsOnLibsWithTags": ["type:model", "type:core:model"]
+                "onlyDependOnLibsWithTags": ["type:model", "type:core:model"]
               },
               {
                 "sourceTag": "domain:raetsel:data",
-                "onlyDependsOnLibsWithTags": ["domain:raetsel:model"]
+                "onlyDependOnLibsWithTags": ["domain:raetsel:model"]
               },
               {
                 "sourceTag": "domain:raetsel:api",
-                "onlyDependsOnLibsWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "domain:raetsel:model",
                   "domain:raetsel:data",
                   "type:core:api"
@@ -71,7 +71,7 @@
               },
               {
                 "sourceTag": "domain:raetsel:feature",
-                "onlyDependsOnLibsWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "domain:raetsel:model",
                   "domain:raetsel:api",
                   "domain:grafik:api",
@@ -82,15 +82,15 @@
               },
               {
                 "sourceTag": "domain:aufgabensammlungen:model",
-                "onlyDependsOnLibsWithTags": ["type:core:model"]
+                "onlyDependOnLibsWithTags": ["type:core:model"]
               },
               {
                 "sourceTag": "domain:aufgabensammlungen:data",
-                "onlyDependsOnLibsWithTags": ["domain:aufgabensammlungen:model"]
+                "onlyDependOnLibsWithTags": ["domain:aufgabensammlungen:model"]
               },
               {
                 "sourceTag": "domain:aufgabensammlungen:api",
-                "onlyDependsOnLibsWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "domain:aufgabensammlungen:model",
                   "domain:aufgabensammlungen:data",
                   "type:core:api"
@@ -98,7 +98,7 @@
               },
               {
                 "sourceTag": "domain:aufgabensammlungen:feature",
-                "onlyDependsOnLibsWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "domain:aufgabensammlungen:model",
                   "domain:aufgabensammlungen:api",
                   "domain:raetsel:api"
@@ -106,25 +106,25 @@
               },
               {
                 "sourceTag": "domain:grafik:model",
-                "onlyDependsOnLibsWithTags": ["type:model", "type:core:model"]
+                "onlyDependOnLibsWithTags": ["type:model", "type:core:model"]
               },
               {
                 "sourceTag": "domain:grafik:data",
-                "onlyDependsOnLibsWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "domain:grafik:model",
                   "type:shared:messaging:api"
                 ]
               },
               {
                 "sourceTag": "domain:grafik:api",
-                "onlyDependsOnLibsWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "domain:grafik:model",
                   "domain:grafik:data"
                 ]
               },
               {
                 "sourceTag": "domain:core",
-                "onlyDependsOnLibsWithTags": "domain:shared"
+                "onlyDependOnLibsWithTags": "domain:shared"
               },
               {
                 "sourceTag": "domain:shared:messaging:ui",
@@ -135,14 +135,14 @@
               },
               {
                 "sourceTag": "type:shared:http",
-                "onlyDependOnLibWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "type:shared:config",
                   "type:shared:messaging:api"
                 ]
               },
               {
                 "sourceTag": "type:shared:auth:api",
-                "onlyDependOnLibWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "domain:shared:auth:model",
                   "type:core:api",
                   "type:shared:auth:data"
@@ -178,7 +178,7 @@
               },
               {
                 "sourceTag": "type:core:api",
-                "onlyDependOnLibWithTags": ["type:core:model", "type:core:data"]
+                "onlyDependOnLibsWithTags": ["type:core:model", "type:core:data"]
               },
               {
                 "sourceTag": "type:core:data",
@@ -193,7 +193,7 @@
               },
               {
                 "sourceTag": "domain:embeddable-images:model",
-                "onlyDependsOnLibsWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "domain:embeddable-images:model",
                   "type:shared:messaging:api"
                   
@@ -201,7 +201,7 @@
               },
               {
                 "sourceTag": "domain:embeddable-images:data",
-                "onlyDependsOnLibsWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "domain:embeddable-images:model",
                   "type:shared:messaging:api"
                   
@@ -209,7 +209,7 @@
               },
               {
                 "sourceTag": "domain:embeddable-images:api",
-                "onlyDependsOnLibsWithTags": [
+                "onlyDependOnLibsWithTags": [
                   "type:core:model"
                 ]
               }

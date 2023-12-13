@@ -69,12 +69,12 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   #paginationStateSubscription: Subscription = new Subscription();
   #deskriptorenSubscription: Subscription = new Subscription();
   #suchfilterSubscription: Subscription = new Subscription();
-  #quelleSubscription: Subscription = new Subscription();
+  #autorSubscription: Subscription = new Subscription();
 
 
   #pageIndex = 0;
   #sortDirection: SortDirection = 'asc';
-  #quelle: HerkunftRaetsel | undefined;
+  #autor!: HerkunftRaetsel;
 
   constructor(private changeDetector: ChangeDetectorRef) { }
 
@@ -121,9 +121,9 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       })
     ).subscribe();
 
-    this.#quelleSubscription = this.coreFacade.herkunftEigenkreation$.subscribe(
+    this.#autorSubscription = this.coreFacade.herkunftEigenkreation$.subscribe(
       (q) => {
-        this.#quelle = q
+        this.#autor = q
       }
     );
   }
@@ -136,7 +136,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.#matSortChangedSubscription.unsubscribe();
     this.#deskriptorenSubscription.unsubscribe();
     this.#suchfilterSubscription.unsubscribe();
-    this.#quelleSubscription.unsubscribe();
+    this.#autorSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -209,7 +209,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   neuesRaetsel(): void {
-    this.#raetselFacade.createAndEditRaetsel(this.#quelle);
+    this.#raetselFacade.createAndEditRaetsel(this.#autor);
   }
 
   buttonNeueSucheDisabled(): boolean {

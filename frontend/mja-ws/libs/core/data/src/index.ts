@@ -1,8 +1,8 @@
 
-export { coreQuelleActions } from './lib/quelle/core-autor.actions';
-export { fromCoreQuelle } from './lib/quelle/core-autor.selectors';
-export { CoreQuelleEffects } from './lib/quelle/core-autor.effects';
-export { coreAutorFeature as coreQuelleFeature } from './lib/quelle/core-autor.reducer';
+export { coreQuelleActions as coreAutorActions } from './lib/quelle/core-autor.actions';
+export { fromCoreAutor } from './lib/quelle/core-autor.selectors';
+export { CoreAutorEffects } from './lib/quelle/core-autor.effects';
+export { coreAutorFeature } from './lib/quelle/core-autor.reducer';
 
 export { coreDeskriptorenActions } from './lib/descriptoren/core-deskriptoren.actions';
 export { fromCoreDeskriptoren } from './lib/descriptoren/core-deskriptoren.selectors'

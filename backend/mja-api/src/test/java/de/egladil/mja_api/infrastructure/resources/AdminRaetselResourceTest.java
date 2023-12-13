@@ -6,6 +6,7 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -859,5 +860,51 @@ public class AdminRaetselResourceTest {
 
 		assertEquals("ERROR", messagePayload.getLevel());
 		assertEquals("Tja, dieses Rätsel gibt es leider nicht.", messagePayload.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(50)
+	void testRaetselMitAndererPersonAnlegen() throws Exception {
+
+		try (InputStream in = getClass().getResourceAsStream("/payloads/EditRaetselPayloadInsertZitatPerson.json");
+			StringWriter sw = new StringWriter()) {
+
+			IOUtils.copy(in, sw, StandardCharsets.UTF_8);
+
+			String requestBody = sw.toString();
+
+			try {
+
+				Raetsel raetsel = given()
+					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+					.contentType(ContentType.JSON)
+					.body(requestBody)
+					.post("v1")
+					.then()
+					.statusCode(201)
+					.and()
+					.contentType(ContentType.JSON)
+					.extract()
+					.as(Raetsel.class);
+
+				assertNotNull(raetsel.getId());
+
+				HerkunftRaetsel herkunft = raetsel.getHerkunft();
+				assertEquals("David Hilbert", herkunft.getText());
+				assertEquals(Quellenart.PERSON, herkunft.getQuellenart());
+				assertNull(herkunft.getMediumUuid());
+				assertEquals(RaetselHerkunftTyp.ZITAT, herkunft.getHerkunftstyp());
+				assertFalse("8ef4d9b8-62a6-4643-8674-73ebaec52d98".equals(herkunft.getId()));
+
+			} catch (Exception e) {
+
+				fail(e.getMessage());
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 }

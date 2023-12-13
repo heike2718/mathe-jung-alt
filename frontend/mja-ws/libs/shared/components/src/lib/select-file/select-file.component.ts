@@ -39,11 +39,11 @@ export class SelectFileComponent implements OnInit {
     erlaubteDateinamenInfo = 'Der Dateiname darf nur Ziffern, Buchstaben des deutschen Alphabets sowie die Zeichen Minus, Punkt und Unterstrich enthalten. Auch Leerzeichen sind nicht erlaubt.';
 
     showMaxSizeExceeded = false;
-    errmMaxFileSize = 'Die gewählte Datei ist zu groß. Bitte andere Datei wählen.';    
+    errmMaxFileSize = 'Die gewählte Datei ist zu groß. Bitte andere Datei wählen.';
 
     showInvalidFilename = false;
     errmFilename = 'Der Name der gewählten Datei enthält ungültige Zeichen. Datei bitte umbenennen oder andere Datei auswählen.';
-    
+
     ngOnInit(): void {
         const maxFileSizeInKB = this.selectFileModel.maxSizeBytes / 1024;
         const maxFileSizeInMB = maxFileSizeInKB / 1024;
@@ -51,44 +51,49 @@ export class SelectFileComponent implements OnInit {
         this.maxFileSizeInfo = 'Maximale erlaubte Größe: ' + maxFileSizeInKB + ' kB bzw. ' + maxFileSizeInMB + ' MB';
     }
 
-    onFileAdded($event: any): void {
+    onFileAdded($event: Event): void {
 
-        const selectedFiles: FileList = $event.target.files;
+        const inputElement = $event.target as HTMLInputElement;
 
-        if (selectedFiles && selectedFiles.length === 1) {
-            const size = selectedFiles[0].size;
-            this.#calculateFileSize(size);
+        if (inputElement.files) {
 
-            if (size <= this.selectFileModel.maxSizeBytes) {
-                this.currentFile = selectedFiles[0];
-                this.showMaxSizeExceeded = false;
-                this.showInvalidFilename = false;
+            const selectedFiles: FileList = inputElement.files;
 
-                const filename = selectedFiles[0].name;
-                const fileReader = new FileReader();
+            if (selectedFiles && selectedFiles.length === 1) {
+                const size = selectedFiles[0].size;
+                this.#calculateFileSize(size);
 
-                fileReader.readAsDataURL(this.currentFile);
-                fileReader.onload = () => {
-                    let base64String = fileReader.result as string;
-                    base64String = base64String.split(',')[1];
+                if (size <= this.selectFileModel.maxSizeBytes) {
+                    this.currentFile = selectedFiles[0];
+                    this.showMaxSizeExceeded = false;
+                    this.showInvalidFilename = false;
 
-                    const uploadedFile: UploadedFile = {
-                        name: filename,
-                        dataBase64: base64String
+                    const filename = selectedFiles[0].name;
+                    const fileReader = new FileReader();
+
+                    fileReader.readAsDataURL(this.currentFile);
+                    fileReader.onload = () => {
+                        let base64String = fileReader.result as string;
+                        base64String = base64String.split(',')[1];
+
+                        const uploadedFile: UploadedFile = {
+                            name: filename,
+                            dataBase64: base64String
+                        }
+
+                        if (isValidFileName(filename)) {
+
+                            this.fileSelected.emit({ file: uploadedFile, fileSize: size });
+                        } else {
+                            this.currentFile = undefined;
+                            this.showInvalidFilename = true;
+                        }
                     }
 
-                    if (isValidFileName(filename)) {
-
-                        this.fileSelected.emit({ file: uploadedFile, fileSize: size });
-                    } else {
-                        this.currentFile = undefined;
-                        this.showInvalidFilename = true;
-                    }
+                } else {
+                    this.currentFile = undefined;
+                    this.showMaxSizeExceeded = true;
                 }
-
-            } else {
-                this.currentFile = undefined;
-                this.showMaxSizeExceeded = true;
             }
         }
     }

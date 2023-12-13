@@ -6,6 +6,7 @@ export const coreQuelleActions = createActionGroup({
     events: {
         'LOAD_AUTOR': emptyProps(),
         'CORE_AUTOR_LOADED': props<{ quelle: HerkunftRaetsel | undefined }>(),
-        'REMOVE_AUTOR':  emptyProps()
+        'CORE_AUTOR_REPLACED': props<{ quelle: HerkunftRaetsel }>(),
+        'REMOVE_AUTOR': emptyProps()
     }
 });

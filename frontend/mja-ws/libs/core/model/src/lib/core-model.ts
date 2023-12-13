@@ -228,7 +228,7 @@ export class GuiReferenztypenMap {
   public toGuiArray(): GuiRefereztyp[] {
 
     const result: GuiRefereztyp[] = [];
-    this.#referenztypen.forEach((l: string, key: Referenztyp, _map: Map<Referenztyp, string>) => {
+    this.#referenztypen.forEach((l: string, key: Referenztyp) => {
       result.push({ id: key, label: l });
     });
 
@@ -315,7 +315,7 @@ export class GuiSchwierigkeitsgradeMap {
   public toGuiArray(): GuiSchwierigkeitsgrad[] {
 
     const result: GuiSchwierigkeitsgrad[] = [];
-    this.#schwierigkeitsgrade.forEach((l: string, key: Schwierigkeitsgrad, _map: Map<Schwierigkeitsgrad, string>) => {
+    this.#schwierigkeitsgrade.forEach((l: string, key: Schwierigkeitsgrad) => {
       result.push({ id: key, label: l });
     });
 

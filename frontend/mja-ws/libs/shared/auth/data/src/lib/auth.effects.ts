@@ -8,6 +8,7 @@ import { Session } from './internal.model';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { CoreFacade } from '@mja-ws/core/api';
 import { Router } from '@angular/router';
+import { BENUTZERART } from '@mja-ws/shared/auth/model';
 
 @Injectable({
     providedIn: 'root'
@@ -64,7 +65,12 @@ export class AuthEffects {
             switchMap((action) => of(action.session)),
             tap((session) => {
                 if (session.user) {
-                    this.#coreFacade.loadAutor(session.user.benutzerart);
+
+                    const benutzerart: BENUTZERART = session.user.benutzerart;
+
+                    if (benutzerart === 'ADMIN' || benutzerart === 'AUTOR') {
+                        this.#coreFacade.loadAutor();
+                    }                    
                     this.#coreFacade.loadDeskriptoren();
                 }
             })

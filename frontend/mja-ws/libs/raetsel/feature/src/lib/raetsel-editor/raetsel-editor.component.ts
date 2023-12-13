@@ -103,7 +103,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   panelGrafikenFrageOpen = false;
   panelGrafikenLoesungOpen = false;
 
-  herkunftEigenkreation!: HerkunftRaetsel;
+  herkunftRaetsel!: HerkunftRaetsel;
   person!: string;
 
 
@@ -150,15 +150,11 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.#combinedSubscription = combineLatest([this.raetselFacade.raetselDetails$,
-      this.#coreFacade.alleDeskriptoren$,
-      this.#coreFacade.herkunftEigenkreation$,
-      this.#authFacade.userIsRoot$,
-      this.#authFacade.user$])
+    this.#coreFacade.alleDeskriptoren$,
+    this.#authFacade.userIsRoot$])
       .subscribe(([raetselDetails,
         alleDeskriptoren,
-        herkunftEigenkreation,
-        root,
-        user
+        root
       ]) => {
 
         this.#raetselDetails = { ...raetselDetails };
@@ -170,8 +166,9 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
         this.isRoot = root;
 
-        this.herkunftEigenkreation = herkunftEigenkreation;
-        this.person = user.fullName;
+        this.herkunftRaetsel = this.#raetselDetails.herkunft;
+          this.person = this.herkunftRaetsel.text;
+
         this.#initForm();
       });
 
@@ -269,9 +266,11 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     return !this.form.valid || this.antwortvorschlaegeErrors() || mbeddableImageInfosOhneFile.length > 0;
   }
 
-  onChangeAnzahlAntwortvorschlaege($event: any) {
+  onChangeAnzahlAntwortvorschlaege($event: Event) {
 
-    const anz = parseInt($event.target.value);
+    const inputElement = $event.target as HTMLInputElement;
+
+    const anz = parseInt(inputElement.value);
     this.#addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
@@ -380,7 +379,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     this.form.controls['schluessel'].setValue(raetsel.schluessel);
     this.form.controls['name'].setValue(raetsel.name);
-    this.form.controls['quelleId'].setValue(this.herkunftEigenkreation.id);
+    this.form.controls['quelleId'].setValue(this.herkunftRaetsel.id);
     this.form.controls['status'].setValue(theStatus);
     this.form.controls['frage'].setValue(raetsel.frage);
     this.form.controls['loesung'].setValue(raetsel.loesung);
@@ -425,8 +424,9 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     const formValue = this.form.value;
 
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
-
-    const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : '';
+    
+    // Falls undefined, dann, weil das input-Field disabled ist.
+    const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : this.#raetselDetails.schluessel;
 
     const raetselDetails: RaetselDetails = {
       ...this.#raetselDetails,
@@ -468,14 +468,14 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   #doSubmit(raetsel: RaetselDetails, latexHistorisieren: boolean) {
 
     const quelle: QuelleDto = {
-      id: this.herkunftEigenkreation.id,
+      id: this.herkunftRaetsel.id,
       person: this.person,
-      quellenart: this.herkunftEigenkreation.quellenart,
+      quellenart: this.herkunftRaetsel.quellenart,
       ausgabe: undefined,
       jahr: undefined,
       klasse: undefined,
       seite: undefined,
-      stufe: undefined     
+      stufe: undefined
     };
 
     const editRaetselPayload: EditRaetselPayload = {

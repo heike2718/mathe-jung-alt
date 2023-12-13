@@ -43,6 +43,7 @@ import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelle;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
@@ -191,8 +192,9 @@ public class RaetselService {
 		neuesRaetsel.filenameVorschauFrage = generateFilenameVorschau();
 		neuesRaetsel.filenameVorschauLoesung = generateFilenameVorschau();
 
-		QuelleDto datenQuelle = payload.getQuelle();
+		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
 
+		QuelleDto datenQuelle = payload.getQuelle();
 		String quelleId = null;
 
 		Quelle quelle = new Quelle(datenQuelle.getId())
@@ -204,20 +206,18 @@ public class RaetselService {
 			if (Quellenart.PERSON == datenQuelle.getQuellenart() && RaetselHerkunftTyp.EIGENKREATION == neuesRaetsel.herkunft) {
 
 				// Dann ist die userId klar. In anderen Fällen handelt es sich um eine von ein von einer anderen Person erfundenes
-				// Rätsel.
+				// Rätsel, das der Admin für diese Person einträgt. Dann benötigt die Quelle keine userId.
 				quelle.setUserId(userId);
 			}
 
-			// TODO: hier Quelle anlegen! An quellenservice übergeben.
-			// dann quelleId = ...
+			PersistenteQuelle neueQuelle = quellenService.quelleAnlegen(quelle);
+			quelleId = neueQuelle.uuid;
 		} else {
 
 			quelleId = datenQuelle.getId();
 		}
 
-		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
 		neuesRaetsel.quelle = quelleId;
-
 		raetselDao.save(neuesRaetsel);
 
 		return neuesRaetsel.uuid;

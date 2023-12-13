@@ -16,10 +16,13 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quellen.QuellenService;
+import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Pattern;
@@ -44,6 +47,9 @@ public class QuellenResource {
 
 	@Inject
 	QuellenService quellenService;
+
+	@Inject
+	AuthenticationContext authCtx;
 
 	@GET
 	@Path("admin/v2")
@@ -86,8 +92,10 @@ public class QuellenResource {
 
 		if (result.isEmpty()) {
 
-			throw new WebApplicationException(Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.warn("Es gibt noch keine Quelle für Dich als Autor:in. Bitte lass eine anlegen.")).build());
+			String person = authCtx.getUser().getFullName();
+
+			return new HerkunftRaetsel().withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION).withId("neu")
+				.withQuellenart(Quellenart.PERSON).withText(person);
 		}
 
 		return result.get();

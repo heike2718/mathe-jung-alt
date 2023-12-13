@@ -26,8 +26,16 @@ export const coreAutorFeature = createFeature({
             })
         ),
         on(
+            coreQuelleActions.cORE_AUTOR_REPLACED,
+            (state, { quelle: quelle }): CoreQuelleState => ({
+                ...state,
+                herkunftEigenkreation: quelle ? quelle : initialHerkunftRaetsel,
+                herkunftEigenkreationLoaded: true
+            })
+        ),
+        on(
             coreQuelleActions.rEMOVE_AUTOR,
-            (_state, _action) => initialState
+            () => initialState
         )
     )
 });

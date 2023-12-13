@@ -12,7 +12,7 @@ export class ErrorHandlerService implements ErrorHandler {
 
     constructor(private injector: Injector) { }
 
-    handleError(error: any): void {
+    handleError(error: NonNullable<unknown>): void {
 
         const messageService = this.injector.get(MessageService);
 
@@ -39,7 +39,7 @@ export class ErrorHandlerService implements ErrorHandler {
         }        
     }
 
-    #handleAnyOtherError(error: any, messageService: MessageService): void {
+    #handleAnyOtherError(error: unknown, messageService: MessageService): void {
         messageService.error('Upsi, da ist ein unerwarteter Fehler aufgetreten');
         // TODO: müssen das noch an die API senden
         console.error(error);

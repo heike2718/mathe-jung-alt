@@ -17,7 +17,7 @@ import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
 import { EditRaetselPayload, initialRaetselDetails, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { deepClone, filterDefined } from '@mja-ws/shared/ngrx-utils';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -94,14 +94,10 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSEL_CANCEL_SELECTION());
   }
 
-  createAndEditRaetsel(quelle: HerkunftRaetsel | undefined): void {
+  createAndEditRaetsel(autor: HerkunftRaetsel ): void {
 
-    if (quelle === undefined) {
-      // TODO: Exception werfen!!!
-      return;
-    }
     this.#enterEditMode();
-    const raetselDetails: RaetselDetails = { ...initialRaetselDetails };
+    const raetselDetails: RaetselDetails = { ...initialRaetselDetails, herkunft: autor };
     this.#store.dispatch(raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
   }
 

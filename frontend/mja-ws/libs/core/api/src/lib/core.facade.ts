@@ -1,8 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { coreDeskriptorenActions, coreQuelleActions, fromCoreQuelle, fromCoreDeskriptoren, ImagesHttpService, fromStatistik, coreStatistikActions } from "@mja-ws/core/data";
+import { coreDeskriptorenActions, coreAutorActions, fromCoreAutor, fromCoreDeskriptoren, ImagesHttpService, fromStatistik, coreStatistikActions } from "@mja-ws/core/data";
 import { DeskriptorUI, GeneratedImages, HerkunftRaetsel } from "@mja-ws/core/model";
-import { BENUTZERART, User } from "@mja-ws/shared/auth/model";
 import { Store } from "@ngrx/store";
 import { Observable, tap } from "rxjs";
 
@@ -17,9 +16,9 @@ export class CoreFacade {
 
     #deskriptorenLoaded = false;
 
-    existsHerkunftEigenkreation$: Observable<boolean> = this.#store.select(fromCoreQuelle.existsHerkunftEigenkreation);
-    notExistsHerkunftEigenkreation$: Observable<boolean> = this.#store.select(fromCoreQuelle.notExistsHerkunftEigenkreation);
-    herkunftEigenkreation$: Observable<HerkunftRaetsel> = this.#store.select(fromCoreQuelle.herkunftEigenkreation);
+    existsHerkunftEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.existsHerkunftEigenkreation);
+    notExistsHerkunftEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.notExistsHerkunftEigenkreation);
+    herkunftEigenkreation$: Observable<HerkunftRaetsel> = this.#store.select(fromCoreAutor.herkunftEigenkreation);
 
     deskriptorenUILoaded$: Observable<boolean> = this.#store.select(fromCoreDeskriptoren.isDeskriptorenUILoaded);
     alleDeskriptoren$: Observable<DeskriptorUI[]> = this.#store.select(fromCoreDeskriptoren.deskriptotrenUI);
@@ -33,13 +32,14 @@ export class CoreFacade {
         ).subscribe();
     }
 
-    public loadAutor(benutzerart: BENUTZERART): void {
+    public loadAutor(): void {
 
-        if (benutzerart === 'ANONYM' || benutzerart === 'STANDARD') {
-            return;
-        }
+        this.#store.dispatch(coreAutorActions.lOAD_AUTOR());
+    }
 
-        this.#store.dispatch(coreQuelleActions.lOAD_AUTOR());
+    public replaceAutor(autor: HerkunftRaetsel): void {
+
+        this.#store.dispatch(coreAutorActions.cORE_AUTOR_REPLACED({quelle: autor}));
     }
 
     public loadDeskriptoren(): void {
@@ -64,7 +64,7 @@ export class CoreFacade {
     }
 
     #removeAutor(): void {
-        this.#store.dispatch(coreQuelleActions.rEMOVE_AUTOR());
+        this.#store.dispatch(coreAutorActions.rEMOVE_AUTOR());
         console.log('coreQuelleActions.rEMOVE_AUTOR() called')
     }
 
