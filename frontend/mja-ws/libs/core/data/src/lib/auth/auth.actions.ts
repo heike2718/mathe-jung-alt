@@ -1,19 +1,18 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { Session } from './internal.model';
-import { AuthResult } from '@mja-ws/core/model';
+import { AuthResult, Session } from '@mja-ws/core/model';
 
 export const authActions = createActionGroup({
     source: 'Auth',
     events: {
-        'LOG_IN': emptyProps(),  // internal
-        'REQUEST_LOGIN_URL': emptyProps(), // internal
-        'REQUEST_SIGNUP_URL': emptyProps(), // internal
-        'REDIRECT_TO_AUTH': props<{ authUrl: string }>(), // internal
+        'LOG_IN': emptyProps(),
+        'REQUEST_LOGIN_URL': emptyProps(),
+        'REQUEST_SIGNUP_URL': emptyProps(), 
+        'REDIRECT_TO_AUTH': props<{ authUrl: string }>(), 
         'CREATE_SESSION': props<{hash: string}>(),
-        'INIT_SESSION': props<{ authResult: AuthResult }>(), // public
-        'SESSION_CREATED': props<{ session: Session }>(), // internal
-        'LOG_OUT': emptyProps(), // public
-        'LOGGED_OUT': emptyProps() // public
+        'INIT_SESSION': props<{ authResult: AuthResult }>(), 
+        'SESSION_CREATED': props<{ session: Session }>(),
+        'LOG_OUT': emptyProps(),
+        'LOGGED_OUT': emptyProps()
     }
     
 });

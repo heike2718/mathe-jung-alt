@@ -1,43 +1,66 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthRepository } from '@mja-ws/core/data';
-import { AuthResult, User } from '@mja-ws/core/model';
+import { authActions, fromAuth } from '@mja-ws/core/data';
+import { AuthResult, BENUTZERART, isAdmin, User } from '@mja-ws/core/model';
 import { MessageService } from '@mja-ws/shared/messaging/api';
+import { filterDefined } from '@mja-ws/shared/util';
+import { Store } from '@ngrx/store';
 import { Observable, of, switchMap, tap } from 'rxjs';
+import { CoreFacade } from './core.facade';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthFacade {
 
-  #authRepository = inject(AuthRepository);
+  #store = inject(Store);
+  #coreFacade = inject(CoreFacade);
+
+  constructor() {
+
+    this.#store.select(fromAuth.session).pipe(
+      tap((session) => {
+        if (!session.user.anonym) {
+
+          const benutzerart: BENUTZERART = session.user.benutzerart;
+
+          if (benutzerart === 'ADMIN' || benutzerart === 'AUTOR') {
+            this.#coreFacade.loadAutor();
+          }
+          this.#coreFacade.loadDeskriptoren();
+        }
+      })
+    ).subscribe();
+  }
+
+  // #authRepository = inject(AuthRepository);
   #messageService = inject(MessageService);
 
-  readonly userIsRoot$: Observable<boolean> = this.#authRepository.benutzerart$.pipe(
-    switchMap((benutzerart) => of(benutzerart === 'ADMIN'))
+  readonly userIsRoot$: Observable<boolean> = this.#store.select(fromAuth.userIsRoot);
+
+  readonly userIsAdmin$: Observable<boolean> = this.#store.select(fromAuth.userIsAdmin);
+
+  readonly userIsPublic$: Observable<boolean> = this.#store.select(fromAuth.userIsPublic);
+
+  readonly user$: Observable<User> = this.#store.select(fromAuth.userFull).pipe(
+    filterDefined,
+    switchMap((user) => of({ fullName: user.fullName, isAdmin: isAdmin(user), anonym: user.anonym, benutzerart: user.benutzerart })));
+
+  readonly userIsLoggedIn$: Observable<boolean> = this.#store.select(fromAuth.userFull).pipe(
+    switchMap((user) => of(!user.anonym))
   );
 
-  readonly userIsAdmin$: Observable<boolean> = this.#authRepository.benutzerart$.pipe(
-    switchMap((benutzerart) => of(benutzerart === 'ADMIN' || benutzerart === 'AUTOR'))
-  );
-
-  readonly userIsPublic$: Observable<boolean> = this.#authRepository.benutzerart$.pipe(
-    switchMap((benutzerart) => of(benutzerart === 'STANDARD'))
-  );
-
-  readonly user$: Observable<User> = this.#authRepository.user$;
-
-  readonly userIsLoggedIn$: Observable<boolean> = this.#authRepository.loggedIn$;
-
-  readonly userIsLoggedOut$: Observable<boolean> = this.#authRepository.loggedIn$.pipe(
+  readonly userIsLoggedOut$: Observable<boolean> = this.userIsLoggedIn$.pipe(
     switchMap((li) => of(!li))
   );
 
   public login(): void {
-    this.#authRepository.login();
+    // Dies triggert einen SideEffect (siehe auth.effects.ts)
+    this.#store.dispatch(authActions.rEQUEST_LOGIN_URL());
   }
 
   public signup(): void {
-    this.#authRepository.signUp();
+    // Dies triggert einen SideEffect (siehe auth.effects.ts)
+    this.#store.dispatch(authActions.rEQUEST_SIGNUP_URL());
   }
 
   public initClearOrRestoreSession(): void {
@@ -50,7 +73,7 @@ export class AuthFacade {
 
       if (authResult.state) {
         if (authResult.state === 'login') {
-          this.#authRepository.createSession(authResult);
+          this.#store.dispatch(authActions.iNIT_SESSION({ authResult }));
         }
         if (authResult.state === 'signup') {
           window.location.hash = '';
@@ -63,11 +86,12 @@ export class AuthFacade {
   }
 
   public logout(): void {
-    this.#authRepository.logout();
+    this.#store.dispatch(authActions.lOG_OUT());
+    this.#coreFacade.handleLogout();
   }
 
   public handleSessionExpired(): void {
-    this.#authRepository.handleSessionExpired();
+    this.#store.dispatch(authActions.lOGGED_OUT());
     this.#messageService.warn('Die Session ist abgelaufen. Bitte erneut einloggen.');
   }
 

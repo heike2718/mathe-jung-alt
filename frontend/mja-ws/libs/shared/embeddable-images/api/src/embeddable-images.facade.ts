@@ -3,7 +3,7 @@ import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageResponseDto
 import { Store } from "@ngrx/store";
 import { embeddableImagesActions, fromEmbeddableImages } from '@mja-ws/embeddable-images/data';
 import { Observable } from "rxjs";
-import { filterDefined } from "@mja-ws/shared/ngrx-utils";
+import { filterDefined } from "@mja-ws/shared/util";
 import { UploadedFile } from "@mja-ws/core/model";
 
 

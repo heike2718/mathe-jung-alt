@@ -1,10 +1,19 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["@nx"],
+  "ignorePatterns": [
+    "**/*"
+  ],
+  "plugins": [
+    "@nx"
+  ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {
         "@nx/enforce-module-boundaries": [
           "error",
@@ -13,194 +22,120 @@
             "enforceBuildableLibDependency": true,
             "allow": [],
             "depConstraints": [
-               {
+              {
                 "sourceTag": "type:app",
                 "onlyDependOnLibsWithTags": [
-                  "type:model",
-                  "type:ui",
-                  "type:api",
                   "type:feature",
-                  "type:shared:config",
                   "type:shared:http",
-                  "type:local-storage"
+                  "type:config",
+                  "type:shared:ui",
+                  "type:shared:api",
+                  "type:core:api",
+                  "type:local-storage-data"
                 ]
               },
               {
                 "sourceTag": "type:feature",
                 "onlyDependOnLibsWithTags": [
                   "type:api",
-                  "type:ui",
+                  "type:core:api",
+                  "type:core:model",
                   "type:model",
-                  "type:shared:config"
-                ],
-                "bannedExternalImports": ["@ngrx/**"]
-              },
-              {
-                "sourceTag": "type:ui",
-                "onlyDependOnLibsWithTags": [
-                  "type:model",
-                  "type:api",
-                  "type:shared:util",
                   "type:shared:ui",
-                  "type:shared:config"
+                  "type:shared:api",
+                  "type:config"
                 ],
-                "bannedExternalImports": ["@ngrx/**"]
+                "bannedExternalImports": [
+                  "@ngrx/**"
+                ]
               },
               {
                 "sourceTag": "type:api",
-                "onlyDependOnLibsWithTags": ["type:model", "type:data"]
+                "onlyDependOnLibsWithTags": [
+                  "type:data",
+                  "type:model",
+                  "type:core:api",
+                  "type:core:model",
+                  "type:util"
+                ]
               },
               {
                 "sourceTag": "type:data",
-                "onlyDependOnLibsWithTags": ["type:model"]
-              },
-              {
-                "sourceTag": "domain:raetsel:model",
-                "onlyDependOnLibsWithTags": ["type:model", "type:core:model"]
-              },
-              {
-                "sourceTag": "domain:raetsel:data",
                 "onlyDependOnLibsWithTags": [
-                  "domain:raetsel:model",
-                  "type:core:model"
-                ]
-              },
-              {
-                "sourceTag": "domain:raetsel:api",
-                "onlyDependOnLibsWithTags": [
-                  "domain:raetsel:model",
-                  "domain:raetsel:data",
+                  "type:model",
+                  "type:util",
                   "type:core:api",
                   "type:core:model",
-                  "type:shared:util",
-                  "type:shared:ngrx-utils"
+                  "type:shared:api"
                 ]
               },
               {
-                "sourceTag": "domain:raetsel:feature",
+                "sourceTag": "type:core:api",
                 "onlyDependOnLibsWithTags": [
-                  "domain:raetsel:model",
-                  "domain:raetsel:api",
-                  "domain:grafik:api",
-                  "domain:grafik:model",
-                  "type:core:api",
-                  "type:core:model"
-                ]
-              },
-              {
-                "sourceTag": "domain:aufgabensammlungen:model",
-                "onlyDependOnLibsWithTags": ["type:core:model"]
-              },
-              {
-                "sourceTag": "domain:aufgabensammlungen:data",
-                "onlyDependOnLibsWithTags": [
-                  "domain:aufgabensammlungen:model",
-                  "domain:shared",
-                  "type:shared:util"
-                ]
-              },
-              {
-                "sourceTag": "domain:aufgabensammlungen:api",
-                "onlyDependOnLibsWithTags": [
-                  "domain:aufgabensammlungen:model",
-                  "domain:aufgabensammlungen:data",
-                  "type:core:api"
-                ]
-              },
-              {
-                "sourceTag": "domain:aufgabensammlungen:feature",
-                "onlyDependOnLibsWithTags": [
-                  "domain:aufgabensammlungen:model",
-                  "domain:aufgabensammlungen:api",
-                  "domain:raetsel:api"
-                ]
-              },
-              {
-                "sourceTag": "domain:grafik:model",
-                "onlyDependOnLibsWithTags": ["type:model", "type:core:model"]
-              },
-              {
-                "sourceTag": "domain:grafik:data",
-                "onlyDependOnLibsWithTags": [
-                  "domain:grafik:model",
-                  "type:shared:messaging:api"
-                ]
-              },
-              {
-                "sourceTag": "domain:grafik:api",
-                "onlyDependOnLibsWithTags": [
-                  "domain:grafik:model",
-                  "domain:grafik:data"
-                ]
-              },
-              {
-                "sourceTag": "domain:core",
-                "onlyDependOnLibsWithTags": [
-                  "domain:shared",
-                  "type:core:model"
-                ]
-              },
-              {
-                "sourceTag": "domain:shared:messaging:ui",
-                "onlyDependOnLibsWithTags": [
-                  "type:shared:messaging:api",
-                  "type:shared:util"
-                ]
-              },
-              {
-                "sourceTag": "type:shared:http",
-                "onlyDependOnLibsWithTags": [
-                  "type:shared:config",
-                  "type:shared:messaging:api"
-                ]
-              },
-              {
-                "sourceTag": "type:shared:ui",
-                "onlyDependOnLibsWithTags": [
+                  "type:shared:ui",
+                  "type:shared:api",
+                  "type:core:data",
                   "type:core:model",
-                  "type:core:api",
-                  "type:shared:util",
-                  "type:shared:messaging:api",
-                  "type:shared:config"                  
-                ]
-              },
-              {
-                "sourceTag": "domain:core:api",
-                "onlyDependOnLibsWithTags": [
-                  "type:core:model",
-                  "type:core:data"
+                  "type:util"
                 ]
               },
               {
                 "sourceTag": "type:core:data",
                 "onlyDependOnLibsWithTags": [
+                  "type:shared:ui",
+                  "type:shared:api",
                   "type:core:model",
-                  "type:shared:messaging:api"
+                  "type:util"
                 ]
               },
               {
-                "sourceTag": "type:shared:ngrx-utils",
-                "onlyDependOnLibsWithTags": ["type:shared:util"]
-              },
-              {
-                "sourceTag": "domain:embeddable-images:model",
+                "sourceTag": "type:shared:ui",
                 "onlyDependOnLibsWithTags": [
-                  "type:shared:messaging:api",
-                  "type:core:model"                  
+                  "type:shared:api",
+                  "type:config",
+                  "type:util",
+                  "type:core:model",
+                  "type:core:api"
                 ]
               },
               {
-                "sourceTag": "domain:embeddable-images:data",
+                "sourceTag": "type:shared:http",
                 "onlyDependOnLibsWithTags": [
-                  "domain:embeddable-images:model",
-                  "type:shared:messaging:api"
-                  
+                  "type:config",
+                  "type:util",
+                  "type:shared:api"
                 ]
               },
               {
-                "sourceTag": "domain:embeddable-images:api",
+                "sourceTag": "type:model",
+                "onlyDependOnLibsWithTags": [
+                  "type:model",
+                  "type:core:model"
+                ]
+              },              
+              {
+                "sourceTag": "type:local-storage-data",
+                "onlyDependOnLibsWithTags": [
+                  "type:util",
+                  "type:core:data"
+                ]
+              },              
+              {
+                "sourceTag": "type:core:model",
                 "onlyDependOnLibsWithTags": [
                   "type:core:model"
+                ]
+              },
+              {
+                "sourceTag": "type:config",
+                "onlyDependOnLibsWithTags": [
+                  "type:config"
+                ]
+              },
+              {
+                "sourceTag": "type:util",
+                "onlyDependOnLibsWithTags": [
+                  "type:util"
                 ]
               }
             ]
@@ -209,17 +144,32 @@
       }
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nx/typescript"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "plugin:@nx/typescript"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nx/javascript"],
+      "files": [
+        "*.js",
+        "*.jsx"
+      ],
+      "extends": [
+        "plugin:@nx/javascript"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
+      "files": [
+        "*.spec.ts",
+        "*.spec.tsx",
+        "*.spec.js",
+        "*.spec.jsx"
+      ],
       "env": {
         "jest": true
       },

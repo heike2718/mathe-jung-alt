@@ -1,14 +1,16 @@
 import { generateUUID, swallowEmptyArgument } from '@mja-ws/shared/util';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { authActions } from './auth.actions';
-import { anonymousSession, Session } from './internal.model';
+import { Session, anonymousSession } from '@mja-ws/core/model';
 
 export interface AuthState {
     readonly session: Session;
+    readonly sessionExists: boolean;
 };
 
 export const initialState: AuthState = {
-    session: anonymousSession
+    session: anonymousSession,
+    sessionExists: false
 };
 
 export const authFeature = createFeature({

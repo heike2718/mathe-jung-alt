@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { fromEvent, map, pluck } from 'rxjs';
+import { fromEvent, map } from 'rxjs';
 import { createEffect } from '@ngrx/effects';
 import { syncLocalStorage } from './sync-local-storage';
-import { filterDefined } from '@mja-ws/shared/ngrx-utils';
+import { filterDefined } from '@mja-ws/shared/util';
 
 @Injectable()
 export class LocalStorageEffects {

@@ -15,7 +15,7 @@ import {
 } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
 import { EditRaetselPayload, initialRaetselDetails, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
-import { deepClone, filterDefined } from '@mja-ws/shared/ngrx-utils';
+import { deepClone, filterDefined } from '@mja-ws/shared/util';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 

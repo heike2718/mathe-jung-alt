@@ -14,8 +14,8 @@ import { AuthFacade } from '@mja-ws/core/api';
 })
 export class SidenavComponent {
 
-  public authFacade = inject(AuthFacade);
-  
+  authFacade = inject(AuthFacade);
+
   @Output()
   sidenavClose = new EventEmitter();
 
@@ -30,7 +30,7 @@ export class SidenavComponent {
   public logout(): void {
     this.authFacade.logout();
   }
-  
+
   public onSidenavClose = () => {
     this.sidenavClose.emit();
   }

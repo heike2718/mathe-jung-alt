@@ -7,4 +7,4 @@ export { coreStatistikDataProvider} from './lib/core-statistik-data.provider';
 export { AuthFacade } from './lib/auth.facade';
 export { authDataProvider } from './lib/auth-data.provider';
 
-export { authActions } from '@mja-ws/core/data';
+// export { authActions } from '@mja-ws/core/data';

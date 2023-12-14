@@ -569,7 +569,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(_result => {
+    dialogRef.afterClosed().subscribe(() => {
       this.#embeddableImagesFacade.clearVorschau();
     });
   }

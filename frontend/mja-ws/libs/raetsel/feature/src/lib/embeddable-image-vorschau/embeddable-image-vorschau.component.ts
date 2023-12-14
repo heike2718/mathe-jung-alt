@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FileInfoComponent, FileInfoModel, SelectFileComponent, SelectFileModel } from '@mja-ws/shared/components';
 import { MatButtonModule } from '@angular/material/button';

@@ -14,6 +14,7 @@ export class CoreAutorEffects {
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);
 
+
     loadQuelleAdmin$ = createEffect(() => {
 
         return this.#actions.pipe(

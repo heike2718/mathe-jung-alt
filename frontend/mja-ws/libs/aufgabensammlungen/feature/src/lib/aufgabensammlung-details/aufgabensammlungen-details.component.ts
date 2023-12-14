@@ -16,7 +16,7 @@ import {
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
-import { Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { EditAufgabensammlungselementPayload, AufgabensammlungBasisdaten, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
 import { AufgabensammlungselementDialogData } from '../aufgabensammlungselement-dialog/aufgabensammlungselement-dialog.data';
 import { AufgabensammlungselementDialogComponent } from '../aufgabensammlungselement-dialog/aufgabensammlungenselement-dialog.component';

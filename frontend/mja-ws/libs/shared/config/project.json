@@ -26,5 +26,5 @@
       }
     }
   },
-  "tags": ["type:shared:config"]
+  "tags": ["type:config"]
 }

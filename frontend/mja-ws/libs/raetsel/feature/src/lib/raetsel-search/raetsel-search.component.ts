@@ -248,7 +248,11 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       this.#searchModeForDescriptors());
   }
 
-  onSuchmodusChanged(_checked: boolean): void {
+  onSuchmodusChanged(checked: boolean): void {
+
+    if (checked) {
+      // do nothing
+    }
 
     const theSuchfilter: RaetselSuchfilter = {
       ...

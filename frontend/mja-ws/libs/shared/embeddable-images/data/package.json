@@ -2,12 +2,13 @@
   "name": "@mja-ws/embeddable-images/data",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^16.2.0",
-    "@angular/core": "^16.2.0",
+    "@angular/common": "17.0.6",
+    "@angular/core": "17.0.6",
     "rxjs": "7.8.1",
-    "@ngrx/store": "16.0.1",
-    "@ngrx/effects": "16.0.1",
-    "@mja-ws/embeddable-images/model": "^0.0.1"
+    "@ngrx/store": "17.0.1",
+    "@ngrx/effects": "17.0.1",
+    "@mja-ws/embeddable-images/model": "^0.0.1",
+    "@mja-ws/shared/util": "^0.0.1"
   },
   "dependencies": {},
   "sideEffects": false

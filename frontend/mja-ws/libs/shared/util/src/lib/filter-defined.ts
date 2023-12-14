@@ -1,5 +1,5 @@
 import { filter, Observable } from 'rxjs';
-import { isDefined } from '@mja-ws/shared/util';
+import { isDefined } from './is-defined';
 
 export function filterDefined<T>(
   source$: Observable<T>

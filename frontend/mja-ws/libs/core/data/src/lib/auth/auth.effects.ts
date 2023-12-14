@@ -4,11 +4,9 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, switchMap, map, tap } from 'rxjs/operators';
 import { authActions } from './auth.actions';
-import { Session } from './internal.model';
 import { Message } from '@mja-ws/shared/messaging/api';
-import { CoreFacade } from '@mja-ws/core/api';
 import { Router } from '@angular/router';
-import { BENUTZERART } from '@mja-ws/core/model';
+import { Session } from '@mja-ws/core/model';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +15,6 @@ export class AuthEffects {
 
     #actions = inject(Actions);
     #httpClient = inject(HttpClient);
-    #coreFacade = inject(CoreFacade);
     #router = inject(Router);
 
     requestLoginUrl$ = createEffect(() => {
@@ -59,30 +56,12 @@ export class AuthEffects {
         );
     });
 
-    sessionCreated$ = createEffect(() =>
-        this.#actions.pipe(
-            ofType(authActions.sESSION_CREATED),
-            switchMap((action) => of(action.session)),
-            tap((session) => {
-                if (session.user) {
-
-                    const benutzerart: BENUTZERART = session.user.benutzerart;
-
-                    if (benutzerart === 'ADMIN' || benutzerart === 'AUTOR') {
-                        this.#coreFacade.loadAutor();
-                    }                    
-                    this.#coreFacade.loadDeskriptoren();
-                }
-            })
-        ), { dispatch: false });
-
     logOut$ = createEffect(() => {
 
         return this.#actions.pipe(
             ofType(authActions.lOG_OUT),
             switchMap(() =>
                 this.#httpClient.delete<Message>('/mja-api/session/logout')),
-            tap(() => this.#coreFacade.handleLogout()),
             map(() => authActions.lOGGED_OUT()),
             catchError(() => of(authActions.lOGGED_OUT()))
         );

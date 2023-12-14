@@ -1,13 +1,8 @@
 
-export { AuthRepository } from './lib/auth/auth.repository';
+export { fromAuth } from './lib/auth/auth.selectors';
 export { authFeature } from './lib/auth/auth.reducer';
 export { AuthEffects } from './lib/auth/auth.effects';
-import { authActions as allAuthActions } from './lib/auth/auth.actions';
-
-// publish logged_out-Action
-const { lOGGED_OUT } = allAuthActions;
-
-export const authActions = { lOGGED_OUT };
+export { authActions } from './lib/auth/auth.actions';
 
 export { coreQuelleActions as coreAutorActions } from './lib/quelle/core-autor.actions';
 export { fromCoreAutor } from './lib/quelle/core-autor.selectors';

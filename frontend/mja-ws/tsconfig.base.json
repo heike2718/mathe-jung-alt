@@ -49,7 +49,6 @@
         "libs/shared/messaging/api/src/index.ts"
       ],
       "@mja-ws/shared/messaging/ui": ["libs/shared/messaging/ui/src/index.ts"],
-      "@mja-ws/shared/ngrx-utils": ["libs/shared/ngrx-utils/src/index.ts"],
       "@mja-ws/shared/util": ["libs/shared/util/src/index.ts"]
     }
   },
