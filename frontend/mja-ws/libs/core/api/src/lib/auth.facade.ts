@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthRepository } from '@mja-ws/shared/auth/data';
-import { AuthResult, User } from '@mja-ws/shared/auth/model';
+import { AuthRepository } from '@mja-ws/core/data';
+import { AuthResult, User } from '@mja-ws/core/model';
 import { MessageService } from '@mja-ws/shared/messaging/api';
 import { Observable, of, switchMap, tap } from 'rxjs';
 

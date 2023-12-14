@@ -1,8 +1,7 @@
-import { generateUUID } from '@mja-ws/shared/util';
+import { generateUUID, swallowEmptyArgument } from '@mja-ws/shared/util';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { authActions } from './auth.actions';
 import { anonymousSession, Session } from './internal.model';
-import { swallowEmptyArgument } from '@mja-ws/shared/ngrx-utils';
 
 export interface AuthState {
     readonly session: Session;

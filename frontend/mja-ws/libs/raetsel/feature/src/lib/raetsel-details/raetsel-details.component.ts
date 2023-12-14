@@ -12,7 +12,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 import { Router } from '@angular/router';
 import { RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';

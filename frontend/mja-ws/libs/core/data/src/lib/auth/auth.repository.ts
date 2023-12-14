@@ -5,7 +5,7 @@ import { authActions } from './auth.actions';
 import { Observable, of, switchMap } from 'rxjs';
 import { fromAuth } from './auth.selectors';
 import { filterDefined } from '@mja-ws/shared/ngrx-utils';
-import { AuthResult, BENUTZERART, User } from '@mja-ws/shared/auth/model';
+import { AuthResult, BENUTZERART, User } from '@mja-ws/core/model';
 
 @Injectable({
     providedIn: 'root'

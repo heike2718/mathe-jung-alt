@@ -41,9 +41,6 @@
       "@mja-ws/aufgabensammlungen/model": [
         "libs/aufgabensammlungen/model/src/index.ts"
       ],
-      "@mja-ws/shared/auth/api": ["libs/shared/auth/api/src/index.ts"],
-      "@mja-ws/shared/auth/data": ["libs/shared/auth/data/src/index.ts"],
-      "@mja-ws/shared/auth/model": ["libs/shared/auth/model/src/index.ts"],
       "@mja-ws/shared/components": ["libs/shared/components/src/index.ts"],
       "@mja-ws/shared/config": ["libs/shared/config/src/index.ts"],
       "@mja-ws/shared/http": ["libs/shared/http/src/index.ts"],

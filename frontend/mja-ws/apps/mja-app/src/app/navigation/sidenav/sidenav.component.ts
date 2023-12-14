@@ -3,7 +3,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLinkWithHref } from '@angular/router';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 
 @Component({
   selector: 'mja-app-sidenav',

@@ -1,4 +1,4 @@
-import { BENUTZERART } from "@mja-ws/shared/auth/model";
+import { BENUTZERART } from "@mja-ws/core/model";
 
 export interface UserFull {
   readonly idReference: string;

@@ -1,5 +1,5 @@
 import { Routes } from "@angular/router";
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 import { AufgabensammlungenSearchComponent } from "./aufgabensammlungen-search/aufgabensammlungen-search.component";
 import { aufgabensammlungenDataProvider } from '@mja-ws/aufgabensammlungen/api';
 import { AufgabensammlungDetailsComponent } from "./aufgabensammlung-details/aufgabensammlungen-details.component";

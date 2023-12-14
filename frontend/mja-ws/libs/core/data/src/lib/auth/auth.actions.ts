@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Session } from './internal.model';
-import { AuthResult } from '@mja-ws/shared/auth/model';
+import { AuthResult } from '@mja-ws/core/model';
 
 export const authActions = createActionGroup({
     source: 'Auth',

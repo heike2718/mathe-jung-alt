@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLinkWithHref } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 
 @Component({
   selector: 'mja-app-header',

@@ -5,7 +5,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavComponent } from './navigation/sidenav/sidenav.component';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 import { LoadingIndicatorComponent, MessageComponent } from '@mja-ws/shared/messaging/ui';
 
 

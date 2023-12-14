@@ -1,5 +1,5 @@
 import { ApplicationConfig } from '@angular/core';
-import { authDataProvider } from '@mja-ws/shared/auth/api';
+import { authDataProvider } from '@mja-ws/core/api';
 import {
   coreDeskriptorenDataProvider,
   coreQuelleDataProvider,
@@ -36,8 +36,6 @@ import { ErrorHandlerService } from './services/error-handler.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { registerLocaleData } from '@angular/common';
-import { embeddableImagesDataProvider } from '@mja-ws/embeddable-images/api';
-import { raetselDataProvider } from '@mja-ws/raetsel/api';
 
 if (environment.production) {
   enableProdMode();
@@ -62,8 +60,6 @@ export const appConfig: ApplicationConfig = {
     coreQuelleDataProvider,
     coreDeskriptorenDataProvider,
     coreStatistikDataProvider,
-    embeddableImagesDataProvider,
-    raetselDataProvider,
     provideAnimations(),
     provideRouter(appRoutes),
     provideRouterStore(),

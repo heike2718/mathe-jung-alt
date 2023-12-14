@@ -9,7 +9,7 @@ import { RaetselDataSource, RaetselFacade } from '@mja-ws/raetsel/api';
 import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { initialSelectItemsComponentModel, PageDefinition, PaginationState, HerkunftRaetsel, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
 import { combineLatest, debounceTime, merge, Subscription, tap } from 'rxjs';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 import { CoreFacade } from '@mja-ws/core/api';
 import { RaetselSuchfilterAdminComponent } from '../raetsel-suchfilter-admin/raetsel-suchfilter-admin.component';
 import { SelectItemsComponent } from '@mja-ws/shared/components';

@@ -8,7 +8,7 @@ import { Session } from './internal.model';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { CoreFacade } from '@mja-ws/core/api';
 import { Router } from '@angular/router';
-import { BENUTZERART } from '@mja-ws/shared/auth/model';
+import { BENUTZERART } from '@mja-ws/core/model';
 
 @Injectable({
     providedIn: 'root'

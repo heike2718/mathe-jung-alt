@@ -25,7 +25,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { FormsModule } from '@angular/forms';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 
 @Component({
   selector: 'mja-aufgabensammlungen-details',

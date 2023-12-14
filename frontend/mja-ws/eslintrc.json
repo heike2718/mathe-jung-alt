@@ -141,25 +141,6 @@
                 ]
               },
               {
-                "sourceTag": "type:shared:auth:api",
-                "onlyDependOnLibsWithTags": [
-                  "domain:shared:auth:model",
-                  "type:core:api",
-                  "type:shared:auth:data"
-                ]
-              },
-              {
-                "sourceTag": "type:shared:auth:data",
-                "onlyDependOnLibsWithTags": [
-                  "domain:shared:auth:model",
-                  "type:shared:messaging:api",
-                  "type:shared:config",
-                  "type:shared:ngrx-utils",
-                  "type:shared:util",
-                  "type:core:api"
-                ]
-              },
-              {
                 "sourceTag": "type:shared:ui",
                 "onlyDependOnLibsWithTags": [
                   "type:core:model",
@@ -172,7 +153,6 @@
               {
                 "sourceTag": "type:local-storage",
                 "onlyDependOnLibsWithTags": [
-                  "type:shared:auth:data",
                   "type:shared:ngrx-utils"
                 ]
               },

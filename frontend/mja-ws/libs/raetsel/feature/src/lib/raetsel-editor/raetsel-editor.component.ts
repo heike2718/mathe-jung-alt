@@ -21,7 +21,7 @@ import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, S
 import { CoreFacade } from '@mja-ws/core/api';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import { MatCardModule } from '@angular/material/card';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, TEXTART } from '@mja-ws/embeddable-images/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorHandler, Injectable, Injector } from "@angular/core";
-import { AuthFacade } from "@mja-ws/shared/auth/api";
+import { AuthFacade } from '@mja-ws/core/api';
 import { extractServerErrorMessage, getHttpErrorResponse } from "@mja-ws/shared/http";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 

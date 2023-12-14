@@ -1,5 +1,5 @@
 import { ActionReducer, INIT, MetaReducer } from '@ngrx/store';
-import { authActions } from '@mja-ws/shared/auth/data';
+import { authActions } from '@mja-ws/core/data';
 
 function clearState(reducer: ActionReducer<any>): ActionReducer<any> {
     return (state, action) => {
