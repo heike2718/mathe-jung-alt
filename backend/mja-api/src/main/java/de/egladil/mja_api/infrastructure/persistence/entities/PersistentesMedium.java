@@ -34,7 +34,12 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "MEDIEN")
 @NamedNativeQueries({
+	@NamedNativeQuery(
+		name = "PersistentesMedium.MAX_SORTNR", query = "SELECT max(m.SORTNR) from MEDIEN m", resultClass = Long.class),
 	@NamedNativeQuery(name = "PersistentesMedium.COUNT_ALL", query = "SELECT count(*) FROM MEDIEN", resultClass = Long.class),
+	@NamedNativeQuery(
+		name = "PersistentesMedium.ANZAHL_MIT_TITEL_GLEICH", query = "SELECT count(*) from MEDIEN m where m.TITEL = :titel",
+		resultClass = Long.class),
 	@NamedNativeQuery(
 		name = "PersistentesMedium.COUNT_WITH_SUCHSTRING",
 		query = "SELECT count(*) FROM MEDIEN m WHERE m.TITEL LIKE :suchstring OR m.KOMMENTAR LIKE :suchstring",
@@ -52,6 +57,10 @@ import jakarta.validation.constraints.Size;
 		query = "select m from PersistentesMedium m where m.titel like :suchstring order by  m.titel"),
 })
 public class PersistentesMedium implements PersistenteMjaEntity {
+
+	public static final String MAX_SORTNR = "PersistentesMedium.MAX_SORTNR";
+
+	public static final String ANZAHL_MIT_TITEL_GLEICH = "PersistentesMedium.ANZAHL_MIT_TITEL_GLEICH";
 
 	public static final String COUNT_ALL = "PersistentesMedium.COUNT_ALL";
 

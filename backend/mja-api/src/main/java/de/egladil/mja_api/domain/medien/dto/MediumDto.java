@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.medien.Medienart;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 /**
@@ -23,9 +25,11 @@ public class MediumDto {
 	private String id;
 
 	@Schema(description = "Art des Mediums")
+	@NotNull(message = "medienart ist erforderlich")
 	private Medienart medienart;
 
 	@Schema(description = "Titel des Mediums", example = "2 mal 3 plus Spaß dabei")
+	@NotBlank(message = "titel ist erforderlich")
 	private String titel;
 
 	@Schema(description = "Autor, bei mehreren kommaseparierte Liste", example = "Johannes Lehmann")

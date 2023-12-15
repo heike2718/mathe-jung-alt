@@ -58,12 +58,14 @@ public class MediumDao {
 	 */
 	public int getMaximumOfAllSortNumbers() {
 
-		String stmt = "SELECT max(m.SORTNR) from MEDIEN m";
+		List<Long> trefferliste = entityManager.createNamedQuery(PersistentesMedium.MAX_SORTNR, Long.class).getResultList();
 
-		@SuppressWarnings("unchecked")
-		List<Long> trefferliste = entityManager.createNativeQuery(stmt).getResultList();
+		if (trefferliste.isEmpty()) {
 
-		return trefferliste.get(0).intValue();
+			return 0;
+		}
+
+		return trefferliste.get(0) == null ? 0 : trefferliste.get(0).intValue();
 	}
 
 	/**
@@ -93,6 +95,15 @@ public class MediumDao {
 			.setParameter("suchstring", theSuchstring).getResultList();
 
 		return treffermenge.get(0);
+	}
+
+	public long countMedienWithSameTitel(final String titel) {
+
+		List<Long> treffermenge = entityManager.createNamedQuery(PersistentesMedium.ANZAHL_MIT_TITEL_GLEICH, Long.class)
+			.setParameter("titel", titel).getResultList();
+
+		return treffermenge.get(0);
+
 	}
 
 	/**

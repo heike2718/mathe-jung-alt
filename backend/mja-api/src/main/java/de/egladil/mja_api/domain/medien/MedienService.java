@@ -90,6 +90,14 @@ public class MedienService {
 	@Transactional
 	public MediumDto mediumAnlegen(final MediumDto medium) {
 
+		long anzahlDubletten = mediumDao.countMedienWithSameTitel(medium.getTitel());
+
+		if (anzahlDubletten > 0) {
+
+			throw new WebApplicationException(Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben."))
+				.build());
+		}
+
 		int maxSortnr = mediumDao.getMaximumOfAllSortNumbers();
 
 		String userId = authCtx.getUser().getUuid();

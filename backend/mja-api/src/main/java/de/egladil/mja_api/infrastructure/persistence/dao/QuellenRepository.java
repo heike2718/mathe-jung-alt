@@ -80,7 +80,12 @@ public class QuellenRepository {
 		@SuppressWarnings("unchecked")
 		List<Long> trefferliste = entityManager.createNativeQuery(stmt).getResultList();
 
-		return trefferliste.get(0).intValue();
+		if (trefferliste.isEmpty()) {
+
+			return 0;
+		}
+
+		return trefferliste.get(0) == null ? 0 : trefferliste.get(0).intValue();
 	}
 
 	/**
