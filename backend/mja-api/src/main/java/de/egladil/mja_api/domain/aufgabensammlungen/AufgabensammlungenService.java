@@ -7,7 +7,6 @@ package de.egladil.mja_api.domain.aufgabensammlungen;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,6 +18,7 @@ import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTre
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTrefferItem;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungPayload;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungselementPayload;
+import de.egladil.mja_api.domain.aufgabensammlungen.impl.AufgabensammlungPermissionDelegate;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.generatoren.AufgabensammlungLaTeXGeneratorService;
 import de.egladil.mja_api.domain.generatoren.AufgabensammlungPDFGeneratorService;
@@ -32,7 +32,6 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
-import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.AufgabensammlungDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
@@ -55,6 +54,9 @@ public class AufgabensammlungenService {
 
 	@Inject
 	AuthenticationContext authCtx;
+
+	@Inject
+	AufgabensammlungPermissionDelegate permissionDelegate;
 
 	@Inject
 	AufgabensammlungDao aufgabensammlungDao;
@@ -115,11 +117,9 @@ public class AufgabensammlungenService {
 
 		final AufgabensammlungDetails result = AufgabensammlungDetails.createFromDB(aufgabensammlung);
 
-		if (PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), aufgabensammlung.owner)) {
+		permissionDelegate.checkWritePermission(aufgabensammlung);
 
-			result.markiereAlsAenderbar();
-		}
+		result.markiereAlsAenderbar();
 
 		List<PersistentesAufgabensammlugnselement> elementeDB = aufgabensammlungDao
 			.loadElementeAufgabensammlung(aufgabensammlungID);
@@ -237,7 +237,7 @@ public class AufgabensammlungenService {
 					.build());
 		}
 
-		checkPermission(ausDB);
+		permissionDelegate.checkWritePermission(ausDB);
 
 		mergeFromPayload(ausDB, payload);
 		ausDB.geaendertDurch = userId;
@@ -337,7 +337,7 @@ public class AufgabensammlungenService {
 			throw new WebApplicationException(response);
 		}
 
-		checkPermission(aufgabensammlung);
+		permissionDelegate.checkWritePermission(aufgabensammlung);
 
 		Optional<String> optRaetselId = raetselService.getRaetselIdWithSchluessel(payload.getRaetselSchluessel());
 
@@ -439,7 +439,7 @@ public class AufgabensammlungenService {
 			throw new WebApplicationException(response);
 		}
 
-		checkPermission(aufgabensammlung);
+		permissionDelegate.checkWritePermission(aufgabensammlung);
 
 		if (!aufgabensammlungID.equals(persistentesElement.aufgabensammlungID)) {
 
@@ -502,11 +502,16 @@ public class AufgabensammlungenService {
 
 		PersistenteAufgabensammlung aufgabensammlung = aufgabensammlungDao.findByID(aufgabensammlungID);
 
-		if (aufgabensammlung != null) {
+		if (aufgabensammlung == null) {
 
-			checkPermission(aufgabensammlung);
+			LOGGER.error("Aufgabensammlung mit der UUID={} gibt es nicht", aufgabensammlungID);
+			Response response = Response.status(Status.NOT_FOUND)
+				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht."))
+				.build();
+			throw new WebApplicationException(response);
 		}
 
+		permissionDelegate.checkWritePermission(aufgabensammlung);
 		aufgabensammlungDao.deleteElement(elementID);
 
 		Optional<AufgabensammlungDetails> opt = this.loadDetails(aufgabensammlungID);
@@ -569,10 +574,10 @@ public class AufgabensammlungenService {
 	public GeneratedFile printKartei(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
-		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
+		List<Quizaufgabe> quizzaufgaben = this.getQuizzaufgaben(dbResult);
 
 		AufgabensammlungGeneratorInput input = createAufgabensammlungGeneratorInput(Verwendungszweck.KARTEI, font, schriftgroesse,
-			layoutAntwortvorschlaege, dbResult, freigegebeneAufgaben);
+			layoutAntwortvorschlaege, dbResult, quizzaufgaben);
 
 		return aufgabensammlungPDFGenerator.generate(input);
 	}
@@ -593,16 +598,24 @@ public class AufgabensammlungenService {
 	public GeneratedFile printArbeitsblattMitLoesungen(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
-		List<Quizaufgabe> freigegebeneAufgaben = vorbedingungenPublicResourcesPruefen(dbResult);
+		List<Quizaufgabe> quizaufgaben = this.getQuizzaufgaben(dbResult);
 
 		AufgabensammlungGeneratorInput input = createAufgabensammlungGeneratorInput(Verwendungszweck.ARBEITSBLATT, font,
 			schriftgroesse,
-			layoutAntwortvorschlaege, dbResult, freigegebeneAufgaben);
+			layoutAntwortvorschlaege, dbResult, quizaufgaben);
 
 		return aufgabensammlungPDFGenerator.generate(input);
 	}
 
-	List<Quizaufgabe> vorbedingungenPublicResourcesPruefen(final PersistenteAufgabensammlung dbResult) throws WebApplicationException {
+	/**
+	 * Gibt die Quizzaugaben zurück, die der eingeloggte User als Kartei oder Arbeitsblatt drucken darf.
+	 *
+	 * @param  dbResult
+	 * @return
+	 * @throws WebApplicationException
+	 *                                 wenn nicht vorhanden, keine Leseberechtigung oder Aufgabensammlung leer
+	 */
+	List<Quizaufgabe> getQuizzaufgaben(final PersistenteAufgabensammlung dbResult) throws WebApplicationException {
 
 		if (dbResult == null) {
 
@@ -610,41 +623,18 @@ public class AufgabensammlungenService {
 				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Die Aufgabensammlung gibt es nicht.")).build());
 		}
 
-		checkPermission(dbResult);
+		permissionDelegate.checkReadPermission(dbResult);
 
-		String aufgabensammlungID = dbResult.uuid;
+		List<Quizaufgabe> result = this.quizService.getItemsAsQuizaufgaben(dbResult.uuid);
 
-		List<Quizaufgabe> aufgaben = this.quizService.getItemsAsQuizaufgaben(aufgabensammlungID);
-		List<Quizaufgabe> freigegebeneAufgaben = aufgaben;
-
-		if (PermissionUtils.isUserOrdinary(authCtx.getUser().getRoles())) {
-
-			freigegebeneAufgaben = aufgaben.stream().filter(a -> a.isFreigegeben())
-				.collect(Collectors.toList());
-
-			if (freigegebeneAufgaben.isEmpty()) {
-
-				LOGGER.error("Aufgabensammlung {} - {} hat keine freigegebenen Aufgaben. Aufruf durch admin {}", aufgabensammlungID,
-					dbResult.name, StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
-
-				throw new WebApplicationException(
-					Response.status(Status.FORBIDDEN)
-						.entity(MessagePayload.error("Drucken einer Kartei nicht erlaubt. Keine freigegebenen Rätsel.")).build());
-			}
-
-		}
-
-		if (freigegebeneAufgaben.isEmpty()) {
-
-			LOGGER.error("Aufgabensammlung {} - {} hat keine Aufgaben. Aufruf durch admin {}", aufgabensammlungID,
-				dbResult.name, StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
+		if (result.isEmpty()) {
 
 			throw new WebApplicationException(
-				Response.status(Status.BAD_REQUEST)
-					.entity(MessagePayload.error("Drucken einer Kartei nicht möglich. Aufgabensammlung ist leer.")).build());
+				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("Die Aufgabensammlung ist leer.")).build());
 		}
 
-		return freigegebeneAufgaben;
+		return result;
+
 	}
 
 	/**
@@ -690,19 +680,6 @@ public class AufgabensammlungenService {
 			.withVerwendungszweck(verwendungszweck)
 			.withSchriftgroesse(schriftgroesse);
 		return input;
-	}
-
-	void checkPermission(final PersistenteAufgabensammlung ausDB) {
-
-		if (!PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), ausDB.owner)) {
-
-			LOGGER.warn("User {} hat versucht, Aufgabensammlung {} mit Owner {} zu aendern oder zu drucken",
-				authCtx.getUser().getName(), ausDB.uuid,
-				ausDB.owner);
-
-			throw new WebApplicationException(Status.FORBIDDEN);
-		}
 	}
 
 	GeneratedFile mapToGeneratedFile(final File file) {

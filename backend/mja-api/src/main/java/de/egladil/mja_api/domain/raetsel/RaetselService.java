@@ -39,7 +39,7 @@ import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_api.domain.raetsel.impl.DeleteUnusedEmbeddableImageFilesService;
 import de.egladil.mja_api.domain.raetsel.impl.FindPathsGrafikParser;
 import de.egladil.mja_api.domain.raetsel.impl.FragenUndLoesungenVO;
-import de.egladil.mja_api.domain.utils.PermissionUtils;
+import de.egladil.mja_api.domain.raetsel.impl.RaetselPermissionDelegate;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
@@ -52,7 +52,6 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 
 /**
  * RaetselService
@@ -64,6 +63,9 @@ public class RaetselService {
 
 	@Inject
 	AuthenticationContext authCtx;
+
+	@Inject
+	RaetselPermissionDelegate permissionDelegate;
 
 	@Inject
 	DeskriptorenService deskriptorenService;
@@ -106,8 +108,7 @@ public class RaetselService {
 		List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
 		long anzahlGesamt = 0L;
 
-		boolean nurFreigegebene = PermissionUtils
-			.restrictSucheToFreigegeben(PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx));
+		boolean nurFreigegebene = permissionDelegate.isOnlyReadFreigegebene();
 
 		switch (suchfilterVariante) {
 
@@ -282,14 +283,7 @@ public class RaetselService {
 				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
-		if (!PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), persistentesRaetsel.owner)) {
-
-			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", userId, persistentesRaetsel.schluessel,
-				persistentesRaetsel.owner);
-
-			throw new WebApplicationException(Status.FORBIDDEN);
-		}
+		permissionDelegate.checkWritePermission(persistentesRaetsel);
 
 		boolean schluesselExistiert = this.schluesselExists(payload);
 
@@ -545,12 +539,12 @@ public class RaetselService {
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
 			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);
 
-		boolean hasWritePermission = PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), raetselDB.owner);
-
-		if (hasWritePermission) {
+		try {
 
 			result.markiereAlsAenderbar();
+		} catch (WebApplicationException e) {
+
+			// in diesem Fall keine Schreibberechtigung
 		}
 
 		return result;

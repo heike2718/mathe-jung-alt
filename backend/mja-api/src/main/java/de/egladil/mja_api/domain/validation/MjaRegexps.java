@@ -37,6 +37,8 @@ public interface MjaRegexps {
 
 	String VALID_SUCHSTRING = "^[\\w ÄÖÜäöüß \\% ; \\+ \\- \\. \\,]{4,200}$";
 
+	String VALID_SUCHSTRING_MEDIEN = "^[\\w ÄÖÜäöüß \\% ; \\+ \\- \\. \\,]{0,200}$";
+
 	String VALID_DATEINAME = "^[\\da-zA-ZÄÖÜäöüß_\\-\\.]{1,100}$";
 
 	String VALID_JAHR = "^[\\d]{4}$";
@@ -48,5 +50,9 @@ public interface MjaRegexps {
 	String VALID_SEITE = "^[\\w -]{0,4}$";
 
 	String VALID_PERSON = "^[^<>/#~%$]{0,100}$";
+
+	String VALID_PFAD = "^/[\\w/.]{0,500}$";
+
+	String VALID_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
 }

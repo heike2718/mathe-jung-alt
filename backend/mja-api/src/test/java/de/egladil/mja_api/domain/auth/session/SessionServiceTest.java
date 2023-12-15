@@ -5,9 +5,7 @@
 package de.egladil.mja_api.domain.auth.session;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
@@ -17,7 +15,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.exceptions.AuthException;
-import de.egladil.mja_api.domain.utils.PermissionUtils;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 
@@ -57,8 +54,6 @@ public class SessionServiceTest {
 			List<String> rollen = Arrays.asList(user.getRoles());
 
 			assertEquals(3, rollen.size());
-			assertTrue(PermissionUtils.isUserAdmin(rollen));
-			assertTrue(PermissionUtils.isUserAutor(rollen));
 
 			// Act 2
 			Session storedSession = sessionService.getAndRefreshSessionIfValid(session.getSessionId());
@@ -92,8 +87,6 @@ public class SessionServiceTest {
 			List<String> rollen = Arrays.asList(user.getRoles());
 
 			assertEquals(1, rollen.size());
-			assertFalse(PermissionUtils.isUserAdmin(rollen));
-			assertFalse(PermissionUtils.isUserAutor(rollen));
 
 			// Act 2
 			Session storedSession = sessionService.getAndRefreshSessionIfValid(session.getSessionId());

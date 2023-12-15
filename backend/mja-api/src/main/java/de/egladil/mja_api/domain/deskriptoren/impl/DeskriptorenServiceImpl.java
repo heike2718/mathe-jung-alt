@@ -24,7 +24,6 @@ import de.egladil.mja_api.domain.deskriptoren.DeskriptorSuchkontext;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.semantik.DomainService;
-import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -66,9 +65,9 @@ public class DeskriptorenServiceImpl implements DeskriptorenService {
 
 		List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).toList();
 
-		List<String> roles = PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx);
+		Benutzerart benutzerart = authCtx.getUser().getBenutzerart();
 
-		if (PermissionUtils.isUserAdmin(roles) || PermissionUtils.isUserAutor(roles)) {
+		if (Benutzerart.ADMIN == benutzerart || Benutzerart.AUTOR == benutzerart) {
 
 			return result;
 		}

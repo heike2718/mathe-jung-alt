@@ -567,7 +567,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "ADMIN" })
 	@Order(18)
 	void testGeneratePDF() {
 
@@ -586,7 +586,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(19)
 	void testGeneratePDFLaTeXKaputt() {
 

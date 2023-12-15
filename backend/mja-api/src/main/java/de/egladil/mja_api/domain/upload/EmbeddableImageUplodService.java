@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
+import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.embeddable_images.EmbeddableImageService;
 import de.egladil.mja_api.domain.embeddable_images.dto.CreateEmbeddableImageRequestDto;
 import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageContext;
@@ -22,7 +23,7 @@ import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageResponseDt
 import de.egladil.mja_api.domain.embeddable_images.dto.ReplaceEmbeddableImageRequestDto;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
-import de.egladil.mja_api.domain.utils.PermissionUtils;
+import de.egladil.mja_api.domain.raetsel.impl.RaetselPermissionDelegate;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
@@ -54,6 +55,9 @@ public class EmbeddableImageUplodService {
 	AuthenticationContext authCtx;
 
 	@Inject
+	RaetselPermissionDelegate permissionDelegate;
+
+	@Inject
 	RaetselDao raetselDao;
 
 	/**
@@ -69,7 +73,9 @@ public class EmbeddableImageUplodService {
 		AuthenticatedUser user = authCtx.getUser();
 		String userId = user.getUuid();
 
-		if (PermissionUtils.isUserOrdinary(user.getRoles())) {
+		Benutzerart benutzerart = user.getBenutzerart();
+
+		if (Benutzerart.ANONYM == benutzerart || Benutzerart.STANDARD == benutzerart) {
 
 			LOGGER.warn("User {} hat versucht, eine EmbeddableImageVorschau hochzuladen", userId);
 
@@ -80,14 +86,10 @@ public class EmbeddableImageUplodService {
 
 		PersistentesRaetsel raetsel = raetselDao.findById(uploadContext.getRaetselId());
 
-		if (raetsel != null && !PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), raetsel.owner)) {
+		if (raetsel != null) {
 
-			LOGGER.warn("User {} hat versucht, zu Raetsel {} mit Owner {} eine EmbeddableImageVorschau hochzuladen", userId,
-				raetsel.schluessel,
-				raetsel.owner);
-
-			throw new WebApplicationException(Status.FORBIDDEN);
+			// wirft eine WebApplicationException
+			permissionDelegate.checkWritePermission(raetsel);
 		}
 
 		try {
@@ -125,7 +127,9 @@ public class EmbeddableImageUplodService {
 		AuthenticatedUser user = authCtx.getUser();
 		String userId = user.getUuid();
 
-		if (PermissionUtils.isUserOrdinary(user.getRoles())) {
+		Benutzerart benutzerart = user.getBenutzerart();
+
+		if (Benutzerart.ANONYM == benutzerart || Benutzerart.STANDARD == benutzerart) {
 
 			LOGGER.warn("User {} hat versucht, eine EmbeddableImageVorschau hochzuladen", userId);
 
@@ -145,15 +149,7 @@ public class EmbeddableImageUplodService {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 
-		if (!PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx), raetsel.owner)) {
-
-			LOGGER.warn("User {} hat versucht, zu Raetsel {} mit Owner {} eine EmbeddableImageVorschau hochzuladen", userId,
-				raetsel.schluessel,
-				raetsel.owner);
-
-			throw new WebApplicationException(Status.FORBIDDEN);
-		}
+		permissionDelegate.checkWritePermission(raetsel);
 
 		try {
 

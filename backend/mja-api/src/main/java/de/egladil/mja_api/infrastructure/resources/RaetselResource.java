@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.dto.SortDirection;
@@ -48,6 +47,7 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.persistence.EnumType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.Consumes;
@@ -71,9 +71,6 @@ import jakarta.ws.rs.core.Response;
 public class RaetselResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselResource.class);
-
-	@Inject
-	SessionService sessionService;
 
 	@Inject
 	DevDelayService delayService;
@@ -356,6 +353,17 @@ public class RaetselResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = Raetsel.class)))
 	@APIResponse(
+		name = "BadRequest",
+		responseCode = "400",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "NotAuthorized",
+		responseCode = "401",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
 		name = "Forbidden",
 		responseCode = "403",
 		content = @Content(
@@ -378,7 +386,7 @@ public class RaetselResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselAnlegen(final EditRaetselPayload payload) {
+	public Response raetselAnlegen(@Valid final EditRaetselPayload payload) {
 
 		this.delayService.pause();
 
@@ -400,6 +408,17 @@ public class RaetselResource {
 		content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = Raetsel.class)))
+	@APIResponse(
+		name = "BadRequest",
+		responseCode = "400",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "NotAuthorized",
+		responseCode = "401",
+		content = @Content(
+			mediaType = "application/json"))
 	@APIResponse(
 		name = "Forbidden",
 		responseCode = "403",

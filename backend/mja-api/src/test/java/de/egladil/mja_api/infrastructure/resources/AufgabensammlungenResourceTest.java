@@ -605,7 +605,7 @@ public class AufgabensammlungenResourceTest {
 			.extract()
 			.as(MessagePayload.class);
 
-		assertEquals("Ups, da ist aber etwas komplett schiefgelaufen", messagePayload.getMessage());
+		assertEquals("Tja, diese Aufgabensammlung gibt es gar nicht.", messagePayload.getMessage());
 	}
 
 	@Test

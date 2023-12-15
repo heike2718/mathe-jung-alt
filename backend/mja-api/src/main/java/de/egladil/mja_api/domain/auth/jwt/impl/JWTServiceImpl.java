@@ -13,8 +13,6 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
-import jakarta.enterprise.context.RequestScoped;
-
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
@@ -26,6 +24,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 
 import de.egladil.mja_api.domain.auth.jwt.JWTService;
 import de.egladil.mja_api.domain.exceptions.MjaAuthRuntimeException;
+import jakarta.enterprise.context.RequestScoped;
 
 /**
  * JWTServiceImpl

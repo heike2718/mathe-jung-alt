@@ -24,8 +24,8 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
+import de.egladil.mja_api.domain.raetsel.impl.RaetselPermissionDelegate;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
-import de.egladil.mja_api.domain.utils.PermissionUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -52,6 +52,9 @@ public class RaetselGeneratorService {
 
 	@Inject
 	AuthenticationContext authCtx;
+
+	@Inject
+	RaetselPermissionDelegate permissionDelegate;
 
 	@RestClient
 	@Inject
@@ -85,7 +88,7 @@ public class RaetselGeneratorService {
 
 			String userId = authCtx.getUser().getName();
 
-			LOGGER.warn("admin {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
+			LOGGER.warn("user {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
 				raetsel.getSchluessel());
 
 			throw new WebApplicationException(Status.FORBIDDEN);
@@ -207,18 +210,8 @@ public class RaetselGeneratorService {
 
 		Raetsel raetsel = loadRaetsel(raetselUuid);
 
-		List<String> relevantRoles = PermissionUtils.getRolesWithWriteRaetselAndAufgabensammlungenPermission(authCtx);
-		boolean hasReadPermission = PermissionUtils.hasReadPermission(relevantRoles,
-			raetsel.isFreigegeben());
-
-		if (!hasReadPermission) {
-
-			LOGGER.warn("admin {} nicht berechtigt, PDF fuer Raetsel mit SCHLUESSEL={} zu generieren",
-				authCtx.getUser().getName(),
-				raetsel.getSchluessel());
-
-			throw new WebApplicationException(Status.FORBIDDEN);
-		}
+		// Das wirft eine Exception
+		permissionDelegate.checkReadPermission(raetsel);
 
 		raetselFileService.generiereLaTeXRaetselPDF(raetsel, layoutAntwortvorschlaege, font, schriftgroesse);
 

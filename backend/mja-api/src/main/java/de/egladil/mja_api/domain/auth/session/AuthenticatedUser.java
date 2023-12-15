@@ -38,11 +38,12 @@ public class AuthenticatedUser extends QuarkusPrincipal {
 	}
 
 	/**
-	 * @param name
+	 * @param uuid
+	 *             String die UUID des Benutzerkontos.
 	 */
-	public AuthenticatedUser(final String name) {
+	public AuthenticatedUser(final String uuid) {
 
-		super(name);
+		super(uuid);
 
 	}
 
