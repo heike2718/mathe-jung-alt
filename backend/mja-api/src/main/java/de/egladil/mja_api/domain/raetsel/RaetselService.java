@@ -172,7 +172,11 @@ public class RaetselService {
 		if (schluesselGenerieren(payload)) {
 
 			String schluessel = generiereSchluessel();
+
+			LOGGER.info("raetsel.SCHLUESSEL={}", schluessel);
+
 			payload.getRaetsel().setSchluessel(schluessel);
+
 		}
 
 		boolean schluesselExistiert = this.schluesselExists(payload);
@@ -188,12 +192,12 @@ public class RaetselService {
 		neuesRaetsel.setImportierteUuid(uuid);
 		String userId = authCtx.getUser().getName();
 
+		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
+
 		neuesRaetsel.owner = userId;
 		neuesRaetsel.geaendertDurch = userId;
 		neuesRaetsel.filenameVorschauFrage = generateFilenameVorschau();
 		neuesRaetsel.filenameVorschauLoesung = generateFilenameVorschau();
-
-		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
 
 		QuelleDto datenQuelle = payload.getQuelle();
 		String quelleId = null;
@@ -219,6 +223,7 @@ public class RaetselService {
 		}
 
 		neuesRaetsel.quelle = quelleId;
+
 		raetselDao.save(neuesRaetsel);
 
 		return neuesRaetsel.uuid;
@@ -240,7 +245,11 @@ public class RaetselService {
 	 */
 	boolean schluesselGenerieren(final EditRaetselPayload payload) {
 
-		if (Benutzerart.ADMIN != authCtx.getUser().getBenutzerart()) {
+		Benutzerart benutzerart = authCtx.getUser().getBenutzerart();
+
+		if (Benutzerart.ADMIN != benutzerart) {
+
+			LOGGER.debug("SCHLUESSEL muss generiert werden, da Benutzerart={}", benutzerart);
 
 			return true;
 		}

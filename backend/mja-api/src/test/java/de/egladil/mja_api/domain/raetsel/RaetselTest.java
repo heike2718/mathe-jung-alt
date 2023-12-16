@@ -38,7 +38,6 @@ public class RaetselTest {
 
 			Deskriptor d = new Deskriptor();
 			d.id = 2L;
-			d.kontext = "RAETSEL";
 			d.name = "Minikänguru";
 			deskriptoren.add(d);
 
@@ -48,7 +47,6 @@ public class RaetselTest {
 
 			Deskriptor d = new Deskriptor();
 			d.id = 3L;
-			d.kontext = "RAETSEL";
 			d.name = "IKID";
 			d.admin = true;
 			deskriptoren.add(d);
@@ -58,7 +56,6 @@ public class RaetselTest {
 
 			Deskriptor d = new Deskriptor();
 			d.id = 33L;
-			d.kontext = "RAETSEL";
 			d.name = "A-2";
 			d.admin = false;
 			deskriptoren.add(d);
@@ -87,7 +84,7 @@ public class RaetselTest {
 	void deserialize() throws JsonMappingException, JsonProcessingException {
 
 		// Arrange
-		String json = "{\"id\":\"df5d4136-8fa6-4fac-b566-470ff7c3c869\",\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigegeben\":false,\"herkunft\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"herkunftstyp\":\"EIGENKREATION\",\"text\":\"Ponder\",\"mediumUuid\":null},\"schreibgeschuetzt\":true,\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":3,\"name\":\"IKID\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":33,\"name\":\"A-2\",\"admin\":false,\"kontext\":\"RAETSEL\"}],\"embeddableImageInfos\":[],\"images\":null,\"raetselPDF\":null}";
+		String json = "{\"id\":\"df5d4136-8fa6-4fac-b566-470ff7c3c869\",\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigegeben\":false,\"herkunft\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"herkunftstyp\":\"EIGENKREATION\",\"text\":\"Ponder\",\"mediumUuid\":null},\"schreibgeschuetzt\":true,\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false},{\"id\":3,\"name\":\"IKID\",\"admin\":true},{\"id\":33,\"name\":\"A-2\",\"admin\":false}],\"embeddableImageInfos\":[],\"images\":null,\"raetselPDF\":null}";
 
 		// Act
 		Raetsel raetsel = new ObjectMapper().readValue(json, Raetsel.class);

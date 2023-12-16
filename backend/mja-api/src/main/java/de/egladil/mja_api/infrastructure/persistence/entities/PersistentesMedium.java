@@ -93,9 +93,6 @@ public class PersistentesMedium implements PersistenteMjaEntity {
 	public String titel;
 
 	@Column
-	public String pfad;
-
-	@Column
 	public String autor;
 
 	@Column

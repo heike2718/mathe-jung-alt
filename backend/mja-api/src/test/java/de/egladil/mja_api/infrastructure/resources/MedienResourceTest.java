@@ -56,8 +56,7 @@ public class MedienResourceTest {
 			.withTitel("alpha")
 			.withId("neu").withKommentar("mathematische Schülerzeitschrift")
 			.withMedienart(Medienart.ZEITSCHRIFT)
-			.withUrl("https://mathematikalpha.de/")
-			.withPfad("/media/veracrypt2/mathe/zeitschriften/alpha");
+			.withUrl("https://mathematikalpha.de/");
 
 		// Act 2
 		MediumDto result = given()
@@ -78,7 +77,6 @@ public class MedienResourceTest {
 		assertEquals("alpha", result.getTitel());
 		assertEquals("https://mathematikalpha.de/", result.getUrl());
 		assertEquals("mathematische Schülerzeitschrift", result.getKommentar());
-		assertEquals("/media/veracrypt2/mathe/zeitschriften/alpha", result.getPfad());
 
 		String id = result.getId();
 
@@ -111,8 +109,7 @@ public class MedienResourceTest {
 			.withTitel("Leipziger Volkszeitung")
 			.withId("neu").withKommentar("Knobelaufgaben")
 			.withMedienart(Medienart.ZEITSCHRIFT)
-			.withUrl("https://mathematikalpha.de/")
-			.withPfad("/media/veracrypt2/mathe/zeitschriften/lvz/lvz1.pdf");
+			.withUrl("https://mathematikalpha.de/");
 
 		// Act
 		MessagePayload result = given()
@@ -166,7 +163,6 @@ public class MedienResourceTest {
 		assertEquals("Johannes Lehmann", result.getAutor());
 		assertNull(result.getUrl());
 		assertNull(result.getKommentar());
-		assertNull(result.getPfad());
 
 		PersistentesMedium ausDB = mediumDao.findMediumById(id);
 		assertEquals("412b67dc-132f-465a-a3c3-468269e866cb", ausDB.owner);
@@ -185,8 +181,7 @@ public class MedienResourceTest {
 			.withId(id)
 			.withKommentar("von der Leipziger Volkszeitung herausgegebene Sonderhefte mit Knobelaufgaben")
 			.withMedienart(Medienart.ZEITSCHRIFT)
-			.withUrl("https://mathematikalpha.de/")
-			.withPfad("/media/veracrypt2/mathe/zeitschriften/lvz");
+			.withUrl("https://mathematikalpha.de/");
 
 		// Act
 		MessagePayload result = given()
@@ -218,8 +213,7 @@ public class MedienResourceTest {
 			.withTitel("kvant")
 			.withId(id)
 			.withKommentar("russische mathematische Schülerzeitschrift")
-			.withMedienart(Medienart.ZEITSCHRIFT)
-			.withPfad("/media/veracrypt2/mathe/zeitschriften/kvant");
+			.withMedienart(Medienart.ZEITSCHRIFT);
 
 		// Act
 		MessagePayload result = given()

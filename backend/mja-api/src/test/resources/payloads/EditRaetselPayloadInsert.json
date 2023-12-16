@@ -3,7 +3,6 @@
   "idAendernderUser": "20721575-8c45-4201-a025-7a9fece1f2aa",
   "raetsel": {
     "id": "neu",
-    "schluessel": "99998",
     "name": "Welches Kind ist das aelteste?",
     "freigegeben": false,
     "frage": "Anton, Beate, Carola und Dennis sind in einer Klasse. Welches Kind ist am ältesten? In welcher Reihenfolge kommen die anderen Kinder?",
@@ -35,9 +34,16 @@
       }
     ]
   },
-  "quelle": {
+"quelle": {
     "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
     "quellenart": "PERSON",
-    "person": "Heike Winkelvoß"
+    "klasse": null,
+    "stufe": null,
+    "ausgabe": null,
+    "jahr": null,
+    "seite": null,
+    "person": "Heike Winkelvoß",
+    "pfad": null,
+    "mediumUuid": null
   }
 }

@@ -23,7 +23,7 @@ public class QuelleDto {
 	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält ungültige Zeichen")
 	private String id;
 
-	@Schema(description = "Art der Quelle: Mensch, Buch, Zeitschrift")
+	@Schema(description = "Art der Quelle: Mensch, Buch, Zeitschrift", required = true)
 	@NotNull(message = "quellenart ist erforderlich")
 	private Quellenart quellenart;
 
@@ -52,6 +52,12 @@ public class QuelleDto {
 	@Schema(description = "Wenn es eine bekannte Person ist, deren vollständiger Name")
 	@Pattern(regexp = MjaRegexps.VALID_PERSON, message = "person enthält ungültige Zeichen")
 	private String person;
+
+	@Schema(
+		description = "Pfad zu einer Datei im eigenen Filesystem, in dem die Vorlage der Aufgabe oder die Aufgabe steht.",
+		example = "/mathe/aufgabensammlungen/buch.pdf")
+	@Pattern(regexp = MjaRegexps.VALID_PFAD, message = "pfad enthält ungültige Zeichen")
+	private String pfad;
 
 	@Schema(description = "Referenz auf ein Buch, eine Zeitschrift oder etwas im Internet, falls es keine Person ist")
 	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "mediumUuid enthält ungültige Zeichen")
@@ -145,6 +151,16 @@ public class QuelleDto {
 	public void setMediumUuid(final String mediumUuid) {
 
 		this.mediumUuid = mediumUuid;
+	}
+
+	public String getPfad() {
+
+		return pfad;
+	}
+
+	public void setPfad(final String pfad) {
+
+		this.pfad = pfad;
 	}
 
 }

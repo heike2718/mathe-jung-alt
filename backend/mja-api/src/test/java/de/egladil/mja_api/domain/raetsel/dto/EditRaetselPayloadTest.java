@@ -44,7 +44,6 @@ public class EditRaetselPayloadTest {
 
 			Deskriptor d = new Deskriptor();
 			d.id = 2L;
-			d.kontext = "RAETSEL";
 			d.name = "Minikänguru";
 			deskriptoren.add(d);
 
@@ -54,7 +53,6 @@ public class EditRaetselPayloadTest {
 
 			Deskriptor d = new Deskriptor();
 			d.id = 3L;
-			d.kontext = "RAETSEL";
 			d.name = "IKID";
 			d.admin = true;
 			deskriptoren.add(d);
@@ -64,7 +62,6 @@ public class EditRaetselPayloadTest {
 
 			Deskriptor d = new Deskriptor();
 			d.id = 33L;
-			d.kontext = "RAETSEL";
 			d.name = "A-2";
 			d.admin = false;
 			deskriptoren.add(d);
@@ -107,7 +104,7 @@ public class EditRaetselPayloadTest {
 	void deserialize() throws JsonMappingException, JsonProcessingException {
 
 		// Arrange
-		String json = "{\"latexHistorisieren\":false,\"raetsel\":{\"id\":\"neu\",\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigegeben\":true,\"herkunft\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"herkunftstyp\":\"EIGENKREATION\",\"text\":\"Heike Winkelvoß\",\"mediumUuid\":null},\"schreibgeschuetzt\":true,\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false,\"kontext\":\"RAETSEL\"},{\"id\":3,\"name\":\"IKID\",\"admin\":true,\"kontext\":\"RAETSEL\"},{\"id\":33,\"name\":\"A-2\",\"admin\":false,\"kontext\":\"RAETSEL\"}],\"embeddableImageInfos\":[],\"images\":null,\"raetselPDF\":null},\"quelle\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"klasse\":null,\"stufe\":null,\"ausgabe\":null,\"jahr\":null,\"seite\":null,\"person\":\"Heike Winkelvoß\",\"mediumUuid\":null}}";
+		String json = "{\"latexHistorisieren\":false,\"raetsel\":{\"id\":\"neu\",\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigegeben\":true,\"herkunft\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"herkunftstyp\":\"EIGENKREATION\",\"text\":\"Heike Winkelvoß\",\"mediumUuid\":null},\"schreibgeschuetzt\":true,\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false},{\"id\":3,\"name\":\"IKID\",\"admin\":true},{\"id\":33,\"name\":\"A-2\",\"admin\":false}],\"embeddableImageInfos\":[],\"images\":null,\"raetselPDF\":null},\"quelle\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"klasse\":null,\"stufe\":null,\"ausgabe\":null,\"jahr\":null,\"seite\":null,\"person\":\"Heike Winkelvoß\",\"pfad\":null,\"mediumUuid\":null}}";
 
 		EditRaetselPayload payload = new ObjectMapper().readValue(json, EditRaetselPayload.class);
 

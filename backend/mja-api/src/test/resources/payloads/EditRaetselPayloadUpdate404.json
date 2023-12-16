@@ -1,6 +1,5 @@
 {
   "latexHistorisieren": true,
-  "idAendernderUser": "20721575-8c45-4201-a025-7a9fece1f2aa",
   "raetsel": {
     "id": "hallihallo",
     "schluessel": "02622",
@@ -21,20 +20,17 @@
       {
         "id": 1,
         "name": "Mathematik",
-        "admin": false,
-        "kontext": "RAETSEL"
+        "admin": false
       },
       {
         "id": 4,
         "name": "Klasse 1",
-        "admin": false,
-        "kontext": "RAETSEL"
+        "admin": false
       },
       {
         "id": 14,
         "name": "Logik",
-        "admin": false,
-        "kontext": "RAETSEL"
+        "admin": false
       }
     ]
   },

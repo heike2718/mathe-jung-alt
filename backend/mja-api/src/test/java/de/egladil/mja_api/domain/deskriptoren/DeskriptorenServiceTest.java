@@ -2,7 +2,7 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.deskriptoren.impl;
+package de.egladil.mja_api.domain.deskriptoren;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -21,22 +21,20 @@ import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
-import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
+import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 
 /**
- * DeskriptorenServiceImplTest
+ * DeskriptorenServiceTest
  */
 @QuarkusTest
-@TestProfile(FullDatabaseAdminTestProfile.class)
-public class DeskriptorenServiceImplTest {
+// @TestProfile(FullDatabaseAdminTestProfile.class)
+public class DeskriptorenServiceTest {
 
 	@InjectMock
 	AuthenticationContext authCtx;
@@ -45,7 +43,7 @@ public class DeskriptorenServiceImplTest {
 	DeskriptorenRepository repository;
 
 	@Inject
-	DeskriptorenServiceImpl service;
+	DeskriptorenService service;
 
 	@Nested
 	class MappingTests {
@@ -161,10 +159,10 @@ public class DeskriptorenServiceImplTest {
 			when(repository.listAll()).thenReturn(alleDeskriptoren);
 
 			// Act
-			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel();
+			List<DeskriptorUI> result = service.loadDeskriptoren();
 
 			// Assert
-			assertEquals(5, result.size());
+			assertEquals(8, result.size());
 			verify(repository).listAll();
 
 		}
@@ -182,10 +180,10 @@ public class DeskriptorenServiceImplTest {
 			when(repository.listAll()).thenReturn(alleDeskriptoren);
 
 			// Act
-			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel();
+			List<DeskriptorUI> result = service.loadDeskriptoren();
 
 			// Assert
-			assertEquals(5, result.size());
+			assertEquals(8, result.size());
 			verify(repository).listAll();
 
 		}
@@ -203,10 +201,10 @@ public class DeskriptorenServiceImplTest {
 			when(repository.listAll()).thenReturn(alleDeskriptoren);
 
 			// Act
-			List<DeskriptorUI> result = service.loadDeskriptorenRaetsel();
+			List<DeskriptorUI> result = service.loadDeskriptoren();
 
 			// Assert
-			assertEquals(3, result.size());
+			assertEquals(4, result.size());
 			verify(repository).listAll();
 
 		}
@@ -226,7 +224,7 @@ public class DeskriptorenServiceImplTest {
 			// Act
 			try {
 
-				service.loadDeskriptorenRaetsel();
+				service.loadDeskriptoren();
 				fail("keine WebApplicationException");
 			} catch (WebApplicationException e) {
 
@@ -280,56 +278,56 @@ public class DeskriptorenServiceImplTest {
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Mathe", false, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Mathe", false);
 			deskriptor.id = 1l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Arithmetik", false, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Arithmetik", false);
 			deskriptor.id = 2l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Klasse 1", false, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Klasse 1", false);
 			deskriptor.id = 3l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Minikänguru", true, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Minikänguru", true);
 			deskriptor.id = 4l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Zeitschrift", true, "MEDIEN,QUELLEN");
+			Deskriptor deskriptor = new Deskriptor("Zeitschrift", true);
 			deskriptor.id = 5l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Nachbau", true, "RAETSEL");
+			Deskriptor deskriptor = new Deskriptor("Nachbau", true);
 			deskriptor.id = 6l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Person", true, "QUELLEN");
+			Deskriptor deskriptor = new Deskriptor("Person", true);
 			deskriptor.id = 7l;
 			alleDeskriptoren.add(deskriptor);
 		}
 
 		{
 
-			Deskriptor deskriptor = new Deskriptor("Buch", false, "MEDIEN,QUELLEN");
+			Deskriptor deskriptor = new Deskriptor("Buch", false);
 			deskriptor.id = 8l;
 			alleDeskriptoren.add(deskriptor);
 		}

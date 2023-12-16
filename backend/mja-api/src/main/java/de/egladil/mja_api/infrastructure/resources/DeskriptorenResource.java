@@ -60,7 +60,7 @@ public class DeskriptorenResource {
 			schema = @Schema(type = SchemaType.ARRAY, implementation = DeskriptorUI.class)))
 	public Response loadDeskriptorenV2() {
 
-		return Response.ok(deskriptorenService.loadDeskriptorenRaetsel()).build();
+		return Response.ok(deskriptorenService.loadDeskriptoren()).build();
 	}
 
 	@GET

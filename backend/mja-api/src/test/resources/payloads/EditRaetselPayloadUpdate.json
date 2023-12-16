@@ -22,20 +22,17 @@
       {
         "id": 1,
         "name": "Mathematik",
-        "admin": false,
-        "kontext": "RAETSEL"
+        "admin": false
       },
       {
         "id": 4,
         "name": "Klasse 1",
-        "admin": false,
-        "kontext": "RAETSEL"
+        "admin": false
       },
       {
         "id": 14,
         "name": "Logik",
-        "admin": false,
-        "kontext": "RAETSEL"
+        "admin": false
       }
     ]
   },

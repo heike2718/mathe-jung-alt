@@ -68,6 +68,9 @@ public class PersistenteQuelle implements PersistenteMjaEntity {
 	@Column
 	public String person;
 
+	@Column
+	public String pfad;
+
 	@Column(name = "USER_ID")
 	public String userId;
 

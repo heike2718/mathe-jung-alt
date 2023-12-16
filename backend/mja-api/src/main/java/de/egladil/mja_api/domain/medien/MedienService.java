@@ -62,7 +62,6 @@ public class MedienService {
 			.withId(ausDB.uuid)
 			.withKommentar(ausDB.kommentar)
 			.withMedienart(ausDB.medienart)
-			.withPfad(ausDB.pfad)
 			.withTitel(ausDB.titel)
 			.withUrl(ausDB.url);
 
@@ -110,7 +109,6 @@ public class MedienService {
 		persistentesMedium.kommentar = medium.getKommentar();
 		persistentesMedium.medienart = medium.getMedienart();
 		persistentesMedium.owner = userId;
-		persistentesMedium.pfad = medium.getPfad();
 		persistentesMedium.sortNumber = maxSortnr + 1;
 		persistentesMedium.titel = medium.getTitel();
 		persistentesMedium.url = medium.getUrl();
@@ -151,7 +149,6 @@ public class MedienService {
 		persistentesMedium.geaendertDurch = userId;
 		persistentesMedium.kommentar = medium.getKommentar();
 		persistentesMedium.medienart = medium.getMedienart();
-		persistentesMedium.pfad = medium.getPfad();
 		persistentesMedium.titel = medium.getTitel();
 		persistentesMedium.url = medium.getUrl();
 

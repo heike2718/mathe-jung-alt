@@ -42,10 +42,6 @@ public class Deskriptor {
 	@Schema(description = "Flag, ob dieser Deskriptor nur in der Admin-Anwendung zur Verfügung steht")
 	public boolean admin;
 
-	@Column(name = "KONTEXT")
-	@Schema(description = "Kontext des Deskriptors")
-	public String kontext;
-
 	/**
 	 *
 	 */
@@ -60,17 +56,16 @@ public class Deskriptor {
 	 * @param adminOnly
 	 *                  boolean
 	 */
-	public Deskriptor(final String name, final boolean adminOnly, final String kontext) {
+	public Deskriptor(final String name, final boolean adminOnly) {
 
 		this.name = name;
 		this.admin = adminOnly;
-		this.kontext = kontext;
 	}
 
 	@Override
 	public String toString() {
 
-		return "Deskriptor [id=" + id + ", name=" + name + ", admin=" + admin + ", kontext=" + kontext + "]";
+		return "Deskriptor [id=" + id + ", name=" + name + ", admin=" + admin + "]";
 	}
 
 }

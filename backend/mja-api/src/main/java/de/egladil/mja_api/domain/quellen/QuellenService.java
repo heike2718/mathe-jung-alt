@@ -111,6 +111,7 @@ public class QuellenService {
 		neueQuelle.person = datenQuelle.getPerson();
 		neueQuelle.quellenart = datenQuelle.getQuellenart();
 		neueQuelle.seite = datenQuelle.getSeite();
+		neueQuelle.pfad = datenQuelle.getPfad();
 		neueQuelle.userId = quelle.getUserId();
 		neueQuelle.sortNumber = maxSornr + 1;
 

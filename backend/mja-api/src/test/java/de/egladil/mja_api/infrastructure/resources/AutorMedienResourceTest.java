@@ -42,8 +42,7 @@ public class AutorMedienResourceTest {
 			.withId(id)
 			.withKommentar("von der Leipziger Volkszeitung herausgegebene Sonderhefte mit Knobelaufgaben")
 			.withMedienart(Medienart.ZEITSCHRIFT)
-			.withUrl("https://mathematikalpha.de/")
-			.withPfad("/media/veracrypt2/mathe/zeitschriften/lvz");
+			.withUrl("https://mathematikalpha.de/");
 
 		// Act + Assert
 		given()

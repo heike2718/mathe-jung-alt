@@ -42,24 +42,21 @@
 		}
 	],
 	"deskriptoren": [
-		{
-			"id": 1,
-			"name": "Mathematik",
-			"admin": false,
-			"kontext": null
-		},
-		{
-			"id": 4,
-			"name": "Klasse 1",
-			"admin": false,
-			"kontext": null
-		},
-		{
-			"id": 14,
-			"name": "Logik",
-			"admin": false,
-			"kontext": null
-		}
+      {
+        "id": 1,
+        "name": "Mathematik",
+        "admin": false
+      },
+      {
+        "id": 4,
+        "name": "Klasse 1",
+        "admin": false
+      },
+      {
+        "id": 14,
+        "name": "Logik",
+        "admin": false
+      }
 	],
 	"embeddableImageInfos": [],
 	"images": null,

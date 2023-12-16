@@ -24,23 +24,17 @@ public class MediumDto {
 	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält ungültige Zeichen")
 	private String id;
 
-	@Schema(description = "Art des Mediums")
+	@Schema(description = "Art des Mediums", required = true)
 	@NotNull(message = "medienart ist erforderlich")
 	private Medienart medienart;
 
-	@Schema(description = "Titel des Mediums", example = "2 mal 3 plus Spaß dabei")
+	@Schema(description = "Titel des Mediums", example = "2 mal 3 plus Spaß dabei", required = true)
 	@NotBlank(message = "titel ist erforderlich")
 	private String titel;
 
 	@Schema(description = "Autor, bei mehreren kommaseparierte Liste", example = "Johannes Lehmann")
 	@Pattern(regexp = MjaRegexps.VALID_PERSON, message = "autor enthält ungültige Zeichen")
 	private String autor;
-
-	@Schema(
-		description = "falls es als pdf oder djvu vorhanden ist, der Pfad relativ zu meinen e-books",
-		example = "/mathe/aufgabensammlungen/buch.pdf")
-	@Pattern(regexp = MjaRegexps.VALID_PFAD, message = "pfad enthält ungültige Zeichen")
-	private String pfad;
 
 	@Schema(description = "falls vorhande und bekannt, die Website", example = "https://mathe-jung-alt.de")
 	@Pattern(regexp = MjaRegexps.VALID_URL, message = "url enthält ungültige Zeichen")
@@ -95,17 +89,6 @@ public class MediumDto {
 	public MediumDto withAutor(final String autor) {
 
 		this.autor = autor;
-		return this;
-	}
-
-	public String getPfad() {
-
-		return pfad;
-	}
-
-	public MediumDto withPfad(final String pfad) {
-
-		this.pfad = pfad;
 		return this;
 	}
 
