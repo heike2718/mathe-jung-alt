@@ -25,10 +25,7 @@ import de.egladil.mja_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
-import de.egladil.mja_api.domain.quellen.Quelle;
 import de.egladil.mja_api.domain.quellen.QuellenService;
-import de.egladil.mja_api.domain.quellen.Quellenart;
-import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
@@ -157,6 +154,9 @@ public class RaetselService {
 	 */
 	public Raetsel raetselAnlegen(final EditRaetselPayload payload) {
 
+		// TODO semantische Validierung Herkunftstyp - Quellenart!!! EIGENKREATION nur mit PERSON, ADAPTION und ZITAT brauchen
+		// MEDIUM oder PERSON.
+
 		String raetselId = doInsertRaetsel(payload);
 		Raetsel result = this.getRaetselZuId(raetselId);
 
@@ -199,28 +199,8 @@ public class RaetselService {
 		neuesRaetsel.filenameVorschauFrage = generateFilenameVorschau();
 		neuesRaetsel.filenameVorschauLoesung = generateFilenameVorschau();
 
-		QuelleDto datenQuelle = payload.getQuelle();
-		String quelleId = null;
-
-		Quelle quelle = new Quelle(datenQuelle.getId())
-			.withDatenQuelle(datenQuelle)
-			.withOwner(userId);
-
-		if ("neu".equals(quelle.getId())) {
-
-			if (Quellenart.PERSON == datenQuelle.getQuellenart() && RaetselHerkunftTyp.EIGENKREATION == neuesRaetsel.herkunft) {
-
-				// Dann ist die userId klar. In anderen Fällen handelt es sich um eine von ein von einer anderen Person erfundenes
-				// Rätsel, das der Admin für diese Person einträgt. Dann benötigt die Quelle keine userId.
-				quelle.setUserId(userId);
-			}
-
-			PersistenteQuelle neueQuelle = quellenService.quelleAnlegen(quelle);
-			quelleId = neueQuelle.uuid;
-		} else {
-
-			quelleId = datenQuelle.getId();
-		}
+		PersistenteQuelle neueQuelle = quellenService.quelleAnlegenOderAendern(neuesRaetsel.herkunft, payload.getQuelle());
+		String quelleId = neueQuelle.uuid;
 
 		neuesRaetsel.quelle = quelleId;
 
@@ -265,6 +245,9 @@ public class RaetselService {
 	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
 	public Raetsel raetselAendern(final EditRaetselPayload payload) {
+
+		// TODO semantische Validierung Herkunftstyp - Quellenart!!! EIGENKREATION nur mit PERSON, ADAPTION und ZITAT brauchen
+		// MEDIUM oder PERSON.
 
 		String raetselId = payload.getRaetsel().getId();
 		doUpdateRaetsel(payload);
@@ -329,22 +312,11 @@ public class RaetselService {
 
 		}
 
-		QuelleDto quelle = payload.getQuelle();
-
-		String quelleId = null;
-
-		if (!persistentesRaetsel.quelle.equals(quelle.getId())) {
-
-			// TODO: hier alte Quelle löschen, neue Anlegen anlegen! quelleId = ....
-		} else {
-
-			quelleId = quelle.getId();
-
-			// TODO: Hier PersistenteQuelle laden und mit neuen Daten mergen.
-		}
+		PersistenteQuelle geaenderteQuelle = quellenService.quelleAnlegenOderAendern(persistentesRaetsel.herkunft,
+			payload.getQuelle());
 
 		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
-		persistentesRaetsel.quelle = quelleId;
+		persistentesRaetsel.quelle = geaenderteQuelle.uuid;
 		raetselDao.save(persistentesRaetsel);
 
 		// Nur löschen, wenn persist klar ging!

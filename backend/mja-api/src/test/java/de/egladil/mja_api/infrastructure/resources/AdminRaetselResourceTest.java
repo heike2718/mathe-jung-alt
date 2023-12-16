@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -31,12 +32,19 @@ import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quellen.Quellenart;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
+import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
+import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
+import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
+import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelle;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -44,6 +52,7 @@ import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import jakarta.inject.Inject;
 import jakarta.persistence.EnumType;
 
 /**
@@ -60,6 +69,12 @@ public class AdminRaetselResourceTest {
 	private String suchstring = "Kinder%20Tiere%20pflanzen%20Kreis%20Monat%20Spielzeug%20Kekse%20Känguru";
 
 	private String deskriptoren = "8,11";
+
+	@Inject
+	RaetselDao raetselDao;
+
+	@Inject
+	QuellenRepository quellenRepository;
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
@@ -905,6 +920,86 @@ public class AdminRaetselResourceTest {
 			}
 
 		}
+
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(51)
+	void testRaetselEinesAnderenOwnersAendern() throws Exception {
+
+		String schluessel = "02820";
+		String raetselId = "8187e29c-446e-428d-a34c-015adac457c9";
+		String quelleId = "73634aeb-f494-4864-ab30-26861a5bf2e0";
+		String owner = "412b67dc-132f-465a-a3c3-468269e866cb";
+
+		HerkunftRaetsel herkunft = new HerkunftRaetsel().withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION)
+			.withQuellenart(Quellenart.PERSON);
+
+		QuelleDto quelle = new QuelleDto();
+		quelle.setPerson("Frodo Beutlin aus Beutelsend");
+		quelle.setQuellenart(Quellenart.PERSON);
+		quelle.setId(quelleId);
+
+		List<Deskriptor> deskriptoren = new ArrayList<>();
+
+		{
+
+			Deskriptor deskriptor = new Deskriptor("Klassen 3/4", true);
+			deskriptor.id = 14l;
+			deskriptoren.add(deskriptor);
+		}
+
+		{
+
+			Deskriptor deskriptor = new Deskriptor("Mathematik", false);
+			deskriptor.id = 1l;
+			deskriptoren.add(deskriptor);
+		}
+
+		Raetsel raetsel = new Raetsel(raetselId)
+			.withSchluessel(schluessel)
+			.withDeskriptoren(deskriptoren)
+			.withFrage(
+				"Subtrahiere von der kleinsten Zahl mit 4 verschiedenen Ziffern die größte Zahl mit 2 verschiedenen Ziffern.")
+			.withKommentar("Name geändert")
+			.withLoesung("$1234 - 98 = 1136$")
+			.withName("Kombinatorik und Subtraktion");
+		raetsel.setHerkunft(herkunft);
+
+		EditRaetselPayload editRaetselPayload = new EditRaetselPayload();
+		editRaetselPayload.setQuelle(quelle);
+		editRaetselPayload.setRaetsel(raetsel);
+
+		// Act
+		Raetsel result = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(editRaetselPayload)
+			.put("v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(Raetsel.class);
+
+		// Assert
+		assertEquals(raetselId, result.getId());
+
+		HerkunftRaetsel quelleUI = result.getHerkunft();
+		assertEquals("Frodo Beutlin aus Beutelsend", quelleUI.getText());
+		assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
+		assertNull(quelleUI.getMediumUuid());
+		assertEquals(quelleId, quelleUI.getId());
+
+		PersistenteQuelle quelleDB = quellenRepository.findQuelleEntityWithId(quelleId);
+		assertEquals(owner, quelleDB.owner);
+		assertEquals(owner, quelleDB.userId);
+
+		PersistentesRaetsel raetselDB = raetselDao.findById(raetselId);
+		assertEquals(owner, raetselDB.owner);
 
 	}
 }
