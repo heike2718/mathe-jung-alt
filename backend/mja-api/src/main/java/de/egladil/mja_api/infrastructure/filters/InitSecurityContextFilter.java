@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,12 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 	private static List<String> OPEN_DATA_PATHS = Arrays
 		.asList(new String[] { "/mja-api/quiz", "/mja-api/raetsel/public/anzahl/v1" });
+
+	@ConfigProperty(name = "mock.benutzerart")
+	String mockBenutzerart;
+
+	@ConfigProperty(name = "mock.benutzerid")
+	String mockBenutzerid;
 
 	@Inject
 	ConfigService configService;
@@ -165,11 +172,14 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 	private void initMockSecurityContext(final ContainerRequestContext requestContext) {
 
-		AuthenticatedUser user = new AuthenticatedUser("b865fc75-1bcf-40c7-96c3-33744826e49f").withFullName("Heike Winkelvoß")
-			.withIdReference("bla").withRoles(new String[] { "ADMIN" }).withBenutzerart(Benutzerart.ADMIN);
+		Benutzerart benutzerart = Benutzerart.valueOf(mockBenutzerart);
+
+		AuthenticatedUser user = new AuthenticatedUser(mockBenutzerid).withFullName("Heike Winkelvoß")
+			.withIdReference("bla").withRoles(new String[] { mockBenutzerart }).withBenutzerart(benutzerart);
 
 		authCtx.setUser(user);
 		LOGGER.warn("config property 'mock.session' is true => authCtx with mocked admin: ");
+		LOGGER.info("====> user={}", user);
 	}
 
 	boolean isPathOpenData(final String path) {

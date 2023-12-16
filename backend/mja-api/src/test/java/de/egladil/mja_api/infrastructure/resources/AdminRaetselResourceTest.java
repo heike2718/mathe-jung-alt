@@ -37,7 +37,7 @@ import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -51,7 +51,7 @@ import jakarta.persistence.EnumType;
  */
 @QuarkusTest
 @TestHTTPEndpoint(RaetselResource.class)
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 @TestMethodOrder(OrderAnnotation.class)
 public class AdminRaetselResourceTest {
 

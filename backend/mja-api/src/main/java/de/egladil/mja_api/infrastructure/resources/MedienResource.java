@@ -29,6 +29,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -98,7 +99,7 @@ public class MedienResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "suchmodus",
-			description = "bei NOOP wird ein eventueller suchstring ignoriert, bei TERM wird in titel und kommentar gesucht. pagination wird je nach suchmodus ignoriert oder berücksichtigt"),
+			description = "bei NOOP wird ein eventueller suchstring ignoriert, bei SEARCHSTRING wird in titel und kommentar gesucht. pagination wird je nach suchmodus ignoriert oder berücksichtigt"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "limit",
@@ -142,7 +143,7 @@ public class MedienResource {
 		switch (suchmodus) {
 
 		case NOOP -> result = medienService.loadMedien(limit, offset);
-		case TERM -> result = medienService.findMedien(suchstring, limit, offset);
+		case SEARCHSTRING -> result = medienService.findMedien(suchstring, limit, offset);
 		default -> throw new IllegalArgumentException("Unexpected value: " + suchmodus);
 		}
 
@@ -196,8 +197,8 @@ public class MedienResource {
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(
-		operationId = "raetselAnlegen",
-		summary = "neues Rätsel anlegen")
+		operationId = "mediumAnlegen",
+		summary = "neues Medium anlegen")
 	@APIResponse(
 		name = "OKResponse",
 		responseCode = "201",
@@ -216,7 +217,7 @@ public class MedienResource {
 		content = @Content(
 			mediaType = "application/json"))
 	@APIResponse(
-		name = "SchluesselConflict",
+		name = "titelConflict",
 		description = "der gewählte titel ist schon vergeben",
 		responseCode = "409", content = @Content(
 			mediaType = "application/json",
@@ -232,5 +233,60 @@ public class MedienResource {
 		MediumDto result = medienService.mediumAnlegen(medium);
 
 		return Response.ok(result).status(201).build();
+	}
+
+	@PUT
+	@Path("v1")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(
+		operationId = "mediumAendern",
+		summary = "Daten des Mediums ändern")
+	@APIResponse(
+		name = "OKResponse",
+		responseCode = "201",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MediumDto.class)))
+	@APIResponse(
+		name = "BadRequest",
+		responseCode = "400",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "NotAuthorized",
+		responseCode = "401",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "Forbidden",
+		description = "keine Änderungsberechtigung",
+		responseCode = "403",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "NotFound",
+		description = "Medium existiert nicht",
+		responseCode = "404", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "titelConflict",
+		description = "der neue titel ist schon vergeben",
+		responseCode = "409", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(
+		name = "ServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Response mediumAendern(final MediumDto medium) {
+
+		MediumDto result = medienService.mediumAendern(medium);
+
+		return Response.ok(result).status(200).build();
 	}
 }

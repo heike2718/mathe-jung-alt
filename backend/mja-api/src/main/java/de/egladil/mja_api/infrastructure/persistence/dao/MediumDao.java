@@ -97,10 +97,21 @@ public class MediumDao {
 		return treffermenge.get(0);
 	}
 
-	public long countMedienWithSameTitel(final String titel) {
+	/**
+	 * Zählt alle Medien mit dem Titel titel aber einer anderen UUID als die gegebene medienId. Falls > 0 würde das uk zuschlagen.
+	 *
+	 * @param  titel
+	 *                  String es wird auf Gleichheit geprüft
+	 * @param  mediumId
+	 *                  es wird auf Ungleichheit geprüft
+	 * @return          long
+	 */
+	public long countMedienWithSameTitel(final String titel, final String mediumId) {
 
 		List<Long> treffermenge = entityManager.createNamedQuery(PersistentesMedium.ANZAHL_MIT_TITEL_GLEICH, Long.class)
-			.setParameter("titel", titel).getResultList();
+			.setParameter("titel", titel)
+			.setParameter("uuid", mediumId)
+			.getResultList();
 
 		return treffermenge.get(0);
 

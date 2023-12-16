@@ -10,7 +10,7 @@ package de.egladil.mja_api.domain.medien;
 public enum Mediensuchmodus {
 
 	NOOP("kein suchstring, mit pagination"),
-	TERM("nach titel oder kommentar mit pagination");
+	SEARCHSTRING("nach titel oder kommentar mit pagination");
 
 	private final String description;
 

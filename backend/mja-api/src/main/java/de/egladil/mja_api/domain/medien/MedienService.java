@@ -90,7 +90,7 @@ public class MedienService {
 	@Transactional
 	public MediumDto mediumAnlegen(final MediumDto medium) {
 
-		long anzahlDubletten = mediumDao.countMedienWithSameTitel(medium.getTitel());
+		long anzahlDubletten = mediumDao.countMedienWithSameTitel(medium.getTitel(), medium.getId());
 
 		if (anzahlDubletten > 0) {
 
@@ -119,6 +119,43 @@ public class MedienService {
 		mediumDao.saveMedium(persistentesMedium);
 
 		medium.withId(uuid);
+
+		return medium;
+	}
+
+	@Transactional
+	public MediumDto mediumAendern(final MediumDto medium) {
+
+		PersistentesMedium persistentesMedium = mediumDao.findMediumById(medium.getId());
+
+		if (persistentesMedium == null) {
+
+			throw new WebApplicationException(
+				Response.status(404).entity(MessagePayload.error("Das Medium existiert nicht.")).build());
+		}
+
+		permissionDelegate.checkWritePermission(persistentesMedium);
+
+		long anzahlDubletten = mediumDao.countMedienWithSameTitel(medium.getTitel(), medium.getId());
+
+		if (anzahlDubletten > 0) {
+
+			throw new WebApplicationException(Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben."))
+				.build());
+		}
+
+		String userId = authCtx.getUser().getUuid();
+
+		// owner darf nicht geändert werden!
+		persistentesMedium.autor = medium.getAutor();
+		persistentesMedium.geaendertDurch = userId;
+		persistentesMedium.kommentar = medium.getKommentar();
+		persistentesMedium.medienart = medium.getMedienart();
+		persistentesMedium.pfad = medium.getPfad();
+		persistentesMedium.titel = medium.getTitel();
+		persistentesMedium.url = medium.getUrl();
+
+		mediumDao.saveMedium(persistentesMedium);
 
 		return medium;
 	}

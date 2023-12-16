@@ -24,7 +24,7 @@ import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorUI;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -35,7 +35,7 @@ import jakarta.ws.rs.WebApplicationException;
  * DeskriptorenServiceImplTest
  */
 @QuarkusTest
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 public class DeskriptorenServiceImplTest {
 
 	@InjectMock

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -26,7 +26,7 @@ import jakarta.inject.Inject;
  * QuellenServiceTest
  */
 @QuarkusTest
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 public class QuellenServiceTest {
 
 	@InjectMock

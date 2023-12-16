@@ -14,7 +14,7 @@ import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -26,7 +26,7 @@ import io.restassured.http.ContentType;
  */
 @QuarkusTest
 @TestHTTPEndpoint(QuellenResource.class)
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 public class QuellenResourceTest {
 
 	@Test

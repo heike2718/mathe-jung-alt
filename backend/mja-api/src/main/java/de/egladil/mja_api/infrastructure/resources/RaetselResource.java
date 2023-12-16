@@ -442,7 +442,7 @@ public class RaetselResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response raetselAendern(final EditRaetselPayload payload) {
+	public Response raetselAendern(@Valid final EditRaetselPayload payload) {
 
 		this.delayService.pause();
 

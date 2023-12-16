@@ -7,15 +7,15 @@ package de.egladil.mja_api.profiles;
 import io.quarkus.test.junit.QuarkusTestProfile;
 
 /**
- * FullDatabaseTestProfile
+ * FullDatabaseAdminTestProfile
  */
-public class FullDatabaseTestProfile implements QuarkusTestProfile {
+public class FullDatabaseAdminTestProfile implements QuarkusTestProfile {
 
 	@Override
 	public String getConfigProfile() {
 
-		// aus .env (siehe templates/env-template)
-		return "full-db-test";
+		// Präfix = _FULL-DB-ADMIN-TEST_ (siehe .env und templates/env-template)
+		return "full-db-admin-test";
 	}
 
 }

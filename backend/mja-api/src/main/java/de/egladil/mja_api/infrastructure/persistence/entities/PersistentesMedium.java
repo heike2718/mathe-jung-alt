@@ -38,7 +38,8 @@ import jakarta.validation.constraints.Size;
 		name = "PersistentesMedium.MAX_SORTNR", query = "SELECT max(m.SORTNR) from MEDIEN m", resultClass = Long.class),
 	@NamedNativeQuery(name = "PersistentesMedium.COUNT_ALL", query = "SELECT count(*) FROM MEDIEN", resultClass = Long.class),
 	@NamedNativeQuery(
-		name = "PersistentesMedium.ANZAHL_MIT_TITEL_GLEICH", query = "SELECT count(*) from MEDIEN m where m.TITEL = :titel",
+		name = "PersistentesMedium.ANZAHL_MIT_TITEL_GLEICH",
+		query = "SELECT count(*) from MEDIEN m where m.TITEL = :titel and m.UUID != :uuid",
 		resultClass = Long.class),
 	@NamedNativeQuery(
 		name = "PersistentesMedium.COUNT_WITH_SUCHSTRING",

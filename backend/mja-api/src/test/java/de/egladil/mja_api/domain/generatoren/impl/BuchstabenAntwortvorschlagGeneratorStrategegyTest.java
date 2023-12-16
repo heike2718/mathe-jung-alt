@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import de.egladil.mja_api.TestFileUtils;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
@@ -20,7 +20,7 @@ import io.quarkus.test.junit.TestProfile;
  * BuchstabenAntwortvorschlagGeneratorStrategegyTest
  */
 @QuarkusTest
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 public class BuchstabenAntwortvorschlagGeneratorStrategegyTest {
 
 	private BuchstabenAntwortvorschlagGeneratorStrategegy strategy = new BuchstabenAntwortvorschlagGeneratorStrategegy();

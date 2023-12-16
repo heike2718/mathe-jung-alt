@@ -14,7 +14,7 @@ import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungPayload;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungselementPayload;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -26,7 +26,7 @@ import io.restassured.http.ContentType;
  */
 @QuarkusTest
 @TestHTTPEndpoint(AufgabensammlungenResource.class)
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 public class AufgabensammlungenResourceAuthorizationTest {
 
 	/**
