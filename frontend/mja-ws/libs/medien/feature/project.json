@@ -1,0 +1,30 @@
+{
+  "name": "medien-feature",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/medien/feature/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/medien/feature",
+        "main": "libs/medien/feature/src/index.ts",
+        "tsConfig": "libs/medien/feature/tsconfig.lib.json",
+        "assets": ["libs/medien/feature/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/medien/feature/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["type:feature"]
+}

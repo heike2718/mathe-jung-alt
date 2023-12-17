@@ -448,6 +448,12 @@ npx nx g @nx/js:lib api --directory=libs/medien --tags='type:api' --buildable --
 npx nx g @nx/js:lib feature --directory=libs/medien --tags='type:feature' --buildable --no-interactive --dry-run
 ```
 
+__Medien search component__
+
+```
+npx nx generate @nrwl/angular:component medien-search --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-medien-search --standalone --no-interactive --dry-run
+```
+
 
 ## FAQ
 

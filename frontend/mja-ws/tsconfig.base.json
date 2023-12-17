@@ -43,6 +43,7 @@
       "@mja-ws/local-storage-data": ["libs/local-storage-data/src/index.ts"],
       "@mja-ws/medien/api": ["libs/medien/api/src/index.ts"],
       "@mja-ws/medien/data": ["libs/medien/data/src/index.ts"],
+      "@mja-ws/medien/feature": ["libs/medien/feature/src/index.ts"],
       "@mja-ws/medien/model": ["libs/medien/model/src/index.ts"],
       "@mja-ws/raetsel/api": ["libs/raetsel/api/src/index.ts"],
       "@mja-ws/raetsel/data": ["libs/raetsel/data/src/index.ts"],

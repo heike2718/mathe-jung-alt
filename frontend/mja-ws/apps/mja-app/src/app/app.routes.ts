@@ -21,6 +21,11 @@ export const appRoutes: Routes = [
         loadChildren: () =>
           import('@mja-ws/aufgabensammlungen/feature').then((m) => m.aufgabensammlungenRoutes),
       },
+      {
+        path: 'medien',
+        loadChildren: () =>
+          import('@mja-ws/medien/feature').then((m) => m.medienRoutes),
+      },
     ],
   },
   {

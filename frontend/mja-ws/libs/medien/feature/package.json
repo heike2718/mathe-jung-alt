@@ -1,5 +1,5 @@
 {
-  "name": "@mja-ws/medien/model",
+  "name": "medien/feature",
   "version": "0.0.1",
   "dependencies": {
     "tslib": "^2.3.0"
