@@ -281,9 +281,9 @@ public class Raetsel extends AbstractDomainEntity {
 		return freigegeben;
 	}
 
-	public Raetsel withFreigebeben(final boolean freigebeben) {
+	public Raetsel withFreigegeben(final boolean freigegeben) {
 
-		this.freigegeben = freigebeben;
+		this.freigegeben = freigegeben;
 		return this;
 	}
 }

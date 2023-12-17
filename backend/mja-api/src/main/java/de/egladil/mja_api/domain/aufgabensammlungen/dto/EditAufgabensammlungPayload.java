@@ -25,7 +25,7 @@ import jakarta.validation.constraints.Size;
 public class EditAufgabensammlungPayload {
 
 	@JsonProperty
-	@Schema(description = "technische ID, 'neu' für neue Aufgabensammlung")
+	@Schema(description = "technische ID, 'neu' für neue Aufgabensammlung", example = "1909f308-ee3e-4ea5-be02-77e30def99a5")
 	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält ungültige Zeichen")
 	private String id;
 

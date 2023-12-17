@@ -15,10 +15,10 @@ import de.egladil.mja_api.domain.semantik.ValueObject;
 @Schema(name = "Antwortvorschlag", description = "Antwortvorschlag für ein multiple choice-Rätsel")
 public class Antwortvorschlag {
 
-	@Schema(description = "der Antwortbuchstabe A, B, C, ... zur Anzeige einer Vorschlagsauswahl")
+	@Schema(description = "der Antwortbuchstabe A, B, C, ... zur Anzeige einer Vorschlagsauswahl", example = "D")
 	private String buchstabe;
 
-	@Schema(description = "optionaler Text der Antwort")
+	@Schema(description = "optionaler Text der Antwort", example = "237")
 	private String text;
 
 	@Schema(description = "Flag, ob dies die korrekte Antwort ist.")

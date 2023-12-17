@@ -19,8 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
-import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
-import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import io.quarkus.test.junit.QuarkusTest;
@@ -74,23 +72,15 @@ public class EditRaetselPayloadTest {
 		quelle.setPerson("Heike Winkelvoß");
 		quelle.setQuellenart(Quellenart.PERSON);
 
-		HerkunftRaetsel herkunft = new HerkunftRaetsel()
-			.withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION)
-			.withId(quelleId)
-			.withQuellenart(Quellenart.PERSON)
-			.withText("Heike Winkelvoß");
-
-		Raetsel raetsel = new Raetsel("neu").withAntwortvorschlaege(antwortvorschlage)
+		EditRaetselPayload payload = new EditRaetselPayload()
+			.withId("neu")
+			.withLatexHistorisieren(false)
+			.withQuelle(quelle).withAntwortvorschlaege(antwortvorschlage)
 			.withDeskriptoren(deskriptoren).withFrage("Wie viele Meter sind es bis zur Schule?")
 			.withKommentar("Minikänguru 2021").withSchluessel("02565")
 			.withName("Schulweglänge")
-			.withFreigebeben(true);
-		raetsel.setHerkunft(herkunft);
-
-		EditRaetselPayload payload = new EditRaetselPayload();
-		payload.setLatexHistorisieren(false);
-		payload.setRaetsel(raetsel);
-		payload.setQuelle(quelle);
+			.withFreigegeben(true)
+			.withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION);
 
 		String json = new ObjectMapper().writeValueAsString(payload);
 
@@ -104,17 +94,16 @@ public class EditRaetselPayloadTest {
 	void deserialize() throws JsonMappingException, JsonProcessingException {
 
 		// Arrange
-		String json = "{\"latexHistorisieren\":false,\"raetsel\":{\"id\":\"neu\",\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigegeben\":true,\"herkunft\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"herkunftstyp\":\"EIGENKREATION\",\"text\":\"Heike Winkelvoß\",\"mediumUuid\":null},\"schreibgeschuetzt\":true,\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false},{\"id\":3,\"name\":\"IKID\",\"admin\":true},{\"id\":33,\"name\":\"A-2\",\"admin\":false}],\"embeddableImageInfos\":[],\"images\":null,\"raetselPDF\":null},\"quelle\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"klasse\":null,\"stufe\":null,\"ausgabe\":null,\"jahr\":null,\"seite\":null,\"person\":\"Heike Winkelvoß\",\"pfad\":null,\"mediumUuid\":null}}";
+		String json = "{\"id\":\"neu\",\"latexHistorisieren\":false,\"schluessel\":\"02565\",\"name\":\"Schulweglänge\",\"frage\":\"Wie viele Meter sind es bis zur Schule?\",\"loesung\":null,\"kommentar\":\"Minikänguru 2021\",\"freigegeben\":true,\"herkunftstyp\":\"EIGENKREATION\",\"antwortvorschlaege\":[{\"buchstabe\":\"A\",\"text\":\"10 m\",\"korrekt\":false},{\"buchstabe\":\"B\",\"text\":\"42 m\",\"korrekt\":true}],\"deskriptoren\":[{\"id\":2,\"name\":\"Minikänguru\",\"admin\":false},{\"id\":3,\"name\":\"IKID\",\"admin\":true},{\"id\":33,\"name\":\"A-2\",\"admin\":false}],\"quelle\":{\"id\":\"8ef4d9b8-62a6-4643-8674-73ebaec52d98\",\"quellenart\":\"PERSON\",\"klasse\":null,\"stufe\":null,\"ausgabe\":null,\"jahr\":null,\"seite\":null,\"person\":\"Heike Winkelvoß\",\"pfad\":null,\"mediumUuid\":null}}";
 
 		EditRaetselPayload payload = new ObjectMapper().readValue(json, EditRaetselPayload.class);
 
 		// Assert
-		Raetsel raetsel = payload.getRaetsel();
-
-		assertEquals("neu", raetsel.getId());
-		assertEquals(2, raetsel.getAntwortvorschlaege().length);
-		assertEquals(3, raetsel.getDeskriptoren().size());
-		assertTrue(raetsel.isFreigegeben());
+		assertEquals("neu", payload.getId());
+		assertEquals(2, payload.getAntwortvorschlaege().length);
+		assertEquals(3, payload.getDeskriptoren().size());
+		assertTrue(payload.isFreigegeben());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, payload.getHerkunftstyp());
 	}
 
 }

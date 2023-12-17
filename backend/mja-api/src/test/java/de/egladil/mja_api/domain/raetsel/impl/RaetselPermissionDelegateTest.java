@@ -266,7 +266,7 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID)
 				.withBenutzerart(Benutzerart.ANONYM);
 
-			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigebeben(false);
+			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigegeben(false);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -290,7 +290,7 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID)
 				.withBenutzerart(Benutzerart.ANONYM);
 
-			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigebeben(true);
+			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigegeben(true);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -318,7 +318,7 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID)
 				.withBenutzerart(Benutzerart.STANDARD);
 
-			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigebeben(false);
+			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigegeben(false);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -342,7 +342,7 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID)
 				.withBenutzerart(Benutzerart.STANDARD);
 
-			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigebeben(true);
+			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigegeben(true);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -364,7 +364,7 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID)
 				.withBenutzerart(Benutzerart.AUTOR);
 
-			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigebeben(false);
+			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigegeben(false);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -382,7 +382,7 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID)
 				.withBenutzerart(Benutzerart.AUTOR);
 
-			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigebeben(true);
+			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigegeben(true);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -404,7 +404,7 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID)
 				.withBenutzerart(Benutzerart.ADMIN);
 
-			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigebeben(false);
+			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigegeben(false);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -422,7 +422,7 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID)
 				.withBenutzerart(Benutzerart.ADMIN);
 
-			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigebeben(true);
+			Raetsel raetsel = new Raetsel(RAETSEL_ID).withSchluessel(SCHLUESSEL).withFreigegeben(true);
 
 			when(authCtx.getUser()).thenReturn(user);
 

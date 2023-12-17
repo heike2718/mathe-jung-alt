@@ -118,7 +118,7 @@ public class AutorRaetselResourceTest {
 		mediumUuid = "6cbf3a2e-0218-4123-8850-6a3d629dee0a"; // das ist jetzt ein Buch
 		EditRaetselPayload payloadAenderung = createPayloadAendern(result.getSchluessel(), raetselId, quelleId, mediumUuid);
 
-		System.out.println("raetselId=" + payloadAenderung.getRaetsel().getId());
+		System.out.println("raetselId=" + payloadAenderung.getId());
 		System.out.println("quelleId=" + payloadAenderung.getQuelle().getId());
 
 		PersistentesMedium theMedium = mediumDao.findMediumById(mediumUuid);
@@ -179,18 +179,16 @@ public class AutorRaetselResourceTest {
 			deskriptoren.add(deskriptor);
 		}
 
-		Raetsel raetsel = new Raetsel(raetselId)
+		EditRaetselPayload editRaetselPayload = new EditRaetselPayload()
+			.withId(raetselId)
 			.withDeskriptoren(deskriptoren)
 			.withFrage(
 				"Subtrahiere von der kleinsten Zahl mit 4 verschiedenen Ziffern die größte Zahl mit 2 verschiedenen Ziffern.")
 			.withKommentar("Ziffern versus Zahlen")
 			.withLoesung("$1234 - 98 = 1136")
-			.withName("Subtraktion und Ziffernverständnis");
-		raetsel.setHerkunft(new HerkunftRaetsel().withHerkunftstyp(RaetselHerkunftTyp.ADAPTATION));
-
-		EditRaetselPayload editRaetselPayload = new EditRaetselPayload();
-		editRaetselPayload.setQuelle(quelle);
-		editRaetselPayload.setRaetsel(raetsel);
+			.withName("Subtraktion und Ziffernverständnis")
+			.withHerkunftstyp(RaetselHerkunftTyp.ADAPTATION)
+			.withQuelle(quelle);
 
 		return editRaetselPayload;
 
@@ -220,19 +218,17 @@ public class AutorRaetselResourceTest {
 			deskriptoren.add(deskriptor);
 		}
 
-		Raetsel raetsel = new Raetsel(raetselId)
+		EditRaetselPayload editRaetselPayload = new EditRaetselPayload()
+			.withId(raetselId)
 			.withSchluessel(schluessel)
 			.withDeskriptoren(deskriptoren)
 			.withFrage(
 				"Subtrahiere von der kleinsten Zahl mit 4 verschiedenen Ziffern die größte Zahl mit 2 verschiedenen Ziffern.")
 			.withKommentar("Quelle auf Buch geändert und Herkunft auf ZITAT")
 			.withLoesung("$1234 - 98 = 1136")
-			.withName("Subtraktion und Ziffernverständnis");
-		raetsel.setHerkunft(new HerkunftRaetsel().withHerkunftstyp(RaetselHerkunftTyp.ZITAT));
-
-		EditRaetselPayload editRaetselPayload = new EditRaetselPayload();
-		editRaetselPayload.setQuelle(quelle);
-		editRaetselPayload.setRaetsel(raetsel);
+			.withName("Subtraktion und Ziffernverständnis")
+			.withHerkunftstyp(RaetselHerkunftTyp.ZITAT)
+			.withQuelle(quelle);
 
 		return editRaetselPayload;
 

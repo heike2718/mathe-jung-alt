@@ -18,7 +18,7 @@ import jakarta.validation.constraints.Pattern;
 public class HerkunftRaetsel {
 
 	@JsonProperty
-	@Schema(description = "technische ID der Quelle")
+	@Schema(description = "technische ID der Quelle", example = "b26aecdd-628a-4b85-b761-b32abf82edc1")
 	@Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "quelleID enthält ungültige Zeichen - muss eine UUID sein")
@@ -30,10 +30,15 @@ public class HerkunftRaetsel {
 	@Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
 	private RaetselHerkunftTyp herkunftstyp;
 
-	@Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe")
+	@Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe", example = "alpha (6) 1976, S.32")
 	private String text;
 
-	@Schema(description = "optional Referenz auf ein Buch, eine Zeitschrift oder etwas im Internet")
+	@Schema(
+		description = "optional Referenz auf ein Buch, eine Zeitschrift oder etwas im Internet",
+		example = "343d9c5f-68e1-4dd9-98cc-1eea3493a559")
+	@Pattern(
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
+		message = "mediumUuid enthält ungültige Zeichen - muss eine UUID sein")
 	private String mediumUuid;
 
 	public String getId() {

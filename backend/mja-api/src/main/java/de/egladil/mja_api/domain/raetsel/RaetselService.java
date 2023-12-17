@@ -175,7 +175,7 @@ public class RaetselService {
 
 			LOGGER.info("raetsel.SCHLUESSEL={}", schluessel);
 
-			payload.getRaetsel().setSchluessel(schluessel);
+			payload.setSchluessel(schluessel);
 
 		}
 
@@ -192,7 +192,7 @@ public class RaetselService {
 		neuesRaetsel.setImportierteUuid(uuid);
 		String userId = authCtx.getUser().getName();
 
-		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
+		mergeWithPayload(neuesRaetsel, payload, userId);
 
 		neuesRaetsel.owner = userId;
 		neuesRaetsel.geaendertDurch = userId;
@@ -234,7 +234,7 @@ public class RaetselService {
 			return true;
 		}
 
-		return StringUtils.isBlank(payload.getRaetsel().getSchluessel());
+		return StringUtils.isBlank(payload.getSchluessel());
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class RaetselService {
 		// TODO semantische Validierung Herkunftstyp - Quellenart!!! EIGENKREATION nur mit PERSON, ADAPTION und ZITAT brauchen
 		// MEDIUM oder PERSON.
 
-		String raetselId = payload.getRaetsel().getId();
+		String raetselId = payload.getId();
 		doUpdateRaetsel(payload);
 
 		LOGGER.info("Raetsel geaendert: [raetsel={}, admin={}]", raetselId,
@@ -261,8 +261,8 @@ public class RaetselService {
 	@Transactional
 	void doUpdateRaetsel(final EditRaetselPayload payload) {
 
-		Raetsel raetsel = payload.getRaetsel();
-		String raetselId = raetsel.getId();
+		// Raetsel raetsel = payload.getRaetsel();
+		String raetselId = payload.getId();
 		PersistentesRaetsel persistentesRaetsel = raetselDao.findById(raetselId);
 		String userId = authCtx.getUser().getName();
 
@@ -298,8 +298,8 @@ public class RaetselService {
 		}
 
 		FragenUndLoesungenVO fragenLoesungenVo = new FragenUndLoesungenVO().withFrageAlt(persistentesRaetsel.frage)
-			.withFrageNeu(payload.getRaetsel().getFrage()).withLoesungAlt(persistentesRaetsel.loesung)
-			.withLoesungNeu(payload.getRaetsel().getLoesung());
+			.withFrageNeu(payload.getFrage()).withLoesungAlt(persistentesRaetsel.loesung)
+			.withLoesungNeu(payload.getLoesung());
 
 		if (persistentesRaetsel.filenameVorschauFrage == null) {
 
@@ -315,7 +315,7 @@ public class RaetselService {
 		PersistenteQuelle geaenderteQuelle = quellenService.quelleAnlegenOderAendern(persistentesRaetsel.herkunft,
 			payload.getQuelle());
 
-		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
+		mergeWithPayload(persistentesRaetsel, payload, userId);
 		persistentesRaetsel.quelle = geaenderteQuelle.uuid;
 		raetselDao.save(persistentesRaetsel);
 
@@ -325,14 +325,14 @@ public class RaetselService {
 
 	boolean schluesselExists(final EditRaetselPayload payload) {
 
-		PersistentesRaetsel persistentesRaetsel = raetselDao.findWithSchluessel(payload.getRaetsel().getSchluessel());
+		PersistentesRaetsel persistentesRaetsel = raetselDao.findWithSchluessel(payload.getSchluessel());
 
 		if (persistentesRaetsel == null) {
 
 			return false;
 		}
 
-		return !persistentesRaetsel.uuid.equals(payload.getRaetsel().getId());
+		return !persistentesRaetsel.uuid.equals(payload.getId());
 	}
 
 	/**
@@ -491,18 +491,18 @@ public class RaetselService {
 		return result;
 	}
 
-	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final Raetsel daten, final String userId) {
+	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final EditRaetselPayload payload, final String userId) {
 
-		persistentesRaetsel.antwortvorschlaege = daten.antwortvorschlaegeAsJSON();
-		persistentesRaetsel.deskriptoren = deskriptorenService.sortAndStringifyIdsDeskriptoren(daten.getDeskriptoren());
-		persistentesRaetsel.frage = daten.getFrage();
+		persistentesRaetsel.antwortvorschlaege = AntwortvorschlaegeMapper.antwortvorschlaegeAsJSON(payload.getAntwortvorschlaege());
+		persistentesRaetsel.deskriptoren = deskriptorenService.sortAndStringifyIdsDeskriptoren(payload.getDeskriptoren());
+		persistentesRaetsel.frage = payload.getFrage();
 		persistentesRaetsel.geaendertDurch = userId;
-		persistentesRaetsel.kommentar = daten.getKommentar();
-		persistentesRaetsel.loesung = daten.getLoesung();
-		persistentesRaetsel.schluessel = daten.getSchluessel();
-		persistentesRaetsel.name = daten.getName();
-		persistentesRaetsel.freigegeben = daten.isFreigegeben();
-		persistentesRaetsel.herkunft = daten.getHerkunft().getHerkunftstyp();
+		persistentesRaetsel.kommentar = payload.getKommentar();
+		persistentesRaetsel.loesung = payload.getLoesung();
+		persistentesRaetsel.schluessel = payload.getSchluessel();
+		persistentesRaetsel.name = payload.getName();
+		persistentesRaetsel.freigegeben = payload.isFreigegeben();
+		persistentesRaetsel.herkunft = payload.getHerkunftstyp();
 		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
 	}
 
@@ -515,7 +515,7 @@ public class RaetselService {
 			.withKommentar(raetselDB.kommentar)
 			.withLoesung(raetselDB.loesung)
 			.withSchluessel(raetselDB.schluessel)
-			.withFreigebeben(raetselDB.freigegeben)
+			.withFreigegeben(raetselDB.freigegeben)
 			.withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
 			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);

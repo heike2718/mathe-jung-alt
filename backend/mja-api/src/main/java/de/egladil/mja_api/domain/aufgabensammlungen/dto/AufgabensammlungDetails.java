@@ -28,7 +28,7 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabe
 public class AufgabensammlungDetails {
 
 	@JsonProperty
-	@Schema(description = "technische ID")
+	@Schema(description = "technische ID", example = "1909f308-ee3e-4ea5-be02-77e30def99a5")
 	private String id;
 
 	@JsonProperty

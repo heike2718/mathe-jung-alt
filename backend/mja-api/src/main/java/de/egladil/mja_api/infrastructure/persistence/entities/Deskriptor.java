@@ -35,7 +35,7 @@ public class Deskriptor {
 	public Long id;
 
 	@Column(name = "NAME")
-	@Schema(description = "Name zum Anzeigen")
+	@Schema(description = "Name zum Anzeigen", example = "Minikänguru")
 	public String name;
 
 	@Column(name = "ADMIN")

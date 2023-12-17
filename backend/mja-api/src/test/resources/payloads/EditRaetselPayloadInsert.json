@@ -1,40 +1,31 @@
 {
   "latexHistorisieren": false,
-  "idAendernderUser": "20721575-8c45-4201-a025-7a9fece1f2aa",
-  "raetsel": {
-    "id": "neu",
-    "name": "Welches Kind ist das aelteste?",
-    "freigegeben": false,
-    "frage": "Anton, Beate, Carola und Dennis sind in einer Klasse. Welches Kind ist am ältesten? In welcher Reihenfolge kommen die anderen Kinder?",
-    "loesung": "Dennis ist am ältesten. Danach kommen Beate, Anton und Carola.",
-    "kommentar": "Serie Serie-1, 1, Serie-65, 65",
-    "herkunft": {
-      "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
-      "quellenart": "PERSON",
-      "herkunftstyp": "EIGENKREATION",
-      "text": "Heike Winkelvoß",
-      "mediumUuid": null
+  "id": "neu",
+  "name": "Welches Kind ist das aelteste?",
+  "frage": "Anton, Beate, Carola und Dennis sind in einer Klasse. Welches Kind ist am ältesten? In welcher Reihenfolge kommen die anderen Kinder?",
+  "loesung": "Dennis ist am ältesten. Danach kommen Beate, Anton und Carola.",
+  "kommentar": "Serie Serie-1, 1, Serie-65, 65",
+  "freigegeben": false,
+  "herkunftstyp": "EIGENKREATION",
+  "antwortvorschlaege": [],
+  "deskriptoren": [
+    {
+      "id": 1,
+      "name": "Mathematik",
+      "admin": false
     },
-    "antwortvorschlaege": [],
-    "deskriptoren": [
-      {
-        "id": 1,
-        "name": "Mathematik",
-        "admin": false
-      },
-      {
-        "id": 4,
-        "name": "Klasse 1",
-        "admin": false
-      },
-      {
-        "id": 14,
-        "name": "Logik",
-        "admin": false
-      }
-    ]
-  },
-"quelle": {
+    {
+      "id": 4,
+      "name": "Klasse 1",
+      "admin": false
+    },
+    {
+      "id": 14,
+      "name": "Logik",
+      "admin": false
+    }
+  ],
+  "quelle": {
     "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
     "quellenart": "PERSON",
     "klasse": null,

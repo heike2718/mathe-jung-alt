@@ -933,9 +933,6 @@ public class AdminRaetselResourceTest {
 		String quelleId = "73634aeb-f494-4864-ab30-26861a5bf2e0";
 		String owner = "412b67dc-132f-465a-a3c3-468269e866cb";
 
-		HerkunftRaetsel herkunft = new HerkunftRaetsel().withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION)
-			.withQuellenart(Quellenart.PERSON);
-
 		QuelleDto quelle = new QuelleDto();
 		quelle.setPerson("Frodo Beutlin aus Beutelsend");
 		quelle.setQuellenart(Quellenart.PERSON);
@@ -957,19 +954,17 @@ public class AdminRaetselResourceTest {
 			deskriptoren.add(deskriptor);
 		}
 
-		Raetsel raetsel = new Raetsel(raetselId)
+		EditRaetselPayload editRaetselPayload = new EditRaetselPayload()
+			.withId(raetselId)
 			.withSchluessel(schluessel)
 			.withDeskriptoren(deskriptoren)
 			.withFrage(
 				"Subtrahiere von der kleinsten Zahl mit 4 verschiedenen Ziffern die größte Zahl mit 2 verschiedenen Ziffern.")
 			.withKommentar("Name geändert")
 			.withLoesung("$1234 - 98 = 1136$")
-			.withName("Kombinatorik und Subtraktion");
-		raetsel.setHerkunft(herkunft);
-
-		EditRaetselPayload editRaetselPayload = new EditRaetselPayload();
-		editRaetselPayload.setQuelle(quelle);
-		editRaetselPayload.setRaetsel(raetsel);
+			.withName("Kombinatorik und Subtraktion")
+			.withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION)
+			.withQuelle(quelle);
 
 		// Act
 		Raetsel result = given()

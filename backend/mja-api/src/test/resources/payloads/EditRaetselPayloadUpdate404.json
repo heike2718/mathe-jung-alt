@@ -1,39 +1,57 @@
 {
   "latexHistorisieren": true,
-  "raetsel": {
-    "id": "hallihallo",
-    "schluessel": "02622",
-    "name": "Bälle in Kisten",
-    "freigegeben": false,
-    "herkunft": {
-      "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
-      "quellenart": "PERSON",
-      "herkunftstyp": "EIGENKREATION",
-      "text": "Heike Winkelvoß",
-      "mediumUuid": null
+  "id": "00000000-0000-0000-0000-000000000000",
+  "schluessel": "02622",
+  "name": "Bälle in Kisten",
+  "freigegeben": false,
+  "herkunftstyp": "EIGENKREATION",
+  "frage": "\\begin{center}{\\Large \\bf 99 Bälle}\\end{center} Wie viele waren es vorher?",
+  "loesung": "100",
+  "kommentar": "Irgendeine Serie",
+  "antwortvorschlaege": [
+    {
+      "buchstabe": "A",
+      "text": "8",
+      "korrekt": false
     },
-    "frage": "\\begin{center}{\\Large \\bf 99 Bälle}\\end{center} Wie viele waren es vorher?",
-    "loesung": "100",
-    "kommentar": "Irgendeine Serie",
-    "antwortvorschlaege": [{"buchstabe":"A","text":"8","korrekt":false},{"buchstabe":"B","text":"7","korrekt":false},{"buchstabe":"C","text":"13","korrekt":false},{"buchstabe":"D","text":"6","korrekt":true},{"buchstabe":"E","text":"3","korrekt":false}],
-    "deskriptoren": [
-      {
-        "id": 1,
-        "name": "Mathematik",
-        "admin": false
-      },
-      {
-        "id": 4,
-        "name": "Klasse 1",
-        "admin": false
-      },
-      {
-        "id": 14,
-        "name": "Logik",
-        "admin": false
-      }
-    ]
-  },
+    {
+      "buchstabe": "B",
+      "text": "7",
+      "korrekt": false
+    },
+    {
+      "buchstabe": "C",
+      "text": "13",
+      "korrekt": false
+    },
+    {
+      "buchstabe": "D",
+      "text": "6",
+      "korrekt": true
+    },
+    {
+      "buchstabe": "E",
+      "text": "3",
+      "korrekt": false
+    }
+  ],
+  "deskriptoren": [
+    {
+      "id": 1,
+      "name": "Mathematik",
+      "admin": false
+    },
+    {
+      "id": 4,
+      "name": "Klasse 1",
+      "admin": false
+    },
+    {
+      "id": 14,
+      "name": "Logik",
+      "admin": false
+    }
+  ],
   "quelle": {
     "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
     "quellenart": "PERSON",
