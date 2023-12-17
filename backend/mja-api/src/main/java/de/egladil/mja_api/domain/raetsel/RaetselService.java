@@ -380,6 +380,16 @@ public class RaetselService {
 			throw new MjaRuntimeException("Datenfehler: es gibt keinen Eintrag in QUELLEN mit uuid=" + raetsel.quelle);
 		}
 
+		try {
+
+			permissionDelegate.checkWritePermission(raetsel);
+			result.setSchreibgeschuetzt(false);
+
+		} catch (WebApplicationException e) {
+
+			result.setSchreibgeschuetzt(true);
+		}
+
 		return result;
 	}
 
@@ -519,14 +529,6 @@ public class RaetselService {
 			.withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
 			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);
-
-		try {
-
-			result.markiereAlsAenderbar();
-		} catch (WebApplicationException e) {
-
-			// in diesem Fall keine Schreibberechtigung
-		}
 
 		return result;
 	}

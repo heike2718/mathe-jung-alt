@@ -354,6 +354,7 @@ public class AdminRaetselResourceTest {
 		assertEquals(RaetselHerkunftTyp.EIGENKREATION, herkunftRaetsel.getHerkunftstyp());
 		assertNull(herkunftRaetsel.getMediumUuid());
 		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", herkunftRaetsel.getId());
+		assertFalse(treffer.isSchreibgeschuetzt());
 	}
 
 	@Test

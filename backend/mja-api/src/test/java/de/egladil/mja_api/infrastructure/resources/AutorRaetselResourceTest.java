@@ -8,6 +8,8 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -79,6 +81,31 @@ public class AutorRaetselResourceTest {
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(2)
+	void testRaetselDetailsLadenAndererOwner() throws Exception {
+
+		Raetsel treffer = given()
+			.when().get("02606/v1").then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(Raetsel.class);
+
+		assertEquals("0ce69e0e-e1f8-4400-a2b9-61d3d6b0a82e", treffer.getId());
+		assertEquals("02606", treffer.getSchluessel());
+		assertTrue(treffer.isFreigegeben());
+
+		HerkunftRaetsel herkunftRaetsel = treffer.getHerkunft();
+		assertEquals("Heike Winkelvoß", herkunftRaetsel.getText());
+		assertEquals(Quellenart.PERSON, herkunftRaetsel.getQuellenart());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, herkunftRaetsel.getHerkunftstyp());
+		assertNull(herkunftRaetsel.getMediumUuid());
+		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", herkunftRaetsel.getId());
+		assertTrue(treffer.isSchreibgeschuetzt());
+	}
+
+	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(3)
 	void should_raetselAnlegenMitQuelleZeitschrift_undAendernMitQuelle_work() {
 
 		// Arrange anlegen

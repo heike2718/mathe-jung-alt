@@ -234,14 +234,14 @@ public class Raetsel extends AbstractDomainEntity {
 		this.embeddableImageInfos.addAll(embeddableImageInfos);
 	}
 
+	public void setSchreibgeschuetzt(final boolean schreibgeschuetzt) {
+
+		this.schreibgeschuetzt = schreibgeschuetzt;
+	}
+
 	public boolean isSchreibgeschuetzt() {
 
 		return schreibgeschuetzt;
-	}
-
-	public void markiereAlsAenderbar() {
-
-		this.schreibgeschuetzt = false;
 	}
 
 	public HerkunftRaetsel getHerkunft() {
