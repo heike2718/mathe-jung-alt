@@ -29,7 +29,7 @@
 
     <ng-container *ngIf="authFacade.user$| async as user">
         <div *ngIf="isHandset === false" class="mr-1">
-            Moin, {{user.fullName}} <span *ngIf="user.isAdmin">(ADMIN)</span>
+            Moin, {{user.fullName}} <span *ngIf="user.isAdmin">({{user.benutzerart}})</span>
         </div>
     </ng-container>
 

@@ -15,6 +15,17 @@ export interface QuelleDto {
   readonly person: string | undefined;
 };
 
+export const initialQuelleDto: QuelleDto = {
+  id: 'neu',
+  quellenart: 'PERSON',
+  ausgabe: undefined,
+  jahr: undefined,
+  klasse: undefined,
+  person: undefined,
+  seite: undefined,
+  stufe: undefined
+};
+
 export interface RaetselSuchfilter {
   readonly suchstring: string;
   readonly deskriptoren: DeskriptorUI[];
@@ -50,6 +61,9 @@ export interface Raetsel {
   readonly deskriptoren: DeskriptorUI[];
 };
 
+/**
+ * Details eines Rätsels zum Anzeigen in der Detailansicht
+ */
 export interface RaetselDetails {
   readonly id: string;
   readonly schluessel: string;
@@ -59,7 +73,6 @@ export interface RaetselDetails {
   readonly frage: string;
   readonly loesung: string | undefined;
   readonly kommentar: string | undefined;
-  readonly herkunftstyp: Herkunftstyp;
   readonly herkunft: HerkunftRaetsel;
   readonly antwortvorschlaege: Antwortvorschlag[];
   readonly deskriptoren: DeskriptorUI[];
@@ -68,12 +81,9 @@ export interface RaetselDetails {
   readonly embeddableImageInfos: EmbeddableImageInfo[];
 };
 
-export interface EditRaetselPayload {
-  readonly latexHistorisieren: boolean;
-  readonly raetsel: RaetselDetails;
-  readonly quelle: QuelleDto;
-};
-
+/** 
+ * Payload zum Anlegen oder Ändern eines Rätsels
+*/
 export const initialRaetselDetails: RaetselDetails = {
   id: 'neu',
   schluessel: '',
@@ -83,13 +93,27 @@ export const initialRaetselDetails: RaetselDetails = {
   frage: '',
   loesung: '',
   kommentar: '',
-  herkunftstyp: initialHerkunftRaetsel.herkunftstyp,
   herkunft: initialHerkunftRaetsel,
   antwortvorschlaege: [],
   deskriptoren: [],
   images: null,
   raetselPDF: null,
   embeddableImageInfos: []
+};
+
+export interface EditRaetselPayload {
+  readonly id: string;
+  readonly schluessel: string | null;
+  readonly latexHistorisieren: boolean;
+  readonly name: string;
+  readonly freigegeben: boolean;
+  readonly herkunftstyp: Herkunftstyp;
+  readonly frage: string;
+  readonly loesung: string | undefined;
+  readonly kommentar: string | undefined;
+  readonly antwortvorschlaege: Antwortvorschlag[];
+  readonly deskriptoren: DeskriptorUI[];
+  readonly quelle: QuelleDto;
 };
 
 export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {

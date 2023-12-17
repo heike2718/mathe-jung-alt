@@ -478,9 +478,20 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       stufe: undefined
     };
 
+    const theSchluessel = raetsel.schluessel.length > 0 ? raetsel.schluessel : null;
+
     const editRaetselPayload: EditRaetselPayload = {
       latexHistorisieren: latexHistorisieren,
-      raetsel: raetsel,
+      antwortvorschlaege: raetsel.antwortvorschlaege,
+      deskriptoren: raetsel.deskriptoren,
+      frage: raetsel.frage,
+      freigegeben: raetsel.freigegeben,
+      herkunftstyp: raetsel.herkunft.herkunftstyp,
+      id: raetsel.id,
+      kommentar: raetsel.kommentar,
+      loesung: raetsel.loesung,
+      name: raetsel.name,
+      schluessel: theSchluessel,
       quelle: quelle
     };
 

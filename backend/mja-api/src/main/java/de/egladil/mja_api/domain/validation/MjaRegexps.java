@@ -31,6 +31,8 @@ public interface MjaRegexps {
 	 */
 	String REGEXP_EPS_HEIKE_WITH_FILE_SEPERATOR = "^/([\\d]{5}_[\\d]{0,1}|[\\d]{5})\\.eps$";
 
+	String VALID_EDIT_PAYLOOAD_SCHLUESSEL = "[\\d]*";
+
 	String VALID_SCHLUESSEL = "^[\\d]{5}$";
 
 	String VALID_DOMAIN_OBJECT_ID = "^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}|neu$";

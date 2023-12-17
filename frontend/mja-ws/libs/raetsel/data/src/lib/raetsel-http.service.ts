@@ -129,7 +129,7 @@ export class RaetselHttpService {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        if ('neu' === editRaetselPayload.raetsel.id) {
+        if ('neu' === editRaetselPayload.id) {
             return this.#http.post<RaetselDetails>(url, editRaetselPayload, { headers });
         }
 

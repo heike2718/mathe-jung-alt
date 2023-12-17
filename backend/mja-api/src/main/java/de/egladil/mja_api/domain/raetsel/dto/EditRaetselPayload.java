@@ -17,6 +17,7 @@ import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 /**
  * EditRaetselPayload
@@ -34,7 +35,8 @@ public class EditRaetselPayload {
 
 	@JsonProperty
 	@Schema(description = "fachlicher Schlüssel im Aufgabenarchiv.", example = "05463")
-	@Pattern(regexp = MjaRegexps.VALID_SCHLUESSEL, message = "schluessel muss aus genau 5 Ziffern bestehen")
+	@Pattern(regexp = MjaRegexps.VALID_EDIT_PAYLOOAD_SCHLUESSEL, message = "falls schluessel, dann nur Ziffern")
+	@Size(max = 5, message = "schluessel darf nicht aus mehr als 5 Ziffern bestehen")
 	private String schluessel;
 
 	@JsonProperty
@@ -54,7 +56,7 @@ public class EditRaetselPayload {
 	private String loesung;
 
 	@JsonProperty
-	@Schema(description = "Kommentar, volltextsuchfähig")
+	@Schema(description = "Kommentar, volltextsuchfähig", example = "Serie Serie-1, 1, Serie-65, 65")
 	private String kommentar;
 
 	@JsonProperty
