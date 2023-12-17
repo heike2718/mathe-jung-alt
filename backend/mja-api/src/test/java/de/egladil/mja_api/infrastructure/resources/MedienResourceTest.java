@@ -21,7 +21,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.medien.Medienart;
 import de.egladil.mja_api.domain.medien.Mediensuchmodus;
-import de.egladil.mja_api.domain.medien.dto.MediensucheTreffer;
+import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
 import de.egladil.mja_api.infrastructure.persistence.dao.MediumDao;
@@ -242,7 +242,7 @@ public class MedienResourceTest {
 		Mediensuchmodus suchmodusNoop = Mediensuchmodus.SEARCHSTRING;
 
 		// Act
-		MediensucheTreffer mediensucheTreffer = given()
+		MediensucheResult mediensucheTreffer = given()
 			.queryParam("suchmodus", suchmodusNoop)
 			.queryParam("suchstring", "Knobel")
 			.queryParam("limit", 3)
@@ -254,7 +254,7 @@ public class MedienResourceTest {
 			.and()
 			.contentType(ContentType.JSON)
 			.extract()
-			.as(MediensucheTreffer.class);
+			.as(MediensucheResult.class);
 
 		// Assert
 		assertEquals(1, mediensucheTreffer.getTrefferGesamt());
@@ -273,7 +273,7 @@ public class MedienResourceTest {
 		// Arrange 3
 		Mediensuchmodus suchmodusNoop = Mediensuchmodus.NOOP;
 
-		MediensucheTreffer mediensucheTreffer = given()
+		MediensucheResult mediensucheTreffer = given()
 			.queryParam("suchmodus", suchmodusNoop)
 			.queryParam("limit", 3)
 			.queryParam("offset", 0)
@@ -284,7 +284,7 @@ public class MedienResourceTest {
 			.and()
 			.contentType(ContentType.JSON)
 			.extract()
-			.as(MediensucheTreffer.class);
+			.as(MediensucheResult.class);
 
 		// Assert 3
 		assertEquals(3, mediensucheTreffer.getTrefferGesamt());

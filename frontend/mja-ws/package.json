@@ -60,6 +60,8 @@
     "@nx/js": "17.2.0",
     "@nx/workspace": "17.2.0",
     "@schematics/angular": "17.0.6",
+    "@swc-node/register": "~1.6.7",
+    "@swc/core": "~1.3.85",
     "@types/jest": "29.4.4",
     "@types/node": "18.16.9",
     "@types/ungap__structured-clone": "^0.3.0",

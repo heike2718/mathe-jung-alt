@@ -15,10 +15,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 
 /**
- * MediensucheTreffer
+ * MediensucheResult
  */
-@Schema(name = "MediensucheTreffer", description = "Teilmenge der Treffer einer Suchanfrage")
-public class MediensucheTreffer {
+@Schema(name = "MediensucheResult", description = "Resultat einer Mediensuche")
+public class MediensucheResult {
 
 	@JsonProperty
 	@Schema(description = "Gesamtzahl aller Treffer der Suchanfrage")

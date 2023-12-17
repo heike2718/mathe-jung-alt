@@ -19,7 +19,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.medien.MedienService;
 import de.egladil.mja_api.domain.medien.Mediensuchmodus;
-import de.egladil.mja_api.domain.medien.dto.MediensucheTreffer;
+import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
@@ -64,7 +64,7 @@ public class MedienResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = MediensucheTreffer.class)))
+			schema = @Schema(implementation = MediensucheResult.class)))
 	@APIResponse(
 		name = "BadRequestResponse",
 		responseCode = "400",
@@ -114,7 +114,7 @@ public class MedienResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = MediensucheTreffer.class)))
+			schema = @Schema(implementation = MediensucheResult.class)))
 	@APIResponse(
 		name = "BadRequestResponse",
 		responseCode = "400",
@@ -139,7 +139,7 @@ public class MedienResource {
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset) {
 	// formatter:on
 
-		MediensucheTreffer result = null;
+		MediensucheResult result = null;
 		switch (suchmodus) {
 
 		case NOOP -> result = medienService.loadMedien(limit, offset);

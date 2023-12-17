@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.medien.dto.MediensucheTreffer;
+import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
 import de.egladil.mja_api.domain.medien.impl.MedienPermissionDelegate;
@@ -162,9 +162,9 @@ public class MedienService {
 	 *
 	 * @param  limit
 	 * @param  offset
-	 * @return        MediensucheTreffer
+	 * @return        MediensucheResult
 	 */
-	public MediensucheTreffer loadMedien(final int limit, final int offset) {
+	public MediensucheResult loadMedien(final int limit, final int offset) {
 
 		long gesamtzahl = mediumDao.countMedien();
 		List<PersistentesMedium> treffermenge = mediumDao.loadMedien(limit, offset);
@@ -172,7 +172,7 @@ public class MedienService {
 		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB)
 			.collect(Collectors.toList());
 
-		MediensucheTreffer result = new MediensucheTreffer();
+		MediensucheResult result = new MediensucheResult();
 		result.setTreffer(trefferItems);
 		result.setTrefferGesamt(gesamtzahl);
 
@@ -186,9 +186,9 @@ public class MedienService {
 	 * @param  suchstring
 	 * @param  limit
 	 * @param  offset
-	 * @return            MediensucheTreffer
+	 * @return            MediensucheResult
 	 */
-	public MediensucheTreffer findMedien(final String suchstring, final int limit, final int offset) {
+	public MediensucheResult findMedien(final String suchstring, final int limit, final int offset) {
 
 		if (StringUtils.isBlank(suchstring)) {
 
@@ -201,7 +201,7 @@ public class MedienService {
 
 		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB).toList();
 
-		MediensucheTreffer result = new MediensucheTreffer();
+		MediensucheResult result = new MediensucheResult();
 		result.setTreffer(trefferItems);
 		result.setTrefferGesamt(gesamtzahl);
 
