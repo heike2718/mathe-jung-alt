@@ -22,7 +22,7 @@ import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 /**
- * AufgabensammlungenResourceTest
+ * AdminAufgabensammlungenResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(AufgabensammlungenResource.class)
@@ -48,18 +48,6 @@ public class AufgabensammlungenResourceAuthorizationTest {
 				"v1?limit=20&offset=0&referenz=2022&referenztyp=MINIKAENGURU&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc")
 			.then()
 			.statusCode(401);
-	}
-
-	@Test
-	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	void testFindAufgabensammlungenForbidden() throws Exception {
-
-		given()
-			.contentType(ContentType.JSON)
-			.get(
-				"v1?limit=20&offset=0&referenz=2022&referenztyp=MINIKAENGURU&schwierigkeitsgrad=EINS&sortAttribute=name&sortDirection=asc")
-			.then()
-			.statusCode(403);
 	}
 
 	@Test

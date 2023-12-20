@@ -143,9 +143,9 @@ public class AufgabensammlungDetails {
 		return schreibgeschuetzt;
 	}
 
-	public void markiereAlsAenderbar() {
+	public void setSchreibgeschuetzt(final boolean schreibgeschuetzt) {
 
-		this.schreibgeschuetzt = false;
+		this.schreibgeschuetzt = schreibgeschuetzt;
 	}
 
 	public boolean isFreigegeben() {

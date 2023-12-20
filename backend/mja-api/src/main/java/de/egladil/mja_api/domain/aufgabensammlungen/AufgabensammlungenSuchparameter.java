@@ -6,6 +6,7 @@ package de.egladil.mja_api.domain.aufgabensammlungen;
 
 import org.apache.commons.lang3.StringUtils;
 
+import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.dto.SortDirection;
 
 /**
@@ -19,7 +20,9 @@ public record AufgabensammlungenSuchparameter(
 	Referenztyp referenztyp,
 	String referenz,
 	AufgabensammlungenSortattribute sortAttribute,
-	SortDirection sortDirection
+	SortDirection sortDirection,
+	String owner,
+	Benutzerart benutzerart
 	) {
 	// @formatter:on
 

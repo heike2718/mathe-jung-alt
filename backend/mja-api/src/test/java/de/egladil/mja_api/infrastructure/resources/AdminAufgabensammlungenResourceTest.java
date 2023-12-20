@@ -35,13 +35,13 @@ import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 /**
- * AufgabensammlungenResourceTest
+ * AdminAufgabensammlungenResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(AufgabensammlungenResource.class)
 @TestProfile(FullDatabaseAdminTestProfile.class)
 @TestMethodOrder(OrderAnnotation.class)
-public class AufgabensammlungenResourceTest {
+public class AdminAufgabensammlungenResourceTest {
 
 	private static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
 

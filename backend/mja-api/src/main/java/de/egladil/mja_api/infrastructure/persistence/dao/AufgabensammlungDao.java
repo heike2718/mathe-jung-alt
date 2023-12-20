@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.aufgabensammlungen.AufgabensammlungenSuchparameter;
 import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
+import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
@@ -56,7 +57,7 @@ public class AufgabensammlungDao {
 			stmt += " where " + whereStmt;
 		}
 
-		LOGGER.debug("stmt={}", stmt);
+		LOGGER.info("stmt={}", stmt);
 
 		Query query = entityManager.createQuery(stmt);
 
@@ -157,6 +158,30 @@ public class AufgabensammlungDao {
 			}
 		}
 
+		if (Benutzerart.STANDARD == suchparameter.benutzerart()) {
+
+			if (addAnd) {
+
+				whereStmt += " and (g.freigegeben = :freigegeben and g.privat = :privatFalse or g.privat=:privatTrue and g.owner = :owner) ";
+
+			} else {
+
+				whereStmt += " (g.freigegeben = :freigegeben and g.privat = :privatFalse or g.privat=:privatTrue and g.owner = :owner) ";
+			}
+
+		}
+
+		if (Benutzerart.AUTOR == suchparameter.benutzerart()) {
+
+			if (addAnd) {
+
+				whereStmt += " and (g.privat = false or g.privat=:privatTrue and g.owner = :owner) ";
+			} else {
+
+				whereStmt += " (g.privat = false or g.privat=:privatTrue and g.owner = :owner) ";
+			}
+		}
+
 		return whereStmt;
 	}
 
@@ -180,6 +205,19 @@ public class AufgabensammlungDao {
 		if (StringUtils.isNotBlank(suchparameter.referenz())) {
 
 			query.setParameter("referenz", "%" + suchparameter.referenz().trim().toLowerCase() + "%");
+		}
+
+		if (Benutzerart.STANDARD == suchparameter.benutzerart()) {
+
+			query.setParameter("freigegeben", true)
+				.setParameter("privatTrue", true)
+				.setParameter("privatFalse", false)
+				.setParameter("owner", suchparameter.owner());
+		}
+
+		if (Benutzerart.AUTOR == suchparameter.benutzerart()) {
+
+			query.setParameter("privatTrue", true).setParameter("owner", suchparameter.owner());
 		}
 	}
 
@@ -303,7 +341,7 @@ public class AufgabensammlungDao {
 
 	/**
 	 * @param  elementID
-	 * @return                         PersistentesAufgabensammlugnselement
+	 * @return           PersistentesAufgabensammlugnselement
 	 */
 	public PersistentesAufgabensammlugnselement findElementById(final String elementID) {
 

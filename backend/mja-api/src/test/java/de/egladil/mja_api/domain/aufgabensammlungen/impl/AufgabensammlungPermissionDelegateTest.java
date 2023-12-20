@@ -161,7 +161,7 @@ public class AufgabensammlungPermissionDelegateTest {
 	}
 
 	@Nested
-	@DisplayName("Autoren haben Schreibberechtigung nur dann, wenn sie OWNER sind")
+	@DisplayName("Standarduser haben Schreibberechtigung nur dann, wenn sie OWNER sind")
 	class WritePermissionTestsStandarduser {
 
 		@Test
@@ -572,11 +572,11 @@ public class AufgabensammlungPermissionDelegateTest {
 	}
 
 	@Nested
-	@DisplayName("Standarduser haben Leseberechtigung für private Aufgabensammlungen, wenn sie OWNER sind und für alle public Aufgabensammlungen")
+	@DisplayName("Standarduser haben Leseberechtigung für private Aufgabensammlungen, wenn sie OWNER sind und für alle freigegebenen, nicht privaten Aufgabensammlungen")
 	class ReadPermissionTestsStandarduser {
 
 		@Test
-		void should_checkPermisionThrow403_when_privatAndUserNotOWNER() {
+		void should_checkPermisionThrow403_when_privatAndNotFreigegebenUserNotOWNER() {
 
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
@@ -585,6 +585,7 @@ public class AufgabensammlungPermissionDelegateTest {
 			ausDB.owner = OWNER;
 			ausDB.uuid = AUFGABENSAMMLUNG_ID;
 			ausDB.privat = true;
+			ausDB.freigegeben = false;
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -603,7 +604,7 @@ public class AufgabensammlungPermissionDelegateTest {
 		}
 
 		@Test
-		void should_checkPermisionNotThrow403_when_privatAndUserIsOWNER() {
+		void should_checkPermisionNotThrow403_when_privatAndNotFreigegebenAndUserIsOWNER() {
 
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
@@ -612,6 +613,7 @@ public class AufgabensammlungPermissionDelegateTest {
 			ausDB.owner = USER_ID;
 			ausDB.uuid = AUFGABENSAMMLUNG_ID;
 			ausDB.privat = true;
+			ausDB.freigegeben = false;
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -623,7 +625,7 @@ public class AufgabensammlungPermissionDelegateTest {
 		}
 
 		@Test
-		void should_checkPermisionNotThrow403_when_publicAndUserIsOWNER() {
+		void should_checkPermisionNotThrow403_when_publicAndFreigegebenAndUserIsOWNER() {
 
 			// das ist ein theoretischer Fall, denn STANDAR-User können keine public Aufgabensammlungen anlegen.
 
@@ -634,6 +636,7 @@ public class AufgabensammlungPermissionDelegateTest {
 			ausDB.owner = USER_ID;
 			ausDB.uuid = AUFGABENSAMMLUNG_ID;
 			ausDB.privat = false;
+			ausDB.freigegeben = true;
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -645,7 +648,7 @@ public class AufgabensammlungPermissionDelegateTest {
 		}
 
 		@Test
-		void should_checkPermisionNotThrow403_when_publicAndUserNotOWNER() {
+		void should_checkPermisionNotThrow403_when_publicAndFreigegebenAndUserNotOWNER() {
 
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
@@ -654,6 +657,7 @@ public class AufgabensammlungPermissionDelegateTest {
 			ausDB.owner = OWNER;
 			ausDB.uuid = AUFGABENSAMMLUNG_ID;
 			ausDB.privat = false;
+			ausDB.freigegeben = true;
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -662,6 +666,66 @@ public class AufgabensammlungPermissionDelegateTest {
 
 			// Assert
 			verify(authCtx).getUser();
+
+		}
+
+		@Test
+		void should_checkPermisionThrow403_when_publicAndNotFreigegebenAndUserIsOWNER() {
+
+			// das ist ein theoretischer Fall, denn STANDAR-User können keine public Aufgabensammlungen anlegen.
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
+
+			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
+			ausDB.owner = USER_ID;
+			ausDB.uuid = AUFGABENSAMMLUNG_ID;
+			ausDB.privat = false;
+			ausDB.freigegeben = false;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act + Assert
+			try {
+
+				delegate.checkReadPermission(ausDB);
+				fail("keine WebApplicationException");
+			} catch (WebApplicationException e) {
+
+				assertEquals(403, e.getResponse().getStatus());
+
+				verify(authCtx).getUser();
+			}
+
+		}
+
+		@Test
+		void should_checkPermisionThrow403_when_publicAndNotFreigegebenAndUserIsNotOWNER() {
+
+			// das ist ein theoretischer Fall, denn STANDAR-User können keine public Aufgabensammlungen anlegen.
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
+
+			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
+			ausDB.owner = OWNER;
+			ausDB.uuid = AUFGABENSAMMLUNG_ID;
+			ausDB.privat = false;
+			ausDB.freigegeben = false;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act + Assert
+			try {
+
+				delegate.checkReadPermission(ausDB);
+				fail("keine WebApplicationException");
+			} catch (WebApplicationException e) {
+
+				assertEquals(403, e.getResponse().getStatus());
+
+				verify(authCtx).getUser();
+			}
 
 		}
 

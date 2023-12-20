@@ -50,9 +50,15 @@ QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_DOMAIN_GENERATOREN_IMPL_IMAGEGENERATORS
 QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_DOMAIN_UTILS_MJAFILEUTILS__LEVEL=WARN
 QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_INFRASTRUCTURE_CDI_AUTHENTICATIONCONTEXTIMPL__LEVEL=WARN
 
+
+
+
 #=============================================================================================#
 #        _TEST_                                                                               #
 #=============================================================================================#
+
+QUARKUS_HTTP_TEST_TIMEOUT=1m
+
 _TEST_QUARKUS_DATASOURCE_JDBC_URL=jdbc:mariadb://172.28.0.2:3306/mathe_jung_alt
 _TEST_QUARKUS_HTTP_PORT=9212
 _TEST_CSRF_ENABLED=false
@@ -61,7 +67,7 @@ _TEST_QUARKUS_HTTP_ACCESS-LOG_LOG-TO-FILE=false
 _TEST_AUTHORIZATION_ENABLED=false
 
 #=============================================================================================#
-#        _FULL-DB-ADMIN-TEST_                                                                 #
+#        _FULL-DB-ADMIN-TEST_           (heike)                                               #
 #=============================================================================================#
 _FULL-DB-ADMIN-TEST_MOCK_SESSION=true
 _FULL-DB-ADMIN-TEST_MOCK_BENUTZERART=ADMIN
@@ -81,7 +87,7 @@ _FULL-DB-ADMIN-TEST_QUARKUS_HIBERNATE_ORM_LOG_SQL=true
 
 
 #=============================================================================================#
-#        _FULL-DB-AUTOR-TEST_                                                                 #
+#        _FULL-DB-AUTOR-TEST_            (frodo)                                              #
 #=============================================================================================#
 _FULL-DB-AUTOR-TEST_MOCK_SESSION=true
 _FULL-DB-AUTOR-TEST_MOCK_BENUTZERART=AUTOR
@@ -98,4 +104,24 @@ _FULL-DB-AUTOR-TEST_AUTHORIZATION_ENABLED=false
 _FULL-DB-AUTOR-TEST_QUARKUS_LOG_MIN_LEVEL=TRACE
 _FULL-DB-AUTOR-TEST_QUARKUS_HIBERNATE_ORM_LOG_BIND_PARAMETERS=true
 _FULL-DB-AUTOR-TEST_QUARKUS_HIBERNATE_ORM_LOG_SQL=true
+
+
+#=============================================================================================#
+#        _FULL-DB-STANDARD-TEST_       (af@egladil.de)                                        #
+#=============================================================================================#
+_FULL-DB-STANDARD-TEST_MOCK_SESSION=true
+_FULL-DB-STANDARD-TEST_MOCK_BENUTZERART=STANDARD
+_FULL-DB-STANDARD-TEST_MOCK_BENUTZERID=9a4989b3-f70d-415c-a914-7f1111fad1cb
+
+_FULL-DB-STANDARD-TEST_QUARKUS_DATASOURCE_JDBC_URL=jdbc:mariadb://172.28.0.2:3306/mathe_jung_alt
+_FULL-DB-STANDARD-TEST_QUARKUS_HTTP_PORT=9212
+_FULL-DB-STANDARD-TEST_CSRF_ENABLED=false
+_FULL-DB-STANDARD-TEST_QUARKUS_LOG_FILE_ENABLE=false
+_FULL-DB-STANDARD-TEST_QUARKUS_HTTP_ACCESS-LOG_LOG-TO-FILE=false
+_FULL-DB-STANDARD-TEST_AUTHORIZATION_ENABLED=false
+
+# man muss auch das MIN-Level auf TRACE setzen, wenn man das SQL von namedQueries sehen will
+_FULL-DB-STANDARD-TEST_QUARKUS_LOG_MIN_LEVEL=TRACE
+_FULL-DB-STANDARD-TEST_QUARKUS_HIBERNATE_ORM_LOG_BIND_PARAMETERS=true
+_FULL-DB-STANDARD-TEST_QUARKUS_HIBERNATE_ORM_LOG_SQL=true
 

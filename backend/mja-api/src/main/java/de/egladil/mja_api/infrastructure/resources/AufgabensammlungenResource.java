@@ -30,6 +30,7 @@ import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTre
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungPayload;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungselementPayload;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
@@ -37,6 +38,7 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -70,6 +72,9 @@ public class AufgabensammlungenResource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungenResource.class);
 
 	@Inject
+	AuthenticationContext authCtx;
+
+	@Inject
 	DevDelayService delayService;
 
 	@Inject
@@ -77,7 +82,7 @@ public class AufgabensammlungenResource {
 
 	@GET
 	@Path("v1")
-	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Operation(
 		operationId = "findAufgabensammlungen",
 		summary = "Gibt alle Aufgabensammlungen zurück, die auf die gegebene Suchanfrage passen.")
@@ -138,7 +143,18 @@ public class AufgabensammlungenResource {
 			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("nicht mehr als 50 auf einmal abfragen.")).build());
 		}
 
-		AufgabensammlungenSuchparameter suchparameter = new AufgabensammlungenSuchparameter(name, schwierigkeitsgrad, referenztyp, referenz, sortAttribute, sortDirection);
+		AuthenticatedUser user = authCtx.getUser();
+
+		AufgabensammlungenSuchparameter suchparameter = new AufgabensammlungenSuchparameter(name,
+			schwierigkeitsgrad,
+			referenztyp,
+			referenz,
+			sortAttribute,
+			sortDirection,
+			user.getName(),
+			user.getBenutzerart()
+		);
+
 		return aufgabensammlungenService.findAufgabensammlungen(suchparameter, limit, offset);
 	}
 
@@ -224,7 +240,7 @@ public class AufgabensammlungenResource {
 
 	@GET
 	@Path("{aufgabensammlungID}/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Operation(
 		operationId = "aufgabensammlungDetailsLaden",
 		summary = "Läd die Details der Aufgabensammlung mit der gegebenen ID")
@@ -247,8 +263,11 @@ public class AufgabensammlungenResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	@APIResponse(
 		name = "Unauthorized",
-		description = "nur Admins und Autoren dürfen Aufgabensammlung laden",
 		responseCode = "401")
+	@APIResponse(
+		name = "Forbidden",
+		description = "Admins dürfen alle Details sehen, Autoren nur die public oder eigenen, Standarduser nur die freigegebenen public oder eigene",
+		responseCode = "403")
 	@APIResponse(
 		name = "NotFound",
 		description = "Gibt es nicht",

@@ -11,7 +11,7 @@ import { AufgabensammlungEditComponent } from "./aufgabensammlung-edit/aufgabens
 export const aufgabensammlungenRoutes: Routes = [
     {
         path: 'uebersicht',
-        canActivate: [() => inject(AuthFacade).userIsAdmin$],
+        canActivate: [() => inject(AuthFacade).userIsLoggedIn$],
         component: AufgabensammlungenSearchComponent,
         providers: [
             aufgabensammlungenDataProvider
@@ -19,7 +19,7 @@ export const aufgabensammlungenRoutes: Routes = [
     },
     {
         path: 'details',
-        canActivate: [() => inject(AuthFacade).userIsAdmin$],
+        canActivate: [() => inject(AuthFacade).userIsLoggedIn$],
         component: AufgabensammlungDetailsComponent
     }, 
     {
@@ -30,7 +30,7 @@ export const aufgabensammlungenRoutes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        canActivate: [() => inject(AuthFacade).userIsAdmin$],
+        canActivate: [() => inject(AuthFacade).userIsLoggedIn$],
         component: AufgabensammlungenSearchComponent,
         providers: [
             aufgabensammlungenDataProvider

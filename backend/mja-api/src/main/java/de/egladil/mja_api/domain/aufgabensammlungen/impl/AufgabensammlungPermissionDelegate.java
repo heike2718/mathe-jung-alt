@@ -50,8 +50,15 @@ public class AufgabensammlungPermissionDelegate {
 		}
 
 		case STANDARD:
+			if (readForbiddenForSTANDARD(ausDB, user)) {
+
+				LOGGER.warn("User {} mit Benutzerart {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
+					user.getName(), benutzerart, ausDB.uuid,
+					ausDB.owner);
+				throw new WebApplicationException(Status.FORBIDDEN);
+			}
 		case AUTOR:
-			if (ausDB.privat && !ausDB.owner.equals(user.getUuid())) {
+			if (readForbiddenForAUTOR(ausDB, user)) {
 
 				LOGGER.warn("User {} mit Benutzerart {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
 					user.getName(), benutzerart, ausDB.uuid,
@@ -107,5 +114,35 @@ public class AufgabensammlungPermissionDelegate {
 		default:
 			throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
 		}
+	}
+
+	/**
+	 * @param  ausDB
+	 * @param  user
+	 * @return
+	 */
+	private boolean readForbiddenForSTANDARD(final PersistenteAufgabensammlung ausDB, final AuthenticatedUser user) {
+
+		if (ausDB.privat) {
+
+			return !ausDB.owner.equals(user.getUuid());
+		}
+
+		return !ausDB.freigegeben;
+	}
+
+	/**
+	 * @param  ausDB
+	 * @param  user
+	 * @return
+	 */
+	private boolean readForbiddenForAUTOR(final PersistenteAufgabensammlung ausDB, final AuthenticatedUser user) {
+
+		if (ausDB.privat) {
+
+			return !ausDB.owner.equals(user.getUuid());
+		}
+
+		return false;
 	}
 }

@@ -117,9 +117,17 @@ public class AufgabensammlungenService {
 
 		final AufgabensammlungDetails result = AufgabensammlungDetails.createFromDB(aufgabensammlung);
 
-		permissionDelegate.checkWritePermission(aufgabensammlung);
+		permissionDelegate.checkReadPermission(aufgabensammlung);
 
-		result.markiereAlsAenderbar();
+		try {
+
+			permissionDelegate.checkWritePermission(aufgabensammlung);
+			result.setSchreibgeschuetzt(false);
+
+		} catch (WebApplicationException e) {
+
+			result.setSchreibgeschuetzt(true);
+		}
 
 		List<PersistentesAufgabensammlugnselement> elementeDB = aufgabensammlungDao
 			.loadElementeAufgabensammlung(aufgabensammlungID);
