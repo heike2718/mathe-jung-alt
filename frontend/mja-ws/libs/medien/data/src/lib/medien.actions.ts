@@ -16,6 +16,6 @@ export const medienActions = createActionGroup({
     'MEDIUMDETAILS_LOADED': props<{details: MediumDto}>(),
     'SELECT_MEDIUM': props<{id: string}>(),
     'SAVE_MEDIUM': props<{medium: MediumDto}>(),
-    'UNSELECT_MEDIUM': emptyProps(),
+    'UNSELECT_MEDIUM': emptyProps()
   }
 });

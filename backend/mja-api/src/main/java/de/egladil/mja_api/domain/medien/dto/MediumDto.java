@@ -36,7 +36,7 @@ public class MediumDto {
 	@Pattern(regexp = MjaRegexps.VALID_PERSON, message = "autor enthält ungültige Zeichen")
 	private String autor;
 
-	@Schema(description = "falls vorhande und bekannt, die Website", example = "https://mathe-jung-alt.de")
+	@Schema(description = "falls vorhanden und bekannt, die Website", example = "https://mathe-jung-alt.de")
 	@Pattern(regexp = MjaRegexps.VALID_URL, message = "url enthält ungültige Zeichen")
 	private String url;
 

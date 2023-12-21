@@ -44,6 +44,10 @@ import jakarta.validation.constraints.Size;
 	@NamedNativeQuery(
 		name = "PersistentesMedium.COUNT_WITH_SUCHSTRING",
 		query = "SELECT count(*) FROM MEDIEN m WHERE m.TITEL LIKE :suchstring OR m.KOMMENTAR LIKE :suchstring",
+		resultClass = Long.class),
+	@NamedNativeQuery(
+		name = "PersistentesMedium.COUNT_WITH_OWNER_AND_SUCHSTRING",
+		query = "SELECT count(*) FROM MEDIEN m WHERE m.owner = :owner and ( m.TITEL LIKE :suchstring OR m.KOMMENTAR LIKE :suchstring )",
 		resultClass = Long.class)
 })
 @NamedQueries({
@@ -54,8 +58,11 @@ import jakarta.validation.constraints.Size;
 		name = "PersistentesMedium.FIND_WITH_SUCHSTRING",
 		query = "select m from PersistentesMedium m where m.titel like :suchstring or m.kommentar like :suchstring order by  m.titel"),
 	@NamedQuery(
+		name = "PersistentesMedium.FIND_WITH_OWNER_AND_SUCHSTRING",
+		query = "select m from PersistentesMedium m where m.owner = :owner and ( m.titel like :suchstring or m.kommentar like :suchstring ) order by  m.titel"),
+	@NamedQuery(
 		name = "PersistentesMedium.FIND_BY_TITEL",
-		query = "select m from PersistentesMedium m where m.titel like :suchstring order by  m.titel"),
+		query = "select m from PersistentesMedium m where m.titel like :suchstring and m.owner = :owner order by  m.titel"),
 })
 public class PersistentesMedium implements PersistenteMjaEntity {
 
@@ -66,6 +73,10 @@ public class PersistentesMedium implements PersistenteMjaEntity {
 	public static final String COUNT_ALL = "PersistentesMedium.COUNT_ALL";
 
 	public static final String LOAD_ALL = "PersistentesMedium.LOAD_ALL";
+
+	public static final String COUNT_WITH_OWNER_AND_SUCHSTRING = "PersistentesMedium.COUNT_WITH_OWNER_AND_SUCHSTRING";
+
+	public static final String FIND_WITH_OWNER_AND_SUCHSTRING = "PersistentesMedium.FIND_WITH_OWNER_AND_SUCHSTRING";
 
 	public static final String COUNT_WITH_SUCHSTRING = "PersistentesMedium.COUNT_WITH_SUCHSTRING";
 

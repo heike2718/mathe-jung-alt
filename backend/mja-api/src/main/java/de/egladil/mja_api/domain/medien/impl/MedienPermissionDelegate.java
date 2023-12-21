@@ -34,6 +34,49 @@ public class MedienPermissionDelegate {
 	 * @throws WebApplicationException
 	 *                                 wenn nicht
 	 */
+	public void checkReadPermission(final PersistentesMedium ausDB) throws WebApplicationException {
+
+		AuthenticatedUser user = authCtx.getUser();
+
+		Benutzerart benutzerart = user.getBenutzerart();
+
+		switch (benutzerart) {
+
+		case ANONYM:
+		case STANDARD: {
+
+			LOGGER.warn("User {} mit Benutzerart {} hat keine Leseberechtigung für Medium {} mit Owner {}",
+				user.getName(), benutzerart, ausDB.uuid,
+				ausDB.owner);
+			throw new WebApplicationException(Status.FORBIDDEN);
+		}
+
+		case AUTOR: {
+
+			if (!user.getUuid().equals(ausDB.owner)) {
+
+				LOGGER.warn("Autor {} hat keine Leseberechtigung für Medium {} mit Owner {}",
+					user.getName(), ausDB.uuid,
+					ausDB.owner);
+				throw new WebApplicationException(Status.FORBIDDEN);
+			}
+		}
+
+		case ADMIN:
+			return;
+
+		default:
+			throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+		}
+	}
+
+	/**
+	 * Prüft ob der angemeldete User schreubberechtigt ist.
+	 *
+	 * @param  ausDB
+	 * @throws WebApplicationException
+	 *                                 wenn nicht
+	 */
 	public void checkWritePermission(final PersistentesMedium ausDB) throws WebApplicationException {
 
 		AuthenticatedUser user = authCtx.getUser();

@@ -1,7 +1,8 @@
 import { Injectable, inject } from "@angular/core";
+import { Router } from "@angular/router";
 import { PageDefinition, PaginationState } from "@mja-ws/core/model";
 import { fromMedien, medienActions } from "@mja-ws/medien/data";
-import { MediensucheTrefferItem, MediumDto } from "@mja-ws/medien/model";
+import { MediensucheTrefferItem, MediumDto, initialMediumDto } from "@mja-ws/medien/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/util";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -12,6 +13,7 @@ import { Observable } from "rxjs";
 export class MedienFacade {
 
   #store = inject(Store);
+  #router = inject(Router);
 
   page$: Observable<MediensucheTrefferItem[]> = this.#store.select(fromMedien.page);
   anzahlTrefferGesamt: Observable<number> = this.#store.select(fromMedien.anzahlTrefferGesamt);
@@ -27,7 +29,30 @@ export class MedienFacade {
   }
 
   selectMedium(medium: MediensucheTrefferItem): void {
-    this.#store.dispatch(medienActions.sELECT_MEDIUM({id: medium.id}));
+    this.#store.dispatch(medienActions.sELECT_MEDIUM({ id: medium.id }));
   }
 
+  saveMedium(medium: MediumDto): void {
+    this.#store.dispatch(medienActions.sAVE_MEDIUM({ medium }));
+  }
+
+  cancelEdit(medium: MediumDto): void {
+
+    if (medium.id === 'neu') {
+      this.#store.dispatch(medienActions.uNSELECT_MEDIUM());
+    } else {
+      this.#store.dispatch(medienActions.sELECT_MEDIUM(medium));
+    }
+  }
+
+  navigateToSuche(): void {
+    this.#store.dispatch(medienActions.uNSELECT_MEDIUM());
+  }
+
+  createAndEditMedium(): void {
+
+    this.#store.dispatch(medienActions.mEDIUMDETAILS_LOADED({ details: initialMediumDto }));
+    const detailsSubscription = this.selectedMediumDetails$.subscribe(() => this.#router.navigateByUrl('medien/edit'));
+    detailsSubscription.unsubscribe();
+  }
 }

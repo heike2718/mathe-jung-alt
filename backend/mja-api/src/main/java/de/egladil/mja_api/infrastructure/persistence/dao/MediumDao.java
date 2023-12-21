@@ -87,7 +87,23 @@ public class MediumDao {
 	 * @param  suchstring
 	 * @return            long
 	 */
-	public long countMedienWithSuchstring(final String suchstring) {
+	public long countAllMedienOfOwnerWithSuchstring(final String suchstring, final String owner) {
+
+		String theSuchstring = "%" + suchstring + "%";
+
+		List<Long> treffermenge = entityManager.createNamedQuery(PersistentesMedium.COUNT_WITH_OWNER_AND_SUCHSTRING, Long.class)
+			.setParameter("suchstring", theSuchstring).setParameter("owner", owner).getResultList();
+
+		return treffermenge.get(0);
+	}
+
+	/**
+	 * Suche nach Medien, bei denen unabhängig von Groß- Kleinschreibung der titel oder der Kommentar den suchstring enthält.
+	 *
+	 * @param  suchstring
+	 * @return            long
+	 */
+	public long countAllMedienWithSuchstring(final String suchstring) {
 
 		String theSuchstring = "%" + suchstring + "%";
 
@@ -143,7 +159,28 @@ public class MediumDao {
 	 * @param  offset
 	 * @return            List
 	 */
-	public List<PersistentesMedium> findMedienWithSuchstring(final String suchstring, final int limit, final int offset) {
+	public List<PersistentesMedium> findAllMedienOfOwnerWithSuchstring(final String suchstring, final String owner, final int limit, final int offset) {
+
+		String theSuchstring = "%" + suchstring + "%";
+
+		return entityManager.createNamedQuery(PersistentesMedium.FIND_WITH_OWNER_AND_SUCHSTRING, PersistentesMedium.class)
+			.setParameter("suchstring", theSuchstring)
+			.setParameter("owner", owner)
+			.setFirstResult(offset)
+			.setMaxResults(limit)
+			.getResultList();
+	}
+
+	/**
+	 * Suche nach Medien, bei denen unabhängig von Groß- Kleinschreibung der titel oder der Kommentar den suchstring enthält.
+	 * Sortiert wird nach titel.
+	 *
+	 * @param  suchstring
+	 * @param  limit
+	 * @param  offset
+	 * @return            List
+	 */
+	public List<PersistentesMedium> findAllMedienWithSuchstring(final String suchstring, final int limit, final int offset) {
 
 		String theSuchstring = "%" + suchstring + "%";
 
@@ -155,18 +192,22 @@ public class MediumDao {
 	}
 
 	/**
-	 * Suche nach Medien, bei denen unabhängig von Groß- Kleinschreibung der titel den suchstring enthält.
+	 * Suche innerhalb der Medien des owners nach Medien, bei denen unabhängig von Groß- Kleinschreibung der titel den suchstring
+	 * enthält.
 	 * Sortiert wird nach titel.
 	 *
 	 * @param  suchstring
+	 * @param  owner
+	 *                    String
 	 * @return            List
 	 */
-	public List<PersistentesMedium> findMedienWithTitelLikeSuchstring(final String suchstring) {
+	public List<PersistentesMedium> findMedienWithTitelLikeSuchstring(final String suchstring, final String owner) {
 
 		String theSuchstring = "%" + suchstring + "%";
 
 		return entityManager.createNamedQuery(PersistentesMedium.FIND_BY_TITEL, PersistentesMedium.class)
 			.setParameter("suchstring", theSuchstring)
+			.setParameter("owner", owner)
 			.getResultList();
 	}
 }

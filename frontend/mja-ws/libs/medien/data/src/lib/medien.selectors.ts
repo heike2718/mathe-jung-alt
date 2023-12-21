@@ -31,7 +31,7 @@ const selectedTrefferItem = createSelector(
 
 const selectedMediumDetails = createSelector(
     selectMedienState,
-    state => state.selectedMediumDetails
+    state => state ? state.selectedMediumDetails : undefined
 );
 
 const allMedienDetails = createSelector(

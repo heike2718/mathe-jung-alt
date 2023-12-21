@@ -116,7 +116,7 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
       user: [''],
       name: ['', [Validators.required, Validators.maxLength(100)]],
       status: ['ERFASST', [Validators.required]],
-      kommentar: [''],
+      kommentar: ['', [Validators.maxLength(200)]],
       schwierigkeitsgrad: [initialGuiSchwierigkeitsgrad.label, [Validators.required]],
       referenztyp: [initialGuiReferenztyp.label],
       referenz: ['']
@@ -156,7 +156,7 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
     const referenztyp: Referenztyp = new GuiReferenztypenMap().getReferenztypOfLabel(formValue['referenztyp']);
     const schwierigkeitsgrad: Schwierigkeitsgrad = new GuiSchwierigkeitsgradeMap().getSchwierigkeitsgradOfLabel(formValue['schwierigkeitsgrad']);
 
-    const EditAufgabensammlungPayload: EditAufgabensammlungPayload = {
+    const payload: EditAufgabensammlungPayload = {
       id: this.#aufgabensammlungBasisdaten.id,
       name: formValue['name'].trim(),
       referenz: formValue['referenz'] && formValue['referenz'].trim().length > 0 ? formValue['referenz'].trim() : undefined,
@@ -167,7 +167,7 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
       kommentar: formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined
     };
 
-    return EditAufgabensammlungPayload;
+    return payload;
 
   }
 }

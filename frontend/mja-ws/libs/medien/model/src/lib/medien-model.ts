@@ -8,7 +8,6 @@ export interface MediumDto {
   readonly url: string | undefined;
   readonly kommentar: string | undefined;
   readonly schreibgeschuetzt: boolean;
-
 };
 
 export const initialMediumDto: MediumDto = {

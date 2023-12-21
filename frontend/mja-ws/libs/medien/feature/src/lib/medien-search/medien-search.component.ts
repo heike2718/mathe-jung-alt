@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MedienDataSource, MedienFacade } from '@mja-ws/medien/api';
 import { PageDefinition, PaginationState, initialPaginationState } from '@mja-ws/core/model';
-import { Subscription, merge, of, tap } from 'rxjs';
+import { Subscription, of, tap } from 'rxjs';
 import { MediensucheTrefferItem } from '@mja-ws/medien/model';
 
 @Component({
@@ -105,6 +105,8 @@ export class MedienSearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   neuesMedium(): void {
+
+    this.#medienFacade.createAndEditMedium();
 
   }
 

@@ -41,6 +41,233 @@ public class MedienPermissionDelegateTest {
 	MedienPermissionDelegate delegate;
 
 	@Nested
+	@DisplayName("anonyme User haben keine Leseberechtigung")
+	class ReadPermissionTestsAnonymerUser {
+
+		@Test
+		void should_checkPermisionThrow403_when_UserNotOWNER() {
+
+			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
+
+			PersistentesMedium ausDB = new PersistentesMedium();
+			ausDB.owner = OWNER;
+			ausDB.uuid = MEDIUM_ID;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act + Assert
+			try {
+
+				delegate.checkReadPermission(ausDB);
+				fail("keine WebApplicationException");
+			} catch (WebApplicationException e) {
+
+				assertEquals(403, e.getResponse().getStatus());
+
+				verify(authCtx).getUser();
+			}
+
+		}
+
+		@Test
+		void should_checkPermisionThrow403_when_UserOWNER() {
+
+			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
+
+			PersistentesMedium ausDB = new PersistentesMedium();
+			ausDB.owner = USER_ID;
+			ausDB.uuid = MEDIUM_ID;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act + Assert
+			try {
+
+				delegate.checkReadPermission(ausDB);
+				fail("keine WebApplicationException");
+			} catch (WebApplicationException e) {
+
+				assertEquals(403, e.getResponse().getStatus());
+
+				verify(authCtx).getUser();
+			}
+
+		}
+
+	}
+
+	@Nested
+	@DisplayName("Standarduser haben keine Leseberechtigung")
+	class ReadPermissionTestsSTANDARD {
+
+		@Test
+		void should_checkPermisionThrow403_when_UserNotOWNER() {
+
+			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
+
+			PersistentesMedium ausDB = new PersistentesMedium();
+			ausDB.owner = OWNER;
+			ausDB.uuid = MEDIUM_ID;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act + Assert
+			try {
+
+				delegate.checkReadPermission(ausDB);
+				fail("keine WebApplicationException");
+			} catch (WebApplicationException e) {
+
+				assertEquals(403, e.getResponse().getStatus());
+
+				verify(authCtx).getUser();
+			}
+
+		}
+
+		@Test
+		void should_checkPermisionThrow403_when_UserOWNER() {
+
+			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
+
+			PersistentesMedium ausDB = new PersistentesMedium();
+			ausDB.owner = USER_ID;
+			ausDB.uuid = MEDIUM_ID;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act + Assert
+			try {
+
+				delegate.checkReadPermission(ausDB);
+				fail("keine WebApplicationException");
+			} catch (WebApplicationException e) {
+
+				assertEquals(403, e.getResponse().getStatus());
+
+				verify(authCtx).getUser();
+			}
+
+		}
+
+	}
+
+	@Nested
+	@DisplayName("Autoren haben nur Leseberechtigung für eigene Medien")
+	class ReadPermissionTestsAUTOR {
+
+		@Test
+		void should_checkPermisionThrow403_when_UserNotOWNER() {
+
+			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
+
+			PersistentesMedium ausDB = new PersistentesMedium();
+			ausDB.owner = OWNER;
+			ausDB.uuid = MEDIUM_ID;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act + Assert
+			try {
+
+				delegate.checkReadPermission(ausDB);
+				fail("keine WebApplicationException");
+			} catch (WebApplicationException e) {
+
+				assertEquals(403, e.getResponse().getStatus());
+
+				verify(authCtx).getUser();
+			}
+
+		}
+
+		@Test
+		void should_checkPermisionThrow403_when_UserOWNER() {
+
+			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
+
+			PersistentesMedium ausDB = new PersistentesMedium();
+			ausDB.owner = USER_ID;
+			ausDB.uuid = MEDIUM_ID;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act
+			delegate.checkReadPermission(ausDB);
+
+			// Assert
+			verify(authCtx).getUser();
+		}
+
+	}
+
+	@Nested
+	@DisplayName("Admins haben Leseberechtigung für alle Medien")
+	class ReadPermissionTestsADMIN {
+
+		@Test
+		void should_checkPermisionNotThrow403_when_UserNotOWNER() {
+
+			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
+
+			PersistentesMedium ausDB = new PersistentesMedium();
+			ausDB.owner = OWNER;
+			ausDB.uuid = MEDIUM_ID;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act
+			delegate.checkReadPermission(ausDB);
+
+			// Assert
+			verify(authCtx).getUser();
+		}
+
+		@Test
+		void should_checkPermisionNotThrow403_when_UserOWNER() {
+
+			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
+
+			// Arrange
+			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
+
+			PersistentesMedium ausDB = new PersistentesMedium();
+			ausDB.owner = USER_ID;
+			ausDB.uuid = MEDIUM_ID;
+
+			when(authCtx.getUser()).thenReturn(user);
+
+			// Act
+			delegate.checkReadPermission(ausDB);
+
+			// Assert
+			verify(authCtx).getUser();
+		}
+
+	}
+
+	@Nested
 	@DisplayName("anonyme User haben keine Schreibberechtigung")
 	class WritePermissionTestsAnonymerUser {
 
@@ -104,7 +331,7 @@ public class MedienPermissionDelegateTest {
 
 	@Nested
 	@DisplayName("Standarduser haben keine Schreibberechtigung")
-	class WritePermissionTestsAnonymerSTANDARD {
+	class WritePermissionTestsSTANDARD {
 
 		@Test
 		void should_checkPermisionThrow403_when_UserNotOWNER() {
@@ -166,7 +393,7 @@ public class MedienPermissionDelegateTest {
 
 	@Nested
 	@DisplayName("Autoren haben nur für eigene Medien Schreibberechtigung")
-	class WritePermissionTestsAnonymerAUTOR {
+	class WritePermissionTestsAUTOR {
 
 		@Test
 		void should_checkPermisionThrow403_when_UserNotOWNER() {
@@ -221,7 +448,7 @@ public class MedienPermissionDelegateTest {
 
 	@Nested
 	@DisplayName("Admins haben immer Schreibberechtigung")
-	class WritePermissionTestsAnonymerADMIN {
+	class WritePermissionTestsADMIN {
 
 		@Test
 		void should_checkPermisionNotThrow403_when_UserNotOWNER() {

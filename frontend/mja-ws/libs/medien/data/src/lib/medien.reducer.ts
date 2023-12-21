@@ -36,5 +36,31 @@ export const medienFeature = createFeature({
                 loaded: true
             };
         }),
+
+        on(medienActions.mEDIUMDETAILS_LOADED, (state, action) => {
+            swallowEmptyArgument(action, false);
+            return {
+                ...state,
+                selectedMediumDetails: action.details
+            };
+        }),
+
+        on(medienActions.mEDIUM_SAVED, (state, action) => {
+            swallowEmptyArgument(action, false);
+            return {
+                ...state,
+                selectedMediumDetails: action.medium
+            };
+        }),
+
+        
+
+        on(medienActions.uNSELECT_MEDIUM, (state, action) => {
+            swallowEmptyArgument(action, false);
+            return {
+                ...state,
+                selectedMediumDetails: undefined
+            };
+        }),
     )
 });

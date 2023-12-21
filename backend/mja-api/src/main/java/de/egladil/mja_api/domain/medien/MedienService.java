@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.medien;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -12,6 +13,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
+import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
@@ -50,6 +53,8 @@ public class MedienService {
 	Optional<MediumDto> getMediumWithId(final String id) {
 
 		PersistentesMedium ausDB = mediumDao.findMediumById(id);
+
+		permissionDelegate.checkReadPermission(ausDB);
 
 		return ausDB == null ? Optional.empty() : Optional.of(mapFromDB(ausDB));
 
@@ -181,7 +186,7 @@ public class MedienService {
 
 	/**
 	 * Innerhalb aller Medien wird nach allen Einträgen gesucht, deren Titel oder Kommentare unabhängig von Groß- und
-	 * Kleinschreibung den suchstring einthält. Sortiert wird nach titel.
+	 * Kleinschreibung den suchstring einthält. Sortiert wird nach titel. Admins bekommen alle Treffer, Autoren nur die eigenen.
 	 *
 	 * @param  suchstring
 	 * @param  limit
@@ -190,14 +195,28 @@ public class MedienService {
 	 */
 	public MediensucheResult findMedien(final String suchstring, final int limit, final int offset) {
 
+		AuthenticatedUser user = authCtx.getUser();
+
 		if (StringUtils.isBlank(suchstring)) {
 
 			throw new WebApplicationException(
 				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("suchstring darf nicht leer sein")).build());
 		}
 
-		long gesamtzahl = mediumDao.countMedienWithSuchstring(suchstring);
-		List<PersistentesMedium> treffermenge = mediumDao.findMedienWithSuchstring(suchstring, limit, offset);
+		List<PersistentesMedium> treffermenge = new ArrayList<>();
+		long gesamtzahl = 0;
+
+		if (Benutzerart.ADMIN == user.getBenutzerart()) {
+
+			gesamtzahl = mediumDao.countAllMedienWithSuchstring(suchstring);
+			treffermenge = mediumDao.findAllMedienWithSuchstring(suchstring, limit, offset);
+		}
+
+		if (Benutzerart.AUTOR == user.getBenutzerart()) {
+
+			gesamtzahl = mediumDao.countAllMedienOfOwnerWithSuchstring(suchstring, user.getName());
+			treffermenge = mediumDao.findAllMedienOfOwnerWithSuchstring(suchstring, user.getName(), limit, offset);
+		}
 
 		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB).toList();
 
@@ -217,7 +236,9 @@ public class MedienService {
 	 */
 	public List<MediumDto> findMedienWithTitel(final String suchstring) {
 
-		List<PersistentesMedium> trefferliste = mediumDao.findMedienWithTitelLikeSuchstring(suchstring);
+		AuthenticatedUser user = authCtx.getUser();
+
+		List<PersistentesMedium> trefferliste = mediumDao.findMedienWithTitelLikeSuchstring(suchstring, user.getName());
 
 		return trefferliste.stream().map(this::mapFromDB).toList();
 

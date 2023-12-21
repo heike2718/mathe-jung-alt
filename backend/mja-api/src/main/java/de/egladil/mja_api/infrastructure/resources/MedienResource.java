@@ -91,7 +91,8 @@ public class MedienResource {
 	@Path("/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findMedien", summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen.")
+		operationId = "findMedien",
+		summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen. Admins sehen alle, Autoren nur die eigenen")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.QUERY,
@@ -153,7 +154,7 @@ public class MedienResource {
 	@Path("titel/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findMedienWithTitel", summary = "Gibt eine Liste von MedienDto zurück, deren titel auf den suschtring passt. Ist gedacht, um für Rätsel eine Quelle zu erzeugen..")
+		operationId = "findMedienWithTitel", summary = "Gibt eine Liste von MedienDto zurück, deren titel auf den suchstring passt. Ist gedacht, um für Rätsel eine Quelle zu erzeugen.")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.QUERY,

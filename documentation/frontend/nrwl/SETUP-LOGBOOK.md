@@ -451,8 +451,23 @@ npx nx g @nx/js:lib feature --directory=libs/medien --tags='type:feature' --buil
 __Medien search component__
 
 ```
-npx nx generate @nrwl/angular:component medien-search --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-medien-search --standalone --no-interactive --dry-run
+npx nx generate @nrwl/angular:component medien-search --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-medien-search -style=scss --standalone --no-interactive --dry-run
 ```
+
+__Medium details component__
+
+```
+npx nx generate @nrwl/angular:component medium-details --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-medium-details --style=scss --standalone --no-interactive --dry-run
+```
+
+
+
+__Medium edit component__
+
+```
+npx nx generate @nrwl/angular:component medium-edit --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-medium-edit --style=scss --standalone --no-interactive --dry-run
+```
+
 
 
 ## FAQ

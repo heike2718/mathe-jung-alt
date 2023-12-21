@@ -140,7 +140,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       status: ['', [Validators.required]],
       frage: ['', [Validators.required]],
       loesung: [''],
-      kommentar: [''],
+      kommentar: ['', [Validators.maxLength(200)]],
       anzahlAntwortvorschlaege: ['0'],
       antwortvorschlaege: new UntypedFormArray([])
     });
@@ -288,7 +288,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
-    this.raetselFacade.leaveEditMode();
     if (this.#raetselDetails && this.#raetselDetails.id !== 'neu') {
       this.raetselFacade.selectRaetsel(this.#raetselDetails.schluessel);
     } else {
@@ -297,7 +296,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   gotoSuche(): void {
-    this.raetselFacade.leaveEditMode();
     this.raetselFacade.cancelSelection();
   }
 

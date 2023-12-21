@@ -33,8 +33,6 @@ export class RaetselFacade {
   suchfilter$: Observable<RaetselSuchfilter> = this.#store.select(fromRaetsel.suchfilter);
   generateLatexError$: Observable<boolean> = this.#store.select(fromRaetsel.generateLatexError);
 
-  editModus$: Observable<boolean> = this.#store.select(fromRaetsel.editModus);
-
   #selectItemsFacade = inject(SelectItemsFacade);
 
   triggerSearch(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
@@ -58,7 +56,6 @@ export class RaetselFacade {
 
   editRaetsel(): void {
 
-    this.#enterEditMode();
     this.#router.navigateByUrl('raetsel/editor');
 
   }
@@ -96,7 +93,6 @@ export class RaetselFacade {
 
   createAndEditRaetsel(autor: HerkunftRaetsel ): void {
 
-    this.#enterEditMode();
     const raetselDetails: RaetselDetails = { ...initialRaetselDetails, herkunft: autor };
     this.#store.dispatch(raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
   }
@@ -141,15 +137,6 @@ export class RaetselFacade {
 
   downloadRaetselLaTeX(raetselID: string): void {
     this.#store.dispatch(raetselActions.fIND_RAETSEL_LATEX({raetselID}));
-  }
-  
-  leaveEditMode() {
-    this.#store.dispatch(raetselActions.fINISH_EDIT());
-  } 
-
-
-  #enterEditMode() {
-    this.#store.dispatch(raetselActions.pREPARE_EDIT());
   }
 
 }
