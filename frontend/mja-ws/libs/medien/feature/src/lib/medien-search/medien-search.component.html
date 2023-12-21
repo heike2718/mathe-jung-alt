@@ -1,1 +1,38 @@
-<p>medien-search works!</p>
+<h1>Medien</h1>
+
+<div class="button-container mt-2 mb-2">
+    <div>
+        <button mat-raised-button color="primary" (click)="resetFilter()">Filter leeren</button>
+    </div>
+    <div>
+        <button mat-raised-button color="primary" (click)="neuesMedium()" title="neues Medium anlegen">neues
+            Medium</button>
+    </div>
+</div>
+
+<mat-paginator [length]="anzahlMedien" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
+
+<mat-table [dataSource]="dataSource" matSort class="mat-elevation-z4 mt-2">
+
+    <!-- medienart -->
+    <ng-container matColumnDef="medienart">
+        <mat-header-cell *matHeaderCellDef class="mat-header-cell__1">Art</mat-header-cell>
+        <mat-cell *matCellDef="let medium" class="mat-cell__1"> {{medium.medienart}} </mat-cell>
+    </ng-container>
+
+    <!-- titel -->
+    <ng-container matColumnDef="titel">
+        <mat-header-cell *matHeaderCellDef class="mat-header-cell__2">Titel</mat-header-cell>
+        <mat-cell *matCellDef="let medium" class="mat-cell__2"> {{medium.titel}} </mat-cell>
+    </ng-container>
+
+    <!-- kommentar -->
+    <ng-container matColumnDef="kommentar">
+        <mat-header-cell *matHeaderCellDef class="mat-header-cell__3">Kommentar</mat-header-cell>
+        <mat-cell *matCellDef="let medium" class="mat-cell__3"> {{medium.kommentar}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)"></mat-row>
+
+</mat-table>

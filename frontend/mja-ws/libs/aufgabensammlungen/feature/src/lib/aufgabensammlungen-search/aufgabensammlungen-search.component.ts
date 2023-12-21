@@ -57,7 +57,7 @@ const REFERENZ = 'referenz';
 export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   dataSource = inject(AufgabensammlungenDataSource);
-  anzahlSammlungen = 0;
+  anzahlSammlungen: number = 0;
 
 
   suchparameterStr = '';
@@ -137,14 +137,8 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
       // hier den init-Kram oder
     }, 0);
 
-    // oder explizit nochmal changeDetection triggern
+    
     this.#initPaginator();
-
-    this.#matPaginatorSubscription = merge(this.sort.sortChange, this.paginator.page).pipe(
-      tap(() => {
-        this.#triggerSearch();
-      })
-    ).subscribe();
 
     merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => {
@@ -232,6 +226,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
       })
     ).subscribe();
 
+    // oder explizit nochmal changeDetection triggern
     this.changeDetector.detectChanges();
   }
 

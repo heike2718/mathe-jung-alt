@@ -1,5 +1,4 @@
 export type Medienart = 'BUCH' | 'INTERNET' | 'ZEITSCHRIFT';
-export type MedienSuchmodus = 'NOOP' | 'SEARCHSTRING';
 
 export interface MediumDto {
   readonly id: string;

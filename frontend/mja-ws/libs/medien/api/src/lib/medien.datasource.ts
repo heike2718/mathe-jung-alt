@@ -6,6 +6,9 @@ import { Observable } from "rxjs";
 import { swallowEmptyArgument } from "@mja-ws/shared/util";
 
 
+@Injectable({
+   providedIn: 'root'
+})
 export class MedienDataSource implements DataSource<MediensucheTrefferItem> {
 
     #medienFacade = inject(MedienFacade);

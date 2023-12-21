@@ -6,6 +6,7 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -95,11 +96,7 @@ public class MedienResource {
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "suchstring",
-			description = "Freitext zum Suchen. Es erfolgt eine Suche mit like titel or like kommentar. Sortiert wird nach titel"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "suchmodus",
-			description = "bei NOOP wird ein eventueller suchstring ignoriert, bei SEARCHSTRING wird in titel und kommentar gesucht. pagination wird je nach suchmodus ignoriert oder berücksichtigt"),
+			description = "Freitext zum Suchen. Es erfolgt eine Suche mit like titel or like kommentar. Sortiert wird nach titel. Wenn nicht angegeben, werden alle aus der page geladen"),
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "limit",
@@ -131,13 +128,15 @@ public class MedienResource {
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
-	public Response findMedien(@QueryParam(value = "suchmodus") final Mediensuchmodus suchmodus,
+	public Response findMedien(
 		@QueryParam(value = "suchstring") @Pattern(
 			regexp = MjaRegexps.VALID_SUCHSTRING_MEDIEN,
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset) {
 	// formatter:on
+
+		Mediensuchmodus suchmodus = StringUtils.isBlank(suchstring) ? Mediensuchmodus.NOOP : Mediensuchmodus.SEARCHSTRING;
 
 		MediensucheResult result = null;
 		switch (suchmodus) {

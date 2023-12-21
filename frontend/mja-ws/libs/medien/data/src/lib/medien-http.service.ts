@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET } from "@mja-ws/core/model";
-import { MedienSuchmodus, MediensucheResult, MediumDto } from "@mja-ws/medien/model";
+import { MediensucheResult, MediumDto } from "@mja-ws/medien/model";
 import { Observable } from "rxjs";
 
 
@@ -14,17 +14,16 @@ export class MedienHttpService {
     #url = '/mja-api/aufgabensammlungen';
 
 
-    findMedien(suchmodus: MedienSuchmodus, suchstring: string, pageDefinition: PageDefinition): Observable<MediensucheResult> {
+    findMedien(suchstring: string, pageDefinition: PageDefinition): Observable<MediensucheResult> {
 
         const offset = pageDefinition.pageIndex * pageDefinition.pageSize;
 
         let params = new HttpParams()
             .set(QUERY_PARAM_LIMIT, pageDefinition.pageSize)
-            .set(QUERY_PARAM_OFFSET, offset)
-            .set('suchmodus', suchmodus.toString())
+            .set(QUERY_PARAM_OFFSET, offset);
 
 
-        if (suchmodus === 'SEARCHSTRING' && suchstring.trim().length > 0) {
+        if (suchstring.trim().length > 0) {
 
             params = params.set('suchstring', suchstring.trim())
         }

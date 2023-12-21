@@ -1,12 +1,12 @@
 import { PageDefinition } from '@mja-ws/core/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { MedienSuchmodus, MediensucheResult, MediensucheTrefferItem, MediumDto } from '@mja-ws/medien/model';
+import { MediensucheResult, MediumDto } from '@mja-ws/medien/model';
 
 export const medienActions = createActionGroup({
   source: 'medien',
   events: {
     'EDIT_MEDIUM': props<{medium: MediumDto}>(),
-    'FIND_MEDIEN': props<{suchmodus: MedienSuchmodus, suchstring: string, pageDefinition: PageDefinition}>(),
+    'FIND_MEDIEN': props<{suchstring: string, pageDefinition: PageDefinition}>(),
     'FIND_MEDIENDETAILS': props<{suchstring: string}>(),
     'MEDIEN_FOUND': props<{result: MediensucheResult}>(),
     'MEDIEN_SELECT_PAGE': props<{pageDefinition: PageDefinition}>(),

@@ -16,7 +16,7 @@ export class MedienEffects {
     findMedien$ = createEffect(() => {
         return this.#actions.pipe(
             ofType(medienActions.fIND_MEDIEN),
-            switchMap((action) => this.#medienHttpService.findMedien(action.suchmodus, action.suchstring, action.pageDefinition)),
+            switchMap((action) => this.#medienHttpService.findMedien(action.suchstring, action.pageDefinition)),
             map((result) => medienActions.mEDIEN_FOUND({ result }))
         );
     });
