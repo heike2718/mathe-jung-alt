@@ -171,8 +171,48 @@ public class MedienService {
 	 */
 	public MediensucheResult loadMedien(final int limit, final int offset) {
 
-		long gesamtzahl = mediumDao.countMedien();
-		List<PersistentesMedium> treffermenge = mediumDao.loadMedien(limit, offset);
+		AuthenticatedUser user = authCtx.getUser();
+
+		switch (user.getBenutzerart()) {
+
+		case ADMIN: {
+
+			return loadAllMedien(limit, offset);
+		}
+
+		case AUTOR: {
+
+			return loadWithOwner(user.getName(), limit, offset);
+		}
+
+		case ANONYM:
+		case STANDARD:
+			throw new WebApplicationException(Status.FORBIDDEN);
+
+		default:
+			throw new IllegalArgumentException("Unexpected benutzerart: " + user.getBenutzerart());
+		}
+	}
+
+	MediensucheResult loadAllMedien(final int limit, final int offset) {
+
+		long gesamtzahl = mediumDao.countAllMedien();
+		List<PersistentesMedium> treffermenge = mediumDao.loadAllMedien(limit, offset);
+
+		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB)
+			.collect(Collectors.toList());
+
+		MediensucheResult result = new MediensucheResult();
+		result.setTreffer(trefferItems);
+		result.setTrefferGesamt(gesamtzahl);
+
+		return result;
+	}
+
+	MediensucheResult loadWithOwner(final String owner, final int limit, final int offset) {
+
+		long gesamtzahl = mediumDao.countMedienWithOwner(owner);
+		List<PersistentesMedium> treffermenge = mediumDao.loadMedienWithOwner(owner, limit, offset);
 
 		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB)
 			.collect(Collectors.toList());

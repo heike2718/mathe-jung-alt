@@ -69,14 +69,28 @@ public class MediumDao {
 	}
 
 	/**
-	 * Suche nach Medien, bei denen unabhängig von Groß- Kleinschreibung der titel oder der Kommentar den suchstring enthält.
+	 * Zählt alle Medien
 	 *
 	 * @param  suchstring
 	 * @return            long
 	 */
-	public long countMedien() {
+	public long countAllMedien() {
 
 		List<Long> treffermenge = entityManager.createNamedQuery(PersistentesMedium.COUNT_ALL, Long.class).getResultList();
+
+		return treffermenge.get(0);
+	}
+
+	/**
+	 * Zählt alle Medien des Owners
+	 *
+	 * @param  owner
+	 * @return       long
+	 */
+	public long countMedienWithOwner(final String owner) {
+
+		List<Long> treffermenge = entityManager.createNamedQuery(PersistentesMedium.COUNT_WITH_OWNER, Long.class)
+			.setParameter("owner", owner).getResultList();
 
 		return treffermenge.get(0);
 	}
@@ -134,17 +148,34 @@ public class MediumDao {
 	}
 
 	/**
-	 * Suche nach Medien, bei denen unabhängig von Groß- Kleinschreibung der titel oder der Kommentar den suchstring enthält.
-	 * Sortiert wird nach titel.
+	 * Läd alle Medien.
 	 *
 	 * @param  suchstring
 	 * @param  limit
 	 * @param  offset
 	 * @return            List
 	 */
-	public List<PersistentesMedium> loadMedien(final int limit, final int offset) {
+	public List<PersistentesMedium> loadAllMedien(final int limit, final int offset) {
 
 		return entityManager.createNamedQuery(PersistentesMedium.LOAD_ALL, PersistentesMedium.class)
+			.setFirstResult(offset)
+			.setMaxResults(limit)
+			.getResultList();
+	}
+
+	/**
+	 * Läd alle Medien des Owners.
+	 *
+	 * @param  owner
+	 *                String
+	 * @param  limit
+	 * @param  offset
+	 * @return        List
+	 */
+	public List<PersistentesMedium> loadMedienWithOwner(final String owner, final int limit, final int offset) {
+
+		return entityManager.createNamedQuery(PersistentesMedium.LOAD_WITH_OWNER, PersistentesMedium.class)
+			.setParameter("owner", owner)
 			.setFirstResult(offset)
 			.setMaxResults(limit)
 			.getResultList();

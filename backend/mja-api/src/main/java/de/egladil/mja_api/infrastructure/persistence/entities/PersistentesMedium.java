@@ -38,6 +38,9 @@ import jakarta.validation.constraints.Size;
 		name = "PersistentesMedium.MAX_SORTNR", query = "SELECT max(m.SORTNR) from MEDIEN m", resultClass = Long.class),
 	@NamedNativeQuery(name = "PersistentesMedium.COUNT_ALL", query = "SELECT count(*) FROM MEDIEN", resultClass = Long.class),
 	@NamedNativeQuery(
+		name = "PersistentesMedium.COUNT_WITH_OWNER", query = "SELECT count(*) FROM MEDIEN where OWNER = :owner",
+		resultClass = Long.class),
+	@NamedNativeQuery(
 		name = "PersistentesMedium.ANZAHL_MIT_TITEL_GLEICH",
 		query = "SELECT count(*) from MEDIEN m where m.TITEL = :titel and m.UUID != :uuid",
 		resultClass = Long.class),
@@ -54,6 +57,9 @@ import jakarta.validation.constraints.Size;
 	@NamedQuery(
 		name = "PersistentesMedium.LOAD_ALL",
 		query = "select m from PersistentesMedium m order by  m.titel"),
+	@NamedQuery(
+		name = "PersistentesMedium.LOAD_WITH_OWNER",
+		query = "select m from PersistentesMedium m where m.owner = :owner order by  m.titel"),
 	@NamedQuery(
 		name = "PersistentesMedium.FIND_WITH_SUCHSTRING",
 		query = "select m from PersistentesMedium m where m.titel like :suchstring or m.kommentar like :suchstring order by  m.titel"),
@@ -73,6 +79,10 @@ public class PersistentesMedium implements PersistenteMjaEntity {
 	public static final String COUNT_ALL = "PersistentesMedium.COUNT_ALL";
 
 	public static final String LOAD_ALL = "PersistentesMedium.LOAD_ALL";
+
+	public static final String COUNT_WITH_OWNER = "PersistentesMedium.COUNT_WITH_OWNER";
+
+	public static final String LOAD_WITH_OWNER = "PersistentesMedium.LOAD_WITH_OWNER";
 
 	public static final String COUNT_WITH_OWNER_AND_SUCHSTRING = "PersistentesMedium.COUNT_WITH_OWNER_AND_SUCHSTRING";
 

@@ -154,12 +154,12 @@ public class MedienResource {
 	@Path("titel/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findMedienWithTitel", summary = "Gibt eine Liste von MedienDto zurück, deren titel auf den suchstring passt. Ist gedacht, um für Rätsel eine Quelle zu erzeugen.")
+		operationId = "findMedienForUseInQuelle", summary = "Gibt eine Liste alle MedienDto des users zurück, deren Titel den suchstring enthält. Ist gedacht, um für Rätsel eine Quelle zu erzeugen.")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "suchstring",
-			description = "Freitext zum Suchen. Es erfolgt eine Suche mit like titel. Sortiert wird nach titel."),
+			description = "Freitext zum Suchen. Es erfolgt eine Suche mit %titel%. Sortiert wird nach titel."),
 	})
 	@APIResponse(
 		name = "OKResponse",
@@ -182,7 +182,7 @@ public class MedienResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response findMedienWithTitel(@QueryParam(value = "suchstring") @Pattern(
+	public Response findMedienForUseInQuelle(@QueryParam(value = "suchstring") @Pattern(
 			regexp = MjaRegexps.VALID_SUCHSTRING,
 			message = "ungültige Eingabe: mindestens 4 höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring) {
 

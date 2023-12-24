@@ -35,13 +35,13 @@ import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
 
 /**
- * MedienResourceTest
+ * AdminMedienResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(MedienResource.class)
 @TestProfile(FullDatabaseAdminTestProfile.class)
 @TestMethodOrder(OrderAnnotation.class)
-public class MedienResourceTest {
+public class AdminMedienResourceTest {
 
 	@Inject
 	MediumDao mediumDao;
@@ -49,6 +49,177 @@ public class MedienResourceTest {
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(1)
+	void should_sucheAlle_work() {
+
+		// Arrange 3
+		Mediensuchmodus suchmodusNoop = Mediensuchmodus.NOOP;
+
+		MediensucheResult mediensucheTreffer = given()
+			.queryParam("suchmodus", suchmodusNoop)
+			.queryParam("limit", 20)
+			.queryParam("offset", 0)
+			.when()
+			.get("v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MediensucheResult.class);
+
+		// Assert 3
+		assertEquals(8, mediensucheTreffer.getTrefferGesamt());
+
+		List<MediensucheTrefferItem> treffermenge = mediensucheTreffer.getTreffer();
+		assertEquals(8, treffermenge.size());
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "5f9bc03c-84f5-48ea-ab6c-ddc265f5d963".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "6cbf3a2e-0218-4123-8850-6a3d629dee0a".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "96d02c3f-c0a6-4bfc-bf08-77190c8de297".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "af9f75bd-9340-40d0-a3dd-0594b6ba0632".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		// ///////////////////////////////////////
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "4f2e96ae-002c-4530-a873-a9cfc65814ff".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "9ab888be-e84b-4c81-ab4d-4451a5097892".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "a94879e6-7479-4c2d-a061-34709d8f9631".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "dbf00c75-6c97-4a1c-afe6-a42462a44e39".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(2)
+	void should_sucheMitSuchstring_work() {
+
+		// Arrange
+		Mediensuchmodus suchmodusNoop = Mediensuchmodus.SEARCHSTRING;
+
+		// Act
+		MediensucheResult mediensucheTreffer = given()
+			.queryParam("suchmodus", suchmodusNoop)
+			.queryParam("suchstring", "Knobel")
+			.queryParam("limit", 3)
+			.queryParam("offset", 0)
+			.when()
+			.get("v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MediensucheResult.class);
+
+		// Assert
+		assertEquals(1, mediensucheTreffer.getTrefferGesamt());
+
+		List<MediensucheTrefferItem> treffermenge = mediensucheTreffer.getTreffer();
+		assertEquals(1, treffermenge.size());
+		assertEquals("9ab888be-e84b-4c81-ab4d-4451a5097892", treffermenge.get(0).getId());
+
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(3)
+	void should_findMedienForUseInQuelle_returnOnlyOwnMedien() {
+
+		// Arrange
+		Mediensuchmodus suchmodusNoop = Mediensuchmodus.SEARCHSTRING;
+
+		// Act
+		MediumDto[] result = given()
+			.queryParam("suchmodus", suchmodusNoop)
+			.queryParam("suchstring", "arith")
+			.when()
+			.get("titel/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MediumDto[].class);
+
+		// Assert
+		assertEquals(0, result.length);
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(4)
+	void should_findMedienForUseInQuelle_work() {
+
+		// Arrange
+		Mediensuchmodus suchmodusNoop = Mediensuchmodus.SEARCHSTRING;
+
+		// Act
+		MediumDto[] result = given()
+			.queryParam("suchmodus", suchmodusNoop)
+			.queryParam("suchstring", "Grundschul")
+			.when()
+			.get("titel/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MediumDto[].class);
+
+		// Assert
+		assertEquals(1, result.length);
+
+		MediumDto medium = result[0];
+		assertEquals("4f2e96ae-002c-4530-a873-a9cfc65814ff", medium.getId());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(10)
 	void should_mediumAnlegenAndFindenWork_when_Zeitschrift() {
 
 		// Arrange
@@ -100,7 +271,7 @@ public class MedienResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(2)
+	@Order(11)
 	void should_mediumAnlegenReturn409_when_TitelGleich() {
 
 		// Arrange
@@ -130,7 +301,7 @@ public class MedienResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(3)
+	@Order(12)
 	void should_mediumAendernNotChangeOwner() {
 
 		// Arrange
@@ -170,7 +341,7 @@ public class MedienResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(4)
+	@Order(13)
 	void should_mediumAendernReturn409_when_titelExists() {
 
 		// Arrange
@@ -203,7 +374,7 @@ public class MedienResourceTest {
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(4)
+	@Order(14)
 	void should_mediumAendernReturn404_when_uuidUnknown() {
 
 		// Arrange
@@ -233,83 +404,4 @@ public class MedienResourceTest {
 		assertEquals("Das Medium existiert nicht.", result.getMessage());
 	}
 
-	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(10)
-	void should_sucheMitSuchstring_work() {
-
-		// Arrange
-		Mediensuchmodus suchmodusNoop = Mediensuchmodus.SEARCHSTRING;
-
-		// Act
-		MediensucheResult mediensucheTreffer = given()
-			.queryParam("suchmodus", suchmodusNoop)
-			.queryParam("suchstring", "Knobel")
-			.queryParam("limit", 3)
-			.queryParam("offset", 0)
-			.when()
-			.get("v1")
-			.then()
-			.statusCode(200)
-			.and()
-			.contentType(ContentType.JSON)
-			.extract()
-			.as(MediensucheResult.class);
-
-		// Assert
-		assertEquals(1, mediensucheTreffer.getTrefferGesamt());
-
-		List<MediensucheTrefferItem> treffermenge = mediensucheTreffer.getTreffer();
-		assertEquals(1, treffermenge.size());
-		assertEquals("9ab888be-e84b-4c81-ab4d-4451a5097892", treffermenge.get(0).getId());
-
-	}
-
-	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN" })
-	@Order(11)
-	void should_sucheAlle_work() {
-
-		// Arrange 3
-		Mediensuchmodus suchmodusNoop = Mediensuchmodus.NOOP;
-
-		MediensucheResult mediensucheTreffer = given()
-			.queryParam("suchmodus", suchmodusNoop)
-			.queryParam("limit", 20)
-			.queryParam("offset", 0)
-			.when()
-			.get("v1")
-			.then()
-			.statusCode(200)
-			.and()
-			.contentType(ContentType.JSON)
-			.extract()
-			.as(MediensucheResult.class);
-
-		// Assert 3
-		long trefferGesamt = mediensucheTreffer.getTrefferGesamt();
-
-		List<MediensucheTrefferItem> treffermenge = mediensucheTreffer.getTreffer();
-		assertEquals(trefferGesamt, treffermenge.size());
-
-		{
-
-			Optional<MediensucheTrefferItem> optItem = treffermenge.stream().filter(m -> "alpha".equals(m.getTitel())).findFirst();
-			assertTrue(optItem.isPresent());
-		}
-
-		{
-
-			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
-				.filter(m -> "Leipziger Volkszeitung".equals(m.getTitel())).findFirst();
-			assertTrue(optItem.isPresent());
-		}
-
-		{
-
-			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
-				.filter(m -> "2 x 3 plus Spaß dabei".equals(m.getTitel())).findFirst();
-			assertTrue(optItem.isPresent());
-		}
-	}
 }
