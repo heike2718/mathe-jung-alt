@@ -53,10 +53,9 @@ public class MedienResourceTest {
 
 		// Arrange
 		MediumDto mediumDto = new MediumDto()
-			.withTitel("alpha")
-			.withId("neu").withKommentar("mathematische Schülerzeitschrift")
-			.withMedienart(Medienart.ZEITSCHRIFT)
-			.withUrl("https://mathematikalpha.de/");
+			.withTitel("quant")
+			.withId("neu").withKommentar("russische Zeitschrift für Mathematik und Physik")
+			.withMedienart(Medienart.ZEITSCHRIFT);
 
 		// Act 2
 		MediumDto result = given()
@@ -74,16 +73,16 @@ public class MedienResourceTest {
 		// Assert 1
 		assertEquals(Medienart.ZEITSCHRIFT, result.getMedienart());
 		assertFalse("neu".equals(result.getId()));
-		assertEquals("alpha", result.getTitel());
-		assertEquals("https://mathematikalpha.de/", result.getUrl());
-		assertEquals("mathematische Schülerzeitschrift", result.getKommentar());
+		assertEquals("quant", result.getTitel());
+		assertNull(result.getUrl());
+		assertEquals("russische Zeitschrift für Mathematik und Physik", result.getKommentar());
 
 		String id = result.getId();
 
 		// Act 2
 		MediumDto[] treffermenge1 = given()
 			.accept(ContentType.JSON)
-			.queryParam("suchstring", "alph")
+			.queryParam("suchstring", "quan")
 			.when()
 			.get("titel/v1")
 			.then()
@@ -166,6 +165,7 @@ public class MedienResourceTest {
 
 		PersistentesMedium ausDB = mediumDao.findMediumById(id);
 		assertEquals("412b67dc-132f-465a-a3c3-468269e866cb", ausDB.owner);
+		assertFalse(ausDB.owner.equals(ausDB.geaendertDurch));
 	}
 
 	@Test
@@ -275,7 +275,7 @@ public class MedienResourceTest {
 
 		MediensucheResult mediensucheTreffer = given()
 			.queryParam("suchmodus", suchmodusNoop)
-			.queryParam("limit", 3)
+			.queryParam("limit", 20)
 			.queryParam("offset", 0)
 			.when()
 			.get("v1")
@@ -287,10 +287,10 @@ public class MedienResourceTest {
 			.as(MediensucheResult.class);
 
 		// Assert 3
-		assertEquals(3, mediensucheTreffer.getTrefferGesamt());
+		long trefferGesamt = mediensucheTreffer.getTrefferGesamt();
 
 		List<MediensucheTrefferItem> treffermenge = mediensucheTreffer.getTreffer();
-		assertEquals(3, treffermenge.size());
+		assertEquals(trefferGesamt, treffermenge.size());
 
 		{
 

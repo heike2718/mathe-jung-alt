@@ -85,10 +85,10 @@ public class PublicAufgabensammlungenResourceTest {
 
 	@Test
 	@Order(3)
-	@TestSecurity(user = "testuser", roles = { "AUTOR" })
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	void testLoadDetails200() throws Exception {
 
-		String id = "13c62cfb-cfdd-41f1-b8a9-6c866e087718";
+		String id = "c09e5d63-9ec1-4884-a01e-08234db9cbf3";
 
 		AufgabensammlungDetails treffer = given()
 			.get(id + "/v1")
@@ -98,13 +98,13 @@ public class PublicAufgabensammlungenResourceTest {
 			.as(AufgabensammlungDetails.class);
 
 		List<Aufgabensammlungselement> elemente = treffer.getElemente();
-		assertEquals(6, elemente.size());
+		assertEquals(15, elemente.size());
 		assertTrue(treffer.isSchreibgeschuetzt());
 	}
 
 	@Test
 	@Order(5)
-	@TestSecurity(user = "testuser", roles = { "AUTOR" })
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	void testLoadDetails403() throws Exception {
 
 		String id = "581cbd35-9423-414f-bda5-3eb2d05b979b";
