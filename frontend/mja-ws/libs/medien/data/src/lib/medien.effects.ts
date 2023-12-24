@@ -5,6 +5,7 @@ import { medienActions } from "./medien.actions";
 import { map, switchMap, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { MessageService } from "@mja-ws/shared/messaging/api";
+import { swallowEmptyArgument } from "@mja-ws/shared/util";
 
 
 @Injectable({
@@ -24,6 +25,33 @@ export class MedienEffects {
             map((result) => medienActions.mEDIEN_FOUND({ result }))
         );
     });
+
+    editMedium$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(medienActions.eDIT_MEDIUM),
+            tap(({ medium, nextUrl }) => {
+                swallowEmptyArgument(medium, false);
+                this.#router.navigateByUrl(nextUrl);
+            }),
+        ), { dispatch: false });
+
+    selectMedium$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(medienActions.sELECT_MEDIUM),
+            switchMap((action) => this.#medienHttpService.loadDetails(action.medium)),
+            map((medium) => medienActions.mEDIUMDETAILS_LOADED({ details: medium, nextUrl: 'medien/details' }))
+        );
+    });
+
+    mediumDetailsLoaded$ = createEffect(() =>
+        this.#actions.pipe(
+            ofType(medienActions.mEDIUMDETAILS_LOADED),
+            tap(({ details, nextUrl }) => {
+                swallowEmptyArgument(details, false);
+                this.#router.navigateByUrl(nextUrl);
+            }),
+        ), { dispatch: false });
 
     unselectMedium$ = createEffect(() =>
 

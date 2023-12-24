@@ -37,6 +37,13 @@ export const medienFeature = createFeature({
             };
         }),
 
+        on(medienActions.eDIT_MEDIUM, (state, action) => {
+            return {
+                ...state,
+                selectedMediumDetails: action.medium
+            };
+        }),
+
         on(medienActions.mEDIUMDETAILS_LOADED, (state, action) => {
             swallowEmptyArgument(action, false);
             return {
@@ -53,7 +60,7 @@ export const medienFeature = createFeature({
             };
         }),
 
-        
+
 
         on(medienActions.uNSELECT_MEDIUM, (state, action) => {
             swallowEmptyArgument(action, false);

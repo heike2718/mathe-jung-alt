@@ -5,6 +5,7 @@
 package de.egladil.mja_api.infrastructure.resources;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -37,6 +38,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * MedienResource
@@ -76,6 +78,11 @@ public class MedienResource {
 		content = @Content(
 			mediaType = "application/json"))
 	@APIResponse(
+		name = "NotFound",
+		responseCode = "404",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
 		name = "ServerError",
 		description = "server error",
 		responseCode = "500", content = @Content(
@@ -84,7 +91,14 @@ public class MedienResource {
 	public Response getMedium(@PathParam(value = "id") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält unerlaubte Zeichen") final String id) {
 
-		return Response.ok().build();
+		Optional<MediumDto> opt = medienService.getMediumWithId(id);
+
+		if (opt.isEmpty()) {
+
+			return Response.status(Status.NOT_FOUND).build();
+		}
+
+		return Response.ok(opt.get()).build();
 	}
 
 	@GET

@@ -13,7 +13,7 @@ const initialState: StatistikState = {
 };
 
 export const statistikFeature = createFeature({
-    name: 'Statistik',
+    name: 'statistik',
     reducer: createReducer(
         initialState,
         on(coreStatistikActions.aNZAHL_RAETSEL_PUBLIC_LOADED, (state, action) => {

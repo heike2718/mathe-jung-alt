@@ -29,7 +29,7 @@ export class MedienFacade {
   }
 
   selectMedium(medium: MediensucheTrefferItem): void {
-    this.#store.dispatch(medienActions.sELECT_MEDIUM({ id: medium.id }));
+    this.#store.dispatch(medienActions.sELECT_MEDIUM({ medium }));
   }
 
   saveMedium(medium: MediumDto): void {
@@ -41,7 +41,7 @@ export class MedienFacade {
     if (medium.id === 'neu') {
       this.#store.dispatch(medienActions.uNSELECT_MEDIUM());
     } else {
-      this.#store.dispatch(medienActions.sELECT_MEDIUM(medium));
+      this.#store.dispatch(medienActions.eDIT_MEDIUM({medium: medium, nextUrl: 'medien/editor'}));
     }
   }
 
@@ -51,8 +51,6 @@ export class MedienFacade {
 
   createAndEditMedium(): void {
 
-    this.#store.dispatch(medienActions.mEDIUMDETAILS_LOADED({ details: initialMediumDto }));
-    const detailsSubscription = this.selectedMediumDetails$.subscribe(() => this.#router.navigateByUrl('medien/edit'));
-    detailsSubscription.unsubscribe();
+    this.#store.dispatch(medienActions.eDIT_MEDIUM({ medium: initialMediumDto, nextUrl: 'medien/editor' }));
   }
 }

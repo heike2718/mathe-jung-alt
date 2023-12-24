@@ -21,7 +21,7 @@ export const medienRoutes: Routes = [
     component: MediumDetailsComponent
   },
   {
-    path: 'edit',
+    path: 'editor',
     canActivate: [() => inject(AuthFacade).userIsAdmin$],
     component: MediumEditComponent
   },

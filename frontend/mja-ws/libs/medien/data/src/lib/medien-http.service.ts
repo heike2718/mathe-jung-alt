@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET } from "@mja-ws/core/model";
-import { MediensucheResult, MediumDto } from "@mja-ws/medien/model";
+import { MediensucheResult, MediensucheTrefferItem, MediumDto } from "@mja-ws/medien/model";
 import { Observable } from "rxjs";
 
 
@@ -52,6 +52,15 @@ export class MedienHttpService {
             .set('suchstring', titel.trim());
 
         return this.#http.get<MediumDto[]>(url, { headers, params });
+    }
+
+    loadDetails(medium: MediensucheTrefferItem): Observable<MediumDto> {
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const url = this.#url + '/' + medium.id + '/v1';
+
+        return this.#http.get<MediumDto>(url, { headers});
+        
     }
 
     saveMedium(medium: MediumDto): Observable<MediumDto> {

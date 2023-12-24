@@ -50,7 +50,7 @@ public class MedienService {
 	 * @param  id
 	 * @return    Optional
 	 */
-	Optional<MediumDto> getMediumWithId(final String id) {
+	public Optional<MediumDto> getMediumWithId(final String id) {
 
 		PersistentesMedium ausDB = mediumDao.findMediumById(id);
 
