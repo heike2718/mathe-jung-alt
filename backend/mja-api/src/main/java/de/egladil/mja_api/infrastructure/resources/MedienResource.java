@@ -200,7 +200,7 @@ public class MedienResource {
 			regexp = MjaRegexps.VALID_SUCHSTRING,
 			message = "ungültige Eingabe: mindestens 4 höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring) {
 
-		List<MediumDto> result = medienService.findMedienWithTitel(suchstring);
+		List<MediumDto> result = medienService.findMedienForUseInQuelle(suchstring);
 
 
 		return Response.ok(result).build();

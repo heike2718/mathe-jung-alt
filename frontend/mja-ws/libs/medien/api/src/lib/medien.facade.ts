@@ -32,6 +32,11 @@ export class MedienFacade {
     this.#store.dispatch(medienActions.sELECT_MEDIUM({ medium }));
   }
 
+  unselectMedium(): void {
+    this.#store.dispatch(medienActions.uNSELECT_MEDIUM());
+    this.#router.navigateByUrl('medien/uebersicht');
+  }
+
   saveMedium(medium: MediumDto): void {
     this.#store.dispatch(medienActions.sAVE_MEDIUM({ medium }));
   }
@@ -41,12 +46,22 @@ export class MedienFacade {
     if (medium.id === 'neu') {
       this.#store.dispatch(medienActions.uNSELECT_MEDIUM());
     } else {
-      this.#store.dispatch(medienActions.eDIT_MEDIUM({medium: medium, nextUrl: 'medien/editor'}));
+      const item: MediensucheTrefferItem = {
+        id: medium.id,
+        kommentar: medium.kommentar,
+        medienart: medium.medienart ? medium.medienart : 'BUCH',
+        titel: ''
+      }
+      this.#store.dispatch(medienActions.sELECT_MEDIUM({ medium: item }));
     }
   }
 
   navigateToSuche(): void {
     this.#store.dispatch(medienActions.uNSELECT_MEDIUM());
+  }
+
+  editMedium(): void {
+    this.#router.navigateByUrl('medien/editor');
   }
 
   createAndEditMedium(): void {

@@ -169,7 +169,7 @@ public class MedienPermissionDelegateTest {
 	class ReadPermissionTestsAUTOR {
 
 		@Test
-		void should_checkPermisionThrow403_when_UserNotOWNER() {
+		void should_checkPermisionNotThrow403_when_UserNotOWNER() {
 
 			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
 
@@ -182,22 +182,16 @@ public class MedienPermissionDelegateTest {
 
 			when(authCtx.getUser()).thenReturn(user);
 
-			// Act + Assert
-			try {
+			// Act
+			delegate.checkReadPermission(ausDB);
 
-				delegate.checkReadPermission(ausDB);
-				fail("keine WebApplicationException");
-			} catch (WebApplicationException e) {
-
-				assertEquals(403, e.getResponse().getStatus());
-
-				verify(authCtx).getUser();
-			}
+			// Assert
+			verify(authCtx).getUser();
 
 		}
 
 		@Test
-		void should_checkPermisionThrow403_when_UserOWNER() {
+		void should_checkPermisionNotThrow403_when_UserOWNER() {
 
 			// das ist ein theoretischer Fall, denn anonyme User sehen keine Medien
 

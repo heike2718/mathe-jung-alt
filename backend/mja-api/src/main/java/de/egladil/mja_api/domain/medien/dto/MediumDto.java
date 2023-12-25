@@ -48,6 +48,9 @@ public class MediumDto {
 	private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird entschieden, ob es
 												// durch den User änderbar ist.
 
+	@JsonProperty
+	private boolean ownMedium;
+
 	public String getId() {
 
 		return id;
@@ -122,6 +125,16 @@ public class MediumDto {
 	public void markiereAlsAenderbar() {
 
 		this.schreibgeschuetzt = false;
+	}
+
+	public boolean isOwnMedium() {
+
+		return ownMedium;
+	}
+
+	public void setOwnMedium(final boolean owner) {
+
+		this.ownMedium = owner;
 	}
 
 }

@@ -8,6 +8,7 @@ export interface MediumDto {
   readonly url: string | undefined;
   readonly kommentar: string | undefined;
   readonly schreibgeschuetzt: boolean;
+  readonly ownMedium: boolean;
 };
 
 export const initialMediumDto: MediumDto = {
@@ -17,7 +18,8 @@ export const initialMediumDto: MediumDto = {
   autor: undefined,
   url: undefined,
   kommentar: undefined,
-  schreibgeschuetzt: true
+  schreibgeschuetzt: true,
+  ownMedium: true
 };
 
 

@@ -167,7 +167,7 @@ public class AdminMedienResourceTest {
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(3)
-	void should_findMedienForUseInQuelle_returnOnlyOwnMedien() {
+	void should_findMedienForUseInQuelle_returnAllMedien() {
 
 		// Arrange
 		Mediensuchmodus suchmodusNoop = Mediensuchmodus.SEARCHSTRING;
@@ -186,7 +186,11 @@ public class AdminMedienResourceTest {
 			.as(MediumDto[].class);
 
 		// Assert
-		assertEquals(0, result.length);
+		assertEquals(1, result.length);
+
+		MediumDto medium = result[0];
+		assertEquals("5f9bc03c-84f5-48ea-ab6c-ddc265f5d963", medium.getId());
+		assertFalse(medium.isOwnMedium());
 	}
 
 	@Test
@@ -215,6 +219,7 @@ public class AdminMedienResourceTest {
 
 		MediumDto medium = result[0];
 		assertEquals("4f2e96ae-002c-4530-a873-a9cfc65814ff", medium.getId());
+		assertTrue(medium.isOwnMedium());
 	}
 
 	@Test

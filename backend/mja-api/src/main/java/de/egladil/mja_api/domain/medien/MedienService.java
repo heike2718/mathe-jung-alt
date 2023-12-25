@@ -4,7 +4,6 @@
 // =====================================================
 package de.egladil.mja_api.domain.medien;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,8 +12,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
-import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
@@ -79,6 +76,11 @@ public class MedienService {
 		} catch (WebApplicationException e) {
 
 			// in diesem Fall keine Schreibberechtigung
+		}
+
+		if (authCtx.getUser().getName().equals(ausDB.owner)) {
+
+			medium.setOwnMedium(true);
 		}
 
 		return medium;
@@ -171,48 +173,8 @@ public class MedienService {
 	 */
 	public MediensucheResult loadMedien(final int limit, final int offset) {
 
-		AuthenticatedUser user = authCtx.getUser();
-
-		switch (user.getBenutzerart()) {
-
-		case ADMIN: {
-
-			return loadAllMedien(limit, offset);
-		}
-
-		case AUTOR: {
-
-			return loadWithOwner(user.getName(), limit, offset);
-		}
-
-		case ANONYM:
-		case STANDARD:
-			throw new WebApplicationException(Status.FORBIDDEN);
-
-		default:
-			throw new IllegalArgumentException("Unexpected benutzerart: " + user.getBenutzerart());
-		}
-	}
-
-	MediensucheResult loadAllMedien(final int limit, final int offset) {
-
 		long gesamtzahl = mediumDao.countAllMedien();
 		List<PersistentesMedium> treffermenge = mediumDao.loadAllMedien(limit, offset);
-
-		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB)
-			.collect(Collectors.toList());
-
-		MediensucheResult result = new MediensucheResult();
-		result.setTreffer(trefferItems);
-		result.setTrefferGesamt(gesamtzahl);
-
-		return result;
-	}
-
-	MediensucheResult loadWithOwner(final String owner, final int limit, final int offset) {
-
-		long gesamtzahl = mediumDao.countMedienWithOwner(owner);
-		List<PersistentesMedium> treffermenge = mediumDao.loadMedienWithOwner(owner, limit, offset);
 
 		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB)
 			.collect(Collectors.toList());
@@ -235,28 +197,14 @@ public class MedienService {
 	 */
 	public MediensucheResult findMedien(final String suchstring, final int limit, final int offset) {
 
-		AuthenticatedUser user = authCtx.getUser();
-
 		if (StringUtils.isBlank(suchstring)) {
 
 			throw new WebApplicationException(
 				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("suchstring darf nicht leer sein")).build());
 		}
 
-		List<PersistentesMedium> treffermenge = new ArrayList<>();
-		long gesamtzahl = 0;
-
-		if (Benutzerart.ADMIN == user.getBenutzerart()) {
-
-			gesamtzahl = mediumDao.countAllMedienWithSuchstring(suchstring);
-			treffermenge = mediumDao.findAllMedienWithSuchstring(suchstring, limit, offset);
-		}
-
-		if (Benutzerart.AUTOR == user.getBenutzerart()) {
-
-			gesamtzahl = mediumDao.countAllMedienOfOwnerWithSuchstring(suchstring, user.getName());
-			treffermenge = mediumDao.findAllMedienOfOwnerWithSuchstring(suchstring, user.getName(), limit, offset);
-		}
+		long gesamtzahl = mediumDao.countAllMedienWithSuchstring(suchstring);
+		List<PersistentesMedium> treffermenge = mediumDao.findAllMedienWithSuchstring(suchstring, limit, offset);
 
 		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB).toList();
 
@@ -274,11 +222,9 @@ public class MedienService {
 	 * @param  suchstring
 	 * @return            List
 	 */
-	public List<MediumDto> findMedienWithTitel(final String suchstring) {
+	public List<MediumDto> findMedienForUseInQuelle(final String suchstring) {
 
-		AuthenticatedUser user = authCtx.getUser();
-
-		List<PersistentesMedium> trefferliste = mediumDao.findMedienWithTitelLikeSuchstring(suchstring, user.getName());
+		List<PersistentesMedium> trefferliste = mediumDao.findMedienWithTitelLikeSuchstring(suchstring);
 
 		return trefferliste.stream().map(this::mapFromDB).toList();
 

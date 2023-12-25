@@ -133,7 +133,8 @@ export class MediumEditComponent implements OnInit, OnDestroy {
       kommentar: formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined,
       autor: formValue['autor'] && formValue['autor'].trim().length > 0 ? formValue['autor'].trim() : undefined,     
       url: formValue['url'] && formValue['url'].trim().length > 0 ? formValue['url'].trim() : '',
-      schreibgeschuetzt: false
+      schreibgeschuetzt: false,
+      ownMedium: true
     };
 
     return payload;

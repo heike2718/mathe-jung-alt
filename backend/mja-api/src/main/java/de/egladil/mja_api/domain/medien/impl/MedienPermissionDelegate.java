@@ -51,17 +51,7 @@ public class MedienPermissionDelegate {
 			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 
-		case AUTOR: {
-
-			if (!user.getUuid().equals(ausDB.owner)) {
-
-				LOGGER.warn("Autor {} hat keine Leseberechtigung für Medium {} mit Owner {}",
-					user.getName(), ausDB.uuid,
-					ausDB.owner);
-				throw new WebApplicationException(Status.FORBIDDEN);
-			}
-		}
-
+		case AUTOR:
 		case ADMIN:
 			return;
 

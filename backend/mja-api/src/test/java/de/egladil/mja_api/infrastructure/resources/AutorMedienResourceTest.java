@@ -6,6 +6,7 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class AutorMedienResourceTest {
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(1)
-	void should_mediumAendernReturn403_when_notTheOwner() throws Exception {
+	void should_mediumAendernReturn403Medium_when_notTheOwner() throws Exception {
 
 		// Arrange
 		String id = "9ab888be-e84b-4c81-ab4d-4451a5097892";
@@ -66,7 +67,7 @@ public class AutorMedienResourceTest {
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(2)
-	void should_findAllReturnOnlyOwnMedien() {
+	void should_findAllReturnAllMedien() {
 
 		// Arrange 3
 		Mediensuchmodus suchmodusNoop = Mediensuchmodus.NOOP;
@@ -87,10 +88,10 @@ public class AutorMedienResourceTest {
 		// Assert 3
 		long trefferGesamt = mediensucheTreffer.getTrefferGesamt();
 
-		assertEquals(4, trefferGesamt);
+		assertTrue(trefferGesamt >= 8);
 
 		List<MediensucheTrefferItem> treffermenge = mediensucheTreffer.getTreffer();
-		assertEquals(4, treffermenge.size());
+		assertTrue(treffermenge.size() >= 8);
 
 		{
 
@@ -119,12 +120,42 @@ public class AutorMedienResourceTest {
 				.filter(m -> "af9f75bd-9340-40d0-a3dd-0594b6ba0632".equals(m.getId())).findFirst();
 			assertTrue(optItem.isPresent());
 		}
+
+		// ///////////////////////////////////////
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "4f2e96ae-002c-4530-a873-a9cfc65814ff".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "9ab888be-e84b-4c81-ab4d-4451a5097892".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "a94879e6-7479-4c2d-a061-34709d8f9631".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
+
+		{
+
+			Optional<MediensucheTrefferItem> optItem = treffermenge.stream()
+				.filter(m -> "dbf00c75-6c97-4a1c-afe6-a42462a44e39".equals(m.getId())).findFirst();
+			assertTrue(optItem.isPresent());
+		}
 	}
 
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(3)
-	void should_findMedienForUseInQuelle_returnOnlyOwnMedien() {
+	void should_findMedienForUseInQuelle_returnAllMedien() {
 
 		// Arrange
 		Mediensuchmodus suchmodusNoop = Mediensuchmodus.SEARCHSTRING;
@@ -143,7 +174,11 @@ public class AutorMedienResourceTest {
 			.as(MediumDto[].class);
 
 		// Assert
-		assertEquals(0, result.length);
+		assertEquals(1, result.length);
+
+		MediumDto medium = result[0];
+		assertEquals("4f2e96ae-002c-4530-a873-a9cfc65814ff", medium.getId());
+		assertFalse(medium.isOwnMedium());
 	}
 
 	@Test
@@ -172,5 +207,32 @@ public class AutorMedienResourceTest {
 
 		MediumDto medium = result[0];
 		assertEquals("5f9bc03c-84f5-48ea-ab6c-ddc265f5d963", medium.getId());
+		assertTrue(medium.isOwnMedium());
+	}
+
+	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(1)
+	void should_LoadDetailsWork_when_notTheOwner() throws Exception {
+
+		// Arrange
+		String id = "9ab888be-e84b-4c81-ab4d-4451a5097892";
+
+		// Act + Assert
+		MediumDto result = given()
+			.pathParam("id", id)
+			.accept(ContentType.JSON)
+			.contentType(ContentType.JSON)
+			.when()
+			.get("{id}/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MediumDto.class);
+
+		assertFalse(result.isOwnMedium());
+		assertTrue(result.isSchreibgeschuetzt());
 	}
 }

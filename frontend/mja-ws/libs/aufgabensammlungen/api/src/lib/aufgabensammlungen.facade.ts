@@ -5,12 +5,14 @@ import { EditAufgabensammlungselementPayload, EditAufgabensammlungPayload, initi
 import { deepClone, filterDefined } from "@mja-ws/shared/util";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
+import { Router } from "@angular/router";
 
 
 @Injectable({ providedIn: 'root' })
 export class AufgabensammlungenFacade {
 
     #store = inject(Store);
+    #router = inject(Router);
 
     page$: Observable<AufgabensammlungTrefferItem[]> = this.#store.select(fromAufgabensammlungen.page);
     anzahlTrefferGesamt$: Observable<number> = this.#store.select(fromAufgabensammlungen.anzahlTrefferGesamt);
@@ -34,6 +36,7 @@ export class AufgabensammlungenFacade {
 
     unselectAufgabensammlung(): void {
         this.#store.dispatch(aufgabensammlungenActions.uNSELECT_AUFGABENSAMMLUNG());
+        this.#router.navigateByUrl('aufgabensammlungen/uebersicht')
     }
 
     selectAufgabensammlungselement(element: Aufgabensammlungselement): void {

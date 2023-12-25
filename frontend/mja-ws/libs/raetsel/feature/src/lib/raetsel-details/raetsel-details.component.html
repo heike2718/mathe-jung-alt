@@ -31,7 +31,7 @@
                 <div class="grid-container-2 mt-2 mb-2">
                     <label>Autor:in / Herkunft:</label>
                     <div>{{raetsel.herkunft.text}}</div>
-                </div>               
+                </div>
 
                 <div *ngIf="!user.isAdmin" class="button-container">
                     <button class="label" mat-raised-button color="primary"
@@ -158,4 +158,7 @@
 <ng-template #keinRaetsel>
     <h1>Rätsel Details</h1>
     <p>kein Rätsel gewählt</p>
+    <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+            (click)="gotoRaetselUebersicht()">Rätselsuche</button>
+    </div>
 </ng-template>
