@@ -375,21 +375,21 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     const theStatus = raetsel.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';
 
-    this.form.controls['schluessel'].setValue(raetsel.schluessel);
-    this.form.controls['name'].setValue(raetsel.name);
-    this.form.controls['quelleId'].setValue(this.herkunftRaetsel.id);
-    this.form.controls['status'].setValue(theStatus);
-    this.form.controls['frage'].setValue(raetsel.frage);
-    this.form.controls['loesung'].setValue(raetsel.loesung);
-    this.form.controls['kommentar'].setValue(raetsel.kommentar);
-    this.form.controls['anzahlAntwortvorschlaege'].setValue(raetsel.antwortvorschlaege.length + '');
+    this.form.get('schluessel')?.setValue(raetsel.schluessel);
+    this.form.get('name')?.setValue(raetsel.name);
+    this.form.get('quelleId')?.setValue(this.herkunftRaetsel.id);
+    this.form.get('status')?.setValue(theStatus);
+    this.form.get('frage')?.setValue(raetsel.frage);
+    this.form.get('loesung')?.setValue(raetsel.loesung);
+    this.form.get('kommentar')?.setValue(raetsel.kommentar);
+    this.form.get('anzahlAntwortvorschlaege')?.setValue(raetsel.antwortvorschlaege.length + '');
 
     this.#addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
 
-    this.form.controls['quelleId'].disable();
+    // this.form.controls['quelleId'].disable();
 
     if (!this.isRoot) {
-      this.form.controls['schluessel'].disable();
+      this.form.get('schluessel')?.disable();
     }
 
     for (let i = 0; i < raetsel.antwortvorschlaege.length; i++) {
