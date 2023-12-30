@@ -10,22 +10,27 @@ import { debounceTime, distinctUntilChanged, merge, Subscription, tap } from 'rx
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { GuiReferenztypenMap, 
-  GuiRefereztyp, 
-  GuiSchwierigkeitsgrad, 
-  GuiSchwierigkeitsgradeMap, 
-  initialGuiReferenztyp, 
-  initialGuiSchwierigkeitsgrad, 
-  initialPaginationState, 
-  PageDefinition, 
-  PaginationState, 
-  Referenztyp, 
-  Schwierigkeitsgrad 
+import {
+  initialPaginationState,
+  PageDefinition,
+  PaginationState,
+  Referenztyp,
+  Schwierigkeitsgrad
 } from '@mja-ws/core/model';
-import { initialAufgabensammlungenSuchparameter, 
-  isInitialAufgabensammlungenSuchparameter, 
-  AufgabensammlungenSuchparameter, 
-  AufgabensammlungTrefferItem } from '@mja-ws/aufgabensammlungen/model';
+
+import {
+  GuiReferenztypenMap,
+  GuiRefereztyp,
+  GuiSchwierigkeitsgrad,
+  GuiSchwierigkeitsgradeMap,
+  initialGuiReferenztyp,
+  initialGuiSchwierigkeitsgrad,
+  initialAufgabensammlungenSuchparameter,
+  isInitialAufgabensammlungenSuchparameter,
+  AufgabensammlungenSuchparameter,
+  AufgabensammlungTrefferItem
+} from '@mja-ws/aufgabensammlungen/model';
+
 import { MatSelectModule } from '@angular/material/select';
 import { Configuration } from '@mja-ws/shared/config';
 
@@ -83,7 +88,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
 
   #configuration = inject(Configuration);
   #aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
-  
+
 
   #nameFilterSubscription = new Subscription();
   #schwierigkeitsgradFilterSubscription = new Subscription();
@@ -137,7 +142,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
       // hier den init-Kram oder
     }, 0);
 
-    
+
     this.#initPaginator();
 
     merge(this.sort.sortChange, this.paginator.page).pipe(

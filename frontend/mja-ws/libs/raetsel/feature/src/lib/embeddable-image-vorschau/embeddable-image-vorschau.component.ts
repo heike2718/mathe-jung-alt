@@ -4,7 +4,7 @@ import { FileInfoComponent, FileInfoModel, SelectFileComponent, SelectFileModel 
 import { MatButtonModule } from '@angular/material/button';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { combineLatest, Subscription } from 'rxjs';
-import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, TEXTART } from '@mja-ws/embeddable-images/model';
+import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, Textart } from '@mja-ws/embeddable-images/model';
 import { Configuration } from '@mja-ws/shared/config';
 
 @Component({
@@ -97,7 +97,7 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   uploadFile(): void {
     if (this.fileInfo) {
 
-      const textart: TEXTART = this.#selectedEmbeddableImageInfo ? this.#selectedEmbeddableImageInfo.textart : 'FRAGE';
+      const textart: Textart = this.#selectedEmbeddableImageInfo ? this.#selectedEmbeddableImageInfo.textart : 'FRAGE';
 
       const context: EmbeddableImageContext = { raetselId: this.raetselId, textart: textart };
 

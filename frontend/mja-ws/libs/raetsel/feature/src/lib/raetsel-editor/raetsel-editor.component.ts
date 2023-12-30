@@ -16,13 +16,13 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { Antwortvorschlag, EditRaetselPayload, QuelleDto, RaetselDetails } from '@mja-ws/raetsel/model';
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, OUTPUTFORMAT, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, fontNamenSelectInput, FONT_NAME, schriftgroessenSelectInput, SCHRIFTGROESSE, HerkunftRaetsel } from '@mja-ws/core/model';
+import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LaTeXLayoutAntwortvorschlaege, OutputFormat, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, fontNamenSelectInput, FontName, schriftgroessenSelectInput, Schriftgroesse, HerkunftRaetsel } from '@mja-ws/core/model';
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel, FileInfoComponent, FileInfoModel, ImageDialogComponent, ImageDialogModel } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import { MatCardModule } from '@angular/material/card';
 import { AuthFacade } from '@mja-ws/core/api';
-import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, TEXTART } from '@mja-ws/embeddable-images/model';
+import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, Textart } from '@mja-ws/embeddable-images/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 
@@ -300,7 +300,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   printPNG(): void {
-    const outputformat: OUTPUTFORMAT = 'PNG';
+    const outputformat: OutputFormat = 'PNG';
     this.#openPrintDialog(outputformat);
   }
 
@@ -341,7 +341,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFileSelected($event: FileInfoModel, textart: TEXTART): void {
+  onFileSelected($event: FileInfoModel, textart: Textart): void {
     if (textart === 'FRAGE') {
       this.fileInfoFrage = $event;
     }
@@ -351,7 +351,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   }
 
-  uploadFile(textart: TEXTART): void {
+  uploadFile(textart: Textart): void {
 
     console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
 
@@ -496,7 +496,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.raetselFacade.saveRaetsel(editRaetselPayload);
   }
 
-  #openPrintDialog(outputformat: OUTPUTFORMAT): void {
+  #openPrintDialog(outputformat: OutputFormat): void {
 
     const dialogData: SelectGeneratorParametersUIModelAutoren = {
       titel: outputformat + ' generieren',
@@ -522,7 +522,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
       if (result) {
 
-        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        let layout: LaTeXLayoutAntwortvorschlaege = 'NOOP';
 
         if (dialogData.selectedLayoutAntwortvorschlaege) {
 
@@ -533,8 +533,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
           }
         }
 
-        let font: FONT_NAME = 'STANDARD';
-        let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
+        let font: FontName = 'STANDARD';
+        let schriftgroesse: Schriftgroesse = 'NORMAL';
 
         if (dialogData.selectedFontName) {
           switch (dialogData.selectedFontName) {

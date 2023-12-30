@@ -1,1 +1,1 @@
-export * from './lib/medien-model';
+export * from './lib/medien.model';

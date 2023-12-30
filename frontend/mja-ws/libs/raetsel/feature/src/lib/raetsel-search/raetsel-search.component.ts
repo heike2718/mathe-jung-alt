@@ -6,7 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
 import { RaetselDataSource, RaetselFacade } from '@mja-ws/raetsel/api';
-import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, ModusSucheMitDeskriptoren, ModusVolltextsuche, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { initialSelectItemsComponentModel, PageDefinition, PaginationState, HerkunftRaetsel, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
 import { combineLatest, debounceTime, merge, Subscription, tap } from 'rxjs';
 import { AuthFacade } from '@mja-ws/core/api';
@@ -292,11 +292,11 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.#raetselFacade.triggerSearch(this.isAutor, theSuchfilter, pageDefinition);
   }
 
-  #modeFullTextSearch(): MODUS_VOLLTEXTSUCHE {
+  #modeFullTextSearch(): ModusVolltextsuche {
     return this.modeFullTextSearchUnion ? 'UNION' : 'INTERSECTION';
   }
 
-  #searchModeForDescriptors(): MODUS_SUCHE_MIT_DESKRIPTOREN {
+  #searchModeForDescriptors(): ModusSucheMitDeskriptoren {
     return this.searchModeForDescriptorsLike ? 'LIKE' : 'NOT_LIKE';
   }
 }

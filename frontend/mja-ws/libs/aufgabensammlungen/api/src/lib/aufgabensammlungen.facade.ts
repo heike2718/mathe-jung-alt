@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { FONT_NAME, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, PaginationState, SCHRIFTGROESSE } from "@mja-ws/core/model";
+import { FontName, GeneratedImages, LaTeXLayoutAntwortvorschlaege, PageDefinition, PaginationState, Schriftgroesse } from "@mja-ws/core/model";
 import { fromAufgabensammlungen, aufgabensammlungenActions } from "@mja-ws/aufgabensammlungen/data";
 import { EditAufgabensammlungselementPayload, EditAufgabensammlungPayload, initialAufgabensammlungBasisdaten, AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem } from "@mja-ws/aufgabensammlungen/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/util";
@@ -43,19 +43,19 @@ export class AufgabensammlungenFacade {
         this.#store.dispatch(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNGSELEMENT({ aufgabensammlungselement: element }));
     }
 
-    generiereArbeitsblatt(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+    generiereArbeitsblatt(aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): void {
         this.#store.dispatch(aufgabensammlungenActions.gENERIERE_ARBEITSBLATT({ aufgabensammlungID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
-    generiereKnobelkartei(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+    generiereKnobelkartei(aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): void {
         this.#store.dispatch(aufgabensammlungenActions.gENERIERE_KNOBELKARTEI({ aufgabensammlungID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
-    generiereVorschau(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+    generiereVorschau(aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): void {
         this.#store.dispatch(aufgabensammlungenActions.gENERIERE_VORSCHAU({ aufgabensammlungID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
-    generiereLaTeX(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+    generiereLaTeX(aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): void {
         this.#store.dispatch(aufgabensammlungenActions.gENERIERE_LATEX({ aufgabensammlungID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 

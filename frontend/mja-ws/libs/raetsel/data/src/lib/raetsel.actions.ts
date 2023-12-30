@@ -1,4 +1,4 @@
-import { FONT_NAME, GeneratedFile, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, SCHRIFTGROESSE } from '@mja-ws/core/model';
+import { FontName, GeneratedFile, GeneratedImages, LaTeXLayoutAntwortvorschlaege, PageDefinition, Schriftgroesse } from '@mja-ws/core/model';
 import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
@@ -10,8 +10,8 @@ export const raetselActions = createActionGroup({
         'FIND_LATEXLOGS': props<{schluessel: string}>(),
         'FIND_RAETSEL': props<{admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition}>(),
         'FIND_RAETSEL_LATEX': props<{raetselID: string}>(),
-        'GENERATE_RAETSEL_PNG': props<{ raetselID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>(),
-        'GENERATE_RAETSEL_PDF': props<{ raetselID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE }>(),
+        'GENERATE_RAETSEL_PNG': props<{ raetselID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege }>(),
+        'GENERATE_RAETSEL_PDF': props<{ raetselID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege }>(),
         'LATEX_ERRORS_DETECTED': emptyProps(),
         'LATEXLOGS_FOUND':props<{ files: GeneratedFile[] }>(),
         'RAETSEL_DETAILS_LOADED': props<{raetselDetails: RaetselDetails, navigateTo: string}>(),

@@ -1,4 +1,4 @@
-import { FONT_NAME, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, SCHRIFTGROESSE, GeneratedImages } from '@mja-ws/core/model';
+import { FontName, GeneratedFile, LaTeXLayoutAntwortvorschlaege, PageDefinition, Schriftgroesse, GeneratedImages } from '@mja-ws/core/model';
 import { AufgabensammlungenTreffer, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem, AufgabensammlungDetails, AufgabensammlungBasisdaten, EditAufgabensammlungPayload, EditAufgabensammlungselementPayload, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
@@ -12,12 +12,12 @@ export const aufgabensammlungenActions = createActionGroup({
         'SELECT_AUFGABENSAMMLUNG': props<{ aufgabensammlung: AufgabensammlungTrefferItem }>(),
         'UNSELECT_AUFGABENSAMMLUNG': emptyProps(),
         'AUFGABENSAMMLUNGDETAILS_LOADED': props<{aufgabensammlungDetails: AufgabensammlungDetails, navigateTo: string}>(),
-        'GENERIERE_ARBEITSBLATT': props<{aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE}>(),
-        'GENERIERE_KNOBELKARTEI': props<{aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE}>(),
-        'GENERIERE_VORSCHAU': props<{aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE}>(),
+        'GENERIERE_ARBEITSBLATT': props<{aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege}>(),
+        'GENERIERE_KNOBELKARTEI': props<{aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege}>(),
+        'GENERIERE_VORSCHAU': props<{aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege}>(),
         'FILE_GENERATED': props<{ pdf: GeneratedFile }>(),
         'BLOB_GENERATED': props<{ data: Blob, fileName: string }>(),
-        'GENERIERE_LATEX': props<{aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE}>(),
+        'GENERIERE_LATEX': props<{aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege}>(),
         'EDIT_AUFGABENSAMMLUNG': props<{aufgabensammlungBasisdaten: AufgabensammlungBasisdaten}>(),
         'SAVE_AUFGABENSAMMLUNG': props<{editAufgabensammlungPayload: EditAufgabensammlungPayload}>(),
         'AUFGABENSAMMLUNG_SAVED': props<{aufgabensammlung: AufgabensammlungBasisdaten}>(),

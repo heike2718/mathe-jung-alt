@@ -21,11 +21,11 @@ import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import {
   anzeigeAntwortvorschlaegeSelectInput,
-  FONT_NAME,
+  FontName,
   fontNamenSelectInput,
-  LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
-  OUTPUTFORMAT,
-  SCHRIFTGROESSE,
+  LaTeXLayoutAntwortvorschlaege,
+  OutputFormat,
+  Schriftgroesse,
   schriftgroessenSelectInput,
   SelectGeneratorParametersUIModelAutoren
 } from '@mja-ws/core/model';
@@ -108,13 +108,13 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   printPNG(): void {
 
-    const outputformat: OUTPUTFORMAT = 'PNG';
+    const outputformat: OutputFormat = 'PNG';
     this.#openPrintDialog(outputformat);
   }
 
   printPDF(): void {
 
-    const outputformat: OUTPUTFORMAT = 'PDF';
+    const outputformat: OutputFormat = 'PDF';
     this.#openPrintDialog(outputformat);
   }
 
@@ -165,7 +165,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  #openPrintDialog(outputformat: OUTPUTFORMAT): void {
+  #openPrintDialog(outputformat: OutputFormat): void {
 
     const dialogData: SelectGeneratorParametersUIModelAutoren = {
       titel: outputformat + ' generieren',
@@ -190,7 +190,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
       if (result) {
 
-        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        let layout: LaTeXLayoutAntwortvorschlaege = 'NOOP';
 
         if (dialogData.selectedLayoutAntwortvorschlaege) {
 
@@ -201,8 +201,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
           }
         }
 
-        let font: FONT_NAME = 'STANDARD';
-        let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
+        let font: FontName = 'STANDARD';
+        let schriftgroesse: Schriftgroesse = 'NORMAL';
 
         if (dialogData.selectedFontName) {
           switch (dialogData.selectedFontName) {

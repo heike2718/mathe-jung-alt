@@ -1,15 +1,15 @@
 import { UploadedFile, initialUploadedFile } from "@mja-ws/core/model";
-export type TEXTART = 'FRAGE' | 'LOESUNG';
+export type Textart = 'FRAGE' | 'LOESUNG';
 
 export interface EmbeddableImageInfo {
   readonly pfad: string;
   readonly existiert: boolean;
-  readonly textart: TEXTART;
+  readonly textart: Textart;
 };
 
 export interface EmbeddableImageContext {
   readonly raetselId: string;
-  readonly textart: TEXTART | undefined;
+  readonly textart: Textart | undefined;
 };
 
 export const initialEmbeddableImageContext: EmbeddableImageContext = {

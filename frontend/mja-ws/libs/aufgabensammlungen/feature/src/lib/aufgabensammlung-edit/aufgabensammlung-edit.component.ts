@@ -9,9 +9,18 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatListModule } from '@angular/material/list';
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { GuiSchwierigkeitsgradeMap, GuiReferenztypenMap, initialGuiSchwierigkeitsgrad, initialGuiReferenztyp, GuiSchwierigkeitsgrad, GuiRefereztyp, Referenztyp, Schwierigkeitsgrad } from '@mja-ws/core/model';
+import { Referenztyp, Schwierigkeitsgrad } from '@mja-ws/core/model';
 import { Router } from '@angular/router';
-import { EditAufgabensammlungPayload, AufgabensammlungBasisdaten } from '@mja-ws/aufgabensammlungen/model';
+import {
+  EditAufgabensammlungPayload,
+  AufgabensammlungBasisdaten,
+  GuiSchwierigkeitsgradeMap,
+  GuiReferenztypenMap,
+  initialGuiSchwierigkeitsgrad,
+  initialGuiReferenztyp,
+  GuiSchwierigkeitsgrad,
+  GuiRefereztyp
+} from '@mja-ws/aufgabensammlungen/model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -87,7 +96,7 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
 
   gotoUebersicht(): void {
     this.aufgabensammlungenFacade.unselectAufgabensammlung();
-    this.#router.navigateByUrl('aufgabensammlungen/uebersicht');      
+    this.#router.navigateByUrl('aufgabensammlungen/uebersicht');
   }
 
   formInvalid(): boolean {

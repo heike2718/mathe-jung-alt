@@ -11,7 +11,7 @@ import {
 } from "@mja-ws/aufgabensammlungen/model";
 import { Observable } from "rxjs";
 import { map } from 'rxjs/operators';
-import { FONT_NAME, GeneratedFile, LATEX_LAYOUT_ANTWORTVORSCHLAEGE, PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION, SCHRIFTGROESSE } from "@mja-ws/core/model";
+import { FontName, GeneratedFile, LaTeXLayoutAntwortvorschlaege, PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET, QUERY_PARAM_SORT_ATTRIBUTE, QUERY_PARAM_SORT_DIRECTION, Schriftgroesse } from "@mja-ws/core/model";
 import { generateUUID } from "@mja-ws/shared/util";
 
 
@@ -89,7 +89,7 @@ export class AufgabensammlungenHttpService {
         return this.#http.delete<AufgabensammlungDetails>(url, { headers });
     }
 
-    generiereVorschau(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereVorschau(aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): Observable<GeneratedFile> {
 
 
         const url = this.#url + '/' + aufgabensammlungID + '/vorschau/v1';
@@ -104,7 +104,7 @@ export class AufgabensammlungenHttpService {
 
     }
 
-    generiereKnobelkartei(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereKnobelkartei(aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): Observable<GeneratedFile> {
 
 
         const url = this.#url + '/' + aufgabensammlungID + '/knobelkartei/v1';
@@ -119,7 +119,7 @@ export class AufgabensammlungenHttpService {
 
     }
 
-    generiereArbeitsblattMitLoesungen(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generiereArbeitsblattMitLoesungen(aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): Observable<GeneratedFile> {
 
 
         const url = this.#url + '/' + aufgabensammlungID + '/arbeitsblatt/v1';
@@ -134,7 +134,7 @@ export class AufgabensammlungenHttpService {
 
     }
 
-    generiereLaTeX(aufgabensammlungID: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<{ data: Blob, fileName: string }> {
+    generiereLaTeX(aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): Observable<{ data: Blob, fileName: string }> {
 
         const url = this.#url + '/' + aufgabensammlungID + '/latex/v1';
         const headers = new HttpHeaders().set('Accept', 'application/octet-stream');

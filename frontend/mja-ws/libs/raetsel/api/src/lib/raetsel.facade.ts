@@ -3,18 +3,18 @@ import { Router } from '@angular/router';
 import { SelectItemsFacade } from '@mja-ws/core/api';
 import {
   DeskriptorUI,
-  FONT_NAME,
-  LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
-  OUTPUTFORMAT,
+  FontName,
+  LaTeXLayoutAntwortvorschlaege,
+  OutputFormat,
   PageDefinition,
   PaginationState,
   HerkunftRaetsel,
-  SCHRIFTGROESSE,
+  Schriftgroesse,
   SelectableItem,
   SelectItemsCompomentModel
 } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
-import { EditRaetselPayload, initialRaetselDetails, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { EditRaetselPayload, initialRaetselDetails, ModusSucheMitDeskriptoren, ModusVolltextsuche, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { deepClone, filterDefined } from '@mja-ws/shared/util';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -45,7 +45,7 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSEL_SELECTED({ schluessel }));
   }
 
-  generiereRaetselOutput(raetselID: string, outputFormat: OUTPUTFORMAT, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+  generiereRaetselOutput(raetselID: string, outputFormat: OutputFormat, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): void {
 
     switch (outputFormat) {
       case 'PNG': this.#store.dispatch(raetselActions.gENERATE_RAETSEL_PNG({ raetselID, font, schriftgroesse, layoutAntwortvorschlaege })); break;
@@ -64,7 +64,7 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
   }
 
-  changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string, modeFullTextSearch: MODUS_VOLLTEXTSUCHE, searchModeForDescriptors: MODUS_SUCHE_MIT_DESKRIPTOREN ): void {
+  changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string, modeFullTextSearch: ModusVolltextsuche, searchModeForDescriptors: ModusSucheMitDeskriptoren ): void {
 
     const deskriptoren: DeskriptorUI[] = [];
     selectedItems.forEach(item => {

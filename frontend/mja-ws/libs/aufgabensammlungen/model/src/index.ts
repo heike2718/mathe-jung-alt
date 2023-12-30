@@ -1,1 +1,1 @@
-export * from './lib/aufgabensammlungen-model';
+export * from './lib/aufgabensammlungen.model';

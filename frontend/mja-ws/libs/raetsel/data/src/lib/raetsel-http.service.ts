@@ -2,10 +2,10 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import {
     DeskriptorUI,
-    FONT_NAME,
+    FontName,
     GeneratedFile,
     GeneratedImages,
-    LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
+    LaTeXLayoutAntwortvorschlaege,
     PageDefinition,
     QUERY_PARAM_DESKRIPTOREN,
     QUERY_PARAM_LIMIT,
@@ -15,7 +15,7 @@ import {
     QUERY_PARAM_SORT_DIRECTION,
     QUERY_PARAM_SUCHSTRING,
     QUERY_PARAM_TYPE_DESKRIPTOREN,
-    SCHRIFTGROESSE
+    Schriftgroesse
 } from "@mja-ws/core/model";
 import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
 import { Observable } from "rxjs";
@@ -69,7 +69,7 @@ export class RaetselHttpService {
         return this.#http.get<RaetselDetails>(url, { headers: headers });
     }
 
-    generateRaetselPNGs(raetselId: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
+    generateRaetselPNGs(raetselId: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): Observable<GeneratedImages> {
 
         const url = this.#url + '/PNG/' + raetselId + '/v1';
 
@@ -82,7 +82,7 @@ export class RaetselHttpService {
         return this.#http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers, params: params });
     }
 
-    generateRaetselPDF(raetselId: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generateRaetselPDF(raetselId: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): Observable<GeneratedFile> {
 
         const url = this.#url + '/PDF/' + raetselId + '/v1';
 

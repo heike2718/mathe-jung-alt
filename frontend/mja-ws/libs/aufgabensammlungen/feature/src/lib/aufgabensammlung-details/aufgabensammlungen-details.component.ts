@@ -7,8 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
 import {
-  anzeigeAntwortvorschlaegeSelectInput, FONT_NAME, fontNamenSelectInput, GeneratedImages, LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
-  SCHRIFTGROESSE,
+  anzeigeAntwortvorschlaegeSelectInput, FontName, fontNamenSelectInput, GeneratedImages, LaTeXLayoutAntwortvorschlaege,
+  Schriftgroesse,
   schriftgroessenSelectInput,
   SelectGeneratorParametersUIModelAutoren,
   verwendungszweckeAutorenSelectInput
@@ -151,9 +151,9 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
       if (result && dialogData.selectedVerwendungszweck) {
 
-        let font: FONT_NAME = 'STANDARD';
-        let size: SCHRIFTGROESSE = 'NORMAL';
-        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        let font: FontName = 'STANDARD';
+        let size: Schriftgroesse = 'NORMAL';
+        let layout: LaTeXLayoutAntwortvorschlaege = 'NOOP';
 
         if (dialogData.selectedLayoutAntwortvorschlaege) {
           switch (dialogData.selectedLayoutAntwortvorschlaege) {

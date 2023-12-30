@@ -9,8 +9,8 @@ import { MatListModule } from '@angular/material/list';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MedienFacade } from '@mja-ws/medien/api';
-import { GuiMedienart, GuiMedienartenMap, Medienart, initialGuiMedienart } from '@mja-ws/core/model';
-import { MediumDto } from '@mja-ws/medien/model';
+import { Medienart } from '@mja-ws/core/model';
+import { MediumDto, GuiMedienartenMap, GuiMedienart, initialGuiMedienart } from '@mja-ws/medien/model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -131,7 +131,7 @@ export class MediumEditComponent implements OnInit, OnDestroy {
       titel: formValue['titel'].trim(),
       medienart: medienart === 'NOOP' ? undefined : medienart,
       kommentar: formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined,
-      autor: formValue['autor'] && formValue['autor'].trim().length > 0 ? formValue['autor'].trim() : undefined,     
+      autor: formValue['autor'] && formValue['autor'].trim().length > 0 ? formValue['autor'].trim() : undefined,
       url: formValue['url'] && formValue['url'].trim().length > 0 ? formValue['url'].trim() : '',
       schreibgeschuetzt: false,
       ownMedium: true

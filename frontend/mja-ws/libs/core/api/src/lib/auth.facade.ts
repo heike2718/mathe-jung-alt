@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { authActions, fromAuth } from '@mja-ws/core/data';
-import { AuthResult, BENUTZERART, isAdmin, User } from '@mja-ws/core/model';
+import { AuthResult, Benutzerart, isAdmin, User } from '@mja-ws/core/model';
 import { MessageService } from '@mja-ws/shared/messaging/api';
 import { filterDefined } from '@mja-ws/shared/util';
 import { Store } from '@ngrx/store';
@@ -21,7 +21,7 @@ export class AuthFacade {
       tap((session) => {
         if (!session.user.anonym) {
 
-          const benutzerart: BENUTZERART = session.user.benutzerart;
+          const benutzerart: Benutzerart = session.user.benutzerart;
 
           if (benutzerart === 'ADMIN' || benutzerart === 'AUTOR') {
             this.#coreFacade.loadAutor();

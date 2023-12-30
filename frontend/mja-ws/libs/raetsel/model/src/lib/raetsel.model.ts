@@ -1,8 +1,8 @@
 import { DeskriptorUI, GeneratedImages, HerkunftRaetsel, Herkunftstyp, Quellenart, initialHerkunftRaetsel } from "@mja-ws/core/model";
 import { EmbeddableImageInfo } from "@mja-ws/embeddable-images/model";
 
-export type MODUS_VOLLTEXTSUCHE = 'UNION' | 'INTERSECTION';
-export type MODUS_SUCHE_MIT_DESKRIPTOREN = 'LIKE' | 'NOT_LIKE';
+export type ModusVolltextsuche = 'UNION' | 'INTERSECTION';
+export type ModusSucheMitDeskriptoren = 'LIKE' | 'NOT_LIKE';
 
 export interface QuelleDto {
   readonly id: string;
@@ -29,8 +29,8 @@ export const initialQuelleDto: QuelleDto = {
 export interface RaetselSuchfilter {
   readonly suchstring: string;
   readonly deskriptoren: DeskriptorUI[];
-  readonly modeFullTextSearch: MODUS_VOLLTEXTSUCHE;
-  readonly searchModeForDescriptors: MODUS_SUCHE_MIT_DESKRIPTOREN;
+  readonly modeFullTextSearch: ModusVolltextsuche;
+  readonly searchModeForDescriptors: ModusSucheMitDeskriptoren;
 };
 
 export const initialRaetselSuchfilter: RaetselSuchfilter = {
@@ -139,8 +139,149 @@ export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {
 };
 
 export function isSuchfilterEmpty(suchfilter: RaetselSuchfilter): boolean {
-
   return suchfilter.suchstring === '' && suchfilter.deskriptoren.length === 0;
+};
 
+// ////////////////////////////////////////////////////////////////////////////////////
+//    helper classes for the mapping between Java enums and UI-Models
+// ////////////////////////////////////////////////////////////////////////////////////
 
-}
+export interface GuiQuellenart {
+  readonly id: Quellenart;
+  readonly label: string;
+};
+
+export const initialGuiQuellenart : GuiQuellenart = {
+  id: 'NOOP',
+  label: ''
+};
+export class GuiQuellenartenMap {
+
+  #quellenarten: Map<Quellenart, string> = new Map();
+  #quellenartenInvers: Map<string, Quellenart> = new Map();
+
+  constructor() {
+
+    this.#quellenarten.set('NOOP', '');
+    this.#quellenarten.set('BUCH', 'Buch');
+    this.#quellenarten.set('INTERNET', 'Internet');
+    this.#quellenarten.set('PERSON', 'Person');
+    this.#quellenarten.set('ZEITSCHRIFT', 'Zeitschrift');
+
+    this.#quellenartenInvers.set('', 'NOOP');
+    this.#quellenartenInvers.set('Buch', 'BUCH');
+    this.#quellenartenInvers.set('Internet', 'INTERNET');
+    this.#quellenartenInvers.set('Person', 'PERSON');
+    this.#quellenartenInvers.set('Zeitschrift', 'ZEITSCHRIFT');
+  }
+
+  public getQuellenartOfLabel(label: string): Quellenart {
+
+    const value: Quellenart | undefined = this.#quellenartenInvers.get(label);
+    return value ? value : 'NOOP';
+  }
+
+  public getGuiQuellenart(refTyp: Quellenart): GuiQuellenart {
+
+    if (this.#quellenarten.has(refTyp)) {
+
+      const label = this.#quellenarten.get(refTyp);
+
+      if (label) {
+        return { id: refTyp, label: label };
+      } else {
+        return initialGuiQuellenart;
+      }
+    }
+
+    return initialGuiQuellenart;
+  }
+
+  public toGuiArray(): GuiQuellenart[] {
+
+    const result: GuiQuellenart[] = [];
+    this.#quellenarten.forEach((l: string, key: Quellenart) => {
+      result.push({ id: key, label: l });
+    });
+
+    return result;
+  }
+
+  public getLabelsSorted(): string[] {
+
+    const result: string[] = [];
+
+    this.toGuiArray().forEach(element => result.push(element.label));
+    return result;
+  }
+
+};
+
+// ////////////////////////////
+
+export interface GuiHerkunfsttyp {
+  readonly id: Herkunftstyp;
+  readonly label: string;
+};
+
+export const initialGuiHerkunftstyp : GuiHerkunfsttyp = {
+  id: 'EIGENKREATION',
+  label: ''
+};
+export class GuiHerkunftstypenMap {
+
+  #herkunftstypen: Map<Herkunftstyp, string> = new Map();
+  #herkunftstypenInvers: Map<string, Herkunftstyp> = new Map();
+
+  constructor() {
+
+    this.#herkunftstypen.set('EIGENKREATION', 'Eigenkreation');
+    this.#herkunftstypen.set('ADAPTATION', 'Adaption');
+    this.#herkunftstypen.set('ZITAT', 'Zitat');
+
+    this.#herkunftstypenInvers.set('Eigenkreation', 'EIGENKREATION');
+    this.#herkunftstypenInvers.set('Adaption', 'ADAPTATION');
+    this.#herkunftstypenInvers.set('Zitat', 'ZITAT');
+  }
+
+  public getHerkunftstypOfLabel(label: string): Herkunftstyp {
+
+    const value: Herkunftstyp | undefined = this.#herkunftstypenInvers.get(label);
+    return value ? value : 'EIGENKREATION';
+  }
+
+  public getGuiQuellenart(refTyp: Herkunftstyp): GuiHerkunfsttyp {
+
+    if (this.#herkunftstypen.has(refTyp)) {
+
+      const label = this.#herkunftstypen.get(refTyp);
+
+      if (label) {
+        return { id: refTyp, label: label };
+      } else {
+        return initialGuiHerkunftstyp;
+      }
+    }
+
+    return initialGuiHerkunftstyp;
+  }
+
+  public toGuiArray(): GuiHerkunfsttyp[] {
+
+    const result: GuiHerkunfsttyp[] = [];
+    this.#herkunftstypen.forEach((l: string, key: Herkunftstyp) => {
+      result.push({ id: key, label: l });
+    });
+
+    return result;
+  }
+
+  public getLabelsSorted(): string[] {
+
+    const result: string[] = [];
+
+    this.toGuiArray().forEach(element => result.push(element.label));
+    return result;
+  }
+
+};
