@@ -24,6 +24,8 @@ export class AufgabensammlungenFacade {
     selectedAufgabensammlungselement$: Observable<Aufgabensammlungselement> = this.#store.select(fromAufgabensammlungen.selectedAufgabensammlungselement).pipe(filterDefined, deepClone);
     selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromAufgabensammlungen.selectedElementImages);
 
+    
+
     triggerSearch(aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): void {
         this.#store.dispatch(aufgabensammlungenActions.aUFGABENSAMMLUNGEN_SELECT_PAGE({ pageDefinition }));
         this.#store.dispatch(aufgabensammlungenActions.fIND_AUFGABENSAMMLUNGEN({ aufgabensammlungenSuchparameter, pageDefinition }));

@@ -11,10 +11,20 @@ import {
   HerkunftRaetsel,
   Schriftgroesse,
   SelectableItem,
-  SelectItemsCompomentModel
+  SelectItemsCompomentModel,
+  Quellenart,
+  Medienart
 } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
-import { EditRaetselPayload, initialRaetselDetails, ModusSucheMitDeskriptoren, ModusVolltextsuche, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { EditRaetselPayload,
+  initialRaetselDetails,
+  MediumQuelleDto,
+  ModusSucheMitDeskriptoren,
+  ModusVolltextsuche,
+  QuelleDto, 
+  Raetsel,
+  RaetselDetails,
+  RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { deepClone, filterDefined } from '@mja-ws/shared/util';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -32,6 +42,8 @@ export class RaetselFacade {
   raetselDetails$: Observable<RaetselDetails> = this.#store.select(fromRaetsel.raetselDetails).pipe(filterDefined, deepClone);
   suchfilter$: Observable<RaetselSuchfilter> = this.#store.select(fromRaetsel.suchfilter);
   generateLatexError$: Observable<boolean> = this.#store.select(fromRaetsel.generateLatexError);
+  quelle$: Observable<QuelleDto> = this.#store.select(fromRaetsel.quelle);
+  medienForQuelle$: Observable<MediumQuelleDto[]> = this.#store.select(fromRaetsel.medienForQuelle);
 
   #selectItemsFacade = inject(SelectItemsFacade);
 
@@ -80,6 +92,29 @@ export class RaetselFacade {
     };
 
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
+  }
+
+  quelleChanged(quelle: QuelleDto): void {
+    this.#store.dispatch(raetselActions.qUELLE_CHANGED({quelle}));
+  }
+
+  loadQuelle(quelleID: string): void {
+    this.#store.dispatch(raetselActions.lOAD_QUELLE_ZU_RAETSEL({quelleID}));
+  }
+
+  sucheMedienForQuelle(quellenart: Quellenart, titel: string): void {
+
+    let medienart: Medienart = 'NOOP';
+
+    switch (quellenart) {
+      case 'BUCH': medienart = 'BUCH'; break;
+      case 'INTERNET': medienart = 'INTERNET'; break;
+      case 'ZEITSCHRIFT': medienart = 'ZEITSCHRIFT'; break;
+    }
+
+    if (medienart !== 'NOOP') {
+      this.#store.dispatch(raetselActions.fIND_MEDIEN_WITH_MEDIENART_AND_TITEL({ medienart, titel }));
+    }
   }
 
   neueRaetselsuche(): void {

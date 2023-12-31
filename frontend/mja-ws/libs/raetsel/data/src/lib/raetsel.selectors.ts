@@ -34,12 +34,24 @@ const generateLatexError = createSelector(
     (state) => state.generateLatexError
 );
 
+const quelle = createSelector(
+    selectRaetselState,
+    (state) => state.quelle
+);
+
+const medienForQuelle = createSelector(
+    selectRaetselState,
+    (state) => state.medienForQuelle
+);
+
 export const fromRaetsel = {
     isLoaded,
     page,
     paginationState,
     raetselDetails,
     suchfilter,
-    generateLatexError
+    generateLatexError,
+    quelle,
+    medienForQuelle
 };
 

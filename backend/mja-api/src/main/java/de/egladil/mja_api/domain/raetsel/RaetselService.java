@@ -26,6 +26,8 @@ import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.quellen.QuellenService;
+import de.egladil.mja_api.domain.quellen.Quellenart;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
@@ -49,6 +51,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * RaetselService
@@ -246,8 +249,14 @@ public class RaetselService {
 	 */
 	public Raetsel raetselAendern(final EditRaetselPayload payload) {
 
-		// TODO semantische Validierung Herkunftstyp - Quellenart!!! EIGENKREATION nur mit PERSON, ADAPTION und ZITAT brauchen
-		// MEDIUM oder PERSON.
+		QuelleDto quelle = payload.getQuelle();
+
+		if (quelle.getQuellenart() != Quellenart.PERSON && quelle.getMediumUuid() == null) {
+
+			Response response = Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("mediumUuid ist erforderlich"))
+				.build();
+			throw new WebApplicationException(response);
+		}
 
 		String raetselId = payload.getId();
 		doUpdateRaetsel(payload);
@@ -405,7 +414,7 @@ public class RaetselService {
 		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
 		String text = nameStrategie.getText(ausDB);
 
-		if (raetsel.herkunft == RaetselHerkunftTyp.ADAPTATION) {
+		if (raetsel.herkunft == RaetselHerkunftTyp.ADAPTION) {
 
 			Optional<PersistenteQuelleReadonly> optQuelle = quellenRepository.findQuelleWithUserId(raetsel.owner);
 

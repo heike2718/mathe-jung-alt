@@ -1,0 +1,88 @@
+<h2>Quellenangaben</h2>
+
+<div class="form-group">
+    <div class="mb-2">
+        <mat-form-field>
+            <mat-label>Quellenart</mat-label>
+            <mat-select matNativeControl [(ngModel)]="selectedQuellenart"
+                (selectionChange)="onSelectQuellenart($event.value)">
+                <mat-option *ngFor="let quellenart of selectQuellenartInput" [value]="quellenart">
+                    {{quellenart}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+
+    <div *ngIf="showMediensuche" class="mb-2">
+        <mat-form-field>
+            <mat-label>Medien</mat-label>
+            <mat-select matNativeControl [(ngModel)]="selectedMedium"
+                (selectionChange)="onSelectMedium($event.value)">
+                <mat-option *ngFor="let medium of raetselFacade.medienForQuelle$ | async" [value]="medium">
+                    {{ medium.titel }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="showPerson" class="mb-2">
+        <mat-form-field>
+            <mat-label>Person(en)</mat-label>
+            <input matInput maxlength="100" [(ngModel)]="person" #personInput
+                (keyup)="onInputChange($event, 'personInput')">
+            <mat-hint align="end">{{personInput.value.length}}/100</mat-hint>
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="showJahr" class="mb-2">
+        <mat-form-field>
+            <mat-label>Jahr</mat-label>
+            <input matInput maxlength="4" [(ngModel)]="jahr" #jahrInput (keyup)="onInputChange($event, 'jahrInput')">
+            <mat-hint align="end">{{jahrInput.value.length}}/4</mat-hint>
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="showAusgabe" class="mb-2">
+        <mat-form-field>
+            <mat-label>Ausgabe</mat-label>
+            <input matInput maxlength="10" [(ngModel)]="ausgabe" #ausgabeInput
+                (keyup)="onInputChange($event, 'ausgabeInput')">
+            <mat-hint align="end">{{ausgabeInput.value.length}}/10</mat-hint>
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="showSeite" class="mb-2">
+        <mat-form-field>
+            <mat-label>Seite</mat-label>
+            <input matInput maxlength="4" [(ngModel)]="seite" #seiteInput (keyup)="onInputChange($event, 'seiteInput')">
+            <mat-hint align="end">{{seiteInput.value.length}}/4</mat-hint>
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="showKlasse" class="mb-2">
+        <mat-form-field>
+            <mat-label>Klasse</mat-label>
+            <input matInput maxlength="10" [(ngModel)]="klasse" #klasseInput
+                (keyup)="onInputChange($event, 'klasseInput')">
+            <mat-hint align="end">{{klasseInput.value.length}}/10</mat-hint>
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="showStufe" class="mb-2">
+        <mat-form-field>
+            <mat-label>Stufe</mat-label>
+            <input matInput maxlength="10" [(ngModel)]="stufe" #stufeInput
+                (keyup)="onInputChange($event, 'stufeInput')">
+            <mat-hint align="end">{{stufeInput.value.length}}/10</mat-hint>
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="showPfad" class="mb-2">
+        <mat-form-field>
+            <mat-label>Pfad</mat-label>
+            <input matInput maxlength="500" [(ngModel)]="pfad" #pfadInput (keyup)="onInputChange($event, 'pfadInput')">
+            <mat-hint align="end">{{pfadInput.value.length}}/500</mat-hint>
+        </mat-form-field>
+    </div>
+
+</div>

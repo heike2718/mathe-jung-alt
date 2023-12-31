@@ -8,15 +8,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { Antwortvorschlag, EditRaetselPayload, QuelleDto, RaetselDetails } from '@mja-ws/raetsel/model';
+import { Antwortvorschlag, EditRaetselPayload, GuiHerkunfsttyp, GuiHerkunftstypenMap, QuelleDto, RaetselDetails } from '@mja-ws/raetsel/model';
 import { combineLatest, Subscription } from 'rxjs';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LaTeXLayoutAntwortvorschlaege, OutputFormat, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, fontNamenSelectInput, FontName, schriftgroessenSelectInput, Schriftgroesse, HerkunftRaetsel } from '@mja-ws/core/model';
+import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LaTeXLayoutAntwortvorschlaege, OutputFormat, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, fontNamenSelectInput, FontName, schriftgroessenSelectInput, Schriftgroesse, HerkunftRaetsel, Herkunftstyp } from '@mja-ws/core/model';
 import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel, FileInfoComponent, FileInfoModel, ImageDialogComponent, ImageDialogModel } from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
@@ -25,6 +26,7 @@ import { AuthFacade } from '@mja-ws/core/api';
 import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, Textart } from '@mja-ws/embeddable-images/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
+import { QuelleComponent } from '../quelle/quelle.component';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -45,6 +47,7 @@ interface AntwortvorschlagFormValue {
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatSelectModule,
     MatSlideToggleModule,
     MatTooltipModule,
     CdkAccordionModule,
@@ -58,7 +61,8 @@ interface AntwortvorschlagFormValue {
     GeneratorParametersDialogAutorenComponent,
     ImageDialogComponent,
     SelectFileComponent,
-    FileInfoComponent
+    FileInfoComponent,
+    QuelleComponent
   ],
   templateUrl: './raetsel-editor.component.html',
   styleUrls: ['./raetsel-editor.component.scss'],
@@ -78,12 +82,17 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   #combinedSubscription = new Subscription();
 
   #selectedDeskriptoren: DeskriptorUI[] = [];
+  #selectedHerkunftstyp!: Herkunftstyp;
 
   isRoot = false;
+
+  #quelle!: QuelleDto;
+  showQuelleComponent = false;
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
   selectStatusInput: string[] = ['ERFASST', 'FREIGEGEBEN'];
+  selectHerkunftstypInput: string[] = new GuiHerkunftstypenMap().getLabelsSorted();
 
   selectItemsCompomentModel!: SelectItemsCompomentModel;
   dialog = inject(MatDialog);
@@ -136,7 +145,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.form = this.#fb.group({
       schluessel: ['', [Validators.pattern('^[0-9]{5}$')]],
       name: ['', [Validators.required, Validators.maxLength(100)]],
-      quelleId: ['', [Validators.required]],
+      herkunftstyp: ['', [Validators.required]],
+      herkunft: [{ value: '', disabled: true }],
       status: ['', [Validators.required]],
       frage: ['', [Validators.required]],
       loesung: [''],
@@ -150,24 +160,29 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.#combinedSubscription = combineLatest([this.raetselFacade.raetselDetails$,
+    this.raetselFacade.quelle$,
     this.#coreFacade.alleDeskriptoren$,
-    this.#authFacade.userIsRoot$])
+    this.#authFacade.userIsRoot$
+    ])
       .subscribe(([raetselDetails,
+        quelle,
         alleDeskriptoren,
         root
       ]) => {
 
+        this.#quelle = { ...quelle };
         this.#raetselDetails = { ...raetselDetails };
         this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
         this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails.deskriptoren, alleDeskriptoren);
+        this.onSelectHerkunftstyp(this.#raetselDetails.herkunft.herkunftstyp);
 
         this.embeddableImageInfosFrage = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
         this.embeddableImageInfosLoesung = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
 
-        this.isRoot = root;
-
         this.herkunftRaetsel = this.#raetselDetails.herkunft;
-          this.person = this.herkunftRaetsel.text;
+        this.#selectedHerkunftstyp = this.herkunftRaetsel.herkunftstyp;    
+        this.isRoot = root;
+        this.person = this.herkunftRaetsel.text;
 
         this.#initForm();
       });
@@ -264,6 +279,21 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     const mbeddableImageInfosOhneFile: EmbeddableImageInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
     return !this.form.valid || this.antwortvorschlaegeErrors() || mbeddableImageInfosOhneFile.length > 0;
+  }
+
+  onSelectHerkunftstyp($event: string): void {
+    console.log($event);
+    this.#selectedHerkunftstyp = new GuiHerkunftstypenMap().getHerkunftstypOfLabel($event);
+    if (this.#selectedHerkunftstyp === 'EIGENKREATION') {
+      this.showQuelleComponent = false;
+    } else {
+      this.showQuelleComponent = true;
+    }
+  }
+
+  onQuelleChanged(quelle: QuelleDto): void {
+    this.#quelle = quelle;
+    console.log(this.#quelle);
   }
 
   onChangeAnzahlAntwortvorschlaege($event: Event) {
@@ -373,20 +403,22 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
     const raetsel = this.#raetselDetails;
 
-    const theStatus = raetsel.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';
+    const theStatus = raetsel.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';    
 
+    const theGuiHerkunftstyp: GuiHerkunfsttyp = new GuiHerkunftstypenMap().getGuiHerkunftstyp(this.herkunftRaetsel.herkunftstyp);
+    
     this.form.get('schluessel')?.setValue(raetsel.schluessel);
     this.form.get('name')?.setValue(raetsel.name);
-    this.form.get('quelleId')?.setValue(this.herkunftRaetsel.id);
+    this.form.get('herkunftstyp')?.setValue(theGuiHerkunftstyp.label);
     this.form.get('status')?.setValue(theStatus);
     this.form.get('frage')?.setValue(raetsel.frage);
     this.form.get('loesung')?.setValue(raetsel.loesung);
     this.form.get('kommentar')?.setValue(raetsel.kommentar);
     this.form.get('anzahlAntwortvorschlaege')?.setValue(raetsel.antwortvorschlaege.length + '');
 
-    this.#addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
 
-    // this.form.controls['quelleId'].disable();
+
+    this.#addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
 
     if (!this.isRoot) {
       this.form.get('schluessel')?.disable();
@@ -398,6 +430,10 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       const av: Antwortvorschlag = raetsel.antwortvorschlaege[i];
 
       avGroup.setValue({ text: av.text, korrekt: av.korrekt });
+    }
+
+    if (this.herkunftRaetsel.herkunftstyp !== 'EIGENKREATION') {
+      this.showQuelleComponent = true;
     }
   }
 
@@ -422,9 +458,14 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     const formValue = this.form.value;
 
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
-    
+
     // Falls undefined, dann, weil das input-Field disabled ist.
     const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : this.#raetselDetails.schluessel;
+
+    const theNewHerkunft: HerkunftRaetsel = {
+      ...this.#raetselDetails.herkunft,
+      herkunftstyp: this.#selectedHerkunftstyp
+    };
 
     const raetselDetails: RaetselDetails = {
       ...this.#raetselDetails,
@@ -436,6 +477,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
       antwortvorschlaege: antwortvorschlaegeNeu,
       deskriptoren: this.#selectedDeskriptoren,
+      herkunft: theNewHerkunft,
       images: null
     };
 
@@ -465,17 +507,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #doSubmit(raetsel: RaetselDetails, latexHistorisieren: boolean) {
 
-    const quelle: QuelleDto = {
-      id: this.herkunftRaetsel.id,
-      person: this.person,
-      quellenart: this.herkunftRaetsel.quellenart,
-      ausgabe: undefined,
-      jahr: undefined,
-      klasse: undefined,
-      seite: undefined,
-      stufe: undefined
-    };
-
     const theSchluessel = raetsel.schluessel.length > 0 ? raetsel.schluessel : null;
 
     const editRaetselPayload: EditRaetselPayload = {
@@ -490,7 +521,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       loesung: raetsel.loesung,
       name: raetsel.name,
       schluessel: theSchluessel,
-      quelle: quelle
+      quelle: this.#quelle
     };
 
     this.raetselFacade.saveRaetsel(editRaetselPayload);

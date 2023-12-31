@@ -468,6 +468,12 @@ __Medium edit component__
 npx nx generate @nrwl/angular:component medium-edit --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-medium-edit --style=scss --standalone --no-interactive --dry-run
 ```
 
+__Quelle component__
+
+```
+npx nx generate @nrwl/angular:component quelle --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-quelle --style=scss --standalone --no-interactive --dry-run
+```
+
 
 
 ## FAQ

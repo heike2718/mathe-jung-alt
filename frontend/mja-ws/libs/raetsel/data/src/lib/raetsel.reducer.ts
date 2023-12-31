@@ -1,9 +1,8 @@
 import { GeneratedImages, initialPaginationState, PaginationState, SelectableItem } from "@mja-ws/core/model";
-import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter } from "@mja-ws/raetsel/model";
+import { initialQuelleDto, initialRaetselSuchfilter, QuelleDto, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
 import { swallowEmptyArgument } from "@mja-ws/shared/util";
-
 export interface RaetselState {
     readonly loaded: boolean;
     readonly page: Raetsel[];
@@ -13,6 +12,8 @@ export interface RaetselState {
     readonly raetselDetails: RaetselDetails | undefined;
     readonly raetselSuchfilter: RaetselSuchfilter;
     readonly generateLatexError: boolean;
+    readonly quelle: QuelleDto,
+    readonly medienForQuelle: MediumQuelleDto[];
 };
 
 const initialState: RaetselState = {
@@ -23,7 +24,9 @@ const initialState: RaetselState = {
     saveSuccessMessage: undefined,
     raetselDetails: undefined,
     raetselSuchfilter: initialRaetselSuchfilter,
-    generateLatexError: false
+    generateLatexError: false,
+    quelle: initialQuelleDto,
+    medienForQuelle: []
 };
 
 export const raetselFeature = createFeature({
@@ -94,8 +97,11 @@ export const raetselFeature = createFeature({
                 ...state,
                 raetselDetails: action.raetselDetails,
                 selectableDeskriptoren: selectableDeskriptoren,
-                generateLatexError: false
+                generateLatexError: false,                
             };
+        }),
+        on(raetselActions.qUELLE_CHANGED, (state, action) => {
+            return {...state, quelle: action.quelle};
         }),
         on(raetselActions.rESET_RAETSELSUCHFILTER, (state, action): RaetselState => {
             
@@ -121,6 +127,12 @@ export const raetselFeature = createFeature({
                 ...state,
                 generateLatexError: true
             }
+        }),
+        on(raetselActions.mEDIEN_FOR_QUELLE_FOUND, (state, action) => {
+            return {
+                ...state,
+                medienForQuelle: action.result
+            };
         }),
     )
 });

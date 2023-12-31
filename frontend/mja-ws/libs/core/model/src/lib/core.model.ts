@@ -1,8 +1,8 @@
 export type SortOrder = 'asc' | 'desc';
 export type Referenztyp = 'NOOP' | 'MINIKAENGURU' | 'SERIE';
-export type Quellenart = 'NOOP' | 'BUCH' | 'INTERNET' | 'PERSON' | 'ZEITSCHRIFT';
+export type Quellenart = 'BUCH' | 'INTERNET' | 'PERSON' | 'ZEITSCHRIFT';
 export type Medienart = 'NOOP' |  'BUCH' | 'INTERNET' | 'ZEITSCHRIFT';
-export type Herkunftstyp = 'EIGENKREATION' | 'ZITAT' | 'ADAPTATION';
+export type Herkunftstyp = 'EIGENKREATION' | 'ZITAT' | 'ADAPTION';
 
 export const QUERY_PARAM_SUCHSTRING = 'suchstring';
 export const QUERY_PARAM_DESKRIPTOREN = 'deskriptoren';
@@ -30,11 +30,7 @@ export type Schwierigkeitsgrad =
   'VORSCHULE' |
   'ZWEI';
 
-export interface MjaEntity {
-  id: string | number
-};
-
-export interface SelectableItem extends MjaEntity {
+export interface SelectableItem {
   readonly id: string | number;
   readonly name: string;
   readonly selected: boolean;

@@ -10,11 +10,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
+import de.egladil.mja_api.domain.medien.dto.MediumQuelleDto;
 import de.egladil.mja_api.domain.medien.impl.MedienPermissionDelegate;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.MediumDao;
@@ -31,6 +34,8 @@ import jakarta.ws.rs.core.Response.Status;
  */
 @ApplicationScoped
 public class MedienService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MedienService.class);
 
 	@Inject
 	AuthenticationContext authCtx;
@@ -53,11 +58,11 @@ public class MedienService {
 
 		permissionDelegate.checkReadPermission(ausDB);
 
-		return ausDB == null ? Optional.empty() : Optional.of(mapFromDB(ausDB));
+		return ausDB == null ? Optional.empty() : Optional.of(mapFullFromDB(ausDB));
 
 	}
 
-	MediumDto mapFromDB(final PersistentesMedium ausDB) {
+	MediumDto mapFullFromDB(final PersistentesMedium ausDB) {
 
 		MediumDto medium = new MediumDto()
 			.withAutor(ausDB.autor)
@@ -82,6 +87,16 @@ public class MedienService {
 
 			medium.setOwnMedium(true);
 		}
+
+		return medium;
+	}
+
+	MediumQuelleDto mapToMediumForQuelleFromDB(final PersistentesMedium ausDB) {
+
+		MediumQuelleDto medium = new MediumQuelleDto()
+			.withId(ausDB.uuid)
+			.withMedienart(ausDB.medienart)
+			.withTitel(ausDB.titel);
 
 		return medium;
 	}
@@ -216,18 +231,20 @@ public class MedienService {
 	}
 
 	/**
-	 * Innerhalb aller Medien wird nach allen Einträgen gesucht, deren Titel unabhängig von Groß- und
+	 * Innerhalb aller Medien der gegebenen Medienart wird nach allen Einträgen gesucht, deren Titel unabhängig von Groß- und
 	 * Kleinschreibung den suchstring einthält. Sortiert wird nach titel.
 	 *
+	 * @param  medienart
+	 *                    Medienart
 	 * @param  suchstring
 	 * @return            List
 	 */
-	public List<MediumDto> findMedienForUseInQuelle(final String suchstring) {
+	public List<MediumQuelleDto> findMedienForUseInQuelle(final Medienart medienart, final String suchstring) {
 
-		List<PersistentesMedium> trefferliste = mediumDao.findMedienWithTitelLikeSuchstring(suchstring);
-
-		return trefferliste.stream().map(this::mapFromDB).toList();
-
+		List<PersistentesMedium> trefferliste = mediumDao.findMedienWithTitelLikeSuchstring(medienart, suchstring);
+		LOGGER.info("medienart={}, suchstring={}, anzahl Treffer: {}", medienart, suchstring,
+			trefferliste.size());
+		return trefferliste.stream().map(this::mapToMediumForQuelleFromDB).toList();
 	}
 
 	MediensucheTrefferItem mapToTrefferitemFromDB(final PersistentesMedium ausDB) {

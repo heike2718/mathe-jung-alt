@@ -45,7 +45,7 @@ export interface GuiMedienart {
   readonly label: string;
 };
 
-export const initialGuiMedienart : GuiMedienart = {
+export const initialGuiMedienart: GuiMedienart = {
   id: 'NOOP',
   label: ''
 };

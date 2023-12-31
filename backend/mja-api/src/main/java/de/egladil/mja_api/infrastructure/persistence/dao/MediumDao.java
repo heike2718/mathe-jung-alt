@@ -6,6 +6,7 @@ package de.egladil.mja_api.infrastructure.persistence.dao;
 
 import java.util.List;
 
+import de.egladil.mja_api.domain.medien.Medienart;
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesMedium;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -154,19 +155,22 @@ public class MediumDao {
 	}
 
 	/**
-	 * Suche innerhalb aller Medien nach Medien, bei denen unabhängig von Groß- Kleinschreibung der titel den suchstring
-	 * enthält.
-	 * Sortiert wird nach titel.
+	 * Suche innerhalb aller Medien des owners nach Medien der gegebenen Medienart, bei denen unabhängig von Groß- Kleinschreibung
+	 * der titel den suchstring
+	 * enthält. Sortiert wird nach titel.
 	 *
+	 * @param  medienart
+	 *                    Medienart
 	 * @param  suchstring
 	 * @return            List
 	 */
-	public List<PersistentesMedium> findMedienWithTitelLikeSuchstring(final String suchstring) {
+	public List<PersistentesMedium> findMedienWithTitelLikeSuchstring(final Medienart medienart, final String suchstring) {
 
 		String theSuchstring = "%" + suchstring + "%";
 
-		return entityManager.createNamedQuery(PersistentesMedium.FIND_BY_TITEL, PersistentesMedium.class)
+		return entityManager.createNamedQuery(PersistentesMedium.FIND_BY_TITEL_AND_MEDIENART, PersistentesMedium.class)
 			.setParameter("suchstring", theSuchstring)
+			.setParameter("medienart", medienart)
 			.getResultList();
 	}
 }

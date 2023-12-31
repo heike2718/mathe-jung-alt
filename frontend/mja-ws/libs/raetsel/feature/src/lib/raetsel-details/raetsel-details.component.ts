@@ -83,10 +83,13 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
+   
+
     this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.pipe(
       tap((details: RaetselDetails) => {
         this.#raetselDetails = details;
         this.freigegeben = this.#raetselDetails.freigegeben;
+        this.raetselFacade.loadQuelle(details.herkunft.id);
       })
     ).subscribe();
 

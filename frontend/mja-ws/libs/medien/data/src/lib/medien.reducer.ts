@@ -60,14 +60,12 @@ export const medienFeature = createFeature({
             };
         }),
 
-
-
         on(medienActions.uNSELECT_MEDIUM, (state, action) => {
             swallowEmptyArgument(action, false);
             return {
                 ...state,
                 selectedMediumDetails: undefined
             };
-        }),
+        })
     )
 });

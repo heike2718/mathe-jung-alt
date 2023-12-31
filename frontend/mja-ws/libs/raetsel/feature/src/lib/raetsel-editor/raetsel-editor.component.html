@@ -47,15 +47,20 @@
                         </mat-form-field>
                     </div>
 
-                    <!-- Quelle -->
-                    <div class="mb-2 row">
+                    <!-- Herkunftstyp -->
+                    <div class="mb-2">
                         <mat-form-field>
-                            <mat-label>ID der Quelle</mat-label>
-                            <input matInput maxlength="36" formControlName="quelleId" #quelleIdInput [disabled]="true">
-                            <mat-hint>{{person}}</mat-hint>
-                            <mat-error *ngIf="raetselDataError('quelleId', 'required')">Quelle ist
-                                Pflicht</mat-error>
+                            <mat-label>Herkunftstyp</mat-label>
+                            <mat-hint>{{raetselDetails.herkunft.text}}</mat-hint>
+                            <mat-select matNativeControl formControlName="herkunftstyp" #herkunftstypInput (selectionChange)="onSelectHerkunftstyp($event.value)">
+                                <mat-option *ngFor="let herkunftstyp of selectHerkunftstypInput" [value]="herkunftstyp">
+                                    {{herkunftstyp}}</mat-option>
+                            </mat-select>
                         </mat-form-field>
+                    </div>
+
+                    <div *ngIf="showQuelleComponent" class="mb-2">
+                        <mja-quelle (quelleChanged)="onQuelleChanged($event)"></mja-quelle>
                     </div>
 
                     <!-- Status -->

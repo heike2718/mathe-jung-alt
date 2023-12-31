@@ -24,7 +24,7 @@ export class MedienEffects {
             switchMap((action) => this.#medienHttpService.findMedien(action.suchstring, action.pageDefinition)),
             map((result) => medienActions.mEDIEN_FOUND({ result }))
         );
-    });
+    });    
 
     editMedium$ = createEffect(() =>
         this.#actions.pipe(

@@ -20,12 +20,15 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.medien.MedienService;
+import de.egladil.mja_api.domain.medien.Medienart;
 import de.egladil.mja_api.domain.medien.Mediensuchmodus;
 import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
+import de.egladil.mja_api.domain.medien.dto.MediumQuelleDto;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DefaultValue;
@@ -172,6 +175,11 @@ public class MedienResource {
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.QUERY,
+			name = "medienart",
+			description = "Medienart. Sortiert wird nach titel.",
+			required = true),
+		@Parameter(
+			in = ParameterIn.QUERY,
 			name = "suchstring",
 			description = "Freitext zum Suchen. Es erfolgt eine Suche mit %titel%. Sortiert wird nach titel."),
 	})
@@ -180,7 +188,7 @@ public class MedienResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(type = SchemaType.ARRAY, implementation = MediumDto.class)))
+			schema = @Schema(type = SchemaType.ARRAY, implementation = MediumQuelleDto.class)))
 	@APIResponse(
 		name = "BadRequestResponse",
 		responseCode = "400",
@@ -196,13 +204,11 @@ public class MedienResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response findMedienForUseInQuelle(@QueryParam(value = "suchstring") @Pattern(
-			regexp = MjaRegexps.VALID_SUCHSTRING,
-			message = "ungültige Eingabe: mindestens 4 höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring) {
+	public Response findMedienForUseInQuelle(@QueryParam(value="medienart")@NotNull(message = "medienart ist erforderlich") final Medienart medienart, @QueryParam(value = "suchstring") @Pattern(
+			regexp = MjaRegexps.VALID_SUCHSTRING_MEDIEN,
+			message = "ungültige Eingabe: mindestens 0 höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring) {
 
-		List<MediumDto> result = medienService.findMedienForUseInQuelle(suchstring);
-
-
+		List<MediumQuelleDto> result = medienService.findMedienForUseInQuelle(medienart, suchstring);
 		return Response.ok(result).build();
 	}
 

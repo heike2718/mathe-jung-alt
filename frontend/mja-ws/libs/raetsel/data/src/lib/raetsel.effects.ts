@@ -192,4 +192,24 @@ export class RaetselEffects {
                 this.#messageService.info('Rätsel erfolgreich gespeichert');
             }),
         ), { dispatch: false });
+
+    loadQuelleZuRaetsel$ = createEffect(() => {
+        return this.#actions.pipe(
+            ofType(raetselActions.lOAD_QUELLE_ZU_RAETSEL),
+            switchMap((action) => this.#raetselHttpService.loadQuelle(action.quelleID)),
+            map((quelle) => raetselActions.qUELLE_CHANGED({ quelle }))
+        );
+    });
+
+    findMedienForQuelle$ = createEffect(() => {
+        return this.#actions.pipe(
+            ofType(raetselActions.fIND_MEDIEN_WITH_MEDIENART_AND_TITEL),
+            switchMap((action) => this.#raetselHttpService.findByTitel(action.medienart, action.titel)),
+            map((result) => raetselActions.mEDIEN_FOR_QUELLE_FOUND({ result }))
+        );
+    });
+
+
+
+
 }

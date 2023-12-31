@@ -24,6 +24,7 @@ import de.egladil.mja_api.domain.medien.Mediensuchmodus;
 import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
+import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.infrastructure.persistence.dao.MediumDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesMedium;
 import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
@@ -176,6 +177,7 @@ public class AdminMedienResourceTest {
 		MediumDto[] result = given()
 			.queryParam("suchmodus", suchmodusNoop)
 			.queryParam("suchstring", "arith")
+			.queryParam("quellenart", Quellenart.BUCH)
 			.when()
 			.get("titel/v1")
 			.then()
@@ -205,6 +207,7 @@ public class AdminMedienResourceTest {
 		MediumDto[] result = given()
 			.queryParam("suchmodus", suchmodusNoop)
 			.queryParam("suchstring", "Grundschul")
+			.queryParam("quellenart", Quellenart.INTERNET)
 			.when()
 			.get("titel/v1")
 			.then()

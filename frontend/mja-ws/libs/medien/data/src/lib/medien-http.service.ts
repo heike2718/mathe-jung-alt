@@ -41,18 +41,7 @@ export class MedienHttpService {
         const headers = new HttpHeaders().set('Accept', 'application/json');
         const url = this.#url + '/' + uuid + '/v1';
         return this.#http.get<MediumDto>(url, { headers });
-    }
-
-    findByTitel(titel: string): Observable<MediumDto[]> {
-
-        const headers = new HttpHeaders().set('Accept', 'application/json');
-        const url = this.#url + '/titel/v1';
-
-        const params = new HttpParams()
-            .set('suchstring', titel.trim());
-
-        return this.#http.get<MediumDto[]>(url, { headers, params });
-    }
+    }    
 
     loadDetails(medium: MediensucheTrefferItem): Observable<MediumDto> {
 

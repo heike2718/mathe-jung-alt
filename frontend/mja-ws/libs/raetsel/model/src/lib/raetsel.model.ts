@@ -1,18 +1,28 @@
-import { DeskriptorUI, GeneratedImages, HerkunftRaetsel, Herkunftstyp, Quellenart, initialHerkunftRaetsel } from "@mja-ws/core/model";
+import { DeskriptorUI, GeneratedImages, HerkunftRaetsel, Herkunftstyp, Medienart, Quellenart, initialHerkunftRaetsel } from "@mja-ws/core/model";
 import { EmbeddableImageInfo } from "@mja-ws/embeddable-images/model";
 
 export type ModusVolltextsuche = 'UNION' | 'INTERSECTION';
 export type ModusSucheMitDeskriptoren = 'LIKE' | 'NOT_LIKE';
 
+
+
+export interface MediumQuelleDto {
+  readonly id: string;
+  readonly medienart: Medienart | undefined;
+  readonly titel: string | undefined;
+}
+
 export interface QuelleDto {
   readonly id: string;
-  readonly quellenart: Quellenart;
-  readonly klasse: string | undefined;
-  readonly stufe: string | undefined;
-  readonly ausgabe: string | undefined;
-  readonly jahr: string | undefined;
-  readonly seite: string| undefined;
-  readonly person: string | undefined;
+  quellenart: Quellenart;
+  klasse: string | undefined;
+  stufe: string | undefined;
+  ausgabe: string | undefined;
+  jahr: string | undefined;
+  seite: string | undefined;
+  pfad: string | undefined;
+  person: string | undefined;
+  mediumUuid: string | undefined;
 };
 
 export const initialQuelleDto: QuelleDto = {
@@ -23,7 +33,9 @@ export const initialQuelleDto: QuelleDto = {
   klasse: undefined,
   person: undefined,
   seite: undefined,
-  stufe: undefined
+  stufe: undefined,
+  pfad: undefined,
+  mediumUuid: undefined
 };
 
 export interface RaetselSuchfilter {
@@ -151,8 +163,8 @@ export interface GuiQuellenart {
   readonly label: string;
 };
 
-export const initialGuiQuellenart : GuiQuellenart = {
-  id: 'NOOP',
+export const initialGuiQuellenart: GuiQuellenart = {
+  id: 'PERSON',
   label: ''
 };
 export class GuiQuellenartenMap {
@@ -162,13 +174,11 @@ export class GuiQuellenartenMap {
 
   constructor() {
 
-    this.#quellenarten.set('NOOP', '');
     this.#quellenarten.set('BUCH', 'Buch');
     this.#quellenarten.set('INTERNET', 'Internet');
     this.#quellenarten.set('PERSON', 'Person');
     this.#quellenarten.set('ZEITSCHRIFT', 'Zeitschrift');
 
-    this.#quellenartenInvers.set('', 'NOOP');
     this.#quellenartenInvers.set('Buch', 'BUCH');
     this.#quellenartenInvers.set('Internet', 'INTERNET');
     this.#quellenartenInvers.set('Person', 'PERSON');
@@ -178,7 +188,12 @@ export class GuiQuellenartenMap {
   public getQuellenartOfLabel(label: string): Quellenart {
 
     const value: Quellenart | undefined = this.#quellenartenInvers.get(label);
-    return value ? value : 'NOOP';
+    return value ? value : 'PERSON';
+  }
+
+  public getLabelOfQuellenart(quellenart: Quellenart): string {
+    const value = this.#quellenarten.get(quellenart);
+    return value ? value : '';
   }
 
   public getGuiQuellenart(refTyp: Quellenart): GuiQuellenart {
@@ -224,7 +239,7 @@ export interface GuiHerkunfsttyp {
   readonly label: string;
 };
 
-export const initialGuiHerkunftstyp : GuiHerkunfsttyp = {
+export const initialGuiHerkunftstyp: GuiHerkunfsttyp = {
   id: 'EIGENKREATION',
   label: ''
 };
@@ -236,11 +251,11 @@ export class GuiHerkunftstypenMap {
   constructor() {
 
     this.#herkunftstypen.set('EIGENKREATION', 'Eigenkreation');
-    this.#herkunftstypen.set('ADAPTATION', 'Adaption');
+    this.#herkunftstypen.set('ADAPTION', 'Adaption');
     this.#herkunftstypen.set('ZITAT', 'Zitat');
 
     this.#herkunftstypenInvers.set('Eigenkreation', 'EIGENKREATION');
-    this.#herkunftstypenInvers.set('Adaption', 'ADAPTATION');
+    this.#herkunftstypenInvers.set('Adaption', 'ADAPTION');
     this.#herkunftstypenInvers.set('Zitat', 'ZITAT');
   }
 
@@ -250,7 +265,7 @@ export class GuiHerkunftstypenMap {
     return value ? value : 'EIGENKREATION';
   }
 
-  public getGuiQuellenart(refTyp: Herkunftstyp): GuiHerkunfsttyp {
+  public getGuiHerkunftstyp(refTyp: Herkunftstyp): GuiHerkunfsttyp {
 
     if (this.#herkunftstypen.has(refTyp)) {
 

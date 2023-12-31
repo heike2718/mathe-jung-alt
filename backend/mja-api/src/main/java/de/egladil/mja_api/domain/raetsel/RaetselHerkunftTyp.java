@@ -11,7 +11,7 @@ public enum RaetselHerkunftTyp {
 
 	EIGENKREATION("selbst erstellt"),
 	ZITAT("zitiert"),
-	ADAPTATION("adaptiert");
+	ADAPTION("adaptiert");
 
 	private final String beschreibung;
 

@@ -214,7 +214,7 @@ public class AutorRaetselResourceTest {
 			.withKommentar("Ziffern versus Zahlen")
 			.withLoesung("$1234 - 98 = 1136")
 			.withName("Subtraktion und Ziffernverständnis")
-			.withHerkunftstyp(RaetselHerkunftTyp.ADAPTATION)
+			.withHerkunftstyp(RaetselHerkunftTyp.ADAPTION)
 			.withQuelle(quelle);
 
 		return editRaetselPayload;
