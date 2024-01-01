@@ -68,10 +68,10 @@ export class QuelleComponent implements OnInit, OnDestroy {
   private subscriptions: { [key: string]: Subscription } = {};
 
 
+  #quelleAdjusting = false;
   #quelleSubscription = new Subscription();
 
   #titelSearchSubject = new Subject<string>();
-  #mediumTitelSubscription: Subscription = new Subscription();
 
   ngOnInit(): void {
 
@@ -88,22 +88,15 @@ export class QuelleComponent implements OnInit, OnDestroy {
       (quelle) => {
         this.quelle = quelle;
         this.selectedQuellenart = new GuiQuellenartenMap().getLabelOfQuellenart(quelle.quellenart);
+        this.#quelleAdjusting = true;
         this.#handleQuellenartChanged();
+        this.#quelleAdjusting = false;
       }
     );
-
-    this.#mediumTitelSubscription = this.#titelSearchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      tap((term: string) => {
-        this.raetselFacade.sucheMedienForQuelle(this.quelle.quellenart, term);
-      })
-    ).subscribe();
   }
 
   ngOnDestroy(): void {
     this.#quelleSubscription.unsubscribe();
-    this.#mediumTitelSubscription.unsubscribe();
 
     for (const key in this.subscriptions) {
       const sub = this.subscriptions[key];
@@ -252,19 +245,21 @@ export class QuelleComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.#fireQuelleChanged();
+    if (!this.#quelleAdjusting) {
+      this.#fireQuelleChanged();
+    }
+
     if (quellenart !== 'PERSON') {
-      this.raetselFacade.sucheMedienForQuelle(quellenart, '');
+      this.raetselFacade.findMedienForQuelle(quellenart);
     }
   }
 
   #fireQuelleChanged(): void {
 
     const quellenart: Quellenart = new GuiQuellenartenMap().getQuellenartOfLabel(this.selectedQuellenart);
-
     const mediumUuid: string | undefined = this.selectedMedium ? this.selectedMedium.id : undefined;
 
-    const theQuelle: QuelleDto = {
+    this.quelle = {
       ...this.quelle,
       ausgabe: this.ausgabe,
       jahr: this.jahr,
@@ -277,6 +272,10 @@ export class QuelleComponent implements OnInit, OnDestroy {
       mediumUuid: mediumUuid
     };
 
-    this.quelleChanged.emit(theQuelle);
+    this.quelleChanged.emit(this.quelle);
+
+    // wird nur einmalig zum Laden der initialQuelle oder der Quelle aus dem Rätsel benötigt.
+    // Daher jetzt wieder unsubscriben, um Endlosschleifen zu vermeiden.
+    this.#quelleSubscription.unsubscribe();
   }
 }

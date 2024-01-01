@@ -203,8 +203,8 @@ export class RaetselEffects {
 
     findMedienForQuelle$ = createEffect(() => {
         return this.#actions.pipe(
-            ofType(raetselActions.fIND_MEDIEN_WITH_MEDIENART_AND_TITEL),
-            switchMap((action) => this.#raetselHttpService.findByTitel(action.medienart, action.titel)),
+            ofType(raetselActions.fIND_MEDIEN_FOR_QUELLE),
+            switchMap((action) => this.#raetselHttpService.findByMedienart(action.medienart)),
             map((result) => raetselActions.mEDIEN_FOR_QUELLE_FOUND({ result }))
         );
     });

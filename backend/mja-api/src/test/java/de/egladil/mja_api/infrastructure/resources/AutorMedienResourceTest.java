@@ -22,6 +22,7 @@ import de.egladil.mja_api.domain.medien.Mediensuchmodus;
 import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
+import de.egladil.mja_api.domain.medien.dto.MediumQuelleDto;
 import de.egladil.mja_api.profiles.FullDatabaseAutorTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -155,59 +156,73 @@ public class AutorMedienResourceTest {
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(3)
-	void should_findMedienForUseInQuelle_returnAllMedien() {
-
-		// Arrange
-		Mediensuchmodus suchmodusNoop = Mediensuchmodus.SEARCHSTRING;
+	void should_findMedienForUseInQuelle_work_whenInternet() {
 
 		// Act
-		MediumDto[] result = given()
-			.queryParam("suchmodus", suchmodusNoop)
-			.queryParam("suchstring", "Grundschul")
+		MediumQuelleDto[] result = given()
+			.queryParam("medienart", Medienart.INTERNET)
 			.when()
-			.get("titel/v1")
+			.get("quelle/v1")
 			.then()
 			.statusCode(200)
 			.and()
 			.contentType(ContentType.JSON)
 			.extract()
-			.as(MediumDto[].class);
+			.as(MediumQuelleDto[].class);
 
 		// Assert
-		assertEquals(1, result.length);
+		assertEquals(2, result.length);
 
-		MediumDto medium = result[0];
-		assertEquals("4f2e96ae-002c-4530-a873-a9cfc65814ff", medium.getId());
-		assertFalse(medium.isOwnMedium());
+		{
+
+			MediumQuelleDto medium = result[0];
+			assertEquals("4f2e96ae-002c-4530-a873-a9cfc65814ff", medium.getId());
+		}
+
+		{
+
+			MediumQuelleDto medium = result[1];
+			assertEquals("af9f75bd-9340-40d0-a3dd-0594b6ba0632", medium.getId());
+		}
 	}
 
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(4)
-	void should_findMedienForUseInQuelle_work() {
-
-		// Arrange
-		Mediensuchmodus suchmodusNoop = Mediensuchmodus.SEARCHSTRING;
+	void should_findMedienForUseInQuelle_work_whenBuch() {
 
 		// Act
-		MediumDto[] result = given()
-			.queryParam("suchmodus", suchmodusNoop)
-			.queryParam("suchstring", "arith")
+		MediumQuelleDto[] result = given()
+			.queryParam("medienart", Medienart.BUCH)
 			.when()
-			.get("titel/v1")
+			.get("quelle/v1")
 			.then()
 			.statusCode(200)
 			.and()
 			.contentType(ContentType.JSON)
 			.extract()
-			.as(MediumDto[].class);
+			.as(MediumQuelleDto[].class);
 
 		// Assert
-		assertEquals(1, result.length);
+		assertEquals(3, result.length);
 
-		MediumDto medium = result[0];
-		assertEquals("5f9bc03c-84f5-48ea-ab6c-ddc265f5d963", medium.getId());
-		assertTrue(medium.isOwnMedium());
+		{
+
+			MediumQuelleDto medium = result[0];
+			assertEquals("6cbf3a2e-0218-4123-8850-6a3d629dee0a", medium.getId());
+		}
+
+		{
+
+			MediumQuelleDto medium = result[1];
+			assertEquals("dbf00c75-6c97-4a1c-afe6-a42462a44e39", medium.getId());
+		}
+
+		{
+
+			MediumQuelleDto medium = result[2];
+			assertEquals("5f9bc03c-84f5-48ea-ab6c-ddc265f5d963", medium.getId());
+		}
 	}
 
 	@Test

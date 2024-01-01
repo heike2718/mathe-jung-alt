@@ -102,7 +102,7 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.lOAD_QUELLE_ZU_RAETSEL({quelleID}));
   }
 
-  sucheMedienForQuelle(quellenart: Quellenart, titel: string): void {
+  findMedienForQuelle(quellenart: Quellenart): void {
 
     let medienart: Medienart = 'NOOP';
 
@@ -113,7 +113,7 @@ export class RaetselFacade {
     }
 
     if (medienart !== 'NOOP') {
-      this.#store.dispatch(raetselActions.fIND_MEDIEN_WITH_MEDIENART_AND_TITEL({ medienart, titel }));
+      this.#store.dispatch(raetselActions.fIND_MEDIEN_FOR_QUELLE({ medienart }));
     }
   }
 

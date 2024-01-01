@@ -292,8 +292,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   onQuelleChanged(quelle: QuelleDto): void {
-    this.#quelle = quelle;
-    console.log(this.#quelle);
+    this.raetselFacade.quelleChanged(quelle);
   }
 
   onChangeAnzahlAntwortvorschlaege($event: Event) {

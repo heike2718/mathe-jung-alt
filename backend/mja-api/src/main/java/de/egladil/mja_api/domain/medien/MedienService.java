@@ -235,15 +235,13 @@ public class MedienService {
 	 * Kleinschreibung den suchstring einthält. Sortiert wird nach titel.
 	 *
 	 * @param  medienart
-	 *                    Medienart
-	 * @param  suchstring
-	 * @return            List
+	 *                   Medienart
+	 * @return           List
 	 */
-	public List<MediumQuelleDto> findMedienForUseInQuelle(final Medienart medienart, final String suchstring) {
+	public List<MediumQuelleDto> findMedienForUseInQuelle(final Medienart medienart) {
 
-		List<PersistentesMedium> trefferliste = mediumDao.findMedienWithTitelLikeSuchstring(medienart, suchstring);
-		LOGGER.info("medienart={}, suchstring={}, anzahl Treffer: {}", medienart, suchstring,
-			trefferliste.size());
+		List<PersistentesMedium> trefferliste = mediumDao.findWithMedienart(medienart);
+		LOGGER.debug("medienart={}, anzahl Treffer: {}", medienart, trefferliste.size());
 		return trefferliste.stream().map(this::mapToMediumForQuelleFromDB).toList();
 	}
 

@@ -168,20 +168,16 @@ public class MedienResource {
 	}
 
 	@GET
-	@Path("titel/v1")
+	@Path("quelle/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "findMedienForUseInQuelle", summary = "Gibt eine Liste alle MedienDto des users zurück, deren Titel den suchstring enthält. Ist gedacht, um für Rätsel eine Quelle zu erzeugen.")
+		operationId = "findMedienForUseInQuelle", summary = "Gibt eine Liste alle MedienDto der gegebenen Medienart zurück. Ist gedacht, um für Rätsel eine Quelle zu erzeugen.")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.QUERY,
 			name = "medienart",
 			description = "Medienart. Sortiert wird nach titel.",
-			required = true),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "suchstring",
-			description = "Freitext zum Suchen. Es erfolgt eine Suche mit %titel%. Sortiert wird nach titel."),
+			required = true)
 	})
 	@APIResponse(
 		name = "OKResponse",
@@ -204,11 +200,9 @@ public class MedienResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response findMedienForUseInQuelle(@QueryParam(value="medienart")@NotNull(message = "medienart ist erforderlich") final Medienart medienart, @QueryParam(value = "suchstring") @Pattern(
-			regexp = MjaRegexps.VALID_SUCHSTRING_MEDIEN,
-			message = "ungültige Eingabe: mindestens 0 höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring) {
+	public Response findMedienForUseInQuelle(@QueryParam(value="medienart")@NotNull(message = "medienart ist erforderlich") final Medienart medienart) {
 
-		List<MediumQuelleDto> result = medienService.findMedienForUseInQuelle(medienart, suchstring);
+		List<MediumQuelleDto> result = medienService.findMedienForUseInQuelle(medienart);
 		return Response.ok(result).build();
 	}
 

@@ -145,10 +145,10 @@ export class RaetselHttpService {
         return this.#http.put<RaetselDetails>(url, editRaetselPayload, { headers })
     }
 
-    findByTitel(medienart: Medienart, titel: string): Observable<MediumQuelleDto[]> {
+    findByMedienart(medienart: Medienart): Observable<MediumQuelleDto[]> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        const url = '/mja-api/medien/titel/v1';
+        const url = '/mja-api/medien/quelle/v1';
         let theMedienartStr: string = '';
         switch(medienart) {
             case 'BUCH': theMedienartStr = 'BUCH'; break;
@@ -157,7 +157,6 @@ export class RaetselHttpService {
         }
 
         const params = new HttpParams()
-            .set('suchstring', titel.trim())
             .set('medienart', theMedienartStr);
 
         return this.#http.get<MediumQuelleDto[]>(url, { headers, params });
@@ -179,5 +178,4 @@ export class RaetselHttpService {
         }
         return result;
     }
-
 }

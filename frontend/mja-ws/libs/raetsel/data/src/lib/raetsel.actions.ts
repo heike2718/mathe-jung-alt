@@ -6,7 +6,7 @@ export const raetselActions = createActionGroup({
     source: 'Raetsel',
     events: {
         'EMBEDDED_IMAGES_FOUND': props<{ files: GeneratedFile[] }>(),
-        'FIND_MEDIEN_WITH_MEDIENART_AND_TITEL': props<{ medienart: Medienart, titel: string }>(),
+        'FIND_MEDIEN_FOR_QUELLE': props<{ medienart: Medienart }>(),
         'MEDIEN_FOR_QUELLE_FOUND': props<{result: MediumQuelleDto[]}>(),
         'FIND_EMBEDDED_IMAGES': props<{ raetselID: string }>(),
         'FIND_LATEXLOGS': props<{ schluessel: string }>(),

@@ -54,8 +54,8 @@ import jakarta.validation.constraints.Size;
 		name = "PersistentesMedium.FIND_WITH_SUCHSTRING",
 		query = "select m from PersistentesMedium m where m.titel like :suchstring or m.kommentar like :suchstring order by  m.titel"),
 	@NamedQuery(
-		name = "PersistentesMedium.FIND_BY_TITEL_AND_MEDIENART",
-		query = "select m from PersistentesMedium m where m.medienart =:medienart and  m.titel like :suchstring order by  m.titel"),
+		name = "PersistentesMedium.FIND_WITH_MEDIENART",
+		query = "select m from PersistentesMedium m where m.medienart =:medienart order by m.titel"),
 })
 public class PersistentesMedium implements PersistenteMjaEntity {
 
@@ -71,7 +71,7 @@ public class PersistentesMedium implements PersistenteMjaEntity {
 
 	public static final String FIND_WITH_SUCHSTRING = "PersistentesMedium.FIND_WITH_SUCHSTRING";
 
-	public static final String FIND_BY_TITEL_AND_MEDIENART = "PersistentesMedium.FIND_BY_TITEL_AND_MEDIENART";
+	public static final String FIND_WITH_MEDIENART = "PersistentesMedium.FIND_WITH_MEDIENART";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")

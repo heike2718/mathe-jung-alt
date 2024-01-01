@@ -155,21 +155,15 @@ public class MediumDao {
 	}
 
 	/**
-	 * Suche innerhalb aller Medien des owners nach Medien der gegebenen Medienart, bei denen unabhängig von Groß- Kleinschreibung
-	 * der titel den suchstring
-	 * enthält. Sortiert wird nach titel.
+	 * Gibt alle Medien der gegebenen Medienart sortiert nach titel zurück.
 	 *
 	 * @param  medienart
-	 *                    Medienart
-	 * @param  suchstring
-	 * @return            List
+	 *                   Medienart
+	 * @return           List
 	 */
-	public List<PersistentesMedium> findMedienWithTitelLikeSuchstring(final Medienart medienart, final String suchstring) {
+	public List<PersistentesMedium> findWithMedienart(final Medienart medienart) {
 
-		String theSuchstring = "%" + suchstring + "%";
-
-		return entityManager.createNamedQuery(PersistentesMedium.FIND_BY_TITEL_AND_MEDIENART, PersistentesMedium.class)
-			.setParameter("suchstring", theSuchstring)
+		return entityManager.createNamedQuery(PersistentesMedium.FIND_WITH_MEDIENART, PersistentesMedium.class)
 			.setParameter("medienart", medienart)
 			.getResultList();
 	}
