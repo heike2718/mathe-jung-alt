@@ -86,7 +86,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   isRoot = false;
 
-  #quelle!: QuelleDto;
+  quelle!: QuelleDto;
   showQuelleComponent = false;
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
@@ -170,7 +170,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
         root
       ]) => {
 
-        this.#quelle = { ...quelle };
+        this.quelle = { ...quelle };
         this.#raetselDetails = { ...raetselDetails };
         this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
         this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails.deskriptoren, alleDeskriptoren);
@@ -520,7 +520,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       loesung: raetsel.loesung,
       name: raetsel.name,
       schluessel: theSchluessel,
-      quelle: this.#quelle
+      quelle: this.quelle
     };
 
     this.raetselFacade.saveRaetsel(editRaetselPayload);

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GuiQuellenartenMap, MediumQuelleDto, QuelleDto, initialQuelleDto } from '@mja-ws/raetsel/model';
 import { Subject, Subscription, combineLatest, debounceTime, distinctUntilChanged, tap } from 'rxjs';
@@ -36,6 +36,9 @@ export class QuelleComponent implements OnInit, OnDestroy {
 
   raetselFacade = inject(RaetselFacade);
 
+  @Input()
+  quelle!: QuelleDto;
+
   @Output()
   private quelleChanged: EventEmitter<QuelleDto> = new EventEmitter<QuelleDto>();
 
@@ -43,8 +46,6 @@ export class QuelleComponent implements OnInit, OnDestroy {
 
   selectQuellenartInput: string[] = new GuiQuellenartenMap().getLabelsSorted();
   selectedMedium: MediumQuelleDto | undefined;
-
-  quelle: QuelleDto = initialQuelleDto;
 
   selectedQuellenart: string = '';
   klasse = '';
@@ -67,10 +68,6 @@ export class QuelleComponent implements OnInit, OnDestroy {
   private inputSubjects: { [key: string]: Subject<string> } = {};
   private subscriptions: { [key: string]: Subscription } = {};
 
-
-  #quelleAdjusting = false;
-  #quelleSubscription = new Subscription();
-
   #titelSearchSubject = new Subject<string>();
 
   ngOnInit(): void {
@@ -83,21 +80,11 @@ export class QuelleComponent implements OnInit, OnDestroy {
     this.#initializeInputField('personInput');
     this.#initializeInputField('pfadInput');
 
-
-    this.#quelleSubscription = this.raetselFacade.quelle$.subscribe(
-      (quelle) => {
-        this.quelle = quelle;
-        this.selectedQuellenart = new GuiQuellenartenMap().getLabelOfQuellenart(quelle.quellenart);
-        this.#quelleAdjusting = true;
-        this.#handleQuellenartChanged();
-        this.#quelleAdjusting = false;
-      }
-    );
+    this.selectedQuellenart = new GuiQuellenartenMap().getLabelOfQuellenart(this.quelle.quellenart);
+    this.#handleQuellenartChanged();
   }
 
   ngOnDestroy(): void {
-    this.#quelleSubscription.unsubscribe();
-
     for (const key in this.subscriptions) {
       const sub = this.subscriptions[key];
       if (sub) {
@@ -245,9 +232,7 @@ export class QuelleComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (!this.#quelleAdjusting) {
-      this.#fireQuelleChanged();
-    }
+    this.#fireQuelleChanged();
 
     if (quellenart !== 'PERSON') {
       this.raetselFacade.findMedienForQuelle(quellenart);
@@ -273,9 +258,5 @@ export class QuelleComponent implements OnInit, OnDestroy {
     };
 
     this.quelleChanged.emit(this.quelle);
-
-    // wird nur einmalig zum Laden der initialQuelle oder der Quelle aus dem Rätsel benötigt.
-    // Daher jetzt wieder unsubscriben, um Endlosschleifen zu vermeiden.
-    this.#quelleSubscription.unsubscribe();
   }
 }

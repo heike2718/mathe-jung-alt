@@ -60,7 +60,7 @@
                     </div>
 
                     <div *ngIf="showQuelleComponent" class="mb-2">
-                        <mja-quelle (quelleChanged)="onQuelleChanged($event)"></mja-quelle>
+                        <mja-quelle [quelle]="quelle" (quelleChanged)="onQuelleChanged($event)"></mja-quelle>
                     </div>
 
                     <!-- Status -->
