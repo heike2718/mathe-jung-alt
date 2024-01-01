@@ -7,13 +7,13 @@ package de.egladil.mja_api.domain.quellen;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
-import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
-import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
@@ -39,14 +39,43 @@ public class QuellenService {
 	@Inject
 	QuellenRepository quellenRepository;
 
-	/**
-	 * Sucht die Quelle mit der gegebenen userId.
-	 *
-	 * @return Optional
-	 */
-	public Optional<HerkunftRaetsel> findQuelleForUser() {
+	public QuelleDto findOrCreateQuelleAutor() {
 
-		String userId = authCtx.getUser().getUuid();
+		AuthenticatedUser user = authCtx.getUser();
+		String userId = user.getUuid();
+
+		Optional<QuelleDto> optQuelle = this.findQuelleAutor();
+
+		if (optQuelle.isPresent()) {
+
+			return optQuelle.get();
+		}
+		QuelleDto datenQuelle = new QuelleDto();
+		datenQuelle.setPerson(user.getFullName());
+		datenQuelle.setQuellenart(Quellenart.PERSON);
+		datenQuelle.setId("neu");
+
+		PersistenteQuelle neueQuelleDB = this.quelleAnlegenOderAendern(RaetselHerkunftTyp.EIGENKREATION, datenQuelle);
+
+		LOGGER.info("Quelle für AUTOR {} angelegt: UUID={}", user.getFullName(), neueQuelleDB);
+
+		optQuelle = this.getQuelleWithId(neueQuelleDB.uuid);
+
+		if (optQuelle.isEmpty()) {
+
+			String message = "Da ist etwas fürchterlich schiefgegangen beim Anlegen einer Quelle für den gegebenen Autor "
+				+ StringUtils.abbreviate(userId, 11);
+			LOGGER.error(message);
+			throw new MjaRuntimeException(message);
+		}
+
+		return optQuelle.get();
+	}
+
+	Optional<QuelleDto> findQuelleAutor() {
+
+		AuthenticatedUser user = authCtx.getUser();
+		String userId = user.getUuid();
 		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithUserId(userId);
 
 		if (optAusDB.isEmpty()) {
@@ -54,13 +83,8 @@ public class QuellenService {
 			return Optional.empty();
 		}
 
-		PersistenteQuelleReadonly ausDB = optAusDB.get();
-		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
+		return Optional.of(mapFromDB(optAusDB.get()));
 
-		HerkunftRaetsel result = new HerkunftRaetsel().withId(ausDB.uuid).withText(nameStrategie.getText(ausDB))
-			.withQuellenart(ausDB.quellenart).withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION);
-
-		return Optional.of(result);
 	}
 
 	/**

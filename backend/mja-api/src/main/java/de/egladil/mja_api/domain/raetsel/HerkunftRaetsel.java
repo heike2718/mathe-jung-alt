@@ -15,6 +15,7 @@ import jakarta.validation.constraints.Pattern;
 /**
  * HerkunftRaetsel gibt Auskunft über die Herkunft des Rätsels.
  */
+@Deprecated
 public class HerkunftRaetsel {
 
 	@JsonProperty

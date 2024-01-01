@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quellen.Quellenart;
-import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
-import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -22,12 +21,12 @@ import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 /**
- * QuellenResourceTest
+ * AdminQuellenResourceTest
  */
 @QuarkusTest
 @TestHTTPEndpoint(QuellenResource.class)
 @TestProfile(FullDatabaseAdminTestProfile.class)
-public class QuellenResourceTest {
+public class AdminQuellenResourceTest {
 
 	@Test
 	void testFindQuelleByIdUnauthorized() throws Exception {
@@ -89,24 +88,27 @@ public class QuellenResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "testUser", roles = { "ADMIN" })
-	void testGetHerkunftEigenkreationen() {
+	@TestSecurity(user = "testUser", roles = { "AUTOR" })
+	void testGetAuthenticatedUserAsQuelle() {
 
-		HerkunftRaetsel result = given()
+		QuelleDto result = given()
 			.when()
-			.get("admin/v2")
+			.get("autor/v2")
 			.then()
 			.statusCode(200)
 			.and()
 			.contentType(ContentType.JSON)
 			.extract()
-			.as(HerkunftRaetsel.class);
+			.as(QuelleDto.class);
 
-		assertEquals("Heike Winkelvoß", result.getText());
+		assertEquals("Heike Winkelvoß", result.getPerson());
 		assertEquals(Quellenart.PERSON, result.getQuellenart());
-		assertNull(result.getMediumUuid());
 		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", result.getId());
-		assertEquals(RaetselHerkunftTyp.EIGENKREATION, result.getHerkunftstyp());
+		assertNull(result.getMediumUuid());
+		assertNull(result.getAusgabe());
+		assertNull(result.getJahr());
+		assertNull(result.getKlasse());
+		assertNull(result.getPfad());
 	}
 
 }

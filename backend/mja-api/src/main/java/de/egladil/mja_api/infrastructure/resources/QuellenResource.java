@@ -16,10 +16,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quellen.QuellenService;
-import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
-import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
-import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
@@ -52,18 +49,18 @@ public class QuellenResource {
 	AuthenticationContext authCtx;
 
 	@GET
-	@Path("admin/v2")
+	@Path("autor/v2")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
-		operationId = "getHerkunftEigenkreationen",
-		summary = "Angaben zum Autor eines als Eigenkreation erstellten Rätsels. Diese gehört zu dem Eintrag des angemeldeten Admins/Autors als Quelle.")
+		operationId = "getAuthenticatedUserAsQuelle",
+		summary = "Gibt den angemeldeten User als Quelle von Eigenkreationen zurück. Falls es noch keine Quelle gibt, wird eine angelegt.")
 	@APIResponse(
 		name = "OKResponse",
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = HerkunftRaetsel.class)))
+			schema = @Schema(implementation = QuelleDto.class)))
 	@APIResponse(
 		name = "Unauthorized",
 		description = "nicht authentifiziert",
@@ -84,21 +81,13 @@ public class QuellenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public HerkunftRaetsel getHerkunftEigenkreationen() {
+	public Response getAuthenticatedUserAsQuelle() {
 
 		this.delayService.pause();
 
-		Optional<HerkunftRaetsel> result = this.quellenService.findQuelleForUser();
+		QuelleDto result = this.quellenService.findOrCreateQuelleAutor();
 
-		if (result.isEmpty()) {
-
-			String person = authCtx.getUser().getFullName();
-
-			return new HerkunftRaetsel().withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION).withId("neu")
-				.withQuellenart(Quellenart.PERSON).withText(person);
-		}
-
-		return result.get();
+		return Response.ok(result).build();
 	}
 
 	@GET

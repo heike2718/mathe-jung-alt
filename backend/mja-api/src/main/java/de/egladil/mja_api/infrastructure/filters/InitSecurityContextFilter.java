@@ -51,6 +51,9 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 	@ConfigProperty(name = "mock.benutzerid")
 	String mockBenutzerid;
 
+	@ConfigProperty(name = "mock.benutzer.fullname")
+	String mockBenutzerFullName;
+
 	@Inject
 	ConfigService configService;
 
@@ -174,7 +177,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 		Benutzerart benutzerart = Benutzerart.valueOf(mockBenutzerart);
 
-		AuthenticatedUser user = new AuthenticatedUser(mockBenutzerid).withFullName("Heike Winkelvoß")
+		AuthenticatedUser user = new AuthenticatedUser(mockBenutzerid).withFullName(mockBenutzerFullName)
 			.withIdReference("bla").withRoles(new String[] { mockBenutzerart }).withBenutzerart(benutzerart);
 
 		authCtx.setUser(user);

@@ -6,6 +6,7 @@ package de.egladil.mja_api.domain.quellen.dto;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.validation.constraints.NotNull;
@@ -67,6 +68,14 @@ public class QuelleDto {
 		example = "8df348e0-2c26-4a25-a1ab-b4840b87ae01")
 	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "mediumUuid enthält ungültige Zeichen")
 	private String mediumUuid;
+
+	public static QuelleDto createNewForAutor(final AuthenticatedUser user) {
+
+		QuelleDto result = new QuelleDto();
+		result.quellenart = Quellenart.PERSON;
+		result.person = user.getFullName();
+		return result;
+	}
 
 	public String getId() {
 

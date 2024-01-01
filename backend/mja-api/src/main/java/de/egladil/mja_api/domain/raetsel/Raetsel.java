@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
@@ -62,6 +63,14 @@ public class Raetsel extends AbstractDomainEntity {
 	@JsonProperty
 	@Schema(description = "Herkunft für dieses Rätsel zum Anzeigen in den Details oder zum Ausdrucken im PDF.")
 	private HerkunftRaetsel herkunft;
+
+	@JsonProperty
+	@Schema(
+		description = "Daten einer Quelle für ein Raetsel. Nicht alle Attribute zusammen sind sinnvoll. Eingie schließen einander aus.")
+	private QuelleDto quelle;
+
+	@Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe", example = "alpha (6) 1976, S.32")
+	private String quellenangabe;
 
 	@JsonProperty
 	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
@@ -285,5 +294,25 @@ public class Raetsel extends AbstractDomainEntity {
 
 		this.freigegeben = freigegeben;
 		return this;
+	}
+
+	public QuelleDto getQuelle() {
+
+		return quelle;
+	}
+
+	public void setQuelle(final QuelleDto quelle) {
+
+		this.quelle = quelle;
+	}
+
+	public String getQuellenangabe() {
+
+		return quellenangabe;
+	}
+
+	public void setQuellenangabe(final String quellenangabe) {
+
+		this.quellenangabe = quellenangabe;
 	}
 }

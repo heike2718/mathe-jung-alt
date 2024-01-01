@@ -377,17 +377,28 @@ public class RaetselService {
 
 		result.setImages(raetselFileService.findImages(raetsel.filenameVorschauFrage, raetsel.filenameVorschauLoesung));
 
-		Optional<HerkunftRaetsel> optQuelle = getHerkunftRaetsel(raetsel.quelle, raetsel);
+		Optional<QuelleDto> optQuelle = quellenService.getQuelleWithId(raetsel.quelle);
 
 		if (optQuelle.isPresent()) {
 
-			result.setHerkunft(optQuelle.get());
+			result.setQuelle(optQuelle.get());
 		} else {
 
 			LOGGER.error("Datenfehler: Rätsel mit SCHLUESSEL={} - keinen Eintrag in QUELLEN mit UUID={} gefunden.",
 				raetsel.schluessel, raetsel.quelle);
 			throw new MjaRuntimeException("Datenfehler: es gibt keinen Eintrag in QUELLEN mit uuid=" + raetsel.quelle);
 		}
+
+		String quellenangabe = this.getQuellenangabe(id, raetsel);
+
+		if (quellenangabe == null) {
+
+			LOGGER.error("Datenfehler: Rätsel mit SCHLUESSEL={} - keinen Eintrag in VW_QUELLEN mit UUID={} gefunden.",
+				raetsel.schluessel, raetsel.quelle);
+			throw new MjaRuntimeException("Datenfehler: es gibt keinen Eintrag in QUELLEN mit uuid=" + raetsel.quelle);
+		}
+
+		result.setQuellenangabe(quellenangabe);
 
 		try {
 
@@ -402,13 +413,13 @@ public class RaetselService {
 		return result;
 	}
 
-	Optional<HerkunftRaetsel> getHerkunftRaetsel(final String quelleId, final PersistentesRaetsel raetsel) {
+	String getQuellenangabe(final String quelleId, final PersistentesRaetsel raetsel) {
 
 		PersistenteQuelleReadonly ausDB = this.quellenRepository.findQuelleReadonlyById(quelleId);
 
 		if (ausDB == null) {
 
-			return Optional.empty();
+			return null;
 		}
 
 		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
@@ -426,15 +437,7 @@ public class RaetselService {
 
 		}
 
-		// @formatter: off
-		HerkunftRaetsel result = new HerkunftRaetsel()
-			.withId(ausDB.uuid)
-			.withQuellenart(ausDB.quellenart)
-			.withText(text)
-			.withHerkunftstyp(raetsel.herkunft)
-			.withMediumUuid(ausDB.mediumUuid);
-		// @formatter: on
-		return Optional.of(result);
+		return text;
 	}
 
 	/**
