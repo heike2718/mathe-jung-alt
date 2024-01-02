@@ -30,6 +30,7 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.infrastructure.persistence.dao.MediumDao;
+import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesMedium;
 import de.egladil.mja_api.profiles.FullDatabaseAutorTestProfile;
@@ -53,6 +54,9 @@ public class AutorRaetselResourceTest {
 
 	@Inject
 	MediumDao mediumDao;
+
+	@Inject
+	QuellenRepository quellenRepo;
 
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
@@ -174,6 +178,28 @@ public class AutorRaetselResourceTest {
 		assertEquals(expectedHerkunftText, result.getQuellenangabe());
 		assertEquals(quelleId, geaenderteQuelle.getId());
 		assertEquals(mediumUuid, geaenderteQuelle.getMediumUuid());
+
+		// zurück auf EIGENKREATION
+		payloadAenderung.withId(raetselId).withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION);
+
+		result = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payloadAenderung)
+			.put("v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(Raetsel.class);
+
+		geaenderteQuelle = result.getQuelle();
+		assertEquals("73634aeb-f494-4864-ab30-26861a5bf2e0", geaenderteQuelle.getId());
+
+		assertNull(quellenRepo.findQuelleEntityWithId(quelleId));
+
 	}
 
 	private EditRaetselPayload createPayloadAnlegen(final String mediumId) {

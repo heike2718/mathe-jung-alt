@@ -54,7 +54,6 @@ import { AuthFacade } from '@mja-ws/core/api';
 import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, Textart } from '@mja-ws/embeddable-images/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
-import { QuelleComponent } from '../quelle/quelle.component';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -91,7 +90,6 @@ interface AntwortvorschlagFormValue {
     ImageDialogComponent,
     SelectFileComponent,
     FileInfoComponent,
-    QuelleComponent
   ],
   templateUrl: './raetsel-editor.component.html',
   styleUrls: ['./raetsel-editor.component.scss'],
@@ -109,7 +107,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   selectQuellenartInput: string[] = new GuiQuellenartenMap().getLabelsSorted();
   #selectedQuellenart: string = '';
 
-  // #selectedMedium: MediumQuelleDto | undefined;
   #mediumUuid: string | undefined;
 
   showMediensuche = false;
@@ -232,7 +229,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
         root
       ]) => {
 
-        // this.#autor = autor;
         this.quelle = { ...raetselDetails.quelle };
         this.quellenangabe = raetselDetails.quellenangabe;
         this.#mediumUuid = this.quelle.mediumUuid;
@@ -257,23 +253,10 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
         };
 
         this.#editRaetselPayloadCache = { ...this.#editRaetselPayload };
-
-        // this.#raetselDetails = { ...raetselDetails };
-
-        // this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
         this.#selectedDeskriptoren = raetselDetails.deskriptoren;
-
-        // this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails.deskriptoren, alleDeskriptoren);
         this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(raetselDetails.deskriptoren, alleDeskriptoren);
-        // this.onSelectHerkunftstyp(this.#raetselDetails.herkunftstyp);
-
-        // this.embeddableImageInfosFrage = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
-        // this.embeddableImageInfosLoesung = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
-
         this.embeddableImageInfosFrage = raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
         this.embeddableImageInfosLoesung = raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
-
-        // this.#selectedHerkunftstyp = this.#raetselDetails.herkunftstyp;
         this.selectedHerkunftstyp = raetselDetails.herkunftstyp;
         this.#selectedQuellenart = new GuiQuellenartenMap().getLabelOfQuellenart(this.quelle.quellenart);
 
@@ -417,15 +400,12 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   onSelectMedium($event: MediumQuelleDto): void {
-    // this.#selectedMedium = $event;
     this.#mediumUuid = $event.id;
-
   }
 
   onChangeAnzahlAntwortvorschlaege($event: Event) {
 
     const inputElement = $event.target as HTMLInputElement;
-
     const anz = parseInt(inputElement.value);
     this.#addOrRemoveAntowrtvorschlagFormParts(anz);
   }
@@ -539,8 +519,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.form.get('loesung')?.setValue(this.#editRaetselPayload.loesung);
     this.form.get('kommentar')?.setValue(this.#editRaetselPayload.kommentar);
     this.form.get('quellenart')?.setValue(theGuiQuellenart.label);
-
-    // this.form.get('medium')?.setValue(theGuiQuellenart);
 
     this.form.get('person')?.setValue(this.quelle.person ? this.quelle.person : '');
     this.form.get('jahr')?.setValue(this.quelle.jahr ? this.quelle.jahr : '');
