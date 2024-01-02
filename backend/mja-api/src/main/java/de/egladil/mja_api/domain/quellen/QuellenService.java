@@ -129,6 +129,19 @@ public class QuellenService {
 		return quelleAendern(quelle);
 	}
 
+	@Transactional
+	public void quelleLoeschen(final String quelleId) {
+
+		PersistenteQuelle quelle = this.quellenRepository.findQuelleEntityWithId(quelleId);
+
+		if (quelle != null) {
+
+			this.quellenRepository.deleteQuelle(quelle);
+
+			LOGGER.info("quelle gelöscht: UUID={}", quelleId);
+		}
+	}
+
 	/**
 	 * @param  quelle
 	 * @return
@@ -158,6 +171,8 @@ public class QuellenService {
 		quelleEntity.userId = quelle.getUserId();
 
 		PersistenteQuelle persisted = quellenRepository.save(quelleEntity);
+
+		LOGGER.info("quelle angelegt: {}", quelle.getDatenQuelle().toString());
 
 		return persisted;
 	}
@@ -192,6 +207,8 @@ public class QuellenService {
 		quelleEntity.pfad = datenQuelle.getPfad();
 
 		PersistenteQuelle persisted = quellenRepository.save(quelleEntity);
+
+		LOGGER.info("quelle geandert: {}", quelle.getDatenQuelle().toString());
 
 		return persisted;
 	}

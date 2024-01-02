@@ -3,31 +3,32 @@ import { coreAutorFeature } from './core-autor.reducer';
 
 const { selectMjaCoreAutorState } = coreAutorFeature;
 
-const herkunftEigenkreation = createSelector(
+const quelleEigenkreation = createSelector(
     selectMjaCoreAutorState,
-    (state) => state.herkunftEigenkreation
+    (state) => state.quelleEigenkreation
 );
 
-const isHerkunftEigenkreation = createSelector(
+const quelleEigenkreationLoaded = createSelector(
     selectMjaCoreAutorState,
-    (quelleAdminLoaded) => quelleAdminLoaded
+    (state) => state.quelleEigenkreationLoaded
 );
 
-const existsHerkunftEigenkreation = createSelector(
-    herkunftEigenkreation,
-    isHerkunftEigenkreation,
+const existsQuelleEigenkreation = createSelector(
+    quelleEigenkreation,
+    quelleEigenkreationLoaded,
     (q, l) => l && q.id !== 'NOOP'
 );
 
-const notExistsHerkunftEigenkreation = createSelector(
-    herkunftEigenkreation,
-    isHerkunftEigenkreation,
+const notExistsQuelleEigenkreation = createSelector(
+    quelleEigenkreation,
+    quelleEigenkreationLoaded,
     (q, l) => l && q.id === 'NOOP'
 );
 
 export const fromCoreAutor = {
-    herkunftEigenkreation,
-    existsHerkunftEigenkreation,
-    notExistsHerkunftEigenkreation
+    quelleEigenkreationLoaded,
+    quelleEigenkreation,
+    existsQuelleEigenkreation,
+    notExistsQuelleEigenkreation
 };
 

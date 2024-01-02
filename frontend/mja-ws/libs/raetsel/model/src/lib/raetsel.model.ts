@@ -1,4 +1,4 @@
-import { DeskriptorUI, GeneratedImages, HerkunftRaetsel, Herkunftstyp, Medienart, Quellenart, initialHerkunftRaetsel } from "@mja-ws/core/model";
+import { DeskriptorUI, GeneratedImages, Herkunftstyp, Medienart, QuelleDto, Quellenart, initialQuelleDto } from "@mja-ws/core/model";
 import { EmbeddableImageInfo } from "@mja-ws/embeddable-images/model";
 
 export type ModusVolltextsuche = 'UNION' | 'INTERSECTION';
@@ -12,31 +12,7 @@ export interface MediumQuelleDto {
   readonly titel: string | undefined;
 }
 
-export interface QuelleDto {
-  readonly id: string;
-  quellenart: Quellenart;
-  klasse: string | undefined;
-  stufe: string | undefined;
-  ausgabe: string | undefined;
-  jahr: string | undefined;
-  seite: string | undefined;
-  pfad: string | undefined;
-  person: string | undefined;
-  mediumUuid: string | undefined;
-};
 
-export const initialQuelleDto: QuelleDto = {
-  id: 'neu',
-  quellenart: 'PERSON',
-  ausgabe: undefined,
-  jahr: undefined,
-  klasse: undefined,
-  person: undefined,
-  seite: undefined,
-  stufe: undefined,
-  pfad: undefined,
-  mediumUuid: undefined
-};
 
 export interface RaetselSuchfilter {
   readonly suchstring: string;
@@ -85,12 +61,14 @@ export interface RaetselDetails {
   readonly frage: string;
   readonly loesung: string | undefined;
   readonly kommentar: string | undefined;
-  readonly herkunft: HerkunftRaetsel;
+  readonly herkunftstyp: Herkunftstyp;
   readonly antwortvorschlaege: Antwortvorschlag[];
   readonly deskriptoren: DeskriptorUI[];
   readonly images: GeneratedImages | null;
   readonly raetselPDF: Blob | null;
   readonly embeddableImageInfos: EmbeddableImageInfo[];
+  readonly quelle: QuelleDto,
+  readonly quellenangabe: string
 };
 
 /** 
@@ -105,12 +83,14 @@ export const initialRaetselDetails: RaetselDetails = {
   frage: '',
   loesung: '',
   kommentar: '',
-  herkunft: initialHerkunftRaetsel,
+  herkunftstyp: 'EIGENKREATION',
   antwortvorschlaege: [],
   deskriptoren: [],
   images: null,
   raetselPDF: null,
-  embeddableImageInfos: []
+  embeddableImageInfos: [],
+  quelle: initialQuelleDto,
+  quellenangabe: ''
 };
 
 export interface EditRaetselPayload {

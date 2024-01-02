@@ -33,7 +33,6 @@ import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
-import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
@@ -347,13 +346,13 @@ public class AdminRaetselResourceTest {
 		assertEquals("0ce69e0e-e1f8-4400-a2b9-61d3d6b0a82e", treffer.getId());
 		assertEquals("02606", treffer.getSchluessel());
 		assertTrue(treffer.isFreigegeben());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, treffer.getHerkunftstyp());
+		assertEquals("Heike Winkelvoß", treffer.getQuellenangabe());
 
-		HerkunftRaetsel herkunftRaetsel = treffer.getHerkunft();
-		assertEquals("Heike Winkelvoß", herkunftRaetsel.getText());
-		assertEquals(Quellenart.PERSON, herkunftRaetsel.getQuellenart());
-		assertEquals(RaetselHerkunftTyp.EIGENKREATION, herkunftRaetsel.getHerkunftstyp());
-		assertNull(herkunftRaetsel.getMediumUuid());
-		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", herkunftRaetsel.getId());
+		QuelleDto quelle = treffer.getQuelle();
+		assertEquals(Quellenart.PERSON, quelle.getQuellenart());
+		assertNull(quelle.getMediumUuid());
+		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
 		assertFalse(treffer.isSchreibgeschuetzt());
 	}
 
@@ -416,11 +415,15 @@ public class AdminRaetselResourceTest {
 
 				assertNotNull(raetsel.getId());
 
-				HerkunftRaetsel quelleUI = raetsel.getHerkunft();
-				assertEquals("Heike Winkelvoß", quelleUI.getText());
-				assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
-				assertNull(quelleUI.getMediumUuid());
-				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelleUI.getId());
+				assertTrue(raetsel.isFreigegeben());
+				assertEquals(RaetselHerkunftTyp.EIGENKREATION, raetsel.getHerkunftstyp());
+				assertEquals("Heike Winkelvoß", raetsel.getQuellenangabe());
+
+				QuelleDto quelle = raetsel.getQuelle();
+				assertEquals(Quellenart.PERSON, quelle.getQuellenart());
+				assertNull(quelle.getMediumUuid());
+				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
+				assertFalse(raetsel.isSchreibgeschuetzt());
 
 			} catch (Exception e) {
 
@@ -460,12 +463,17 @@ public class AdminRaetselResourceTest {
 					.as(Raetsel.class);
 
 				assertEquals("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866", raetsel.getId());
+				assertEquals("02622", raetsel.getSchluessel());
+				assertTrue(raetsel.isFreigegeben());
+				assertEquals(RaetselHerkunftTyp.EIGENKREATION, raetsel.getHerkunftstyp());
+				assertEquals("Heike Winkelvoß", raetsel.getQuellenangabe());
 
-				HerkunftRaetsel quelleUI = raetsel.getHerkunft();
-				assertEquals("Heike Winkelvoß", quelleUI.getText());
-				assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
-				assertNull(quelleUI.getMediumUuid());
-				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelleUI.getId());
+				QuelleDto quelle = raetsel.getQuelle();
+				assertEquals(Quellenart.PERSON, quelle.getQuellenart());
+				assertNull(quelle.getMediumUuid());
+				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
+				assertNull(quelle.getMediumUuid());
+				assertFalse(raetsel.isSchreibgeschuetzt());
 
 			} catch (Exception e) {
 
@@ -906,14 +914,16 @@ public class AdminRaetselResourceTest {
 					.as(Raetsel.class);
 
 				assertNotNull(raetsel.getId());
+				assertFalse(raetsel.isFreigegeben());
+				assertEquals(RaetselHerkunftTyp.ZITAT, raetsel.getHerkunftstyp());
+				assertEquals("David Hilbert", raetsel.getQuellenangabe());
 
-				HerkunftRaetsel herkunft = raetsel.getHerkunft();
-				assertEquals("David Hilbert", herkunft.getText());
-				assertEquals(Quellenart.PERSON, herkunft.getQuellenart());
-				assertNull(herkunft.getMediumUuid());
-				assertEquals(RaetselHerkunftTyp.ZITAT, herkunft.getHerkunftstyp());
-				assertFalse("8ef4d9b8-62a6-4643-8674-73ebaec52d98".equals(herkunft.getId()));
-
+				QuelleDto quelle = raetsel.getQuelle();
+				assertEquals(Quellenart.PERSON, quelle.getQuellenart());
+				assertNull(quelle.getMediumUuid());
+				assertFalse("8ef4d9b8-62a6-4643-8674-73ebaec52d98".equals(quelle.getId()));
+				assertNull(quelle.getMediumUuid());
+				assertFalse(raetsel.isSchreibgeschuetzt());
 			} catch (Exception e) {
 
 				fail(e.getMessage());
@@ -984,8 +994,10 @@ public class AdminRaetselResourceTest {
 		// Assert
 		assertEquals(raetselId, result.getId());
 
-		HerkunftRaetsel quelleUI = result.getHerkunft();
-		assertEquals("Frodo Beutlin aus Beutelsend", quelleUI.getText());
+		QuelleDto quelleUI = result.getQuelle();
+
+		assertEquals("Frodo Beutlin aus Beutelsend", result.getQuellenangabe());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, result.getHerkunftstyp());
 		assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
 		assertNull(quelleUI.getMediumUuid());
 		assertEquals(quelleId, quelleUI.getId());

@@ -77,6 +77,13 @@ public class QuelleDto {
 		return result;
 	}
 
+	@Override
+	public String toString() {
+
+		return "QuelleDto [quellenart=" + quellenart + ", klasse=" + klasse + ", stufe=" + stufe + ", ausgabe=" + ausgabe
+			+ ", jahr=" + jahr + ", seite=" + seite + ", person=" + person + ", pfad=" + pfad + ", mediumUuid=" + mediumUuid + "]";
+	}
+
 	public String getId() {
 
 		return id;

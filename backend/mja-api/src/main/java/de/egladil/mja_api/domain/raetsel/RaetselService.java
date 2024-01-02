@@ -163,7 +163,7 @@ public class RaetselService {
 		String raetselId = doInsertRaetsel(payload);
 		Raetsel result = this.getRaetselZuId(raetselId);
 
-		LOGGER.info("Raetsel angelegt: [raetsel={}, admin={}]", result.getId(),
+		LOGGER.info("Raetsel angelegt: [raetsel.schluessel={}, admin={}]", result.getSchluessel(),
 			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
 
 		return result;
@@ -202,10 +202,17 @@ public class RaetselService {
 		neuesRaetsel.filenameVorschauFrage = generateFilenameVorschau();
 		neuesRaetsel.filenameVorschauLoesung = generateFilenameVorschau();
 
-		PersistenteQuelle neueQuelle = quellenService.quelleAnlegenOderAendern(neuesRaetsel.herkunft, payload.getQuelle());
-		String quelleId = neueQuelle.uuid;
+		if (RaetselHerkunftTyp.EIGENKREATION != payload.getHerkunftstyp()) {
 
-		neuesRaetsel.quelle = quelleId;
+			payload.getQuelle().setId("neu");
+			PersistenteQuelle neueQuelle = quellenService.quelleAnlegenOderAendern(neuesRaetsel.herkunft, payload.getQuelle());
+			String quelleId = neueQuelle.uuid;
+			neuesRaetsel.quelle = quelleId;
+		} else {
+
+			QuelleDto quelleAutor = quellenService.findOrCreateQuelleAutor();
+			neuesRaetsel.quelle = quelleAutor.getId();
+		}
 
 		raetselDao.save(neuesRaetsel);
 
@@ -261,7 +268,7 @@ public class RaetselService {
 		String raetselId = payload.getId();
 		doUpdateRaetsel(payload);
 
-		LOGGER.info("Raetsel geaendert: [raetsel={}, admin={}]", raetselId,
+		LOGGER.info("Raetsel geaendert: [raetsel.schluessel={}, raetsel.uuid={}, admin={}]", payload.getSchluessel(), raetselId,
 			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
 
 		return getRaetselZuId(raetselId);
@@ -321,12 +328,43 @@ public class RaetselService {
 
 		}
 
-		PersistenteQuelle geaenderteQuelle = quellenService.quelleAnlegenOderAendern(persistentesRaetsel.herkunft,
-			payload.getQuelle());
+		String idQuelleZumLoeschen = null;
+
+		if (persistentesRaetsel.herkunft == RaetselHerkunftTyp.EIGENKREATION
+			&& payload.getHerkunftstyp() != RaetselHerkunftTyp.EIGENKREATION) {
+
+			LOGGER.debug("muss neue Quelle anlegen");
+			payload.getQuelle().setId("neu");
+			PersistenteQuelle neueQuelle = quellenService.quelleAnlegenOderAendern(payload.getHerkunftstyp(), payload.getQuelle());
+			persistentesRaetsel.quelle = neueQuelle.uuid;
+		}
+
+		if (persistentesRaetsel.herkunft != RaetselHerkunftTyp.EIGENKREATION
+			&& payload.getHerkunftstyp() == RaetselHerkunftTyp.EIGENKREATION) {
+
+			LOGGER.debug("muss Quelle mit ID=" + persistentesRaetsel.quelle + " löschen und Autor-Quelle zuordnen");
+			idQuelleZumLoeschen = payload.getQuelle().getId();
+			QuelleDto autor = quellenService.findOrCreateQuelleAutor();
+			persistentesRaetsel.quelle = autor.getId();
+
+		}
+
+		if (persistentesRaetsel.herkunft != RaetselHerkunftTyp.EIGENKREATION
+			&& payload.getHerkunftstyp() != RaetselHerkunftTyp.EIGENKREATION) {
+
+			LOGGER.debug("muss vorhandene Quelle überschreiben - also payload.quelle.id ignorieren");
+			payload.getQuelle().setId(persistentesRaetsel.quelle);
+			quellenService.quelleAnlegenOderAendern(payload.getHerkunftstyp(), payload.getQuelle());
+		}
 
 		mergeWithPayload(persistentesRaetsel, payload, userId);
-		persistentesRaetsel.quelle = geaenderteQuelle.uuid;
+
 		raetselDao.save(persistentesRaetsel);
+
+		if (idQuelleZumLoeschen != null) {
+
+			this.quellenService.quelleLoeschen(idQuelleZumLoeschen);
+		}
 
 		// Nur löschen, wenn persist klar ging!
 		deleteImagesFileService.checkAndDeleteUnusedFiles(fragenLoesungenVo);
@@ -351,7 +389,6 @@ public class RaetselService {
 	 * @param  id
 	 * @return    Raetsel oder null.
 	 */
-	@Transactional
 	public Raetsel getRaetselZuId(final String id) {
 
 		PersistentesRaetsel raetsel = raetselDao.findById(id);
@@ -379,17 +416,16 @@ public class RaetselService {
 
 		Optional<QuelleDto> optQuelle = quellenService.getQuelleWithId(raetsel.quelle);
 
-		if (optQuelle.isPresent()) {
-
-			result.setQuelle(optQuelle.get());
-		} else {
+		if (optQuelle.isEmpty()) {
 
 			LOGGER.error("Datenfehler: Rätsel mit SCHLUESSEL={} - keinen Eintrag in QUELLEN mit UUID={} gefunden.",
 				raetsel.schluessel, raetsel.quelle);
 			throw new MjaRuntimeException("Datenfehler: es gibt keinen Eintrag in QUELLEN mit uuid=" + raetsel.quelle);
 		}
 
-		String quellenangabe = this.getQuellenangabe(id, raetsel);
+		QuelleDto theQuelle = optQuelle.get();
+
+		String quellenangabe = this.getQuellenangabe(theQuelle.getId(), raetsel);
 
 		if (quellenangabe == null) {
 
@@ -398,6 +434,7 @@ public class RaetselService {
 			throw new MjaRuntimeException("Datenfehler: es gibt keinen Eintrag in QUELLEN mit uuid=" + raetsel.quelle);
 		}
 
+		result.setQuelle(theQuelle);
 		result.setQuellenangabe(quellenangabe);
 
 		try {
@@ -538,6 +575,7 @@ public class RaetselService {
 			.withLoesung(raetselDB.loesung)
 			.withSchluessel(raetselDB.schluessel)
 			.withFreigegeben(raetselDB.freigegeben)
+			.withHerkunftstyp(raetselDB.herkunft)
 			.withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
 			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);

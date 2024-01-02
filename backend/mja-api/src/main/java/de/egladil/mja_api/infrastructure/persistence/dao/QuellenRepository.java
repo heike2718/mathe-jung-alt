@@ -106,4 +106,9 @@ public class QuellenRepository {
 		}
 
 	}
+
+	public void deleteQuelle(final PersistenteQuelle quelle) {
+
+		entityManager.remove(quelle);
+	}
 }

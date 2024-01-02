@@ -60,9 +60,8 @@ public class Raetsel extends AbstractDomainEntity {
 	@JsonIgnore
 	private String filenameVorschauLoesung;
 
-	@JsonProperty
-	@Schema(description = "Herkunft für dieses Rätsel zum Anzeigen in den Details oder zum Ausdrucken im PDF.")
-	private HerkunftRaetsel herkunft;
+	@Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
+	private RaetselHerkunftTyp herkunftstyp;
 
 	@JsonProperty
 	@Schema(
@@ -253,16 +252,6 @@ public class Raetsel extends AbstractDomainEntity {
 		return schreibgeschuetzt;
 	}
 
-	public HerkunftRaetsel getHerkunft() {
-
-		return herkunft;
-	}
-
-	public void setHerkunft(final HerkunftRaetsel quelle) {
-
-		this.herkunft = quelle;
-	}
-
 	public String getFilenameVorschauFrage() {
 
 		return filenameVorschauFrage;
@@ -306,6 +295,12 @@ public class Raetsel extends AbstractDomainEntity {
 		this.quelle = quelle;
 	}
 
+	public Raetsel withQuelle(final QuelleDto quelle) {
+
+		this.quelle = quelle;
+		return this;
+	}
+
 	public String getQuellenangabe() {
 
 		return quellenangabe;
@@ -314,5 +309,22 @@ public class Raetsel extends AbstractDomainEntity {
 	public void setQuellenangabe(final String quellenangabe) {
 
 		this.quellenangabe = quellenangabe;
+	}
+
+	public Raetsel withQuellenangabe(final String quellenangabe) {
+
+		this.quellenangabe = quellenangabe;
+		return this;
+	}
+
+	public RaetselHerkunftTyp getHerkunftstyp() {
+
+		return herkunftstyp;
+	}
+
+	public Raetsel withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
+
+		this.herkunftstyp = herkunftstyp;
+		return this;
 	}
 }

@@ -1,64 +1,70 @@
 {
-	"id": "neu",
-	"schluessel": "generator-test",
-	"name": "2022 zählen",
-	"frage": "\\begin{center}{\\Large \\bf 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 0 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2}\\end{center}Wie oft steht hier 2022?",
-	"loesung": "alle 2022 umranden, dann zählen",
-	"kommentar": "Minikänguru 2022 Klasse 1",
-	"freigegeben": false,
-    "herkunft": {
-      "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
-      "quellenart": "PERSON",
-      "herkunftstyp": "EIGENKREATION",
-      "text": "Heike Winkelvoß",
-      "mediumUuid": null
+  "id": "neu",
+  "schluessel": "generator-test",
+  "name": "2022 zählen",
+  "frage": "\\begin{center}{\\Large \\bf 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2 0 0 2 2 2 0 2 2 2 0 2 2 2 0 2 2}\\end{center}Wie oft steht hier 2022?",
+  "loesung": "alle 2022 umranden, dann zählen",
+  "kommentar": "Minikänguru 2022 Klasse 1",
+  "freigegeben": false,
+  "herkunftstyp": "EIGENKREATION",
+  "quelle": {
+    "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+    "quellenart": "PERSON",
+    "klasse": null,
+    "stufe": null,
+    "ausgabe": null,
+    "jahr": null,
+    "seite": null,
+    "person": "Heike Winkelvoß",
+    "pfad": null,
+    "mediumUuid": null
+  },
+  "schreibgeschuetzt": false,
+  "antwortvorschlaege": [
+    {
+      "buchstabe": "A",
+      "text": "7 Mal",
+      "korrekt": false
     },
-	"schreibgeschuetzt": false,
-	"antwortvorschlaege": [
-		{
-			"buchstabe": "A",
-			"text": "7 Mal",
-			"korrekt": false
-		},
-		{
-			"buchstabe": "B",
-			"text": "9 Mal",
-			"korrekt": false
-		},
-		{
-			"buchstabe": "C",
-			"text": "8 Mal",
-			"korrekt": true
-		},
-		{
-			"buchstabe": "D",
-			"text": "10 Mal",
-			"korrekt": false
-		},
-		{
-			"buchstabe": "E",
-			"text": "11 Mal",
-			"korrekt": false
-		}
-	],
-	"deskriptoren": [
-      {
-        "id": 1,
-        "name": "Mathematik",
-        "admin": false
-      },
-      {
-        "id": 4,
-        "name": "Klasse 1",
-        "admin": false
-      },
-      {
-        "id": 14,
-        "name": "Logik",
-        "admin": false
-      }
-	],
-	"embeddableImageInfos": [],
-	"images": null,
-	"raetselPDF": null
+    {
+      "buchstabe": "B",
+      "text": "9 Mal",
+      "korrekt": false
+    },
+    {
+      "buchstabe": "C",
+      "text": "8 Mal",
+      "korrekt": true
+    },
+    {
+      "buchstabe": "D",
+      "text": "10 Mal",
+      "korrekt": false
+    },
+    {
+      "buchstabe": "E",
+      "text": "11 Mal",
+      "korrekt": false
+    }
+  ],
+  "deskriptoren": [
+    {
+      "id": 1,
+      "name": "Mathematik",
+      "admin": false
+    },
+    {
+      "id": 4,
+      "name": "Klasse 1",
+      "admin": false
+    },
+    {
+      "id": 14,
+      "name": "Logik",
+      "admin": false
+    }
+  ],
+  "embeddableImageInfos": [],
+  "images": null,
+  "raetselPDF": null
 }

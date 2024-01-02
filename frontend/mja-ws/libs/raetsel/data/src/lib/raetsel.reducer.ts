@@ -1,5 +1,5 @@
 import { GeneratedImages, initialPaginationState, PaginationState, SelectableItem } from "@mja-ws/core/model";
-import { initialQuelleDto, initialRaetselSuchfilter, QuelleDto, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto } from "@mja-ws/raetsel/model";
+import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto, initialRaetselDetails } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
 import { swallowEmptyArgument } from "@mja-ws/shared/util";
@@ -12,7 +12,6 @@ export interface RaetselState {
     readonly raetselDetails: RaetselDetails | undefined;
     readonly raetselSuchfilter: RaetselSuchfilter;
     readonly generateLatexError: boolean;
-    readonly quelle: QuelleDto,
     readonly medienForQuelle: MediumQuelleDto[];
 };
 
@@ -25,7 +24,6 @@ const initialState: RaetselState = {
     raetselDetails: undefined,
     raetselSuchfilter: initialRaetselSuchfilter,
     generateLatexError: false,
-    quelle: initialQuelleDto,
     medienForQuelle: []
 };
 
@@ -42,7 +40,7 @@ export const raetselFeature = createFeature({
         }),
         on(raetselActions.rAETSELSUCHFILTER_CHANGED, (state, action) => {
 
-            return {...state, raetselSuchfilter: action.suchfilter, generateLatexError: false};
+            return { ...state, raetselSuchfilter: action.suchfilter, generateLatexError: false };
         }),
         on(raetselActions.rAETSEL_FOUND, (state, action): RaetselState => {
             return {
@@ -72,6 +70,13 @@ export const raetselFeature = createFeature({
                 generateLatexError: false
             };
         }),
+
+        on(raetselActions.hERKUNFTSTYP_CHANGED, (state, action) => {
+
+            const raetselDetails: RaetselDetails = state.raetselDetails ? {...state.raetselDetails } : initialRaetselDetails;
+            return {...state, raetselDetails: {...raetselDetails, herkunftstyp: action.herkunftstyp, quellenangabe: action.quellenangabe} };
+        }),
+
         on(raetselActions.rAETSEL_PNG_GENERATED, (state, action) => {
 
             if (state.raetselDetails) {
@@ -97,14 +102,19 @@ export const raetselFeature = createFeature({
                 ...state,
                 raetselDetails: action.raetselDetails,
                 selectableDeskriptoren: selectableDeskriptoren,
-                generateLatexError: false,                
+                generateLatexError: false,
             };
         }),
         on(raetselActions.qUELLE_CHANGED, (state, action) => {
-            return {...state, quelle: action.quelle};
+            if (state.raetselDetails) {
+                return { ...state, raetselDetails: { ...state.raetselDetails, quelle: action.quelle, quellenangabe: action.quellenangabe } };
+            } else {
+                return { ...state, raetselDetails: { ...initialRaetselDetails, quelle: action.quelle, quellenangabe: action.quellenangabe } };
+            }
         }),
+
         on(raetselActions.rESET_RAETSELSUCHFILTER, (state, action): RaetselState => {
-            
+
             swallowEmptyArgument(action, false);
 
             return {
@@ -119,7 +129,7 @@ export const raetselFeature = createFeature({
         }),
         on(raetselActions.rAETSEL_CANCEL_SELECTION, (state, action) => {
             swallowEmptyArgument(action, false);
-            return {...state, raetselDetails: undefined, selectableDeskriptoren: [], generateLatexError: false}
+            return { ...state, raetselDetails: undefined, selectableDeskriptoren: [], generateLatexError: false }
         }),
         on(raetselActions.lATEX_ERRORS_DETECTED, (state, action) => {
             swallowEmptyArgument(action, false);

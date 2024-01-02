@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { coreDeskriptorenActions, coreAutorActions, fromCoreAutor, fromCoreDeskriptoren, ImagesHttpService, fromStatistik, coreStatistikActions } from "@mja-ws/core/data";
-import { DeskriptorUI, GeneratedImages, HerkunftRaetsel } from "@mja-ws/core/model";
+import { DeskriptorUI, GeneratedImages, QuelleDto } from "@mja-ws/core/model";
 import { Store } from "@ngrx/store";
 import { Observable, tap } from "rxjs";
 
@@ -15,10 +15,14 @@ export class CoreFacade {
     #imagesHttpService = inject(ImagesHttpService);
 
     #deskriptorenLoaded = false;
+    #autorLoaded = false;
 
-    existsHerkunftEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.existsHerkunftEigenkreation);
-    notExistsHerkunftEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.notExistsHerkunftEigenkreation);
-    herkunftEigenkreation$: Observable<HerkunftRaetsel> = this.#store.select(fromCoreAutor.herkunftEigenkreation);
+    existsQuelleEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.existsQuelleEigenkreation);
+    notExistsQuelleEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.notExistsQuelleEigenkreation);    
+
+    autorLoaded$: Observable<boolean> = this.#store.select(fromCoreAutor.quelleEigenkreationLoaded);
+        autor$: Observable<QuelleDto> = this.#store.select(fromCoreAutor.quelleEigenkreation);
+
 
     deskriptorenUILoaded$: Observable<boolean> = this.#store.select(fromCoreDeskriptoren.isDeskriptorenUILoaded);
     alleDeskriptoren$: Observable<DeskriptorUI[]> = this.#store.select(fromCoreDeskriptoren.deskriptotrenUI);
@@ -26,20 +30,31 @@ export class CoreFacade {
     anzahlPublicRaetselLoaded$: Observable<boolean> = this.#store.select(fromStatistik.isAnzahlPublicRaetselLoaded);
     anzahlPublicRaetsel$: Observable<number> = this.#store.select(fromStatistik.anzahlPublicRaetsel);
 
+
+
     constructor() {
         this.deskriptorenUILoaded$.pipe(
             tap((loaded: boolean) => this.#deskriptorenLoaded = loaded)
         ).subscribe();
+
+        this.autorLoaded$.pipe(
+            tap((loaded) => this.#autorLoaded = loaded)
+        ).subscribe();
+       
     }
 
     public loadAutor(): void {
 
+        if (this.#autorLoaded) {
+            return;
+        }
+
         this.#store.dispatch(coreAutorActions.lOAD_AUTOR());
     }
 
-    public replaceAutor(autor: HerkunftRaetsel): void {
+    public replaceAutor(quelle: QuelleDto): void {
 
-        this.#store.dispatch(coreAutorActions.cORE_AUTOR_REPLACED({quelle: autor}));
+        this.#store.dispatch(coreAutorActions.cORE_AUTOR_REPLACED({quelle: quelle}));
     }
 
     public loadDeskriptoren(): void {

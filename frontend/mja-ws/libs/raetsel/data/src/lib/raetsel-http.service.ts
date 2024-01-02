@@ -16,9 +16,10 @@ import {
     QUERY_PARAM_SORT_DIRECTION,
     QUERY_PARAM_SUCHSTRING,
     QUERY_PARAM_TYPE_DESKRIPTOREN,
+    QuelleDto,
     Schriftgroesse
 } from "@mja-ws/core/model";
-import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter, MediumQuelleDto, QuelleDto } from "@mja-ws/raetsel/model";
+import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter, MediumQuelleDto } from "@mja-ws/raetsel/model";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
@@ -68,14 +69,6 @@ export class RaetselHttpService {
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
         return this.#http.get<RaetselDetails>(url, { headers: headers });
-    }
-
-    loadQuelle(quelleID: string): Observable<QuelleDto> {
-
-        const url = '/mja-api/quellen/' + quelleID + '/v1';
-        const headers = new HttpHeaders().set('Accept', 'application/json');
-
-        return this.#http.get<QuelleDto>(url, { headers: headers });
     }
 
     generateRaetselPNGs(raetselId: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): Observable<GeneratedImages> {

@@ -51,17 +51,134 @@
                     <div class="mb-2">
                         <mat-form-field>
                             <mat-label>Herkunftstyp</mat-label>
-                            <mat-hint>{{raetselDetails.herkunft.text}}</mat-hint>
-                            <mat-select matNativeControl formControlName="herkunftstyp" #herkunftstypInput (selectionChange)="onSelectHerkunftstyp($event.value)">
+                            <mat-hint>{{quellenangabe}}</mat-hint>
+                            <mat-select matNativeControl formControlName="herkunftstyp" #herkunftstypInput
+                                (selectionChange)="onSelectHerkunftstyp($event.value)">
                                 <mat-option *ngFor="let herkunftstyp of selectHerkunftstypInput" [value]="herkunftstyp">
                                     {{herkunftstyp}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
 
-                    <div *ngIf="showQuelleComponent" class="mb-2">
+
+                    <div *ngIf="selectedHerkunftstyp !== 'EIGENKREATION'">
+                        <h2>Quellenangaben</h2>
+
+                        <!-- Quellenart -->
+                        <div class="mb-2">
+                            <mat-form-field>
+                                <mat-label>Quellenart</mat-label>
+                                <mat-hint>{{quelle.quellenart}}</mat-hint>
+                                <mat-select matNativeControl formControlName="quellenart" #quellenartInput
+                                    (selectionChange)="onSelectQuellenart($event.value)">
+                                    <mat-option *ngFor="let quellenart of selectQuellenartInput" [value]="quellenart">
+                                        {{quellenart}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Medium -->
+                        <div *ngIf="showMediensuche" class="mb-2">
+                            <mat-form-field>
+                                <mat-label>Medien</mat-label>
+                                <mat-select matNativeControl formControlName="medium" #mediumInput
+                                    (selectionChange)="onSelectMedium($event.value)">
+                                    <mat-option *ngFor="let medium of raetselFacade.medienForQuelle$ | async"
+                                        [value]="medium">
+                                        {{ medium.titel }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Person -->
+                        <div *ngIf="showPerson" class="mb-2">
+                            <mat-form-field>
+                                <mat-label>Person(en)</mat-label>
+                                <input matInput maxlength="100" formControlName="person" #personInput>
+                                <mat-hint align="end">{{personInput.value.length}}/100</mat-hint>
+                                <mat-error *ngIf="raetselDataError('person', 'maxLength')">maximal 100
+                                    Zeichen</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Jahr -->
+                        <div *ngIf="showJahr" class="mb-2">
+                            <mat-form-field>
+                                <mat-label>Jahr</mat-label>
+                                <input matInput maxlength="4" formControlName="jahr" #jahrInput>
+                                <mat-hint align="end">{{jahrInput.value.length}}/4</mat-hint>
+                                <mat-error *ngIf="raetselDataError('jahr', 'maxLength')">maximal 4
+                                    Zeichen</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Ausgabe -->
+                        <div *ngIf="showAusgabe" class="mb-2">
+                            <mat-form-field>
+                                <mat-label>Ausgabe</mat-label>
+                                <input matInput maxlength="10" formControlName="ausgabe" #ausgabeInput>
+                                <mat-hint align="end">{{ausgabeInput.value.length}}/10</mat-hint>
+                                <mat-error *ngIf="raetselDataError('ausgabe', 'maxLength')">maximal 10
+                                    Zeichen</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Seite -->
+                        <div *ngIf="showSeite" class="mb-2">
+                            <mat-form-field>
+                                <mat-label>Seite</mat-label>
+                                <input matInput maxlength="4" formControlName="seite" #seiteInput>
+                                <mat-hint align="end">{{seiteInput.value.length}}/4</mat-hint>
+                                <mat-error *ngIf="raetselDataError('seite', 'maxLength')">maximal 4
+                                    Zeichen</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Klasse -->
+                        <div *ngIf="showKlasse" class="mb-2">
+                            <mat-form-field>
+                                <mat-label>Klasse</mat-label>
+                                <input matInput maxlength="10" formControlName="klasse" #klasseInput>
+                                <mat-hint align="end">{{klasseInput.value.length}}/10</mat-hint>
+                                <mat-error *ngIf="raetselDataError('klasse', 'maxLength')">maximal 10
+                                    Zeichen</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Stufe -->
+                        <div *ngIf="showStufe" class="mb-2">
+                            <mat-form-field>
+                                <mat-label>Stufe</mat-label>
+                                <input matInput maxlength="10" formControlName="stufe" #stufeInput>
+                                <mat-hint align="end">{{stufeInput.value.length}}/10</mat-hint>
+                                <mat-error *ngIf="raetselDataError('stufe', 'maxLength')">maximal 10
+                                    Zeichen</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Pfad -->
+                        <div *ngIf="showPfad" class="mb-2">
+                            <mat-form-field>
+                                <mat-label>Pfad</mat-label>
+                                <input matInput maxlength="500" formControlName="pfad" #pfadInput>
+                                <mat-hint align="end">{{pfadInput.value.length}}/500</mat-hint>
+                                <mat-error *ngIf="raetselDataError('pfad', 'maxLength')">maximal 500
+                                    Zeichen</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+                    <!--
+                    <div *ngIf="raetselFacade.showQuelle$ | async" class="mb-2">
                         <mja-quelle [quelle]="quelle" (quelleChanged)="onQuelleChanged($event)"></mja-quelle>
                     </div>
+
+                    <div class="mb-2">
+                        <mja-quelle [quelle]="quelle" (quelleChanged)="onQuelleChanged($event)"></mja-quelle>
+                    </div>
+                -->
 
                     <!-- Status -->
                     <div class="mb-2">
@@ -88,7 +205,8 @@
                     </div>
 
 
-                    <mat-expansion-panel (opened)="panelGrafikenFrageOpen=true" (closed)="panelGrafikenFrageOpen = false">
+                    <mat-expansion-panel (opened)="panelGrafikenFrageOpen=true"
+                        (closed)="panelGrafikenFrageOpen = false">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 Grafiken Frage (eingebundene Bilder anzeigen oder neue hochladen)
@@ -113,8 +231,8 @@
                                 [actualFileSize]="fileInfoFrage.fileSize">
                             </mja-file-info>
 
-                            <button mat-raised-button color="primary" *ngIf="fileInfoFrage" title="gewählte Datei hochladen"
-                                (click)="uploadFile('FRAGE')">Datei hochladen</button>
+                            <button mat-raised-button color="primary" *ngIf="fileInfoFrage"
+                                title="gewählte Datei hochladen" (click)="uploadFile('FRAGE')">Datei hochladen</button>
                         </div>
                     </mat-expansion-panel>
 
@@ -157,8 +275,9 @@
                                 [actualFileSize]="fileInfoLoesung.fileSize">
                             </mja-file-info>
 
-                            <button mat-raised-button color="primary" *ngIf="fileInfoLoesung" title="gewählte Datei hochladen"
-                                (click)="uploadFile('LOESUNG')">Datei hochladen</button>
+                            <button mat-raised-button color="primary" *ngIf="fileInfoLoesung"
+                                title="gewählte Datei hochladen" (click)="uploadFile('LOESUNG')">Datei
+                                hochladen</button>
                         </div>
                     </mat-expansion-panel>
 

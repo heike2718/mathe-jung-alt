@@ -14,6 +14,32 @@ export const QUERY_PARAM_OFFSET = 'offset';
 export const QUERY_PARAM_SORT_DIRECTION = 'sortDirection';
 export const QUERY_PARAM_SORT_ATTRIBUTE = 'sortAttribute';
 
+export interface QuelleDto {
+  readonly id: string;
+  quellenart: Quellenart;
+  klasse: string | undefined;
+  stufe: string | undefined;
+  ausgabe: string | undefined;
+  jahr: string | undefined;
+  seite: string | undefined;
+  pfad: string | undefined;
+  person: string | undefined;
+  mediumUuid: string | undefined;
+};
+
+export const initialQuelleDto: QuelleDto = {
+  id: 'neu',
+  quellenart: 'PERSON',
+  ausgabe: undefined,
+  jahr: undefined,
+  klasse: undefined,
+  person: undefined,
+  seite: undefined,
+  stufe: undefined,
+  pfad: undefined,
+  mediumUuid: undefined
+};
+
 export type Schwierigkeitsgrad =
   'NOOP' |
   'ALLE' |
@@ -58,26 +84,6 @@ export interface UploadedFile {
 export const initialUploadedFile: UploadedFile = {
   name: '',
   dataBase64: ''
-};
-
-/** 
- * Neue Rätsel werden als EIGENKREATION mit der für den angemeldeten Admin oder Autor eingetragenen Quelle vom Typ PERSON angelegt.
- * Wenn eine andere Quelle zugewiesen wird, muss die Herkunft auf ZITAT oder ADAPTION geändert werden.
-*/
-export interface HerkunftRaetsel {
-  readonly id: string;
-  readonly quellenart: Quellenart;
-  readonly herkunftstyp: Herkunftstyp;
-  readonly text: string;
-  readonly mediumUuid: string | undefined;
-};
-
-export const initialHerkunftRaetsel: HerkunftRaetsel = {
-  id: 'neu',
-  quellenart: 'PERSON',
-  herkunftstyp: 'EIGENKREATION',
-  mediumUuid: undefined,
-  text: ''
 };
 
 export interface DeskriptorUI {

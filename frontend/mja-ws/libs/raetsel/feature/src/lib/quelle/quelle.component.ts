@@ -1,11 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GuiQuellenartenMap, MediumQuelleDto, QuelleDto, initialQuelleDto } from '@mja-ws/raetsel/model';
-import { Subject, Subscription, combineLatest, debounceTime, distinctUntilChanged, tap } from 'rxjs';
+import { GuiQuellenartenMap, MediumQuelleDto } from '@mja-ws/raetsel/model';
+import { Subject, Subscription, debounceTime, distinctUntilChanged, tap } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { Quellenart } from '@mja-ws/core/model';
+import { Quellenart, QuelleDto } from '@mja-ws/core/model';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { RaetselFacade } from '@mja-ws/raetsel/api';

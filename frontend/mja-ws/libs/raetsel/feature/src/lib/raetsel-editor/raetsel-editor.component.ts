@@ -14,11 +14,39 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { Antwortvorschlag, EditRaetselPayload, GuiHerkunfsttyp, GuiHerkunftstypenMap, QuelleDto, RaetselDetails } from '@mja-ws/raetsel/model';
-import { combineLatest, Subscription } from 'rxjs';
-import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { anzeigeAntwortvorschlaegeSelectInput, DeskriptorUI, LaTeXLayoutAntwortvorschlaege, OutputFormat, SelectableItem, SelectItemsCompomentModel, SelectGeneratorParametersUIModelAutoren, fontNamenSelectInput, FontName, schriftgroessenSelectInput, Schriftgroesse, HerkunftRaetsel, Herkunftstyp } from '@mja-ws/core/model';
-import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, SelectItemsComponent, GeneratorParametersDialogAutorenComponent, SelectFileComponent, SelectFileModel, FileInfoComponent, FileInfoModel, ImageDialogComponent, ImageDialogModel } from '@mja-ws/shared/components';
+import { Antwortvorschlag, EditRaetselPayload, GuiHerkunfsttyp, GuiHerkunftstypenMap, GuiQuellenart, GuiQuellenartenMap, MediumQuelleDto } from '@mja-ws/raetsel/model';
+import { combineLatest, Subject, Subscription } from 'rxjs';
+import { FormsModule, ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  anzeigeAntwortvorschlaegeSelectInput,
+  DeskriptorUI,
+  LaTeXLayoutAntwortvorschlaege,
+  OutputFormat,
+  SelectableItem,
+  SelectItemsCompomentModel,
+  SelectGeneratorParametersUIModelAutoren,
+  fontNamenSelectInput,
+  FontName,
+  schriftgroessenSelectInput,
+  Schriftgroesse,
+  Herkunftstyp,
+  QuelleDto,
+  Quellenart,
+  initialQuelleDto
+} from '@mja-ws/core/model';
+import {
+  FrageLoesungImagesComponent,
+  JaNeinDialogComponent,
+  JaNeinDialogData,
+  SelectItemsComponent,
+  GeneratorParametersDialogAutorenComponent,
+  SelectFileComponent,
+  SelectFileModel,
+  FileInfoComponent,
+  FileInfoModel,
+  ImageDialogComponent,
+  ImageDialogModel
+} from '@mja-ws/shared/components';
 import { CoreFacade } from '@mja-ws/core/api';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import { MatCardModule } from '@angular/material/card';
@@ -38,6 +66,7 @@ interface AntwortvorschlagFormValue {
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
@@ -69,10 +98,34 @@ interface AntwortvorschlagFormValue {
 })
 export class RaetselEditorComponent implements OnInit, OnDestroy {
 
+  // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //   QUELLENTEIL
+  // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  searchTerm = '';
+  quelle!: QuelleDto;
+  quellenangabe = '';
+
+  selectQuellenartInput: string[] = new GuiQuellenartenMap().getLabelsSorted();
+  #selectedQuellenart: string = '';
+
+  // #selectedMedium: MediumQuelleDto | undefined;
+  #mediumUuid: string | undefined;
+
+  showMediensuche = false;
+  showKlasse = false;
+  showStufe = false;
+  showAusgabe = false;
+  showJahr = false;
+  showSeite = false;
+  showPerson = false;
+  showPfad = false;
+
+
+
   #infoIncludegraphics = 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Textes und kann an eine beliebiege Stelle verschoben werden. Das width-Attribut kann geändert werden. Um eine eingebundene Grafik wieder zu löschen, bitte einfach den \\includegraphics-Befehl aus dem Text entfernen und speichern. Dabei wird auf dem Server auch die Grafikdatei gelöscht.';
   #warnungIncludegraphics = 'Bitte den \\includegraphics-Befehl nicht manuell einfügen. Er wird beim Hochladen einer neuen Datei vom System generiert. Der generierte Pfad darf nicht geändert werden!';
 
-  #raetselDetails!: RaetselDetails;
   #fb = inject(UntypedFormBuilder);
 
   #coreFacade = inject(CoreFacade);
@@ -82,12 +135,14 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   #combinedSubscription = new Subscription();
 
   #selectedDeskriptoren: DeskriptorUI[] = [];
-  #selectedHerkunftstyp!: Herkunftstyp;
+  selectedHerkunftstyp!: Herkunftstyp;
 
   isRoot = false;
+  #autor!: QuelleDto;
 
-  quelle!: QuelleDto;
-  showQuelleComponent = false;
+
+  #editRaetselPayload!: EditRaetselPayload;
+  #editRaetselPayloadCache!: EditRaetselPayload;
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
@@ -111,10 +166,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   panelGrafikenFrageOpen = false;
   panelGrafikenLoesungOpen = false;
-
-  herkunftRaetsel!: HerkunftRaetsel;
-  person!: string;
-
 
   selectFileFrageModel: SelectFileModel = {
     maxSizeBytes: 2097152,
@@ -140,6 +191,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   #embeddableImagesResponseSubscription: Subscription = new Subscription();
   #combinedEmbeddableImageVorschauSubscription: Subscription = new Subscription();
 
+
+
   constructor() {
 
     this.form = this.#fb.group({
@@ -152,7 +205,16 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       loesung: [''],
       kommentar: ['', [Validators.maxLength(200)]],
       anzahlAntwortvorschlaege: ['0'],
-      antwortvorschlaege: new UntypedFormArray([])
+      antwortvorschlaege: new UntypedFormArray([]),
+      quellenart: [''],
+      medium: [''],
+      person: ['', [Validators.maxLength(100)]],
+      jahr: ['', [Validators.maxLength(4)]],
+      ausgabe: ['', [Validators.maxLength(10)]],
+      seite: ['', [Validators.maxLength(4)]],
+      klasse: ['', [Validators.maxLength(10)]],
+      stufe: ['', [Validators.maxLength(10)]],
+      pfad: ['', [Validators.maxLength(500)]],
     });
 
   }
@@ -160,31 +222,66 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.#combinedSubscription = combineLatest([this.raetselFacade.raetselDetails$,
-    this.raetselFacade.quelle$,
     this.#coreFacade.alleDeskriptoren$,
+    this.#coreFacade.autor$,
     this.#authFacade.userIsRoot$
     ])
       .subscribe(([raetselDetails,
-        quelle,
         alleDeskriptoren,
+        autor,
         root
       ]) => {
 
-        this.quelle = { ...quelle };
-        this.#raetselDetails = { ...raetselDetails };
-        this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
-        this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails.deskriptoren, alleDeskriptoren);
-        this.onSelectHerkunftstyp(this.#raetselDetails.herkunft.herkunftstyp);
+        // this.#autor = autor;
+        this.quelle = { ...raetselDetails.quelle };
+        this.quellenangabe = raetselDetails.quellenangabe;
+        this.#mediumUuid = this.quelle.mediumUuid;
+        this.#autor = autor;
 
-        this.embeddableImageInfosFrage = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
-        this.embeddableImageInfosLoesung = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
+        const theSchluessel = raetselDetails.schluessel.length > 0 ? raetselDetails.schluessel : null;
+        this.selectedHerkunftstyp = raetselDetails.herkunftstyp;
 
-        this.herkunftRaetsel = this.#raetselDetails.herkunft;
-        this.#selectedHerkunftstyp = this.herkunftRaetsel.herkunftstyp;    
+        this.#editRaetselPayload = {
+          latexHistorisieren: false,
+          antwortvorschlaege: raetselDetails.antwortvorschlaege,
+          deskriptoren: raetselDetails.deskriptoren,
+          frage: raetselDetails.frage,
+          freigegeben: raetselDetails.freigegeben,
+          herkunftstyp: this.selectedHerkunftstyp,
+          id: raetselDetails.id,
+          kommentar: raetselDetails.kommentar,
+          loesung: raetselDetails.loesung,
+          name: raetselDetails.name,
+          schluessel: theSchluessel,
+          quelle: this.quelle
+        };
+
+        this.#editRaetselPayloadCache = { ...this.#editRaetselPayload };
+
+        // this.#raetselDetails = { ...raetselDetails };
+
+        // this.#selectedDeskriptoren = this.#raetselDetails.deskriptoren;
+        this.#selectedDeskriptoren = raetselDetails.deskriptoren;
+
+        // this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.#raetselDetails.deskriptoren, alleDeskriptoren);
+        this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(raetselDetails.deskriptoren, alleDeskriptoren);
+        // this.onSelectHerkunftstyp(this.#raetselDetails.herkunftstyp);
+
+        // this.embeddableImageInfosFrage = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
+        // this.embeddableImageInfosLoesung = this.#raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
+
+        this.embeddableImageInfosFrage = raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
+        this.embeddableImageInfosLoesung = raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
+
+        // this.#selectedHerkunftstyp = this.#raetselDetails.herkunftstyp;
+        this.selectedHerkunftstyp = raetselDetails.herkunftstyp;
+        this.#selectedQuellenart = new GuiQuellenartenMap().getLabelOfQuellenart(this.quelle.quellenart);
+
         this.isRoot = root;
-        this.person = this.herkunftRaetsel.text;
 
         this.#initForm();
+
+
       });
 
     this.#embeddableImagesResponseSubscription = this.#embeddableImagesFacade.embeddableImageResponse$.subscribe(
@@ -277,22 +374,52 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   generierenDiabled(): boolean {
 
-    const mbeddableImageInfosOhneFile: EmbeddableImageInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
-    return !this.form.valid || this.antwortvorschlaegeErrors() || mbeddableImageInfosOhneFile.length > 0;
+    const embeddableImageInfosFrageOhneFile: EmbeddableImageInfo[] = this.embeddableImageInfosFrage.filter(gi => !gi.existiert);
+    const embeddableImageInfosLoesungOhneFile: EmbeddableImageInfo[] = this.embeddableImageInfosLoesung.filter(gi => !gi.existiert);
+    return !this.form.valid || this.antwortvorschlaegeErrors() || embeddableImageInfosFrageOhneFile.length > 0 || embeddableImageInfosLoesungOhneFile.length > 0;
   }
 
   onSelectHerkunftstyp($event: string): void {
-    console.log($event);
-    this.#selectedHerkunftstyp = new GuiHerkunftstypenMap().getHerkunftstypOfLabel($event);
-    if (this.#selectedHerkunftstyp === 'EIGENKREATION') {
-      this.showQuelleComponent = false;
-    } else {
-      this.showQuelleComponent = true;
+    const theHerkunftstyp = $event as Herkunftstyp;
+    this.selectedHerkunftstyp = new GuiHerkunftstypenMap().getHerkunftstypOfLabel(theHerkunftstyp);
+    this.quellenangabe = 'Text wird nach dem Speichern aktualisiert';
+
+    if (theHerkunftstyp === 'EIGENKREATION') {
+      this.quelle = { ...initialQuelleDto, id: this.#autor.id };
+      if (this.#autor.person) {
+        this.quellenangabe = this.#autor.person;
+      }
+
+
+      this.showAusgabe = false;
+      this.showJahr = false;
+      this.showKlasse = false;
+      this.showPerson = false;
+      this.showPfad = false;
+      this.showSeite = false;
+      this.showStufe = false;
+      this.showMediensuche = false;
+
+      this.form.get('person')?.setValue('');
+      this.form.get('jahr')?.setValue('');
+      this.form.get('ausgabe')?.setValue('');
+      this.form.get('seite')?.setValue('');
+      this.form.get('klasse')?.setValue('');
+      this.form.get('stufe')?.setValue('');
+      this.form.get('pfad')?.setValue('');
     }
+
   }
 
-  onQuelleChanged(quelle: QuelleDto): void {
-    this.raetselFacade.quelleChanged(quelle);
+  onSelectQuellenart($event: string): void {
+    this.#selectedQuellenart = $event;
+    this.#handleQuellenartChanged();
+  }
+
+  onSelectMedium($event: MediumQuelleDto): void {
+    // this.#selectedMedium = $event;
+    this.#mediumUuid = $event.id;
+
   }
 
   onChangeAnzahlAntwortvorschlaege($event: Event) {
@@ -317,8 +444,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
-    if (this.#raetselDetails && this.#raetselDetails.id !== 'neu') {
-      this.raetselFacade.selectRaetsel(this.#raetselDetails.schluessel);
+    if (this.#editRaetselPayload.id !== 'neu' && this.#editRaetselPayload.schluessel) {
+      this.raetselFacade.selectRaetsel(this.#editRaetselPayload.schluessel);
     } else {
       this.raetselFacade.cancelSelection();
     }
@@ -333,7 +460,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.#openPrintDialog(outputformat);
   }
 
-  openHistorieLaTeXSpeichernDialog(raetsel: RaetselDetails): void {
+  openHistorieLaTeXSpeichernDialog(): void {
 
     const dialogData: JaNeinDialogData = {
       frage: 'Soll Historie gespeichert werden?',
@@ -347,26 +474,25 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.#doSubmit(raetsel, result);
+      this.#doSubmit(result);
     });
   }
 
   submit() {
 
-    const raetsel: RaetselDetails = this.#readFormValues();
-
-    const laTeXChanged = this.#latexChanged(raetsel);
+    const laTeXChanged = this.#latexChanged();
+    this.#readFormValues()
 
     if (laTeXChanged) {
-      this.openHistorieLaTeXSpeichernDialog(raetsel);
+      this.openHistorieLaTeXSpeichernDialog();
     } else {
-      this.#doSubmit(raetsel, false);
+      this.#doSubmit(false);
     }
   }
 
   downloadLatexLogs(): void {
-    if (this.#raetselDetails && this.#raetselDetails.schluessel) {
-      this.raetselFacade.downloadLatexLogs(this.#raetselDetails.schluessel)
+    if (this.#editRaetselPayload.schluessel) {
+      this.raetselFacade.downloadLatexLogs(this.#editRaetselPayload.schluessel)
     }
   }
 
@@ -385,7 +511,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
 
     const context: EmbeddableImageContext = {
-      raetselId: this.#raetselDetails.id,
+      raetselId: this.#editRaetselPayload.id,
       textart: textart
     };
 
@@ -400,39 +526,153 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #initForm() {
 
-    const raetsel = this.#raetselDetails;
+    const theStatus = this.#editRaetselPayload.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';
 
-    const theStatus = raetsel.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';    
+    const theGuiHerkunftstyp: GuiHerkunfsttyp = new GuiHerkunftstypenMap().getGuiHerkunftstyp(this.#editRaetselPayload.herkunftstyp);
+    const theGuiQuellenart: GuiQuellenart = new GuiQuellenartenMap().getGuiQuellenart(this.quelle.quellenart);
 
-    const theGuiHerkunftstyp: GuiHerkunfsttyp = new GuiHerkunftstypenMap().getGuiHerkunftstyp(this.herkunftRaetsel.herkunftstyp);
-    
-    this.form.get('schluessel')?.setValue(raetsel.schluessel);
-    this.form.get('name')?.setValue(raetsel.name);
+    this.form.get('schluessel')?.setValue(this.#editRaetselPayload.schluessel);
+    this.form.get('name')?.setValue(this.#editRaetselPayload.name);
     this.form.get('herkunftstyp')?.setValue(theGuiHerkunftstyp.label);
     this.form.get('status')?.setValue(theStatus);
-    this.form.get('frage')?.setValue(raetsel.frage);
-    this.form.get('loesung')?.setValue(raetsel.loesung);
-    this.form.get('kommentar')?.setValue(raetsel.kommentar);
-    this.form.get('anzahlAntwortvorschlaege')?.setValue(raetsel.antwortvorschlaege.length + '');
+    this.form.get('frage')?.setValue(this.#editRaetselPayload.frage);
+    this.form.get('loesung')?.setValue(this.#editRaetselPayload.loesung);
+    this.form.get('kommentar')?.setValue(this.#editRaetselPayload.kommentar);
+    this.form.get('quellenart')?.setValue(theGuiQuellenart.label);
 
+    // this.form.get('medium')?.setValue(theGuiQuellenart);
 
+    this.form.get('person')?.setValue(this.quelle.person ? this.quelle.person : '');
+    this.form.get('jahr')?.setValue(this.quelle.jahr ? this.quelle.jahr : '');
+    this.form.get('ausgabe')?.setValue(this.quelle.ausgabe ? this.quelle.ausgabe : '');
+    this.form.get('seite')?.setValue(this.quelle.seite ? this.quelle.seite : '');
+    this.form.get('klasse')?.setValue(this.quelle.klasse ? this.quelle.klasse : '');
+    this.form.get('stufe')?.setValue(this.quelle.stufe ? this.quelle.stufe : '');
+    this.form.get('pfad')?.setValue(this.quelle.pfad ? this.quelle.pfad : '');
 
-    this.#addOrRemoveAntowrtvorschlagFormParts(raetsel.antwortvorschlaege.length);
+    this.form.get('anzahlAntwortvorschlaege')?.setValue(this.#editRaetselPayload.antwortvorschlaege.length + '');
+
+    this.#addOrRemoveAntowrtvorschlagFormParts(this.#editRaetselPayload.antwortvorschlaege.length);
 
     if (!this.isRoot) {
       this.form.get('schluessel')?.disable();
     }
 
-    for (let i = 0; i < raetsel.antwortvorschlaege.length; i++) {
+    for (let i = 0; i < this.#editRaetselPayload.antwortvorschlaege.length; i++) {
 
       const avGroup = this.avFormArray.at(i);
-      const av: Antwortvorschlag = raetsel.antwortvorschlaege[i];
+      const av: Antwortvorschlag = this.#editRaetselPayload.antwortvorschlaege[i];
 
       avGroup.setValue({ text: av.text, korrekt: av.korrekt });
     }
 
-    if (this.herkunftRaetsel.herkunftstyp !== 'EIGENKREATION') {
-      this.showQuelleComponent = true;
+    this.#initVisibilityQuelleInputs();
+  }
+
+  #initVisibilityQuelleInputs(): void {
+    const quellenart: Quellenart = new GuiQuellenartenMap().getQuellenartOfLabel(this.#selectedQuellenart);
+
+    switch (quellenart) {
+      case 'BUCH': {
+
+        this.showAusgabe = false;
+        this.showJahr = false;
+        this.showKlasse = false;
+        this.showPerson = false;
+        this.showPfad = true;
+        this.showSeite = true;
+        this.showStufe = false;
+        this.showMediensuche = true;
+        break;
+      }
+      case 'INTERNET': {
+        this.showAusgabe = false;
+        this.showJahr = true;
+        this.showKlasse = true;
+        this.showPerson = false;
+        this.showPfad = true;
+        this.showSeite = false;
+        this.showStufe = true;
+        this.showMediensuche = true;
+        break;
+      }
+      case 'PERSON': {
+        this.showAusgabe = false;
+        this.showJahr = false;
+        this.showKlasse = false;
+        this.showPerson = true;
+        this.showPfad = false;
+        this.showSeite = false;
+        this.showStufe = false;
+        this.showMediensuche = false;
+        break;
+      }
+      case 'ZEITSCHRIFT': {
+        this.showAusgabe = true;
+        this.showJahr = true;
+        this.showKlasse = false;
+        this.showPerson = false;
+        this.showPfad = true;
+        this.showSeite = true;
+        this.showStufe = false;
+        this.showMediensuche = true;
+        break;
+      }
+    }
+  }
+
+  #handleQuellenartChanged(): void {
+
+    const quellenart: Quellenart = new GuiQuellenartenMap().getQuellenartOfLabel(this.#selectedQuellenart);
+    this.searchTerm = '';
+
+    this.#initVisibilityQuelleInputs();
+
+    switch (quellenart) {
+      case 'BUCH': {
+        this.quelle.ausgabe = '';
+        this.quelle.jahr = '';
+        this.quelle.klasse = '';
+        this.quelle.person = '';
+        this.quelle.stufe = '';
+
+        break;
+      }
+      case 'INTERNET': {
+        this.quelle.ausgabe = '';
+        this.quelle.jahr = this.quelle.jahr ? this.quelle.jahr : '';
+        this.quelle.klasse = this.quelle.klasse ? this.quelle.klasse : '';
+        this.quelle.person = '';
+        this.quelle.seite = '';
+        break;
+      }
+      case 'PERSON': {
+        this.quelle.ausgabe = '';
+        this.quelle.jahr = '';
+        this.quelle.klasse = '';
+        this.quelle.pfad = '';
+        this.quelle.seite = '';
+        this.quelle.stufe = '';
+        break;
+      }
+      case 'ZEITSCHRIFT': {
+        this.quelle.klasse = '';
+        this.quelle.person = '';
+        this.quelle.stufe = '';
+        break;
+      }
+    }
+
+    this.form.get('person')?.setValue(this.quelle.person ? this.quelle.person : '');
+    this.form.get('jahr')?.setValue(this.quelle.jahr ? this.quelle.jahr : '');
+    this.form.get('ausgabe')?.setValue(this.quelle.ausgabe ? this.quelle.ausgabe : '');
+    this.form.get('seite')?.setValue(this.quelle.seite ? this.quelle.seite : '');
+    this.form.get('klasse')?.setValue(this.quelle.klasse ? this.quelle.klasse : '');
+    this.form.get('stufe')?.setValue(this.quelle.stufe ? this.quelle.stufe : '');
+    this.form.get('pfad')?.setValue(this.quelle.pfad ? this.quelle.pfad : '');
+
+    if (quellenart !== 'PERSON') {
+      this.raetselFacade.findMedienForQuelle(quellenart);
     }
   }
 
@@ -453,21 +693,29 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  #readFormValues(): RaetselDetails {
+  #readFormValues(): void {
     const formValue = this.form.value;
 
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
 
     // Falls undefined, dann, weil das input-Field disabled ist.
-    const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : this.#raetselDetails.schluessel;
+    const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : this.#editRaetselPayload.schluessel;
 
-    const theNewHerkunft: HerkunftRaetsel = {
-      ...this.#raetselDetails.herkunft,
-      herkunftstyp: this.#selectedHerkunftstyp
-    };
+    const theQuelle: QuelleDto = {
+      id: this.quelle.id,
+      ausgabe: formValue['ausgabe'] ? formValue['ausgabe'].trim() : null,
+      jahr: formValue['jahr'] ? formValue['jahr'].trim() : null,
+      klasse: formValue['klasse'] ? formValue['klasse'].trim() : null,
+      mediumUuid: this.#mediumUuid,
+      person: formValue['person'] ? formValue['person'].trim() : null,
+      pfad: formValue['pfad'] ? formValue['pfad'].trim() : null,
+      quellenart: new GuiQuellenartenMap().getQuellenartOfLabel(this.#selectedQuellenart),
+      seite: formValue['seite'] ? formValue['seite'].trim() : null,
+      stufe: formValue['stufe'] ? formValue['stufe'].trim() : null,
+    }
 
-    const raetselDetails: RaetselDetails = {
-      ...this.#raetselDetails,
+    this.#editRaetselPayload = {
+      ...this.#editRaetselPayload,
       schluessel: c_schluessel,
       name: formValue['name'] !== null ? formValue['name'].trim() : '',
       freigegeben: formValue['status'] === 'FREIGEGEBEN',
@@ -476,11 +724,9 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
       antwortvorschlaege: antwortvorschlaegeNeu,
       deskriptoren: this.#selectedDeskriptoren,
-      herkunft: theNewHerkunft,
-      images: null
-    };
-
-    return raetselDetails;
+      herkunftstyp: this.selectedHerkunftstyp,
+      quelle: theQuelle
+    }
   }
 
   #collectAntwortvorschlaege(): Antwortvorschlag[] {
@@ -498,29 +744,17 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  #latexChanged(raetsel: RaetselDetails): boolean {
+  #latexChanged(): boolean {
 
-    return this.#raetselDetails.id !== 'neu' &&
-      (raetsel.frage !== this.#raetselDetails.frage || raetsel.loesung !== this.#raetselDetails.loesung);
+    return this.#editRaetselPayload.id !== 'neu' &&
+      (this.#editRaetselPayload.frage !== this.#editRaetselPayloadCache.frage || this.#editRaetselPayload.loesung !== this.#editRaetselPayloadCache.loesung);
   }
 
-  #doSubmit(raetsel: RaetselDetails, latexHistorisieren: boolean) {
-
-    const theSchluessel = raetsel.schluessel.length > 0 ? raetsel.schluessel : null;
+  #doSubmit(latexHistorisieren: boolean) {
 
     const editRaetselPayload: EditRaetselPayload = {
-      latexHistorisieren: latexHistorisieren,
-      antwortvorschlaege: raetsel.antwortvorschlaege,
-      deskriptoren: raetsel.deskriptoren,
-      frage: raetsel.frage,
-      freigegeben: raetsel.freigegeben,
-      herkunftstyp: raetsel.herkunft.herkunftstyp,
-      id: raetsel.id,
-      kommentar: raetsel.kommentar,
-      loesung: raetsel.loesung,
-      name: raetsel.name,
-      schluessel: theSchluessel,
-      quelle: this.quelle
+      ...this.#editRaetselPayload,
+      latexHistorisieren: latexHistorisieren
     };
 
     this.raetselFacade.saveRaetsel(editRaetselPayload);
@@ -581,8 +815,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
           }
         }
 
-        this.raetselFacade.generiereRaetselOutput(this.#raetselDetails.id, outputformat, font, schriftgroesse, layout);
-
+        this.raetselFacade.generiereRaetselOutput(this.#editRaetselPayload.id, outputformat, font, schriftgroesse, layout);
       }
     });
   }
@@ -612,5 +845,4 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       this.#embeddableImagesFacade.clearVorschau();
     });
   }
-
 }

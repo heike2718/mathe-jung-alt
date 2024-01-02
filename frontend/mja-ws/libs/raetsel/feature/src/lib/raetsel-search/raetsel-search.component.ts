@@ -7,7 +7,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
 import { RaetselDataSource, RaetselFacade } from '@mja-ws/raetsel/api';
 import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, ModusSucheMitDeskriptoren, ModusVolltextsuche, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
-import { initialSelectItemsComponentModel, PageDefinition, PaginationState, HerkunftRaetsel, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
+import { initialSelectItemsComponentModel, PageDefinition, PaginationState, QuelleDto, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
 import { combineLatest, debounceTime, merge, Subscription, tap } from 'rxjs';
 import { AuthFacade } from '@mja-ws/core/api';
 import { CoreFacade } from '@mja-ws/core/api';
@@ -74,7 +74,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   #pageIndex = 0;
   #sortDirection: SortDirection = 'asc';
-  #autor!: HerkunftRaetsel;
+  #autor!: QuelleDto;
 
   constructor(private changeDetector: ChangeDetectorRef) { }
 
@@ -121,7 +121,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       })
     ).subscribe();
 
-    this.#autorSubscription = this.coreFacade.herkunftEigenkreation$.subscribe(
+    this.#autorSubscription = this.coreFacade.autor$.subscribe(
       (q) => {
         this.#autor = q
       }

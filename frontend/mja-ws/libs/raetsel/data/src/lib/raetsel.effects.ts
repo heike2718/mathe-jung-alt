@@ -3,11 +3,12 @@ import { Router } from "@angular/router";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { map, switchMap, tap, catchError, of } from "rxjs";
+import { map, switchMap, tap, catchError, of, pipe } from "rxjs";
 import { RaetselHttpService } from "./raetsel-http.service";
 import { raetselActions } from "./raetsel.actions";
-import { GeneratedFile, HerkunftRaetsel } from "@mja-ws/core/model";
+import { GeneratedFile } from "@mja-ws/core/model";
 import { CoreFacade } from "@mja-ws/core/api";
+import { RaetselDetails } from "@mja-ws/raetsel/model";
 
 @Injectable({
     providedIn: 'root'
@@ -182,24 +183,13 @@ export class RaetselEffects {
     raetselSaved$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselActions.rAETSEL_SAVED),
-            tap((raetselDetails) => {
-                const herkunft: HerkunftRaetsel = raetselDetails.raetselDetails.herkunft;
-
-                if (herkunft.herkunftstyp === 'EIGENKREATION') {
-                    this.#coreFacade.replaceAutor(herkunft);
+            tap((action) => {
+                if (action.raetselDetails.herkunftstyp === 'EIGENKREATION') {
+                    this.#coreFacade.replaceAutor(action.raetselDetails.quelle);
                 }
-
                 this.#messageService.info('Rätsel erfolgreich gespeichert');
             }),
         ), { dispatch: false });
-
-    loadQuelleZuRaetsel$ = createEffect(() => {
-        return this.#actions.pipe(
-            ofType(raetselActions.lOAD_QUELLE_ZU_RAETSEL),
-            switchMap((action) => this.#raetselHttpService.loadQuelle(action.quelleID)),
-            map((quelle) => raetselActions.qUELLE_CHANGED({ quelle }))
-        );
-    });
 
     findMedienForQuelle$ = createEffect(() => {
         return this.#actions.pipe(
@@ -208,8 +198,4 @@ export class RaetselEffects {
             map((result) => raetselActions.mEDIEN_FOR_QUELLE_FOUND({ result }))
         );
     });
-
-
-
-
 }

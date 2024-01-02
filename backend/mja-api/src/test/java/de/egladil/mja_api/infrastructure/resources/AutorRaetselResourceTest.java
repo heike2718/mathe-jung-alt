@@ -26,7 +26,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
-import de.egladil.mja_api.domain.raetsel.HerkunftRaetsel;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
@@ -93,13 +92,13 @@ public class AutorRaetselResourceTest {
 		assertEquals("0ce69e0e-e1f8-4400-a2b9-61d3d6b0a82e", treffer.getId());
 		assertEquals("02606", treffer.getSchluessel());
 		assertTrue(treffer.isFreigegeben());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, treffer.getHerkunftstyp());
 
-		HerkunftRaetsel herkunftRaetsel = treffer.getHerkunft();
-		assertEquals("Heike Winkelvoß", herkunftRaetsel.getText());
-		assertEquals(Quellenart.PERSON, herkunftRaetsel.getQuellenart());
-		assertEquals(RaetselHerkunftTyp.EIGENKREATION, herkunftRaetsel.getHerkunftstyp());
-		assertNull(herkunftRaetsel.getMediumUuid());
-		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", herkunftRaetsel.getId());
+		QuelleDto quelle = treffer.getQuelle();
+		assertEquals("Heike Winkelvoß", treffer.getQuellenangabe());
+		assertEquals(Quellenart.PERSON, quelle.getQuellenart());
+		assertNull(quelle.getMediumUuid());
+		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
 		assertTrue(treffer.isSchreibgeschuetzt());
 	}
 
@@ -127,16 +126,17 @@ public class AutorRaetselResourceTest {
 			.as(Raetsel.class);
 
 		assertNotNull(result.getId());
+		assertEquals("Frodo Beutlin aus Beutelsend (basierend auf einer Idee aus Leipziger Volkszeitung 1965, S.32)",
+			result.getQuellenangabe());
 
 		String raetselId = result.getId();
+		assertEquals(RaetselHerkunftTyp.ADAPTION, result.getHerkunftstyp());
 
-		HerkunftRaetsel herkunft = result.getHerkunft();
-		assertEquals("Frodo Beutlin aus Beutelsend (basierend auf einer Idee aus Leipziger Volkszeitung 1965, S.32)",
-			herkunft.getText());
-		assertEquals(Quellenart.ZEITSCHRIFT, herkunft.getQuellenart());
-		assertEquals(mediumUuid, herkunft.getMediumUuid());
+		QuelleDto quelle = result.getQuelle();
+		assertEquals(Quellenart.ZEITSCHRIFT, quelle.getQuellenart());
+		assertEquals(mediumUuid, quelle.getMediumUuid());
 
-		String quelleId = herkunft.getId();
+		String quelleId = quelle.getId();
 		System.out.println("quelleID=" + quelleId);
 
 		assertFalse("neu".equals(quelleId));
@@ -170,11 +170,10 @@ public class AutorRaetselResourceTest {
 			.as(Raetsel.class);
 
 		// Assert ändern
-		HerkunftRaetsel geanderteHertkunft = result.getHerkunft();
-		assertEquals(expectedHerkunftText, geanderteHertkunft.getText());
-		assertEquals("Quelle auf Buch geändert und Herkunft auf ZITAT", result.getKommentar());
-		assertEquals(quelleId, geanderteHertkunft.getId());
-		assertEquals(mediumUuid, geanderteHertkunft.getMediumUuid());
+		QuelleDto geaenderteQuelle = result.getQuelle();
+		assertEquals(expectedHerkunftText, result.getQuellenangabe());
+		assertEquals(quelleId, geaenderteQuelle.getId());
+		assertEquals(mediumUuid, geaenderteQuelle.getMediumUuid());
 	}
 
 	private EditRaetselPayload createPayloadAnlegen(final String mediumId) {

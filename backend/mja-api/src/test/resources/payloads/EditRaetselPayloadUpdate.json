@@ -3,7 +3,7 @@
   "id": "cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866",
   "schluessel": "02622",
   "name": "Bälle in Kisten",
-  "freigegeben": false,
+  "freigegeben": true,
   "herkunftstyp": "EIGENKREATION",
   "frage": "\\begin{center}{\\Large \\bf 99 Bälle}\\end{center} Wie viele waren es vorher?",
   "loesung": "100",

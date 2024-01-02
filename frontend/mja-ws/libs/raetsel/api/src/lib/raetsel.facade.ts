@@ -8,23 +8,25 @@ import {
   OutputFormat,
   PageDefinition,
   PaginationState,
-  HerkunftRaetsel,
   Schriftgroesse,
   SelectableItem,
   SelectItemsCompomentModel,
   Quellenart,
-  Medienart
+  Medienart,
+  QuelleDto,
+  Herkunftstyp
 } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
-import { EditRaetselPayload,
+import {
+  EditRaetselPayload,
   initialRaetselDetails,
   MediumQuelleDto,
   ModusSucheMitDeskriptoren,
   ModusVolltextsuche,
-  QuelleDto, 
   Raetsel,
   RaetselDetails,
-  RaetselSuchfilter } from '@mja-ws/raetsel/model';
+  RaetselSuchfilter
+} from '@mja-ws/raetsel/model';
 import { deepClone, filterDefined } from '@mja-ws/shared/util';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -42,15 +44,15 @@ export class RaetselFacade {
   raetselDetails$: Observable<RaetselDetails> = this.#store.select(fromRaetsel.raetselDetails).pipe(filterDefined, deepClone);
   suchfilter$: Observable<RaetselSuchfilter> = this.#store.select(fromRaetsel.suchfilter);
   generateLatexError$: Observable<boolean> = this.#store.select(fromRaetsel.generateLatexError);
-  quelle$: Observable<QuelleDto> = this.#store.select(fromRaetsel.quelle);
   medienForQuelle$: Observable<MediumQuelleDto[]> = this.#store.select(fromRaetsel.medienForQuelle);
+  showQuelle$: Observable<boolean> = this.#store.select(fromRaetsel.showQuelle);
 
   #selectItemsFacade = inject(SelectItemsFacade);
 
   triggerSearch(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
 
     this.#store.dispatch(raetselActions.rAETSEL_SELECT_PAGE({ pageDefinition }));
-    this.#store.dispatch(raetselActions.fIND_RAETSEL({admin, suchfilter, pageDefinition }));
+    this.#store.dispatch(raetselActions.fIND_RAETSEL({ admin, suchfilter, pageDefinition }));
   }
 
   selectRaetsel(schluessel: string): void {
@@ -76,7 +78,7 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
   }
 
-  changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string, modeFullTextSearch: ModusVolltextsuche, searchModeForDescriptors: ModusSucheMitDeskriptoren ): void {
+  changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string, modeFullTextSearch: ModusVolltextsuche, searchModeForDescriptors: ModusSucheMitDeskriptoren): void {
 
     const deskriptoren: DeskriptorUI[] = [];
     selectedItems.forEach(item => {
@@ -94,12 +96,30 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
   }
 
-  quelleChanged(quelle: QuelleDto): void {
-    this.#store.dispatch(raetselActions.qUELLE_CHANGED({quelle}));
+  herkunftstypChanged(herkunftstyp: Herkunftstyp, raetsel: RaetselDetails): void {
+
+    let quellenangabe = raetsel.quellenangabe;
+
+    if (herkunftstyp !== raetsel.herkunftstyp) {
+
+      quellenangabe = 'wird nach dem Speichern aktualisiert'
+    }
+
+    this.#store.dispatch(raetselActions.hERKUNFTSTYP_CHANGED({ herkunftstyp, quellenangabe }));
+
   }
 
-  loadQuelle(quelleID: string): void {
-    this.#store.dispatch(raetselActions.lOAD_QUELLE_ZU_RAETSEL({quelleID}));
+  quelleChanged(quelle: QuelleDto): void {
+    let quellenangabe = '';
+    if (quelle.quellenart === 'PERSON') {
+      quellenangabe = quelle.person ? quelle.person : 'selbst';
+    } else {
+      quellenangabe = quelle.mediumUuid ? quelle.mediumUuid : 'Buch, Internet, Zeitschrift?';
+    }
+
+    quellenangabe += ' (wird beim Speichern ersetzt)';
+
+    this.#store.dispatch(raetselActions.qUELLE_CHANGED({ quelle, quellenangabe }));
   }
 
   findMedienForQuelle(quellenart: Quellenart): void {
@@ -126,9 +146,9 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSEL_CANCEL_SELECTION());
   }
 
-  createAndEditRaetsel(autor: HerkunftRaetsel ): void {
+  createAndEditRaetsel(quelle: QuelleDto): void {
 
-    const raetselDetails: RaetselDetails = { ...initialRaetselDetails, herkunft: autor };
+    const raetselDetails: RaetselDetails = { ...initialRaetselDetails, quelle: quelle };
     this.#store.dispatch(raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
   }
 
@@ -167,11 +187,11 @@ export class RaetselFacade {
   }
 
   downloadEmbeddedImages(raetselID: string): void {
-    this.#store.dispatch(raetselActions.fIND_EMBEDDED_IMAGES({raetselID}));
+    this.#store.dispatch(raetselActions.fIND_EMBEDDED_IMAGES({ raetselID }));
   }
 
   downloadRaetselLaTeX(raetselID: string): void {
-    this.#store.dispatch(raetselActions.fIND_RAETSEL_LATEX({raetselID}));
+    this.#store.dispatch(raetselActions.fIND_RAETSEL_LATEX({ raetselID }));
   }
 
 }
