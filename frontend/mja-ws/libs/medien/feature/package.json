@@ -10,10 +10,10 @@
     "@angular/forms": "^17.0.6",
     "@angular/cdk": "^17.0.3",
     "rxjs": "^7.8.1",
-    "@mja-ws/medien/api": "^2.4.1",
-    "@mja-ws/medien/model": "^2.4.1",
-    "@mja-ws/core/api": "^2.4.1",
-    "@mja-ws/core/model": "^2.4.1"
+    "@mja-ws/medien/api": "^2.4.2",
+    "@mja-ws/medien/model": "^2.4.2",
+    "@mja-ws/core/api": "^2.4.2",
+    "@mja-ws/core/model": "^2.4.2"
   },
   "type": "commonjs",
   "main": "./src/index.js",
