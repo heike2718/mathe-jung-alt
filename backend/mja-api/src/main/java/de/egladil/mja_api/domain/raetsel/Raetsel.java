@@ -14,8 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
-import de.egladil.mja_api.domain.DomainEntityStatus;
-import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.semantik.AggregateRoot;
@@ -27,7 +26,7 @@ import jakarta.validation.constraints.Pattern;
  * Raetsel
  */
 @AggregateRoot
-@Schema(name = "Raetsel", description = "Stammdaten eines Rätsels")
+@Schema(name = "Raetsel", description = "Die Details eines Rätsels - der Einfachheit halber mit Quellenangabe.")
 public class Raetsel extends AbstractDomainEntity {
 
 	@JsonProperty
@@ -52,8 +51,8 @@ public class Raetsel extends AbstractDomainEntity {
 	private String kommentar;
 
 	@JsonProperty
-	@Schema(description = "Veröffentlichungsstatus des Rätsels, nur freigegebene können in der mja-app gefunden werden.")
-	private DomainEntityStatus status;
+	@Schema(description = "ob das Rätsel freigegeben ist.")
+	private boolean freigegeben;
 
 	@JsonIgnore
 	private String filenameVorschauFrage;
@@ -61,22 +60,21 @@ public class Raetsel extends AbstractDomainEntity {
 	@JsonIgnore
 	private String filenameVorschauLoesung;
 
-	@JsonProperty
-	@Schema(description = "Referenz auf die Quelle des Rätsels")
-	@Pattern(
-		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "quelleID enthält ungültige Zeichen - muss eine UUID sein")
-	private String quelleId;
+	@Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
+	private RaetselHerkunftTyp herkunftstyp;
 
 	@JsonProperty
-	@Schema(description = "Referenz auf die Quelle des Rätsels sowie ein Name zum Anzeigen")
-	private QuelleMinimalDto quelle;
+	@Schema(
+		description = "Daten einer Quelle für ein Raetsel. Nicht alle Attribute zusammen sind sinnvoll. Eingie schließen einander aus.")
+	private QuelleDto quelle;
+
+	@Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe", example = "alpha (6) 1976, S.32")
+	private String quellenangabe;
 
 	@JsonProperty
 	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
 	private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird entschieden, ob es
-												// durch den User
-	// änderbar ist.
+												// durch den User änderbar ist.
 
 	@JsonProperty
 	@Schema(
@@ -202,17 +200,6 @@ public class Raetsel extends AbstractDomainEntity {
 		return this;
 	}
 
-	public String getQuelleId() {
-
-		return quelle.getId();
-	}
-
-	public Raetsel withQuelleId(final String quelleId) {
-
-		this.quelleId = quelleId;
-		return this;
-	}
-
 	public Antwortvorschlag[] getAntwortvorschlaege() {
 
 		return antwortvorschlaege;
@@ -245,17 +232,6 @@ public class Raetsel extends AbstractDomainEntity {
 		this.images = images;
 	}
 
-	public DomainEntityStatus getStatus() {
-
-		return status;
-	}
-
-	public Raetsel withStatus(final DomainEntityStatus status) {
-
-		this.status = status;
-		return this;
-	}
-
 	public List<EmbeddableImageInfo> getEmbeddableImageInfos() {
 
 		return embeddableImageInfos;
@@ -266,24 +242,14 @@ public class Raetsel extends AbstractDomainEntity {
 		this.embeddableImageInfos.addAll(embeddableImageInfos);
 	}
 
+	public void setSchreibgeschuetzt(final boolean schreibgeschuetzt) {
+
+		this.schreibgeschuetzt = schreibgeschuetzt;
+	}
+
 	public boolean isSchreibgeschuetzt() {
 
 		return schreibgeschuetzt;
-	}
-
-	public void markiereAlsAenderbar() {
-
-		this.schreibgeschuetzt = false;
-	}
-
-	public QuelleMinimalDto getQuelle() {
-
-		return quelle;
-	}
-
-	public void setQuelle(final QuelleMinimalDto quelle) {
-
-		this.quelle = quelle;
 	}
 
 	public String getFilenameVorschauFrage() {
@@ -305,6 +271,60 @@ public class Raetsel extends AbstractDomainEntity {
 	public Raetsel withFilenameVorschauLoesung(final String filenameVorschauLoesung) {
 
 		this.filenameVorschauLoesung = filenameVorschauLoesung;
+		return this;
+	}
+
+	public boolean isFreigegeben() {
+
+		return freigegeben;
+	}
+
+	public Raetsel withFreigegeben(final boolean freigegeben) {
+
+		this.freigegeben = freigegeben;
+		return this;
+	}
+
+	public QuelleDto getQuelle() {
+
+		return quelle;
+	}
+
+	public void setQuelle(final QuelleDto quelle) {
+
+		this.quelle = quelle;
+	}
+
+	public Raetsel withQuelle(final QuelleDto quelle) {
+
+		this.quelle = quelle;
+		return this;
+	}
+
+	public String getQuellenangabe() {
+
+		return quellenangabe;
+	}
+
+	public void setQuellenangabe(final String quellenangabe) {
+
+		this.quellenangabe = quellenangabe;
+	}
+
+	public Raetsel withQuellenangabe(final String quellenangabe) {
+
+		this.quellenangabe = quellenangabe;
+		return this;
+	}
+
+	public RaetselHerkunftTyp getHerkunftstyp() {
+
+		return herkunftstyp;
+	}
+
+	public Raetsel withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
+
+		this.herkunftstyp = herkunftstyp;
 		return this;
 	}
 }

@@ -1,0 +1,33 @@
+{
+  "latexHistorisieren": false,
+  "id": "neu",
+  "name": "Welches Kind ist das aelteste?",
+  "freigegeben": false,
+  "frage": "Anton, Beate, Carola und Dennis sind in einer Klasse. Welches Kind ist am ältesten? In welcher Reihenfolge kommen die anderen Kinder?",
+  "loesung": "Dennis ist am ältesten. Danach kommen Beate, Anton und Carola.",
+  "kommentar": "Serie Serie-1, 1, Serie-65, 65",
+  "herkunftstyp": "ZITAT",
+  "antwortvorschlaege": [],
+  "deskriptoren": [
+    {
+      "id": 1,
+      "name": "Mathematik",
+      "admin": false
+    },
+    {
+      "id": 4,
+      "name": "Klasse 1",
+      "admin": false
+    },
+    {
+      "id": 14,
+      "name": "Logik",
+      "admin": false
+    }
+  ],
+  "quelle": {
+    "id": "neu",
+    "quellenart": "PERSON",
+    "person": "David Hilbert"
+  }
+}

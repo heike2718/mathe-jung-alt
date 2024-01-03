@@ -4,9 +4,9 @@
 // =====================================================
 package de.egladil.mja_api.domain.auth.dto;
 
-import jakarta.validation.constraints.NotBlank;
-
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * AuthResult

@@ -37,7 +37,7 @@ public class PersistenteQuelle implements PersistenteMjaEntity {
 		name = "uuid_generator", type = UuidGenerator.class)
 	@NotNull
 	@Size(min = 1, max = 40)
-	@Column(name = "UUID")
+	@Column
 	public String uuid;
 
 	@Column(name = "SORTNR")
@@ -47,26 +47,32 @@ public class PersistenteQuelle implements PersistenteMjaEntity {
 	@Enumerated(EnumType.STRING)
 	public Quellenart quellenart;
 
-	@Column(name = "MEDIUM_UUID")
-	public String mediumUuid;
+	@Column(name = "MEDIUM")
+	public String mediumID;
 
-	@Column(name = "JAHRGANG")
-	public String jahrgang;
+	@Column
+	public String klasse;
 
-	@Column(name = "AUSGABE")
+	@Column
+	public String stufe;
+
+	@Column
 	public String ausgabe;
 
-	@Column(name = "SEITE")
+	@Column
+	public String jahr;
+
+	@Column
 	public String seite;
 
-	@Column(name = "PERSON")
+	@Column
 	public String person;
 
-	@Column(name = "HW")
-	public boolean _hw;
+	@Column
+	public String pfad;
 
-	@Column(name = "DESKRIPTOREN")
-	public String deskriptoren;
+	@Column(name = "USER_ID")
+	public String userId;
 
 	@Column
 	@NotNull

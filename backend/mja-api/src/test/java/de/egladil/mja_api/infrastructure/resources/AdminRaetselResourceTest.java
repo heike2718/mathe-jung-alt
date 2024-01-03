@@ -6,13 +6,16 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -28,17 +31,27 @@ import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.quellen.Quellenart;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
+import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
+import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
+import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelle;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import jakarta.inject.Inject;
 import jakarta.persistence.EnumType;
 
 /**
@@ -46,7 +59,7 @@ import jakarta.persistence.EnumType;
  */
 @QuarkusTest
 @TestHTTPEndpoint(RaetselResource.class)
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 @TestMethodOrder(OrderAnnotation.class)
 public class AdminRaetselResourceTest {
 
@@ -55,6 +68,12 @@ public class AdminRaetselResourceTest {
 	private String suchstring = "Kinder%20Tiere%20pflanzen%20Kreis%20Monat%20Spielzeug%20Kekse%20Känguru";
 
 	private String deskriptoren = "8,11";
+
+	@Inject
+	RaetselDao raetselDao;
+
+	@Inject
+	QuellenRepository quellenRepository;
 
 	@Test
 	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
@@ -318,15 +337,23 @@ public class AdminRaetselResourceTest {
 	void testRaetselDetailsLadenFound() throws Exception {
 
 		Raetsel treffer = given()
-			.when().get("02622/v1").then()
+			.when().get("02606/v1").then()
 			.statusCode(200)
 			.and()
 			.extract()
 			.as(Raetsel.class);
 
-		assertEquals("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866", treffer.getId());
-		assertEquals("02622", treffer.getSchluessel());
+		assertEquals("0ce69e0e-e1f8-4400-a2b9-61d3d6b0a82e", treffer.getId());
+		assertEquals("02606", treffer.getSchluessel());
+		assertTrue(treffer.isFreigegeben());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, treffer.getHerkunftstyp());
+		assertEquals("Heike Winkelvoß", treffer.getQuellenangabe());
 
+		QuelleDto quelle = treffer.getQuelle();
+		assertEquals(Quellenart.PERSON, quelle.getQuellenart());
+		assertNull(quelle.getMediumUuid());
+		assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
+		assertFalse(treffer.isSchreibgeschuetzt());
 	}
 
 	@Test
@@ -371,30 +398,39 @@ public class AdminRaetselResourceTest {
 
 			String requestBody = sw.toString();
 
-			Response response = null;
-
 			try {
 
-				response = given()
+				Raetsel raetsel = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.post("v1");
+					.post("v1")
+					.then()
+					.statusCode(201)
+					.and()
+					.contentType(ContentType.JSON)
+					.extract()
+					.as(Raetsel.class);
+
+				assertNotNull(raetsel.getId());
+
+				assertTrue(raetsel.isFreigegeben());
+				assertEquals(RaetselHerkunftTyp.EIGENKREATION, raetsel.getHerkunftstyp());
+				assertEquals("Heike Winkelvoß", raetsel.getQuellenangabe());
+
+				QuelleDto quelle = raetsel.getQuelle();
+				assertEquals(Quellenart.PERSON, quelle.getQuellenart());
+				assertNull(quelle.getMediumUuid());
+				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
+				assertFalse(raetsel.isSchreibgeschuetzt());
+
 			} catch (Exception e) {
 
+				fail(e.getMessage());
 				e.printStackTrace();
 			}
 
-			String responsePayload = response.asString();
-
-			System.out.println("=> " + responsePayload);
-
-			assertEquals(201, response.getStatusCode());
-
-			Raetsel raetsel = new ObjectMapper().readValue(responsePayload, Raetsel.class);
-			System.out.println(raetsel.getId());
-			assertNotNull(raetsel.getId());
 		}
 
 	}
@@ -411,32 +447,40 @@ public class AdminRaetselResourceTest {
 
 			String requestBody = sw.toString();
 
-			Response response = null;
-
 			try {
 
-				response = given()
+				Raetsel raetsel = given()
 					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
 					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
 					.contentType(ContentType.JSON)
 					.body(requestBody)
-					.put("v1");
+					.put("v1")
+					.then()
+					.statusCode(200)
+					.and()
+					.contentType(ContentType.JSON)
+					.extract()
+					.as(Raetsel.class);
+
+				assertEquals("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866", raetsel.getId());
+				assertEquals("02622", raetsel.getSchluessel());
+				assertTrue(raetsel.isFreigegeben());
+				assertEquals(RaetselHerkunftTyp.EIGENKREATION, raetsel.getHerkunftstyp());
+				assertEquals("Heike Winkelvoß", raetsel.getQuellenangabe());
+
+				QuelleDto quelle = raetsel.getQuelle();
+				assertEquals(Quellenart.PERSON, quelle.getQuellenart());
+				assertNull(quelle.getMediumUuid());
+				assertEquals("8ef4d9b8-62a6-4643-8674-73ebaec52d98", quelle.getId());
+				assertNull(quelle.getMediumUuid());
+				assertFalse(raetsel.isSchreibgeschuetzt());
+
 			} catch (Exception e) {
 
+				fail(e.getMessage());
 				e.printStackTrace();
 			}
-
-			String responsePayload = response.asString();
-
-			assertEquals(200, response.getStatusCode());
-
-			Raetsel raetsel = new ObjectMapper().readValue(responsePayload, Raetsel.class);
-			assertEquals(5, raetsel.getAntwortvorschlaege().length);
-			assertEquals("cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866", raetsel.getId());
-
-			System.out.println("=> " + responsePayload);
 		}
-
 	}
 
 	@Test
@@ -547,7 +591,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "ADMIN" })
 	@Order(18)
 	void testGeneratePDF() {
 
@@ -566,7 +610,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(19)
 	void testGeneratePDFLaTeXKaputt() {
 
@@ -840,5 +884,130 @@ public class AdminRaetselResourceTest {
 
 		assertEquals("ERROR", messagePayload.getLevel());
 		assertEquals("Tja, dieses Rätsel gibt es leider nicht.", messagePayload.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(50)
+	void testRaetselMitAndererPersonAnlegen() throws Exception {
+
+		try (InputStream in = getClass().getResourceAsStream("/payloads/EditRaetselPayloadInsertZitatPerson.json");
+			StringWriter sw = new StringWriter()) {
+
+			IOUtils.copy(in, sw, StandardCharsets.UTF_8);
+
+			String requestBody = sw.toString();
+
+			try {
+
+				Raetsel raetsel = given()
+					.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+					.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+					.contentType(ContentType.JSON)
+					.body(requestBody)
+					.post("v1")
+					.then()
+					.statusCode(201)
+					.and()
+					.contentType(ContentType.JSON)
+					.extract()
+					.as(Raetsel.class);
+
+				assertNotNull(raetsel.getId());
+				assertFalse(raetsel.isFreigegeben());
+				assertEquals(RaetselHerkunftTyp.ZITAT, raetsel.getHerkunftstyp());
+				assertEquals("David Hilbert", raetsel.getQuellenangabe());
+
+				QuelleDto quelle = raetsel.getQuelle();
+				assertEquals(Quellenart.PERSON, quelle.getQuellenart());
+				assertNull(quelle.getMediumUuid());
+				assertFalse("8ef4d9b8-62a6-4643-8674-73ebaec52d98".equals(quelle.getId()));
+				assertNull(quelle.getMediumUuid());
+				assertFalse(raetsel.isSchreibgeschuetzt());
+			} catch (Exception e) {
+
+				fail(e.getMessage());
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(51)
+	void testRaetselEinesAnderenOwnersAendern() throws Exception {
+
+		String schluessel = "02820";
+		String raetselId = "8187e29c-446e-428d-a34c-015adac457c9";
+		String quelleId = "73634aeb-f494-4864-ab30-26861a5bf2e0";
+		String owner = "412b67dc-132f-465a-a3c3-468269e866cb";
+
+		QuelleDto quelle = new QuelleDto();
+		quelle.setPerson("Frodo Beutlin aus Beutelsend");
+		quelle.setQuellenart(Quellenart.PERSON);
+		quelle.setId(quelleId);
+
+		List<Deskriptor> deskriptoren = new ArrayList<>();
+
+		{
+
+			Deskriptor deskriptor = new Deskriptor("Klassen 3/4", true);
+			deskriptor.id = 14l;
+			deskriptoren.add(deskriptor);
+		}
+
+		{
+
+			Deskriptor deskriptor = new Deskriptor("Mathematik", false);
+			deskriptor.id = 1l;
+			deskriptoren.add(deskriptor);
+		}
+
+		EditRaetselPayload editRaetselPayload = new EditRaetselPayload()
+			.withId(raetselId)
+			.withSchluessel(schluessel)
+			.withDeskriptoren(deskriptoren)
+			.withFrage(
+				"Subtrahiere von der kleinsten Zahl mit 4 verschiedenen Ziffern die größte Zahl mit 2 verschiedenen Ziffern.")
+			.withKommentar("Name geändert")
+			.withLoesung("$1234 - 98 = 1136$")
+			.withName("Kombinatorik und Subtraktion")
+			.withHerkunftstyp(RaetselHerkunftTyp.EIGENKREATION)
+			.withQuelle(quelle);
+
+		// Act
+		Raetsel result = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(editRaetselPayload)
+			.put("v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(Raetsel.class);
+
+		// Assert
+		assertEquals(raetselId, result.getId());
+
+		QuelleDto quelleUI = result.getQuelle();
+
+		assertEquals("Frodo Beutlin aus Beutelsend", result.getQuellenangabe());
+		assertEquals(RaetselHerkunftTyp.EIGENKREATION, result.getHerkunftstyp());
+		assertEquals(Quellenart.PERSON, quelleUI.getQuellenart());
+		assertNull(quelleUI.getMediumUuid());
+		assertEquals(quelleId, quelleUI.getId());
+
+		PersistenteQuelle quelleDB = quellenRepository.findQuelleEntityWithId(quelleId);
+		assertEquals(owner, quelleDB.owner);
+		assertEquals(owner, quelleDB.userId);
+
+		PersistentesRaetsel raetselDB = raetselDao.findById(raetselId);
+		assertEquals(owner, raetselDB.owner);
+
 	}
 }

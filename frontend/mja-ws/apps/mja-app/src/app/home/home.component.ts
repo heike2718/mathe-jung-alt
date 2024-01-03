@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 import { CoreFacade } from '@mja-ws/core/api';
 import { Configuration } from '@mja-ws/shared/config';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
 
   #configService = inject(Configuration);
 
-  version = "2.3.5";
+  version = "2.4.0";
 
   imageSourceLogo = '';
 

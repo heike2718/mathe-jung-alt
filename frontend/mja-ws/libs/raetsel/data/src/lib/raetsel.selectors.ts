@@ -34,9 +34,19 @@ const generateLatexError = createSelector(
     (state) => state.generateLatexError
 );
 
-const editModus = createSelector(
+const medienForQuelle = createSelector(
     selectRaetselState,
-    (state) => state.editModus
+    (state) => state.medienForQuelle
+);
+
+const herkunftstyp = createSelector(
+    raetselDetails,
+    (details) => details ? details.herkunftstyp : 'EIGENKREATION'
+);
+
+const showQuelle = createSelector(
+    herkunftstyp,
+    (herkunftstyp) => herkunftstyp === 'EIGENKREATION' ? false : true
 );
 
 export const fromRaetsel = {
@@ -46,6 +56,7 @@ export const fromRaetsel = {
     raetselDetails,
     suchfilter,
     generateLatexError,
-    editModus
+    medienForQuelle,
+    showQuelle
 };
 

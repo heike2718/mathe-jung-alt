@@ -17,9 +17,14 @@ export const appRoutes: Routes = [
           import('@mja-ws/raetsel/feature').then((m) => m.raetselRoutes),
       }, 
       {
-        path: 'raetselgruppen',
+        path: 'aufgabensammlungen',
         loadChildren: () =>
-          import('@mja-ws/raetselgruppen/feature').then((m) => m.raetselgruppenRoutes),
+          import('@mja-ws/aufgabensammlungen/feature').then((m) => m.aufgabensammlungenRoutes),
+      },
+      {
+        path: 'medien',
+        loadChildren: () =>
+          import('@mja-ws/medien/feature').then((m) => m.medienRoutes),
       },
     ],
   },

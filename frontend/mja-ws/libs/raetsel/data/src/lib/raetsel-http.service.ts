@@ -2,10 +2,11 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import {
     DeskriptorUI,
-    FONT_NAME,
+    FontName,
     GeneratedFile,
     GeneratedImages,
-    LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
+    LaTeXLayoutAntwortvorschlaege,
+    Medienart,
     PageDefinition,
     QUERY_PARAM_DESKRIPTOREN,
     QUERY_PARAM_LIMIT,
@@ -15,9 +16,9 @@ import {
     QUERY_PARAM_SORT_DIRECTION,
     QUERY_PARAM_SUCHSTRING,
     QUERY_PARAM_TYPE_DESKRIPTOREN,
-    SCHRIFTGROESSE
+    Schriftgroesse
 } from "@mja-ws/core/model";
-import { EditRaetselPayload, Raetsel, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from "@mja-ws/raetsel/model";
+import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter, MediumQuelleDto } from "@mja-ws/raetsel/model";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
@@ -69,7 +70,7 @@ export class RaetselHttpService {
         return this.#http.get<RaetselDetails>(url, { headers: headers });
     }
 
-    generateRaetselPNGs(raetselId: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedImages> {
+    generateRaetselPNGs(raetselId: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): Observable<GeneratedImages> {
 
         const url = this.#url + '/PNG/' + raetselId + '/v1';
 
@@ -82,7 +83,7 @@ export class RaetselHttpService {
         return this.#http.post<GeneratedImages>(url, layoutAntwortvorschlaege, { headers: headers, params: params });
     }
 
-    generateRaetselPDF(raetselId: string, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): Observable<GeneratedFile> {
+    generateRaetselPDF(raetselId: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): Observable<GeneratedFile> {
 
         const url = this.#url + '/PDF/' + raetselId + '/v1';
 
@@ -129,11 +130,28 @@ export class RaetselHttpService {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        if ('neu' === editRaetselPayload.raetsel.id) {
+        if ('neu' === editRaetselPayload.id) {
             return this.#http.post<RaetselDetails>(url, editRaetselPayload, { headers });
         }
 
         return this.#http.put<RaetselDetails>(url, editRaetselPayload, { headers })
+    }
+
+    findByMedienart(medienart: Medienart): Observable<MediumQuelleDto[]> {
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const url = '/mja-api/medien/quelle/v1';
+        let theMedienartStr: string = '';
+        switch(medienart) {
+            case 'BUCH': theMedienartStr = 'BUCH'; break;
+            case 'INTERNET': theMedienartStr = 'INTERNET'; break;
+            case 'ZEITSCHRIFT': theMedienartStr = 'ZEITSCHRIFT'; break;
+        }
+
+        const params = new HttpParams()
+            .set('medienart', theMedienartStr);
+
+        return this.#http.get<MediumQuelleDto[]>(url, { headers, params });
     }
 
 
@@ -152,5 +170,4 @@ export class RaetselHttpService {
         }
         return result;
     }
-
 }

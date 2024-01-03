@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.generatoren.dto.RaetselgruppeGeneratorInput;
+import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselLaTeXDto;
 
@@ -31,7 +31,7 @@ public class LaTeXMainDocLoesungenGenerator implements LaTeXDocGeneratorStrategy
 	 * @param  input
 	 * @return
 	 */
-	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final RaetselgruppeGeneratorInput input) {
+	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
 
 		String template = LaTeXTemplatesService.getInstance().getTemplateMainLaTeXDocument();
 
@@ -39,7 +39,7 @@ public class LaTeXMainDocLoesungenGenerator implements LaTeXDocGeneratorStrategy
 		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
 			input.getSchriftgroesse().getLaTeXReplacement());
 		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
-		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), input.getRaetselgruppe().name + " (Lösungen)");
+		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), input.getAufgabensammlung().name + " (Lösungen)");
 
 		String content = printContentLoesungen(aufgaben, raetselLaTeX);
 

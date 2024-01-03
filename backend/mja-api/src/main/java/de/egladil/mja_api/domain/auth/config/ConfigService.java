@@ -4,9 +4,9 @@
 // =====================================================
 package de.egladil.mja_api.domain.auth.config;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * ConfigService

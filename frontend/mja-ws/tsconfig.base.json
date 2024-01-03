@@ -15,6 +15,18 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@mja-ws/aufgabensammlungen/api": [
+        "libs/aufgabensammlungen/api/src/index.ts"
+      ],
+      "@mja-ws/aufgabensammlungen/data": [
+        "libs/aufgabensammlungen/data/src/index.ts"
+      ],
+      "@mja-ws/aufgabensammlungen/feature": [
+        "libs/aufgabensammlungen/feature/src/index.ts"
+      ],
+      "@mja-ws/aufgabensammlungen/model": [
+        "libs/aufgabensammlungen/model/src/index.ts"
+      ],
       "@mja-ws/core/api": ["libs/core/api/src/index.ts"],
       "@mja-ws/core/data": ["libs/core/data/src/index.ts"],
       "@mja-ws/core/model": ["libs/core/model/src/index.ts"],
@@ -29,21 +41,14 @@
         "libs/shared/embeddable-images/model/src/index.ts"
       ],
       "@mja-ws/local-storage-data": ["libs/local-storage-data/src/index.ts"],
+      "@mja-ws/medien/api": ["libs/medien/api/src/index.ts"],
+      "@mja-ws/medien/data": ["libs/medien/data/src/index.ts"],
+      "@mja-ws/medien/feature": ["libs/medien/feature/src/index.ts"],
+      "@mja-ws/medien/model": ["libs/medien/model/src/index.ts"],
       "@mja-ws/raetsel/api": ["libs/raetsel/api/src/index.ts"],
       "@mja-ws/raetsel/data": ["libs/raetsel/data/src/index.ts"],
       "@mja-ws/raetsel/feature": ["libs/raetsel/feature/src/index.ts"],
       "@mja-ws/raetsel/model": ["libs/raetsel/model/src/index.ts"],
-      "@mja-ws/raetselgruppen/api": ["libs/raetselgruppen/api/src/index.ts"],
-      "@mja-ws/raetselgruppen/data": ["libs/raetselgruppen/data/src/index.ts"],
-      "@mja-ws/raetselgruppen/feature": [
-        "libs/raetselgruppen/feature/src/index.ts"
-      ],
-      "@mja-ws/raetselgruppen/model": [
-        "libs/raetselgruppen/model/src/index.ts"
-      ],
-      "@mja-ws/shared/auth/api": ["libs/shared/auth/api/src/index.ts"],
-      "@mja-ws/shared/auth/data": ["libs/shared/auth/data/src/index.ts"],
-      "@mja-ws/shared/auth/model": ["libs/shared/auth/model/src/index.ts"],
       "@mja-ws/shared/components": ["libs/shared/components/src/index.ts"],
       "@mja-ws/shared/config": ["libs/shared/config/src/index.ts"],
       "@mja-ws/shared/http": ["libs/shared/http/src/index.ts"],
@@ -52,7 +57,6 @@
         "libs/shared/messaging/api/src/index.ts"
       ],
       "@mja-ws/shared/messaging/ui": ["libs/shared/messaging/ui/src/index.ts"],
-      "@mja-ws/shared/ngrx-utils": ["libs/shared/ngrx-utils/src/index.ts"],
       "@mja-ws/shared/util": ["libs/shared/util/src/index.ts"]
     }
   },

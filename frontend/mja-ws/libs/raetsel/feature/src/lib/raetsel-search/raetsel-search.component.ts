@@ -6,10 +6,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
 import { RaetselDataSource, RaetselFacade } from '@mja-ws/raetsel/api';
-import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
-import { initialSelectItemsComponentModel, PageDefinition, PaginationState, QuelleUI, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
+import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, ModusSucheMitDeskriptoren, ModusVolltextsuche, Raetsel, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { initialSelectItemsComponentModel, PageDefinition, PaginationState, QuelleDto, SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
 import { combineLatest, debounceTime, merge, Subscription, tap } from 'rxjs';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 import { CoreFacade } from '@mja-ws/core/api';
 import { RaetselSuchfilterAdminComponent } from '../raetsel-suchfilter-admin/raetsel-suchfilter-admin.component';
 import { SelectItemsComponent } from '@mja-ws/shared/components';
@@ -69,12 +69,12 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   #paginationStateSubscription: Subscription = new Subscription();
   #deskriptorenSubscription: Subscription = new Subscription();
   #suchfilterSubscription: Subscription = new Subscription();
-  #quelleSubscription: Subscription = new Subscription();
+  #autorSubscription: Subscription = new Subscription();
 
 
   #pageIndex = 0;
   #sortDirection: SortDirection = 'asc';
-  #quelle: QuelleUI | undefined;
+  #autor!: QuelleDto;
 
   constructor(private changeDetector: ChangeDetectorRef) { }
 
@@ -121,9 +121,9 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       })
     ).subscribe();
 
-    this.#quelleSubscription = this.coreFacade.quelleAdmin$.subscribe(
+    this.#autorSubscription = this.coreFacade.autor$.subscribe(
       (q) => {
-        this.#quelle = q
+        this.#autor = q
       }
     );
   }
@@ -136,7 +136,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.#matSortChangedSubscription.unsubscribe();
     this.#deskriptorenSubscription.unsubscribe();
     this.#suchfilterSubscription.unsubscribe();
-    this.#quelleSubscription.unsubscribe();
+    this.#autorSubscription.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -209,16 +209,16 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   neuesRaetsel(): void {
-    this.#raetselFacade.createAndEditRaetsel(this.#quelle);
+    this.#raetselFacade.createAndEditRaetsel(this.#autor);
   }
 
   buttonNeueSucheDisabled(): boolean {
     return isSuchfilterEmpty(this.suchfilter);
   }
 
-  onRowClicked(row: Raetsel): void {
+  onRowClicked(raetsel: Raetsel): void {
 
-    const raetsel: Raetsel = <Raetsel>row;
+    // const raetsel: Raetsel = <Raetsel>row;
     this.#raetselFacade.selectRaetsel(raetsel.schluessel);
   }
 
@@ -248,7 +248,11 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
       this.#searchModeForDescriptors());
   }
 
-  onSuchmodusChanged(_checked: boolean): void {
+  onSuchmodusChanged(checked: boolean): void {
+
+    if (checked) {
+      // do nothing
+    }
 
     const theSuchfilter: RaetselSuchfilter = {
       ...
@@ -288,11 +292,11 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.#raetselFacade.triggerSearch(this.isAutor, theSuchfilter, pageDefinition);
   }
 
-  #modeFullTextSearch(): MODUS_VOLLTEXTSUCHE {
+  #modeFullTextSearch(): ModusVolltextsuche {
     return this.modeFullTextSearchUnion ? 'UNION' : 'INTERSECTION';
   }
 
-  #searchModeForDescriptors(): MODUS_SUCHE_MIT_DESKRIPTOREN {
+  #searchModeForDescriptors(): ModusSucheMitDeskriptoren {
     return this.searchModeForDescriptorsLike ? 'LIKE' : 'NOT_LIKE';
   }
 }

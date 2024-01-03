@@ -18,10 +18,17 @@
         </a>
     </div>
 
-    <div *ngIf="authFacade.userIsAdmin$ | async">
-        <a *ngIf="isHandset === false" mat-button routerLink="/raetselgruppen">
+    <div *ngIf="authFacade.userIsLoggedIn$ | async">
+        <a *ngIf="isHandset === false" mat-button routerLink="/aufgabensammlungen">
             <mat-icon class="nav-item">menu_book</mat-icon>
-            <span class="nav-caption">Rätselgruppen</span>
+            <span class="nav-caption">Aufgabensammlungen</span>
+        </a>
+    </div>
+
+    <div *ngIf="authFacade.userIsAdmin$ | async">
+        <a *ngIf="isHandset === false" mat-button routerLink="/medien">
+            <mat-icon class="nav-item">newspaper</mat-icon>
+            <span class="nav-caption">Medien</span>
         </a>
     </div>
 
@@ -29,7 +36,7 @@
 
     <ng-container *ngIf="authFacade.user$| async as user">
         <div *ngIf="isHandset === false" class="mr-1">
-            Moin, {{user.fullName}} <span *ngIf="user.isAdmin">(ADMIN)</span>
+            Moin, {{user.fullName}} <span *ngIf="user.isAdmin">({{user.benutzerart}})</span>
         </div>
     </ng-container>
 

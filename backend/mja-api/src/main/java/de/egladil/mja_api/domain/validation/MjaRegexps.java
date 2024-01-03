@@ -31,12 +31,30 @@ public interface MjaRegexps {
 	 */
 	String REGEXP_EPS_HEIKE_WITH_FILE_SEPERATOR = "^/([\\d]{5}_[\\d]{0,1}|[\\d]{5})\\.eps$";
 
+	String VALID_EDIT_PAYLOOAD_SCHLUESSEL = "[\\d]*";
+
 	String VALID_SCHLUESSEL = "^[\\d]{5}$";
 
 	String VALID_DOMAIN_OBJECT_ID = "^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}|neu$";
 
 	String VALID_SUCHSTRING = "^[\\w ÄÖÜäöüß \\% ; \\+ \\- \\. \\,]{4,200}$";
 
+	String VALID_SUCHSTRING_MEDIEN = "^[\\w ÄÖÜäöüß \\% ; \\+ \\- \\. \\,]{0,200}$";
+
 	String VALID_DATEINAME = "^[\\da-zA-ZÄÖÜäöüß_\\-\\.]{1,100}$";
+
+	String VALID_JAHR = "^[\\d]{4}$";
+
+	String VALID_AUSGABE = "^[\\d]{0,5}$";
+
+	String VALID_KLASSE_STUFE = "^[\\w ]{0,10}$";
+
+	String VALID_SEITE = "^[\\w -]{0,4}$";
+
+	String VALID_PERSON = "^[^<>/#~%$]{0,100}$";
+
+	String VALID_PFAD = "^/[\\w/.]{0,500}$";
+
+	String VALID_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
 }

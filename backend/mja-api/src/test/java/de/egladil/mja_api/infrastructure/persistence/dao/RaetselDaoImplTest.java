@@ -19,7 +19,7 @@ import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;
@@ -28,7 +28,7 @@ import jakarta.inject.Inject;
  * RaetselDaoImplTest
  */
 @QuarkusTest
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 public class RaetselDaoImplTest {
 
 	@Inject
@@ -399,7 +399,7 @@ public class RaetselDaoImplTest {
 			boolean nurFreigegebene = true;
 
 			// Assert
-			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN,
+			assertEquals(PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN,
 				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
 
 		}
@@ -413,7 +413,7 @@ public class RaetselDaoImplTest {
 			boolean nurFreigegebene = true;
 
 			// Assert
-			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC,
+			assertEquals(PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN_DESC,
 				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
 
 		}
@@ -456,7 +456,7 @@ public class RaetselDaoImplTest {
 			boolean nurFreigegebene = true;
 
 			// Assert
-			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN,
+			assertEquals(PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN,
 				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
 
 		}
@@ -470,7 +470,7 @@ public class RaetselDaoImplTest {
 			boolean nurFreigegebene = true;
 
 			// Assert
-			assertEquals(PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN_DESC,
+			assertEquals(PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN_DESC,
 				dao.queryNameFilteredSearch(suchmodus, sortDirection, nurFreigegebene));
 
 		}

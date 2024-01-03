@@ -3,7 +3,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLinkWithHref } from '@angular/router';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 
 @Component({
   selector: 'mja-app-sidenav',
@@ -14,8 +14,8 @@ import { AuthFacade } from '@mja-ws/shared/auth/api';
 })
 export class SidenavComponent {
 
-  public authFacade = inject(AuthFacade);
-  
+  authFacade = inject(AuthFacade);
+
   @Output()
   sidenavClose = new EventEmitter();
 
@@ -30,7 +30,7 @@ export class SidenavComponent {
   public logout(): void {
     this.authFacade.logout();
   }
-  
+
   public onSidenavClose = () => {
     this.sidenavClose.emit();
   }

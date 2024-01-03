@@ -13,7 +13,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.dto.SortDirection;
@@ -102,7 +101,7 @@ public class RaetselDao {
 
 		if (nurFreigegebene) {
 
-			stmt = "SELECT count(*) FROM RAETSEL r WHERE " + matcher + " AND STATUS = :status";
+			stmt = "SELECT count(*) FROM RAETSEL r WHERE " + matcher + " AND FREIGEGEBEN = :freigegeben";
 
 		}
 
@@ -113,7 +112,7 @@ public class RaetselDao {
 		if (nurFreigegebene) {
 
 			query
-				.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString());
+				.setParameter("freigegeben", true);
 		}
 
 		List<Long> trefferliste = query.getResultList();
@@ -149,7 +148,7 @@ public class RaetselDao {
 
 		if (nurFreigegebene) {
 
-			stmt += " AND STATUS = :status ";
+			stmt += " AND FREIGEGEBEN = :freigegeben ";
 		}
 
 		stmt += sortDirection == SortDirection.desc
@@ -164,7 +163,7 @@ public class RaetselDao {
 		if (nurFreigegebene) {
 
 			query
-				.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString());
+				.setParameter("freigegeben", true);
 		}
 
 		return query.getResultList();
@@ -193,7 +192,7 @@ public class RaetselDao {
 
 		if (nurFreigegebene) {
 
-			stmt += " AND STATUS = :status";
+			stmt += " AND FREIGEGEBEN = :freigegeben";
 		}
 
 		// System.out.println(stmt);
@@ -204,7 +203,7 @@ public class RaetselDao {
 
 			trefferliste = entityManager.createNativeQuery(stmt)
 				.setParameter("deskriptoren", wrappedDeskriptorenIds)
-				.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString())
+				.setParameter("freigegeben", true)
 				.getResultList();
 		} else {
 
@@ -250,7 +249,7 @@ public class RaetselDao {
 
 			return entityManager.createNamedQuery(queryName, PersistentesRaetsel.class)
 				.setParameter("deskriptoren", wrappedDeskriptoren)
-				.setParameter("status", DomainEntityStatus.FREIGEGEBEN)
+				.setParameter("freigegeben", true)
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.getResultList();
@@ -273,13 +272,13 @@ public class RaetselDao {
 
 			case asc: {
 
-				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN
+				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN
 					: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN;
 			}
 
 			case desc: {
 
-				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_STATUS_AND_DESKRIPTOREN_DESC
+				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_DESKRIPTOREN_DESC
 					: PersistentesRaetsel.FIND_WITH_DESKRIPTOREN_DESC;
 			}
 
@@ -294,13 +293,13 @@ public class RaetselDao {
 
 			case asc: {
 
-				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN
+				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN
 					: PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN;
 			}
 
 			case desc: {
 
-				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_STATUS_AND_NOT_WITH_DESKRIPTOREN_DESC
+				return nurFreigegebene ? PersistentesRaetsel.FIND_WITH_FREIGEGEBEN_AND_NOT_WITH_DESKRIPTOREN_DESC
 					: PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN_DESC;
 			}
 
@@ -342,7 +341,7 @@ public class RaetselDao {
 
 		if (nurFreigegebene) {
 
-			where += " AND STATUS = :status ";
+			where += " AND FREIGEGEBEN = :freigegeben ";
 		}
 
 		String stmt = "SELECT count(*) FROM RAETSEL r WHERE " + where;
@@ -352,7 +351,7 @@ public class RaetselDao {
 
 		if (nurFreigegebene) {
 
-			query.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString());
+			query.setParameter("freigegeben", true);
 		}
 
 		List<Long> trefferliste = query.getResultList();
@@ -394,7 +393,7 @@ public class RaetselDao {
 
 		if (nurFreigegebene) {
 
-			where += " AND STATUS = :status ";
+			where += " AND FREIGEGEBEN = :freigegeben ";
 		}
 
 		String stmt = "select * from RAETSEL WHERE " + where;
@@ -412,7 +411,7 @@ public class RaetselDao {
 
 		if (nurFreigegebene) {
 
-			query.setParameter("status", DomainEntityStatus.FREIGEGEBEN.toString());
+			query.setParameter("freigegeben", true);
 		}
 
 		return query.getResultList();
@@ -422,12 +421,12 @@ public class RaetselDao {
 	 * @param  status
 	 * @return        long
 	 */
-	public long countRaetselWithStatus(final DomainEntityStatus status) {
+	public long countRaetselWithStatus(final boolean freigegeben) {
 
-		String stmt = "SELECT count(*) FROM RAETSEL r WHERE STATUS = :status";
+		String stmt = "SELECT count(*) FROM RAETSEL r WHERE FREIGEGEBEN = :freigegeben";
 
 		@SuppressWarnings("unchecked")
-		List<Long> trefferliste = entityManager.createNativeQuery(stmt).setParameter("status", status.toString()).getResultList();
+		List<Long> trefferliste = entityManager.createNativeQuery(stmt).setParameter("freigegeben", freigegeben).getResultList();
 
 		long anzahl = trefferliste.get(0);
 
@@ -471,7 +470,8 @@ public class RaetselDao {
 	 * Selektiert alle Raetsel, deren SCHLUESSEL in der gegebenen Collection enthalten ist.<br>
 	 * <br>
 	 * <strong>Achtung:</strong> Es wird mit IN gesucht. Es gibt ein DB-Limit für die Länge der Liste. Das wird aktuell nicht
-	 * berücksichtigt. Es dürfte momentan auch so groß sein, dass es nicht durch irgendwelche Rätselgruppen gerissen werden kann. Es
+	 * berücksichtigt. Es dürfte momentan auch so groß sein, dass es nicht durch irgendwelche Aufgabensammlungen gerissen werden
+	 * kann. Es
 	 * gibt ein Issue diesbezüglich: https://github.com/heike2718/mathe-jung-alt/issues/105
 	 *
 	 * @param  schluessel

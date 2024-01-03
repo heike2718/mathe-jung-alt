@@ -18,7 +18,7 @@ public interface QuelleNameStrategie {
 	 * @param  quelle
 	 * @return        String
 	 */
-	String getName(PersistenteQuelleReadonly quelle);
+	String getText(PersistenteQuelleReadonly quelle);
 
 	static QuelleNameStrategie getStrategie(final Quellenart quellenart) {
 
@@ -26,10 +26,11 @@ public interface QuelleNameStrategie {
 
 		switch (quellenart) {
 
-			case PERSON -> result = new PersonquelleNameStrategie();
-			case BUCH -> result = new BuchquelleNameStrategie();
-			case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
-			default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
+		case PERSON -> result = new PersonquelleNameStrategie();
+		case BUCH -> result = new BuchquelleNameStrategie();
+		case INTERNET -> result = new InternetquelleNameStrategie();
+		case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
+		default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
 		}
 
 		return result;

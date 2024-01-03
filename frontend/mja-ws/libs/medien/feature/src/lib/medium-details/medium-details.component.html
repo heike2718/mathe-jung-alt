@@ -1,0 +1,37 @@
+<div class="mja-container">
+    <div *ngIf="medienFacade.selectedMediumDetails$ | async as medium; else keinMedium">
+        <h1>{{medium.titel}} ({{medium.medienart}})</h1>
+        <div *ngIf="medium.autor" class="grid-container-2 mt-2 mb-2">
+            <label>Autor:</label>
+            <div>{{medium.autor}}</div>
+        </div>
+        <div *ngIf="medium.url" class="grid-container-2 mt-2 mb-2">
+            <label>URL:</label>
+            <div>{{medium.url}}</div>
+        </div>
+        <div *ngIf="medium.kommentar" class="grid-container-2 mt-2 mb-2">
+            <label>Kommentar:</label>
+            <div>{{medium.kommentar}}</div>
+        </div>
+        <label>gehört mir?</label>
+        <mat-checkbox [(ngModel)]="owner" [disabled]="true"></mat-checkbox>
+
+        <div class="button-container mt-2">
+            <div *ngIf="!medium.schreibgeschuetzt"><button class="label" mat-raised-button color="primary"
+                    (click)="startEdit()">bearbeiten</button>
+            </div>
+
+            <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+                    (click)="gotoMedienuebersicht()">Medien</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #keinMedium>
+    <h1>Medium: Details</h1>
+    <p>kein Medium gewählt</p>
+    <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+            (click)="gotoMedienuebersicht()">Medien</button>
+    </div>
+</ng-template>

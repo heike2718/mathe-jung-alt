@@ -4,14 +4,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { AuthFacade } from '@mja-ws/shared/auth/api';
+import { AuthFacade } from '@mja-ws/core/api';
 import { Router } from '@angular/router';
 import { RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
@@ -20,11 +21,11 @@ import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import {
   anzeigeAntwortvorschlaegeSelectInput,
-  FONT_NAME,
+  FontName,
   fontNamenSelectInput,
-  LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
-  OUTPUTFORMAT,
-  SCHRIFTGROESSE,
+  LaTeXLayoutAntwortvorschlaege,
+  OutputFormat,
+  Schriftgroesse,
   schriftgroessenSelectInput,
   SelectGeneratorParametersUIModelAutoren
 } from '@mja-ws/core/model';
@@ -32,8 +33,8 @@ import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { Configuration } from '@mja-ws/shared/config';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
 import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
-import { RaetselgruppenFacade } from '@mja-ws/raetselgruppen/api';
-import { RaetselgruppeDetails, RaetselgruppenTrefferItem } from '@mja-ws/raetselgruppen/model';
+import { AufgabensammlungenFacade } from '@mja-ws/aufgabensammlungen/api';
+import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/aufgabensammlungen/model';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -41,9 +42,11 @@ import { RaetselgruppeDetails, RaetselgruppenTrefferItem } from '@mja-ws/raetsel
   imports: [
     CommonModule,
     CdkAccordionModule,
-    MatExpansionModule,
-    MatChipsModule,
+    FormsModule,
+    MatExpansionModule,    
     MatButtonModule,
+    MatCheckboxModule,
+    MatChipsModule,
     MatDialogModule,
     MatFormFieldModule,
     MatListModule,
@@ -61,9 +64,10 @@ import { RaetselgruppeDetails, RaetselgruppenTrefferItem } from '@mja-ws/raetsel
 export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   raetselFacade = inject(RaetselFacade);
-  raetselgruppenFacade = inject(RaetselgruppenFacade);
+  aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
   authFacade = inject(AuthFacade);
   dialog = inject(MatDialog);
+  freigegeben = false;
 
   #config = inject(Configuration);
   devMode = !this.#config.production;
@@ -73,28 +77,27 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   #raetselDetailsSubscription = new Subscription();
   #raetselDetails!: RaetselDetails;
-  #raetselgruppeDetailsSubscription = new Subscription();
+  #aufgabensammlungDetailsSubscription = new Subscription();
 
-  #selectedRaetselgruppe: RaetselgruppeDetails | undefined;
+  #selectedAufgabensammlung: AufgabensammlungDetails | undefined;
 
-
-
-  ngOnInit(): void {
+  ngOnInit(): void {  
 
     this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.pipe(
-      tap((details) => {
+      tap((details: RaetselDetails) => {
         this.#raetselDetails = details;
+        this.freigegeben = this.#raetselDetails.freigegeben;
       })
     ).subscribe();
 
-    this.#raetselgruppeDetailsSubscription = this.raetselgruppenFacade.raetselgruppeDetails$
-      .subscribe((gruppe) => this.#selectedRaetselgruppe = gruppe);
+    this.#aufgabensammlungDetailsSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$
+      .subscribe((aufgabensammlung) => this.#selectedAufgabensammlung = aufgabensammlung);
   }
 
   ngOnDestroy(): void {
     this.#raetselDetailsSubscription.unsubscribe();
     this.#embeddableImagesFacade.clearVorschau();
-    this.#raetselgruppeDetailsSubscription.unsubscribe();
+    this.#aufgabensammlungDetailsSubscription.unsubscribe();
   }
 
   startEdit(): void {
@@ -105,13 +108,13 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   printPNG(): void {
 
-    const outputformat: OUTPUTFORMAT = 'PNG';
+    const outputformat: OutputFormat = 'PNG';
     this.#openPrintDialog(outputformat);
   }
 
   printPDF(): void {
 
-    const outputformat: OUTPUTFORMAT = 'PDF';
+    const outputformat: OutputFormat = 'PDF';
     this.#openPrintDialog(outputformat);
   }
 
@@ -119,22 +122,23 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     this.#router.navigateByUrl('/raetsel');
   }
 
-  gotoRaetselgruppe(): void {
+  gotoAufgabensammlung(): void {
 
-    if (this.#selectedRaetselgruppe) {
-      const trefferitem: RaetselgruppenTrefferItem = {
-        anzahlElemente: this.#selectedRaetselgruppe.elemente.length,
-        geaendertDurch: this.#selectedRaetselgruppe.geaendertDurch,
-        id: this.#selectedRaetselgruppe.id,
-        name: this.#selectedRaetselgruppe.name,
-        referenz: this.#selectedRaetselgruppe.referenz,
-        referenztyp: this.#selectedRaetselgruppe.referenztyp,
-        schwierigkeitsgrad: this.#selectedRaetselgruppe.schwierigkeitsgrad,
-        status: this.#selectedRaetselgruppe.status
+    if (this.#selectedAufgabensammlung) {
+      const trefferitem: AufgabensammlungTrefferItem = {
+        anzahlElemente: this.#selectedAufgabensammlung.elemente.length,
+        geaendertDurch: this.#selectedAufgabensammlung.geaendertDurch,
+        id: this.#selectedAufgabensammlung.id,
+        name: this.#selectedAufgabensammlung.name,
+        referenz: this.#selectedAufgabensammlung.referenz,
+        referenztyp: this.#selectedAufgabensammlung.referenztyp,
+        schwierigkeitsgrad: this.#selectedAufgabensammlung.schwierigkeitsgrad,
+        freigegeben: this.#selectedAufgabensammlung.freigegeben,
+        privat: this.#selectedAufgabensammlung.privat
       };
-      this.raetselgruppenFacade.selectRaetselgruppe(trefferitem)
+      this.aufgabensammlungenFacade.selectAufgabensammlung(trefferitem)
     } else {
-      this.#router.navigateByUrl('raetselgruppen');
+      this.#router.navigateByUrl('aufgabensammlungen');
     }
   }
 
@@ -161,7 +165,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  #openPrintDialog(outputformat: OUTPUTFORMAT): void {
+  #openPrintDialog(outputformat: OutputFormat): void {
 
     const dialogData: SelectGeneratorParametersUIModelAutoren = {
       titel: outputformat + ' generieren',
@@ -186,7 +190,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
       if (result) {
 
-        let layout: LATEX_LAYOUT_ANTWORTVORSCHLAEGE = 'NOOP';
+        let layout: LaTeXLayoutAntwortvorschlaege = 'NOOP';
 
         if (dialogData.selectedLayoutAntwortvorschlaege) {
 
@@ -197,8 +201,8 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
           }
         }
 
-        let font: FONT_NAME = 'STANDARD';
-        let schriftgroesse: SCHRIFTGROESSE = 'NORMAL';
+        let font: FontName = 'STANDARD';
+        let schriftgroesse: Schriftgroesse = 'NORMAL';
 
         if (dialogData.selectedFontName) {
           switch (dialogData.selectedFontName) {

@@ -2,6 +2,20 @@
 
 Damit ich mich nach einigen Tagen Pause wieder erinnere, wo ich weitermachen muss.
 
+## 17.12.2023
+
+- Medien: feature-search begonnen. Komponente ist schon eingehängt.
+  - Tabelle einbauen mit Pagination
+  - Suchfeld oberhalb mit debounceTime (muss ich nochmal schauen - da war irgendwas mit switchMap und so, damit nicht zu viele backend calls getriggert weren)
+  - Button "neues Medium"
+
+
+## 11.12.2023
+
+siehe [Aufgabensammlungen](./konzepte/aufgabensammlungen.md)
+
+siehe [Quellen und Medien](./konzepte/quellen-und-medien.md)
+
 ## 19.12.2023
 
 Volltextsuche ist auf OR umgestellt, aber nur im Backend, weil das jetzt default ist

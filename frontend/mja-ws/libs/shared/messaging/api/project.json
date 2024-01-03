@@ -26,5 +26,5 @@
       }
     }
   },
-  "tags": ["domain:shared", "type:shared:messaging:api", "type:api"]
+  "tags": ["type:shared:api"]
 }

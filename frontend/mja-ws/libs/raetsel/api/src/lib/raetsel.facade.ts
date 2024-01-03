@@ -3,21 +3,33 @@ import { Router } from '@angular/router';
 import { SelectItemsFacade } from '@mja-ws/core/api';
 import {
   DeskriptorUI,
-  FONT_NAME,
-  LATEX_LAYOUT_ANTWORTVORSCHLAEGE,
-  OUTPUTFORMAT,
+  FontName,
+  LaTeXLayoutAntwortvorschlaege,
+  OutputFormat,
   PageDefinition,
   PaginationState,
-  QuelleUI,
-  SCHRIFTGROESSE,
+  Schriftgroesse,
   SelectableItem,
-  SelectItemsCompomentModel
+  SelectItemsCompomentModel,
+  Quellenart,
+  Medienart,
+  QuelleDto,
+  Herkunftstyp
 } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
-import { EditRaetselPayload, initialRaetselDetails, MODUS_SUCHE_MIT_DESKRIPTOREN, MODUS_VOLLTEXTSUCHE, Raetsel, RaetselDetails, RaetselSuchfilter } from '@mja-ws/raetsel/model';
-import { deepClone, filterDefined } from '@mja-ws/shared/ngrx-utils';
+import {
+  EditRaetselPayload,
+  initialRaetselDetails,
+  MediumQuelleDto,
+  ModusSucheMitDeskriptoren,
+  ModusVolltextsuche,
+  Raetsel,
+  RaetselDetails,
+  RaetselSuchfilter
+} from '@mja-ws/raetsel/model';
+import { deepClone, filterDefined } from '@mja-ws/shared/util';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RaetselFacade {
@@ -32,22 +44,22 @@ export class RaetselFacade {
   raetselDetails$: Observable<RaetselDetails> = this.#store.select(fromRaetsel.raetselDetails).pipe(filterDefined, deepClone);
   suchfilter$: Observable<RaetselSuchfilter> = this.#store.select(fromRaetsel.suchfilter);
   generateLatexError$: Observable<boolean> = this.#store.select(fromRaetsel.generateLatexError);
-
-  editModus$: Observable<boolean> = this.#store.select(fromRaetsel.editModus);
+  medienForQuelle$: Observable<MediumQuelleDto[]> = this.#store.select(fromRaetsel.medienForQuelle);
+  showQuelle$: Observable<boolean> = this.#store.select(fromRaetsel.showQuelle);
 
   #selectItemsFacade = inject(SelectItemsFacade);
 
   triggerSearch(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): void {
 
     this.#store.dispatch(raetselActions.rAETSEL_SELECT_PAGE({ pageDefinition }));
-    this.#store.dispatch(raetselActions.fIND_RAETSEL({admin, suchfilter, pageDefinition }));
+    this.#store.dispatch(raetselActions.fIND_RAETSEL({ admin, suchfilter, pageDefinition }));
   }
 
   selectRaetsel(schluessel: string): void {
     this.#store.dispatch(raetselActions.rAETSEL_SELECTED({ schluessel }));
   }
 
-  generiereRaetselOutput(raetselID: string, outputFormat: OUTPUTFORMAT, font: FONT_NAME, schriftgroesse: SCHRIFTGROESSE, layoutAntwortvorschlaege: LATEX_LAYOUT_ANTWORTVORSCHLAEGE): void {
+  generiereRaetselOutput(raetselID: string, outputFormat: OutputFormat, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege): void {
 
     switch (outputFormat) {
       case 'PNG': this.#store.dispatch(raetselActions.gENERATE_RAETSEL_PNG({ raetselID, font, schriftgroesse, layoutAntwortvorschlaege })); break;
@@ -58,7 +70,6 @@ export class RaetselFacade {
 
   editRaetsel(): void {
 
-    this.#enterEditMode();
     this.#router.navigateByUrl('raetsel/editor');
 
   }
@@ -67,7 +78,7 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
   }
 
-  changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string, modeFullTextSearch: MODUS_VOLLTEXTSUCHE, searchModeForDescriptors: MODUS_SUCHE_MIT_DESKRIPTOREN ): void {
+  changeSuchfilterWithSelectableItems(selectedItems: SelectableItem[], suchstring: string, modeFullTextSearch: ModusVolltextsuche, searchModeForDescriptors: ModusSucheMitDeskriptoren): void {
 
     const deskriptoren: DeskriptorUI[] = [];
     selectedItems.forEach(item => {
@@ -85,6 +96,47 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
   }
 
+  herkunftstypChanged(herkunftstyp: Herkunftstyp, raetsel: RaetselDetails): void {
+
+    let quellenangabe = raetsel.quellenangabe;
+
+    if (herkunftstyp !== raetsel.herkunftstyp) {
+
+      quellenangabe = 'wird nach dem Speichern aktualisiert'
+    }
+
+    this.#store.dispatch(raetselActions.hERKUNFTSTYP_CHANGED({ herkunftstyp, quellenangabe }));
+
+  }
+
+  quelleChanged(quelle: QuelleDto): void {
+    let quellenangabe = '';
+    if (quelle.quellenart === 'PERSON') {
+      quellenangabe = quelle.person ? quelle.person : 'selbst';
+    } else {
+      quellenangabe = quelle.mediumUuid ? quelle.mediumUuid : 'Buch, Internet, Zeitschrift?';
+    }
+
+    quellenangabe += ' (wird beim Speichern ersetzt)';
+
+    this.#store.dispatch(raetselActions.qUELLE_CHANGED({ quelle, quellenangabe }));
+  }
+
+  findMedienForQuelle(quellenart: Quellenart): void {
+
+    let medienart: Medienart = 'NOOP';
+
+    switch (quellenart) {
+      case 'BUCH': medienart = 'BUCH'; break;
+      case 'INTERNET': medienart = 'INTERNET'; break;
+      case 'ZEITSCHRIFT': medienart = 'ZEITSCHRIFT'; break;
+    }
+
+    if (medienart !== 'NOOP') {
+      this.#store.dispatch(raetselActions.fIND_MEDIEN_FOR_QUELLE({ medienart }));
+    }
+  }
+
   neueRaetselsuche(): void {
     this.#store.dispatch(raetselActions.rESET_RAETSELSUCHFILTER());
     this.#selectItemsFacade.resetSelection();
@@ -94,13 +146,8 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSEL_CANCEL_SELECTION());
   }
 
-  createAndEditRaetsel(quelle: QuelleUI | undefined): void {
+  createAndEditRaetsel(quelle: QuelleDto): void {
 
-    if (quelle === undefined) {
-      // TODO: Exception werfen!!!
-      return;
-    }
-    this.#enterEditMode();
     const raetselDetails: RaetselDetails = { ...initialRaetselDetails, quelle: quelle };
     this.#store.dispatch(raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
   }
@@ -140,20 +187,11 @@ export class RaetselFacade {
   }
 
   downloadEmbeddedImages(raetselID: string): void {
-    this.#store.dispatch(raetselActions.fIND_EMBEDDED_IMAGES({raetselID}));
+    this.#store.dispatch(raetselActions.fIND_EMBEDDED_IMAGES({ raetselID }));
   }
 
   downloadRaetselLaTeX(raetselID: string): void {
-    this.#store.dispatch(raetselActions.fIND_RAETSEL_LATEX({raetselID}));
-  }
-  
-  leaveEditMode() {
-    this.#store.dispatch(raetselActions.fINISH_EDIT());
-  } 
-
-
-  #enterEditMode() {
-    this.#store.dispatch(raetselActions.pREPARE_EDIT());
+    this.#store.dispatch(raetselActions.fIND_RAETSEL_LATEX({ raetselID }));
   }
 
 }

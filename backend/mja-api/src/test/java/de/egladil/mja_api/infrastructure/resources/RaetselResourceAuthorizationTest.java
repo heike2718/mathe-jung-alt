@@ -14,7 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -26,7 +26,7 @@ import io.restassured.http.ContentType;
  */
 @QuarkusTest
 @TestHTTPEndpoint(RaetselResource.class)
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 public class RaetselResourceAuthorizationTest {
 
 	private static final String CSRF_TOKEN = "lqhidhqio";

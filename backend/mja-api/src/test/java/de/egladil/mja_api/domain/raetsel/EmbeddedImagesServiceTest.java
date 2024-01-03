@@ -39,7 +39,7 @@ import jakarta.ws.rs.core.Response;
  * EmbeddedImagesServiceTest
  */
 @QuarkusTest
-// @TestProfile(FullDatabaseTestProfile.class)
+// @TestProfile(FullDatabaseAdminTestProfile.class)
 public class EmbeddedImagesServiceTest {
 
 	private static final String ADMIN_UUID = "86348fae-b322-47bb-ba51-a0f5fed9fcdd";

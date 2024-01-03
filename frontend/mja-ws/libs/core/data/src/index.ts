@@ -1,8 +1,13 @@
 
-export { coreQuelleActions } from './lib/quelle/core-quelle.actions';
-export { fromCoreQuelle } from './lib/quelle/core-quelle.selectors';
-export { CoreQuelleEffects } from './lib/quelle/core-quelle.effects';
-export { coreQuelleFeature } from './lib/quelle/core-quelle.reducer';
+export { fromAuth } from './lib/auth/auth.selectors';
+export { authFeature } from './lib/auth/auth.reducer';
+export { AuthEffects } from './lib/auth/auth.effects';
+export { authActions } from './lib/auth/auth.actions';
+
+export { coreQuelleActions as coreAutorActions } from './lib/quelle/core-autor.actions';
+export { fromCoreAutor } from './lib/quelle/core-autor.selectors';
+export { CoreAutorEffects } from './lib/quelle/core-autor.effects';
+export { coreAutorFeature } from './lib/quelle/core-autor.reducer';
 
 export { coreDeskriptorenActions } from './lib/descriptoren/core-deskriptoren.actions';
 export { fromCoreDeskriptoren } from './lib/descriptoren/core-deskriptoren.selectors'
@@ -15,3 +20,5 @@ export { coreStatistikActions } from './lib/statistik/core-statistik.actions';
 export { statistikFeature } from './lib/statistik/core-statistik.reducer';
 export { fromStatistik } from './lib/statistik/core-statistik.selectors';
 export { CoreStatistikEffects } from './lib/statistik/core-statistik.effects';
+
+

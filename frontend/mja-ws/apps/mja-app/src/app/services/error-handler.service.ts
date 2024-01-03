@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorHandler, Injectable, Injector } from "@angular/core";
-import { AuthFacade } from "@mja-ws/shared/auth/api";
+import { AuthFacade } from '@mja-ws/core/api';
 import { extractServerErrorMessage, getHttpErrorResponse } from "@mja-ws/shared/http";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 
@@ -12,7 +12,7 @@ export class ErrorHandlerService implements ErrorHandler {
 
     constructor(private injector: Injector) { }
 
-    handleError(error: any): void {
+    handleError(error: NonNullable<unknown>): void {
 
         const messageService = this.injector.get(MessageService);
 
@@ -39,7 +39,7 @@ export class ErrorHandlerService implements ErrorHandler {
         }        
     }
 
-    #handleAnyOtherError(error: any, messageService: MessageService): void {
+    #handleAnyOtherError(error: unknown, messageService: MessageService): void {
         messageService.error('Upsi, da ist ein unerwarteter Fehler aufgetreten');
         // TODO: müssen das noch an die API senden
         console.error(error);

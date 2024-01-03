@@ -8,19 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.AntwortvorschlaegeMapper;
-import de.egladil.mja_api.domain.raetselgruppen.Referenztyp;
-import de.egladil.mja_api.domain.raetselgruppen.Schwierigkeitsgrad;
-import de.egladil.mja_api.infrastructure.persistence.dao.RaetselgruppenDao;
+import de.egladil.mja_api.infrastructure.persistence.dao.AufgabensammlungDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteRaetselgruppe;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -32,8 +34,10 @@ public class QuizService {
 
 	private static final String QUELLE_HW = "Heike Winkelvoß";
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(QuizService.class);
+
 	@Inject
-	RaetselgruppenDao raetselgruppenDao;
+	AufgabensammlungDao aufgabensammlungDao;
 
 	@Inject
 	RaetselFileService raetselFileService;
@@ -52,9 +56,13 @@ public class QuizService {
 	 */
 	public Optional<Quiz> generateQuiz(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
 
-		PersistenteRaetselgruppe dbResult = raetselgruppenDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
+		LOGGER.debug(" ==> (1)");
+		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
 
-		if (dbResult == null || dbResult.status != DomainEntityStatus.FREIGEGEBEN) {
+		LOGGER.debug(" ==> (4)");
+
+		// nur öffentliche und freigegebene Aufgabensammlungen.
+		if (dbResult == null || !dbResult.freigegeben || dbResult.privat) {
 
 			return Optional.empty();
 		}
@@ -68,9 +76,9 @@ public class QuizService {
 		return Optional.of(quiz);
 	}
 
-	public List<Quizaufgabe> getItemsAsQuizaufgaben(final String raetselgruppeID) {
+	public List<Quizaufgabe> getItemsAsQuizaufgaben(final String aufgabensammlungID) {
 
-		List<PersistenteAufgabeReadonly> aufgabenReadonly = raetselgruppenDao.loadAufgabenByReaetselgruppe(raetselgruppeID);
+		List<PersistenteAufgabeReadonly> aufgabenReadonly = aufgabensammlungDao.loadAufgabenByAufgabensammlung(aufgabensammlungID);
 		List<Quizaufgabe> aufgaben = new ArrayList<>();
 
 		aufgabenReadonly.forEach(aufgabeDB -> {
@@ -90,7 +98,7 @@ public class QuizService {
 		aufgabe.setAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(dbAufgabe.antwortvorschlaege));
 		aufgabe.setSchluessel(dbAufgabe.schluessel);
 		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.filenameVorschauFrage, dbAufgabe.filenameVorschauLoesung));
-		aufgabe.setStatus(dbAufgabe.status);
+		aufgabe.setFreigegeben(dbAufgabe.freigegeben);
 		aufgabe.setQuelle(mapQuelle(dbAufgabe));
 		aufgabe.setNummer(dbAufgabe.nummer);
 		aufgabe.setPunkte(dbAufgabe.punkte);
@@ -123,7 +131,7 @@ public class QuizService {
 
 		case ZEITSCHRIFT: {
 
-			return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahrgang;
+			return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahr;
 		}
 
 		default:

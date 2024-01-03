@@ -15,7 +15,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.DomainEntityStatus;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
@@ -26,8 +25,10 @@ import de.egladil.mja_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
-import de.egladil.mja_api.domain.quellen.QuelleMinimalDto;
 import de.egladil.mja_api.domain.quellen.QuellenService;
+import de.egladil.mja_api.domain.quellen.Quellenart;
+import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
+import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -37,9 +38,12 @@ import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_api.domain.raetsel.impl.DeleteUnusedEmbeddableImageFilesService;
 import de.egladil.mja_api.domain.raetsel.impl.FindPathsGrafikParser;
 import de.egladil.mja_api.domain.raetsel.impl.FragenUndLoesungenVO;
-import de.egladil.mja_api.domain.utils.PermissionUtils;
+import de.egladil.mja_api.domain.raetsel.impl.RaetselPermissionDelegate;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
+import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelle;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -61,13 +65,19 @@ public class RaetselService {
 	AuthenticationContext authCtx;
 
 	@Inject
+	RaetselPermissionDelegate permissionDelegate;
+
+	@Inject
 	DeskriptorenService deskriptorenService;
 
 	@Inject
 	RaetselFileService raetselFileService;
 
 	@Inject
-	QuellenService quellenServive;
+	QuellenService quellenService;
+
+	@Inject
+	QuellenRepository quellenRepository;
 
 	@Inject
 	RaetselDao raetselDao;
@@ -98,8 +108,7 @@ public class RaetselService {
 		List<RaetselsucheTrefferItem> treffer = new ArrayList<>();
 		long anzahlGesamt = 0L;
 
-		boolean nurFreigegebene = PermissionUtils
-			.restrictSucheToFreigegeben(PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx));
+		boolean nurFreigegebene = permissionDelegate.isOnlyReadFreigegebene();
 
 		switch (suchfilterVariante) {
 
@@ -146,13 +155,31 @@ public class RaetselService {
 	 *                 EditRaetselPayload die Daten und Metainformationen
 	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	@Transactional
 	public Raetsel raetselAnlegen(final EditRaetselPayload payload) {
+
+		// TODO semantische Validierung Herkunftstyp - Quellenart!!! EIGENKREATION nur mit PERSON, ADAPTION und ZITAT brauchen
+		// MEDIUM oder PERSON.
+
+		String raetselId = doInsertRaetsel(payload);
+		Raetsel result = this.getRaetselZuId(raetselId);
+
+		LOGGER.info("Raetsel angelegt: [raetsel.schluessel={}, admin={}]", result.getSchluessel(),
+			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
+
+		return result;
+	}
+
+	@Transactional
+	String doInsertRaetsel(final EditRaetselPayload payload) {
 
 		if (schluesselGenerieren(payload)) {
 
 			String schluessel = generiereSchluessel();
-			payload.getRaetsel().setSchluessel(schluessel);
+
+			LOGGER.info("raetsel.SCHLUESSEL={}", schluessel);
+
+			payload.setSchluessel(schluessel);
+
 		}
 
 		boolean schluesselExistiert = this.schluesselExists(payload);
@@ -168,23 +195,28 @@ public class RaetselService {
 		neuesRaetsel.setImportierteUuid(uuid);
 		String userId = authCtx.getUser().getName();
 
+		mergeWithPayload(neuesRaetsel, payload, userId);
+
 		neuesRaetsel.owner = userId;
 		neuesRaetsel.geaendertDurch = userId;
 		neuesRaetsel.filenameVorschauFrage = generateFilenameVorschau();
 		neuesRaetsel.filenameVorschauLoesung = generateFilenameVorschau();
 
-		mergeWithPayload(neuesRaetsel, payload.getRaetsel(), userId);
+		if (RaetselHerkunftTyp.EIGENKREATION != payload.getHerkunftstyp()) {
+
+			payload.getQuelle().setId("neu");
+			PersistenteQuelle neueQuelle = quellenService.quelleAnlegenOderAendern(neuesRaetsel.herkunft, payload.getQuelle());
+			String quelleId = neueQuelle.uuid;
+			neuesRaetsel.quelle = quelleId;
+		} else {
+
+			QuelleDto quelleAutor = quellenService.findOrCreateQuelleAutor();
+			neuesRaetsel.quelle = quelleAutor.getId();
+		}
 
 		raetselDao.save(neuesRaetsel);
 
-		Raetsel result = payload.getRaetsel();
-		result.setId(neuesRaetsel.uuid);
-		result.markiereAlsAenderbar();
-
-		LOGGER.info("Raetsel angelegt: [raetsel={}, admin={}]", result.getId(),
-			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
-
-		return result;
+		return neuesRaetsel.uuid;
 	}
 
 	/**
@@ -203,12 +235,16 @@ public class RaetselService {
 	 */
 	boolean schluesselGenerieren(final EditRaetselPayload payload) {
 
-		if (Benutzerart.ADMIN != authCtx.getUser().getBenutzerart()) {
+		Benutzerart benutzerart = authCtx.getUser().getBenutzerart();
+
+		if (Benutzerart.ADMIN != benutzerart) {
+
+			LOGGER.debug("SCHLUESSEL muss generiert werden, da Benutzerart={}", benutzerart);
 
 			return true;
 		}
 
-		return StringUtils.isBlank(payload.getRaetsel().getSchluessel());
+		return StringUtils.isBlank(payload.getSchluessel());
 	}
 
 	/**
@@ -218,11 +254,31 @@ public class RaetselService {
 	 *                 EditRaetselPayload die Daten und Metainformationen
 	 * @return         RaetselPayloadDaten mit einer generierten UUID.
 	 */
-	@Transactional
 	public Raetsel raetselAendern(final EditRaetselPayload payload) {
 
-		Raetsel raetsel = payload.getRaetsel();
-		String raetselId = raetsel.getId();
+		QuelleDto quelle = payload.getQuelle();
+
+		if (quelle.getQuellenart() != Quellenart.PERSON && quelle.getMediumUuid() == null) {
+
+			Response response = Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("mediumUuid ist erforderlich"))
+				.build();
+			throw new WebApplicationException(response);
+		}
+
+		String raetselId = payload.getId();
+		doUpdateRaetsel(payload);
+
+		LOGGER.info("Raetsel geaendert: [raetsel.schluessel={}, raetsel.uuid={}, admin={}]", payload.getSchluessel(), raetselId,
+			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
+
+		return getRaetselZuId(raetselId);
+	}
+
+	@Transactional
+	void doUpdateRaetsel(final EditRaetselPayload payload) {
+
+		// Raetsel raetsel = payload.getRaetsel();
+		String raetselId = payload.getId();
 		PersistentesRaetsel persistentesRaetsel = raetselDao.findById(raetselId);
 		String userId = authCtx.getUser().getName();
 
@@ -235,14 +291,7 @@ public class RaetselService {
 				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
-		if (!PermissionUtils.hasWritePermission(userId,
-			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), persistentesRaetsel.owner)) {
-
-			LOGGER.warn("User {} hat versucht, Raetsel {} mit Owner {} zu aendern", userId, persistentesRaetsel.schluessel,
-				persistentesRaetsel.owner);
-
-			throw new WebApplicationException(Status.FORBIDDEN);
-		}
+		permissionDelegate.checkWritePermission(persistentesRaetsel);
 
 		boolean schluesselExistiert = this.schluesselExists(payload);
 
@@ -265,8 +314,8 @@ public class RaetselService {
 		}
 
 		FragenUndLoesungenVO fragenLoesungenVo = new FragenUndLoesungenVO().withFrageAlt(persistentesRaetsel.frage)
-			.withFrageNeu(payload.getRaetsel().getFrage()).withLoesungAlt(persistentesRaetsel.loesung)
-			.withLoesungNeu(payload.getRaetsel().getLoesung());
+			.withFrageNeu(payload.getFrage()).withLoesungAlt(persistentesRaetsel.loesung)
+			.withLoesungNeu(payload.getLoesung());
 
 		if (persistentesRaetsel.filenameVorschauFrage == null) {
 
@@ -279,28 +328,58 @@ public class RaetselService {
 
 		}
 
-		mergeWithPayload(persistentesRaetsel, payload.getRaetsel(), userId);
+		String idQuelleZumLoeschen = null;
+
+		if (persistentesRaetsel.herkunft == RaetselHerkunftTyp.EIGENKREATION
+			&& payload.getHerkunftstyp() != RaetselHerkunftTyp.EIGENKREATION) {
+
+			LOGGER.debug("muss neue Quelle anlegen");
+			payload.getQuelle().setId("neu");
+			PersistenteQuelle neueQuelle = quellenService.quelleAnlegenOderAendern(payload.getHerkunftstyp(), payload.getQuelle());
+			persistentesRaetsel.quelle = neueQuelle.uuid;
+		}
+
+		if (persistentesRaetsel.herkunft != RaetselHerkunftTyp.EIGENKREATION
+			&& payload.getHerkunftstyp() == RaetselHerkunftTyp.EIGENKREATION) {
+
+			LOGGER.debug("muss Quelle mit ID=" + persistentesRaetsel.quelle + " löschen und Autor-Quelle zuordnen");
+			idQuelleZumLoeschen = payload.getQuelle().getId();
+			QuelleDto autor = quellenService.findOrCreateQuelleAutor();
+			persistentesRaetsel.quelle = autor.getId();
+
+		}
+
+		if (persistentesRaetsel.herkunft != RaetselHerkunftTyp.EIGENKREATION
+			&& payload.getHerkunftstyp() != RaetselHerkunftTyp.EIGENKREATION) {
+
+			LOGGER.debug("muss vorhandene Quelle überschreiben - also payload.quelle.id ignorieren");
+			payload.getQuelle().setId(persistentesRaetsel.quelle);
+			quellenService.quelleAnlegenOderAendern(payload.getHerkunftstyp(), payload.getQuelle());
+		}
+
+		mergeWithPayload(persistentesRaetsel, payload, userId);
+
 		raetselDao.save(persistentesRaetsel);
+
+		if (idQuelleZumLoeschen != null) {
+
+			this.quellenService.quelleLoeschen(idQuelleZumLoeschen);
+		}
 
 		// Nur löschen, wenn persist klar ging!
 		deleteImagesFileService.checkAndDeleteUnusedFiles(fragenLoesungenVo);
-
-		LOGGER.info("Raetsel geaendert: [raetsel={}, admin={}]", raetselId,
-			StringUtils.abbreviate(authCtx.getUser().getName(), 11));
-
-		return getRaetselZuId(raetselId);
 	}
 
 	boolean schluesselExists(final EditRaetselPayload payload) {
 
-		PersistentesRaetsel persistentesRaetsel = raetselDao.findWithSchluessel(payload.getRaetsel().getSchluessel());
+		PersistentesRaetsel persistentesRaetsel = raetselDao.findWithSchluessel(payload.getSchluessel());
 
 		if (persistentesRaetsel == null) {
 
 			return false;
 		}
 
-		return !persistentesRaetsel.uuid.equals(payload.getRaetsel().getId());
+		return !persistentesRaetsel.uuid.equals(payload.getId());
 	}
 
 	/**
@@ -310,7 +389,6 @@ public class RaetselService {
 	 * @param  id
 	 * @return    Raetsel oder null.
 	 */
-	@Transactional
 	public Raetsel getRaetselZuId(final String id) {
 
 		PersistentesRaetsel raetsel = raetselDao.findById(id);
@@ -336,14 +414,67 @@ public class RaetselService {
 
 		result.setImages(raetselFileService.findImages(raetsel.filenameVorschauFrage, raetsel.filenameVorschauLoesung));
 
-		Optional<QuelleMinimalDto> optQuelle = quellenServive.loadQuelleMinimal(raetsel.quelle);
+		Optional<QuelleDto> optQuelle = quellenService.getQuelleWithId(raetsel.quelle);
 
-		if (optQuelle.isPresent()) {
+		if (optQuelle.isEmpty()) {
 
-			result.setQuelle(optQuelle.get());
+			LOGGER.error("Datenfehler: Rätsel mit SCHLUESSEL={} - keinen Eintrag in QUELLEN mit UUID={} gefunden.",
+				raetsel.schluessel, raetsel.quelle);
+			throw new MjaRuntimeException("Datenfehler: es gibt keinen Eintrag in QUELLEN mit uuid=" + raetsel.quelle);
+		}
+
+		QuelleDto theQuelle = optQuelle.get();
+
+		String quellenangabe = this.getQuellenangabe(theQuelle.getId(), raetsel);
+
+		if (quellenangabe == null) {
+
+			LOGGER.error("Datenfehler: Rätsel mit SCHLUESSEL={} - keinen Eintrag in VW_QUELLEN mit UUID={} gefunden.",
+				raetsel.schluessel, raetsel.quelle);
+			throw new MjaRuntimeException("Datenfehler: es gibt keinen Eintrag in QUELLEN mit uuid=" + raetsel.quelle);
+		}
+
+		result.setQuelle(theQuelle);
+		result.setQuellenangabe(quellenangabe);
+
+		try {
+
+			permissionDelegate.checkWritePermission(raetsel);
+			result.setSchreibgeschuetzt(false);
+
+		} catch (WebApplicationException e) {
+
+			result.setSchreibgeschuetzt(true);
 		}
 
 		return result;
+	}
+
+	String getQuellenangabe(final String quelleId, final PersistentesRaetsel raetsel) {
+
+		PersistenteQuelleReadonly ausDB = this.quellenRepository.findQuelleReadonlyById(quelleId);
+
+		if (ausDB == null) {
+
+			return null;
+		}
+
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
+		String text = nameStrategie.getText(ausDB);
+
+		if (raetsel.herkunft == RaetselHerkunftTyp.ADAPTION) {
+
+			Optional<PersistenteQuelleReadonly> optQuelle = quellenRepository.findQuelleWithUserId(raetsel.owner);
+
+			if (optQuelle.isPresent()) {
+
+				PersistenteQuelleReadonly quelle = optQuelle.get();
+				text = quelle.person + " (basierend auf einer Idee aus " + text + ")";
+			}
+
+		}
+
+		return text;
 	}
 
 	/**
@@ -395,8 +526,8 @@ public class RaetselService {
 	 * Läd das, was als Input für ein LaTeX-File erforderlich ist.
 	 *
 	 * @param  schluesselliste
-	 *                    List eine Liste von Schlüsseln.
-	 * @return            List
+	 *                         List eine Liste von Schlüsseln.
+	 * @return                 List
 	 */
 	public List<RaetselLaTeXDto> findRaetselLaTeXwithSchluesselliste(final List<String> schluesselliste) {
 
@@ -419,18 +550,18 @@ public class RaetselService {
 		return result;
 	}
 
-	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final Raetsel daten, final String userId) {
+	void mergeWithPayload(final PersistentesRaetsel persistentesRaetsel, final EditRaetselPayload payload, final String userId) {
 
-		persistentesRaetsel.antwortvorschlaege = daten.antwortvorschlaegeAsJSON();
-		persistentesRaetsel.deskriptoren = deskriptorenService.sortAndStringifyIdsDeskriptoren(daten.getDeskriptoren());
-		persistentesRaetsel.frage = daten.getFrage();
+		persistentesRaetsel.antwortvorschlaege = AntwortvorschlaegeMapper.antwortvorschlaegeAsJSON(payload.getAntwortvorschlaege());
+		persistentesRaetsel.deskriptoren = deskriptorenService.sortAndStringifyIdsDeskriptoren(payload.getDeskriptoren());
+		persistentesRaetsel.frage = payload.getFrage();
 		persistentesRaetsel.geaendertDurch = userId;
-		persistentesRaetsel.kommentar = daten.getKommentar();
-		persistentesRaetsel.loesung = daten.getLoesung();
-		persistentesRaetsel.quelle = daten.getQuelle().getId();
-		persistentesRaetsel.schluessel = daten.getSchluessel();
-		persistentesRaetsel.name = daten.getName();
-		persistentesRaetsel.status = daten.getStatus();
+		persistentesRaetsel.kommentar = payload.getKommentar();
+		persistentesRaetsel.loesung = payload.getLoesung();
+		persistentesRaetsel.schluessel = payload.getSchluessel();
+		persistentesRaetsel.name = payload.getName();
+		persistentesRaetsel.freigegeben = payload.isFreigegeben();
+		persistentesRaetsel.herkunft = payload.getHerkunftstyp();
 		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
 	}
 
@@ -442,20 +573,12 @@ public class RaetselService {
 			.withFrage(raetselDB.frage)
 			.withKommentar(raetselDB.kommentar)
 			.withLoesung(raetselDB.loesung)
-			.withQuelleId(raetselDB.quelle)
 			.withSchluessel(raetselDB.schluessel)
-			.withStatus(raetselDB.status)
+			.withFreigegeben(raetselDB.freigegeben)
+			.withHerkunftstyp(raetselDB.herkunft)
 			.withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
 			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);
-
-		boolean hasWritePermission = PermissionUtils.hasWritePermission(authCtx.getUser().getName(),
-			PermissionUtils.getRolesWithWriteRaetselAndRaetselgruppenPermission(authCtx), raetselDB.owner);
-
-		if (hasWritePermission) {
-
-			result.markiereAlsAenderbar();
-		}
 
 		return result;
 	}
@@ -466,9 +589,10 @@ public class RaetselService {
 			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
 			.withId(raetselDB.uuid)
 			.withName(raetselDB.name)
-			.withStatus(raetselDB.status)
+			.withFreigegeben(raetselDB.freigegeben)
 			.withKommentar(raetselDB.kommentar)
-			.withSchluessel(raetselDB.schluessel);
+			.withSchluessel(raetselDB.schluessel)
+			.withHerkunft(raetselDB.herkunft);
 
 		return result;
 	}
@@ -489,7 +613,7 @@ public class RaetselService {
 	 */
 	public AnzahlabfrageResponseDto zaehleFreigegebeneRaetsel() {
 
-		long anzahl = raetselDao.countRaetselWithStatus(DomainEntityStatus.FREIGEGEBEN);
+		long anzahl = raetselDao.countRaetselWithStatus(true);
 		AnzahlabfrageResponseDto result = new AnzahlabfrageResponseDto();
 		result.setErgebnis(anzahl);
 

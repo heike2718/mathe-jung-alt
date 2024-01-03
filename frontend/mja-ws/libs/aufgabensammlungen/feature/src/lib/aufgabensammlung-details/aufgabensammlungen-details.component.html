@@ -1,0 +1,99 @@
+<div class="mja-container">
+
+    <div *ngIf="aufgabensammlungenFacade.aufgabensammlungDetails$ | async as sammlung else keineGruppe">
+
+        <h2>Aufgabensammlung {{sammlung.name}} <span matBadge={{sammlung.elemente.length}} matBadgeColor="accent"
+                class="ml-1"></span></h2>
+
+        <div class="grid-container-2 mt-2 mb-2">
+
+            <label *ngIf="authFacade.userIsAdmin$ | async">ID:</label>
+            <div *ngIf="authFacade.userIsAdmin$ | async">
+                {{sammlung.id}}
+            </div>
+
+            <label>Kommentar:</label>
+            <div>
+                {{sammlung.kommentar}}
+            </div>
+
+            <label *ngIf="authFacade.userIsAdmin$ | async">geändert durch:</label>
+            <div *ngIf="authFacade.userIsAdmin$ | async">
+                {{sammlung.geaendertDurch}}
+            </div>
+
+            <label>freigegeben:</label>
+            <mat-checkbox [(ngModel)]="freigegeben" [disabled]="true"></mat-checkbox>
+
+            <label>pivat:</label>
+            <mat-checkbox [(ngModel)]="privat" [disabled]="true"></mat-checkbox>
+
+            <label> Referenztyp:</label>
+            <div>
+                {{sammlung.referenztyp}}
+            </div>
+
+            <label>Referenz:</label>
+            <div>
+                {{sammlung.referenz}}
+            </div>
+        </div>
+
+        <div class="button-container">
+
+            <div *ngIf="!(sammlung.schreibgeschuetzt)">
+                <button mat-raised-button color="primary" [disabled]="!getAufgabensammlungID()"
+                    (click)="openNeuesAufgabensammlungselementDialog()">neues Element</button>
+            </div>
+
+            <div *ngIf="!(sammlung.schreibgeschuetzt)">
+                <button mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button>
+            </div>
+
+            <div>
+                <button mat-raised-button color="primary" [disabled]="buttonsGenerierenDisabled()"
+                    (click)="openGenerateDialog()">PDF / LaTeX</button>
+            </div>
+
+            <div>
+                <button mat-raised-button color="primary" (click)="reload()">aktualisieren</button>
+            </div>
+
+            <div>
+                <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
+            </div>
+
+
+        </div>
+
+        <h2>Elemente</h2>
+
+        <mja-aufgabensammlungselement [aufgabensammlung]="sammlung" (showImages)="onShowImagesElement($event)"
+            (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
+        </mja-aufgabensammlungselement>
+
+        <div *ngIf="sammlung.elemente.length > 0">
+            <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
+            <div *ngIf="schluessel.length > 0" class="mb-2">
+                <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
+                <button *ngIf="aufgabensammlungenFacade.selectedAufgabensammlungselement$ | async as element"
+                    mat-raised-button color="primary" class="ml-2" (click)="onShowImagesElement(element)">neu
+                    laden</button>
+            </div>
+            <div *ngIf="images else imagesFehlen">
+                <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #keineGruppe>
+        <h2>Aufgabensammlung Details</h2>
+        <p>keine Aufgabensammlung ausgewählt</p>
+        <div>
+            <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
+        </div>
+    </ng-template>
+
+    <ng-template #imagesFehlen>
+        <p>Entweder wurde die Vorschau nicht geladen oder sie existiert nicht</p>
+    </ng-template>

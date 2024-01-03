@@ -439,6 +439,42 @@ npx nx generate @nrwl/angular:component select-items --project=shared-components
 npx nx generate @nrwl/angular:component ja-nein-dialog --project=shared-components --selector=mja-ja-nein --standalone --no-interactive --dry-run
 ```
 
+### Medien
+
+```
+npx nx g @nx/js:lib model --directory=libs/medien --tags='type:model' --buildable --no-interactive --dry-run
+npx nx g @nx/js:lib data --directory=libs/medien --tags='type:data' --buildable --no-interactive --dry-run
+npx nx g @nx/js:lib api --directory=libs/medien --tags='type:api' --buildable --no-interactive --dry-run
+npx nx g @nx/js:lib feature --directory=libs/medien --tags='type:feature' --buildable --no-interactive --dry-run
+```
+
+__Medien search component__
+
+```
+npx nx generate @nrwl/angular:component medien-search --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-medien-search -style=scss --standalone --no-interactive --dry-run
+```
+
+__Medium details component__
+
+```
+npx nx generate @nrwl/angular:component medium-details --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-medium-details --style=scss --standalone --no-interactive --dry-run
+```
+
+
+
+__Medium edit component__
+
+```
+npx nx generate @nrwl/angular:component medium-edit --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-medium-edit --style=scss --standalone --no-interactive --dry-run
+```
+
+__Quelle component__
+
+```
+npx nx generate @nrwl/angular:component quelle --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-quelle --style=scss --standalone --no-interactive --dry-run
+```
+
+
 
 ## FAQ
 

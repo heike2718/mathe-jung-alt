@@ -1,18 +1,17 @@
 import { GeneratedImages, initialPaginationState, PaginationState, SelectableItem } from "@mja-ws/core/model";
-import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter } from "@mja-ws/raetsel/model";
+import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto, initialRaetselDetails } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
-
+import { swallowEmptyArgument } from "@mja-ws/shared/util";
 export interface RaetselState {
     readonly loaded: boolean;
     readonly page: Raetsel[];
     readonly paginationState: PaginationState;
     readonly selectableDeskriptoren: SelectableItem[];
-    readonly saveSuccessMessage: string | undefined;
     readonly raetselDetails: RaetselDetails | undefined;
     readonly raetselSuchfilter: RaetselSuchfilter;
     readonly generateLatexError: boolean;
-    readonly editModus: boolean;
+    readonly medienForQuelle: MediumQuelleDto[];
 };
 
 const initialState: RaetselState = {
@@ -20,11 +19,10 @@ const initialState: RaetselState = {
     page: [],
     paginationState: initialPaginationState,
     selectableDeskriptoren: [],
-    saveSuccessMessage: undefined,
     raetselDetails: undefined,
     raetselSuchfilter: initialRaetselSuchfilter,
     generateLatexError: false,
-    editModus: false
+    medienForQuelle: []
 };
 
 export const raetselFeature = createFeature({
@@ -40,7 +38,7 @@ export const raetselFeature = createFeature({
         }),
         on(raetselActions.rAETSELSUCHFILTER_CHANGED, (state, action) => {
 
-            return {...state, raetselSuchfilter: action.suchfilter, generateLatexError: false};
+            return { ...state, raetselSuchfilter: action.suchfilter, generateLatexError: false };
         }),
         on(raetselActions.rAETSEL_FOUND, (state, action): RaetselState => {
             return {
@@ -70,6 +68,13 @@ export const raetselFeature = createFeature({
                 generateLatexError: false
             };
         }),
+
+        on(raetselActions.hERKUNFTSTYP_CHANGED, (state, action) => {
+
+            const raetselDetails: RaetselDetails = state.raetselDetails ? {...state.raetselDetails } : initialRaetselDetails;
+            return {...state, raetselDetails: {...raetselDetails, herkunftstyp: action.herkunftstyp, quellenangabe: action.quellenangabe} };
+        }),
+
         on(raetselActions.rAETSEL_PNG_GENERATED, (state, action) => {
 
             if (state.raetselDetails) {
@@ -95,10 +100,21 @@ export const raetselFeature = createFeature({
                 ...state,
                 raetselDetails: action.raetselDetails,
                 selectableDeskriptoren: selectableDeskriptoren,
-                generateLatexError: false
+                generateLatexError: false,
             };
         }),
-        on(raetselActions.rESET_RAETSELSUCHFILTER, (state, _action): RaetselState => {
+        on(raetselActions.qUELLE_CHANGED, (state, action) => {
+            if (state.raetselDetails) {
+                return { ...state, raetselDetails: { ...state.raetselDetails, quelle: action.quelle, quellenangabe: action.quellenangabe } };
+            } else {
+                return { ...state, raetselDetails: { ...initialRaetselDetails, quelle: action.quelle, quellenangabe: action.quellenangabe } };
+            }
+        }),
+
+        on(raetselActions.rESET_RAETSELSUCHFILTER, (state, action): RaetselState => {
+
+            swallowEmptyArgument(action, false);
+
             return {
                 ...state,
                 loaded: false,
@@ -109,16 +125,22 @@ export const raetselFeature = createFeature({
                 paginationState: initialPaginationState
             };
         }),
-        on(raetselActions.rAETSEL_CANCEL_SELECTION, (state, _action) => {
-            return {...state, raetselDetails: undefined, selectableDeskriptoren: [], generateLatexError: false}
+        on(raetselActions.rAETSEL_CANCEL_SELECTION, (state, action) => {
+            swallowEmptyArgument(action, false);
+            return { ...state, raetselDetails: undefined, selectableDeskriptoren: [], generateLatexError: false }
         }),
-        on(raetselActions.lATEX_ERRORS_DETECTED, (state, _action) => {
+        on(raetselActions.lATEX_ERRORS_DETECTED, (state, action) => {
+            swallowEmptyArgument(action, false);
             return {
                 ...state,
                 generateLatexError: true
             }
         }),
-        on(raetselActions.pREPARE_EDIT, (state, _action) => ({ ...state, editModus: true })),
-        on(raetselActions.fINISH_EDIT, (state, _action) => ({ ...state, editModus: false })),
+        on(raetselActions.mEDIEN_FOR_QUELLE_FOUND, (state, action) => {
+            return {
+                ...state,
+                medienForQuelle: action.result
+            };
+        }),
     )
 });

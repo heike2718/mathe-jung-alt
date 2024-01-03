@@ -1,35 +1,60 @@
 {
   "latexHistorisieren": true,
-  "idAendernderUser": "20721575-8c45-4201-a025-7a9fece1f2aa",
-  "raetsel": {
-    "id": "cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866",
-    "schluessel": "02777",
-    "name": "Bälle in Kisten",
-    "status": "ERFASST",
-    "frage": "\\begin{center}{\\Large \\bf 99 Bälle}\\end{center} Wie viele waren es vorher?",
-    "loesung": "100",
-    "kommentar": "Irgendeine Serie",
-    "quelleId": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
-    "antwortvorschlaege": [{"buchstabe":"A","text":"8","korrekt":false},{"buchstabe":"B","text":"7","korrekt":false},{"buchstabe":"C","text":"13","korrekt":false},{"buchstabe":"D","text":"6","korrekt":true},{"buchstabe":"E","text":"3","korrekt":false}],
-    "deskriptoren": [
-      {
-        "id": 1,
-        "name": "Mathematik",
-        "admin": false,
-        "kontext": "RAETSEL"
-      },
-      {
-        "id": 4,
-        "name": "Klasse 1",
-        "admin": false,
-        "kontext": "RAETSEL"
-      },
-      {
-        "id": 14,
-        "name": "Logik",
-        "admin": false,
-        "kontext": "RAETSEL"
-      }
-    ]
+  "id": "cb1f6adb-1ba4-4aeb-ac8d-d4ba255a5866",
+  "schluessel": "02777",
+  "name": "Bälle in Kisten",
+  "freigegeben": false,
+  "herkunftstyp": "EIGENKREATION",
+  "frage": "\\begin{center}{\\Large \\bf 99 Bälle}\\end{center} Wie viele waren es vorher?",
+  "loesung": "100",
+  "kommentar": "Irgendeine Serie",
+  "antwortvorschlaege": [
+    {
+      "buchstabe": "A",
+      "text": "8",
+      "korrekt": false
+    },
+    {
+      "buchstabe": "B",
+      "text": "7",
+      "korrekt": false
+    },
+    {
+      "buchstabe": "C",
+      "text": "13",
+      "korrekt": false
+    },
+    {
+      "buchstabe": "D",
+      "text": "6",
+      "korrekt": true
+    },
+    {
+      "buchstabe": "E",
+      "text": "3",
+      "korrekt": false
+    }
+  ],
+  "deskriptoren": [
+    {
+      "id": 1,
+      "name": "Mathematik",
+      "admin": false
+    },
+    {
+      "id": 4,
+      "name": "Klasse 1",
+      "admin": false
+    },
+    {
+      "id": 14,
+      "name": "Logik",
+      "admin": false
+    }
+  ],
+  "quelle": {
+    "id": "8ef4d9b8-62a6-4643-8674-73ebaec52d98",
+    "quellenart": "PERSON",
+    "person": "Heike Winkelvoß"
   }
 }

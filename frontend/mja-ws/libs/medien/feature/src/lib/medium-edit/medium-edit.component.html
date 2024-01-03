@@ -1,0 +1,88 @@
+<div class="mja-container" *ngIf="medienFacade.selectedMediumDetails$ | async else keinMedium">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Medium</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form [formGroup]="form" novalidate>
+
+                <div class="mja-form">
+                    <!-- Titel -->
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Titel</mat-label>
+                            <input matInput maxlength="100" formControlName="titel" #titelInput>
+                            <mat-error *ngIf="mediumDataError('titel', 'required')">Titel ist
+                                Pflicht</mat-error>
+                            <mat-error *ngIf="mediumDataError('titel', 'maxLength')">maximal 100
+                                Zeichen</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Medienarten -->
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Medienart</mat-label>
+                            <select matNativeControl formControlName="medienart" #medienartInput>
+                                <option *ngFor="let level of selectMedienartenInput" [value]="level">
+                                    {{level}}</option>
+                            </select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- URL -->
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Autor(en)</mat-label>
+                            <input matInput maxlength="255" formControlName="autor" #autorInput>
+                            <mat-hint>kommaseparierte Liste von Autorennamen. Nur sinnvoll bei Büchern</mat-hint>
+                            <mat-error *ngIf="mediumDataError('autor', 'maxLength')">maximal 100
+                                Zeichen</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- URL -->
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>URL</mat-label>
+                            <input matInput maxlength="255" formControlName="url" #urlInput>
+                            <mat-hint>optionale URL zu einer Webseite.</mat-hint>
+                            <mat-error *ngIf="mediumDataError('url', 'maxLength')">maximal 255
+                                Zeichen</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                   <!-- Kommentar -->
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Kommentar</mat-label>
+                            <input matInput maxlength="200" formControlName="kommentar" #kommentarInput>
+                            <mat-error *ngIf="mediumDataError('kommentar', 'maxLength')">maximal 200 Zeichen
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" [disabled]="!form.valid"
+                (click)="submit()">speichern</button>
+            <button *ngIf="medium.id !== 'neu'" mat-raised-button color="primary"
+                matTooltip="zurück zur Detailansicht" (click)="cancelEdit()">Abbruch/Details</button>
+            <button mat-raised-button color="primary" matTooltip="zurück zur Suche"
+                (click)="gotoSuche()">Mediensuche</button>
+        </mat-card-actions>
+        <mat-card-footer *ngIf="(!form.valid)">
+            <mat-error *ngIf="(!form.valid)">
+                Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
+                Pflichtangaben und so.
+            </mat-error>
+        </mat-card-footer>
+    </mat-card>
+</div>
+
+<ng-template #keinMedium>
+    <h2>Medium anlegen oder ändern</h2>
+    <p>kein Medium ausgewählt</p>
+</ng-template>

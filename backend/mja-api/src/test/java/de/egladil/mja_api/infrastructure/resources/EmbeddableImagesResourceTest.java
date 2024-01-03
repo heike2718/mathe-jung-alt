@@ -24,7 +24,7 @@ import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageVorschau;
 import de.egladil.mja_api.domain.embeddable_images.dto.ReplaceEmbeddableImageRequestDto;
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.upload.UploadedFile;
-import de.egladil.mja_api.profiles.FullDatabaseTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -36,7 +36,7 @@ import io.restassured.http.ContentType;
  */
 @QuarkusTest
 @TestHTTPEndpoint(EmbeddableImagesResource.class)
-@TestProfile(FullDatabaseTestProfile.class)
+@TestProfile(FullDatabaseAdminTestProfile.class)
 public class EmbeddableImagesResourceTest {
 
 	@ConfigProperty(name = "latex.base.dir")

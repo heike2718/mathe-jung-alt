@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.egladil.mja_api.domain.auth.config.AuthConstants;
+import de.egladil.mja_api.domain.auth.config.ConfigService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -16,12 +21,6 @@ import jakarta.ws.rs.container.PreMatching;
 import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import de.egladil.mja_api.domain.auth.config.AuthConstants;
-import de.egladil.mja_api.domain.auth.config.ConfigService;
 
 /**
  * CsrfTokenValidationFilter

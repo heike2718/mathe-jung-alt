@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { generateUUID } from "./uuid-generator";
 
 @Injectable({
     providedIn: 'root'

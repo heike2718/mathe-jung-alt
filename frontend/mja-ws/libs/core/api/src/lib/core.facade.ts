@@ -1,8 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { coreDeskriptorenActions, coreQuelleActions, fromCoreQuelle, fromCoreDeskriptoren, ImagesHttpService, fromStatistik, coreStatistikActions } from "@mja-ws/core/data";
-import { DeskriptorUI, GeneratedImages, QuelleUI } from "@mja-ws/core/model";
-import { BENUTZERART, User } from "@mja-ws/shared/auth/model";
+import { coreDeskriptorenActions, coreAutorActions, fromCoreAutor, fromCoreDeskriptoren, ImagesHttpService, fromStatistik, coreStatistikActions } from "@mja-ws/core/data";
+import { DeskriptorUI, GeneratedImages, QuelleDto } from "@mja-ws/core/model";
 import { Store } from "@ngrx/store";
 import { Observable, tap } from "rxjs";
 
@@ -16,10 +15,14 @@ export class CoreFacade {
     #imagesHttpService = inject(ImagesHttpService);
 
     #deskriptorenLoaded = false;
+    #autorLoaded = false;
 
-    existsQuelleAdmin$: Observable<boolean> = this.#store.select(fromCoreQuelle.existsQuelleAdmin);
-    notExistsQuelleAdmin$: Observable<boolean> = this.#store.select(fromCoreQuelle.notExistsQuelleAdmin);
-    quelleAdmin$: Observable<QuelleUI> = this.#store.select(fromCoreQuelle.quelleAdmin);
+    existsQuelleEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.existsQuelleEigenkreation);
+    notExistsQuelleEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.notExistsQuelleEigenkreation);    
+
+    autorLoaded$: Observable<boolean> = this.#store.select(fromCoreAutor.quelleEigenkreationLoaded);
+        autor$: Observable<QuelleDto> = this.#store.select(fromCoreAutor.quelleEigenkreation);
+
 
     deskriptorenUILoaded$: Observable<boolean> = this.#store.select(fromCoreDeskriptoren.isDeskriptorenUILoaded);
     alleDeskriptoren$: Observable<DeskriptorUI[]> = this.#store.select(fromCoreDeskriptoren.deskriptotrenUI);
@@ -27,19 +30,31 @@ export class CoreFacade {
     anzahlPublicRaetselLoaded$: Observable<boolean> = this.#store.select(fromStatistik.isAnzahlPublicRaetselLoaded);
     anzahlPublicRaetsel$: Observable<number> = this.#store.select(fromStatistik.anzahlPublicRaetsel);
 
+
+
     constructor() {
         this.deskriptorenUILoaded$.pipe(
             tap((loaded: boolean) => this.#deskriptorenLoaded = loaded)
         ).subscribe();
+
+        this.autorLoaded$.pipe(
+            tap((loaded) => this.#autorLoaded = loaded)
+        ).subscribe();
+       
     }
 
-    public loadQuelleAngemeldeterAdmin(benutzerart: BENUTZERART): void {
+    public loadAutor(): void {
 
-        if (benutzerart === 'ANONYM' || benutzerart === 'STANDARD') {
+        if (this.#autorLoaded) {
             return;
         }
 
-        this.#store.dispatch(coreQuelleActions.lOAD_QUELLE_ADMIN());
+        this.#store.dispatch(coreAutorActions.lOAD_AUTOR());
+    }
+
+    public replaceAutor(quelle: QuelleDto): void {
+
+        this.#store.dispatch(coreAutorActions.cORE_AUTOR_REPLACED({quelle: quelle}));
     }
 
     public loadDeskriptoren(): void {
@@ -55,7 +70,7 @@ export class CoreFacade {
 
     public handleLogout(): void {        
         this.#removeCoreDeskriptoren();
-        this.#removeQuelleAngemeldeterAdmin;
+        this.#removeAutor;
         this.#router.navigateByUrl('/');
     }
 
@@ -63,9 +78,9 @@ export class CoreFacade {
         return this.#imagesHttpService.loadRaetselPNGs(schluessel);
     }
 
-    #removeQuelleAngemeldeterAdmin(): void {
-        this.#store.dispatch(coreQuelleActions.cORE_QUELLE_ADMIN_REMOVE());
-        console.log('coreQuelleActions.cORE_QUELLE_ADMIN_REMOVE() called')
+    #removeAutor(): void {
+        this.#store.dispatch(coreAutorActions.rEMOVE_AUTOR());
+        console.log('coreQuelleActions.rEMOVE_AUTOR() called')
     }
 
     #removeCoreDeskriptoren(): void {       

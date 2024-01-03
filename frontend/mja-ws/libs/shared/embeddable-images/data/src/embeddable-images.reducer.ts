@@ -2,6 +2,7 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { embeddableImagesActions } from './embeddable-images.actions';
 import { EmbeddableImageInfo, EmbeddableImageResponseDto, EmbeddableImageVorschau, initialEmbeddableImageResponseDto } from "@mja-ws/embeddable-images/model";
+import { swallowEmptyArgument } from "@mja-ws/shared/util";
 
 export interface EmbeddableImagesState {
     readonly embeddableImagesResponse: EmbeddableImageResponseDto | undefined;
@@ -46,23 +47,35 @@ export const embeddableImagesFeature = createFeature({
             )
         ),
         on(embeddableImagesActions.iMAGE_INFO_SELECTED, (state, action) => ({ ...state, selectedEmbeddableImageInfo: action.embeddableImageInfo })),
-        on(embeddableImagesActions.lADE_VORSCHAU, (state, _action) => ({ ...state, selectedEmbeddableImageVorschau: undefined })),
+
+        on(embeddableImagesActions.lADE_VORSCHAU, (state, action) => {
+
+            swallowEmptyArgument(action, false);
+            return {
+                ...state, selectedEmbeddableImageVorschau: undefined
+            }
+        }),
+
         on(embeddableImagesActions.vORSCHAU_GELADEN, (state, action) =>
-            ({ ...state,
-                embeddableImageVorschauGeladen: true,
-                selectedEmbeddableImageVorschau: action.embeddableImageVorschau
-             })),
-        on(embeddableImagesActions.cLEAR_VORSCHAU, (state, _action) =>
         ({
             ...state,
-            embeddableImageVorschauGeladen: false,
-            selectedEmbeddableImageInfo: undefined,
-            selectedEmbeddableImageVorschau: undefined,
-            embeddableImagesResponse: initialEmbeddableImageResponseDto
+            embeddableImageVorschauGeladen: true,
+            selectedEmbeddableImageVorschau: action.embeddableImageVorschau
         })),
+        on(embeddableImagesActions.cLEAR_VORSCHAU, (state, action) => {
+
+            swallowEmptyArgument(action, false);
+            return {
+                ...state,
+                embeddableImageVorschauGeladen: false,
+                selectedEmbeddableImageInfo: undefined,
+                selectedEmbeddableImageVorschau: undefined,
+                embeddableImagesResponse: initialEmbeddableImageResponseDto
+            };
+        }),
         on(
             embeddableImagesActions.rESET_STATE,
-            (_state, _action) => (initialState)
+            () => (initialState)
         ),
     )
 });
