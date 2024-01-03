@@ -14,8 +14,16 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
-import { Antwortvorschlag, EditRaetselPayload, GuiHerkunfsttyp, GuiHerkunftstypenMap, GuiQuellenart, GuiQuellenartenMap, MediumQuelleDto } from '@mja-ws/raetsel/model';
-import { combineLatest, Subject, Subscription } from 'rxjs';
+import {
+  Antwortvorschlag,
+  EditRaetselPayload,
+  GuiHerkunfsttyp,
+  GuiHerkunftstypenMap,
+  GuiQuellenart,
+  GuiQuellenartenMap,
+  MediumQuelleDto
+} from '@mja-ws/raetsel/model';
+import { combineLatest, Subscription } from 'rxjs';
 import { FormsModule, ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import {
   anzeigeAntwortvorschlaegeSelectInput,
@@ -721,7 +729,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
       antwortvorschlaege: antwortvorschlaegeNeu,
       deskriptoren: this.#selectedDeskriptoren,
-      herkunftstyp: this.selectedHerkunftstyp,
+      herkunftstyp: new GuiHerkunftstypenMap().getHerkunftstypOfLabel(this.selectedHerkunftstyp),
       quelle: theQuelle
     }
   }
@@ -743,8 +751,17 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #latexChanged(): boolean {
 
-    return this.#editRaetselPayload.id !== 'neu' &&
-      (this.#editRaetselPayload.frage !== this.#editRaetselPayloadCache.frage || this.#editRaetselPayload.loesung !== this.#editRaetselPayloadCache.loesung);
+    if (this.#editRaetselPayload.id === 'neu') {
+      return false;
+    }
+
+    const formValue = this.form.value;
+
+    const frageActual = formValue['frage'] !== null ? formValue['frage'].trim() : '';
+    const loesungActual = formValue['loesung'] !== null ? formValue['loesung'].trim() : '';
+    const result = frageActual !== this.#editRaetselPayloadCache.frage || loesungActual !== this.#editRaetselPayloadCache.loesung;
+
+    return result;
   }
 
   #doSubmit(latexHistorisieren: boolean) {

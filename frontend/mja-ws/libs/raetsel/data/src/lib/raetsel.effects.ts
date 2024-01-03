@@ -3,12 +3,11 @@ import { Router } from "@angular/router";
 import { MessageService } from "@mja-ws/shared/messaging/api";
 import { FileDownloadService } from "@mja-ws/shared/util";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { map, switchMap, tap, catchError, of, pipe } from "rxjs";
+import { map, switchMap, tap, catchError, of } from "rxjs";
 import { RaetselHttpService } from "./raetsel-http.service";
 import { raetselActions } from "./raetsel.actions";
 import { GeneratedFile } from "@mja-ws/core/model";
 import { CoreFacade } from "@mja-ws/core/api";
-import { RaetselDetails } from "@mja-ws/raetsel/model";
 
 @Injectable({
     providedIn: 'root'

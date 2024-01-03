@@ -1,5 +1,11 @@
 # Release-Notes
 
+__2.4.0__
+
+Medienverwaltung und Quellenzuordnung fertig:
+
+[2023-Q4 completed](https://github.com/heike2718/mathe-jung-alt/milestone/7)
+
 __2.3.4__
 
 [2023-Q4 completed](https://github.com/heike2718/mathe-jung-alt/milestone/7)

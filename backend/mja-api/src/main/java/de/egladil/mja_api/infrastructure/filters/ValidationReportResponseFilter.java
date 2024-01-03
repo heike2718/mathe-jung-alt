@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import io.quarkus.hibernate.validator.runtime.jaxrs.ViolationReport;
 import io.quarkus.hibernate.validator.runtime.jaxrs.ViolationReport.Violation;
+import io.quarkus.resteasy.reactive.jackson.runtime.mappers.DefaultMismatchedInputException.MismatchedJsonInputError;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;
@@ -35,31 +36,56 @@ public class ValidationReportResponseFilter implements ContainerResponseFilter {
 	@Override
 	public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) throws IOException {
 
-		try {
+		if (responseContext.getStatus() == 400) {
 
-			if (responseContext.getStatus() == 400) {
+			Object entity = responseContext.getEntity();
 
-				ViolationReport entity = (ViolationReport) responseContext.getEntity();
+			if (entity instanceof MessagePayload) {
 
-				if (entity != null) {
+				// alles gut
 
-					String path = requestContext.getUriInfo().getPath();
-					String method = requestContext.getMethod();
+			} else {
 
-					MessagePayload responsePayload = mapToMessagePayload(entity, method, path);
+				if (entity instanceof ViolationReport) {
 
-					LOGGER.warn(responsePayload.toString());
+					ViolationReport validationReport = (ViolationReport) responseContext.getEntity();
 
-					responseContext.setEntity(responsePayload);
+					if (entity != null) {
 
+						String path = requestContext.getUriInfo().getPath();
+						String method = requestContext.getMethod();
+
+						MessagePayload responsePayload = mapToMessagePayload(validationReport, method, path);
+
+						LOGGER.error(responsePayload.toString());
+
+						responseContext.setEntity(responsePayload);
+
+					}
+				} else {
+
+					if (entity instanceof MismatchedJsonInputError) {
+
+						MismatchedJsonInputError exception = (MismatchedJsonInputError) entity;
+
+						MessagePayload responsePayload = mapToMessagePayload(exception);
+
+						LOGGER.error(responsePayload.toString());
+
+						responseContext.setEntity(responsePayload);
+
+					} else {
+
+						LOGGER.error("unerwarteted entity type {} im BadRequest-Response.", entity.getClass().getName());
+
+						MessagePayload responsePayload = MessagePayload
+							.error("BadRequest in der Request Payload, aber wird noch nicht sauber abgefangen.");
+
+						responseContext.setEntity(responsePayload);
+					}
 				}
 			}
-
-		} catch (ClassCastException e) {
-
-			// nichts zu tun
 		}
-
 	}
 
 	MessagePayload mapToMessagePayload(final ViolationReport entity, final String method, final String path) {
@@ -75,6 +101,14 @@ public class ValidationReportResponseFilter implements ContainerResponseFilter {
 		messages.sort(Collator.getInstance(Locale.GERMAN));
 
 		return MessagePayload.error(StringUtils.join(messages, ','));
+	}
+
+	MessagePayload mapToMessagePayload(final MismatchedJsonInputError exception) {
+
+		String attributeName = exception.getAttributeName();
+		Object value = exception.getValue();
+
+		return MessagePayload.error("BadRequest: [attributeName=" + attributeName + ", value=" + value + "]");
 	}
 
 }

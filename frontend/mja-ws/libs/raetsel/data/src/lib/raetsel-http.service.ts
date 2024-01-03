@@ -16,7 +16,6 @@ import {
     QUERY_PARAM_SORT_DIRECTION,
     QUERY_PARAM_SUCHSTRING,
     QUERY_PARAM_TYPE_DESKRIPTOREN,
-    QuelleDto,
     Schriftgroesse
 } from "@mja-ws/core/model";
 import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter, MediumQuelleDto } from "@mja-ws/raetsel/model";
