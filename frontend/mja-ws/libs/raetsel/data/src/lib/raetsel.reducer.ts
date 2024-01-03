@@ -8,7 +8,6 @@ export interface RaetselState {
     readonly page: Raetsel[];
     readonly paginationState: PaginationState;
     readonly selectableDeskriptoren: SelectableItem[];
-    readonly saveSuccessMessage: string | undefined;
     readonly raetselDetails: RaetselDetails | undefined;
     readonly raetselSuchfilter: RaetselSuchfilter;
     readonly generateLatexError: boolean;
@@ -20,7 +19,6 @@ const initialState: RaetselState = {
     page: [],
     paginationState: initialPaginationState,
     selectableDeskriptoren: [],
-    saveSuccessMessage: undefined,
     raetselDetails: undefined,
     raetselSuchfilter: initialRaetselSuchfilter,
     generateLatexError: false,

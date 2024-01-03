@@ -119,6 +119,13 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   showPfad = false;
 
 
+  #autor!: QuelleDto;
+
+
+  // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //   RAETSELTEIL
+  // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
   #infoIncludegraphics = 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Textes und kann an eine beliebiege Stelle verschoben werden. Das width-Attribut kann geändert werden. Um eine eingebundene Grafik wieder zu löschen, bitte einfach den \\includegraphics-Befehl aus dem Text entfernen und speichern. Dabei wird auf dem Server auch die Grafikdatei gelöscht.';
   #warnungIncludegraphics = 'Bitte den \\includegraphics-Befehl nicht manuell einfügen. Er wird beim Hochladen einer neuen Datei vom System generiert. Der generierte Pfad darf nicht geändert werden!';
@@ -135,7 +142,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   selectedHerkunftstyp!: Herkunftstyp;
 
   isRoot = false;
-  #autor!: QuelleDto;
 
 
   #editRaetselPayload!: EditRaetselPayload;
@@ -174,7 +180,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     hinweis: this.#warnungIncludegraphics
   };
 
-
   selectFileLoesungModel: SelectFileModel = {
     maxSizeBytes: 2097152,
     errorMessageSize: 'Die Datei ist zu groß. Die maximale erlaubte Größe ist 2 MB.',
@@ -189,7 +194,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   #combinedEmbeddableImageVorschauSubscription: Subscription = new Subscription();
 
 
-
   constructor() {
 
     this.form = this.#fb.group({
@@ -202,7 +206,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       loesung: [''],
       kommentar: ['', [Validators.maxLength(200)]],
       anzahlAntwortvorschlaege: ['0'],
-      antwortvorschlaege: new UntypedFormArray([]),
+      antwortvorschlaege: new UntypedFormArray([]),  // ab hier die Teile für die Quelle
       quellenart: [''],
       medium: [''],
       person: ['', [Validators.maxLength(100)]],
@@ -362,147 +366,9 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     return !this.form.valid || this.antwortvorschlaegeErrors() || embeddableImageInfosFrageOhneFile.length > 0 || embeddableImageInfosLoesungOhneFile.length > 0;
   }
 
-  onSelectHerkunftstyp($event: string): void {
-    const theHerkunftstyp = $event as Herkunftstyp;
-    this.selectedHerkunftstyp = new GuiHerkunftstypenMap().getHerkunftstypOfLabel(theHerkunftstyp);
-    this.quellenangabe = 'Text wird nach dem Speichern aktualisiert';
-
-    if (theHerkunftstyp === 'EIGENKREATION') {
-      this.quelle = { ...initialQuelleDto, id: this.#autor.id };
-      if (this.#autor.person) {
-        this.quellenangabe = this.#autor.person;
-      }
-
-
-      this.showAusgabe = false;
-      this.showJahr = false;
-      this.showKlasse = false;
-      this.showPerson = false;
-      this.showPfad = false;
-      this.showSeite = false;
-      this.showStufe = false;
-      this.showMediensuche = false;
-
-      this.form.get('person')?.setValue('');
-      this.form.get('jahr')?.setValue('');
-      this.form.get('ausgabe')?.setValue('');
-      this.form.get('seite')?.setValue('');
-      this.form.get('klasse')?.setValue('');
-      this.form.get('stufe')?.setValue('');
-      this.form.get('pfad')?.setValue('');
-    }
-
-  }
-
-  onSelectQuellenart($event: string): void {
-    this.#selectedQuellenart = $event;
-    this.#handleQuellenartChanged();
-  }
-
-  onSelectMedium($event: MediumQuelleDto): void {
-    this.#mediumUuid = $event.id;
-  }
-
-  onChangeAnzahlAntwortvorschlaege($event: Event) {
-
-    const inputElement = $event.target as HTMLInputElement;
-    const anz = parseInt(inputElement.value);
-    this.#addOrRemoveAntowrtvorschlagFormParts(anz);
-  }
-
-  onSelectItemsCompomentModelChanged($event: SelectItemsCompomentModel) {
-
-    if ($event) {
-      const selectedItems: SelectableItem[] = $event.gewaehlteItems;
-      this.#selectedDeskriptoren = [];
-      selectedItems.forEach(item => this.#selectedDeskriptoren.push(
-        {
-          id: item.id as number,
-          name: item.name
-        }));
-    }
-  }
-
-  cancelEdit() {
-    if (this.#editRaetselPayload.id !== 'neu' && this.#editRaetselPayload.schluessel) {
-      this.raetselFacade.selectRaetsel(this.#editRaetselPayload.schluessel);
-    } else {
-      this.raetselFacade.cancelSelection();
-    }
-  }
-
-  gotoSuche(): void {
-    this.raetselFacade.cancelSelection();
-  }
-
-  printPNG(): void {
-    const outputformat: OutputFormat = 'PNG';
-    this.#openPrintDialog(outputformat);
-  }
-
-  openHistorieLaTeXSpeichernDialog(): void {
-
-    const dialogData: JaNeinDialogData = {
-      frage: 'Soll Historie gespeichert werden?',
-      hinweis: 'Bitte nur bei inhaltlichen Korrekturen. Das spart Speicherplatz'
-    }
-
-    const dialogRef = this.dialog.open(JaNeinDialogComponent, {
-      height: '300px',
-      width: '700px',
-      data: dialogData
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.#doSubmit(result);
-    });
-  }
-
-  submit() {
-
-    const laTeXChanged = this.#latexChanged();
-    this.#readFormValues()
-
-    if (laTeXChanged) {
-      this.openHistorieLaTeXSpeichernDialog();
-    } else {
-      this.#doSubmit(false);
-    }
-  }
-
-  downloadLatexLogs(): void {
-    if (this.#editRaetselPayload.schluessel) {
-      this.raetselFacade.downloadLatexLogs(this.#editRaetselPayload.schluessel)
-    }
-  }
-
-  onFileSelected($event: FileInfoModel, textart: Textart): void {
-    if (textart === 'FRAGE') {
-      this.fileInfoFrage = $event;
-    }
-    if (textart === 'LOESUNG') {
-      this.fileInfoLoesung = $event;
-    }
-
-  }
-
-  uploadFile(textart: Textart): void {
-
-    console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
-
-    const context: EmbeddableImageContext = {
-      raetselId: this.#editRaetselPayload.id,
-      textart: textart
-    };
-
-    // im Editor wird immer nur eine neue Datei hochgeladen.
-    if (textart === 'FRAGE' && this.fileInfoFrage) {
-      this.#embeddableImagesFacade.createEmbeddableImage(context, this.fileInfoFrage!.file);
-    }
-    if (textart === 'LOESUNG' && this.fileInfoLoesung) {
-      this.#embeddableImagesFacade.createEmbeddableImage(context, this.fileInfoLoesung!.file);
-    }
-  }
+  // ================================================================================================================
+  // initialization methods
+  // ================================================================================================================
 
   #initForm() {
 
@@ -599,6 +465,73 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     }
   }
 
+  // ================================================================================================================
+  // select controls handler
+  // ================================================================================================================
+
+  onSelectHerkunftstyp($event: string): void {
+    this.selectedHerkunftstyp = $event as Herkunftstyp;
+    this.quellenangabe = 'Text wird nach dem Speichern aktualisiert';
+
+    if (this.selectedHerkunftstyp === 'EIGENKREATION') {
+      this.#hideQuelle();
+    }
+  }
+
+  onSelectQuellenart($event: string): void {
+    this.#selectedQuellenart = $event as Quellenart;
+    this.#handleQuellenartChanged();
+  }
+
+  onSelectMedium($event: MediumQuelleDto): void {
+    this.#mediumUuid = $event.id;
+  }
+
+  onChangeAnzahlAntwortvorschlaege($event: Event) {
+
+    const inputElement = $event.target as HTMLInputElement;
+    const anz = parseInt(inputElement.value);
+    this.#addOrRemoveAntowrtvorschlagFormParts(anz);
+  }
+
+  onSelectItemsCompomentModelChanged($event: SelectItemsCompomentModel) {
+
+    if ($event) {
+      const selectedItems: SelectableItem[] = $event.gewaehlteItems;
+      this.#selectedDeskriptoren = [];
+      selectedItems.forEach(item => this.#selectedDeskriptoren.push(
+        {
+          id: item.id as number,
+          name: item.name
+        }));
+    }
+  }
+
+  #hideQuelle(): void {
+
+    this.quelle = { ...initialQuelleDto, id: this.#autor.id };
+    if (this.#autor.person) {
+      this.quellenangabe = this.#autor.person;
+    }
+    this.showAusgabe = false;
+    this.showJahr = false;
+    this.showKlasse = false;
+    this.showPerson = false;
+    this.showPfad = false;
+    this.showSeite = false;
+    this.showStufe = false;
+    this.showMediensuche = false;
+
+    this.form.get('person')?.setValue('');
+    this.form.get('jahr')?.setValue('');
+    this.form.get('ausgabe')?.setValue('');
+    this.form.get('seite')?.setValue('');
+    this.form.get('klasse')?.setValue('');
+    this.form.get('stufe')?.setValue('');
+    this.form.get('pfad')?.setValue('');
+  }
+
+
   #handleQuellenartChanged(): void {
 
     const quellenart: Quellenart = new GuiQuellenartenMap().getQuellenartOfLabel(this.#selectedQuellenart);
@@ -670,6 +603,92 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  // ================================================================================================================
+  // action handlers
+  // ================================================================================================================
+
+  cancelEdit() {
+    if (this.#editRaetselPayload.id !== 'neu' && this.#editRaetselPayload.schluessel) {
+      this.raetselFacade.selectRaetsel(this.#editRaetselPayload.schluessel);
+    } else {
+      this.raetselFacade.cancelSelection();
+    }
+  }
+
+  gotoSuche(): void {
+    this.raetselFacade.cancelSelection();
+  }
+
+  printPNG(): void {
+    const outputformat: OutputFormat = 'PNG';
+    this.#openPrintDialog(outputformat);
+  }
+
+  openHistorieLaTeXSpeichernDialog(): void {
+
+    const dialogData: JaNeinDialogData = {
+      frage: 'Soll Historie gespeichert werden?',
+      hinweis: 'Bitte nur bei inhaltlichen Korrekturen. Das spart Speicherplatz'
+    }
+
+    const dialogRef = this.dialog.open(JaNeinDialogComponent, {
+      height: '300px',
+      width: '700px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.#doSubmit(result);
+    });
+  }
+
+  submit() {
+
+    const laTeXChanged = this.#latexChanged();
+    this.#readFormValues()
+
+    if (laTeXChanged) {
+      this.openHistorieLaTeXSpeichernDialog();
+    } else {
+      this.#doSubmit(false);
+    }
+  }
+
+  downloadLatexLogs(): void {
+    if (this.#editRaetselPayload.schluessel) {
+      this.raetselFacade.downloadLatexLogs(this.#editRaetselPayload.schluessel)
+    }
+  }
+
+  onFileSelected($event: FileInfoModel, textart: Textart): void {
+    if (textart === 'FRAGE') {
+      this.fileInfoFrage = $event;
+    }
+    if (textart === 'LOESUNG') {
+      this.fileInfoLoesung = $event;
+    }
+
+  }
+
+  uploadFile(textart: Textart): void {
+
+    console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
+
+    const context: EmbeddableImageContext = {
+      raetselId: this.#editRaetselPayload.id,
+      textart: textart
+    };
+
+    // im Editor wird immer nur eine neue Datei hochgeladen.
+    if (textart === 'FRAGE' && this.fileInfoFrage) {
+      this.#embeddableImagesFacade.createEmbeddableImage(context, this.fileInfoFrage!.file);
+    }
+    if (textart === 'LOESUNG' && this.fileInfoLoesung) {
+      this.#embeddableImagesFacade.createEmbeddableImage(context, this.fileInfoLoesung!.file);
+    }
+  }
+
 
   #readFormValues(): void {
     const formValue = this.form.value;
