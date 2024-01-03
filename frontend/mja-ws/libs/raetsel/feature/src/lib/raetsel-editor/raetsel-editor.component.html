@@ -51,7 +51,7 @@
                     <div class="mb-2">
                         <mat-form-field>
                             <mat-label>Herkunftstyp</mat-label>
-                            <mat-hint>{{quellenangabe}}</mat-hint>
+                            <mat-hint>{{guiEditRaetselPayload.quellenangabe}}</mat-hint>
                             <mat-select matNativeControl formControlName="herkunftstyp" #herkunftstypInput
                                 (selectionChange)="onSelectHerkunftstyp($event.value)">
                                 <mat-option *ngFor="let herkunftstyp of selectHerkunftstypInput" [value]="herkunftstyp">
@@ -64,26 +64,28 @@
                     <div *ngIf="selectedHerkunftstyp !== 'EIGENKREATION'">
                         <h2>Quellenangaben</h2>
 
+                        <p *ngIf="selectedMedium !== undefined">{{selectedMedium.titel}}</p>
+
                         <!-- Quellenart -->
                         <div class="mb-2">
                             <mat-form-field>
                                 <mat-label>Quellenart</mat-label>
-                                <mat-hint>{{quelle.quellenart}}</mat-hint>
+                                <mat-hint>{{guiEditRaetselPayload.editRaetselPayload.quelle.quellenart}}</mat-hint>
                                 <mat-select matNativeControl formControlName="quellenart" #quellenartInput
                                     (selectionChange)="onSelectQuellenart($event.value)">
                                     <mat-option *ngFor="let quellenart of selectQuellenartInput" [value]="quellenart">
                                         {{quellenart}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
-                        </div>
+                        </div>                        
 
-                        <!-- Medium -->
+                        <!-- Mediensuche -->
                         <div *ngIf="showMediensuche" class="mb-2">
                             <mat-form-field>
                                 <mat-label>Medien</mat-label>
-                                <mat-select matNativeControl formControlName="medium" #mediumInput
+                                <mat-select matNativeControl formControlName="medium" #mediumInput [compareWith]="compareMedia"
                                     (selectionChange)="onSelectMedium($event.value)">
-                                    <mat-option *ngFor="let medium of raetselFacade.medienForQuelle$ | async"
+                                    <mat-option *ngFor="let medium of medienForQuelle"
                                         [value]="medium">
                                         {{ medium.titel }}
                                     </mat-option>
@@ -168,17 +170,6 @@
                             </mat-form-field>
                         </div>
                     </div>
-
-
-                    <!--
-                    <div *ngIf="raetselFacade.showQuelle$ | async" class="mb-2">
-                        <mja-quelle [quelle]="quelle" (quelleChanged)="onQuelleChanged($event)"></mja-quelle>
-                    </div>
-
-                    <div class="mb-2">
-                        <mja-quelle [quelle]="quelle" (quelleChanged)="onQuelleChanged($event)"></mja-quelle>
-                    </div>
-                -->
 
                     <!-- Status -->
                     <div class="mb-2">

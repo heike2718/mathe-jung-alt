@@ -1,5 +1,5 @@
 import { GeneratedImages, initialPaginationState, PaginationState, SelectableItem } from "@mja-ws/core/model";
-import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto, initialRaetselDetails } from "@mja-ws/raetsel/model";
+import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto, initialRaetselDetails, EditRaetselPayload, GUIEditRaetselPayload, createEditRaetselPayload } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
 import { swallowEmptyArgument } from "@mja-ws/shared/util";
@@ -12,6 +12,7 @@ export interface RaetselState {
     readonly raetselSuchfilter: RaetselSuchfilter;
     readonly generateLatexError: boolean;
     readonly medienForQuelle: MediumQuelleDto[];
+    readonly guiEditRaetselPayload: GUIEditRaetselPayload | undefined;
 };
 
 const initialState: RaetselState = {
@@ -22,7 +23,8 @@ const initialState: RaetselState = {
     raetselDetails: undefined,
     raetselSuchfilter: initialRaetselSuchfilter,
     generateLatexError: false,
-    medienForQuelle: []
+    medienForQuelle: [],
+    guiEditRaetselPayload: undefined
 };
 
 export const raetselFeature = createFeature({
@@ -61,18 +63,23 @@ export const raetselFeature = createFeature({
                 })
             });
 
+            const theNewEditRaetselPayload = createEditRaetselPayload(action.raetselDetails);
+
             return {
                 ...state,
                 raetselDetails: action.raetselDetails,
                 selectableDeskriptoren: selectableDeskriptoren,
-                generateLatexError: false
+                generateLatexError: false,
+                guiEditRaetselPayload: {
+                    ...state.guiEditRaetselPayload,
+                    editRaetselPayload: theNewEditRaetselPayload.editRaetselPayload,
+                    embeddableImageInfos: theNewEditRaetselPayload.embeddableImageInfos,
+                    quellenangabe: theNewEditRaetselPayload.quellenangabe
+                }
             };
         }),
-
-        on(raetselActions.hERKUNFTSTYP_CHANGED, (state, action) => {
-
-            const raetselDetails: RaetselDetails = state.raetselDetails ? {...state.raetselDetails } : initialRaetselDetails;
-            return {...state, raetselDetails: {...raetselDetails, herkunftstyp: action.herkunftstyp, quellenangabe: action.quellenangabe} };
+        on(raetselActions.iNIT_EDIT_RAETSEL_PAYLOD, (state, action) => {
+            return { ...state, guiEditRaetselPayload: action.payload };
         }),
 
         on(raetselActions.rAETSEL_PNG_GENERATED, (state, action) => {
@@ -96,19 +103,20 @@ export const raetselFeature = createFeature({
                 })
             });
 
+            const theNewEditRaetselPayload = createEditRaetselPayload(action.raetselDetails);
+
             return {
                 ...state,
                 raetselDetails: action.raetselDetails,
                 selectableDeskriptoren: selectableDeskriptoren,
                 generateLatexError: false,
+                guiEditRaetselPayload: {
+                    ...state.guiEditRaetselPayload,
+                    editRaetselPayload: theNewEditRaetselPayload.editRaetselPayload,
+                    embeddableImageInfos: theNewEditRaetselPayload.embeddableImageInfos,
+                    quellenangabe: theNewEditRaetselPayload.quellenangabe
+                }
             };
-        }),
-        on(raetselActions.qUELLE_CHANGED, (state, action) => {
-            if (state.raetselDetails) {
-                return { ...state, raetselDetails: { ...state.raetselDetails, quelle: action.quelle, quellenangabe: action.quellenangabe } };
-            } else {
-                return { ...state, raetselDetails: { ...initialRaetselDetails, quelle: action.quelle, quellenangabe: action.quellenangabe } };
-            }
         }),
 
         on(raetselActions.rESET_RAETSELSUCHFILTER, (state, action): RaetselState => {
@@ -127,7 +135,14 @@ export const raetselFeature = createFeature({
         }),
         on(raetselActions.rAETSEL_CANCEL_SELECTION, (state, action) => {
             swallowEmptyArgument(action, false);
-            return { ...state, raetselDetails: undefined, selectableDeskriptoren: [], generateLatexError: false }
+            return {
+                ...state,
+                raetselDetails: undefined,
+                selectableDeskriptoren: [],
+                generateLatexError: false,
+                guiEditRaetselPayload: undefined,
+                medienForQuelle: []
+            }
         }),
         on(raetselActions.lATEX_ERRORS_DETECTED, (state, action) => {
             swallowEmptyArgument(action, false);

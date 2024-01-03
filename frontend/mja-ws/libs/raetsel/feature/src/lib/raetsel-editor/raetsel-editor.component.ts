@@ -17,6 +17,7 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
 import {
   Antwortvorschlag,
   EditRaetselPayload,
+  GUIEditRaetselPayload,
   GuiHerkunfsttyp,
   GuiHerkunftstypenMap,
   GuiQuellenart,
@@ -40,7 +41,6 @@ import {
   Herkunftstyp,
   QuelleDto,
   Quellenart,
-  initialQuelleDto
 } from '@mja-ws/core/model';
 import {
   FrageLoesungImagesComponent,
@@ -108,14 +108,11 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   //   QUELLENTEIL
   // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  searchTerm = '';
-  quelle!: QuelleDto;
-  quellenangabe = '';
-
   selectQuellenartInput: string[] = new GuiQuellenartenMap().getLabelsSorted();
   #selectedQuellenart: string = '';
 
-  #mediumUuid: string | undefined;
+  selectedMedium: MediumQuelleDto | undefined;
+  medienForQuelle: MediumQuelleDto[] = [];
 
   showMediensuche = false;
   showKlasse = false;
@@ -127,13 +124,11 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   showPfad = false;
 
 
-  #autor!: QuelleDto;
-
-
   // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //   RAETSELTEIL
   // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  guiEditRaetselPayload!: GUIEditRaetselPayload;
 
   #infoIncludegraphics = 'Nach dem Hochladen erscheint der LaTeX-Befehl zum Einbinden der Grafik am Ende des Textes und kann an eine beliebiege Stelle verschoben werden. Das width-Attribut kann geändert werden. Um eine eingebundene Grafik wieder zu löschen, bitte einfach den \\includegraphics-Befehl aus dem Text entfernen und speichern. Dabei wird auf dem Server auch die Grafikdatei gelöscht.';
   #warnungIncludegraphics = 'Bitte den \\includegraphics-Befehl nicht manuell einfügen. Er wird beim Hochladen einer neuen Datei vom System generiert. Der generierte Pfad darf nicht geändert werden!';
@@ -144,15 +139,11 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   #authFacade = inject(AuthFacade);
   #embeddableImagesFacade = inject(EmbeddableImagesFacade);
 
-  #combinedSubscription = new Subscription();
-
   #selectedDeskriptoren: DeskriptorUI[] = [];
   selectedHerkunftstyp!: Herkunftstyp;
 
   isRoot = false;
 
-
-  #editRaetselPayload!: EditRaetselPayload;
   #editRaetselPayloadCache!: EditRaetselPayload;
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
@@ -198,8 +189,10 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     hinweis: this.#warnungIncludegraphics
   };
 
+  #combinedSubscription = new Subscription();
   #embeddableImagesResponseSubscription: Subscription = new Subscription();
   #combinedEmbeddableImageVorschauSubscription: Subscription = new Subscription();
+  #medienForQuelleSubscription: Subscription = new Subscription();
 
 
   constructor() {
@@ -230,53 +223,30 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.#combinedSubscription = combineLatest([this.raetselFacade.raetselDetails$,
+    this.#combinedSubscription = combineLatest([this.raetselFacade.editRaetselPayload$,
     this.#coreFacade.alleDeskriptoren$,
-    this.#coreFacade.autor$,
     this.#authFacade.userIsRoot$
     ])
-      .subscribe(([raetselDetails,
+      .subscribe(([guiEditRaetselPayload,
         alleDeskriptoren,
-        autor,
         root
       ]) => {
 
-        this.quelle = { ...raetselDetails.quelle };
-        this.quellenangabe = raetselDetails.quellenangabe;
-        this.#mediumUuid = this.quelle.mediumUuid;
-        this.#autor = autor;
+        this.guiEditRaetselPayload = guiEditRaetselPayload;
+        this.selectedHerkunftstyp = this.guiEditRaetselPayload.editRaetselPayload.herkunftstyp;
+        this.#selectedQuellenart = new GuiQuellenartenMap().getLabelOfQuellenart(this.guiEditRaetselPayload.editRaetselPayload.quelle.quellenart);
 
-        const theSchluessel = raetselDetails.schluessel.length > 0 ? raetselDetails.schluessel : null;
-        this.selectedHerkunftstyp = raetselDetails.herkunftstyp;
-
-        this.#editRaetselPayload = {
-          latexHistorisieren: false,
-          antwortvorschlaege: raetselDetails.antwortvorschlaege,
-          deskriptoren: raetselDetails.deskriptoren,
-          frage: raetselDetails.frage,
-          freigegeben: raetselDetails.freigegeben,
-          herkunftstyp: this.selectedHerkunftstyp,
-          id: raetselDetails.id,
-          kommentar: raetselDetails.kommentar,
-          loesung: raetselDetails.loesung,
-          name: raetselDetails.name,
-          schluessel: theSchluessel,
-          quelle: this.quelle
-        };
-
-        this.#editRaetselPayloadCache = { ...this.#editRaetselPayload };
-        this.#selectedDeskriptoren = raetselDetails.deskriptoren;
-        this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(raetselDetails.deskriptoren, alleDeskriptoren);
-        this.embeddableImageInfosFrage = raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
-        this.embeddableImageInfosLoesung = raetselDetails.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
-        this.selectedHerkunftstyp = raetselDetails.herkunftstyp;
-        this.#selectedQuellenart = new GuiQuellenartenMap().getLabelOfQuellenart(this.quelle.quellenart);
+        this.#editRaetselPayloadCache = { ...this.guiEditRaetselPayload.editRaetselPayload };
+        this.#selectedDeskriptoren = this.guiEditRaetselPayload.editRaetselPayload.deskriptoren;
+        this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.guiEditRaetselPayload.editRaetselPayload.deskriptoren, alleDeskriptoren);
+        this.embeddableImageInfosFrage = guiEditRaetselPayload.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
+        this.embeddableImageInfosLoesung = guiEditRaetselPayload.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
 
         this.isRoot = root;
 
+
+
         this.#initForm();
-
-
       });
 
     this.#embeddableImagesResponseSubscription = this.#embeddableImagesFacade.embeddableImageResponse$.subscribe(
@@ -312,6 +282,22 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
           }
         }
       });
+
+
+    this.#medienForQuelleSubscription = combineLatest([this.raetselFacade.editRaetselPayload$,
+    this.raetselFacade.medienForQuelle$]).subscribe(([payload, medien]) => {
+
+      this.medienForQuelle = medien;
+      if (payload.editRaetselPayload.quelle.mediumUuid) {
+        const filtered: MediumQuelleDto[] = medien.filter(m => m.id === this.guiEditRaetselPayload.editRaetselPayload.quelle.mediumUuid);
+        if (filtered.length > 0) {
+          this.selectedMedium = filtered[0];
+          this.form.get('medium')?.patchValue(this.selectedMedium);
+        } else {
+          this.selectedMedium = undefined;
+        }
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -319,6 +305,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.#embeddableImagesResponseSubscription.unsubscribe();
     this.#combinedEmbeddableImageVorschauSubscription.unsubscribe();
     this.#embeddableImagesFacade.clearVorschau();
+    this.#medienForQuelleSubscription.unsubscribe();
   }
 
   isFormValid(): boolean {
@@ -380,43 +367,43 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #initForm() {
 
-    const theStatus = this.#editRaetselPayload.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';
+    const theStatus = this.guiEditRaetselPayload.editRaetselPayload.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';
 
-    const theGuiHerkunftstyp: GuiHerkunfsttyp = new GuiHerkunftstypenMap().getGuiHerkunftstyp(this.#editRaetselPayload.herkunftstyp);
-    const theGuiQuellenart: GuiQuellenart = new GuiQuellenartenMap().getGuiQuellenart(this.quelle.quellenart);
+    const theGuiHerkunftstyp: GuiHerkunfsttyp = new GuiHerkunftstypenMap().getGuiHerkunftstyp(this.guiEditRaetselPayload.editRaetselPayload.herkunftstyp);
+    const theGuiQuellenart: GuiQuellenart = new GuiQuellenartenMap().getGuiQuellenart(this.guiEditRaetselPayload.editRaetselPayload.quelle.quellenart);
 
-    this.form.get('schluessel')?.setValue(this.#editRaetselPayload.schluessel);
-    this.form.get('name')?.setValue(this.#editRaetselPayload.name);
+    this.form.get('schluessel')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.schluessel);
+    this.form.get('name')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.name);
     this.form.get('herkunftstyp')?.setValue(theGuiHerkunftstyp.label);
     this.form.get('status')?.setValue(theStatus);
-    this.form.get('frage')?.setValue(this.#editRaetselPayload.frage);
-    this.form.get('loesung')?.setValue(this.#editRaetselPayload.loesung);
-    this.form.get('kommentar')?.setValue(this.#editRaetselPayload.kommentar);
+    this.form.get('frage')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.frage);
+    this.form.get('loesung')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.loesung);
+    this.form.get('kommentar')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.kommentar);
     this.form.get('quellenart')?.setValue(theGuiQuellenart.label);
 
-    this.form.get('person')?.setValue(this.quelle.person ? this.quelle.person : '');
-    this.form.get('jahr')?.setValue(this.quelle.jahr ? this.quelle.jahr : '');
-    this.form.get('ausgabe')?.setValue(this.quelle.ausgabe ? this.quelle.ausgabe : '');
-    this.form.get('seite')?.setValue(this.quelle.seite ? this.quelle.seite : '');
-    this.form.get('klasse')?.setValue(this.quelle.klasse ? this.quelle.klasse : '');
-    this.form.get('stufe')?.setValue(this.quelle.stufe ? this.quelle.stufe : '');
-    this.form.get('pfad')?.setValue(this.quelle.pfad ? this.quelle.pfad : '');
+    this.form.get('person')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.person ? this.guiEditRaetselPayload.editRaetselPayload.quelle.person : '');
+    this.form.get('jahr')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr ? this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr : '');
+    this.form.get('ausgabe')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe : '');
+    this.form.get('seite')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.seite ? this.guiEditRaetselPayload.editRaetselPayload.quelle.seite : '');
+    this.form.get('klasse')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse ? this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse : '');
+    this.form.get('stufe')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe : '');
+    this.form.get('pfad')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad ? this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad : '');
 
-    this.form.get('anzahlAntwortvorschlaege')?.setValue(this.#editRaetselPayload.antwortvorschlaege.length + '');
+    this.form.get('anzahlAntwortvorschlaege')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length + '');
 
-    this.#addOrRemoveAntowrtvorschlagFormParts(this.#editRaetselPayload.antwortvorschlaege.length);
+    this.#addOrRemoveAntowrtvorschlagFormParts(this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length);
 
     if (!this.isRoot) {
       this.form.get('schluessel')?.disable();
     }
 
-    for (let i = 0; i < this.#editRaetselPayload.antwortvorschlaege.length; i++) {
+    for (let i = 0; i < this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length; i++) {
 
       const avGroup = this.avFormArray.at(i);
-      const av: Antwortvorschlag = this.#editRaetselPayload.antwortvorschlaege[i];
+      const av: Antwortvorschlag = this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege[i];
 
       avGroup.setValue({ text: av.text, korrekt: av.korrekt });
-    }
+    }   
 
     this.#initVisibilityQuelleInputs();
   }
@@ -478,8 +465,12 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   // ================================================================================================================
 
   onSelectHerkunftstyp($event: string): void {
-    this.selectedHerkunftstyp = $event as Herkunftstyp;
-    this.quellenangabe = 'Text wird nach dem Speichern aktualisiert';
+    this.selectedHerkunftstyp = new GuiHerkunftstypenMap().getHerkunftstypOfLabel($event);
+
+    this.guiEditRaetselPayload = {
+      ...this.guiEditRaetselPayload,
+      quellenangabe: 'Text wird nach dem Speichern aktualisiert.',
+    }
 
     if (this.selectedHerkunftstyp === 'EIGENKREATION') {
       this.#hideQuelle();
@@ -492,7 +483,12 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   onSelectMedium($event: MediumQuelleDto): void {
-    this.#mediumUuid = $event.id;
+    this.selectedMedium = $event;
+  }
+
+  compareMedia(medium1: MediumQuelleDto, medium2: MediumQuelleDto): boolean {
+    // console.log('[medium1=' + (medium1 ? medium1.titel : 'undefined') + ', medium2=' + (medium2 ? medium2.titel : 'undefined') + ']');
+    return medium1 && medium2 && medium1.id === medium2.id;
   }
 
   onChangeAnzahlAntwortvorschlaege($event: Event) {
@@ -517,10 +513,14 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #hideQuelle(): void {
 
-    this.quelle = { ...initialQuelleDto, id: this.#autor.id };
-    if (this.#autor.person) {
-      this.quellenangabe = this.#autor.person;
-    }
+    this.guiEditRaetselPayload = {
+      ...this.guiEditRaetselPayload,
+      quellenangabe: 'Text wird nach dem Speichern aktualisiert.',
+      editRaetselPayload: {
+        ...this.guiEditRaetselPayload.editRaetselPayload
+      }
+    };
+
     this.showAusgabe = false;
     this.showJahr = false;
     this.showKlasse = false;
@@ -529,69 +529,82 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.showSeite = false;
     this.showStufe = false;
     this.showMediensuche = false;
-
-    this.form.get('person')?.setValue('');
-    this.form.get('jahr')?.setValue('');
-    this.form.get('ausgabe')?.setValue('');
-    this.form.get('seite')?.setValue('');
-    this.form.get('klasse')?.setValue('');
-    this.form.get('stufe')?.setValue('');
-    this.form.get('pfad')?.setValue('');
   }
 
 
   #handleQuellenartChanged(): void {
 
-    const quellenart: Quellenart = new GuiQuellenartenMap().getQuellenartOfLabel(this.#selectedQuellenart);
-    this.searchTerm = '';
+    if (this.guiEditRaetselPayload.editRaetselPayload.quelle.mediumUuid) {
+      const filtered: MediumQuelleDto[] = this.medienForQuelle.filter(m => m.id === this.guiEditRaetselPayload.editRaetselPayload.quelle.mediumUuid);
+      if (filtered.length > 0) {
+        this.selectedMedium = filtered[0];
+      }
+    }
 
+    const quellenart: Quellenart = new GuiQuellenartenMap().getQuellenartOfLabel(this.#selectedQuellenart);
+    const quelle: QuelleDto = {
+      ... this.guiEditRaetselPayload.editRaetselPayload.quelle,
+      quellenart: quellenart
+    }
+    this.#setFormAndModelQuelle(quelle);
+  }  
+
+  #setFormAndModelQuelle(quelle: QuelleDto): void {
     this.#initVisibilityQuelleInputs();
 
-    switch (quellenart) {
+    switch (quelle.quellenart) {
       case 'BUCH': {
-        this.quelle.ausgabe = '';
-        this.quelle.jahr = '';
-        this.quelle.klasse = '';
-        this.quelle.person = '';
-        this.quelle.stufe = '';
+        quelle.ausgabe = '';
+        quelle.jahr = '';
+        quelle.klasse = '';
+        quelle.person = '';
+        quelle.stufe = '';
 
         break;
       }
       case 'INTERNET': {
-        this.quelle.ausgabe = '';
-        this.quelle.jahr = this.quelle.jahr ? this.quelle.jahr : '';
-        this.quelle.klasse = this.quelle.klasse ? this.quelle.klasse : '';
-        this.quelle.person = '';
-        this.quelle.seite = '';
+        quelle.ausgabe = '';
+        quelle.jahr = quelle.jahr ? quelle.jahr : '';
+        quelle.klasse = quelle.klasse ? quelle.klasse : '';
+        quelle.person = '';
+        quelle.seite = '';
         break;
       }
       case 'PERSON': {
-        this.quelle.ausgabe = '';
-        this.quelle.jahr = '';
-        this.quelle.klasse = '';
-        this.quelle.pfad = '';
-        this.quelle.seite = '';
-        this.quelle.stufe = '';
+        quelle.ausgabe = '';
+        quelle.jahr = '';
+        quelle.klasse = '';
+        quelle.pfad = '';
+        quelle.seite = '';
+        quelle.stufe = '';
         break;
       }
       case 'ZEITSCHRIFT': {
-        this.quelle.klasse = '';
-        this.quelle.person = '';
-        this.quelle.stufe = '';
+        quelle.klasse = '';
+        quelle.person = '';
+        quelle.stufe = '';
         break;
       }
     }
 
-    this.form.get('person')?.setValue(this.quelle.person ? this.quelle.person : '');
-    this.form.get('jahr')?.setValue(this.quelle.jahr ? this.quelle.jahr : '');
-    this.form.get('ausgabe')?.setValue(this.quelle.ausgabe ? this.quelle.ausgabe : '');
-    this.form.get('seite')?.setValue(this.quelle.seite ? this.quelle.seite : '');
-    this.form.get('klasse')?.setValue(this.quelle.klasse ? this.quelle.klasse : '');
-    this.form.get('stufe')?.setValue(this.quelle.stufe ? this.quelle.stufe : '');
-    this.form.get('pfad')?.setValue(this.quelle.pfad ? this.quelle.pfad : '');
+    this.guiEditRaetselPayload = {
+      ... this.guiEditRaetselPayload,
+      editRaetselPayload: {
+        ... this.guiEditRaetselPayload.editRaetselPayload,
+        quelle: quelle
+      }
+    };
 
-    if (quellenart !== 'PERSON') {
-      this.raetselFacade.findMedienForQuelle(quellenart);
+    this.form.get('person')?.setValue(quelle.person ? quelle.person : '');
+    this.form.get('jahr')?.setValue(quelle.jahr ? quelle.jahr : '');
+    this.form.get('ausgabe')?.setValue(quelle.ausgabe ? quelle.ausgabe : '');
+    this.form.get('seite')?.setValue(quelle.seite ? quelle.seite : '');
+    this.form.get('klasse')?.setValue(quelle.klasse ? quelle.klasse : '');
+    this.form.get('stufe')?.setValue(quelle.stufe ? quelle.stufe : '');
+    this.form.get('pfad')?.setValue(quelle.pfad ? quelle.pfad : '');
+
+    if (quelle.quellenart !== 'PERSON') {
+      this.raetselFacade.findMedienForQuelle(quelle.quellenart);
     }
   }
 
@@ -617,8 +630,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   // ================================================================================================================
 
   cancelEdit() {
-    if (this.#editRaetselPayload.id !== 'neu' && this.#editRaetselPayload.schluessel) {
-      this.raetselFacade.selectRaetsel(this.#editRaetselPayload.schluessel);
+    if (this.guiEditRaetselPayload.editRaetselPayload.id !== 'neu' && this.guiEditRaetselPayload.editRaetselPayload.schluessel) {
+      this.raetselFacade.selectRaetsel(this.guiEditRaetselPayload.editRaetselPayload.schluessel);
     } else {
       this.raetselFacade.cancelSelection();
     }
@@ -664,8 +677,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   }
 
   downloadLatexLogs(): void {
-    if (this.#editRaetselPayload.schluessel) {
-      this.raetselFacade.downloadLatexLogs(this.#editRaetselPayload.schluessel)
+    if (this.guiEditRaetselPayload.editRaetselPayload.schluessel) {
+      this.raetselFacade.downloadLatexLogs(this.guiEditRaetselPayload.editRaetselPayload.schluessel)
     }
   }
 
@@ -684,7 +697,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     console.log('jetzt über die EmbeddableImageFacade die action up: ' + textart);
 
     const context: EmbeddableImageContext = {
-      raetselId: this.#editRaetselPayload.id,
+      raetselId: this.guiEditRaetselPayload.editRaetselPayload.id,
       textart: textart
     };
 
@@ -700,18 +713,16 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #readFormValues(): void {
     const formValue = this.form.value;
-
     const antwortvorschlaegeNeu: Antwortvorschlag[] = this.#collectAntwortvorschlaege();
 
     // Falls undefined, dann, weil das input-Field disabled ist.
-    const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : this.#editRaetselPayload.schluessel;
-
+    const c_schluessel = formValue['schluessel'] ? formValue['schluessel'].trim() : this.guiEditRaetselPayload.editRaetselPayload.schluessel;
     const theQuelle: QuelleDto = {
-      id: this.quelle.id,
+      ... this.guiEditRaetselPayload.editRaetselPayload.quelle,
       ausgabe: formValue['ausgabe'] ? formValue['ausgabe'].trim() : null,
       jahr: formValue['jahr'] ? formValue['jahr'].trim() : null,
       klasse: formValue['klasse'] ? formValue['klasse'].trim() : null,
-      mediumUuid: this.#mediumUuid,
+      mediumUuid: this.selectedMedium?.id,
       person: formValue['person'] ? formValue['person'].trim() : null,
       pfad: formValue['pfad'] ? formValue['pfad'].trim() : null,
       quellenart: new GuiQuellenartenMap().getQuellenartOfLabel(this.#selectedQuellenart),
@@ -719,8 +730,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       stufe: formValue['stufe'] ? formValue['stufe'].trim() : null,
     }
 
-    this.#editRaetselPayload = {
-      ...this.#editRaetselPayload,
+    const theEditRaetselPayload: EditRaetselPayload = {
+      ... this.guiEditRaetselPayload.editRaetselPayload,
       schluessel: c_schluessel,
       name: formValue['name'] !== null ? formValue['name'].trim() : '',
       freigegeben: formValue['status'] === 'FREIGEGEBEN',
@@ -729,9 +740,14 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
       antwortvorschlaege: antwortvorschlaegeNeu,
       deskriptoren: this.#selectedDeskriptoren,
-      herkunftstyp: new GuiHerkunftstypenMap().getHerkunftstypOfLabel(this.selectedHerkunftstyp),
+      herkunftstyp: this.selectedHerkunftstyp,
       quelle: theQuelle
     }
+
+    this.guiEditRaetselPayload = {
+      ... this.guiEditRaetselPayload,
+      editRaetselPayload: theEditRaetselPayload
+    };
   }
 
   #collectAntwortvorschlaege(): Antwortvorschlag[] {
@@ -751,7 +767,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #latexChanged(): boolean {
 
-    if (this.#editRaetselPayload.id === 'neu') {
+    if (this.guiEditRaetselPayload.editRaetselPayload.id === 'neu') {
       return false;
     }
 
@@ -767,7 +783,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   #doSubmit(latexHistorisieren: boolean) {
 
     const editRaetselPayload: EditRaetselPayload = {
-      ...this.#editRaetselPayload,
+      ...this.guiEditRaetselPayload.editRaetselPayload,
       latexHistorisieren: latexHistorisieren
     };
 
@@ -829,7 +845,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
           }
         }
 
-        this.raetselFacade.generiereRaetselOutput(this.#editRaetselPayload.id, outputformat, font, schriftgroesse, layout);
+        this.raetselFacade.generiereRaetselOutput(this.guiEditRaetselPayload.editRaetselPayload.id, outputformat, font, schriftgroesse, layout);
       }
     });
   }

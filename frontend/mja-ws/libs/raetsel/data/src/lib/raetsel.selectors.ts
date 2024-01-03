@@ -24,6 +24,11 @@ const raetselDetails = createSelector(
     (state) => state.raetselDetails
 );
 
+const editRaetselPayload = createSelector(
+    selectRaetselState,
+    (state) => state.guiEditRaetselPayload
+);
+
 const suchfilter = createSelector(
     selectRaetselState,
     (state) => state.raetselSuchfilter
@@ -57,6 +62,7 @@ export const fromRaetsel = {
     suchfilter,
     generateLatexError,
     medienForQuelle,
-    showQuelle
+    showQuelle,
+    editRaetselPayload
 };
 

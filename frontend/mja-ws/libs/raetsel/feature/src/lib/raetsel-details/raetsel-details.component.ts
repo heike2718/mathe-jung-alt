@@ -102,7 +102,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   startEdit(): void {
     if (this.#raetselDetails) {
-      this.raetselFacade.editRaetsel();
+      this.raetselFacade.editRaetsel(this.#raetselDetails);
     }
   }
 

@@ -182,10 +182,7 @@ export class RaetselEffects {
     raetselSaved$ = createEffect(() =>
         this.#actions.pipe(
             ofType(raetselActions.rAETSEL_SAVED),
-            tap((action) => {
-                if (action.raetselDetails.herkunftstyp === 'EIGENKREATION') {
-                    this.#coreFacade.replaceAutor(action.raetselDetails.quelle);
-                }
+            tap(() => {                
                 this.#messageService.info('Rätsel erfolgreich gespeichert');
             }),
         ), { dispatch: false });

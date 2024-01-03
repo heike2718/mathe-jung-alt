@@ -18,7 +18,9 @@ import {
 } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
 import {
+  createEditRaetselPayload,
   EditRaetselPayload,
+  GUIEditRaetselPayload,
   initialRaetselDetails,
   MediumQuelleDto,
   ModusSucheMitDeskriptoren,
@@ -42,6 +44,8 @@ export class RaetselFacade {
   paginationState$: Observable<PaginationState> = this.#store.select(fromRaetsel.paginationState);
 
   raetselDetails$: Observable<RaetselDetails> = this.#store.select(fromRaetsel.raetselDetails).pipe(filterDefined, deepClone);
+  editRaetselPayload$: Observable<GUIEditRaetselPayload> = this.#store.select(fromRaetsel.editRaetselPayload).pipe(filterDefined, deepClone);
+
   suchfilter$: Observable<RaetselSuchfilter> = this.#store.select(fromRaetsel.suchfilter);
   generateLatexError$: Observable<boolean> = this.#store.select(fromRaetsel.generateLatexError);
   medienForQuelle$: Observable<MediumQuelleDto[]> = this.#store.select(fromRaetsel.medienForQuelle);
@@ -68,10 +72,25 @@ export class RaetselFacade {
     }
   }
 
-  editRaetsel(): void {
+  editRaetsel(raetselDetails: RaetselDetails): void {
+    this.#internalStartEditRaetsel(raetselDetails);
+  }
 
+  createAndEditRaetsel(quelle: QuelleDto): void {
+
+    const raetselDetails: RaetselDetails = { ...initialRaetselDetails, quelle: quelle };
+    this.#internalStartEditRaetsel(raetselDetails);
+  }
+
+  #internalStartEditRaetsel(raetselDetails: RaetselDetails): void {
+
+    if(raetselDetails.quelle.quellenart !== 'PERSON') {
+      this.findMedienForQuelle(raetselDetails.quelle.quellenart);
+    }
+
+    const editRaetselPayload: GUIEditRaetselPayload = createEditRaetselPayload(raetselDetails);
+    this.#store.dispatch(raetselActions.iNIT_EDIT_RAETSEL_PAYLOD({payload: editRaetselPayload}));
     this.#router.navigateByUrl('raetsel/editor');
-
   }
 
   changeSuchfilterWithDeskriptoren(suchfilter: RaetselSuchfilter) {
@@ -94,32 +113,6 @@ export class RaetselFacade {
     };
 
     this.#store.dispatch(raetselActions.rAETSELSUCHFILTER_CHANGED({ suchfilter }));
-  }
-
-  herkunftstypChanged(herkunftstyp: Herkunftstyp, raetsel: RaetselDetails): void {
-
-    let quellenangabe = raetsel.quellenangabe;
-
-    if (herkunftstyp !== raetsel.herkunftstyp) {
-
-      quellenangabe = 'wird nach dem Speichern aktualisiert'
-    }
-
-    this.#store.dispatch(raetselActions.hERKUNFTSTYP_CHANGED({ herkunftstyp, quellenangabe }));
-
-  }
-
-  quelleChanged(quelle: QuelleDto): void {
-    let quellenangabe = '';
-    if (quelle.quellenart === 'PERSON') {
-      quellenangabe = quelle.person ? quelle.person : 'selbst';
-    } else {
-      quellenangabe = quelle.mediumUuid ? quelle.mediumUuid : 'Buch, Internet, Zeitschrift?';
-    }
-
-    quellenangabe += ' (wird beim Speichern ersetzt)';
-
-    this.#store.dispatch(raetselActions.qUELLE_CHANGED({ quelle, quellenangabe }));
   }
 
   findMedienForQuelle(quellenart: Quellenart): void {
@@ -146,11 +139,7 @@ export class RaetselFacade {
     this.#store.dispatch(raetselActions.rAETSEL_CANCEL_SELECTION());
   }
 
-  createAndEditRaetsel(quelle: QuelleDto): void {
-
-    const raetselDetails: RaetselDetails = { ...initialRaetselDetails, quelle: quelle };
-    this.#store.dispatch(raetselActions.rAETSEL_DETAILS_LOADED({ raetselDetails: raetselDetails, navigateTo: 'raetsel/editor' }));
-  }
+  
 
   initSelectItemsCompomentModel(selectedDeskriptoren: DeskriptorUI[], alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
 

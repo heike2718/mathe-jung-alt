@@ -113,6 +113,7 @@ public class QuellenService {
 		quelle.setQuellenart(persistenteQuelle.quellenart);
 		quelle.setSeite(persistenteQuelle.seite);
 		quelle.setStufe(persistenteQuelle.stufe);
+		quelle.setPfad(persistenteQuelle.pfad);
 		return quelle;
 	}
 

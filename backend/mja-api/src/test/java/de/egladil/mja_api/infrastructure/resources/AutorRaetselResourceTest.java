@@ -139,6 +139,7 @@ public class AutorRaetselResourceTest {
 		QuelleDto quelle = result.getQuelle();
 		assertEquals(Quellenart.ZEITSCHRIFT, quelle.getQuellenart());
 		assertEquals(mediumUuid, quelle.getMediumUuid());
+		assertEquals(editRaetselPayload.getQuelle().getPfad(), quelle.getPfad());
 
 		String quelleId = quelle.getId();
 		System.out.println("quelleID=" + quelleId);

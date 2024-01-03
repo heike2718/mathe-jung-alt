@@ -12,8 +12,6 @@ export interface MediumQuelleDto {
   readonly titel: string | undefined;
 }
 
-
-
 export interface RaetselSuchfilter {
   readonly suchstring: string;
   readonly deskriptoren: DeskriptorUI[];
@@ -108,6 +106,12 @@ export interface EditRaetselPayload {
   readonly quelle: QuelleDto;
 };
 
+export interface GUIEditRaetselPayload {
+  readonly editRaetselPayload: EditRaetselPayload;
+  readonly quellenangabe: string;
+  readonly embeddableImageInfos: EmbeddableImageInfo[];
+};
+
 export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {
 
   if (deskriptoren.length === 0) {
@@ -133,6 +137,27 @@ export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {
 export function isSuchfilterEmpty(suchfilter: RaetselSuchfilter): boolean {
   return suchfilter.suchstring === '' && suchfilter.deskriptoren.length === 0;
 };
+
+export function createEditRaetselPayload(raetselDetails: RaetselDetails): GUIEditRaetselPayload {
+  const editRaetselPayload: EditRaetselPayload = {
+    latexHistorisieren: false,
+    antwortvorschlaege: raetselDetails.antwortvorschlaege,
+    deskriptoren: raetselDetails.deskriptoren,
+    frage: raetselDetails.frage,
+    freigegeben: raetselDetails.freigegeben,
+    herkunftstyp: raetselDetails.herkunftstyp,
+    id: raetselDetails.id,
+    kommentar: raetselDetails.kommentar,
+    loesung: raetselDetails.loesung,
+    name: raetselDetails.name,
+    schluessel: raetselDetails.schluessel.length > 0 ? raetselDetails.schluessel : null,
+    quelle: raetselDetails.quelle
+  };
+
+  const quellenangabe = raetselDetails.quellenangabe;
+
+  return {editRaetselPayload: editRaetselPayload, quellenangabe: quellenangabe, embeddableImageInfos: raetselDetails.embeddableImageInfos};
+}
 
 // ////////////////////////////////////////////////////////////////////////////////////
 //    helper classes for the mapping between Java enums and UI-Models
