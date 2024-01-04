@@ -1,4 +1,4 @@
-<div class="mja-container" *ngIf="raetselFacade.raetselDetails$ | async as raetselDetails else keinRaetsel">
+<div class="mja-container" *ngIf="raetselFacade.editRaetselPayload$ | async as guiEditRaetselPayload else keinRaetsel">
     <mat-card>
         <mat-card-header>
             <mat-card-title>Rätseleditor</mat-card-title>
@@ -31,6 +31,7 @@
                             <mat-label>Name</mat-label>
                             <input matInput maxlength="100" formControlName="name" #nameInput>
                             <mat-hint>wird in der Tabelle angezeigt</mat-hint>
+                            <mat-hint align="end">{{nameInput.value.length}}/100</mat-hint>
                             <mat-error *ngIf="raetselDataError('name', 'required')">Name ist Pflicht</mat-error>
                             <mat-error *ngIf="raetselDataError('name', 'maxLength')">maximal 100 Zeichen</mat-error>
                         </mat-form-field>
@@ -42,6 +43,7 @@
                             <mat-label>Kommentar</mat-label>
                             <input matInput maxlength="200" formControlName="kommentar" #kommentarInput>
                             <mat-hint>Kommentare sind in Volltextsuche eingebunden</mat-hint>
+                            <mat-hint align="end">{{kommentarInput.value.length}}/200</mat-hint>
                             <mat-error *ngIf="raetselDataError('kommentar', 'maxLength')">maximal 200
                                 Zeichen</mat-error>
                         </mat-form-field>
@@ -324,7 +326,7 @@
                 generieren</button>
             <button *ngIf="raetselFacade.generateLatexError$ | async" mat-raised-button color="primary"
                 matTooltip="LaTeX: Logdateien herunterladen" (click)="downloadLatexLogs()">LaTeX-Logs</button>
-            <button *ngIf="raetselDetails.id !== 'neu'" mat-raised-button color="primary"
+            <button *ngIf="guiEditRaetselPayload.editRaetselPayload.id !== 'neu'" mat-raised-button color="primary"
                 matTooltip="zurück zur Detailansicht" (click)="cancelEdit()">Abbruch/Details</button>
             <button mat-raised-button color="primary" matTooltip="zurück zur Suche"
                 (click)="gotoSuche()">Rätselsuche</button>
