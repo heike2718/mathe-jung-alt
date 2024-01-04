@@ -41,8 +41,47 @@ h2 {
     color: red;
 }
 
+.badge-green {
+    background-color: green;
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.badge-blue {
+    background-color: blue;
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.badge-orange {
+    background-color: rgba(255, 145, 0, 0.692);
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.badge-white {
+    background-color: white;
+    color: black;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.badge-beige {
+    background-color: beige;
+    color: black;
+    padding: 5px;
+    border-radius: 3px;
+}
+
 .bg-white {
     background-color: white;
+}
+
+.bg-beige {
+    background-color: beige !important;
 }
 
 .btn {

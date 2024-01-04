@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -23,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     MatTableModule,
+    MatBadgeModule,
     MatButtonModule,
     MatCheckboxModule,
     MatPaginatorModule,
@@ -182,11 +184,12 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
   getDisplayedColumns(): string[] {
 
-    if (this.isAutor) {
-      return ['status', 'schluessel', 'name', 'kommentar'];
-    } else {
-      return ['schluessel', 'name', 'kommentar'];
-    }
+    // if (this.isAutor) {
+    //   return ['status', 'schluessel', 'name', 'kommentar'];
+    // } else {
+    //   return ['schluessel', 'name', 'kommentar'];
+    // }
+    return ['schluessel', 'name', 'kommentar'];
   }
 
   getHeaderSchluessel(): string {

@@ -5,8 +5,10 @@
         (inputChanged)="onSuchfilterSuchstringChanged($event)"
         (selectableItemsChanged)="onSelectItemsCompomentModelChanged($event)"></mja-raetsel-suchfilter-admin>
 
-    <mat-checkbox [(ngModel)]="modeFullTextSearchUnion" (change)="onSuchmodusChanged($event.checked)" >Volltextsuche mit OR? (sonst AND)</mat-checkbox>
-    <mat-checkbox [(ngModel)]="searchModeForDescriptorsLike" (change)="onSuchmodusChanged($event.checked)">Suche nach Deskriptoren mit LIKE? (sonst NOT LIKE)</mat-checkbox>   
+    <mat-checkbox [(ngModel)]="modeFullTextSearchUnion" (change)="onSuchmodusChanged($event.checked)">Volltextsuche mit
+        OR? (sonst AND)</mat-checkbox>
+    <mat-checkbox [(ngModel)]="searchModeForDescriptorsLike" (change)="onSuchmodusChanged($event.checked)">Suche nach
+        Deskriptoren mit LIKE? (sonst NOT LIKE)</mat-checkbox>
 
     <p>Suchkriterien: {{suchfilter | json}}</p>
 </div>
@@ -32,26 +34,25 @@
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortActive="schluessel" matSortDirection="asc"
     matSortDisableClear>
 
-    <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef class="mat-header-cell__1"></mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" class="mat-cell__1"><span *ngIf="!raetsel.freigegeben">
-                <mat-icon>block</mat-icon>
-            </span>
-            <span *ngIf="raetsel.freigegeben">
-                <mat-icon>check_circle_outline</mat-icon>
-            </span>
-        </mat-cell>
-    </ng-container>
-
     <ng-container matColumnDef="schluessel">
         <mat-header-cell *matHeaderCellDef mat-sort-header
             class="mat-header-cell__2">{{getHeaderSchluessel()}}</mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" class="mat-cell__2">{{raetsel.schluessel}}</mat-cell>
+        <mat-cell *matCellDef="let raetsel" class="mat-cell__2">
+            <div [ngClass]="{
+                'badge-green': raetsel.herkunft== 'EIGENKREATION',
+                'badge-blue': raetsel.herkunft=== 'ADAPTION',
+                'badge-orange': raetsel.herkunft=== 'ZITAT'
+            }">
+                {{raetsel.schluessel}}
+            </div>
+        </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef class="mat-header-cell__3">Name</mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" class="mat-cell__3"> {{raetsel.name}} </mat-cell>
+        <mat-cell *matCellDef="let raetsel" class="mat-cell__3">
+            {{raetsel.name}}
+        </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="kommentar">
@@ -60,7 +61,9 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)"></mat-row>
+    <mat-row *matRowDef="let row; columns: getDisplayedColumns()"  [ngClass]="{
+        'bg-beige': !row.freigegeben
+      }" (click)="onRowClicked(row)"></mat-row>
 
 </mat-table>
 

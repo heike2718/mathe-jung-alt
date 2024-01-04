@@ -1,5 +1,11 @@
 # Release-Notes
 
+__2.4.3__
+
++ [Optik Tabellen verbessert](https://github.com/heike2718/mathe-jung-alt/issues/115)
++ [neues Rätsel funktioniert nicht mehr](https://github.com/heike2718/mathe-jung-alt/issues/113)
++ [Bugs beim Pflegen der Quellen](https://github.com/heike2718/mathe-jung-alt/issues/111)
+
 __2.4.0__
 
 Medienverwaltung und Quellenzuordnung fertig:

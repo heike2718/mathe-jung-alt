@@ -21,18 +21,6 @@
 <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mt-2" matSort matSortActive="name"
   matSortDirection="asc" matSortDisableClear>
 
-  <!-- status -->
-  <ng-container matColumnDef="status">
-    <mat-header-cell *matHeaderCellDef class="mat-header-cell__1"> </mat-header-cell>
-    <mat-cell *matCellDef="let sammlung" class="mat-cell__1"> <span *ngIf="!sammlung.freigegeben">
-        <mat-icon>block</mat-icon>
-      </span>
-      <span *ngIf="sammlung.freigegeben">
-        <mat-icon>check_circle_outline</mat-icon>
-      </span>
-    </mat-cell>
-  </ng-container>
-
   <!-- name -->
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef>
@@ -110,6 +98,8 @@
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)"></mat-row>
+  <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)" [ngClass]="{
+    'bg-beige': !row.freigegeben
+  }" ></mat-row>
 
 </mat-table>

@@ -252,9 +252,9 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
 
   getDisplayedColumns(): string[] {
     if (this.#scrWidth > 959) {
-      return [STATUS, NAME, LEVEL, REFERENZTYP, REFERENZ];
+      return [NAME, LEVEL, REFERENZTYP, REFERENZ];
     } else {
-      return [STATUS, NAME];
+      return [NAME];
     }
   }
 
