@@ -23,6 +23,8 @@ import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
 import de.egladil.mja_api.domain.medien.dto.MediumQuelleDto;
+import de.egladil.mja_api.domain.medien.dto.RaetselMediensucheTrefferItem;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.profiles.FullDatabaseAutorTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
@@ -227,7 +229,7 @@ public class AutorMedienResourceTest {
 
 	@Test
 	@TestSecurity(user = "autor", roles = { "AUTOR" })
-	@Order(1)
+	@Order(5)
 	void should_LoadDetailsWork_when_notTheOwner() throws Exception {
 
 		// Arrange
@@ -249,5 +251,56 @@ public class AutorMedienResourceTest {
 
 		assertFalse(result.isOwnMedium());
 		assertTrue(result.isSchreibgeschuetzt());
+	}
+
+	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(6)
+	void should_getRaetselMitMedium_work() {
+
+		// Arrange
+		String mediumId = "2c6fc5a1-f27c-4d51-98c4-239a1eead05f";
+
+		// Act
+		RaetselMediensucheTrefferItem[] trefferliste = given()
+			.pathParam("id", mediumId)
+			.accept(ContentType.JSON)
+			.contentType(ContentType.JSON)
+			.when()
+			.get("{id}/raetsel/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(RaetselMediensucheTrefferItem[].class);
+
+		// Assert
+		assertEquals(2, trefferliste.length);
+
+		{
+
+			RaetselMediensucheTrefferItem item = trefferliste[0];
+			assertEquals("46b8bd51-9cd6-4d06-9b5b-26495b5e5a4c", item.getId());
+			assertEquals("02821", item.getSchluessel());
+			assertEquals(RaetselHerkunftTyp.ADAPTION, item.getHerkunftstyp());
+			assertEquals("Kängurus springen 6 Mal", item.getName());
+			assertEquals(
+				"Frodo Beutlin aus Beutelsend (basierend auf einer Idee aus Dokumentation Johannes Lehmann: 25 Jahre ABC-Mathematikolympiaden, S.47)",
+				item.getQuellenangabe());
+			assertEquals("/media/veracrypt2/mathe/wettbewerbe/grundschule/abc_olympiade.pdf", item.getPfad());
+		}
+
+		{
+
+			RaetselMediensucheTrefferItem item = trefferliste[1];
+			assertEquals("f61b41c9-1d00-45f5-8d47-c2fa11ca541e", item.getId());
+			assertEquals("02822", item.getSchluessel());
+			assertEquals(RaetselHerkunftTyp.ZITAT, item.getHerkunftstyp());
+			assertEquals("Ziffern in einem Satz zählen", item.getName());
+			assertEquals("Dokumentation Johannes Lehmann: 25 Jahre ABC-Mathematikolympiaden, S.51", item.getQuellenangabe());
+			assertEquals("/media/veracrypt2/mathe/wettbewerbe/grundschule/abc_olympiade.pdf", item.getPfad());
+		}
+
 	}
 }

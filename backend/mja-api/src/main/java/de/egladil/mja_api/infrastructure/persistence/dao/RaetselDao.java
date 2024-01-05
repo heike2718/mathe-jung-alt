@@ -535,5 +535,4 @@ public class RaetselDao {
 
 		return result;
 	}
-
 }

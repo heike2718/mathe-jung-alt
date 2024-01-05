@@ -2,7 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { PageDefinition, PaginationState } from "@mja-ws/core/model";
 import { fromMedien, medienActions } from "@mja-ws/medien/data";
-import { MediensucheTrefferItem, MediumDto, initialMediumDto } from "@mja-ws/medien/model";
+import { LinkedRaetsel, MediensucheTrefferItem, MediumDto, initialMediumDto } from "@mja-ws/medien/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/util";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -21,6 +21,7 @@ export class MedienFacade {
   selectedTrefferItem$: Observable<MediensucheTrefferItem> = this.#store.select(fromMedien.selectedTrefferItem).pipe(filterDefined, deepClone);
   selectedMediumDetails$: Observable<MediumDto> = this.#store.select(fromMedien.selectedMediumDetails).pipe(filterDefined, deepClone);
   allMedienDetails$: Observable<MediumDto[]> = this.#store.select(fromMedien.allMedienDetails);
+  linkedRaetsel$: Observable<LinkedRaetsel[]> = this.#store.select(fromMedien.linkedRaetsel);
 
 
   triggerSearch(suchstring: string, pageDefinition: PageDefinition): void {
@@ -67,5 +68,9 @@ export class MedienFacade {
   createAndEditMedium(): void {
 
     this.#store.dispatch(medienActions.eDIT_MEDIUM({ medium: initialMediumDto, nextUrl: 'medien/editor' }));
+  }
+
+  findLinkedRaetsel(mediumId: string): void {
+    this.#store.dispatch(medienActions.fIND_LINKED_RAETSEL({mediumId}));
   }
 }

@@ -24,7 +24,7 @@ export class MedienEffects {
             switchMap((action) => this.#medienHttpService.findMedien(action.suchstring, action.pageDefinition)),
             map((result) => medienActions.mEDIEN_FOUND({ result }))
         );
-    });    
+    });
 
     editMedium$ = createEffect(() =>
         this.#actions.pipe(
@@ -78,5 +78,14 @@ export class MedienEffects {
                 this.#messageService.info('Medium erfolgreich gespeichert');
             }),
         ), { dispatch: false });
+
+
+    findLinkedRaetsel$ = createEffect(() => {
+        return this.#actions.pipe(
+            ofType(medienActions.fIND_LINKED_RAETSEL),
+            switchMap((action) => this.#medienHttpService.findLinkedRaetsel(action.mediumId)),
+            map((raetsel) => medienActions.lINKED_RAETSEL_FOUND({ raetsel }))
+        );
+    });
 
 }

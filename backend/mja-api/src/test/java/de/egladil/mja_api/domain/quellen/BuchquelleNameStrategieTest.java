@@ -22,6 +22,8 @@ public class BuchquelleNameStrategieTest {
 
 	BuchquelleNameStrategie strategie = new BuchquelleNameStrategie();
 
+	QuelleInfosAdapter quelleAdapter = new QuelleInfosAdapter();
+
 	@Test
 	void should_getNameThrowIllegalStateException_when_QuellenartNichtBuch() {
 
@@ -32,7 +34,7 @@ public class BuchquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getText(quelle);
+			strategie.getText(quelleAdapter.adapt(quelle));
 			fail("keine IllegalStateException");
 		} catch (IllegalStateException e) {
 
@@ -52,7 +54,7 @@ public class BuchquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getText(quelle);
+			strategie.getText(quelleAdapter.adapt(quelle));
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
@@ -72,7 +74,7 @@ public class BuchquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getText(quelle);
+			strategie.getText(quelleAdapter.adapt(quelle));
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
@@ -92,7 +94,7 @@ public class BuchquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getText(quelle);
+			strategie.getText(quelleAdapter.adapt(quelle));
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
@@ -111,7 +113,7 @@ public class BuchquelleNameStrategieTest {
 		String expected = "Johannes Lehmann: Grunschulolympiade 2x2, S.42";
 
 		// Act
-		String name = strategie.getText(quelle);
+		String name = strategie.getText(quelleAdapter.adapt(quelle));
 
 		// Assert
 		assertEquals(expected, name);

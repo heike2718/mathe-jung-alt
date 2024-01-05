@@ -1,0 +1,50 @@
+use mathe_jung_alt;
+
+CREATE OR REPLACE VIEW mathe_jung_alt.VW_QUELLEN
+AS
+SELECT q.UUID,
+	q.SORTNR,
+	q.ART,
+	m.UUID as MEDIUM_UUID,
+	m.TITEL AS MEDIUM_TITEL,
+	m.ART AS MEDIUM_ART,
+	m.AUTOR,
+	q.AUSGABE,
+	q.JAHR,
+	q.KLASSE,
+	q.STUFE,
+	q.SEITE,
+	q.PERSON,
+	q.PFAD,
+	q.USER_ID
+FROM mathe_jung_alt.QUELLEN q
+	LEFT OUTER JOIN mathe_jung_alt.MEDIEN m ON q.MEDIUM = m.UUID;
+
+
+CREATE OR REPLACE VIEW mathe_jung_alt.VW_MEDIEN_RAETSEL
+AS
+SELECT
+	r.UUID as RAETSEL_ID ,
+	r.SCHLUESSEL ,
+	r.NAME,
+	r.FREIGEGEBEN ,
+	r.HERKUNFT,
+	vq.MEDIUM_UUID,
+	vq.MEDIUM_TITEL,
+	vq.MEDIUM_ART,
+	vq.AUTOR,
+	vq.AUSGABE,
+	vq.JAHR,
+	vq.KLASSE,
+	vq.STUFE,
+	vq.SEITE,
+	vq.PFAD
+from
+	VW_QUELLEN vq ,
+	RAETSEL r
+where
+	r.QUELLE = vq.UUID
+	and vq.MEDIUM_UUID is not NULL
+order by
+	vq.SORTNR;
+

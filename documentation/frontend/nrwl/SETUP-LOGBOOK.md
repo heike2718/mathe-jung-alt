@@ -474,6 +474,12 @@ __Quelle component__
 npx nx generate @nrwl/angular:component quelle --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-quelle --style=scss --standalone --no-interactive --dry-run
 ```
 
+__linked raetsel component__
+
+```
+npx nx generate @nrwl/angular:component linked-raetsel --project=medien-feature --path=/libs/medien/feature/src/lib --selector=mja-linked-raetsel --style=scss --standalone --no-interactive --dry-run
+```
+
 
 
 ## FAQ

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { PageDefinition, QUERY_PARAM_LIMIT, QUERY_PARAM_OFFSET } from "@mja-ws/core/model";
-import { MediensucheResult, MediensucheTrefferItem, MediumDto } from "@mja-ws/medien/model";
+import { LinkedRaetsel, MediensucheResult, MediensucheTrefferItem, MediumDto } from "@mja-ws/medien/model";
 import { Observable } from "rxjs";
 
 
@@ -62,6 +62,15 @@ export class MedienHttpService {
             return this.#updateMedium(url, medium);
         }
 
+    }
+
+    findLinkedRaetsel(mediumId: string): Observable<LinkedRaetsel[]> {
+
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+        const url = this.#url + '/' + mediumId + '/raetsel/v1';
+
+        return this.#http.get<LinkedRaetsel[]>(url, { headers});
+        
     }
 
     #insertMedium(url: string, payload: MediumDto): Observable<MediumDto> {

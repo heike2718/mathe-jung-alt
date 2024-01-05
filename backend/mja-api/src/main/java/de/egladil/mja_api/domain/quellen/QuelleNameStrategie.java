@@ -2,10 +2,13 @@
 // Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
-package de.egladil.mja_api.domain.quellen.impl;
+package de.egladil.mja_api.domain.quellen;
 
-import de.egladil.mja_api.domain.quellen.Quellenart;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
+import de.egladil.mja_api.domain.medien.Medienart;
+import de.egladil.mja_api.domain.quellen.impl.BuchquelleNameStrategie;
+import de.egladil.mja_api.domain.quellen.impl.InternetquelleNameStrategie;
+import de.egladil.mja_api.domain.quellen.impl.PersonquelleNameStrategie;
+import de.egladil.mja_api.domain.quellen.impl.ZeitschriftquelleNameStrategie;
 
 /**
  * QuelleNameStrategie
@@ -13,12 +16,12 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleR
 public interface QuelleNameStrategie {
 
 	/**
-	 * Bastelt einen Namen für ein Quellenverzeichnis zusammen.
+	 * Bastelt einen Text für ein Quellenverzeichnis zusammen.
 	 *
 	 * @param  quelle
 	 * @return        String
 	 */
-	String getText(PersistenteQuelleReadonly quelle);
+	String getText(IQuellenangabeDaten quelle);
 
 	static QuelleNameStrategie getStrategie(final Quellenart quellenart) {
 
@@ -27,6 +30,21 @@ public interface QuelleNameStrategie {
 		switch (quellenart) {
 
 		case PERSON -> result = new PersonquelleNameStrategie();
+		case BUCH -> result = new BuchquelleNameStrategie();
+		case INTERNET -> result = new InternetquelleNameStrategie();
+		case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
+		default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
+		}
+
+		return result;
+	}
+
+	static QuelleNameStrategie getStrategie(final Medienart quellenart) {
+
+		QuelleNameStrategie result = null;
+
+		switch (quellenart) {
+
 		case BUCH -> result = new BuchquelleNameStrategie();
 		case INTERNET -> result = new InternetquelleNameStrategie();
 		case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();

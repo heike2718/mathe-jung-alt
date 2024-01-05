@@ -1,0 +1,18 @@
+<mat-card [ngClass]="{
+    'bg-gray': !raetsel.freigegeben
+  }">
+    <mat-card-header>
+        <mat-card-title>{{raetsel.name}} ({{raetsel.schluessel}})</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="grid-container-2 mt-2 mb-2">
+            <label>Autor:in / Herkunft:</label>
+            <div>{{raetsel.quellenangabe}}</div>
+
+            <label>Pfad:</label>
+            <div>{{raetsel.pfad}}</div>
+        </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-raised-button color="primary" title="{{raetsel.schluessel}}-Details" (click)="showDetails()" >Details</button>
+    </mat-card-actions>

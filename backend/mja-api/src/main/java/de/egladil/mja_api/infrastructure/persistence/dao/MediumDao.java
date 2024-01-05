@@ -9,6 +9,7 @@ import java.util.List;
 import de.egladil.mja_api.domain.medien.Medienart;
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesMedium;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselMediensucheItemReadonly;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -166,5 +167,21 @@ public class MediumDao {
 		return entityManager.createNamedQuery(PersistentesMedium.FIND_WITH_MEDIENART, PersistentesMedium.class)
 			.setParameter("medienart", medienart)
 			.getResultList();
+	}
+
+	/**
+	 * Gibt alle Rätsel zurück, die das gegebene Medium als Quelle referenzieren.
+	 *
+	 * @param  mediumUuid
+	 * @return            List
+	 */
+	public List<PersistentesRaetselMediensucheItemReadonly> findAllRaetselWithMedium(final String mediumUuid) {
+
+		return entityManager
+			.createNamedQuery(PersistentesRaetselMediensucheItemReadonly.FIND_WITH_MEDIUM_ID,
+				PersistentesRaetselMediensucheItemReadonly.class)
+			.setParameter("mediumUuid", mediumUuid)
+			.getResultList();
+
 	}
 }

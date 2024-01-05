@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { swallowEmptyArgument } from "@mja-ws/shared/util";
-import { MediensucheTrefferItem, MediumDto } from "@mja-ws/medien/model";
+import { LinkedRaetsel, MediensucheTrefferItem, MediumDto } from "@mja-ws/medien/model";
 import { PaginationState, initialPaginationState } from "@mja-ws/core/model";
 import { medienActions } from "./medien.actions";
 
@@ -12,6 +12,7 @@ export interface MedienState {
     readonly selectedTrefferItem: MediensucheTrefferItem | undefined;
     readonly selectedMediumDetails: MediumDto | undefined;
     readonly allMedienDetails: MediumDto[];
+    readonly linkedRaetsel: LinkedRaetsel[];
 };
 
 const initialMedienState: MedienState = {
@@ -21,7 +22,8 @@ const initialMedienState: MedienState = {
     paginationState: initialPaginationState,
     selectedTrefferItem: undefined,
     selectedMediumDetails: undefined,
-    allMedienDetails: []
+    allMedienDetails: [],
+    linkedRaetsel: []
 };
 
 export const medienFeature = createFeature({
@@ -64,7 +66,15 @@ export const medienFeature = createFeature({
             swallowEmptyArgument(action, false);
             return {
                 ...state,
-                selectedMediumDetails: undefined
+                selectedMediumDetails: undefined,
+                linkedRaetsel: []
+            };
+        }),
+
+        on(medienActions.lINKED_RAETSEL_FOUND, (state, action) => {
+            return {
+                ...state,
+                linkedRaetsel: action.raetsel
             };
         })
     )

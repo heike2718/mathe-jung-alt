@@ -22,6 +22,8 @@ public class PersonquelleNameStrategieTest {
 
 	PersonquelleNameStrategie strategie = new PersonquelleNameStrategie();
 
+	QuelleInfosAdapter quelleAdapter = new QuelleInfosAdapter();
+
 	@Test
 	void should_getNameThrowIllegalStateException_when_QuellenartNichtPerson() {
 
@@ -32,7 +34,7 @@ public class PersonquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getText(quelle);
+			strategie.getText(quelleAdapter.adapt(quelle));
 			fail("keine IllegalStateException");
 		} catch (IllegalStateException e) {
 
@@ -52,7 +54,7 @@ public class PersonquelleNameStrategieTest {
 		// Act
 		try {
 
-			strategie.getText(quelle);
+			strategie.getText(quelleAdapter.adapt(quelle));
 			fail("keine MjaRuntimeException");
 		} catch (MjaRuntimeException e) {
 
@@ -69,7 +71,7 @@ public class PersonquelleNameStrategieTest {
 		quelle.quellenart = Quellenart.PERSON;
 
 		// Act
-		String name = strategie.getText(quelle);
+		String name = strategie.getText(quelleAdapter.adapt(quelle));
 
 		// Assert
 		assertEquals("Hans Manz", name);

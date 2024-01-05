@@ -1,4 +1,4 @@
-import { Medienart } from '@mja-ws/core/model';
+import { Herkunftstyp, Medienart } from '@mja-ws/core/model';
 
 export interface MediumDto {
   readonly id: string;
@@ -33,6 +33,16 @@ export interface MediensucheTrefferItem {
 export interface MediensucheResult {
   readonly trefferGesamt: number;
   readonly treffer: MediensucheTrefferItem[];
+};
+
+export interface LinkedRaetsel {
+  readonly id: string;
+  readonly schluessel: string;
+  readonly name: string;
+  readonly freigegeben: boolean;
+  readonly herkunftstyp: Herkunftstyp;
+  readonly quellenangabe: string;
+  readonly pfad: string;
 };
 
 

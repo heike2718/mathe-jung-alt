@@ -16,8 +16,19 @@
         <label>gehört mir?</label>
         <mat-checkbox [(ngModel)]="owner" [disabled]="true"></mat-checkbox>
 
+        <div *ngIf="medienFacade.linkedRaetsel$ | async as liste">
+            <h2 *ngIf="liste.length > 0">
+                verknüfte Rätsel
+                <span matBadge={{liste.length}} matBadgeColor="accent"
+                class="ml-1"></span>
+            </h2>
+            <div *ngFor="let raetsel of liste">
+                <mja-linked-raetsel [raetsel]="raetsel" (detailsClicked)="detailsClicked($event)" ></mja-linked-raetsel>
+            </div>
+        </div>
+        
         <div class="button-container mt-2">
-            <div *ngIf="!medium.schreibgeschuetzt"><button class="label" mat-raised-button color="primary"
+            <div *ngIf="!medium.schreibgeschuetzt"><button class="label" mat-raised-button color="primary" title="{{medium.titel}} bearbeiten"
                     (click)="startEdit()">bearbeiten</button>
             </div>
 

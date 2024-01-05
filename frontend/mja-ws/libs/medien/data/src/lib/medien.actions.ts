@@ -1,11 +1,13 @@
 import { PageDefinition } from '@mja-ws/core/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { MediensucheResult, MediensucheTrefferItem, MediumDto } from '@mja-ws/medien/model';
+import { LinkedRaetsel, MediensucheResult, MediensucheTrefferItem, MediumDto } from '@mja-ws/medien/model';
 
 export const medienActions = createActionGroup({
   source: 'medien',
   events: {
     'EDIT_MEDIUM': props<{medium: MediumDto, nextUrl: string}>(),
+    'FIND_LINKED_RAETSEL': props<{mediumId: string}>(),
+    'LINKED_RAETSEL_FOUND': props<{raetsel: LinkedRaetsel[]}>(),
     'FIND_MEDIEN': props<{suchstring: string, pageDefinition: PageDefinition}>(),
     'FIND_MEDIENDETAILS': props<{suchstring: string}>(),
     'MEDIEN_FOUND': props<{result: MediensucheResult}>(),

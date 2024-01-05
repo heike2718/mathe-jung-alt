@@ -14,6 +14,11 @@
         <span class="nav-caption">Aufgabensammlungen</span>
     </a>
 
+    <a *ngIf="authFacade.userIsAdmin$| async" mat-list-item routerLink="/medien">
+        <mat-icon>newspaper</mat-icon>
+        <span class="nav-caption">Medien</span>
+    </a>
+
     <a *ngIf="authFacade.userIsLoggedOut$ | async" mat-list-item (click)="login()">
         <mat-icon aria-hidden="false" aria-label="einloggen" fontIcon="login"></mat-icon>
         <span class="nav-caption">einloggen</span>

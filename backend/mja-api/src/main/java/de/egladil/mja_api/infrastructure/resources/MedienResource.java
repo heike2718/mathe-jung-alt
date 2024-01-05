@@ -25,6 +25,7 @@ import de.egladil.mja_api.domain.medien.Mediensuchmodus;
 import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
 import de.egladil.mja_api.domain.medien.dto.MediumQuelleDto;
+import de.egladil.mja_api.domain.medien.dto.RaetselMediensucheTrefferItem;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -302,5 +303,49 @@ public class MedienResource {
 		MediumDto result = medienService.mediumAendern(medium);
 
 		return Response.ok(result).status(200).build();
+	}
+
+	@GET
+	@Path("{id}/raetsel/v1")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Operation(
+		operationId = "getRaetselMitMedium", summary = "Gibt alle Rätsel zurück, die das gegebene Medium als Quelle referenzieren.")
+	@Parameters({
+		@Parameter(
+			in = ParameterIn.PATH,
+			name = "id",
+			description = "technische ID eines Mediums"),
+	})
+	@APIResponse(
+		name = "OKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(type = SchemaType.ARRAY, implementation = RaetselMediensucheTrefferItem.class)))
+	@APIResponse(
+		name = "BadRequestResponse",
+		responseCode = "400",
+		description = "fehlgeschlagene Input-Validierung")
+	@APIResponse(
+		name = "NotAuthorized",
+		responseCode = "401",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "NotFound",
+		responseCode = "404",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "ServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Response getRaetselMitMedium(@PathParam(value = "id") @Pattern(
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält unerlaubte Zeichen") final String id) {
+
+		List<RaetselMediensucheTrefferItem> result = medienService.findRaetselWithMedium(id);
+		return Response.ok(result).build();
 	}
 }

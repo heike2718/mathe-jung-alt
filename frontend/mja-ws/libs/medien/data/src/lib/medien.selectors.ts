@@ -39,6 +39,11 @@ const allMedienDetails = createSelector(
     state => state.allMedienDetails
 );
 
+const linkedRaetsel = createSelector(
+    selectMedienState,
+    (state) => state.linkedRaetsel
+);
+
 
 export const fromMedien = {
     isLoaded,
@@ -47,5 +52,6 @@ export const fromMedien = {
     paginationState,
     selectedTrefferItem,
     selectedMediumDetails,
-    allMedienDetails
+    allMedienDetails,
+    linkedRaetsel
 };

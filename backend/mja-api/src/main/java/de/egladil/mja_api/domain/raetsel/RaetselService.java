@@ -25,10 +25,11 @@ import de.egladil.mja_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
+import de.egladil.mja_api.domain.quellen.QuelleInfosAdapter;
+import de.egladil.mja_api.domain.quellen.QuelleNameStrategie;
 import de.egladil.mja_api.domain.quellen.QuellenService;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
-import de.egladil.mja_api.domain.quellen.impl.QuelleNameStrategie;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -460,7 +461,7 @@ public class RaetselService {
 		}
 
 		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
-		String text = nameStrategie.getText(ausDB);
+		String text = nameStrategie.getText(new QuelleInfosAdapter().adapt(ausDB));
 
 		if (raetsel.herkunft == RaetselHerkunftTyp.ADAPTION) {
 

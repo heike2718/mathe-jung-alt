@@ -7,8 +7,9 @@ package de.egladil.mja_api.domain.quellen.impl;
 import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.quellen.IQuellenangabeDaten;
+import de.egladil.mja_api.domain.quellen.QuelleNameStrategie;
 import de.egladil.mja_api.domain.quellen.Quellenart;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 
 /**
  * ZeitschriftquelleNameStrategie
@@ -16,37 +17,37 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleR
 public class ZeitschriftquelleNameStrategie implements QuelleNameStrategie {
 
 	@Override
-	public String getText(final PersistenteQuelleReadonly quelle) {
+	public String getText(final IQuellenangabeDaten quelle) {
 
-		if (quelle.quellenart != Quellenart.ZEITSCHRIFT) {
+		if (quelle.getQuellenart() != Quellenart.ZEITSCHRIFT) {
 
 			throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.ZEITSCHRIFT);
 		}
 
-		if (StringUtils.isBlank(quelle.mediumTitel)) {
+		if (StringUtils.isBlank(quelle.getMediumTitel())) {
 
 			throw new MjaRuntimeException("Bei Quellenart ZEITSCHRIFT darf mediumTitel nicht blank sein.");
 		}
 
-		StringBuffer sb = new StringBuffer(quelle.mediumTitel);
+		StringBuffer sb = new StringBuffer(quelle.getMediumTitel());
 
-		if (StringUtils.isNotBlank(quelle.ausgabe)) {
+		if (StringUtils.isNotBlank(quelle.getAusgabe())) {
 
 			sb.append(" (");
-			sb.append(quelle.ausgabe);
+			sb.append(quelle.getAusgabe());
 			sb.append(")");
 		}
 
-		if (StringUtils.isNotBlank(quelle.jahr)) {
+		if (StringUtils.isNotBlank(quelle.getJahr())) {
 
 			sb.append(" ");
-			sb.append(quelle.jahr);
+			sb.append(quelle.getJahr());
 		}
 
-		if (StringUtils.isNotBlank(quelle.seite)) {
+		if (StringUtils.isNotBlank(quelle.getSeite())) {
 
 			sb.append(", S.");
-			sb.append(quelle.seite);
+			sb.append(quelle.getSeite());
 		}
 
 		return sb.toString();

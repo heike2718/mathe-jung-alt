@@ -18,10 +18,17 @@ import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
 import de.egladil.mja_api.domain.medien.dto.MediumQuelleDto;
+import de.egladil.mja_api.domain.medien.dto.RaetselMediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.impl.MedienPermissionDelegate;
+import de.egladil.mja_api.domain.quellen.QuelleInfosAdapter;
+import de.egladil.mja_api.domain.quellen.QuelleNameStrategie;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.MediumDao;
+import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesMedium;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselMediensucheItemReadonly;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -45,6 +52,9 @@ public class MedienService {
 
 	@Inject
 	MediumDao mediumDao;
+
+	@Inject
+	QuellenRepository quellenRepository;
 
 	/**
 	 * Holt das Medium mit dieser id.
@@ -252,5 +262,50 @@ public class MedienService {
 			.withKommentar(ausDB.kommentar)
 			.withMedienart(ausDB.medienart)
 			.withTitel(ausDB.titel);
+	}
+
+	/**
+	 * Gibt alle Raetsel zurück, die das gegebene Medium als Quelle referenzieren.
+	 *
+	 * @param  mediumId
+	 *                  String
+	 * @return          List
+	 */
+	public List<RaetselMediensucheTrefferItem> findRaetselWithMedium(final String mediumId) {
+
+		List<PersistentesRaetselMediensucheItemReadonly> treffermenge = this.mediumDao.findAllRaetselWithMedium(mediumId);
+
+		List<RaetselMediensucheTrefferItem> result = treffermenge.stream()
+			.map(this::mapToRaetselMediensucheTrefferItem)
+			.collect(Collectors.toList());
+
+		return result;
+	}
+
+	RaetselMediensucheTrefferItem mapToRaetselMediensucheTrefferItem(final PersistentesRaetselMediensucheItemReadonly ausDB) {
+
+		QuelleNameStrategie quelleNameStrategie = QuelleNameStrategie.getStrategie(ausDB.medienart);
+
+		String quellenangabe = quelleNameStrategie.getText(new QuelleInfosAdapter().adapt(ausDB));
+
+		if (RaetselHerkunftTyp.ADAPTION == ausDB.herkunft) {
+
+			Optional<PersistenteQuelleReadonly> optQuelle = quellenRepository.findQuelleWithUserId(ausDB.raetselOwner);
+
+			if (optQuelle.isPresent()) {
+
+				PersistenteQuelleReadonly quelle = optQuelle.get();
+				quellenangabe = quelle.person + " (basierend auf einer Idee aus " + quellenangabe + ")";
+			}
+		}
+
+		return new RaetselMediensucheTrefferItem()
+			.withFreigegeben(ausDB.freigegeben)
+			.withHerkunftstyp(ausDB.herkunft)
+			.withId(ausDB.uuid)
+			.withName(ausDB.name)
+			.withPfad(ausDB.pfad)
+			.withQuellenangabe(quellenangabe)
+			.withSchluessel(ausDB.schluessel);
 	}
 }
