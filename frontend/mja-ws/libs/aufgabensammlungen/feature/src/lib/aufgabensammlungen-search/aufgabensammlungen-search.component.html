@@ -6,15 +6,20 @@
       [disabled]="buttonResetAllFiltersDisabled()">Filter leeren</button>
   </div>
   <div>
-    <button mat-raised-button color="primary" (click)="neueAufgabensammlung()" title="neue Aufgabensammlung anlegen">neue
+    <button mat-raised-button color="primary" (click)="neueAufgabensammlung()"
+      title="neue Aufgabensammlung anlegen">neue
       Sammlung</button>
   </div>
 </div>
 
-<div *ngIf="showSuchparameter()" class="grid-container-2 mt-2 mb-2">
+@if (showSuchparameter()) {
+<div class="grid-container-2 mt-2 mb-2">
   <label>Suchparameter</label>
   <div>{{suchparameterStr}}</div>
 </div>
+}
+
+
 
 <mat-paginator [length]="anzahlSammlungen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
 
@@ -30,12 +35,17 @@
         </label>
         <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <input matInput [formControl]="nameFilterControl" type="text" #nameFilterInput />
-          <button mat-button *ngIf="nameFilterInput.value" matSuffix mat-icon-button
+
+          @if (nameFilterInput.value) {
+            <button mat-button matSuffix mat-icon-button
             class="mat-form-field-suffix__clear" aria-label="Clear" (click)="clearFilter(nameFilterControl)">
             <mat-icon>
               close
             </mat-icon>
           </button>
+          }
+
+          
         </mat-form-field>
       </div>
     </mat-header-cell>
@@ -90,7 +100,7 @@
           Referenz
         </label>
         <mat-form-field class="filter">
-          <input matInput [formControl]="referenzFilterControl" type="text" #referenzFilterInput />          
+          <input matInput [formControl]="referenzFilterControl" type="text" #referenzFilterInput />
         </mat-form-field>
       </div>
     </mat-header-cell>
@@ -100,6 +110,6 @@
   <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
   <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)" [ngClass]="{
     'bg-beige': !row.freigegeben
-  }" ></mat-row>
+  }"></mat-row>
 
 </mat-table>

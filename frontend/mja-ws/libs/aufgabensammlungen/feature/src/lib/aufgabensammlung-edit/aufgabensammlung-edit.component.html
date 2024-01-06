@@ -1,5 +1,15 @@
-<div class="mja-container" *ngIf="aufgabensammlungenFacade.editorContent$ | async else keineAufgabensammlung">
+@if (!(aufgabensammlungenFacade.editorContent$ | async)) {
+<div class="mja-container">
+    <h2>Aufgabensammlung anlegen oder ändern</h2>
+    <p>keine Aufgabensammlung ausgewählt</p>
+    <div>
+        <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
+    </div>
+</div>
+}
 
+@if (aufgabensammlungenFacade.editorContent$ | async) {
+<div class="mja-container">
     <mat-card>
         <mat-card-header>
             <mat-card-title>Aufgabensammlung Basisdaten</mat-card-title>
@@ -9,16 +19,22 @@
             <form [formGroup]="form" novalidate>
 
                 <div class="mja-form">
+
                     <!-- Name -->
                     <div class="mb-2">
                         <mat-form-field>
                             <mat-label>Name</mat-label>
                             <input matInput maxlength="100" formControlName="name" #nameInput>
                             <mat-hint>für Übersicht und Quiz</mat-hint>
-                            <mat-error *ngIf="aufgabensammlungDataError('name', 'required')">Name ist
-                                Pflicht</mat-error>
-                            <mat-error *ngIf="aufgabensammlungDataError('name', 'maxLength')">maximal 100
-                                Zeichen</mat-error>
+                            <mat-hint align="end">{{nameInput.value.length}}/100</mat-hint>
+
+                            @if (aufgabensammlungDataError('name', 'required')) {
+                            <mat-error>Name ist erforderlich</mat-error>
+                            }
+
+                            @if (aufgabensammlungDataError('name', 'maxLength')) {
+                            <mat-error>maximal 100 Zeichen</mat-error>
+                            }
                         </mat-form-field>
                     </div>
 
@@ -27,8 +43,10 @@
                         <mat-form-field>
                             <mat-label>Kommentar</mat-label>
                             <input matInput maxlength="200" formControlName="kommentar" #kommentarInput>
-                            <mat-error *ngIf="aufgabensammlungDataError('kommentar', 'maxLength')">maximal 200 Zeichen
-                            </mat-error>
+                            <mat-hint align="end">{{kommentarInput.value.length}}/200</mat-hint>
+                            @if (aufgabensammlungDataError('kommentar', 'maxLength')) {
+                            <mat-error>maximal 100 Zeichen</mat-error>
+                            }
                         </mat-form-field>
                     </div>
 
@@ -70,9 +88,10 @@
                     <div class="mb-2">
                         <mat-form-field>
                             <mat-label>Referenz</mat-label>
-                            <input matInput maxlength="36" formControlName="referenz" #nameInput>
+                            <input matInput maxlength="36" formControlName="referenz" #referenzInput>
                             <mat-hint>Referenz auf ID im alten Aufgabenarchiv. Pflicht, wenn Referenztyp
                                 gewählt</mat-hint>
+                            <mat-hint align="end">{{referenzInput.value.length}}/36</mat-hint>
                         </mat-form-field>
                     </div>
                     <!-- ID -->
@@ -102,17 +121,17 @@
             <button mat-raised-button color="primary" (click)="gotoUebersicht()">abbrechen
                 (Übersicht)</button>
         </mat-card-actions>
-        <mat-card-footer *ngIf="!form.valid">
-            <mat-error *ngIf="!form.valid">
+
+        @if (!form.valid) {
+        <mat-card-footer>
+            <mat-error>
                 Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
                 Pflichtangaben und so.
-            </mat-error>            
+            </mat-error>
         </mat-card-footer>
+        }
+
     </mat-card>
+
 </div>
-
-
-<ng-template #keineAufgabensammlung>
-    <h2>Aufgabensammlung anlegen oder ändern</h2>
-    <p>keine Aufgabensammlung ausgewählt</p>
-</ng-template>
+}

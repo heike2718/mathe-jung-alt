@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { FontName, GeneratedImages, LaTeXLayoutAntwortvorschlaege, PageDefinition, PaginationState, Schriftgroesse } from "@mja-ws/core/model";
+import { FontName, GeneratedImages, LaTeXLayoutAntwortvorschlaege, PageDefinition, PaginationState, Schriftgroesse, User } from "@mja-ws/core/model";
 import { fromAufgabensammlungen, aufgabensammlungenActions } from "@mja-ws/aufgabensammlungen/data";
 import { EditAufgabensammlungselementPayload, EditAufgabensammlungPayload, AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem, initialAufgabensammlungDetails } from "@mja-ws/aufgabensammlungen/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/util";
@@ -24,7 +24,7 @@ export class AufgabensammlungenFacade {
     selectedAufgabensammlungselement$: Observable<Aufgabensammlungselement> = this.#store.select(fromAufgabensammlungen.selectedAufgabensammlungselement).pipe(filterDefined, deepClone);
     selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromAufgabensammlungen.selectedElementImages);
 
-    
+
 
     triggerSearch(aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): void {
         this.#store.dispatch(aufgabensammlungenActions.aUFGABENSAMMLUNGEN_SELECT_PAGE({ pageDefinition }));
@@ -61,11 +61,25 @@ export class AufgabensammlungenFacade {
         this.#store.dispatch(aufgabensammlungenActions.gENERIERE_LATEX({ aufgabensammlungID, font, schriftgroesse, layoutAntwortvorschlaege }));
     }
 
-    createAndEditAufgabensammlung(): void {
-        this.editAufgabensammlung(initialAufgabensammlungDetails);
+    createAndEditAufgabensammlung(user: User): void {
+        const privat = user.isAdmin ? false : true;
+        this.editAufgabensammlung({ ...initialAufgabensammlungDetails, privat: privat });
     }
 
-    editAufgabensammlung(aufgabensammlung: AufgabensammlungDetails): void {
+    editAufgabensammlung(augabensammlungDetails: AufgabensammlungDetails): void {
+
+        const aufgabensammlung: AufgabensammlungBasisdaten = {
+            freigegeben: augabensammlungDetails.freigegeben,
+            geaendertDurch: augabensammlungDetails.geaendertDurch,
+            id: augabensammlungDetails.id,
+            kommentar: augabensammlungDetails.kommentar,
+            name: augabensammlungDetails.name,
+            privat: augabensammlungDetails.privat,
+            referenz: augabensammlungDetails.referenz,
+            referenztyp: augabensammlungDetails.referenztyp,
+            schwierigkeitsgrad: augabensammlungDetails.schwierigkeitsgrad
+        }
+
         this.#store.dispatch(aufgabensammlungenActions.eDIT_AUFGABENSAMMLUNG({ aufgabensammlung }));
     }
 

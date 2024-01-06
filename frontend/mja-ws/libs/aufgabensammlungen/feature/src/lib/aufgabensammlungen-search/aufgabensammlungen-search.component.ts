@@ -15,7 +15,8 @@ import {
   PageDefinition,
   PaginationState,
   Referenztyp,
-  Schwierigkeitsgrad
+  Schwierigkeitsgrad,
+  User
 } from '@mja-ws/core/model';
 
 import {
@@ -33,6 +34,7 @@ import {
 
 import { MatSelectModule } from '@angular/material/select';
 import { Configuration } from '@mja-ws/shared/config';
+import { AuthFacade } from '@mja-ws/core/api';
 
 const STATUS = 'status';
 const NAME = 'name';
@@ -88,7 +90,9 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
 
   #configuration = inject(Configuration);
   #aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
+  #authFacade = inject(AuthFacade);
 
+  #user!: User;
 
   #nameFilterSubscription = new Subscription();
   #schwierigkeitsgradFilterSubscription = new Subscription();
@@ -97,6 +101,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   #matSortChangedSubscription: Subscription = new Subscription();
   #matPaginatorSubscription: Subscription = new Subscription();
   #paginationStateSubscription: Subscription = new Subscription();
+  #userSubscription = new Subscription();
 
 
   #suchparameter: AufgabensammlungenSuchparameter = initialAufgabensammlungenSuchparameter;
@@ -128,6 +133,8 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
         this.#sortDirection = state.pageDefinition.sortDirection === 'asc' ? 'asc' : 'desc';
       }
     );
+
+    this.#userSubscription = this.#authFacade.user$.subscribe((user) => this.#user = user);
 
     this.#triggerSearch();
   }
@@ -244,6 +251,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
     this.#paginationStateSubscription.unsubscribe();
     this.#matPaginatorSubscription.unsubscribe();
     this.#matSortChangedSubscription.unsubscribe();
+    this.#userSubscription.unsubscribe();
   }
 
   showSuchparameter(): boolean {
@@ -268,7 +276,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   neueAufgabensammlung(): void {
-    this.#aufgabensammlungenFacade.createAndEditAufgabensammlung();
+    this.#aufgabensammlungenFacade.createAndEditAufgabensammlung(this.#user);
   }
 
   onRowClicked(aufgabensammlung: AufgabensammlungTrefferItem): void {

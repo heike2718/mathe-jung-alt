@@ -55,7 +55,7 @@ export const aufgabensammlungenFeature = createFeature({
         on(aufgabensammlungenActions.eDIT_AUFGABENSAMMLUNG, (state, action) => {
             return {
                 ...state,
-                aufgabensammlungDetails: action.aufgabensammlung
+                aufgabensammlungBasisdaten: action.aufgabensammlung
             }
         }),
         on(aufgabensammlungenActions.aUFGABENSAMMLUNG_SAVED, (state, action) => {

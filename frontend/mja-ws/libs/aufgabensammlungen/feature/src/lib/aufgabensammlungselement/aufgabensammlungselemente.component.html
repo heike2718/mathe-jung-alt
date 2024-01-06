@@ -27,7 +27,11 @@
       <!-- Loesungsbuchstabe Column -->
       <ng-container matColumnDef="loesungsbuchstabe">
         <th mat-header-cell *matHeaderCellDef>Lösung</th>
-        <td mat-cell *matCellDef="let element"><span *ngIf="element.loesungsbuchstabe">{{element.loesungsbuchstabe}}</span></td>
+        <td mat-cell *matCellDef="let element">
+          @if (element.loesungsbuchstabe) {
+            <span >{{element.loesungsbuchstabe}}</span>
+          }          
+        </td>        
       </ng-container>
   
       <!-- Show Images Column -->
