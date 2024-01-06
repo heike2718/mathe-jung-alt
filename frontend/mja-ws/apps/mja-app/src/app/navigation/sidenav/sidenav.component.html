@@ -4,33 +4,44 @@
         <span class="nav-caption">Startseite</span>
     </a>
 
-    <a *ngIf="authFacade.userIsLoggedIn$ | async" mat-list-item routerLink="/raetsel">
+    @if (authFacade.userIsLoggedIn$ | async) {
+    <a mat-list-item routerLink="/raetsel">
         <mat-icon>library_books</mat-icon>
         <span class="nav-caption">Rätsel</span>
     </a>
 
-    <a *ngIf="authFacade.userIsAdmin$| async" mat-list-item routerLink="/aufgabensammlungen">
+    <a mat-list-item routerLink="/aufgabensammlungen">
         <mat-icon>menu_book</mat-icon>
         <span class="nav-caption">Aufgabensammlungen</span>
     </a>
+    }
 
-    <a *ngIf="authFacade.userIsAdmin$| async" mat-list-item routerLink="/medien">
+    @if (authFacade.userIsAdmin$| async) {
+    <a mat-list-item routerLink="/medien">
         <mat-icon>newspaper</mat-icon>
         <span class="nav-caption">Medien</span>
     </a>
+    }
 
-    <a *ngIf="authFacade.userIsLoggedOut$ | async" mat-list-item (click)="login()">
+    @if (authFacade.userIsLoggedOut$ | async) {
+    <a mat-list-item (click)="login()">
         <mat-icon aria-hidden="false" aria-label="einloggen" fontIcon="login"></mat-icon>
         <span class="nav-caption">einloggen</span>
     </a>
 
-    <a *ngIf="authFacade.userIsLoggedOut$ | async" mat-list-item (click)="signup()">
+    <a mat-list-item (click)="signup()">
         <mat-icon aria-hidden="false" aria-label="registrieren" fontIcon="perm_identity"></mat-icon>
         <span class="nav-caption">registrieren</span>
     </a>
+    }
 
-    <a *ngIf="authFacade.userIsLoggedOut$ | async" mat-list-item (click)="logout()">
+
+
+    @if (authFacade.userIsLoggedIn$ | async) {
+    <a mat-list-item (click)="logout()">
         <mat-icon>logout</mat-icon>
         <span class="nav-caption">ausloggen</span>
     </a>
+    }
+
 </mat-nav-list>

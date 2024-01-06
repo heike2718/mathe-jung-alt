@@ -18,7 +18,7 @@ export const aufgabensammlungenActions = createActionGroup({
         'FILE_GENERATED': props<{ pdf: GeneratedFile }>(),
         'BLOB_GENERATED': props<{ data: Blob, fileName: string }>(),
         'GENERIERE_LATEX': props<{aufgabensammlungID: string, font: FontName, schriftgroesse: Schriftgroesse, layoutAntwortvorschlaege: LaTeXLayoutAntwortvorschlaege}>(),
-        'EDIT_AUFGABENSAMMLUNG': props<{aufgabensammlungBasisdaten: AufgabensammlungBasisdaten}>(),
+        'EDIT_AUFGABENSAMMLUNG': props<{aufgabensammlung: AufgabensammlungDetails}>(),
         'SAVE_AUFGABENSAMMLUNG': props<{editAufgabensammlungPayload: EditAufgabensammlungPayload}>(),
         'AUFGABENSAMMLUNG_SAVED': props<{aufgabensammlung: AufgabensammlungBasisdaten}>(),
         'SELECT_AUFGABENSAMMLUNGSELEMENT': props<{aufgabensammlungselement: Aufgabensammlungselement}>(),

@@ -20,18 +20,6 @@ export interface AufgabensammlungBasisdaten {
   readonly geaendertDurch: string | undefined;
 };
 
-export const initialAufgabensammlungBasisdaten: AufgabensammlungBasisdaten = {
-  id: 'neu',
-  name: '',
-  freigegeben: false,
-  privat: false,
-  kommentar: undefined,
-  schwierigkeitsgrad: 'NOOP',
-  referenztyp: 'NOOP',
-  referenz: undefined,
-  geaendertDurch: undefined
-};
-
 export interface AufgabensammlungTrefferItem {
   readonly id: string;
   readonly name: string;
@@ -92,6 +80,20 @@ export interface AufgabensammlungDetails extends EditAufgabensammlungPayload {
   readonly elemente: Aufgabensammlungselement[];
   readonly geaendertDurch: string;
   readonly schreibgeschuetzt: boolean;
+};
+
+export const initialAufgabensammlungDetails: AufgabensammlungDetails = {
+  id: 'neu',
+  elemente: [],
+  freigegeben: false,
+  geaendertDurch: '',
+  kommentar: undefined,
+  name: '',
+  privat: true,
+  referenz: undefined,
+  referenztyp: 'NOOP',
+  schreibgeschuetzt: false,
+  schwierigkeitsgrad: 'NOOP'
 };
 
 export function isInitialAufgabensammlungenSuchparameter(aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter): boolean {

@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { FontName, GeneratedImages, LaTeXLayoutAntwortvorschlaege, PageDefinition, PaginationState, Schriftgroesse } from "@mja-ws/core/model";
 import { fromAufgabensammlungen, aufgabensammlungenActions } from "@mja-ws/aufgabensammlungen/data";
-import { EditAufgabensammlungselementPayload, EditAufgabensammlungPayload, initialAufgabensammlungBasisdaten, AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem } from "@mja-ws/aufgabensammlungen/model";
+import { EditAufgabensammlungselementPayload, EditAufgabensammlungPayload, AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem, initialAufgabensammlungDetails } from "@mja-ws/aufgabensammlungen/model";
 import { deepClone, filterDefined } from "@mja-ws/shared/util";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -62,17 +62,17 @@ export class AufgabensammlungenFacade {
     }
 
     createAndEditAufgabensammlung(): void {
-        this.editAufgabensammlung(initialAufgabensammlungBasisdaten);
+        this.editAufgabensammlung(initialAufgabensammlungDetails);
     }
 
-    editAufgabensammlung(aufgabensammlung: AufgabensammlungBasisdaten): void {
-        this.#store.dispatch(aufgabensammlungenActions.eDIT_AUFGABENSAMMLUNG({ aufgabensammlungBasisdaten: aufgabensammlung }));
+    editAufgabensammlung(aufgabensammlung: AufgabensammlungDetails): void {
+        this.#store.dispatch(aufgabensammlungenActions.eDIT_AUFGABENSAMMLUNG({ aufgabensammlung }));
     }
 
-    reloadAufgabensammlung(aufgabensammlung: AufgabensammlungBasisdaten, anzahlElemente: number): void {
+    reloadAufgabensammlung(aufgabensammlung: AufgabensammlungDetails): void {
 
         const theAufgabensammlung: AufgabensammlungTrefferItem = {
-            anzahlElemente: anzahlElemente,
+            anzahlElemente: aufgabensammlung.elemente.length,
             geaendertDurch: aufgabensammlung.geaendertDurch,
             id: aufgabensammlung.id,
             name: aufgabensammlung.name,
@@ -86,7 +86,7 @@ export class AufgabensammlungenFacade {
         this.selectAufgabensammlung(theAufgabensammlung);
     }
 
-    toggleStatus(aufgabensammlung: AufgabensammlungBasisdaten): void {
+    toggleStatus(aufgabensammlung: AufgabensammlungDetails): void {
 
         const EditAufgabensammlungPayload: EditAufgabensammlungPayload = {
             id: aufgabensammlung.id,

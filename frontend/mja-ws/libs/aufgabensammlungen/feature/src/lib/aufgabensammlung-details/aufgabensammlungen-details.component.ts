@@ -17,7 +17,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Subscription } from 'rxjs';
-import { EditAufgabensammlungselementPayload, AufgabensammlungBasisdaten, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
+import { EditAufgabensammlungselementPayload, AufgabensammlungBasisdaten, Aufgabensammlungselement, AufgabensammlungDetails } from '@mja-ws/aufgabensammlungen/model';
 import { AufgabensammlungselementDialogData } from '../aufgabensammlungselement-dialog/aufgabensammlungselement-dialog.data';
 import { AufgabensammlungselementDialogComponent } from '../aufgabensammlungselement-dialog/aufgabensammlungenselement-dialog.component';
 import { AufgabensammlungselementeComponent } from '../aufgabensammlungselement/aufgabensammlungselemente.component';
@@ -55,14 +55,21 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
   authFacade = inject(AuthFacade);
 
+  sammlung!: AufgabensammlungDetails;
+
+  selectedElement: Aufgabensammlungselement | undefined
+
   dialog = inject(MatDialog);
 
   images: GeneratedImages | undefined;
+
+  // sind das model für die template driven form elements
+  freigegeben = false;
+  privat = true;
   schluessel = '';
   nummer = '';
   punkte = '';
-  freigegeben = false;
-  privat = false;
+
 
   #raetselFacade = inject(RaetselFacade);
 
@@ -70,21 +77,18 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   #imagesSubscription = new Subscription();
   #aufgabensammlungselementSubscription = new Subscription();
 
-  #aufgabensammlungBasisdaten!: AufgabensammlungBasisdaten;
-  #anzahlElemente = 0;
-
   ngOnInit(): void {
 
     this.#aufgabensammlungSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$.subscribe(
       (aufgabensammlung) => {
-        this.#aufgabensammlungBasisdaten = aufgabensammlung;
-        this.#anzahlElemente = aufgabensammlung.elemente.length;
+        this.sammlung = aufgabensammlung;
         this.freigegeben = aufgabensammlung.freigegeben;
         this.privat = aufgabensammlung.privat;
       });
 
     this.#aufgabensammlungselementSubscription = this.aufgabensammlungenFacade.selectedAufgabensammlungselement$.subscribe(
       (element) => {
+        this.selectedElement = element;
         if (element) {
           this.schluessel = element.raetselSchluessel;
           this.nummer = element.nummer;
@@ -107,7 +111,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   getAufgabensammlungID(): string {
-    return this.#aufgabensammlungBasisdaten.id;
+    return this.sammlung ? this.sammlung.id : 'neu';
   }
 
   gotoUebersicht(): void {
@@ -189,23 +193,15 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   startEdit(): void {
-    this.aufgabensammlungenFacade.editAufgabensammlung(this.#aufgabensammlungBasisdaten);
-  }
-
-  reloadDisabled(): boolean {
-    return !this.#basisdatenLoaded();
+    this.aufgabensammlungenFacade.editAufgabensammlung(this.sammlung);
   }
 
   reload(): void {
-    this.aufgabensammlungenFacade.reloadAufgabensammlung(this.#aufgabensammlungBasisdaten, this.#anzahlElemente);
-  }
-
-  toggleStatusDisabled(): boolean {
-    return !this.#basisdatenLoaded();
+    this.aufgabensammlungenFacade.reloadAufgabensammlung(this.sammlung);
   }
 
   toggleStatus(): void {
-    this.aufgabensammlungenFacade.toggleStatus(this.#aufgabensammlungBasisdaten);
+    this.aufgabensammlungenFacade.toggleStatus(this.sammlung);
   }
 
   openNeuesAufgabensammlungselementDialog(): void {
@@ -223,7 +219,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   buttonsGenerierenDisabled(): boolean {
-    return this.getAufgabensammlungID().length === 0 || this.#anzahlElemente === 0;
+    return this.sammlung.id === 'neu' || this.sammlung.elemente.length === 0;
   }
 
   onEditElement($element: Aufgabensammlungselement): void {
@@ -241,9 +237,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   onDeleteElement($element: Aufgabensammlungselement): void {
-    if (this.#aufgabensammlungBasisdaten) {
-      this.#openConfirmLoeschenDialog($element);
-    }
+    this.#openConfirmLoeschenDialog($element);
   }
 
   onShowImagesElement($element: Aufgabensammlungselement): void {
@@ -260,7 +254,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if (result && this.#aufgabensammlungBasisdaten) {
+      if (result && this.sammlung) {
         const data: AufgabensammlungselementDialogData = result as AufgabensammlungselementDialogData;
         this.#saveElement(data);
       }
@@ -300,15 +294,4 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  #basisdatenLoaded(): boolean {
-
-    if (this.#aufgabensammlungBasisdaten) {
-      return true;
-    }
-
-    return false;
-  }
-
-
 }
