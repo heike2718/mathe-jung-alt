@@ -1,11 +1,13 @@
 <h1 mat-dialog-title>{{data.frage}}</h1>
 <mat-dialog-content class="mat-typography">
-    <mat-hint *ngIf="data.hinweis">{{data.hinweis}}
-    </mat-hint>
+
+    @if (data.hinweis) {
+    <mat-hint>{{data.hinweis}}</mat-hint>
+    }
+
+
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-raised-button color="primary"
-        [mat-dialog-close]="true">ja</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true">ja</button>
     <button mat-raised-button color="secondary" mat-dialog-close cdkFocusInitial>nein</button>
 </mat-dialog-actions>
-

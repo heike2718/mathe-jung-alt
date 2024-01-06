@@ -62,6 +62,7 @@ import { AuthFacade } from '@mja-ws/core/api';
 import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, Textart } from '@mja-ws/embeddable-images/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddable-image-info.component';
+import { Router } from '@angular/router';
 
 interface AntwortvorschlagFormValue {
   text: string,
@@ -127,6 +128,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
   // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //   RAETSELTEIL
   // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  #router = inject(Router);
 
   guiEditRaetselPayload!: GUIEditRaetselPayload;
 
@@ -213,10 +216,10 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       person: ['', [Validators.maxLength(100)]],
       jahr: ['', [Validators.maxLength(4)]],
       ausgabe: ['', [Validators.maxLength(10)]],
-      seite: ['', [Validators.maxLength(4)]],
-      klasse: ['', [Validators.maxLength(10)]],
+      seite: ['', [Validators.maxLength(10)]],
+      klasse: ['', [Validators.maxLength(20)]],
       stufe: ['', [Validators.maxLength(10)]],
-      pfad: ['', [Validators.maxLength(500)]],
+      pfad: ['', [Validators.maxLength(255)]],
     });
 
   }
@@ -639,6 +642,10 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   gotoSuche(): void {
     this.raetselFacade.cancelSelection();
+  }
+
+  gotoRaetselUebersicht(): void {
+    this.#router.navigateByUrl('/raetsel');
   }
 
   printPNG(): void {

@@ -1,14 +1,26 @@
-<h2 *ngIf="selectFileModel.titel && selectFileModel.titel.length>0">{{selectFileModel.titel}}</h2>
-<p *ngIf="devMode" class="hint">select-file.component</p>
-<p class="info" *ngIf="selectFileModel.beschreibung">{{selectFileModel.beschreibung}}</p>
-<p class="warnung" *ngIf="selectFileModel.hinweis">{{selectFileModel.hinweis}}</p>
+@if (selectFileModel.titel && selectFileModel.titel.length > 0) {
+<h2>{{selectFileModel.titel}}</h2>
+}
+
+@if (devMode) {
+<div class="hint">select-file.component</div>
+}
+
+@if (selectFileModel.beschreibung) {
+<div class="info">{{selectFileModel.beschreibung}}</div>
+}
+
+@if (selectFileModel.hinweis) {
+<div class="warnung">{{selectFileModel.hinweis}}</div>
+}
 
 <div>
     <input type="file" #file accept="{{selectFileModel.accept}}" style="display: none" (change)="onFileAdded($event)"
         #fileUpload />
 
     <div class="file-upload">
-        <button mat-mini-fab color="primary" class="upload-btn" title="Datei zum Hochladen auswählen" (click)="fileUpload.click()">
+        <button mat-mini-fab color="primary" class="upload-btn" title="Datei zum Hochladen auswählen"
+            (click)="fileUpload.click()">
             <mat-icon>attach_file</mat-icon>
         </button>
     </div>
@@ -19,6 +31,10 @@
     <div class="mt-1 mb-1 hint">
         {{erlaubteDateinamenInfo}}
     </div>
-    <div *ngIf="showMaxSizeExceeded" class="mt-1 hint-red bordered-red">{{errmMaxFileSize}}</div>
-    <div *ngIf="showInvalidFilename" class="mt-1 hint-red bordered-red">{{errmFilename}}</div>
+    @if (showMaxSizeExceeded) {
+    <div class="mt-1 hint-red bordered-red">{{errmMaxFileSize}}</div>
+    }
+    @if (showInvalidFilename) {
+    <div class="mt-1 hint-red bordered-red">{{errmFilename}}</div>
+    }
 </div>

@@ -1,6 +1,7 @@
 <h1>Rätsel</h1>
 
-<div *ngIf="isAutor" class="grid-container-1">
+@if (isAutor) {
+<div class="grid-container-1">
     <mja-raetsel-suchfilter-admin [selectItemsCompomentModel]="selectItemsCompomentModel"
         (inputChanged)="onSuchfilterSuchstringChanged($event)"
         (selectableItemsChanged)="onSelectItemsCompomentModelChanged($event)"></mja-raetsel-suchfilter-admin>
@@ -12,21 +13,25 @@
 
     <p>Suchkriterien: {{suchfilter | json}}</p>
 </div>
-
-<div *ngIf="!isAutor" class="grid-container-1">
+} @else {
+<div class="grid-container-1">
     <mja-select-items [model]="selectItemsCompomentModel"
         (modelChanged)="onSelectItemsCompomentModelChanged($event)"></mja-select-items>
 </div>
+}
 
 <div class="button-container mt-2 mb-2">
     <div>
         <button mat-raised-button color="primary" (click)="neueSuche()" [disabled]="buttonNeueSucheDisabled()">neue
             Suche</button>
     </div>
-    <div *ngIf="isAutor else keinAutor">
-        <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues
-            Rätsel</button>
-    </div>
+
+    @if (isAutor) {
+    <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues
+        Rätsel</button>
+    } @else {
+        <div>Bitte nehmen Sie Kontakt mit mir auf, wenn Sie Autor:in werden und selbst Rätsel erstellen möchten.</div>
+    }    
 </div>
 
 <mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
@@ -61,13 +66,8 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: getDisplayedColumns()"  [ngClass]="{
+    <mat-row *matRowDef="let row; columns: getDisplayedColumns()" [ngClass]="{
         'bg-beige': !row.freigegeben
       }" (click)="onRowClicked(row)"></mat-row>
 
 </mat-table>
-
-
-<ng-template #keinAutor>
-    Bitte nehmen Sie Kontakt mit mir auf, wenn Sie Autor:in werden und selbst Rätsel erstellen möchten.
-</ng-template>

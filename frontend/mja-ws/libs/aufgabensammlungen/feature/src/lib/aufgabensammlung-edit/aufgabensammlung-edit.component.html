@@ -1,15 +1,6 @@
-@if (!(aufgabensammlungenFacade.editorContent$ | async)) {
 <div class="mja-container">
-    <h2>Aufgabensammlung anlegen oder ändern</h2>
-    <p>keine Aufgabensammlung ausgewählt</p>
-    <div>
-        <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
-    </div>
-</div>
-}
+    @if (aufgabensammlungenFacade.editorContent$ | async) {
 
-@if (aufgabensammlungenFacade.editorContent$ | async) {
-<div class="mja-container">
     <mat-card>
         <mat-card-header>
             <mat-card-title>Aufgabensammlung Basisdaten</mat-card-title>
@@ -105,7 +96,7 @@
                     <div class="mb-2">
                         <mat-form-field>
                             <mat-label>ID</mat-label>
-                            <input matInput formControlName="id" #idInput [readonly]="true">  
+                            <input matInput formControlName="id" #idInput [readonly]="true">
                         </mat-form-field>
                     </div>
 
@@ -140,5 +131,11 @@
 
     </mat-card>
 
+    } @else {
+    <h2>Aufgabensammlung anlegen oder ändern</h2>
+    <p>keine Aufgabensammlung ausgewählt</p>
+    <div>
+        <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
+    </div>
+    }
 </div>
-}

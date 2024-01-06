@@ -83,6 +83,10 @@ export class MediumEditComponent implements OnInit, OnDestroy {
     this.medienFacade.navigateToSuche();
   }
 
+  gotoMedienuebersicht(): void {
+    this.medienFacade.unselectMedium();
+  }
+
   formInvalid(): boolean {
 
     const selectedMedienart = this.form.controls['medienart'].value;

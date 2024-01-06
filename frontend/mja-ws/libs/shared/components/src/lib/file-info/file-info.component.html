@@ -1,6 +1,12 @@
 <h2>{{titel}}</h2>
-<p *ngIf="devMode" class="hint">file-info.component</p>
-<p class="hint" *ngIf="beschreibung">{{beschreibung}}</p>
+@if (devMode) {
+<div class="hint">file-info.component</div>
+}
+
+@if (beschreibung) {
+<div class="hint">{{beschreibung}}</div>
+}
+
 <div class="row mt-3">
     <p>{{fileName}} ({{fileSize}})</p>
 </div>

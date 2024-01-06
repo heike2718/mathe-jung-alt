@@ -3,7 +3,8 @@
 <div class="mt-3">
     <mat-dialog-content>
 
-        <mat-form-field *ngIf="data.showVerwendungszwecke">
+        @if (data.showVerwendungszwecke) {
+        <mat-form-field>
             <mat-label>Verwendungszweck</mat-label>
             <select required="true" matNativeControl name="verwendungszweckeTyp" id="verwendungszweckeTyp"
                 [(ngModel)]="data.selectedVerwendungszweck">
@@ -14,9 +15,13 @@
 
             </select>
         </mat-form-field>
-        <div *ngIf="data.showVerwendungszwecke" class="hint mb-1">Hinweis 'Verwendungszweck': bei Arbeitsblättern werden
+
+        <div class="hint mb-1">Hinweis 'Verwendungszweck': bei Arbeitsblättern werden
             alle Lösungen ans Ende gedruckt, bei Knobelkarteien werden Frage und Lösung abwechselnd auf einzelne Blätter
             gedruckt.</div>
+        }
+
+
         <mat-form-field>
             <mat-label>Font</mat-label>
             <select matNativeControl name="fontTyp" id="fontTyp" [(ngModel)]="data.selectedFontName">

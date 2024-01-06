@@ -27,7 +27,8 @@ import {
   OutputFormat,
   Schriftgroesse,
   schriftgroessenSelectInput,
-  SelectGeneratorParametersUIModelAutoren
+  SelectGeneratorParametersUIModelAutoren,
+  User
 } from '@mja-ws/core/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
 import { Configuration } from '@mja-ws/shared/config';
@@ -65,9 +66,10 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   raetselFacade = inject(RaetselFacade);
   aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
-  authFacade = inject(AuthFacade);
+  #authFacade = inject(AuthFacade);
   dialog = inject(MatDialog);
   freigegeben = false;
+  user!: User;
 
   #config = inject(Configuration);
   devMode = !this.#config.production;
@@ -78,6 +80,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   #raetselDetailsSubscription = new Subscription();
   #raetselDetails!: RaetselDetails;
   #aufgabensammlungDetailsSubscription = new Subscription();
+  #userSubscription = new Subscription();
 
   #selectedAufgabensammlung: AufgabensammlungDetails | undefined;
 
@@ -92,12 +95,15 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
     this.#aufgabensammlungDetailsSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$
       .subscribe((aufgabensammlung) => this.#selectedAufgabensammlung = aufgabensammlung);
+
+      this.#userSubscription = this.#authFacade.user$.subscribe((user) => this.user = user);
   }
 
   ngOnDestroy(): void {
     this.#raetselDetailsSubscription.unsubscribe();
     this.#embeddableImagesFacade.clearVorschau();
     this.#aufgabensammlungDetailsSubscription.unsubscribe();
+    this.#userSubscription.unsubscribe();
   }
 
   startEdit(): void {

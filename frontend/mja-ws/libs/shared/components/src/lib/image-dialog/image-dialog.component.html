@@ -1,10 +1,14 @@
 <h1 mat-dialog-title>{{data.titel}}</h1>
 <mat-dialog-content class="mat-typography">
-    <mat-hint *ngIf="data.hinweis">{{data.hinweis}}
-    </mat-hint>
-    <div *ngIf="data.image" class="bg-white mt-1">
-        <img src="data:image/png;base64,{{data.image}}" />
-    </div>
+    @if (data.hinweis) {
+        <mat-hint>{{data.hinweis}}</mat-hint>
+    }
+    @if (data.image) {
+        <div class="bg-white mt-1">
+            <img src="data:image/png;base64,{{data.image}}" />
+        </div>
+    }   
+    
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-raised-button color="primary"

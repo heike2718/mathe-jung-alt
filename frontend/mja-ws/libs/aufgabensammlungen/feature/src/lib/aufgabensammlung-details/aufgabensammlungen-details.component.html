@@ -1,17 +1,5 @@
-@if (!(aufgabensammlungenFacade.aufgabensammlungDetails$ | async)) {
 <div class="mja-container">
-
-    <h2>Aufgabensammlung Details</h2>
-    <p>keine Aufgabensammlung ausgewählt</p>
-    <div>
-        <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
-    </div>
-</div>
-}
-
-@if ((aufgabensammlungenFacade.aufgabensammlungDetails$ | async)) {
-<div class="mja-container">
-
+    @if (aufgabensammlungenFacade.aufgabensammlungDetails$ | async) {
 
     <h2>Aufgabensammlung {{sammlung.name}} <span matBadge={{sammlung.elemente.length}} matBadgeColor="accent"
             class="ml-1"></span></h2>
@@ -78,29 +66,36 @@
         (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
     </mja-aufgabensammlungselement>
 
-    @if (schluessel.length > 0 && !selectedElement) {
+    @if (schluessel.length > 0) {
+
+    @if (!selectedElement) {
     <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
     <div class="mb-2">
         <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
     </div>
-    }
-
-    @if (schluessel.length > 0 && selectedElement) {
+    } @else {
     <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
     <div class="mb-2">
         <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
-        <button mat-raised-button color="primary" class="ml-2"
-            (click)="onShowImagesElement(selectedElement)">neu
+        <button mat-raised-button color="primary" class="ml-2" (click)="onShowImagesElement(selectedElement)">neu
             laden</button>
     </div>
     }
 
-    @if (images) {
-    <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
     }
 
-    @if (!images) {
+    @if (images) {
+    <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
+    } @else {
     <p>Entweder wurde die Vorschau nicht geladen oder sie existiert nicht</p>
     }
+
+    } @else {
+    <h2>Aufgabensammlung Details</h2>
+    <p>keine Aufgabensammlung ausgewählt</p>
+    <div>
+        <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
+    </div>
+    }
+
 </div>
-}

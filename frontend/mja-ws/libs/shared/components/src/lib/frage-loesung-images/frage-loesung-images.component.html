@@ -1,8 +1,12 @@
-<div *ngIf="images.imageFrage !== null" class="bordered bg-white">
+@if (images.imageFrage !== null) {
+<div class="bordered bg-white">
     <img src="data:image/png;base64,{{images.imageFrage}}" class="mja-image" />
 </div>
+}
 
-<div *ngIf="images.imageLoesung !== null" class="mt-1">
+@if (images.imageLoesung !== null) {
+
+<div class="mt-1">
     <mat-accordion>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
@@ -18,3 +22,4 @@
 
     </mat-accordion>
 </div>
+}

@@ -1,49 +1,63 @@
 <div class="mja-container">
-    <div *ngIf="medienFacade.selectedMediumDetails$ | async as medium; else keinMedium">
+    @if ((medienFacade.selectedMediumDetails$ | async); as medium) {
+    <div class="mja-container">
         <h1>{{medium.titel}} ({{medium.medienart}})</h1>
-        <div *ngIf="medium.autor" class="grid-container-2 mt-2 mb-2">
+
+        @if (medium.autor) {
+        <div class="grid-container-2 mt-2 mb-2">
             <label>Autor:</label>
             <div>{{medium.autor}}</div>
         </div>
-        <div *ngIf="medium.url" class="grid-container-2 mt-2 mb-2">
+        }
+
+        @if (medium.url) {
+        <div class="grid-container-2 mt-2 mb-2">
             <label>URL:</label>
             <div>{{medium.url}}</div>
         </div>
-        <div *ngIf="medium.kommentar" class="grid-container-2 mt-2 mb-2">
+        }
+
+        @if (medium.kommentar) {
+        <div class="grid-container-2 mt-2 mb-2">
             <label>Kommentar:</label>
             <div>{{medium.kommentar}}</div>
         </div>
+        }
+
         <label>gehört mir?</label>
         <mat-checkbox [(ngModel)]="owner" [disabled]="true"></mat-checkbox>
 
-        <div *ngIf="medienFacade.linkedRaetsel$ | async as liste">
-            <h2 *ngIf="liste.length > 0">
-                verknüfte Rätsel
-                <span matBadge={{liste.length}} matBadgeColor="accent"
-                class="ml-1"></span>
-            </h2>
+        <div class="button-container mt-2 mb-2">
 
-            @for (raetsel of liste; track $index) {
-                <mja-linked-raetsel [raetsel]="raetsel" (detailsClicked)="detailsClicked($event)" ></mja-linked-raetsel>
+            @if (!medium.schreibgeschuetzt) {
+            <button class="label" mat-raised-button color="primary" title="{{medium.titel}} bearbeiten"
+                (click)="startEdit()">bearbeiten</button>
             }
-        </div>
-        
-        <div class="button-container mt-2">
-            <div *ngIf="!medium.schreibgeschuetzt"><button class="label" mat-raised-button color="primary" title="{{medium.titel}} bearbeiten"
-                    (click)="startEdit()">bearbeiten</button>
-            </div>
 
             <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
                     (click)="gotoMedienuebersicht()">Medien</button>
             </div>
         </div>
-    </div>
-</div>
 
-<ng-template #keinMedium>
+        @if ((medienFacade.linkedRaetsel$ | async); as liste) {
+
+        @if (liste.length > 0) {
+        <h2>
+            verknüfte Rätsel
+            <span matBadge={{liste.length}} matBadgeColor="accent" class="ml-1"></span>
+        </h2>
+
+        @for (raetsel of liste; track $index) {
+        <mja-linked-raetsel [raetsel]="raetsel" (detailsClicked)="detailsClicked($event)"></mja-linked-raetsel>
+        }
+        }
+        }
+    </div>
+    } @else {
     <h1>Medium: Details</h1>
     <p>kein Medium gewählt</p>
-    <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
-            (click)="gotoMedienuebersicht()">Medien</button>
-    </div>
-</ng-template>
+    <button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+        (click)="gotoMedienuebersicht()">Medien</button>
+    }
+
+</div>

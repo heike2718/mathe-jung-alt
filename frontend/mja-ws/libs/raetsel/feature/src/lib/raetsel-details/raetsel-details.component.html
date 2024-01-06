@@ -1,166 +1,170 @@
 <div class="mja-container">
-    <div *ngIf="authFacade.user$ | async as user">
-        <div *ngIf="raetselFacade.raetselDetails$ | async as raetsel; else keinRaetsel">
-            <h1>Rätsel {{raetsel.schluessel}}</h1>
-            <div class="grid-container-1 mt-2 mb-2">
-                <mat-chip-listbox>
-                    @for (deskriptor of raetsel.deskriptoren; track $index) {
-                    <mat-chip-option>{{deskriptor.name}}</mat-chip-option>
-                    }
-                </mat-chip-listbox>
+    @if ((raetselFacade.raetselDetails$ | async); as raetsel) {
+    <h1>Rätsel {{raetsel.schluessel}}</h1>
+    <div class="grid-container-1 mt-2 mb-2">
+        <mat-chip-listbox>
+            @for (deskriptor of raetsel.deskriptoren; track $index) {
+            <mat-chip-option>{{deskriptor.name}}</mat-chip-option>
+            }
+        </mat-chip-listbox>
 
-                <mja-frage-loesung-images *ngIf="raetsel.images" [images]="raetsel.images"></mja-frage-loesung-images>
+        @if (raetsel.images) {
+        <mja-frage-loesung-images [images]="raetsel.images"></mja-frage-loesung-images>
+        }
 
-                <div *ngIf="raetsel.antwortvorschlaege.length > 0">
-                    <mat-accordion>
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Antwortvorschläge
-                                </mat-panel-title>
+        @if (raetsel.antwortvorschlaege.length > 0) {
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Antwortvorschläge
+                    </mat-panel-title>
 
-                            </mat-expansion-panel-header>
+                </mat-expansion-panel-header>
 
-                            @for (antwortvorschlag of raetsel.antwortvorschlaege; track $index) {
-                            <mja-antwortvorschlag [antwortvorschlag]="antwortvorschlag"></mja-antwortvorschlag>
-                            }
-                        </mat-expansion-panel>
-                    </mat-accordion>
-                </div>
+                @for (antwortvorschlag of raetsel.antwortvorschlaege; track $index) {
+                <mja-antwortvorschlag [antwortvorschlag]="antwortvorschlag"></mja-antwortvorschlag>
+                }
+            </mat-expansion-panel>
+        </mat-accordion>
+        }
 
-                <div class="grid-container-2 mt-2 mb-2">
-                    <label>Autor:in / Herkunft:</label>
-                    <div>{{raetsel.quellenangabe}}</div>
-                </div>
-
-                <div *ngIf="!user.isAdmin" class="button-container">
-                    <button class="label" mat-raised-button color="primary"
-                        (click)="gotoRaetselUebersicht()">Suche</button>
-                </div>
-
-                <div *ngIf="user.isAdmin">
-                    <h2>Metadaten und LaTeX</h2>
-
-                    <div class="button-container">
-                        <div *ngIf="!raetsel.schreibgeschuetzt"><button class="label" mat-raised-button color="primary"
-                                (click)="startEdit()">bearbeiten</button>
-                        </div>
-                        <div *ngIf="!raetsel.schreibgeschuetzt"><button class="label" mat-raised-button color="primary"
-                                [disabled]="generierenDiabled()" matTooltip="PNG Frage und Lösung generieren"
-                                (click)="printPNG()">PNG
-                                generieren</button></div>
-                        <div><button class="label" mat-raised-button color="primary" matTooltip="PDF generieren"
-                                [disabled]="generierenDiabled()" (click)="printPDF()">PDF
-                                generieren</button></div>
-                        <div *ngIf="!raetsel.schreibgeschuetzt && raetsel.embeddableImageInfos.length !== 0">
-                            <button class="label" mat-raised-button color="primary"
-                                matTooltip="eingebette Grafikdateien herunterladen"
-                                (click)="downloadEmbeddedImages()">EPS-Files</button>
-                        </div>
-                        <div *ngIf="!raetsel.schreibgeschuetzt">
-                            <button class="label" mat-raised-button color="primary"
-                                matTooltip="texte des Rätsels herunterladen"
-                                (click)="downloadRaetselLaTeX()">TEX-Files</button>
-                        </div>
-                        <div *ngIf="raetselFacade.generateLatexError$ | async">
-                            <button class="label" mat-raised-button color="primary"
-                                matTooltip="LaTeX: Logdateien herunterladen"
-                                (click)="downloadLatexLogs()">LaTeX-Logs</button>
-                        </div>
-
-                        <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
-                                (click)="gotoRaetselUebersicht()">Rätselsuche</button>
-                        </div>
-
-                        <div *ngIf="authFacade.userIsAdmin$ | async">
-                            <div *ngIf="aufgabensammlungenFacade.aufgabensammlungDetails$ | async as aufgabensammlung">
-                                <button class="label" mat-raised-button color="primary"
-                                    matTooltip="zur gewählten Aufgabensammlung {{aufgabensammlung.name}}"
-                                    (click)="gotoAufgabensammlung()">Aufgabensammlung</button>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="grid-container-2 mt-2 mb-2">
-
-                        <label>ID:</label>
-                        <div>{{raetsel.id}}</div>
-
-                        <label>Name:</label>
-                        <div>{{raetsel.name}}</div>
-
-                        <label>freigegeben:</label>
-                        <mat-checkbox [(ngModel)]="freigegeben" [disabled]="true"></mat-checkbox>
-                    </div>
-
-                    <mat-accordion>
-
-                        <mat-expansion-panel
-                            *ngIf="!raetsel.schreibgeschuetzt && raetsel.embeddableImageInfos.length !== 0">
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Grafiken
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-
-                            <mat-nav-list>
-                                @for (embeddableImageInfo of raetsel.embeddableImageInfos; track $index) {
-                                <mat-list-item>
-                                    <mja-ws-embeddable-image-info
-                                        [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
-                                </mat-list-item>
-                                }
-                            </mat-nav-list>
-
-                            <mja-embeddable-image-vorschau [schluessel]=raetsel.schluessel
-                                [raetselId]=raetsel.id></mja-embeddable-image-vorschau>
-                        </mat-expansion-panel>
-
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Frage (LaTeX)
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-
-                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
-                                disabled="true">{{raetsel.frage}}</textarea>
-                        </mat-expansion-panel>
-
-                        <mat-expansion-panel *ngIf="raetsel.loesung">
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Lösung (LaTeX)
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-
-                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
-                                disabled="true">{{raetsel.loesung}}</textarea>
-                        </mat-expansion-panel>
-
-                        <mat-expansion-panel *ngIf="raetsel.kommentar">
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Kommentar
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-
-                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
-                                disabled="true">{{raetsel.kommentar}}</textarea>
-                        </mat-expansion-panel>
-
-                    </mat-accordion>
-                </div>
-            </div>
+        <div class="grid-container-2 mt-2 mb-2">
+            <label>Autor:in / Herkunft:</label>
+            <div>{{raetsel.quellenangabe}}</div>
         </div>
-    </div>
-</div>
 
-<ng-template #keinRaetsel>
+        <div class="button-container">
+
+            @if (!user.isAdmin) {
+            <button class="label" mat-raised-button color="primary" (click)="gotoRaetselUebersicht()">Suche</button>
+            }
+
+        </div>
+
+
+
+        @if (user.isAdmin) {
+
+        <h2>Metadaten und LaTeX</h2>
+        <div class="button-container">
+
+            @if (!raetsel.schreibgeschuetzt) {
+            <button class="label" mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button>
+            <button class="label" mat-raised-button color="primary" [disabled]="generierenDiabled()"
+                matTooltip="PNG Frage und Lösung generieren" (click)="printPNG()">PNG
+                generieren</button>
+            }
+
+            @if (!raetsel.schreibgeschuetzt && raetsel.embeddableImageInfos.length !== 0) {
+            <button class="label" mat-raised-button color="primary" matTooltip="eingebette Grafikdateien herunterladen"
+                (click)="downloadEmbeddedImages()">EPS-Files</button>
+            }
+
+            @if (!raetsel.schreibgeschuetzt) {
+            <button class="label" mat-raised-button color="primary" matTooltip="texte des Rätsels herunterladen"
+                (click)="downloadRaetselLaTeX()">TEX-Files</button>
+            }
+
+            @if (raetselFacade.generateLatexError$ | async) {
+            <button class="label" mat-raised-button color="primary" matTooltip="LaTeX: Logdateien herunterladen"
+                (click)="downloadLatexLogs()">LaTeX-Logs</button>
+            }
+
+            <button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+                (click)="gotoRaetselUebersicht()">Rätselsuche</button>
+
+            @if (user.isAdmin) {
+            @if ((aufgabensammlungenFacade.aufgabensammlungDetails$ | async); as aufgabensammlung) {
+            <button class="label" mat-raised-button color="primary"
+                matTooltip="zur gewählten Aufgabensammlung {{aufgabensammlung.name}}"
+                (click)="gotoAufgabensammlung()">Aufgabensammlung</button>
+            }
+            }
+
+        </div>
+
+        <div class="grid-container-2 mt-2 mb-2">
+
+            <label>ID:</label>
+            <div>{{raetsel.id}}</div>
+
+            <label>Name:</label>
+            <div>{{raetsel.name}}</div>
+
+            <label>freigegeben:</label>
+            <mat-checkbox [(ngModel)]="freigegeben" [disabled]="true"></mat-checkbox>
+        </div>
+
+        <mat-accordion>
+
+            @if (!raetsel.schreibgeschuetzt && raetsel.embeddableImageInfos.length !== 0) {
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Grafiken
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <mat-nav-list>
+                    @for (embeddableImageInfo of raetsel.embeddableImageInfos; track $index) {
+                    <mat-list-item>
+                        <mja-ws-embeddable-image-info
+                            [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
+                    </mat-list-item>
+                    }
+                </mat-nav-list>
+
+                <mja-embeddable-image-vorschau [schluessel]=raetsel.schluessel
+                    [raetselId]=raetsel.id></mja-embeddable-image-vorschau>
+            </mat-expansion-panel>
+            }
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Frage (LaTeX)
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
+                    disabled="true">{{raetsel.frage}}</textarea>
+            </mat-expansion-panel>
+
+            @if (raetsel.loesung) {
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Lösung (LaTeX)
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
+                    disabled="true">{{raetsel.loesung}}</textarea>
+            </mat-expansion-panel>
+            }
+
+            @if (raetsel.kommentar) {
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Kommentar
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="5" cols="120"
+                    disabled="true">{{raetsel.kommentar}}</textarea>
+            </mat-expansion-panel>
+            }
+        </mat-accordion>
+
+
+        }
+    </div>
+    } @else {
     <h1>Rätsel Details</h1>
     <p>kein Rätsel gewählt</p>
-    <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
-            (click)="gotoRaetselUebersicht()">Rätselsuche</button>
-    </div>
-</ng-template>
+    <button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+        (click)="gotoRaetselUebersicht()">Rätselsuche</button>
+    }
+</div>

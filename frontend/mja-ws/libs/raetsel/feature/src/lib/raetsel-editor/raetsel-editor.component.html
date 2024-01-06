@@ -1,4 +1,5 @@
-<div class="mja-container" *ngIf="raetselFacade.editRaetselPayload$ | async as guiEditRaetselPayload else keinRaetsel">
+<div class="mja-container">
+    @if ((raetselFacade.editRaetselPayload$ | async); as guiEditRaetselPayload) {
     <mat-card>
         <mat-card-header>
             <mat-card-title>Rätseleditor</mat-card-title>
@@ -13,15 +14,16 @@
                         <mat-form-field>
                             <mat-label>Schlüssel</mat-label>
                             <input matInput maxlength="5" inputmode="tel" formControlName="schluessel" #schluesselInput>
-                            <mat-hint *ngIf="isRoot">für neue Rätsel beim Speichern generieren</mat-hint>
-                            <mat-hint *ngIf="!isRoot">wird vom System generiert</mat-hint>
-                            <mat-error *ngIf="raetselDataError('schluessel', 'required')">Schlüssel ist
-                                Pflicht</mat-error>
-                            <mat-error *ngIf="raetselDataError('schluessel', 'pattern')">genau 5 Ziffern - nach
-                                links
-                                mit 0
-                                auffüllen
-                            </mat-error>
+
+                            @if (isRoot) {
+                            <mat-hint>für neue Rätsel beim Speichern generieren</mat-hint>
+                            } @else {
+                            <mat-hint>wird vom System generiert</mat-hint>
+                            }
+
+                            @if (raetselDataError('schluessel', 'pattern')) {
+                            <mat-error>genau 5 Ziffern - nach links mit 0 auffüllen</mat-error>
+                            }
                         </mat-form-field>
                     </div>
 
@@ -32,8 +34,12 @@
                             <input matInput maxlength="100" formControlName="name" #nameInput>
                             <mat-hint>wird in der Tabelle angezeigt</mat-hint>
                             <mat-hint align="end">{{nameInput.value.length}}/100</mat-hint>
-                            <mat-error *ngIf="raetselDataError('name', 'required')">Name ist Pflicht</mat-error>
-                            <mat-error *ngIf="raetselDataError('name', 'maxLength')">maximal 100 Zeichen</mat-error>
+                            @if (raetselDataError('ausgabe', 'required')) {
+                            <mat-error>Name ist erforderlich</mat-error>
+                            }
+                            @if (raetselDataError('name', 'maxLength')) {
+                            <mat-error>maximal 100 Zeichen</mat-error>
+                            }
                         </mat-form-field>
                     </div>
 
@@ -44,8 +50,10 @@
                             <input matInput maxlength="200" formControlName="kommentar" #kommentarInput>
                             <mat-hint>Kommentare sind in Volltextsuche eingebunden</mat-hint>
                             <mat-hint align="end">{{kommentarInput.value.length}}/200</mat-hint>
-                            <mat-error *ngIf="raetselDataError('kommentar', 'maxLength')">maximal 200
-                                Zeichen</mat-error>
+
+                            @if (raetselDataError('kommentar', 'maxLength')) {
+                            <mat-error>maximal 200 Zeichen</mat-error>
+                            }
                         </mat-form-field>
                     </div>
 
@@ -65,120 +73,151 @@
                         </mat-form-field>
                     </div>
 
+                    <!-- Quelle -->
+                    @if (selectedHerkunftstyp !== 'EIGENKREATION') {
+                    <h2>Quellenangaben</h2>
 
-                    <div *ngIf="selectedHerkunftstyp !== 'EIGENKREATION'">
-                        <h2>Quellenangaben</h2>
+                    @if (selectedMedium !== undefined) {
+                    <p>{{selectedMedium.titel}}</p>
+                    }
 
-                        <p *ngIf="selectedMedium !== undefined">{{selectedMedium.titel}}</p>
+                    <!-- Quellenart -->
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Quellenart</mat-label>
+                            <mat-hint>{{guiEditRaetselPayload.editRaetselPayload.quelle.quellenart}}</mat-hint>
+                            <mat-select matNativeControl formControlName="quellenart" #quellenartInput
+                                (selectionChange)="onSelectQuellenart($event.value)">
 
-                        <!-- Quellenart -->
-                        <div class="mb-2">
-                            <mat-form-field>
-                                <mat-label>Quellenart</mat-label>
-                                <mat-hint>{{guiEditRaetselPayload.editRaetselPayload.quelle.quellenart}}</mat-hint>
-                                <mat-select matNativeControl formControlName="quellenart" #quellenartInput
-                                    (selectionChange)="onSelectQuellenart($event.value)">
+                                @for (quellenart of selectQuellenartInput; track $index) {
+                                <mat-option [value]="quellenart">{{quellenart}}</mat-option>
+                                }
 
-                                    @for (quellenart of selectQuellenartInput; track $index) {
-                                    <mat-option [value]="quellenart">{{quellenart}}</mat-option>
-                                    }
-
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Mediensuche -->
-                        <div *ngIf="showMediensuche" class="mb-2">
-                            <mat-form-field>
-                                <mat-label>Medien</mat-label>
-                                <mat-select matNativeControl formControlName="medium" #mediumInput
-                                    [compareWith]="compareMedia" (selectionChange)="onSelectMedium($event.value)">
-
-                                    @for (medium of medienForQuelle; track $index) {
-                                    <mat-option [value]="medium">{{ medium.titel }}</mat-option>
-                                    }
-
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Person -->
-                        <div *ngIf="showPerson" class="mb-2">
-                            <mat-form-field>
-                                <mat-label>Person(en)</mat-label>
-                                <input matInput maxlength="100" formControlName="person" #personInput>
-                                <mat-hint align="end">{{personInput.value.length}}/100</mat-hint>
-                                <mat-error *ngIf="raetselDataError('person', 'maxLength')">maximal 100
-                                    Zeichen</mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Jahr -->
-                        <div *ngIf="showJahr" class="mb-2">
-                            <mat-form-field>
-                                <mat-label>Jahr</mat-label>
-                                <input matInput maxlength="4" formControlName="jahr" #jahrInput>
-                                <mat-hint align="end">{{jahrInput.value.length}}/4</mat-hint>
-                                <mat-error *ngIf="raetselDataError('jahr', 'maxLength')">maximal 4
-                                    Zeichen</mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Ausgabe -->
-                        <div *ngIf="showAusgabe" class="mb-2">
-                            <mat-form-field>
-                                <mat-label>Ausgabe</mat-label>
-                                <input matInput maxlength="10" formControlName="ausgabe" #ausgabeInput>
-                                <mat-hint align="end">{{ausgabeInput.value.length}}/10</mat-hint>
-                                <mat-error *ngIf="raetselDataError('ausgabe', 'maxLength')">maximal 10
-                                    Zeichen</mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Seite -->
-                        <div *ngIf="showSeite" class="mb-2">
-                            <mat-form-field>
-                                <mat-label>Seite</mat-label>
-                                <input matInput maxlength="4" formControlName="seite" #seiteInput>
-                                <mat-hint align="end">{{seiteInput.value.length}}/4</mat-hint>
-                                <mat-error *ngIf="raetselDataError('seite', 'maxLength')">maximal 4
-                                    Zeichen</mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Klasse -->
-                        <div *ngIf="showKlasse" class="mb-2">
-                            <mat-form-field>
-                                <mat-label>Klasse</mat-label>
-                                <input matInput maxlength="10" formControlName="klasse" #klasseInput>
-                                <mat-hint align="end">{{klasseInput.value.length}}/10</mat-hint>
-                                <mat-error *ngIf="raetselDataError('klasse', 'maxLength')">maximal 10
-                                    Zeichen</mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Stufe -->
-                        <div *ngIf="showStufe" class="mb-2">
-                            <mat-form-field>
-                                <mat-label>Stufe</mat-label>
-                                <input matInput maxlength="10" formControlName="stufe" #stufeInput>
-                                <mat-hint align="end">{{stufeInput.value.length}}/10</mat-hint>
-                                <mat-error *ngIf="raetselDataError('stufe', 'maxLength')">maximal 10
-                                    Zeichen</mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Pfad -->
-                        <div *ngIf="showPfad" class="mb-2">
-                            <mat-form-field>
-                                <mat-label>Pfad</mat-label>
-                                <input matInput maxlength="500" formControlName="pfad" #pfadInput>
-                                <mat-hint align="end">{{pfadInput.value.length}}/500</mat-hint>
-                                <mat-error *ngIf="raetselDataError('pfad', 'maxLength')">maximal 500
-                                    Zeichen</mat-error>
-                            </mat-form-field>
-                        </div>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
+
+                    <!-- Mediensuche -->
+                    @if (showMediensuche) {
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Medien</mat-label>
+                            <mat-select matNativeControl formControlName="medium" #mediumInput
+                                [compareWith]="compareMedia" (selectionChange)="onSelectMedium($event.value)">
+
+                                @for (medium of medienForQuelle; track $index) {
+                                <mat-option [value]="medium">{{ medium.titel }}</mat-option>
+                                }
+
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    }
+
+                    <!-- Person -->
+                    @if (showPerson) {
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Person(en)</mat-label>
+                            <input matInput maxlength="100" formControlName="person" #personInput>
+                            <mat-hint align="end">{{personInput.value.length}}/100</mat-hint>
+                            @if (raetselDataError('person', 'maxLength')) {
+                            <mat-error>maximal 100 Zeichen</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    }
+
+                    <!-- Jahr -->
+                    @if (showJahr) {
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Jahr</mat-label>
+                            <input matInput maxlength="4" formControlName="jahr" #jahrInput>
+                            <mat-hint align="end">{{jahrInput.value.length}}/4</mat-hint>
+                            @if (raetselDataError('jahr', 'maxLength')) {
+                            <mat-error>maximal 4 Zeichen</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    }
+
+                    <!-- Ausgabe -->
+                    @if (showAusgabe) {
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Ausgabe</mat-label>
+                            <input matInput maxlength="10" formControlName="ausgabe" #ausgabeInput>
+                            <mat-hint align="end">{{ausgabeInput.value.length}}/10</mat-hint>
+                            @if (raetselDataError('ausgabe', 'maxLength')) {
+                            <mat-error>maximal 10 Zeichen</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    }
+
+                    <!-- Seite -->
+                    @if (showSeite) {
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Seite</mat-label>
+                            <input matInput maxlength="10" formControlName="seite" #seiteInput>
+                            <mat-hint align="end">{{seiteInput.value.length}}/10</mat-hint>
+                            @if (raetselDataError('seite', 'maxLength')) {
+                            <mat-error>maximal 10 Zeichen</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    }
+
+                    <!-- Klasse -->
+                    @if (showKlasse) {
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Klasse</mat-label>
+                            <input matInput maxlength="20" formControlName="klasse" #klasseInput>
+                            <mat-hint align="end">{{klasseInput.value.length}}/20</mat-hint>
+                            @if (raetselDataError('klasse', 'maxLength')) {
+                            <mat-error>maximal 20 Zeichen</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    }
+
+                    <!-- Stufe -->
+                    @if (showStufe) {
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Stufe</mat-label>
+                            <input matInput maxlength="10" formControlName="stufe" #stufeInput>
+                            <mat-hint align="end">{{stufeInput.value.length}}/10</mat-hint>
+
+                            @if (raetselDataError('stufe', 'maxLength')) {
+                            <mat-error>maximal 10 Zeichen</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    }
+
+
+                    <!-- Pfad -->
+                    @if (showPfad) {
+                    <div class="mb-2">
+                        <mat-form-field>
+                            <mat-label>Pfad</mat-label>
+                            <input matInput maxlength="255" formControlName="pfad" #pfadInput>
+                            <mat-hint align="end">{{pfadInput.value.length}}/255</mat-hint>
+
+                            @if (raetselDataError('pfad', 'maxLength')) {
+                            <mat-error>maximal 255 Zeichen</mat-error>
+                            }
+
+                        </mat-form-field>
+                    </div>
+                    }
+
+
+                    }
 
                     <!-- Status -->
                     <div class="mb-2">
@@ -203,11 +242,15 @@
                                 [cdkAutosizeMinRows]="5" [cdkAutosizeMaxRows]="15" placeholder="Frage"
                                 formControlName="frage" #frageInput></textarea>
                             <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
-                            <mat-error *ngIf="raetselDataError('frage', 'required')">Frage ist Pflicht</mat-error>
+                            @if (raetselDataError('frage', 'required')) {
+                            <mat-error>Frage ist erforderlich</mat-error>
+                            }
+
                         </mat-form-field>
                     </div>
 
 
+                    <!-- Frage - Grafiken -->
                     <mat-expansion-panel (opened)="panelGrafikenFrageOpen=true"
                         (closed)="panelGrafikenFrageOpen = false">
                         <mat-expansion-panel-header>
@@ -215,8 +258,11 @@
                                 Grafiken Frage (eingebundene Bilder anzeigen oder neue hochladen)
                             </mat-panel-title>
                         </mat-expansion-panel-header>
-                        <h2 *ngIf="embeddableImageInfosFrage.length > 0">Eingebundene Bilder</h2>
-                        <mat-nav-list *ngIf="embeddableImageInfosFrage.length > 0">
+
+
+                        @if (embeddableImageInfosFrage.length > 0) {
+                        <h2>Eingebundene Bilder</h2>
+                        <mat-nav-list>
 
                             @for (embeddableImageInfo of embeddableImageInfosFrage; track $index) {
 
@@ -228,24 +274,26 @@
 
 
                         </mat-nav-list>
+                        }
 
                         <div class="mb-2">
+
+                            @if (!fileInfoFrage) {
                             <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
                             <mja-select-file [selectFileModel]="selectFileFrageModel"
                                 (fileSelected)="onFileSelected($event, 'FRAGE')"></mja-select-file>
-
-                            <mja-file-info *ngIf="fileInfoFrage" [titel]="selectFileFrageModel.titel"
+                            } @else {
+                            <mja-file-info [titel]="selectFileFrageModel.titel"
                                 [beschreibung]="selectFileFrageModel.beschreibung" [fileName]="fileInfoFrage.file.name"
                                 [maxSizeBytes]="selectFileFrageModel.maxSizeBytes"
                                 [actualFileSize]="fileInfoFrage.fileSize">
                             </mja-file-info>
 
-                            <button mat-raised-button color="primary" *ngIf="fileInfoFrage"
-                                title="gewählte Datei hochladen" (click)="uploadFile('FRAGE')">Datei hochladen</button>
+                            <button mat-raised-button color="primary" title="gewählte Datei hochladen"
+                                (click)="uploadFile('FRAGE')">Datei hochladen</button>
+                            }
                         </div>
                     </mat-expansion-panel>
-
-
 
                     <!-- Lösung -->
                     <h2>Lösung</h2>
@@ -259,13 +307,16 @@
                         </mat-form-field>
                     </div>
 
+                    <!-- Lösung - Grafiken -->
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 Grafiken Lösung (eingebundene Bilder anzeigen oder neue hochladen)
                             </mat-panel-title>
                         </mat-expansion-panel-header>
-                        <mat-nav-list *ngIf="embeddableImageInfosLoesung.length > 0">
+
+                        @if (embeddableImageInfosLoesung.length > 0) {
+                        <mat-nav-list>
 
                             @for (embeddableImageInfo of embeddableImageInfosLoesung; track $index) {
                             <mat-list-item>
@@ -275,24 +326,30 @@
                             }
 
                         </mat-nav-list>
+                        }
 
                         <div class="mb-2">
-                            <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-                            <mja-select-file *ngIf="!fileInfoLoesung" [selectFileModel]="selectFileLoesungModel"
-                                (fileSelected)="onFileSelected($event, 'LOESUNG')"></mja-select-file>
 
-                            <mja-file-info *ngIf="fileInfoLoesung" [titel]="selectFileLoesungModel.titel"
+                            @if (!fileInfoLoesung) {
+                            <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
+                            <mja-select-file [selectFileModel]="selectFileLoesungModel"
+                                (fileSelected)="onFileSelected($event, 'LOESUNG')"></mja-select-file>
+                            } @else {
+                            <mja-file-info [titel]="selectFileLoesungModel.titel"
                                 [beschreibung]="selectFileLoesungModel.beschreibung"
                                 [fileName]="fileInfoLoesung.file.name"
                                 [maxSizeBytes]="selectFileLoesungModel.maxSizeBytes"
                                 [actualFileSize]="fileInfoLoesung.fileSize">
                             </mja-file-info>
 
-                            <button mat-raised-button color="primary" *ngIf="fileInfoLoesung"
-                                title="gewählte Datei hochladen" (click)="uploadFile('LOESUNG')">Datei
+                            <button mat-raised-button color="primary" title="gewählte Datei hochladen"
+                                (click)="uploadFile('LOESUNG')">Datei
                                 hochladen</button>
+                            }
                         </div>
                     </mat-expansion-panel>
+
+                    <!-- Antwortvorschläge - Anzahl -->
 
                     <div class="mb-2 mt-2">
                         <mat-form-field>
@@ -330,18 +387,19 @@
                     </div>
                     }
 
-                    <mat-error *ngIf="antwortvorschlaegeErrors()">Antwortvorschläge sind noch fehlerhaft: genau
-                        einer
-                        muss
-                        korrekt sein.</mat-error>
+                    @if (antwortvorschlaegeErrors()) {
+                    <mat-error>Antwortvorschläge sind noch fehlerhaft: genau einer muss korrekt sein.</mat-error>
+                    }
+
                 </div>
             </form>
 
             <!-- Deskriptoren -->
-            <div *ngIf="selectItemsCompomentModel">
-                <mja-select-items [model]="selectItemsCompomentModel"
-                    (modelChanged)="onSelectItemsCompomentModelChanged($event)"></mja-select-items>
-            </div>
+
+            @if (selectItemsCompomentModel) {
+            <mja-select-items [model]="selectItemsCompomentModel"
+                (modelChanged)="onSelectItemsCompomentModelChanged($event)"></mja-select-items>
+            }
         </mat-card-content>
 
         <mat-card-actions>
@@ -350,27 +408,35 @@
             <button mat-raised-button color="primary" [disabled]="generierenDiabled()"
                 matTooltip="PNG Frage und Lösung generieren" (click)="printPNG()">PNG
                 generieren</button>
-            <button *ngIf="raetselFacade.generateLatexError$ | async" mat-raised-button color="primary"
-                matTooltip="LaTeX: Logdateien herunterladen" (click)="downloadLatexLogs()">LaTeX-Logs</button>
-            <button *ngIf="guiEditRaetselPayload.editRaetselPayload.id !== 'neu'" mat-raised-button color="primary"
-                matTooltip="zurück zur Detailansicht" (click)="cancelEdit()">Abbruch/Details</button>
+
+            @if (raetselFacade.generateLatexError$ | async) {
+            <button mat-raised-button color="primary" matTooltip="LaTeX: Logdateien herunterladen"
+                (click)="downloadLatexLogs()">LaTeX-Logs</button>
+            }
+
+            @if (guiEditRaetselPayload.editRaetselPayload.id !== 'neu') {
+            <button mat-raised-button color="primary" matTooltip="zurück zur Detailansicht"
+                (click)="cancelEdit()">Abbruch/Details</button>
+            }
+
             <button mat-raised-button color="primary" matTooltip="zurück zur Suche"
                 (click)="gotoSuche()">Rätselsuche</button>
+
         </mat-card-actions>
-        <mat-card-footer *ngIf="(!form.valid || antwortvorschlaegeErrors())">
-            <mat-error *ngIf="(!form.valid || antwortvorschlaegeErrors())">
+
+        @if (!form.valid || antwortvorschlaegeErrors()) {
+        <mat-card-footer>
+            <mat-error>
                 Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
                 Pflichtangaben und so.
             </mat-error>
         </mat-card-footer>
+        }
     </mat-card>
+    } @else {
+    <h1>Rätsel Details</h1>
+    <p>kein Rätsel gewählt</p>
+    <button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+        (click)="gotoRaetselUebersicht()">Rätselsuche</button>
+    }
 </div>
-
-<ng-template #keinRaetsel>
-    <h1>Rätseleditor</h1>
-    <p>kein Rätsel ausgewählt</p>
-</ng-template>
-
-<ng-template #keineImagesGeneriert>
-    <p>noch keine Images generiert</p>
-</ng-template>

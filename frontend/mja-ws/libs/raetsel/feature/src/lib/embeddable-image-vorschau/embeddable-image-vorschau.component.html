@@ -1,31 +1,54 @@
-<div *ngIf="embeddableImagesFacade.embeddableImageVorschauGeladen$ | async">
-    <p *ngIf="devMode" class="hint">embeddable-image-vorschau.component</p>
-    <ng-container *ngIf="embeddableImagesFacade.selectedEmbeddableImageVorschau$ | async as selectedVorschau">
-        <p *ngIf="devMode" class="hint">image-Teil (keine eigene Komponente)</p>
-        <div *ngIf="!selectedVorschau.exists" class="bordered bg-white">
-            {{selectedVorschau.pfad}}: {{hinweisNichtExistierendeGrafik}}
-        </div>
-        <div *ngIf="selectedVorschau.exists" class="bordered bg-white">
-            {{selectedVorschau.pfad}}
+@if (embeddableImagesFacade.embeddableImageVorschauGeladen$ | async) {
 
-            <div *ngIf="selectedVorschau.image !== null" class="bg-white mt-1">
-                <img src="data:image/png;base64,{{selectedVorschau.image}}" />
-            </div>
-        </div>
+@if (devMode) {
+<p>embeddable-image-vorschau.component</p>
+}
 
-        <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-        <mja-select-file *ngIf="showSelectFileComponent()" [selectFileModel]="selectFileModel"
-            (fileSelected)="onFileSelected($event)"></mja-select-file>
+@if ((embeddableImagesFacade.selectedEmbeddableImageVorschau$ | async); as selectedVorschau) {
 
-        <mja-file-info *ngIf="fileInfo" [titel]="selectFileModel.titel" [beschreibung]="selectFileModel.beschreibung"
-            [fileName]="fileInfo.file.name" [maxSizeBytes]="selectFileModel.maxSizeBytes"
-            [actualFileSize]="fileInfo.fileSize">
-        </mja-file-info>
 
-        <button mat-raised-button color="primary" *ngIf="fileInfo" title="gewählte Datei hochladen" (click)="uploadFile()">Datei hochladen</button>
+@if (devMode) {
+<p>image-Teil (keine eigene Komponente)</p>
 
-        <div class="button-container mt-2">
-            <button mat-stroked-button color="primary" (click)="reset()">leeren</button>
-        </div>
-    </ng-container>
+}
+
+@if (!selectedVorschau.exists) {
+<div class="bordered bg-white">
+    {{selectedVorschau.pfad}}: {{hinweisNichtExistierendeGrafik}}
 </div>
+}
+
+@if (selectedVorschau.exists) {
+{{selectedVorschau.pfad}}
+
+@if (selectedVorschau.image !== null) {
+<div class="bg-white mt-1">
+    <img src="data:image/png;base64,{{selectedVorschau.image}}" />
+</div>
+}
+}
+
+<!-- fileSelected transportiert ein FileInfoModel- Objekt -->
+@if (showSelectFileComponent()) {
+<mja-select-file [selectFileModel]="selectFileModel" (fileSelected)="onFileSelected($event)"></mja-select-file>
+
+}
+
+@if (fileInfo) {
+<mja-file-info [titel]="selectFileModel.titel" [beschreibung]="selectFileModel.beschreibung"
+    [fileName]="fileInfo.file.name" [maxSizeBytes]="selectFileModel.maxSizeBytes" [actualFileSize]="fileInfo.fileSize">
+</mja-file-info>
+}
+
+<div class="button-container mt-2">
+
+    @if (fileInfo) {
+        <button mat-raised-button color="primary" title="gewählte Datei hochladen" (click)="uploadFile()">Datei
+            hochladen</button>
+    }
+
+    <button mat-stroked-button color="primary" (click)="reset()">leeren</button>
+</div>
+
+}
+}
