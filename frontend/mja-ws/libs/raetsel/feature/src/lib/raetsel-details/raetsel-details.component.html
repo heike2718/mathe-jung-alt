@@ -4,9 +4,9 @@
             <h1>Rätsel {{raetsel.schluessel}}</h1>
             <div class="grid-container-1 mt-2 mb-2">
                 <mat-chip-listbox>
-                    <div *ngFor="let deskriptor of raetsel.deskriptoren">
-                        <mat-chip-option>{{deskriptor.name}}</mat-chip-option>
-                    </div>
+                    @for (deskriptor of raetsel.deskriptoren; track $index) {
+                    <mat-chip-option>{{deskriptor.name}}</mat-chip-option>
+                    }
                 </mat-chip-listbox>
 
                 <mja-frage-loesung-images *ngIf="raetsel.images" [images]="raetsel.images"></mja-frage-loesung-images>
@@ -21,9 +21,9 @@
 
                             </mat-expansion-panel-header>
 
-                            <div *ngFor="let antwortvorschlag of raetsel.antwortvorschlaege">
-                                <mja-antwortvorschlag [antwortvorschlag]="antwortvorschlag"></mja-antwortvorschlag>
-                            </div>
+                            @for (antwortvorschlag of raetsel.antwortvorschlaege; track $index) {
+                            <mja-antwortvorschlag [antwortvorschlag]="antwortvorschlag"></mja-antwortvorschlag>
+                            }
                         </mat-expansion-panel>
                     </mat-accordion>
                 </div>
@@ -105,10 +105,12 @@
                             </mat-expansion-panel-header>
 
                             <mat-nav-list>
-                                <mat-list-item *ngFor="let embeddableImageInfo of raetsel.embeddableImageInfos">
+                                @for (embeddableImageInfo of raetsel.embeddableImageInfos; track $index) {
+                                <mat-list-item>
                                     <mja-ws-embeddable-image-info
                                         [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
                                 </mat-list-item>
+                                }
                             </mat-nav-list>
 
                             <mja-embeddable-image-vorschau [schluessel]=raetsel.schluessel

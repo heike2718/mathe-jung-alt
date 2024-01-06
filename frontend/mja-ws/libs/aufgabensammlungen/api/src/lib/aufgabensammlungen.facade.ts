@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { FontName, GeneratedImages, LaTeXLayoutAntwortvorschlaege, PageDefinition, PaginationState, Schriftgroesse, User } from "@mja-ws/core/model";
 import { fromAufgabensammlungen, aufgabensammlungenActions } from "@mja-ws/aufgabensammlungen/data";
 import { EditAufgabensammlungselementPayload, EditAufgabensammlungPayload, AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem, initialAufgabensammlungDetails } from "@mja-ws/aufgabensammlungen/model";
-import { deepClone, filterDefined } from "@mja-ws/shared/util";
+import { filterDefined } from "@mja-ws/shared/util";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
@@ -17,11 +17,11 @@ export class AufgabensammlungenFacade {
     page$: Observable<AufgabensammlungTrefferItem[]> = this.#store.select(fromAufgabensammlungen.page);
     anzahlTrefferGesamt$: Observable<number> = this.#store.select(fromAufgabensammlungen.anzahlTrefferGesamt);
     paginationState$: Observable<PaginationState> = this.#store.select(fromAufgabensammlungen.paginationState);
-    editorContent$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromAufgabensammlungen.aufgabensammlungBasisdaten).pipe(filterDefined, deepClone);
-    aufgabensammlungDetails$: Observable<AufgabensammlungDetails> = this.#store.select(fromAufgabensammlungen.aufgabensammlungDetails).pipe(filterDefined, deepClone);
-    aufgabensammlungBasisdaten$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromAufgabensammlungen.aufgabensammlungBasisdaten).pipe(filterDefined, deepClone);
+    editorContent$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromAufgabensammlungen.aufgabensammlungBasisdaten).pipe(filterDefined);
+    aufgabensammlungDetails$: Observable<AufgabensammlungDetails> = this.#store.select(fromAufgabensammlungen.aufgabensammlungDetails).pipe(filterDefined);
+    aufgabensammlungBasisdaten$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromAufgabensammlungen.aufgabensammlungBasisdaten).pipe(filterDefined);
     aufgabensammlungselemente$: Observable<Aufgabensammlungselement[]> = this.#store.select(fromAufgabensammlungen.aufgabensammlungselemente);
-    selectedAufgabensammlungselement$: Observable<Aufgabensammlungselement> = this.#store.select(fromAufgabensammlungen.selectedAufgabensammlungselement).pipe(filterDefined, deepClone);
+    selectedAufgabensammlungselement$: Observable<Aufgabensammlungselement> = this.#store.select(fromAufgabensammlungen.selectedAufgabensammlungselement).pipe(filterDefined);
     selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromAufgabensammlungen.selectedElementImages);
 
 

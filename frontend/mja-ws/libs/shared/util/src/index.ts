@@ -7,6 +7,5 @@ export { generateUUID } from './lib/uuid-generator';
 export { swallowEmptyArgument } from './lib/swallowEmptyArgument';
 export * from './lib/file-utils';
 export { filterDefined } from './lib/filter-defined';
-export { deepClone } from './lib/deep-clone';
 export { noopAction } from './lib/noop-action';
 export { safeswitchMap } from './lib/safe-concat-map';

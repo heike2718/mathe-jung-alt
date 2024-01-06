@@ -37,15 +37,15 @@
           <input matInput [formControl]="nameFilterControl" type="text" #nameFilterInput />
 
           @if (nameFilterInput.value) {
-            <button mat-button matSuffix mat-icon-button
-            class="mat-form-field-suffix__clear" aria-label="Clear" (click)="clearFilter(nameFilterControl)">
+          <button mat-button matSuffix mat-icon-button class="mat-form-field-suffix__clear" aria-label="Clear"
+            (click)="clearFilter(nameFilterControl)">
             <mat-icon>
               close
             </mat-icon>
           </button>
           }
 
-          
+
         </mat-form-field>
       </div>
     </mat-header-cell>
@@ -63,9 +63,11 @@
         </label>
         <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <mat-select floatLabel="always" [formControl]="schwierigkeitsgradSelectFilterControl">
-            <mat-option *ngFor="let level of schwierigkeitsgrade" [value]="level">
-              {{ level.label }}
-            </mat-option>
+
+            @for (level of schwierigkeitsgrade; track $index) {
+            <mat-option [value]="level">{{ level.label }}</mat-option>
+            }
+
           </mat-select>
         </mat-form-field>
       </div>
@@ -82,9 +84,11 @@
         </label>
         <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <mat-select floatLabel="always" [formControl]="referenztypSelectFilterControl">
-            <mat-option *ngFor="let reftyp of referenztypen" [value]="reftyp">
-              {{ reftyp.label }}
-            </mat-option>
+
+            @for (reftyp of referenztypen; track $index) {
+              <mat-option [value]="reftyp">{{ reftyp.label }}</mat-option>
+            }
+            
           </mat-select>
         </mat-form-field>
       </div>

@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { PageDefinition, PaginationState } from "@mja-ws/core/model";
 import { fromMedien, medienActions } from "@mja-ws/medien/data";
 import { LinkedRaetsel, MediensucheTrefferItem, MediumDto, initialMediumDto } from "@mja-ws/medien/model";
-import { deepClone, filterDefined } from "@mja-ws/shared/util";
+import { filterDefined } from "@mja-ws/shared/util";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 
@@ -18,8 +18,8 @@ export class MedienFacade {
   page$: Observable<MediensucheTrefferItem[]> = this.#store.select(fromMedien.page);
   anzahlTrefferGesamt: Observable<number> = this.#store.select(fromMedien.anzahlTrefferGesamt);
   paginationState$: Observable<PaginationState> = this.#store.select(fromMedien.paginationState);
-  selectedTrefferItem$: Observable<MediensucheTrefferItem> = this.#store.select(fromMedien.selectedTrefferItem).pipe(filterDefined, deepClone);
-  selectedMediumDetails$: Observable<MediumDto> = this.#store.select(fromMedien.selectedMediumDetails).pipe(filterDefined, deepClone);
+  selectedTrefferItem$: Observable<MediensucheTrefferItem> = this.#store.select(fromMedien.selectedTrefferItem).pipe(filterDefined);
+  selectedMediumDetails$: Observable<MediumDto> = this.#store.select(fromMedien.selectedMediumDetails).pipe(filterDefined);
   allMedienDetails$: Observable<MediumDto[]> = this.#store.select(fromMedien.allMedienDetails);
   linkedRaetsel$: Observable<LinkedRaetsel[]> = this.#store.select(fromMedien.linkedRaetsel);
 

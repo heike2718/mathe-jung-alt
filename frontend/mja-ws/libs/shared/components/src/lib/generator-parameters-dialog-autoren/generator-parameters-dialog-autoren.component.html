@@ -8,9 +8,10 @@
             <select required="true" matNativeControl name="verwendungszweckeTyp" id="verwendungszweckeTyp"
                 [(ngModel)]="data.selectedVerwendungszweck">
                 <option selected="" value=""></option>
-                <option [ngValue]="c" *ngFor="let c of data.verwendungszwecke">
-                    {{c}}
-                </option>
+                @for (c of data.verwendungszwecke; track $index) {
+                <option [ngValue]="c">{{c}}</option>
+                }
+
             </select>
         </mat-form-field>
         <div *ngIf="data.showVerwendungszwecke" class="hint mb-1">Hinweis 'Verwendungszweck': bei Arbeitsblättern werden
@@ -20,9 +21,9 @@
             <mat-label>Font</mat-label>
             <select matNativeControl name="fontTyp" id="fontTyp" [(ngModel)]="data.selectedFontName">
                 <option selected="" value=""></option>
-                <option [ngValue]="c" *ngFor="let c of data.fontNamen">
-                    {{c}}
-                </option>
+                @for (c of data.fontNamen; track $index) {
+                <option [ngValue]="c">{{c}}</option>
+                }
             </select>
         </mat-form-field>
         <div class="hint mb-1">Hinweis 'Font': optional. Ohne Auswahl wird der Standard-LaTeX-Font verwendet.
@@ -33,25 +34,28 @@
             <select matNativeControl name="schriftgroesseTyp" id="schriftgroesseTyp"
                 [(ngModel)]="data.selectedSchriftgroesse">
                 <option selected="" value=""></option>
-                <option [ngValue]="c" *ngFor="let c of data.schriftgroessen">
-                    {{c}}
-                </option>
+                @for (c of data.schriftgroessen; track $index) {
+                <option [ngValue]="c">{{c}}</option>
+                }
             </select>
         </mat-form-field>
-        <div class="hint mb-1">Hinweis 'Schriftgröße': optional und nur sinnvoll bei Wahl eines Fonts. Empfehlung: Vorschule bis Klasse 1
+        <div class="hint mb-1">Hinweis 'Schriftgröße': optional und nur sinnvoll bei Wahl eines Fonts. Empfehlung:
+            Vorschule bis Klasse 1
             'sehr groß', ab Klasse 2 'groß'</div>
         <mat-form-field>
             <mat-label>Layout Antwortvorschläge</mat-label>
             <select matNativeControl name="antwortvorschlaegeTyp" id="antwortvorschlaegeTyp"
                 [(ngModel)]="data.selectedLayoutAntwortvorschlaege">
                 <option selected="" value=""></option>
-                <option [ngValue]="c" *ngFor="let c of data.layoutsAntwortvorschlaegeInput">
-                    {{c}}
-                </option>
+                @for (c of data.layoutsAntwortvorschlaegeInput; track $index) {
+                <option [ngValue]="c">{{c}}</option>
+                }
             </select>
         </mat-form-field>
-        <div class="hint mb-1">Hinweis 'Layout Antwortvorschläge': Sie können entscheiden, ob Antwortvorschläge gedruckt werden sollen und deren Anordnung wählen. 
-            Es ist nur sinnvoll bei multiple choice und wenn die Antwortvorschläge nicht bereits im Aufgabentext vorkommmen. Default bei PNG ist LISTE</div>
+        <div class="hint mb-1">Hinweis 'Layout Antwortvorschläge': Sie können entscheiden, ob Antwortvorschläge gedruckt
+            werden sollen und deren Anordnung wählen.
+            Es ist nur sinnvoll bei multiple choice und wenn die Antwortvorschläge nicht bereits im Aufgabentext
+            vorkommmen. Default bei PNG ist LISTE</div>
     </mat-dialog-content>
 </div>
 <mat-dialog-actions align="end">

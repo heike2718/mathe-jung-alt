@@ -25,8 +25,11 @@
                         <mat-form-field>
                             <mat-label>Medienart</mat-label>
                             <select matNativeControl formControlName="medienart" #medienartInput>
-                                <option *ngFor="let level of selectMedienartenInput" [value]="level">
-                                    {{level}}</option>
+
+                                @for (medienart of selectMedienartenInput; track $index) {
+                                    <option [value]="medienart">{{medienart}}</option>
+                                }
+                                
                             </select>
                         </mat-form-field>
                     </div>

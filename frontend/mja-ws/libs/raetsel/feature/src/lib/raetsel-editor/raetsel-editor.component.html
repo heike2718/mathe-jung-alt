@@ -56,8 +56,11 @@
                             <mat-hint>{{guiEditRaetselPayload.quellenangabe}}</mat-hint>
                             <mat-select matNativeControl formControlName="herkunftstyp" #herkunftstypInput
                                 (selectionChange)="onSelectHerkunftstyp($event.value)">
-                                <mat-option *ngFor="let herkunftstyp of selectHerkunftstypInput" [value]="herkunftstyp">
-                                    {{herkunftstyp}}</mat-option>
+
+                                @for (herkunftstyp of selectHerkunftstypInput; track $index) {
+                                <mat-option [value]="herkunftstyp">{{herkunftstyp}}</mat-option>
+                                }
+
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -75,22 +78,26 @@
                                 <mat-hint>{{guiEditRaetselPayload.editRaetselPayload.quelle.quellenart}}</mat-hint>
                                 <mat-select matNativeControl formControlName="quellenart" #quellenartInput
                                     (selectionChange)="onSelectQuellenart($event.value)">
-                                    <mat-option *ngFor="let quellenart of selectQuellenartInput" [value]="quellenart">
-                                        {{quellenart}}</mat-option>
+
+                                    @for (quellenart of selectQuellenartInput; track $index) {
+                                    <mat-option [value]="quellenart">{{quellenart}}</mat-option>
+                                    }
+
                                 </mat-select>
                             </mat-form-field>
-                        </div>                        
+                        </div>
 
                         <!-- Mediensuche -->
                         <div *ngIf="showMediensuche" class="mb-2">
                             <mat-form-field>
                                 <mat-label>Medien</mat-label>
-                                <mat-select matNativeControl formControlName="medium" #mediumInput [compareWith]="compareMedia"
-                                    (selectionChange)="onSelectMedium($event.value)">
-                                    <mat-option *ngFor="let medium of medienForQuelle"
-                                        [value]="medium">
-                                        {{ medium.titel }}
-                                    </mat-option>
+                                <mat-select matNativeControl formControlName="medium" #mediumInput
+                                    [compareWith]="compareMedia" (selectionChange)="onSelectMedium($event.value)">
+
+                                    @for (medium of medienForQuelle; track $index) {
+                                    <mat-option [value]="medium">{{ medium.titel }}</mat-option>
+                                    }
+
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -178,8 +185,11 @@
                         <mat-form-field>
                             <mat-label>Status</mat-label>
                             <select matNativeControl formControlName="status" #statusInput>
-                                <option *ngFor="let status of selectStatusInput" [value]="status">{{status}}
-                                </option>
+
+                                @for (status of selectStatusInput; track $index) {
+                                <option [value]="status">{{status}}</option>
+                                }
+
                             </select>
                         </mat-form-field>
                     </div>
@@ -207,10 +217,16 @@
                         </mat-expansion-panel-header>
                         <h2 *ngIf="embeddableImageInfosFrage.length > 0">Eingebundene Bilder</h2>
                         <mat-nav-list *ngIf="embeddableImageInfosFrage.length > 0">
-                            <mat-list-item *ngFor="let embeddableImageInfo of embeddableImageInfosFrage">
+
+                            @for (embeddableImageInfo of embeddableImageInfosFrage; track $index) {
+
+                            <mat-list-item>
                                 <mja-ws-embeddable-image-info
                                     [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
                             </mat-list-item>
+                            }
+
+
                         </mat-nav-list>
 
                         <div class="mb-2">
@@ -250,10 +266,14 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <mat-nav-list *ngIf="embeddableImageInfosLoesung.length > 0">
-                            <mat-list-item *ngFor="let embeddableImageInfo of embeddableImageInfosLoesung">
+
+                            @for (embeddableImageInfo of embeddableImageInfosLoesung; track $index) {
+                            <mat-list-item>
                                 <mja-ws-embeddable-image-info
                                     [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
                             </mat-list-item>
+                            }
+
                         </mat-nav-list>
 
                         <div class="mb-2">
@@ -279,15 +299,19 @@
                             <mat-label>Anzahl Antwortvorschläge</mat-label>
                             <select matNativeControl formControlName="anzahlAntwortvorschlaege"
                                 #anzahlAntwortvorschlaegeInput (change)="onChangeAnzahlAntwortvorschlaege($event)">
-                                <option *ngFor="let anz of anzahlenAntwortvorschlaege" [value]="anz">{{anz}}
-                                </option>
+
+                                @for (anz of anzahlenAntwortvorschlaege; track $index) {
+                                <option [value]="anz">{{anz}}</option>
+                                }
+
                             </select>
                         </mat-form-field>
                     </div>
 
                     <!-- Antwortvorschlag- Controls -->
-                    <div *ngFor="let antwortvorschlag of antwortvorschlaegeFormGroup; let i = index">
-                        <h3>Antwortvorschlag {{getBuchstabe(i)}}</h3>
+                    @for (antwortvorschlag of antwortvorschlaegeFormGroup; track $index) {
+                    <div>
+                        <h3>Antwortvorschlag {{getBuchstabe($index)}}</h3>
 
                         <div [formGroup]="antwortvorschlag">
                             <div class="mb-2">
@@ -304,6 +328,8 @@
                             </div>
                         </div>
                     </div>
+                    }
+
                     <mat-error *ngIf="antwortvorschlaegeErrors()">Antwortvorschläge sind noch fehlerhaft: genau
                         einer
                         muss

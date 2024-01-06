@@ -55,8 +55,11 @@
                         <mat-form-field>
                             <mat-label>Status</mat-label>
                             <select matNativeControl formControlName="status" #statusInput>
-                                <option *ngFor="let status of selectStatusInput" [value]="status">{{status}}
+
+                                @for (status of selectStatusInput; track $index) {
+                                <option [value]="status">{{status}}
                                 </option>
+                                }
                             </select>
                         </mat-form-field>
                     </div>
@@ -66,8 +69,10 @@
                         <mat-form-field>
                             <mat-label>Level</mat-label>
                             <select matNativeControl formControlName="schwierigkeitsgrad" #schwierigkeitsgradInput>
-                                <option *ngFor="let level of selectSchwierigkeitsgradeInput" [value]="level">
+                                @for (level of selectSchwierigkeitsgradeInput; track $index) {
+                                <option [value]="level">
                                     {{level}}</option>
+                                }
                             </select>
                         </mat-form-field>
                     </div>
@@ -77,9 +82,11 @@
                         <mat-form-field>
                             <mat-label>Referenztyp</mat-label>
                             <select matNativeControl formControlName="referenztyp" #referenztypInput>
-                                <option *ngFor="let reftyp of selectReferenztypenSelectContent" [value]="reftyp">
+                                @for (reftyp of selectReferenztypenSelectContent; track $index) {
+                                <option [value]="reftyp">
                                     {{reftyp}}
                                 </option>
+                                }
                             </select>
                         </mat-form-field>
                     </div>
@@ -98,7 +105,7 @@
                     <div class="mb-2">
                         <mat-form-field>
                             <mat-label>ID</mat-label>
-                            <input matInput formControlName="id" #idInput [readonly]="true">
+                            <input matInput formControlName="id" #idInput [readonly]="true">  
                         </mat-form-field>
                     </div>
 

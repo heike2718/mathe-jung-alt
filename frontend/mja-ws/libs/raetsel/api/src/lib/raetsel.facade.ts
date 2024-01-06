@@ -29,7 +29,7 @@ import {
   RaetselDetails,
   RaetselSuchfilter
 } from '@mja-ws/raetsel/model';
-import { deepClone, filterDefined } from '@mja-ws/shared/util';
+import { filterDefined } from '@mja-ws/shared/util';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -43,8 +43,8 @@ export class RaetselFacade {
   page$: Observable<Raetsel[]> = this.#store.select(fromRaetsel.page);
   paginationState$: Observable<PaginationState> = this.#store.select(fromRaetsel.paginationState);
 
-  raetselDetails$: Observable<RaetselDetails> = this.#store.select(fromRaetsel.raetselDetails).pipe(filterDefined, deepClone);
-  editRaetselPayload$: Observable<GUIEditRaetselPayload> = this.#store.select(fromRaetsel.editRaetselPayload).pipe(filterDefined, deepClone);
+  raetselDetails$: Observable<RaetselDetails> = this.#store.select(fromRaetsel.raetselDetails).pipe(filterDefined);
+  editRaetselPayload$: Observable<GUIEditRaetselPayload> = this.#store.select(fromRaetsel.editRaetselPayload).pipe(filterDefined);
 
   suchfilter$: Observable<RaetselSuchfilter> = this.#store.select(fromRaetsel.suchfilter);
   generateLatexError$: Observable<boolean> = this.#store.select(fromRaetsel.generateLatexError);
