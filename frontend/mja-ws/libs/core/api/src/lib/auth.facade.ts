@@ -53,17 +53,17 @@ export class AuthFacade {
     switchMap((li) => of(!li))
   );
 
-  public login(): void {
+  login(): void {
     // Dies triggert einen SideEffect (siehe auth.effects.ts)
     this.#store.dispatch(authActions.rEQUEST_LOGIN_URL());
   }
 
-  public signup(): void {
+  signup(): void {
     // Dies triggert einen SideEffect (siehe auth.effects.ts)
     this.#store.dispatch(authActions.rEQUEST_SIGNUP_URL());
   }
 
-  public initClearOrRestoreSession(): void {
+  initClearOrRestoreSession(): void {
 
     const hash = window.location.hash;
 
@@ -73,7 +73,7 @@ export class AuthFacade {
 
       if (authResult.state) {
         if (authResult.state === 'login') {
-          this.#store.dispatch(authActions.iNIT_SESSION({ authResult }));
+          this.#store.dispatch(authActions.iNIT_SESSION({ authResult }));          
         }
         if (authResult.state === 'signup') {
           window.location.hash = '';
@@ -85,12 +85,12 @@ export class AuthFacade {
     }
   }
 
-  public logout(): void {
+  logout(): void {
     this.#store.dispatch(authActions.lOG_OUT());
     this.#coreFacade.handleLogout();
   }
 
-  public handleSessionExpired(): void {
+  handleSessionExpired(): void {
     this.#store.dispatch(authActions.lOGGED_OUT());
     this.#messageService.warn('Die Session ist abgelaufen. Bitte erneut einloggen.');
   }
@@ -123,5 +123,5 @@ export class AuthFacade {
     }
     window.location.hash = '';
     return result;
-  }
+  }  
 };
