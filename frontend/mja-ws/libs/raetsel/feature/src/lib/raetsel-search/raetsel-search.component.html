@@ -21,17 +21,15 @@
 }
 
 <div class="button-container mt-2 mb-2">
-    <div>
-        <button mat-raised-button color="primary" (click)="neueSuche()" [disabled]="buttonNeueSucheDisabled()">neue
-            Suche</button>
-    </div>
+    <button mat-raised-button color="primary" (click)="neueSuche()" [disabled]="buttonNeueSucheDisabled()">neue
+        Suche</button>
 
     @if (isAutor) {
     <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues
         Rätsel</button>
     } @else {
-        <div>Bitte nehmen Sie Kontakt mit mir auf, wenn Sie Autor:in werden und selbst Rätsel erstellen möchten.</div>
-    }    
+    <div>Bitte nehmen Sie Kontakt mit mir auf, wenn Sie Autor:in werden und selbst Rätsel erstellen möchten.</div>
+    }
 </div>
 
 <mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>

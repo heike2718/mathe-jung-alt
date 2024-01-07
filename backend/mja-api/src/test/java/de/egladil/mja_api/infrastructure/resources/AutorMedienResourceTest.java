@@ -206,7 +206,7 @@ public class AutorMedienResourceTest {
 			.as(MediumQuelleDto[].class);
 
 		// Assert
-		assertEquals(3, result.length);
+		assertEquals(4, result.length);
 
 		{
 
@@ -217,12 +217,18 @@ public class AutorMedienResourceTest {
 		{
 
 			MediumQuelleDto medium = result[1];
-			assertEquals("dbf00c75-6c97-4a1c-afe6-a42462a44e39", medium.getId());
+			assertEquals("2c6fc5a1-f27c-4d51-98c4-239a1eead05f", medium.getId());
 		}
 
 		{
 
 			MediumQuelleDto medium = result[2];
+			assertEquals("dbf00c75-6c97-4a1c-afe6-a42462a44e39", medium.getId());
+		}
+
+		{
+
+			MediumQuelleDto medium = result[3];
 			assertEquals("5f9bc03c-84f5-48ea-ab6c-ddc265f5d963", medium.getId());
 		}
 	}

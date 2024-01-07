@@ -34,9 +34,8 @@
                 (click)="startEdit()">bearbeiten</button>
             }
 
-            <div><button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
-                    (click)="gotoMedienuebersicht()">Medien</button>
-            </div>
+            <button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+                (click)="gotoMedienuebersicht()">Medien</button>
         </div>
 
         @if ((medienFacade.linkedRaetsel$ | async); as liste) {

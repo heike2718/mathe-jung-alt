@@ -787,7 +787,7 @@ public class RaetselDaoImplTest {
 			long anzahl = dao.countRaetselWithFilter(suchfilter, nurFregegebene);
 
 			// Assert
-			assertEquals(3, anzahl);
+			assertEquals(4, anzahl);
 
 		}
 
@@ -811,7 +811,7 @@ public class RaetselDaoImplTest {
 				SortDirection.asc, nurFregegebene);
 
 			// Assert
-			assertEquals(3, treffer.size());
+			assertEquals(4, treffer.size());
 
 			assertEquals("02604", treffer.get(0).schluessel);
 
@@ -837,9 +837,9 @@ public class RaetselDaoImplTest {
 				SortDirection.desc, nurFregegebene);
 
 			// Assert
-			assertEquals(3, treffer.size());
+			assertEquals(4, treffer.size());
 
-			assertEquals("02800", treffer.get(0).schluessel);
+			assertEquals("02822", treffer.get(0).schluessel);
 
 		}
 
@@ -934,7 +934,7 @@ public class RaetselDaoImplTest {
 				nurFregegebene);
 
 			// Assert
-			assertEquals(16, anzahl);
+			assertEquals(18, anzahl);
 
 		}
 
@@ -956,7 +956,7 @@ public class RaetselDaoImplTest {
 				SortDirection.asc, nurFregegebene);
 
 			// Assert
-			assertEquals(16, treffer.size());
+			assertEquals(18, treffer.size());
 
 			assertEquals("02516", treffer.get(0).schluessel);
 
@@ -979,9 +979,9 @@ public class RaetselDaoImplTest {
 				SortDirection.desc, nurFregegebene);
 
 			// Assert
-			assertEquals(16, treffer.size());
+			assertEquals(18, treffer.size());
 
-			assertEquals("02818", treffer.get(0).schluessel);
+			assertEquals("02822", treffer.get(0).schluessel);
 
 		}
 

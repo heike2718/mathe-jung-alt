@@ -220,8 +220,8 @@ public class AdminRaetselResourceTest {
 			.as(RaetselsucheTreffer.class);
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
-		assertEquals(16, alleRaetsel.size());
-		assertEquals(16, suchergebnis.getTrefferGesamt());
+		assertEquals(18, alleRaetsel.size());
+		assertEquals(18, suchergebnis.getTrefferGesamt());
 
 		assertEquals("02516", alleRaetsel.get(0).getSchluessel());
 	}
@@ -272,8 +272,8 @@ public class AdminRaetselResourceTest {
 			.as(RaetselsucheTreffer.class);
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
-		assertEquals(3, alleRaetsel.size());
-		assertEquals(3, suchergebnis.getTrefferGesamt());
+		assertEquals(4, alleRaetsel.size());
+		assertEquals(4, suchergebnis.getTrefferGesamt());
 
 		assertEquals("02604", alleRaetsel.get(0).getSchluessel());
 	}
