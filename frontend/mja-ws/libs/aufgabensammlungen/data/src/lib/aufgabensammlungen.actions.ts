@@ -1,5 +1,5 @@
 import { FontName, GeneratedFile, LaTeXLayoutAntwortvorschlaege, PageDefinition, Schriftgroesse, GeneratedImages } from '@mja-ws/core/model';
-import { AufgabensammlungenTreffer, AufgabensammlungenSuchparameter, AufgabensammlungTrefferItem, AufgabensammlungDetails, AufgabensammlungBasisdaten, EditAufgabensammlungPayload, EditAufgabensammlungselementPayload, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
+import { AufgabensammlungenTreffer, AufgabensammlungenSuchparameter, AufgabensammlungDetails, AufgabensammlungBasisdaten, EditAufgabensammlungPayload, EditAufgabensammlungselementPayload, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 

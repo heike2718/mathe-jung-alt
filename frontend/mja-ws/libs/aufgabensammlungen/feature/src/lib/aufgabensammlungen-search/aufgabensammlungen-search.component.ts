@@ -36,7 +36,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { Configuration } from '@mja-ws/shared/config';
 import { AuthFacade } from '@mja-ws/core/api';
 
-const STATUS = 'status';
 const NAME = 'name';
 const LEVEL = 'schwierigkeitsgrad';
 const REFERENZTYP = 'referenztyp';

@@ -13,7 +13,8 @@
     "@mja-ws/medien/api": "^2.5.0",
     "@mja-ws/medien/model": "^2.5.0",
     "@mja-ws/core/api": "^2.5.0",
-    "@mja-ws/core/model": "^2.5.0"
+    "@mja-ws/core/model": "^2.5.0",
+    "@mja-ws/raetsel/api": "^2.5.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",

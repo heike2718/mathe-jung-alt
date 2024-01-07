@@ -1,5 +1,5 @@
 import { GeneratedImages, initialPaginationState, PaginationState, SelectableItem } from "@mja-ws/core/model";
-import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto, initialRaetselDetails, EditRaetselPayload, GUIEditRaetselPayload, createEditRaetselPayload, LinkedAufgabensammlung } from "@mja-ws/raetsel/model";
+import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto, GUIEditRaetselPayload, createEditRaetselPayload, LinkedAufgabensammlung } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
 import { swallowEmptyArgument } from "@mja-ws/shared/util";

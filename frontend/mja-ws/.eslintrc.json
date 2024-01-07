@@ -31,6 +31,7 @@
                   "type:shared:ui",
                   "type:shared:api",
                   "type:core:api",
+                  "type:core:model",
                   "type:local-storage-data"
                 ]
               },

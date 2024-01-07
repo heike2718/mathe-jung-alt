@@ -1,4 +1,4 @@
-import { FontName, GeneratedFile, GeneratedImages, Herkunftstyp, LaTeXLayoutAntwortvorschlaege, Medienart, PageDefinition, QuelleDto, Schriftgroesse } from '@mja-ws/core/model';
+import { FontName, GeneratedFile, GeneratedImages, LaTeXLayoutAntwortvorschlaege, Medienart, PageDefinition, Schriftgroesse } from '@mja-ws/core/model';
 import { EditRaetselPayload, GUIEditRaetselPayload, LinkedAufgabensammlung, MediumQuelleDto, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
