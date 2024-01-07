@@ -20,6 +20,7 @@ import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.domain.utils.SetOperationUtils;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlungRaetselsucheItemReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -534,5 +535,22 @@ public class RaetselDao {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Sucht alle Aufgabensammlungen, in denen das gegebene Rätsel verwendet wird.
+	 *
+	 * @param  raetselId
+	 *                   String die UUID des RAETSELS. Sortiert ist nach Name der Aufgabensammlungen.
+	 * @return           List
+	 */
+	public List<PersistentesAufgabensammlungRaetselsucheItemReadonly> findAllAufgabensammlungenWithRaetsel(final String raetselId) {
+
+		return entityManager
+			.createNamedQuery(PersistentesAufgabensammlungRaetselsucheItemReadonly.FIND_WITH_RAETSEL_ID,
+				PersistentesAufgabensammlungRaetselsucheItemReadonly.class)
+			.setParameter("raetselId", raetselId)
+			.getResultList();
+
 	}
 }

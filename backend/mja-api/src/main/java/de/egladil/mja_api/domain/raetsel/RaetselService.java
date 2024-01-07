@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -30,6 +31,7 @@ import de.egladil.mja_api.domain.quellen.QuelleNameStrategie;
 import de.egladil.mja_api.domain.quellen.QuellenService;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
+import de.egladil.mja_api.domain.raetsel.dto.AufgabensammlungRaetselsucheTrefferItem;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -45,6 +47,7 @@ import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelle;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlungRaetselsucheItemReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselHistorieItem;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -627,6 +630,35 @@ public class RaetselService {
 	String generateFilenameVorschau() {
 
 		return UUID.randomUUID().toString().substring(0, 13) + Outputformat.PNG.getFilenameExtension();
+	}
+
+	/**
+	 * Sucht alle Aufgabensammlungen, die das gegebene Rätsel enthalten.
+	 *
+	 * @param  raetselId
+	 *                   String
+	 * @return           List
+	 */
+	public List<AufgabensammlungRaetselsucheTrefferItem> findAufgabensammlungenWithRaetsel(final String raetselId) {
+
+		List<PersistentesAufgabensammlungRaetselsucheItemReadonly> trefferliste = this.raetselDao
+			.findAllAufgabensammlungenWithRaetsel(raetselId);
+
+		return trefferliste.stream()
+			.map(this::mapToAufgabensammlungRaetselsucheTrefferItem)
+			.collect(Collectors.toList());
+	}
+
+	AufgabensammlungRaetselsucheTrefferItem mapToAufgabensammlungRaetselsucheTrefferItem(final PersistentesAufgabensammlungRaetselsucheItemReadonly ausDB) {
+
+		return new AufgabensammlungRaetselsucheTrefferItem().withFreigegeben(ausDB.sammlungFreigegeben)
+			.withId(ausDB.id)
+			.withName(ausDB.sammlungName)
+			.withNummer(ausDB.elementNummer)
+			.withPrivat(ausDB.sammlungPrivat)
+			.withPunkte(ausDB.elementPunkte)
+			.withSchwierigkeitsgrad(ausDB.schwierigkeitsgrad)
+			.withOwner(StringUtils.abbreviate(ausDB.sammlungOwner, 11));
 	}
 
 }

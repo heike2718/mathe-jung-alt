@@ -19,11 +19,12 @@ import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
-import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
+import de.egladil.mja_api.profiles.FullDatabaseStandarduserTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.quarkus.test.security.TestSecurity;
+import io.restassured.http.ContentType;
 import jakarta.persistence.EnumType;
 
 /**
@@ -31,7 +32,7 @@ import jakarta.persistence.EnumType;
  */
 @QuarkusTest
 @TestHTTPEndpoint(RaetselResource.class)
-@TestProfile(FullDatabaseAdminTestProfile.class)
+@TestProfile(FullDatabaseStandarduserTestProfile.class)
 @TestMethodOrder(OrderAnnotation.class)
 public class PublicRaetselResourceTest {
 
@@ -52,7 +53,7 @@ public class PublicRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	@Order(2)
 	void findRaetselPublic_when_Deskriptoren_LIKE() throws Exception {
 
@@ -70,16 +71,14 @@ public class PublicRaetselResourceTest {
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		// Das ist irriterend, weil man die Roles benötigt, damit man nicht sofort eine 401 bekommt, aber wegen mockSession ein
-		// adminUser in den authContext gesetzt wird. Das Ergebnis ist daher nicht auf die FREIGEGEBENEN beschränkt
-		assertEquals(13, alleRaetsel.size());
-		assertEquals(13, suchergebnis.getTrefferGesamt());
+		assertEquals(6, alleRaetsel.size());
+		assertEquals(6, suchergebnis.getTrefferGesamt());
 
-		assertEquals("02540", alleRaetsel.get(0).getSchluessel());
+		assertEquals("02604", alleRaetsel.get(0).getSchluessel());
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	@Order(3)
 	void findRaetselPublic_when_fallbackToDefaultModusDeskriptoren() throws Exception {
 
@@ -96,16 +95,14 @@ public class PublicRaetselResourceTest {
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		// Das ist irriterend, weil man die Roles benötigt, damit man nicht sofort eine 401 bekommt, aber wegen mockSession ein
-		// adminUser in den authContext gesetzt wird. Das Ergebnis ist daher nicht auf die FREIGEGEBENEN beschränkt
-		assertEquals(13, alleRaetsel.size());
-		assertEquals(13, suchergebnis.getTrefferGesamt());
+		assertEquals(6, alleRaetsel.size());
+		assertEquals(6, suchergebnis.getTrefferGesamt());
 
-		assertEquals("02540", alleRaetsel.get(0).getSchluessel());
+		assertEquals("02604", alleRaetsel.get(0).getSchluessel());
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	@Order(4)
 	void findRaetselPublic_when_deskriptorenBlank() throws Exception {
 
@@ -126,7 +123,7 @@ public class PublicRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	@Order(5)
 	void findRaetselPublic_when_Deskriptoren_NOT_LIKE() throws Exception {
 
@@ -144,14 +141,11 @@ public class PublicRaetselResourceTest {
 
 		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		// Das ist irriterend, weil man die Roles benötigt, damit man nicht sofort eine 401 bekommt, aber wegen mockSession ein
-		// adminUser in den authContext gesetzt wird. Das Ergebnis ist daher nicht auf die FREIGEGEBENEN beschränkt
 		assertEquals(20, alleRaetsel.size());
 
-		// Je nach Testkontext kann ein Rätsel hinzugekommen sein.
-		assertTrue(suchergebnis.getTrefferGesamt() >= 50);
+		assertTrue(suchergebnis.getTrefferGesamt() >= 6);
 
-		assertEquals("00000", alleRaetsel.get(0).getSchluessel());
+		assertEquals("01219", alleRaetsel.get(0).getSchluessel());
 	}
 
 	@Test
@@ -167,11 +161,46 @@ public class PublicRaetselResourceTest {
 			.extract()
 			.as(AnzahlabfrageResponseDto.class);
 
-		// Assert
-		// Das ist irriterend, weil man die Roles benötigt, damit man nicht sofort eine 401 bekommt, aber wegen mockSession ein
-		// adminUser in den authContext gesetzt wird. Das Ergebnis ist daher nicht auf die FREIGEGEBENEN beschränkt
-
 		// Je nach Testkontext kann ein Rätsel hinzugekommen sein.
 		assertTrue(result.getErgebnis() >= 31);
+	}
+
+	@Test
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	@Order(7)
+	void testGetAufgabensammlungenMitRaetsel_401_when_knownUser() {
+
+		// Arrange
+		String raetselId = "2c6fc5a1-f27c-4d51-98c4-239a1eead05f";
+
+		// Act
+		given()
+			.pathParam("id", raetselId)
+			.accept(ContentType.JSON)
+			.contentType(ContentType.JSON)
+			.when()
+			.get("{id}/aufgabensammlungen/v1")
+			.then()
+			.statusCode(403);
+
+	}
+
+	@Test
+	@Order(8)
+	void testGetAufgabensammlungenMitRaetsel_401_when_unknownUser() {
+
+		// Arrange
+		String raetselId = "2c6fc5a1-f27c-4d51-98c4-239a1eead05f";
+
+		// Act
+		given()
+			.pathParam("id", raetselId)
+			.accept(ContentType.JSON)
+			.contentType(ContentType.JSON)
+			.when()
+			.get("{id}/aufgabensammlungen/v1")
+			.then()
+			.statusCode(401);
+
 	}
 }

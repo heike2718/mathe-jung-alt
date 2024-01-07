@@ -23,11 +23,13 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
+import de.egladil.mja_api.domain.raetsel.dto.AufgabensammlungRaetselsucheTrefferItem;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.infrastructure.persistence.dao.MediumDao;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
@@ -200,6 +202,58 @@ public class AutorRaetselResourceTest {
 		assertEquals("73634aeb-f494-4864-ab30-26861a5bf2e0", geaenderteQuelle.getId());
 
 		assertNull(quellenRepo.findQuelleEntityWithId(quelleId));
+
+	}
+
+	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(4)
+	void should_findAufgabensammlungenWithRaetsel_work() {
+
+		// Arrange
+		String raetselId = "e6f4c722-fcc2-4695-91df-5e0e1bd5cddb";
+
+		// Act
+		AufgabensammlungRaetselsucheTrefferItem[] result = given()
+			.pathParam("id", raetselId)
+			.accept(ContentType.JSON)
+			.contentType(ContentType.JSON)
+			.when()
+			.get("{id}/aufgabensammlungen/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(AufgabensammlungRaetselsucheTrefferItem[].class);
+
+		// Assert
+		assertEquals(2, result.length);
+
+		{
+
+			AufgabensammlungRaetselsucheTrefferItem item = result[0];
+			assertEquals("e92728aa-dab5-441e-9f55-77afe99dea31", item.getId());
+			assertEquals("Minikänguru 2020 - Klasse 1", item.getName());
+			assertEquals("B-1", item.getNummer());
+			assertEquals(400, item.getPunkte());
+			assertEquals(Schwierigkeitsgrad.EINS, item.getSchwierigkeitsgrad());
+			assertTrue(item.isFreigegeben());
+			assertFalse(item.isPrivat());
+			assertEquals("b865fc75...", item.getOwner());
+		}
+
+		{
+
+			AufgabensammlungRaetselsucheTrefferItem item = result[1];
+			assertEquals("21558916-94ff-4cce-9343-4c6829f2c0a9", item.getId());
+			assertEquals("Minikänguru 2020 - Klasse 2", item.getName());
+			assertEquals("A-3", item.getNummer());
+			assertEquals(300, item.getPunkte());
+			assertEquals(Schwierigkeitsgrad.ZWEI, item.getSchwierigkeitsgrad());
+			assertTrue(item.isFreigegeben());
+			assertFalse(item.isPrivat());
+			assertEquals("b865fc75...", item.getOwner());
+		}
 
 	}
 

@@ -70,6 +70,10 @@ export interface RaetselDetails {
   readonly quellenangabe: string
 };
 
+export interface LinkedAufgabensammlung  {
+
+};
+
 /** 
  * Payload zum Anlegen oder Ändern eines Rätsels
 */

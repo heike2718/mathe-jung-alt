@@ -1,12 +1,14 @@
 import { FontName, GeneratedFile, GeneratedImages, Herkunftstyp, LaTeXLayoutAntwortvorschlaege, Medienart, PageDefinition, QuelleDto, Schriftgroesse } from '@mja-ws/core/model';
-import { EditRaetselPayload, GUIEditRaetselPayload, MediumQuelleDto, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from '@mja-ws/raetsel/model';
+import { EditRaetselPayload, GUIEditRaetselPayload, LinkedAufgabensammlung, MediumQuelleDto, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter } from '@mja-ws/raetsel/model';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const raetselActions = createActionGroup({
     source: 'Raetsel',
     events: {
         'EMBEDDED_IMAGES_FOUND': props<{ files: GeneratedFile[] }>(),
-        'INIT_EDIT_RAETSEL_PAYLOD': props<{payload: GUIEditRaetselPayload}>(),
+        'INIT_EDIT_RAETSEL_PAYLOD': props<{ payload: GUIEditRaetselPayload }>(),
+        'FIND_LINKED_AUFGABENSAMMLUNGEN': props<{ schluessel: string }>(),
+        'LINKED_AUFGABENSAMMLUNGEN_FOUND': props<{ raetsel: LinkedAufgabensammlung[] }>(),
         'FIND_MEDIEN_FOR_QUELLE': props<{ medienart: Medienart }>(),
         'MEDIEN_FOR_QUELLE_FOUND': props<{ result: MediumQuelleDto[] }>(),
         'FIND_EMBEDDED_IMAGES': props<{ raetselID: string }>(),

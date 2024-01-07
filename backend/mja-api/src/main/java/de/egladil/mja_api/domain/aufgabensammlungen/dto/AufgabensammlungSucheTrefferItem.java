@@ -14,6 +14,7 @@ import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 /**
  * AufgabensammlungSucheTrefferItem
  */
+@Schema(name = "AufgabensammlungSucheTrefferItem", description = "Ein Element einer Suchanfrage")
 public class AufgabensammlungSucheTrefferItem {
 
 	@JsonProperty
@@ -25,7 +26,7 @@ public class AufgabensammlungSucheTrefferItem {
 	private String name;
 
 	@JsonProperty
-	@Schema(description = "poptionaler Kommentar")
+	@Schema(description = "optionaler Kommentar")
 	private String kommentar;
 
 	@JsonProperty

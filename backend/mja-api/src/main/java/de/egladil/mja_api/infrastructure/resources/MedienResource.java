@@ -309,7 +309,7 @@ public class MedienResource {
 	@Path("{id}/raetsel/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
-		operationId = "getRaetselMitMedium", summary = "Gibt alle Rätsel zurück, die das gegebene Medium als Quelle referenzieren.")
+		operationId = "getRaetselMitMedium", summary = "Gibt alle Rätsel zurück, die das gegebene Medium als Quelle referenzieren. Sortiert wird nach dem Schlüssel der Rätsel.")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.PATH,
@@ -329,11 +329,6 @@ public class MedienResource {
 	@APIResponse(
 		name = "NotAuthorized",
 		responseCode = "401",
-		content = @Content(
-			mediaType = "application/json"))
-	@APIResponse(
-		name = "NotFound",
-		responseCode = "404",
 		content = @Content(
 			mediaType = "application/json"))
 	@APIResponse(

@@ -36,6 +36,7 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.RaetselTexteService;
+import de.egladil.mja_api.domain.raetsel.dto.AufgabensammlungRaetselsucheTrefferItem;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -771,5 +772,44 @@ public class RaetselResource {
 
 		}
 		return deskriptorenOrdinal;
+	}
+
+	@GET
+	@Path("{id}/aufgabensammlungen/v1")
+	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@Operation(
+		operationId = "getAufgabensammlungenMitRaetsel",
+		summary = "Gibt alle Aufgabensammlungen zurück, die das gegebene Rätsel enthalten. Sortiert wird nach dem Namen der Aufgabensammlung")
+	@Parameters({
+		@Parameter(
+			in = ParameterIn.PATH,
+			name = "id",
+			description = "technische ID eines Rätsels"),
+	})
+	@APIResponse(
+		name = "OKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(type = SchemaType.ARRAY, implementation = AufgabensammlungRaetselsucheTrefferItem.class)))
+	@APIResponse(
+		name = "BadRequestResponse",
+		responseCode = "400",
+		description = "fehlgeschlagene Input-Validierung")
+	@APIResponse(
+		name = "NotAuthorized",
+		responseCode = "401",
+		content = @Content(
+			mediaType = "application/json"))
+	@APIResponse(
+		name = "ServerError",
+		description = "server error",
+		responseCode = "500", content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	public Response getAufgabensammlungenMitRaetsel(@PathParam(value = "id") @Pattern(
+		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält unerlaubte Zeichen") final String id) {
+
+		return Response.ok(raetselService.findAufgabensammlungenWithRaetsel(id)).build();
 	}
 }
