@@ -652,7 +652,7 @@ public class RaetselService {
 	AufgabensammlungRaetselsucheTrefferItem mapToAufgabensammlungRaetselsucheTrefferItem(final PersistentesAufgabensammlungRaetselsucheItemReadonly ausDB) {
 
 		return new AufgabensammlungRaetselsucheTrefferItem().withFreigegeben(ausDB.sammlungFreigegeben)
-			.withId(ausDB.id)
+			.withId(ausDB.sammlungId)
 			.withName(ausDB.sammlungName)
 			.withNummer(ausDB.elementNummer)
 			.withPrivat(ausDB.sammlungPrivat)

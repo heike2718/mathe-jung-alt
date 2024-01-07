@@ -158,7 +158,22 @@
             }
         </mat-accordion>
 
+        @if ((raetselFacade.linkedAufgabensammlungen$ | async); as liste) {
 
+        @if (liste.length > 0) {
+
+        <h2>
+            verknüfte Aufgabensammlungen
+            <span matBadge={{liste.length}} matBadgeColor="accent" class="ml-1"></span>
+        </h2>
+
+        @for (aufgabensammlung of liste; track $index) {
+        <mja-linked-as [aufgabensammlung]="aufgabensammlung"
+            (detailsClicked)="aufgabenammlungDetailsClicked($event)"></mja-linked-as>
+        }
+        }
+
+        }
         }
     </div>
     } @else {

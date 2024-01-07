@@ -13,8 +13,7 @@ import {
   SelectItemsCompomentModel,
   Quellenart,
   Medienart,
-  QuelleDto,
-  Herkunftstyp
+  QuelleDto
 } from '@mja-ws/core/model';
 import { fromRaetsel, raetselActions } from '@mja-ws/raetsel/data';
 import {
@@ -22,6 +21,7 @@ import {
   EditRaetselPayload,
   GUIEditRaetselPayload,
   initialRaetselDetails,
+  LinkedAufgabensammlung,
   MediumQuelleDto,
   ModusSucheMitDeskriptoren,
   ModusVolltextsuche,
@@ -50,6 +50,7 @@ export class RaetselFacade {
   generateLatexError$: Observable<boolean> = this.#store.select(fromRaetsel.generateLatexError);
   medienForQuelle$: Observable<MediumQuelleDto[]> = this.#store.select(fromRaetsel.medienForQuelle);
   showQuelle$: Observable<boolean> = this.#store.select(fromRaetsel.showQuelle);
+  linkedAufgabensammlungen$: Observable<LinkedAufgabensammlung[]> = this.#store.select(fromRaetsel.linkedAufgabensammlungen);
 
   #selectItemsFacade = inject(SelectItemsFacade);
 
@@ -127,6 +128,12 @@ export class RaetselFacade {
 
     if (medienart !== 'NOOP') {
       this.#store.dispatch(raetselActions.fIND_MEDIEN_FOR_QUELLE({ medienart }));
+    }
+  }
+
+  findLinkedAufgabensammlungen(raetselId: string): void {
+    if (raetselId !== 'neu') {
+      this.#store.dispatch(raetselActions.fIND_LINKED_AUFGABENSAMMLUNGEN({raetselId}));
     }
   }
 

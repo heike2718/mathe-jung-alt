@@ -280,7 +280,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   onRowClicked(aufgabensammlung: AufgabensammlungTrefferItem): void {
-    this.#aufgabensammlungenFacade.selectAufgabensammlung(aufgabensammlung);
+    this.#aufgabensammlungenFacade.selectAufgabensammlung(aufgabensammlung.id);
   }
 
   clearFilter(filterFormControl: FormControl): void {

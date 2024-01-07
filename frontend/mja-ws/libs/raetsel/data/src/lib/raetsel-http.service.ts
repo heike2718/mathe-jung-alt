@@ -18,7 +18,7 @@ import {
     QUERY_PARAM_TYPE_DESKRIPTOREN,
     Schriftgroesse
 } from "@mja-ws/core/model";
-import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter, MediumQuelleDto } from "@mja-ws/raetsel/model";
+import { EditRaetselPayload, RaetselDetails, RaetselsucheTreffer, RaetselSuchfilter, MediumQuelleDto, LinkedAufgabensammlung } from "@mja-ws/raetsel/model";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
@@ -152,6 +152,14 @@ export class RaetselHttpService {
             .set('medienart', theMedienartStr);
 
         return this.#http.get<MediumQuelleDto[]>(url, { headers, params });
+    }
+
+    findLinkedAufgabensammlungen(raetselId: string): Observable<LinkedAufgabensammlung[]> {
+
+        const url = this.#url + '/' + raetselId + '/aufgabensammlungen/v1';
+        const headers = new HttpHeaders().set('Accept', 'application/json');
+
+        return this.#http.get<LinkedAufgabensammlung[]>(url, { headers: headers });
     }
 
 

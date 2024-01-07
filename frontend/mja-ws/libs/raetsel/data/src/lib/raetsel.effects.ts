@@ -194,4 +194,13 @@ export class RaetselEffects {
             map((result) => raetselActions.mEDIEN_FOR_QUELLE_FOUND({ result }))
         );
     });
+
+    findLinkedAufgabensammlungen$ = createEffect(() => {
+
+        return this.#actions.pipe(
+            ofType(raetselActions.fIND_LINKED_AUFGABENSAMMLUNGEN),
+            switchMap((action) => this.#raetselHttpService.findLinkedAufgabensammlungen(action.raetselId)),
+            map((linkedAufgabensammlungen) => raetselActions.lINKED_AUFGABENSAMMLUNGEN_FOUND({ linkedAufgabensammlungen }))
+        );
+    });
 }

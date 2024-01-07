@@ -62,7 +62,7 @@ export class MediumDetailsComponent implements OnInit, OnDestroy {
     this.medienFacade.unselectMedium();
   }
 
-  detailsClicked($event: LinkedRaetsel): void {
+  raetselDetailsClicked($event: LinkedRaetsel): void {
     this.#raetselFacade.selectRaetsel($event.schluessel);
   }
 }

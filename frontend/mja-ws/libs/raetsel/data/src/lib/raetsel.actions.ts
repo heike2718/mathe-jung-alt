@@ -7,8 +7,8 @@ export const raetselActions = createActionGroup({
     events: {
         'EMBEDDED_IMAGES_FOUND': props<{ files: GeneratedFile[] }>(),
         'INIT_EDIT_RAETSEL_PAYLOD': props<{ payload: GUIEditRaetselPayload }>(),
-        'FIND_LINKED_AUFGABENSAMMLUNGEN': props<{ schluessel: string }>(),
-        'LINKED_AUFGABENSAMMLUNGEN_FOUND': props<{ raetsel: LinkedAufgabensammlung[] }>(),
+        'FIND_LINKED_AUFGABENSAMMLUNGEN': props<{ raetselId: string }>(),
+        'LINKED_AUFGABENSAMMLUNGEN_FOUND': props<{ linkedAufgabensammlungen: LinkedAufgabensammlung[] }>(),
         'FIND_MEDIEN_FOR_QUELLE': props<{ medienart: Medienart }>(),
         'MEDIEN_FOR_QUELLE_FOUND': props<{ result: MediumQuelleDto[] }>(),
         'FIND_EMBEDDED_IMAGES': props<{ raetselID: string }>(),

@@ -1,4 +1,4 @@
-import { DeskriptorUI, GeneratedImages, Herkunftstyp, Medienart, QuelleDto, Quellenart, initialQuelleDto } from "@mja-ws/core/model";
+import { DeskriptorUI, GeneratedImages, Herkunftstyp, Medienart, QuelleDto, Quellenart, Schwierigkeitsgrad, initialQuelleDto } from "@mja-ws/core/model";
 import { EmbeddableImageInfo } from "@mja-ws/embeddable-images/model";
 
 export type ModusVolltextsuche = 'UNION' | 'INTERSECTION';
@@ -71,7 +71,14 @@ export interface RaetselDetails {
 };
 
 export interface LinkedAufgabensammlung  {
-
+  readonly id: string;
+  readonly name: string;
+  readonly nummer: string;
+  readonly punkte: number;
+  readonly schwierigkeitsgrad: Schwierigkeitsgrad;
+  readonly freigegeben: boolean;
+  readonly privat: boolean;
+  readonly owner: string;
 };
 
 /** 

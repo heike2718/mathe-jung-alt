@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { AuthFacade } from '@mja-ws/core/api';
 import { Router } from '@angular/router';
-import { RaetselDetails } from '@mja-ws/raetsel/model';
+import { LinkedAufgabensammlung, RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
 import { FrageLoesungImagesComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
 import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
@@ -36,6 +36,8 @@ import { EmbeddableImageInfoComponent } from '../embeddable-image-info/embeddabl
 import { EmbeddableImageInfo } from '@mja-ws/embeddable-images/model';
 import { AufgabensammlungenFacade } from '@mja-ws/aufgabensammlungen/api';
 import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/aufgabensammlungen/model';
+import { LinkedAufgabensammlungenComponent } from '../linked-aufgabensammlungen/linked-aufgabensammlungen.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'mja-raetsel-details',
@@ -44,7 +46,8 @@ import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/au
     CommonModule,
     CdkAccordionModule,
     FormsModule,
-    MatExpansionModule,    
+    MatExpansionModule,
+    MatBadgeModule,    
     MatButtonModule,
     MatCheckboxModule,
     MatChipsModule,
@@ -57,7 +60,8 @@ import { AufgabensammlungDetails, AufgabensammlungTrefferItem } from '@mja-ws/au
     AntwortvorschlagComponent,
     EmbeddableImageVorschauComponent,
     EmbeddableImageInfoComponent,
-    GeneratorParametersDialogAutorenComponent
+    GeneratorParametersDialogAutorenComponent,
+    LinkedAufgabensammlungenComponent    
   ],
   templateUrl: './raetsel-details.component.html',
   styleUrls: ['./raetsel-details.component.scss'],
@@ -90,6 +94,10 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
       tap((details: RaetselDetails) => {
         this.#raetselDetails = details;
         this.freigegeben = this.#raetselDetails.freigegeben;
+
+        if (this.#raetselDetails) {
+          this.raetselFacade.findLinkedAufgabensammlungen(this.#raetselDetails.id);
+        }
       })
     ).subscribe();
 
@@ -142,7 +150,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
         freigegeben: this.#selectedAufgabensammlung.freigegeben,
         privat: this.#selectedAufgabensammlung.privat
       };
-      this.aufgabensammlungenFacade.selectAufgabensammlung(trefferitem)
+      this.aufgabensammlungenFacade.selectAufgabensammlung(trefferitem.id)
     } else {
       this.#router.navigateByUrl('aufgabensammlungen');
     }
@@ -169,6 +177,11 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     if (this.#raetselDetails) {
       this.raetselFacade.downloadRaetselLaTeX(this.#raetselDetails.id);
     }
+  }
+
+  aufgabenammlungDetailsClicked($event: LinkedAufgabensammlung): void {
+    console.log('jetzt navigieren zu Aufgabensammlung ' + $event.name);
+    this.aufgabensammlungenFacade.selectAufgabensammlung($event.id)
   }
 
   #openPrintDialog(outputformat: OutputFormat): void {

@@ -29,7 +29,7 @@ export class AufgabensammlungenEffects {
 
         return this.#actions.pipe(
             ofType(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNG),
-            switchMap((action) => this.#aufgabensammlungenHttpService.findById(action.aufgabensammlung.id)),
+            switchMap((action) => this.#aufgabensammlungenHttpService.findById(action.aufgabensammlungId)),
             map((aufgabensammlungDetails) => aufgabensammlungenActions.aUFGABENSAMMLUNGDETAILS_LOADED({ aufgabensammlungDetails: aufgabensammlungDetails, navigateTo: 'aufgabensammlungen/details' }))
         )
 

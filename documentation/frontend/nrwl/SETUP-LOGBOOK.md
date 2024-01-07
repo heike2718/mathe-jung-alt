@@ -481,6 +481,11 @@ npx nx generate @nrwl/angular:component linked-raetsel --project=medien-feature 
 ```
 
 
+__linked aufgabensammlungen component__
+
+```
+npx nx generate @nrwl/angular:component linked-aufgabensammlungen --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-linked-as --style=scss --standalone --no-interactive --dry-run
+```
 
 ## FAQ
 

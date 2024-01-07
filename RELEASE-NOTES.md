@@ -1,5 +1,12 @@
 # Release-Notes
 
+__2.5.0__
+
++ fast alle *ngIf und alle *ngFor durch Angular-17-Syntax ersetzt
++ [Raetseldetails: referenzierte Aufgabensammlungen anzeigen](https://github.com/heike2718/mathe-jung-alt/issues/118)
++ [Mediendetails: referenzierte Rätsel anzeigen](https://github.com/heike2718/mathe-jung-alt/issues/114)
+
+
 __2.4.3__
 
 + [Optik Tabellen verbessert](https://github.com/heike2718/mathe-jung-alt/issues/115)

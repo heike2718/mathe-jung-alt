@@ -44,6 +44,11 @@ const medienForQuelle = createSelector(
     (state) => state.medienForQuelle
 );
 
+const linkedAufgabensammlungen = createSelector(
+    selectRaetselState,
+    (state) => state.linkedAufgabensammlungen
+);
+
 const herkunftstyp = createSelector(
     raetselDetails,
     (details) => details ? details.herkunftstyp : 'EIGENKREATION'
@@ -63,6 +68,7 @@ export const fromRaetsel = {
     generateLatexError,
     medienForQuelle,
     showQuelle,
-    editRaetselPayload
+    editRaetselPayload,
+    linkedAufgabensammlungen
 };
 

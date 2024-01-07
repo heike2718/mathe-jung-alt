@@ -232,7 +232,7 @@ public class AutorRaetselResourceTest {
 		{
 
 			AufgabensammlungRaetselsucheTrefferItem item = result[0];
-			assertEquals("e92728aa-dab5-441e-9f55-77afe99dea31", item.getId());
+			assertEquals("1c34d95c-dce4-4e38-b6c0-bd6072bb4232", item.getId());
 			assertEquals("Minikänguru 2020 - Klasse 1", item.getName());
 			assertEquals("B-1", item.getNummer());
 			assertEquals(400, item.getPunkte());
@@ -245,7 +245,7 @@ public class AutorRaetselResourceTest {
 		{
 
 			AufgabensammlungRaetselsucheTrefferItem item = result[1];
-			assertEquals("21558916-94ff-4cce-9343-4c6829f2c0a9", item.getId());
+			assertEquals("c09e5d63-9ec1-4884-a01e-08234db9cbf3", item.getId());
 			assertEquals("Minikänguru 2020 - Klasse 2", item.getName());
 			assertEquals("A-3", item.getNummer());
 			assertEquals(300, item.getPunkte());

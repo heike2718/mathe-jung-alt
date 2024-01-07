@@ -31,9 +31,9 @@ export class AufgabensammlungenFacade {
         this.#store.dispatch(aufgabensammlungenActions.fIND_AUFGABENSAMMLUNGEN({ aufgabensammlungenSuchparameter, pageDefinition }));
     }
 
-    selectAufgabensammlung(aufgabensammlung: AufgabensammlungTrefferItem): void {
+    selectAufgabensammlung(aufgabensammlungId: string): void {
 
-        this.#store.dispatch(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNG({ aufgabensammlung }));
+        this.#store.dispatch(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNG({ aufgabensammlungId }));
     }
 
     unselectAufgabensammlung(): void {
@@ -83,21 +83,9 @@ export class AufgabensammlungenFacade {
         this.#store.dispatch(aufgabensammlungenActions.eDIT_AUFGABENSAMMLUNG({ aufgabensammlung }));
     }
 
-    reloadAufgabensammlung(aufgabensammlung: AufgabensammlungDetails): void {
+    reloadAufgabensammlung(aufgabensammlung: AufgabensammlungDetails): void {       
 
-        const theAufgabensammlung: AufgabensammlungTrefferItem = {
-            anzahlElemente: aufgabensammlung.elemente.length,
-            geaendertDurch: aufgabensammlung.geaendertDurch,
-            id: aufgabensammlung.id,
-            name: aufgabensammlung.name,
-            referenz: aufgabensammlung.referenz,
-            referenztyp: aufgabensammlung.referenztyp,
-            schwierigkeitsgrad: aufgabensammlung.schwierigkeitsgrad,
-            freigegeben: aufgabensammlung.freigegeben,
-            privat: aufgabensammlung.privat
-        };
-
-        this.selectAufgabensammlung(theAufgabensammlung);
+        this.selectAufgabensammlung(aufgabensammlung.id);
     }
 
     toggleStatus(aufgabensammlung: AufgabensammlungDetails): void {
@@ -124,19 +112,8 @@ export class AufgabensammlungenFacade {
 
         if (aufgabensammlung.id === 'neu') {
             this.#store.dispatch(aufgabensammlungenActions.uNSELECT_AUFGABENSAMMLUNG());
-        } else {
-            const rg: AufgabensammlungTrefferItem = {
-                id: aufgabensammlung.id,
-                name: '',
-                schwierigkeitsgrad: aufgabensammlung.schwierigkeitsgrad,
-                freigegeben: aufgabensammlung.freigegeben,
-                privat: aufgabensammlung.privat,
-                referenztyp: aufgabensammlung.referenztyp,
-                referenz: aufgabensammlung.referenz,
-                geaendertDurch: aufgabensammlung.geaendertDurch,
-                anzahlElemente: 0
-            };
-            this.#store.dispatch(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNG({ aufgabensammlung: rg }));
+        } else {            
+            this.#store.dispatch(aufgabensammlungenActions.sELECT_AUFGABENSAMMLUNG({ aufgabensammlungId: aufgabensammlung.id }));
         }
     }
 

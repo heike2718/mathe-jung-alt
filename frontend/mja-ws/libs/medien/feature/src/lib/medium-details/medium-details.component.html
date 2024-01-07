@@ -47,7 +47,7 @@
         </h2>
 
         @for (raetsel of liste; track $index) {
-        <mja-linked-raetsel [raetsel]="raetsel" (detailsClicked)="detailsClicked($event)"></mja-linked-raetsel>
+        <mja-linked-raetsel [raetsel]="raetsel" (detailsClicked)="raetselDetailsClicked($event)"></mja-linked-raetsel>
         }
         }
         }

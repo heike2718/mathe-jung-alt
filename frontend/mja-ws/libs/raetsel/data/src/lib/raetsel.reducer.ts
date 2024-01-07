@@ -1,5 +1,5 @@
 import { GeneratedImages, initialPaginationState, PaginationState, SelectableItem } from "@mja-ws/core/model";
-import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto, initialRaetselDetails, EditRaetselPayload, GUIEditRaetselPayload, createEditRaetselPayload } from "@mja-ws/raetsel/model";
+import { initialRaetselSuchfilter, Raetsel, RaetselDetails, RaetselSuchfilter, MediumQuelleDto, initialRaetselDetails, EditRaetselPayload, GUIEditRaetselPayload, createEditRaetselPayload, LinkedAufgabensammlung } from "@mja-ws/raetsel/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { raetselActions } from "./raetsel.actions";
 import { swallowEmptyArgument } from "@mja-ws/shared/util";
@@ -13,6 +13,7 @@ export interface RaetselState {
     readonly generateLatexError: boolean;
     readonly medienForQuelle: MediumQuelleDto[];
     readonly guiEditRaetselPayload: GUIEditRaetselPayload | undefined;
+    readonly linkedAufgabensammlungen: LinkedAufgabensammlung[];
 };
 
 const initialState: RaetselState = {
@@ -24,7 +25,8 @@ const initialState: RaetselState = {
     raetselSuchfilter: initialRaetselSuchfilter,
     generateLatexError: false,
     medienForQuelle: [],
-    guiEditRaetselPayload: undefined
+    guiEditRaetselPayload: undefined,
+    linkedAufgabensammlungen: []
 };
 
 export const raetselFeature = createFeature({
@@ -141,7 +143,8 @@ export const raetselFeature = createFeature({
                 selectableDeskriptoren: [],
                 generateLatexError: false,
                 guiEditRaetselPayload: undefined,
-                medienForQuelle: []
+                medienForQuelle: [],
+                linkedAufgabensammlungen: []
             }
         }),
         on(raetselActions.lATEX_ERRORS_DETECTED, (state, action) => {
@@ -157,5 +160,12 @@ export const raetselFeature = createFeature({
                 medienForQuelle: action.result
             };
         }),
+        on(raetselActions.lINKED_AUFGABENSAMMLUNGEN_FOUND, (state, action) => {
+            return {
+                ...state,
+                linkedAufgabensammlungen: action.linkedAufgabensammlungen
+            };
+        }),
+        
     )
 });
