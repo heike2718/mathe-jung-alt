@@ -66,7 +66,10 @@ public class RaetselFileService {
 		String path = latexBaseDir + File.separator + raetsel.getSchluessel() + ".tex";
 		File file = new File(path);
 
-		String antworten = AntwortvorschlagGeneratorStrategegy.create(layoutAntwortvorschlaege)
+		LayoutAntwortvorschlaege theResultingLayout = raetsel.isAntwortvorschlaegeEingebettet() ? LayoutAntwortvorschlaege.NOOP
+			: layoutAntwortvorschlaege;
+
+		String antworten = AntwortvorschlagGeneratorStrategegy.create(theResultingLayout)
 			.generateLaTeXAntwortvorschlaege(raetsel.getAntwortvorschlaege());
 
 		String template = LaTeXTemplatesService.getInstance().getTemplateDocumentRaetselPNG();
@@ -135,6 +138,7 @@ public class RaetselFileService {
 		File file = new File(path);
 
 		RaetselGeneratorinput input = new RaetselGeneratorinput()
+			.withAntwortvorschlaegeEingebettet(raetsel.isAntwortvorschlaegeEingebettet())
 			.withAntwortvorschlaege(raetsel.getAntwortvorschlaege())
 			.withFrage(raetsel.getFrage())
 			.withLoesung(raetsel.getLoesung())

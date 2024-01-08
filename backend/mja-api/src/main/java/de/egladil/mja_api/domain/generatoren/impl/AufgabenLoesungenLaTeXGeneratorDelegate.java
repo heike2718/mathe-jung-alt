@@ -41,6 +41,7 @@ public class AufgabenLoesungenLaTeXGeneratorDelegate {
 				RaetselLaTeXDto raetsel = opt.get();
 
 				RaetselGeneratorinput raetselInput = new RaetselGeneratorinput()
+					.withAntwortvorschlaegeEingebettet(aufgabe.isAntwortvorschlaegeEingebettet())
 					.withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
 					.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
 					.withLayoutAntwortvorschlaege(input.getLayoutAntwortvorschlaege())

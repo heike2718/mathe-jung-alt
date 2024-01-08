@@ -26,6 +26,8 @@ public class RaetselGeneratorinput {
 
 	private int punkte;
 
+	private boolean antwortvorschlaegeEingebettet;
+
 	private Antwortvorschlag[] antwortvorschlaege;
 
 	private LayoutAntwortvorschlaege layoutAntwortvorschlaege;
@@ -148,6 +150,17 @@ public class RaetselGeneratorinput {
 	public RaetselGeneratorinput withVerwendungszweck(final Verwendungszweck verwendungszweck) {
 
 		this.verwendungszweck = verwendungszweck;
+		return this;
+	}
+
+	public boolean isAntwortvorschlaegeEingebettet() {
+
+		return antwortvorschlaegeEingebettet;
+	}
+
+	public RaetselGeneratorinput withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
+
+		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
 		return this;
 	}
 }

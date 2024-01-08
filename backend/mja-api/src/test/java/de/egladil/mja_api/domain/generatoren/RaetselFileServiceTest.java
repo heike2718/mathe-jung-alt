@@ -5,6 +5,8 @@
 package de.egladil.mja_api.domain.generatoren;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -20,6 +22,7 @@ import de.egladil.mja_api.TestFileUtils;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
+import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -75,7 +78,7 @@ public class RaetselFileServiceTest {
 		}
 
 		@Test
-		void should_generateFrageLaTeX_add_Antworten() throws Exception {
+		void should_generateFrageLaTeX_add_Antworten_whenNichtEingebettet() throws Exception {
 
 			// Arrange
 			String expectedPath = BASE_DIR + File.separator + "generator-test.tex";
@@ -98,6 +101,46 @@ public class RaetselFileServiceTest {
 			File result = new File(path);
 			assertTrue(result.isFile());
 			assertTrue(result.canRead());
+
+			String text = MjaFileUtils.readTextFile(path);
+
+			// System.out.println(text);
+
+			assertNotNull(text);
+			assertTrue(text.contains("\\end{tabular}\\end{center}}\\end{document}"));
+		}
+
+		@Test
+		void should_generateFrageLaTeX_not_Antworten_whenEingebettet() throws Exception {
+
+			// Arrange
+			String expectedPath = BASE_DIR + File.separator + "generator-test.tex";
+
+			File file = new File(expectedPath);
+
+			if (file.exists() && file.isFile()) {
+
+				file.delete();
+			}
+
+			Raetsel raetsel = TestFileUtils.loadReaetsel().withAntwortvorschlaegeEingebettet(true);
+
+			// Act
+			String path = fileService.generateFrageLaTeX(raetsel, LayoutAntwortvorschlaege.BUCHSTABEN, FontName.STANDARD,
+				Schriftgroesse.NORMAL);
+
+			// Assert
+			assertEquals(expectedPath, path);
+			File result = new File(path);
+			assertTrue(result.isFile());
+			assertTrue(result.canRead());
+
+			String text = MjaFileUtils.readTextFile(path);
+
+			// System.out.println(text);
+
+			assertNotNull(text);
+			assertFalse(text.contains("\\end{tabular}\\end{center}}\\end{document}"));
 		}
 	}
 

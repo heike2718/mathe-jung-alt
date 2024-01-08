@@ -28,7 +28,7 @@ public class QuizitemLaTeXGeneratorTest {
 	class GenerateLaTeXFrageLoesungTests {
 
 		@Test
-		void should_generateLaTeXFrageLoesung_work_whenMultipleChoiceAndMoreThan0Antwortvorschlaege() {
+		void should_generateLaTeXFrageLoesung_work_whenMultipleChoiceAndMoreThan0AntwortvorschlaegeAndAntwortvorschlaegeNichtEingebettet() {
 
 			// Arrange
 			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[2];
@@ -36,6 +36,7 @@ public class QuizitemLaTeXGeneratorTest {
 			antwortvorschlaege[1] = new Antwortvorschlag().withBuchstabe("B").withText("b").withKorrekt(true);
 
 			RaetselGeneratorinput input = new RaetselGeneratorinput()
+				.withAntwortvorschlaegeEingebettet(false)
 				.withAntwortvorschlaege(antwortvorschlaege)
 				.withFrage("Was stimmt?")
 				.withLayoutAntwortvorschlaege(LayoutAntwortvorschlaege.ANKREUZTABELLE)
@@ -62,6 +63,47 @@ public class QuizitemLaTeXGeneratorTest {
 			assertFalse(result.contains("{antwortvorschlaege}"));
 			assertTrue(result.contains("vspace{1ex}"));
 			assertTrue(result.contains("begin{tabular}{*{2}{|C{2cm}}|}"));
+			assertTrue(result.contains(" (300) }"));
+			assertTrue(result.contains("bf Lösung A-1 - 00756"));
+
+		}
+
+		@Test
+		void should_generateLaTeXFrageLoesung_work_whenMultipleChoiceAndMoreThan0AntwortvorschlaegeAndAntwortvorschlaegeEingebettet() {
+
+			// Arrange
+			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[2];
+			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("A").withText("a");
+			antwortvorschlaege[1] = new Antwortvorschlag().withBuchstabe("B").withText("b").withKorrekt(true);
+
+			RaetselGeneratorinput input = new RaetselGeneratorinput()
+				.withAntwortvorschlaegeEingebettet(true)
+				.withAntwortvorschlaege(antwortvorschlaege)
+				.withFrage("Was stimmt?")
+				.withLayoutAntwortvorschlaege(LayoutAntwortvorschlaege.ANKREUZTABELLE)
+				.withLoesung("ganz klar B")
+				.withNummer("A-1")
+				.withPunkten(300)
+				.withSchluessel("00756")
+				.withVerwendungszweck(Verwendungszweck.VORSCHAU);
+
+			boolean printAsMultipleChoice = true;
+
+			QuizitemLaTeXGenerator generator = new QuizitemLaTeXGenerator();
+
+			// Act
+			String result = generator.generateLaTeXFrageLoesung(input, TrennerartFrageLoesung.ABSTAND, printAsMultipleChoice);
+
+			// System.out.println(result);
+
+			// Assert
+			assertTrue(result.contains("A-1"));
+			assertTrue(result.contains("00756"));
+			assertTrue(result.contains("Lösung ist B (b)"));
+			assertTrue(result.contains("green"));
+			assertFalse(result.contains("{antwortvorschlaege}"));
+			assertTrue(result.contains("vspace{1ex}"));
+			assertFalse(result.contains("begin{tabular}{*{2}{|C{2cm}}|}"));
 			assertTrue(result.contains(" (300) }"));
 			assertTrue(result.contains("bf Lösung A-1 - 00756"));
 
@@ -323,7 +365,7 @@ public class QuizitemLaTeXGeneratorTest {
 	class GenerateLaTeXFrageTests {
 
 		@Test
-		void should_generateLaTeXFrageLoesung_work_whenMultipleChoiceAndMoreThan0Antwortvorschlaege() {
+		void should_generateLaTeXFrageLoesung_work_whenMultipleChoiceAndMoreThan0AntwortvorschlaegeAndAntwortvorschlaegeNichtEingebettet() {
 
 			// Arrange
 			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[2];
@@ -331,6 +373,7 @@ public class QuizitemLaTeXGeneratorTest {
 			antwortvorschlaege[1] = new Antwortvorschlag().withBuchstabe("B").withText("b").withKorrekt(true);
 
 			RaetselGeneratorinput input = new RaetselGeneratorinput()
+				.withAntwortvorschlaegeEingebettet(false)
 				.withAntwortvorschlaege(antwortvorschlaege)
 				.withFrage("Was stimmt?")
 				.withLayoutAntwortvorschlaege(LayoutAntwortvorschlaege.ANKREUZTABELLE)
@@ -355,6 +398,45 @@ public class QuizitemLaTeXGeneratorTest {
 			assertFalse(result.contains("{antwortvorschlaege}"));
 			assertFalse(result.contains("vspace{1ex}"));
 			assertTrue(result.contains("begin{tabular}{*{2}{|C{2cm}}|}"));
+			assertTrue(result.contains(" (300) }"));
+			assertFalse(result.contains("bf Lösung A-1 - 00756"));
+			assertFalse(result.contains("Lösung ist B (b)"));
+		}
+
+		@Test
+		void should_generateLaTeXFrageLoesung_work_whenMultipleChoiceAndMoreThan0AntwortvorschlaegeAndAntwortvorschlaegeEingebettet() {
+
+			// Arrange
+			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[2];
+			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("A").withText("a");
+			antwortvorschlaege[1] = new Antwortvorschlag().withBuchstabe("B").withText("b").withKorrekt(true);
+
+			RaetselGeneratorinput input = new RaetselGeneratorinput()
+				.withAntwortvorschlaegeEingebettet(true)
+				.withAntwortvorschlaege(antwortvorschlaege)
+				.withFrage("Was stimmt?")
+				.withLayoutAntwortvorschlaege(LayoutAntwortvorschlaege.ANKREUZTABELLE)
+				.withLoesung("ganz klar B")
+				.withNummer("A-1")
+				.withPunkten(300)
+				.withSchluessel("00756")
+				.withVerwendungszweck(Verwendungszweck.VORSCHAU);
+
+			boolean printAsMultipleChoice = true;
+
+			// Act
+			String result = new QuizitemLaTeXGenerator().generateLaTeXFrage(input,
+				printAsMultipleChoice);
+
+			System.out.println(result);
+
+			// Assert
+			assertTrue(result.contains("A-1"));
+			assertTrue(result.contains("00756"));
+			assertTrue(result.contains("green"));
+			assertFalse(result.contains("{antwortvorschlaege}"));
+			assertFalse(result.contains("vspace{1ex}"));
+			assertFalse(result.contains("begin{tabular}{*{2}{|C{2cm}}|}"));
 			assertTrue(result.contains(" (300) }"));
 			assertFalse(result.contains("bf Lösung A-1 - 00756"));
 			assertFalse(result.contains("Lösung ist B (b)"));
@@ -417,7 +499,7 @@ public class QuizitemLaTeXGeneratorTest {
 		}
 
 		@Test
-		void should_generateLaTeXFrageLoesung_work_whenNotMultipleChoiceAndMoreThan0Antwortvorschlaege() {
+		void should_generateLaTeXFrageLoesung_work_whenNotMultipleChoiceAndMoreThan0AntwortvorschlaegeAndAntwortvorschlaegeNichtEingebettet() {
 
 			// Arrange
 			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[2];
@@ -425,6 +507,39 @@ public class QuizitemLaTeXGeneratorTest {
 			antwortvorschlaege[1] = new Antwortvorschlag().withBuchstabe("B").withText("b").withKorrekt(true);
 
 			RaetselGeneratorinput input = new RaetselGeneratorinput()
+				.withAntwortvorschlaegeEingebettet(false)
+				.withAntwortvorschlaege(antwortvorschlaege)
+				.withFrage("Was stimmt?")
+				.withLayoutAntwortvorschlaege(LayoutAntwortvorschlaege.ANKREUZTABELLE)
+				.withLoesung("ganz klar B")
+				.withNummer("A-1")
+				.withPunkten(300)
+				.withSchluessel("00756")
+				.withVerwendungszweck(Verwendungszweck.VORSCHAU);
+
+			boolean printAsMultipleChoice = false;
+
+			// Act
+			String result = new QuizitemLaTeXGenerator().generateLaTeXFrage(input,
+				printAsMultipleChoice);
+
+			// System.out.println(result);
+
+			// Assert
+			assertFalse(result.contains("{antwortvorschlaege}"));
+			assertFalse(result.contains("tabular"));
+		}
+
+		@Test
+		void should_generateLaTeXFrageLoesung_work_whenNotMultipleChoiceAndMoreThan0AntwortvorschlaegeAndAntwortvorschlaegeEingebettet() {
+
+			// Arrange
+			Antwortvorschlag[] antwortvorschlaege = new Antwortvorschlag[2];
+			antwortvorschlaege[0] = new Antwortvorschlag().withBuchstabe("A").withText("a");
+			antwortvorschlaege[1] = new Antwortvorschlag().withBuchstabe("B").withText("b").withKorrekt(true);
+
+			RaetselGeneratorinput input = new RaetselGeneratorinput()
+				.withAntwortvorschlaegeEingebettet(true)
 				.withAntwortvorschlaege(antwortvorschlaege)
 				.withFrage("Was stimmt?")
 				.withLayoutAntwortvorschlaege(LayoutAntwortvorschlaege.ANKREUZTABELLE)

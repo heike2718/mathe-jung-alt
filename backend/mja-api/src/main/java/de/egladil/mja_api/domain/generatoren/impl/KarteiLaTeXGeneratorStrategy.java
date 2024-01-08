@@ -106,6 +106,7 @@ public class KarteiLaTeXGeneratorStrategy implements AufgabensammlungGeneratorSt
 	void appendFrageLoesung(final StringBuffer sb, final Quizaufgabe aufgabe, final RaetselLaTeXDto raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final Verwendungszweck verwendungszweck, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
 
 		RaetselGeneratorinput raetselInput = new RaetselGeneratorinput()
+			.withAntwortvorschlaegeEingebettet(aufgabe.isAntwortvorschlaegeEingebettet())
 			.withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
 			.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
 			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)

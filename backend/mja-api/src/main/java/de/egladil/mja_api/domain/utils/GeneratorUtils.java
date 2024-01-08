@@ -26,7 +26,8 @@ public class GeneratorUtils {
 
 		return layoutAntwortvorschlaege != LayoutAntwortvorschlaege.NOOP
 			&& aufgabe.getAntwortvorschlaege() != null
-			&& aufgabe.getAntwortvorschlaege().length > 0;
+			&& aufgabe.getAntwortvorschlaege().length > 0
+			&& !aufgabe.isAntwortvorschlaegeEingebettet();
 	}
 
 	/**
@@ -42,7 +43,8 @@ public class GeneratorUtils {
 
 		return layoutAntwortvorschlaege != LayoutAntwortvorschlaege.NOOP
 			&& input.getAntwortvorschlaege() != null
-			&& input.getAntwortvorschlaege().length > 0;
+			&& input.getAntwortvorschlaege().length > 0
+			&& !input.isAntwortvorschlaegeEingebettet();
 	}
 
 	/**

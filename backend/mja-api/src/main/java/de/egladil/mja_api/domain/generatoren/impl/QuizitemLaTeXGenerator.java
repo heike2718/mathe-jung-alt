@@ -41,7 +41,7 @@ public class QuizitemLaTeXGenerator {
 
 		boolean isMultipleChoice = input.getAntwortvorschlaege() != null && input.getAntwortvorschlaege().length > 0;
 
-		if (isMultipleChoice && printAsMultipleChoice) {
+		if (isGenerateAntwortvorschlaegeToLaTeX(input, printAsMultipleChoice, isMultipleChoice)) {
 
 			String antworten = AntwortvorschlagGeneratorStrategegy.create(input.getLayoutAntwortvorschlaege())
 				.generateLaTeXAntwortvorschlaege(input.getAntwortvorschlaege());
@@ -104,7 +104,7 @@ public class QuizitemLaTeXGenerator {
 
 		boolean isMultipleChoice = input.getAntwortvorschlaege() != null && input.getAntwortvorschlaege().length > 0;
 
-		if (isMultipleChoice && printAsMultipleChoice) {
+		if (isGenerateAntwortvorschlaegeToLaTeX(input, printAsMultipleChoice, isMultipleChoice)) {
 
 			String antworten = AntwortvorschlagGeneratorStrategegy.create(input.getLayoutAntwortvorschlaege())
 				.generateLaTeXAntwortvorschlaege(input.getAntwortvorschlaege());
@@ -117,6 +117,20 @@ public class QuizitemLaTeXGenerator {
 		}
 
 		return template;
+	}
+
+	/**
+	 * Wenn es überhaupt Antwortvorschläge gibt, diese nicht eingebettet sind und der Druckauftrag Antwortvorschläge verlangt, dann
+	 * true, anderenfalls false.
+	 *
+	 * @param  input
+	 * @param  printAsMultipleChoice
+	 * @param  isMultipleChoice
+	 * @return                       boolean
+	 */
+	boolean isGenerateAntwortvorschlaegeToLaTeX(final RaetselGeneratorinput input, final boolean printAsMultipleChoice, final boolean isMultipleChoice) {
+
+		return isMultipleChoice && printAsMultipleChoice && !input.isAntwortvorschlaegeEingebettet();
 	}
 
 	/**

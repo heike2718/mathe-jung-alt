@@ -592,7 +592,7 @@ public class AufgabensammlungenService {
 
 	/**
 	 * Generiert eine PDF-Datei mit Aufgabenblättern und Lösungen. Zuerst kommen die Aufgaben, danach, beginnend mit einer neuen
-	 * Seite, die Lösungen in der gewünschten Reihenfolge. Es wird generell ohne Antwortvorschläge gedruckt.
+	 * Seite, die Lösungen in der gewünschten Reihenfolge.
 	 *
 	 * @param  aufgabensammlungID
 	 * @param  font

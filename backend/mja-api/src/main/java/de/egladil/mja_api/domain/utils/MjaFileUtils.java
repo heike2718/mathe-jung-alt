@@ -4,10 +4,12 @@
 // =====================================================
 package de.egladil.mja_api.domain.utils;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -342,6 +344,28 @@ public class MjaFileUtils {
 
 		result = result.replaceAll("_-_", "_");
 		return result;
+
+	}
+
+	public static String readTextFile(final String filePath) {
+
+		StringBuffer sb = new StringBuffer();
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line);
+			}
+		} catch (IOException e) {
+
+			LOGGER.error(e.getMessage());
+			return null;
+		}
+
+		return sb.toString();
 
 	}
 }

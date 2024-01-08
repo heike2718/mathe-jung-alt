@@ -47,6 +47,10 @@ public class Quizaufgabe {
 	private int strafpunkte;
 
 	@JsonProperty
+	@Schema(description = "ob der Frage-Text die eventuell vorhandenen Antwortvorschläge bereits enthält.")
+	private boolean antwortvorschlaegeEingebettet;
+
+	@JsonProperty
 	@Schema(
 		type = SchemaType.ARRAY, implementation = Antwortvorschlag.class,
 		description = "optionale Antwortvorschläge, wenn es sich um beim Quiz um multiple choice handelt")
@@ -170,5 +174,15 @@ public class Quizaufgabe {
 	public void setFreigegeben(final boolean freigegeben) {
 
 		this.freigegeben = freigegeben;
+	}
+
+	public boolean isAntwortvorschlaegeEingebettet() {
+
+		return antwortvorschlaegeEingebettet;
+	}
+
+	public void setAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
+
+		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
 	}
 }
