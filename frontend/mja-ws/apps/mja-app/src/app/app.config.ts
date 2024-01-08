@@ -36,6 +36,9 @@ import { ErrorHandlerService } from './services/error-handler.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { registerLocaleData } from '@angular/common';
+import { aufgabensammlungenDataProvider } from '@mja-ws/aufgabensammlungen/api';
+import { raetselDataProvider } from '@mja-ws/raetsel/api';
+import { medienDataProvider } from '@mja-ws/medien/api';
 
 if (environment.production) {
   enableProdMode();
@@ -75,6 +78,9 @@ export const appConfig: ApplicationConfig = {
     ),
     provideEffects(LocalStorageEffects),
     environment.providers,
+    aufgabensammlungenDataProvider,
+    raetselDataProvider,
+    medienDataProvider,
     importProvidersFrom(
       HttpClientModule,
       HttpClientXsrfModule.withOptions({
