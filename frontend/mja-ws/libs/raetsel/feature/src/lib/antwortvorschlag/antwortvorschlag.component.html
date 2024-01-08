@@ -1,8 +1,4 @@
-<div [ngClass]="{
-    'bg-light-blue': isKorrekt(),
-    'bg-white': !isKorrekt()
-}">
-    id="antwortvorschlag" class="bordered">
+<div [ngStyle]="{'background': isKorrekt() ? '#d7e6f4' : 'white'}" id="antwortvorschlag" class="bordered">
     <label>{{antwortvorschlag.buchstabe}}:</label>
     <div id="text">{{antwortvorschlag.text}}</div>
 </div>

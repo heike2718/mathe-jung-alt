@@ -2,7 +2,7 @@
   "name": "@mja-ws/embeddable-images/model",
   "version": "0.0.1",
   "peerDependencies": {
-    "@mja-ws/core/model": "2.5.1"
+    "@mja-ws/core/model": "2.5.2"
   },
   "dependencies": {},
   "sideEffects": false
