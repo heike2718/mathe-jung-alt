@@ -151,7 +151,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   anzahlenAntwortvorschlaege = ['0', '2', '3', '5', '6'];
 
-  selectStatusInput: string[] = ['ERFASST', 'FREIGEGEBEN'];
   selectHerkunftstypInput: string[] = new GuiHerkunftstypenMap().getLabelsSorted();
 
   selectItemsCompomentModel!: SelectItemsCompomentModel;
@@ -205,10 +204,11 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       name: ['', [Validators.required, Validators.maxLength(100)]],
       herkunftstyp: ['', [Validators.required]],
       herkunft: [{ value: '', disabled: true }],
-      status: ['', [Validators.required]],
+      freigegeben: [false],
       frage: ['', [Validators.required]],
       loesung: [''],
       kommentar: ['', [Validators.maxLength(200)]],
+      antwortvorschlaegeEingebettet: [false],
       anzahlAntwortvorschlaege: ['0'],
       antwortvorschlaege: new UntypedFormArray([]),  // ab hier die Teile für die Quelle
       quellenart: [''],
@@ -370,29 +370,48 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #initForm() {
 
-    const theStatus = this.guiEditRaetselPayload.editRaetselPayload.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';
-
     const theGuiHerkunftstyp: GuiHerkunfsttyp = new GuiHerkunftstypenMap().getGuiHerkunftstyp(this.guiEditRaetselPayload.editRaetselPayload.herkunftstyp);
     const theGuiQuellenart: GuiQuellenart = new GuiQuellenartenMap().getGuiQuellenart(this.guiEditRaetselPayload.editRaetselPayload.quelle.quellenart);
 
-    this.form.get('schluessel')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.schluessel);
-    this.form.get('name')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.name);
-    this.form.get('herkunftstyp')?.setValue(theGuiHerkunftstyp.label);
-    this.form.get('status')?.setValue(theStatus);
-    this.form.get('frage')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.frage);
-    this.form.get('loesung')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.loesung);
-    this.form.get('kommentar')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.kommentar);
-    this.form.get('quellenart')?.setValue(theGuiQuellenart.label);
+    this.form.patchValue({
+      schluessel: this.guiEditRaetselPayload.editRaetselPayload.schluessel,
+      name: this.guiEditRaetselPayload.editRaetselPayload.name,
+      herkunftstyp: theGuiHerkunftstyp.label,
+      freigegeben: this.guiEditRaetselPayload.editRaetselPayload.freigegeben,
+      antwortvorschlaegeEingebettet: this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaegeEingebettet,
+      frage: this.guiEditRaetselPayload.editRaetselPayload.frage,
+      loesung: this.guiEditRaetselPayload.editRaetselPayload.loesung,
+      kommentar: this.guiEditRaetselPayload.editRaetselPayload.kommentar,
+      quellenart: theGuiQuellenart.label,
+      person: this.guiEditRaetselPayload.editRaetselPayload.quelle.person ? this.guiEditRaetselPayload.editRaetselPayload.quelle.person : '',
+      jahr: this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr ? this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr : '',
+      ausgabe: this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe : '',
+      seite: this.guiEditRaetselPayload.editRaetselPayload.quelle.seite ? this.guiEditRaetselPayload.editRaetselPayload.quelle.seite : '',
+      klasse: this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse ? this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse : '',
+      stufe: this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe : '',
+      pfad: this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad ? this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad : '',
+      anzahlAntwortvorschlaege: this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length + '',
+    });
 
-    this.form.get('person')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.person ? this.guiEditRaetselPayload.editRaetselPayload.quelle.person : '');
-    this.form.get('jahr')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr ? this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr : '');
-    this.form.get('ausgabe')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe : '');
-    this.form.get('seite')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.seite ? this.guiEditRaetselPayload.editRaetselPayload.quelle.seite : '');
-    this.form.get('klasse')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse ? this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse : '');
-    this.form.get('stufe')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe : '');
-    this.form.get('pfad')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad ? this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad : '');
 
-    this.form.get('anzahlAntwortvorschlaege')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length + '');
+    // this.form.get('schluessel')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.schluessel);
+    // this.form.get('name')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.name);
+    // this.form.get('herkunftstyp')?.setValue(theGuiHerkunftstyp.label);
+    // this.form.get('status')?.setValue(theStatus);
+    // this.form.get('frage')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.frage);
+    // this.form.get('loesung')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.loesung);
+    // this.form.get('kommentar')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.kommentar);
+    // this.form.get('quellenart')?.setValue(theGuiQuellenart.label);
+
+    // this.form.get('person')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.person ? this.guiEditRaetselPayload.editRaetselPayload.quelle.person : '');
+    // this.form.get('jahr')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr ? this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr : '');
+    // this.form.get('ausgabe')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe : '');
+    // this.form.get('seite')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.seite ? this.guiEditRaetselPayload.editRaetselPayload.quelle.seite : '');
+    // this.form.get('klasse')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse ? this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse : '');
+    // this.form.get('stufe')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe : '');
+    // this.form.get('pfad')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad ? this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad : '');
+
+    // this.form.get('anzahlAntwortvorschlaege')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length + '');
 
     this.#addOrRemoveAntowrtvorschlagFormParts(this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length);
 
@@ -406,7 +425,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       const av: Antwortvorschlag = this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege[i];
 
       avGroup.setValue({ text: av.text, korrekt: av.korrekt });
-    }   
+    }
 
     this.#initVisibilityQuelleInputs();
   }
@@ -550,7 +569,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       quellenart: quellenart
     }
     this.#setFormAndModelQuelle(quelle);
-  }  
+  }
 
   #setFormAndModelQuelle(quelle: QuelleDto): void {
     this.#initVisibilityQuelleInputs();
@@ -741,7 +760,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       ... this.guiEditRaetselPayload.editRaetselPayload,
       schluessel: c_schluessel,
       name: formValue['name'] !== null ? formValue['name'].trim() : '',
-      freigegeben: formValue['status'] === 'FREIGEGEBEN',
+      freigegeben: formValue['freigegeben'],
+      antwortvorschlaegeEingebettet: formValue['antwortvorschlaegeEingebettet'],
       kommentar: formValue['kommentar'] !== null ? formValue['kommentar'].trim() : null,
       frage: formValue['frage'] !== null ? formValue['frage'].trim() : '',
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,

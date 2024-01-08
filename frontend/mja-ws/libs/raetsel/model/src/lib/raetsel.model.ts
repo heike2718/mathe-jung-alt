@@ -56,6 +56,7 @@ export interface RaetselDetails {
   readonly schluessel: string;
   readonly name: string;
   readonly freigegeben: boolean;
+  readonly antwortvorschlaegeEingebettet: boolean;
   readonly schreibgeschuetzt: boolean;
   readonly frage: string;
   readonly loesung: string | undefined;
@@ -89,6 +90,7 @@ export const initialRaetselDetails: RaetselDetails = {
   schluessel: '',
   name: '',
   freigegeben: false,
+  antwortvorschlaegeEingebettet: false,
   schreibgeschuetzt: true,
   frage: '',
   loesung: '',
@@ -109,6 +111,7 @@ export interface EditRaetselPayload {
   readonly latexHistorisieren: boolean;
   readonly name: string;
   readonly freigegeben: boolean;
+  readonly antwortvorschlaegeEingebettet: boolean;
   readonly herkunftstyp: Herkunftstyp;
   readonly frage: string;
   readonly loesung: string | undefined;
@@ -157,6 +160,7 @@ export function createEditRaetselPayload(raetselDetails: RaetselDetails): GUIEdi
     deskriptoren: raetselDetails.deskriptoren,
     frage: raetselDetails.frage,
     freigegeben: raetselDetails.freigegeben,
+    antwortvorschlaegeEingebettet: raetselDetails.antwortvorschlaegeEingebettet,
     herkunftstyp: raetselDetails.herkunftstyp,
     id: raetselDetails.id,
     kommentar: raetselDetails.kommentar,

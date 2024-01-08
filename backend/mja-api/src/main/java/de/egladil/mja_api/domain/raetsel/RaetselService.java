@@ -567,6 +567,7 @@ public class RaetselService {
 		persistentesRaetsel.freigegeben = payload.isFreigegeben();
 		persistentesRaetsel.herkunft = payload.getHerkunftstyp();
 		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
+		persistentesRaetsel.antwortvorschlaegeEingebettet = payload.isAntwortvorschlaegeEingebettet();
 	}
 
 	Raetsel mapFromDB(final PersistentesRaetsel raetselDB) {
@@ -579,6 +580,7 @@ public class RaetselService {
 			.withLoesung(raetselDB.loesung)
 			.withSchluessel(raetselDB.schluessel)
 			.withFreigegeben(raetselDB.freigegeben)
+			.withAntwortvorschlaegeEingebettet(raetselDB.antwortvorschlaegeEingebettet)
 			.withHerkunftstyp(raetselDB.herkunft)
 			.withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)

@@ -64,6 +64,10 @@ public class EditRaetselPayload {
 	private boolean freigegeben;
 
 	@JsonProperty
+	@Schema(description = "ob der Frage-Text die eventuell vorhandenen Antwortvorschläge bereits enthält.")
+	private boolean antwortvorschlaegeEingebettet;
+
+	@JsonProperty
 	@Schema(description = "Herkunftstyp des Rätsels", required = true)
 	private RaetselHerkunftTyp herkunftstyp;
 
@@ -214,6 +218,17 @@ public class EditRaetselPayload {
 	public EditRaetselPayload withDeskriptoren(final List<Deskriptor> deskriptoren) {
 
 		this.deskriptoren = deskriptoren;
+		return this;
+	}
+
+	public boolean isAntwortvorschlaegeEingebettet() {
+
+		return antwortvorschlaegeEingebettet;
+	}
+
+	public EditRaetselPayload withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
+
+		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
 		return this;
 	}
 }

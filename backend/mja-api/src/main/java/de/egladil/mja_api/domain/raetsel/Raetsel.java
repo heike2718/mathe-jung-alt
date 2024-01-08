@@ -54,6 +54,10 @@ public class Raetsel extends AbstractDomainEntity {
 	@Schema(description = "ob das Rätsel freigegeben ist.")
 	private boolean freigegeben;
 
+	@JsonProperty
+	@Schema(description = "ob der Frage-Text die eventuell vorhandenen Antwortvorschläge bereits enthält.")
+	private boolean antwortvorschlaegeEingebettet;
+
 	@JsonIgnore
 	private String filenameVorschauFrage;
 
@@ -325,6 +329,17 @@ public class Raetsel extends AbstractDomainEntity {
 	public Raetsel withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
 
 		this.herkunftstyp = herkunftstyp;
+		return this;
+	}
+
+	public boolean isAntwortvorschlaegeEingebettet() {
+
+		return antwortvorschlaegeEingebettet;
+	}
+
+	public Raetsel withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
+
+		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
 		return this;
 	}
 }

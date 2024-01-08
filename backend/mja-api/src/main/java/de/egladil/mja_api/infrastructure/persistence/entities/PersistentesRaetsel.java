@@ -119,6 +119,9 @@ public class PersistentesRaetsel implements PersistenteMjaEntity {
 	@Column
 	public boolean freigegeben;
 
+	@Column(name = "ANTWORTVORSCHLAEGE_EINGEBETTET")
+	public boolean antwortvorschlaegeEingebettet;
+
 	@Column
 	@Enumerated(EnumType.STRING)
 	public RaetselHerkunftTyp herkunft;

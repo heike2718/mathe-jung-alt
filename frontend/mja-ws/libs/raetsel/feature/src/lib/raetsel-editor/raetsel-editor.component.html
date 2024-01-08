@@ -219,18 +219,20 @@
 
                     }
 
-                    <!-- Status -->
+                    <!-- freigegeben -->
                     <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Status</mat-label>
-                            <select matNativeControl formControlName="status" #statusInput>
+                        <mat-slide-toggle formControlName="freigegeben" color="primary">
+                            freigegeben
+                        </mat-slide-toggle>
+                    </div>
 
-                                @for (status of selectStatusInput; track $index) {
-                                <option [value]="status">{{status}}</option>
-                                }
-
-                            </select>
-                        </mat-form-field>
+                    <!-- antwortvorschlaege eingebettet -->
+                    <div class="mb-2">
+                        <mat-slide-toggle formControlName="antwortvorschlaegeEingebettet" color="primary">
+                            Antwortvorschläge eingebettet
+                        </mat-slide-toggle>
+                        <div class="formcontrol-hint mt-1">aktivieren, wenn es eine multiple choice Frage ist und der Text die
+                            Antwortvorschläge bereits enthält</div>
                     </div>
 
                     <!-- Frage -->

@@ -118,6 +118,11 @@ mat-icon .clickable {
     display: block;
 }
 
+.formcontrol-hint {
+    font-size: small;
+    margin-left: 1rem;
+}
+
 .hint {
     font-size: small;
     color: #467096;
@@ -198,7 +203,7 @@ mat-card {
 
 mat-form-field {
     width: 100% !important;
- }
+}
 
 mat-card-actions>button {
     margin: 1em;
@@ -225,7 +230,8 @@ mat-card-actions>button {
     margin-bottom: 2rem;
 }
 
-mat-card-content, mat-dialog-content {
+mat-card-content,
+mat-dialog-content {
     width: 100%;
 }
 
