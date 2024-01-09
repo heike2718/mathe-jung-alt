@@ -57,7 +57,7 @@ public class AufgabensammlungDao {
 			stmt += " where " + whereStmt;
 		}
 
-		LOGGER.info("stmt={}", stmt);
+		LOGGER.debug("stmt={}", stmt);
 
 		Query query = entityManager.createQuery(stmt);
 

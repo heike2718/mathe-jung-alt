@@ -180,7 +180,7 @@ public class RaetselService {
 
 			String schluessel = generiereSchluessel();
 
-			LOGGER.info("raetsel.SCHLUESSEL={}", schluessel);
+			LOGGER.debug("raetsel.SCHLUESSEL={}", schluessel);
 
 			payload.setSchluessel(schluessel);
 

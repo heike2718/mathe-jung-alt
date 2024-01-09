@@ -553,7 +553,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("PDF/{raetselID}/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
+	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "raetselPDFGenerieren",
 		summary = "generiert ein PDF mit dem Rätsel")

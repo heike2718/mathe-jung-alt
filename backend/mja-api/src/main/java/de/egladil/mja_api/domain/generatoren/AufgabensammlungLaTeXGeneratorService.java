@@ -96,14 +96,14 @@ public class AufgabensammlungLaTeXGeneratorService {
 		File dirAufgabensammlung = MjaFileUtils.createDirectory(pathDirAufgabensammlung,
 			"Fehler beim Erzeugen eines Verzeichnisses für die Aufgabensammlung");
 
-		LOGGER.info("Verzeichnis {} angelegt", pathDirAufgabensammlung);
+		LOGGER.debug("Verzeichnis {} angelegt", pathDirAufgabensammlung);
 
 		{
 
 			File file = new File(pathDirAufgabensammlung + File.separator + dirNameAufgabensammlung + "_selfcontained.tex");
 			MjaFileUtils.writeTextfile(file, selfcontainedContent, "Fehler beim Schreiben des selfcontained LaTeX");
 
-			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
+			LOGGER.debug("File {} gespeichert", file.getAbsolutePath());
 
 		}
 
@@ -112,7 +112,7 @@ public class AufgabensammlungLaTeXGeneratorService {
 			File file = new File(pathDirAufgabensammlung + File.separator + dirNameAufgabensammlung + "_aufgaben.tex");
 			MjaFileUtils.writeTextfile(file, laTeXContentAufgabenMaster, "Fehler beim Schreiben des laTeXContentAufgabenMaster");
 
-			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
+			LOGGER.debug("File {} gespeichert", file.getAbsolutePath());
 		}
 
 		{
@@ -120,7 +120,7 @@ public class AufgabensammlungLaTeXGeneratorService {
 			File file = new File(pathDirAufgabensammlung + File.separator + dirNameAufgabensammlung + "_loesungen.tex");
 			MjaFileUtils.writeTextfile(file, laTeXContentLoesungenMaster, "Fehler beim Schreiben des laTeXContentLoesungenMaster");
 
-			LOGGER.info("File {} gespeichert", file.getAbsolutePath());
+			LOGGER.debug("File {} gespeichert", file.getAbsolutePath());
 		}
 
 		File includeDir = new File(pathDirAufgabensammlung + File.separator + "include");
@@ -131,14 +131,14 @@ public class AufgabensammlungLaTeXGeneratorService {
 			String pathAufgabe = pathDirAufgabensammlung + File.separator + raetselDB.schluessel + ".tex";
 			MjaFileUtils.writeTextfile(new File(pathAufgabe), raetselDB.frage,
 				"Fehler beim Schreiben der Frage von " + raetselDB.schluessel);
-			LOGGER.info("File {} fertig", pathAufgabe);
+			LOGGER.debug("File {} fertig", pathAufgabe);
 
 			if (StringUtils.isNotBlank(raetselDB.loesung)) {
 
 				String pathLoesung = pathDirAufgabensammlung + File.separator + raetselDB.schluessel + "_l.tex";
 				MjaFileUtils.writeTextfile(new File(pathLoesung), raetselDB.loesung,
 					"Fehler beim Schreiben der Frage von " + raetselDB.schluessel);
-				LOGGER.info("File {} fertig", pathLoesung);
+				LOGGER.debug("File {} fertig", pathLoesung);
 			}
 
 			List<GeneratedFile> embeddedImages = embeddedImagesService.getEmbeddedImages(raetselDB.uuid);
@@ -147,7 +147,7 @@ public class AufgabensammlungLaTeXGeneratorService {
 
 				String pathImage = pathDirAufgabensammlung + File.separator + generatedFile.getFileName();
 				MjaFileUtils.writeBinaryFile(new File(pathImage), generatedFile.getFileData());
-				LOGGER.info("File {} fertig", pathImage);
+				LOGGER.debug("File {} fertig", pathImage);
 
 			}
 		}

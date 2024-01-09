@@ -139,7 +139,7 @@ public class QuellenService {
 
 			this.quellenRepository.deleteQuelle(quelle);
 
-			LOGGER.info("quelle gelöscht: UUID={}", quelleId);
+			LOGGER.debug("quelle gelöscht: UUID={}", quelleId);
 		}
 	}
 
@@ -173,7 +173,7 @@ public class QuellenService {
 
 		PersistenteQuelle persisted = quellenRepository.save(quelleEntity);
 
-		LOGGER.info("quelle angelegt: {}", quelle.getDatenQuelle().toString());
+		LOGGER.debug("quelle angelegt: {}", quelle.getDatenQuelle().toString());
 
 		return persisted;
 	}
@@ -209,7 +209,7 @@ public class QuellenService {
 
 		PersistenteQuelle persisted = quellenRepository.save(quelleEntity);
 
-		LOGGER.info("quelle geandert: {}", quelle.getDatenQuelle().toString());
+		LOGGER.debug("quelle geandert: {}", quelle.getDatenQuelle().toString());
 
 		return persisted;
 	}

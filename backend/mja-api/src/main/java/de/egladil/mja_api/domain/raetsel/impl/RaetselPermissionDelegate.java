@@ -142,7 +142,7 @@ public class RaetselPermissionDelegate {
 	 */
 	public void checkReadPermission(final RaetselsucheTrefferItem raetsel) {
 
-		LOGGER.info("check the read permission for {}", raetsel.getSchluessel());
+		LOGGER.debug("check the read permission for {}", raetsel.getSchluessel());
 
 		AuthenticatedUser user = authCtx.getUser();
 

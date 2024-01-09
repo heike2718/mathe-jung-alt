@@ -76,7 +76,7 @@ public class AdminRaetselResourceTest {
 	QuellenRepository quellenRepository;
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(3)
 	void testFindRaetselAdminDeskriptorenAlsStringUndSuchstring() throws Exception {
 
@@ -107,7 +107,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(4)
 	void testFindRaetselAdminKeinTreffer() {
 
@@ -130,7 +130,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(5)
 	void findRaetselAdmin_when_UNION_AND_LIKE() throws Exception {
 
@@ -156,7 +156,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(5)
 	void findRaetselAdmin_when_fallbackToDefaults() throws Exception {
 
@@ -180,7 +180,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(5)
 	void findRaetselAdmin_when_deskriptorenUndSuchstringBlank() throws Exception {
 
@@ -200,7 +200,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(6)
 	void findRaetselAdmin_when_UNION_AND_NOT_LIKE() throws Exception {
 
@@ -227,7 +227,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(7)
 	void findRaetselAdmin_when_INTERSECTION_AND_LIKE() throws Exception {
 
@@ -253,7 +253,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(8)
 	void findRaetselAdmin_when_INTERSECTION_AND_NOT_LIKE() throws Exception {
 
@@ -279,7 +279,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(9)
 	void testFindFromMinikaenguruWithCoordinates() throws Exception {
 
@@ -306,7 +306,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(10)
 	void testFindWithSchluessel() throws Exception {
 
@@ -332,7 +332,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "AUTOR", "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
 	@Order(11)
 	void testRaetselDetailsLadenFound() throws Exception {
 
@@ -357,7 +357,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(12)
 	void testRaetselDetailsLadenBadRequest() throws Exception {
 
@@ -376,7 +376,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "admin", roles = { "ADMIN", "STANDARD" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(12)
 	void testRaetselDetailsLadenNotFound() throws Exception {
 
@@ -628,7 +628,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "autor", roles = { "STANDARD" })
+	@TestSecurity(user = "autor", roles = { "ADMIN" })
 	@Order(20)
 	void testGeneratePDFGrafikFehlt() {
 
@@ -747,7 +747,7 @@ public class AdminRaetselResourceTest {
 	}
 
 	@Test
-	@TestSecurity(user = "lehrer", roles = { "LEHRER" })
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
 	@Order(25)
 	void testGeneratePDFKeinTreffer() {
 

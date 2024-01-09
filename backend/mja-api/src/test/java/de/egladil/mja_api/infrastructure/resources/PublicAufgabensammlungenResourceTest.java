@@ -37,6 +37,8 @@ import io.restassured.http.ContentType;
 @TestMethodOrder(OrderAnnotation.class)
 public class PublicAufgabensammlungenResourceTest {
 
+	private static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
+
 	@Test
 	@Order(1)
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
@@ -111,6 +113,38 @@ public class PublicAufgabensammlungenResourceTest {
 
 		given()
 			.get(id + "/v1")
+			.then()
+			.statusCode(403);
+	}
+
+	@Test
+	@Order(6)
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void test_printVorschau_403() {
+
+		given()
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.queryParam("font", "FIBEL_NORD")
+			.queryParam("size", "LARGE")
+			.accept(ContentType.JSON)
+			.get(
+				"c09e5d63-9ec1-4884-a01e-08234db9cbf3/vorschau/v1")
+			.then()
+			.statusCode(403);
+	}
+
+	@Test
+	@Order(7)
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void test_downloadLaTeX_403() {
+
+		given()
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.queryParam("font", "FIBEL_NORD")
+			.queryParam("size", "LARGE")
+			.accept(APPLICATION_OCTET_STREAM)
+			.get(
+				"c09e5d63-9ec1-4884-a01e-08234db9cbf3/latex/v1")
 			.then()
 			.statusCode(403);
 	}

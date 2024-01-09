@@ -577,7 +577,7 @@ public class AufgabensammlungenResource {
 		File generatedFile = aufgabensammlungenService.downloadLaTeXSources(aufgabensammlungID, theFont, theSchriftgroesse,
 			layoutAntwortvorschlaege);
 
-		LOGGER.info("zip generiert");
+		LOGGER.debug("zip generiert");
 
 		ResponseBuilder ok = Response.ok().header("Content-Disposition", "attachment;filename=" + generatedFile.getName());
 

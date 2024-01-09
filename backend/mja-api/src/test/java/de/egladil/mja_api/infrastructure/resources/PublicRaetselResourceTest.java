@@ -210,4 +210,30 @@ public class PublicRaetselResourceTest {
 			.statusCode(401);
 
 	}
+
+	@Test
+	@TestSecurity(user = "lehrer", roles = { "STANDARD" })
+	@Order(9)
+	void testGeneratePDF_403() {
+
+		given()
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.accept(ContentType.JSON)
+			.get("PDF/2528094b-b91b-41f9-ac5e-6251470e5781/v1")
+			.then()
+			.statusCode(403);
+	}
+
+	@Test
+	@TestSecurity(user = "lehrer", roles = { "STANDARD" })
+	@Order(10)
+	void testGeneratePNG_403() {
+
+		given()
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.accept(ContentType.JSON)
+			.get("PNG/2528094b-b91b-41f9-ac5e-6251470e5781/v1")
+			.then()
+			.statusCode(403);
+	}
 }
