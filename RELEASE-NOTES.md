@@ -1,5 +1,13 @@
 # Release-Notes
 
+__2.6.0__
+
++ [Standarduser 403 bei Rätseldetails wegen referenzierter Aufgabensammlungen](https://github.com/heike2718/mathe-jung-alt/issues/121)
++ [Anzeige Antwortvorschläge kaputt](https://github.com/heike2718/mathe-jung-alt/issues/120)
++ [Einschränkung public print dialog](https://github.com/heike2718/mathe-jung-alt/issues/108)
++ [neues Attribut antwortvorschlaegeEingebettet](https://github.com/heike2718/mathe-jung-alt/issues/122)
+
+
 __2.5.0__
 
 + fast alle *ngIf und alle *ngFor durch Angular-17-Syntax ersetzt

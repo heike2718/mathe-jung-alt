@@ -6,7 +6,7 @@
 
     <div class="grid-container-2 mt-2 mb-2">
 
-        @if (authFacade.userIsAdmin$ | async) {
+        @if (user.isAdmin) {
         <label>ID:</label>
         <div>
             {{sammlung.id}}
@@ -18,7 +18,7 @@
             {{sammlung.kommentar}}
         </div>
 
-        @if (authFacade.userIsAdmin$ | async) {
+        @if (user.isAdmin) {
         <label>geändert durch:</label>
         <div>
             {{sammlung.geaendertDurch}}
@@ -51,8 +51,13 @@
         <button mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button>
         }
 
+        @if (user.isAdmin) {
         <button mat-raised-button color="primary" [disabled]="buttonsGenerierenDisabled()"
             (click)="openGenerateDialog()">PDF / LaTeX</button>
+        } @else {
+        <button mat-raised-button color="primary" [disabled]="buttonsGenerierenDisabled()"
+            (click)="openGenerateDialog()">PDF</button>
+        }
 
         <button mat-raised-button color="primary" (click)="reload()">aktualisieren</button>
 

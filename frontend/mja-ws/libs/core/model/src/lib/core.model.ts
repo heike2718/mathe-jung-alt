@@ -1,7 +1,7 @@
 export type SortOrder = 'asc' | 'desc';
 export type Referenztyp = 'NOOP' | 'MINIKAENGURU' | 'SERIE';
 export type Quellenart = 'BUCH' | 'INTERNET' | 'PERSON' | 'ZEITSCHRIFT';
-export type Medienart = 'NOOP' |  'BUCH' | 'INTERNET' | 'ZEITSCHRIFT';
+export type Medienart = 'NOOP' | 'BUCH' | 'INTERNET' | 'ZEITSCHRIFT';
 export type Herkunftstyp = 'EIGENKREATION' | 'ZITAT' | 'ADAPTION';
 
 export const QUERY_PARAM_SUCHSTRING = 'suchstring';
@@ -159,7 +159,8 @@ export interface GeneratedFile {
   readonly fileData: Blob
 };
 
-// dies sind die Parameter für Dialoge zum Generieren für die admin-app. Es muss gewählt werden können zwischen verschiedenen Antwortvorschlag-Layouts und Fonts
+// dies sind die Parameter für Dialoge zum Generieren von Aufgabensammlungen oder Rätseln
+// Es muss gewählt werden können zwischen verschiedenen Antwortvorschlag-Layouts und Fonts
 export interface SelectGeneratorParametersUIModelAutoren {
   titel: string;
   showVerwendungszwecke: boolean;
@@ -172,16 +173,6 @@ export interface SelectGeneratorParametersUIModelAutoren {
   schriftgroessen: string[];
   selectedSchriftgroesse: undefined;
 };
-
-// Für die public-API sollen die Menschen zwischen KARTEI und ARBEITSBLATT wählen dürfen.
-export interface SelectGeneratorParametersUIModelPublic {
-  verwendungszwecke: string[];
-  selectedVerwendungszweck: string | undefined;
-  fontNamen: string[];
-  selectedFontName: string | undefined;
-  schriftgroessen: string[];
-  selectedSchriftgroesse: undefined;
-}
 
 // //////////////////////////////////
 

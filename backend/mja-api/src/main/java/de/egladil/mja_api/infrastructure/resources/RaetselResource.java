@@ -196,7 +196,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("v2")
-	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Operation(
 		operationId = "findRaetselPublic", summary = "Gibt alle Rätsel mit den gegebenen Deskriptoren zurück")
 	@Parameters({
@@ -553,7 +553,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("PDF/{raetselID}/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Operation(
 		operationId = "raetselPDFGenerieren",
 		summary = "generiert ein PDF mit dem Rätsel")

@@ -586,7 +586,7 @@ public class AufgabensammlungenResource {
 
 	@GET
 	@Path("{aufgabensammlungID}/arbeitsblatt/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printArbeitsblatt",
@@ -650,7 +650,7 @@ public class AufgabensammlungenResource {
 
 	@GET
 	@Path("{aufgabensammlungID}/knobelkartei/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD", "LEHRER" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printKnobelkartei",

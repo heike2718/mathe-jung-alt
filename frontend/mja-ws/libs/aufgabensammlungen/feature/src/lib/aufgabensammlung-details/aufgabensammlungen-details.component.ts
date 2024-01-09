@@ -11,7 +11,9 @@ import {
   Schriftgroesse,
   schriftgroessenSelectInput,
   SelectGeneratorParametersUIModelAutoren,
-  verwendungszweckeAutorenSelectInput
+  User,
+  verwendungszweckeAutorenSelectInput,
+  verwendungszweckePublicSelectInput
 } from '@mja-ws/core/model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
@@ -53,9 +55,10 @@ import { AuthFacade } from '@mja-ws/core/api';
 export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
   aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
-  authFacade = inject(AuthFacade);
+  
+  user!: User;
 
-  sammlung!: AufgabensammlungDetails;
+  sammlung!: AufgabensammlungDetails;  
 
   selectedElement: Aufgabensammlungselement | undefined
 
@@ -72,10 +75,14 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
 
   #raetselFacade = inject(RaetselFacade);
+  #authFacade = inject(AuthFacade);
+
+  
 
   #aufgabensammlungSubscription = new Subscription();
   #imagesSubscription = new Subscription();
   #aufgabensammlungselementSubscription = new Subscription();
+  #userSubscription = new Subscription();
 
   ngOnInit(): void {
 
@@ -101,6 +108,8 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
       }
     );
 
+    this.#userSubscription = this.#authFacade.user$.subscribe(user => this.user = user);
+
     this.#imagesSubscription = this.aufgabensammlungenFacade.selectedElementImages$.subscribe((images) => this.images = images);
   }
 
@@ -108,6 +117,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
     this.#aufgabensammlungSubscription.unsubscribe();
     this.#imagesSubscription.unsubscribe();
     this.#aufgabensammlungselementSubscription.unsubscribe();
+    this.#userSubscription.unsubscribe();
   }
 
   getAufgabensammlungID(): string {
@@ -135,7 +145,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
     const dialogData: SelectGeneratorParametersUIModelAutoren = {
       titel: 'File generieren',
       showVerwendungszwecke: true,
-      verwendungszwecke: verwendungszweckeAutorenSelectInput,
+      verwendungszwecke: this.user.isAdmin ? verwendungszweckeAutorenSelectInput : verwendungszweckePublicSelectInput,
       selectedVerwendungszweck: undefined,
       layoutsAntwortvorschlaegeInput: anzeigeAntwortvorschlaegeSelectInput,
       selectedLayoutAntwortvorschlaege: undefined,
