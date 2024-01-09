@@ -25,8 +25,12 @@
 
 @if (authFacade.userIsPublic$ | async) {
 <p>
-    Die Funktion zum Erstellen von Arbeitsblättern und Knobelkarteien ist leider noch nicht fertig. Natürlich
-    können Sie sich die Inhalte schon einmal ansehen.
+    Die Funktion zum Erstellen eigener Aufgabensammlungen ist noch in Arbeit. Die bereits veröffentlichten
+    Aufgabensammlungen können Sie schon nutzen, um Arbeitsblätter oder Karteien zu drucken.
+</p>
+<p>
+    Sie können auch gleich verschiedene Fonts für Grundschulkinder testen. Über entprechende Rückmeldungen würde ich
+    mich freuen.
 </p>
 <p>
     Wenn Sie selbst Anderen Inhalte zur Verfügung stellen möchten, nehmen Sie bitte Kontakt mit mir auf. Dann
@@ -36,14 +40,19 @@
 
 @if(authFacade.userIsLoggedOut$ | async){
 <p>
-    Zukünftig können Sie hier die freigegebenen Rätsel und Knobeleien nutzen, um Arbeitsblätter oder
-    Knobelkarteien
-    zu generieren. Momentan sind es hauptsächlich
-    Aufgaben aus dem <a href="https://mathe-jung-alt.de/minikaenguru" target="_blank">Minikänguru-Wettbewerb</a>
+    Die hier zur Verfügung gestellten Aufgabensammlungen können Sie gern als Arbeitsblätter oder Karteien drucken.
+</p>
+<p>
+    Momentan sind es hauptsächlich Aufgaben aus dem <a href="https://mathe-jung-alt.de/minikaenguru"
+        target="_blank">Minikänguru-Wettbewerb</a>
     und der
     <a href="https://mathe-jung-alt.de/mathe" target="_blank">virtuellen Mathe-AG</a>,
-    die nach und nach hier zur Verfügung gestellt werden. Geplant ist, das Angebot auch auf andere Gebiete
-    auszudehnen.
+    die nach und nach hier zur Verfügung gestellt werden.
+</p>
+<p>
+    Geplant ist, dass Sie aus dem Fundus der Aufgaben eigene Sammlungen erstellen können, um sie als Arbeitsblätter oder
+    Karteien zu drucken. Diese Funktion ist aktuell in Arbeit.
+</p>
 <p>Um das Angebot zu nutzen, bitte mit einem vorhandenen Minikänguru-Benutzerkonto <button mat-raised-button
         (click)="login()">einloggen</button>
     oder von hier aus ein Benutzerkonto anlegen: <button mat-raised-button (click)="signup()">registrieren</button>.

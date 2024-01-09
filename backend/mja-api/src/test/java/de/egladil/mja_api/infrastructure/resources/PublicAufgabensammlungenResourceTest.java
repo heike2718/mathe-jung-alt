@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import de.egladil.mja_api.domain.aufgabensammlungen.Aufgabensammlungselement;
+import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
+import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungDetails;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTreffer;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTrefferItem;
@@ -42,7 +44,7 @@ public class PublicAufgabensammlungenResourceTest {
 	@Test
 	@Order(1)
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	void testFindAufgabensammlungen() throws Exception {
+	void testFindAufgabensammlungenWithoutSuchparameters() throws Exception {
 
 		AufgabensammlungSucheTreffer treffer = given()
 			.queryParam("limit", "20")
@@ -86,7 +88,95 @@ public class PublicAufgabensammlungenResourceTest {
 	}
 
 	@Test
+	@Order(2)
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void testFindAufgabensammlungen_when_nur_referenz() throws Exception {
+
+		AufgabensammlungSucheTreffer treffer = given()
+			.queryParam("limit", "20")
+			.queryParam("offset", "0")
+			.queryParam("referenz", "2021")
+			.get(
+				"v1")
+			.then()
+			.contentType(ContentType.JSON)
+			.and()
+			.extract()
+			.as(AufgabensammlungSucheTreffer.class);
+
+		assertEquals(0, treffer.getItems().size());
+		assertEquals(0l, treffer.getTrefferGesamt());
+
+	}
+
+	@Test
 	@Order(3)
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void testFindAufgabensammlungen_when_nur_name() throws Exception {
+
+		AufgabensammlungSucheTreffer treffer = given()
+			.queryParam("limit", "20")
+			.queryParam("offset", "0")
+			.queryParam("name", "Mini")
+			.get(
+				"v1")
+			.then()
+			.contentType(ContentType.JSON)
+			.and()
+			.extract()
+			.as(AufgabensammlungSucheTreffer.class);
+
+		assertEquals(5, treffer.getItems().size());
+		assertEquals(5l, treffer.getTrefferGesamt());
+
+	}
+
+	@Test
+	@Order(4)
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void testFindAufgabensammlungen_when_nur_schwierigkeitsgrad() throws Exception {
+
+		AufgabensammlungSucheTreffer treffer = given()
+			.queryParam("limit", "20")
+			.queryParam("offset", "0")
+			.queryParam("schwierigkeitsgrad", Schwierigkeitsgrad.EINS)
+			.get(
+				"v1")
+			.then()
+			.contentType(ContentType.JSON)
+			.and()
+			.extract()
+			.as(AufgabensammlungSucheTreffer.class);
+
+		assertEquals(2, treffer.getItems().size());
+		assertEquals(2l, treffer.getTrefferGesamt());
+
+	}
+
+	@Test
+	@Order(5)
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void testFindAufgabensammlungen_when_nur_Referenztyp() throws Exception {
+
+		AufgabensammlungSucheTreffer treffer = given()
+			.queryParam("limit", "20")
+			.queryParam("offset", "0")
+			.queryParam("referenztyp", Referenztyp.MINIKAENGURU)
+			.get(
+				"v1")
+			.then()
+			.contentType(ContentType.JSON)
+			.and()
+			.extract()
+			.as(AufgabensammlungSucheTreffer.class);
+
+		assertEquals(5, treffer.getItems().size());
+		assertEquals(5l, treffer.getTrefferGesamt());
+
+	}
+
+	@Test
+	@Order(10)
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	void testLoadDetails200() throws Exception {
 
@@ -105,7 +195,7 @@ public class PublicAufgabensammlungenResourceTest {
 	}
 
 	@Test
-	@Order(5)
+	@Order(11)
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	void testLoadDetails403() throws Exception {
 
@@ -118,7 +208,7 @@ public class PublicAufgabensammlungenResourceTest {
 	}
 
 	@Test
-	@Order(6)
+	@Order(12)
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	void test_printVorschau_403() {
 
@@ -134,7 +224,7 @@ public class PublicAufgabensammlungenResourceTest {
 	}
 
 	@Test
-	@Order(7)
+	@Order(13)
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	void test_downloadLaTeX_403() {
 

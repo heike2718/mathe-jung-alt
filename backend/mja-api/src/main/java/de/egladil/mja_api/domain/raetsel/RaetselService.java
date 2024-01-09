@@ -441,15 +441,18 @@ public class RaetselService {
 		result.setQuelle(theQuelle);
 		result.setQuellenangabe(quellenangabe);
 
-		try {
+		// try {
+		//
+		// permissionDelegate.checkWritePermission(raetsel);
+		// result.setSchreibgeschuetzt(false);
+		//
+		// } catch (WebApplicationException e) {
+		//
+		// LOGGER.info(e.getMessage());
+		// result.setSchreibgeschuetzt(true);
+		// }
 
-			permissionDelegate.checkWritePermission(raetsel);
-			result.setSchreibgeschuetzt(false);
-
-		} catch (WebApplicationException e) {
-
-			result.setSchreibgeschuetzt(true);
-		}
+		result.setSchreibgeschuetzt(permissionDelegate.isSchreibgeschuetztForUser(raetsel));
 
 		return result;
 	}
@@ -507,6 +510,23 @@ public class RaetselService {
 		}
 
 		return Pair.of(grafikInfosFrage, grafikInfosLoesung);
+	}
+
+	/**
+	 * @param  schluessel
+	 *                    String
+	 * @return            Optional
+	 */
+	public Images findImagesForRaetsel(final String raetselId) {
+
+		PersistentesRaetsel raetselDB = raetselDao.findById(raetselId);
+
+		if (raetselDB == null) {
+
+			return new Images();
+		}
+
+		return this.raetselFileService.findImages(raetselDB.filenameVorschauFrage, raetselDB.filenameVorschauLoesung);
 	}
 
 	/**

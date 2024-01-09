@@ -155,6 +155,7 @@ public class AufgabensammlungDao {
 			} else {
 
 				whereStmt += " g.referenz like :referenz";
+				addAnd = true;
 			}
 		}
 
@@ -167,6 +168,7 @@ public class AufgabensammlungDao {
 			} else {
 
 				whereStmt += " (g.freigegeben = :freigegeben and g.privat = :privatFalse or g.privat=:privatTrue and g.owner = :owner) ";
+				addAnd = true;
 			}
 
 		}

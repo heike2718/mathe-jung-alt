@@ -106,10 +106,40 @@ public class AufgabensammlungPermissionDelegate {
 				LOGGER.warn("User {} mit Benutzerart {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
 					user.getName(), benutzerart, ausDB.uuid,
 					ausDB.owner);
-				throw new WebApplicationException(Status.FORBIDDEN);
+				throw new WebApplicationException("keine Schreibberechtigung für Aufgabensammlung", Status.FORBIDDEN);
 			}
 		case ADMIN:
 			return;
+
+		default:
+			throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+		}
+	}
+
+	public boolean isSchreibgeschuetztFuerUser(final PersistenteAufgabensammlung ausDB) {
+
+		AuthenticatedUser user = authCtx.getUser();
+
+		Benutzerart benutzerart = user.getBenutzerart();
+
+		switch (benutzerart) {
+
+		case ANONYM: {
+
+			LOGGER.warn("anonymer User {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
+				user.getName(), ausDB.uuid,
+				ausDB.owner);
+			return true;
+		}
+
+		case STANDARD:
+		case AUTOR:
+			// privat oder nicht privat muss nicht gesondert behandelt werden, da Standarduser
+			// nicht owner von public Aufgabensammlungen sein können
+			return !ausDB.owner.equals(user.getUuid());
+
+		case ADMIN:
+			return false;
 
 		default:
 			throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);

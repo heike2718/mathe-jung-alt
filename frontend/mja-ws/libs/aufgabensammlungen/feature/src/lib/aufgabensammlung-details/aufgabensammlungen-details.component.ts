@@ -193,7 +193,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
         switch (dialogData.selectedVerwendungszweck) {
           case 'Arbeitsblatt': this.aufgabensammlungenFacade.generiereArbeitsblatt(this.getAufgabensammlungID(), font, size, layout); break;
-          case 'Knobelkartei': this.aufgabensammlungenFacade.generiereKnobelkartei(this.getAufgabensammlungID(), font, size, layout); break;
+          case 'Kartei': this.aufgabensammlungenFacade.generiereKnobelkartei(this.getAufgabensammlungID(), font, size, layout); break;
           case 'Vorschau': this.aufgabensammlungenFacade.generiereVorschau(this.getAufgabensammlungID(), font, size, layout); break;
           case 'LaTeX': this.aufgabensammlungenFacade.generiereLaTeX(this.getAufgabensammlungID(), font, size, layout); break;
         }

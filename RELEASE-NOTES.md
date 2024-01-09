@@ -1,5 +1,11 @@
 # Release-Notes
 
+__2.6.4__
+
++ [Standarduser 403 bei Navigation von Aufgabensammlung zu Rätseldetails](https://github.com/heike2718/mathe-jung-alt/issues/124)
++ [Herkunftstyp farbig auch bei Elementen einer Aufgabensammlung](https://github.com/heike2718/mathe-jung-alt/issues/123)
+
+
 __2.6.0__
 
 + [Standarduser 403 bei Rätseldetails wegen referenzierter Aufgabensammlungen](https://github.com/heike2718/mathe-jung-alt/issues/121)

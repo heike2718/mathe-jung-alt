@@ -11,6 +11,7 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
@@ -235,6 +236,19 @@ public class RaetselResourceAuthorizationTest {
 	}
 
 	@Test
+	@TestSecurity(user = "lehrer", roles = { "STANDARD" })
+	@Order(9)
+	void testGeneratePDF_403() {
+
+		given()
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.accept(ContentType.JSON)
+			.get("PDF/2528094b-b91b-41f9-ac5e-6251470e5781/v1")
+			.then()
+			.statusCode(403);
+	}
+
+	@Test
 	void testLoadImagesUnauthorized() {
 
 		given()
@@ -245,7 +259,7 @@ public class RaetselResourceAuthorizationTest {
 	}
 
 	@Test
-	@TestSecurity(user = "bolle", roles = { "STANDARD" })
+	@TestSecurity(user = "bolle", roles = { "PRIVAT" })
 	void testLoadImagesForbidden() {
 
 		given()

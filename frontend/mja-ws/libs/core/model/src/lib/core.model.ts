@@ -143,7 +143,7 @@ export const verwendungszweckePublicSelectInput: string[] = [
 
 export const verwendungszweckeAutorenSelectInput: string[] = [
   'Arbeitsblatt',
-  'Knobelkartei',
+  'Kartei',
   'LaTeX',
   'Vorschau'
 ];

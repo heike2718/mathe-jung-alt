@@ -75,7 +75,7 @@ public class RaetselPermissionDelegate {
 				user.getName(),
 				benutzerart, ausDB.schluessel,
 				ausDB.owner);
-			throw new WebApplicationException(Status.FORBIDDEN);
+			throw new WebApplicationException("keine Schreibberechtigung für Rätsel", Status.FORBIDDEN);
 		}
 
 		case AUTOR: {
@@ -91,6 +91,38 @@ public class RaetselPermissionDelegate {
 
 		case ADMIN:
 			return;
+
+		default:
+			throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+		}
+
+	}
+
+	public boolean isSchreibgeschuetztForUser(final PersistentesRaetsel ausDB) {
+
+		AuthenticatedUser user = authCtx.getUser();
+
+		Benutzerart benutzerart = user.getBenutzerart();
+
+		switch (benutzerart) {
+
+		case ANONYM: {
+
+			LOGGER.warn("User {} mit Benutzerart {} hat keine Schreibberechtigung auf Raetsel {} mit Owner {}",
+				user.getName(),
+				benutzerart, ausDB.schluessel,
+				ausDB.owner);
+			throw new WebApplicationException(Status.FORBIDDEN);
+		}
+
+		case STANDARD:
+			return true;
+
+		case AUTOR:
+			return !user.getUuid().equals(ausDB.owner);
+
+		case ADMIN:
+			return false;
 
 		default:
 			throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);

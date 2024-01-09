@@ -119,15 +119,18 @@ public class AufgabensammlungenService {
 
 		permissionDelegate.checkReadPermission(aufgabensammlung);
 
-		try {
+		// try {
+		//
+		// permissionDelegate.checkWritePermission(aufgabensammlung);
+		// result.setSchreibgeschuetzt(false);
+		//
+		// } catch (WebApplicationException e) {
+		//
+		// LOGGER.info(e.getMessage());
+		// result.setSchreibgeschuetzt(true);
+		// }
 
-			permissionDelegate.checkWritePermission(aufgabensammlung);
-			result.setSchreibgeschuetzt(false);
-
-		} catch (WebApplicationException e) {
-
-			result.setSchreibgeschuetzt(true);
-		}
+		result.setSchreibgeschuetzt(permissionDelegate.isSchreibgeschuetztFuerUser(aufgabensammlung));
 
 		List<PersistentesAufgabensammlugnselement> elementeDB = aufgabensammlungDao
 			.loadElementeAufgabensammlung(aufgabensammlungID);

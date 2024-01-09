@@ -43,7 +43,6 @@ import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
-import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -296,7 +295,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("{schluessel}/v1")
-	@Authenticated
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Operation(
 		operationId = "raetselDetailsLaden",
 		summary = "Läd die Details des Rätsels mit der gegebenen ID")
@@ -453,7 +452,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("PNG/{schluessel}/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Operation(
 		operationId = "raetselImagesLaden",
 		summary = "Läd die Vorschaubilder (png) des Rätsels")
