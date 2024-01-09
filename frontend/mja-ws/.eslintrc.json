@@ -26,6 +26,7 @@
                 "sourceTag": "type:app",
                 "onlyDependOnLibsWithTags": [
                   "type:feature",
+                  "type:api",
                   "type:shared:http",
                   "type:config",
                   "type:shared:ui",
