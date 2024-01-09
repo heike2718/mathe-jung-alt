@@ -776,7 +776,7 @@ public class RaetselResource {
 
 	@GET
 	@Path("{id}/aufgabensammlungen/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR" })
+	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Operation(
 		operationId = "getAufgabensammlungenMitRaetsel",
 		summary = "Gibt alle Aufgabensammlungen zurück, die das gegebene Rätsel enthalten. Sortiert wird nach dem Namen der Aufgabensammlung")

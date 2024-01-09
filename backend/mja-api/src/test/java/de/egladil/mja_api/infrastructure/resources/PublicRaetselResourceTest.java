@@ -17,6 +17,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
+import de.egladil.mja_api.domain.raetsel.dto.AufgabensammlungRaetselsucheTrefferItem;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.mja_api.profiles.FullDatabaseStandarduserTestProfile;
@@ -168,20 +169,26 @@ public class PublicRaetselResourceTest {
 	@Test
 	@TestSecurity(user = "testuser", roles = { "STANDARD" })
 	@Order(7)
-	void testGetAufgabensammlungenMitRaetsel_401_when_knownUser() {
+	void testGetAufgabensammlungenMitRaetsel_return_only_freigegeben_when_standardUser() {
 
 		// Arrange
-		String raetselId = "2c6fc5a1-f27c-4d51-98c4-239a1eead05f";
+		String raetselId = "08dc5237-505d-4db2-b5f9-3fd3d74981e0";
 
 		// Act
-		given()
+		AufgabensammlungRaetselsucheTrefferItem[] result = given()
 			.pathParam("id", raetselId)
 			.accept(ContentType.JSON)
 			.contentType(ContentType.JSON)
 			.when()
 			.get("{id}/aufgabensammlungen/v1")
 			.then()
-			.statusCode(403);
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(AufgabensammlungRaetselsucheTrefferItem[].class);
+
+		// Assert
+		assertEquals(0, result.length);
 
 	}
 

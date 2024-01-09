@@ -646,9 +646,34 @@ public class RaetselService {
 		List<PersistentesAufgabensammlungRaetselsucheItemReadonly> trefferliste = this.raetselDao
 			.findAllAufgabensammlungenWithRaetsel(raetselId);
 
-		return trefferliste.stream()
+		Benutzerart benutzerart = authCtx.getUser().getBenutzerart();
+
+		boolean nurFreigegebene = false;
+
+		switch (benutzerart) {
+
+		case STANDARD:
+			nurFreigegebene = true;
+			break;
+
+		case ADMIN:
+		case AUTOR:
+			break;
+
+		default:
+			throw new IllegalArgumentException("nur Benutzer mit Konto erlaub. War " + benutzerart);
+		}
+
+		List<AufgabensammlungRaetselsucheTrefferItem> items = trefferliste.stream()
 			.map(this::mapToAufgabensammlungRaetselsucheTrefferItem)
 			.collect(Collectors.toList());
+
+		if (nurFreigegebene) {
+
+			return items.stream().filter(i -> i.isFreigegeben()).toList();
+		}
+
+		return items;
 	}
 
 	AufgabensammlungRaetselsucheTrefferItem mapToAufgabensammlungRaetselsucheTrefferItem(final PersistentesAufgabensammlungRaetselsucheItemReadonly ausDB) {
