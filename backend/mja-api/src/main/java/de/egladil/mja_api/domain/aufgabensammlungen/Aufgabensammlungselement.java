@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlugnselement;
 
@@ -48,6 +49,10 @@ public class Aufgabensammlungselement {
 	@Schema(description = "Loesungsbuchstabe, falls vorhanden. Kann null sein")
 	private String loesungsbuchstabe;
 
+	@JsonProperty
+	@Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
+	private RaetselHerkunftTyp herkunftstyp;
+
 	/**
 	 * Erzeugt ein Objekt aus den verschiedenen Daten.
 	 *
@@ -65,6 +70,7 @@ public class Aufgabensammlungselement {
 		result.punkte = element.punkte;
 		result.raetselSchluessel = aufgabe.schluessel;
 		result.name = aufgabe.name;
+		result.herkunftstyp = aufgabe.herkunft;
 
 		String antwortvorschlaegeSerialized = aufgabe.antwortvorschlaege;
 

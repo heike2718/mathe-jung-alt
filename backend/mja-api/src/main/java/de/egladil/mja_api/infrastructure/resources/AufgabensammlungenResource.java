@@ -290,7 +290,8 @@ public class AufgabensammlungenResource {
 			throw new WebApplicationException(Response.status(404).entity(MessagePayload.error("kein Treffer")).build());
 		}
 
-		return optDetails.get();
+		AufgabensammlungDetails result = optDetails.get();
+		return result;
 	}
 
 	@POST

@@ -73,7 +73,6 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   nummer = '';
   punkte = '';
 
-
   #raetselFacade = inject(RaetselFacade);
   #authFacade = inject(AuthFacade);
 

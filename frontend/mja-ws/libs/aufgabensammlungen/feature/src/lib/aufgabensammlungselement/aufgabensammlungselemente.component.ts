@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, inject, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { AufgabensammlungDetails, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
@@ -17,14 +17,22 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./aufgabensammlungselemente.component.scss'],
 })
 export class AufgabensammlungselementeComponent implements AfterViewInit {
- 
+
   @Input()
   aufgabensammlung!: AufgabensammlungDetails;
 
   @ViewChild(MatTable)
   table!: MatTable<Aufgabensammlungselement>
 
-  dataSource = inject(AufgabensammlungselementeDataSource);  
+  // Declare height and width variables
+  #scrWidth!: number;
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize() {
+    this.#scrWidth = window.innerWidth;
+  }
+
+  dataSource = inject(AufgabensammlungselementeDataSource);
 
   @Output()
   showImages: EventEmitter<Aufgabensammlungselement> = new EventEmitter<Aufgabensammlungselement>();
@@ -46,6 +54,15 @@ export class AufgabensammlungselementeComponent implements AfterViewInit {
 
     } else {
       return ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'show', 'edit', 'delete'];
+    }
+  }
+
+  getHeaderSchluessel(): string {
+
+    if (this.#scrWidth > 959) {
+      return 'SCHLUESSEL';
+    } else {
+      return 'SCHL';
     }
   }
 

@@ -1,4 +1,4 @@
-import { Referenztyp, Schwierigkeitsgrad } from '@mja-ws/core/model';
+import { Herkunftstyp, Referenztyp, Schwierigkeitsgrad } from '@mja-ws/core/model';
 
 
 export interface GuiRefereztyp {
@@ -73,6 +73,7 @@ export interface EditAufgabensammlungselementPayload {
 
 export interface Aufgabensammlungselement extends EditAufgabensammlungselementPayload {
   readonly name: string;
+  readonly herkunftstyp: Herkunftstyp;
   readonly loesungsbuchstabe: string | undefined;
 };
 
