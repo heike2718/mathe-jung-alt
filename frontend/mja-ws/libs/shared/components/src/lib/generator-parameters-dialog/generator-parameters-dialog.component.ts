@@ -5,10 +5,10 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { SelectGeneratorParametersUIModelAutoren } from '@mja-ws/core/model';
+import { SelectGeneratorParametersUIModel } from '@mja-ws/core/model';
 
 @Component({
-  selector: 'mja-generator-parameters-dialog-autoren',
+  selector: 'mja-generator-parameters-dialog',
   standalone: true,
   imports: [
     CommonModule,
@@ -18,14 +18,14 @@ import { SelectGeneratorParametersUIModelAutoren } from '@mja-ws/core/model';
     MatFormFieldModule,
     MatInputModule
   ],
-  templateUrl: './generator-parameters-dialog-autoren.component.html',
-  styleUrls: ['./generator-parameters-dialog-autoren.component.scss'],
+  templateUrl: './generator-parameters-dialog.component.html',
+  styleUrls: ['./generator-parameters-dialog.component.scss'],
 })
-export class GeneratorParametersDialogAutorenComponent {
+export class GeneratorParametersDialogComponent {
 
-  public dialogRef: MatDialogRef<GeneratorParametersDialogAutorenComponent> = inject(MatDialogRef);
+  public dialogRef: MatDialogRef<GeneratorParametersDialogComponent> = inject(MatDialogRef);
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: SelectGeneratorParametersUIModelAutoren) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: SelectGeneratorParametersUIModel) {
     this.dialogRef.disableClose = true;
   }
 }

@@ -33,7 +33,7 @@ import {
   OutputFormat,
   SelectableItem,
   SelectItemsCompomentModel,
-  SelectGeneratorParametersUIModelAutoren,
+  SelectGeneratorParametersUIModel,
   fontNamenSelectInput,
   FontName,
   schriftgroessenSelectInput,
@@ -47,7 +47,7 @@ import {
   JaNeinDialogComponent,
   JaNeinDialogData,
   SelectItemsComponent,
-  GeneratorParametersDialogAutorenComponent,
+  GeneratorParametersDialogComponent,
   SelectFileComponent,
   SelectFileModel,
   FileInfoComponent,
@@ -95,7 +95,7 @@ interface AntwortvorschlagFormValue {
     JaNeinDialogComponent,
     EmbeddableImageVorschauComponent,
     EmbeddableImageInfoComponent,
-    GeneratorParametersDialogAutorenComponent,
+    GeneratorParametersDialogComponent,
     ImageDialogComponent,
     SelectFileComponent,
     FileInfoComponent,
@@ -819,7 +819,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   #openPrintDialog(outputformat: OutputFormat): void {
 
-    const dialogData: SelectGeneratorParametersUIModelAutoren = {
+    const dialogData: SelectGeneratorParametersUIModel = {
       titel: outputformat + ' generieren',
       showVerwendungszwecke: false,
       verwendungszwecke: [],
@@ -832,7 +832,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       selectedSchriftgroesse: undefined
     };
 
-    const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
+    const dialogRef = this.dialog.open(GeneratorParametersDialogComponent, {
       height: '600px',
       width: '700px',
       data: dialogData,

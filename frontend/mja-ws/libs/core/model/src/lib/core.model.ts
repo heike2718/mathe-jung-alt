@@ -161,7 +161,7 @@ export interface GeneratedFile {
 
 // dies sind die Parameter für Dialoge zum Generieren von Aufgabensammlungen oder Rätseln
 // Es muss gewählt werden können zwischen verschiedenen Antwortvorschlag-Layouts und Fonts
-export interface SelectGeneratorParametersUIModelAutoren {
+export interface SelectGeneratorParametersUIModel {
   titel: string;
   showVerwendungszwecke: boolean;
   verwendungszwecke: string[];

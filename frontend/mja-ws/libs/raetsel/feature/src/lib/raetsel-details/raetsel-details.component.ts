@@ -16,7 +16,7 @@ import { AuthFacade } from '@mja-ws/core/api';
 import { Router } from '@angular/router';
 import { LinkedAufgabensammlung, RaetselDetails } from '@mja-ws/raetsel/model';
 import { Subscription, tap } from 'rxjs';
-import { FrageLoesungImagesComponent, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
+import { FrageLoesungImagesComponent, GeneratorParametersDialogComponent } from '@mja-ws/shared/components';
 import { AntwortvorschlagComponent } from '../antwortvorschlag/antwortvorschlag.component';
 import { EmbeddableImageVorschauComponent } from '../embeddable-image-vorschau/embeddable-image-vorschau.component';
 import {
@@ -27,7 +27,7 @@ import {
   OutputFormat,
   Schriftgroesse,
   schriftgroessenSelectInput,
-  SelectGeneratorParametersUIModelAutoren,
+  SelectGeneratorParametersUIModel,
   User
 } from '@mja-ws/core/model';
 import { EmbeddableImagesFacade } from '@mja-ws/embeddable-images/api';
@@ -60,7 +60,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     AntwortvorschlagComponent,
     EmbeddableImageVorschauComponent,
     EmbeddableImageInfoComponent,
-    GeneratorParametersDialogAutorenComponent,
+    GeneratorParametersDialogComponent,
     LinkedAufgabensammlungenComponent    
   ],
   templateUrl: './raetsel-details.component.html',
@@ -186,7 +186,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   #openPrintDialog(outputformat: OutputFormat): void {
 
-    const dialogData: SelectGeneratorParametersUIModelAutoren = {
+    const dialogData: SelectGeneratorParametersUIModel = {
       titel: outputformat + ' generieren',
       showVerwendungszwecke: false,
       verwendungszwecke: [],
@@ -199,7 +199,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
       selectedSchriftgroesse: undefined
     };
 
-    const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
+    const dialogRef = this.dialog.open(GeneratorParametersDialogComponent, {
       height: 'auto',
       width: '700px',
       data: dialogData

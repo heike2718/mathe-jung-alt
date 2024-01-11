@@ -5,12 +5,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, GeneratorParametersDialogAutorenComponent } from '@mja-ws/shared/components';
+import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, GeneratorParametersDialogComponent } from '@mja-ws/shared/components';
 import {
   anzeigeAntwortvorschlaegeSelectInput, FontName, fontNamenSelectInput, GeneratedImages, LaTeXLayoutAntwortvorschlaege,
   Schriftgroesse,
   schriftgroessenSelectInput,
-  SelectGeneratorParametersUIModelAutoren,
+  SelectGeneratorParametersUIModel,
   User,
   verwendungszweckeAutorenSelectInput,
   verwendungszweckePublicSelectInput
@@ -45,7 +45,7 @@ import { AuthFacade } from '@mja-ws/core/api';
     MatListModule,
     MatFormFieldModule,
     FrageLoesungImagesComponent,
-    GeneratorParametersDialogAutorenComponent,
+    GeneratorParametersDialogComponent,
     AufgabensammlungselementDialogComponent,
     AufgabensammlungselementeComponent
   ],
@@ -141,7 +141,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const dialogData: SelectGeneratorParametersUIModelAutoren = {
+    const dialogData: SelectGeneratorParametersUIModel = {
       titel: 'File generieren',
       showVerwendungszwecke: true,
       verwendungszwecke: this.user.isAdmin ? verwendungszweckeAutorenSelectInput : verwendungszweckePublicSelectInput,
@@ -154,7 +154,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
       selectedSchriftgroesse: undefined,
     }
 
-    const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
+    const dialogRef = this.dialog.open(GeneratorParametersDialogComponent, {
       height: '750px',
       width: '700px',
       data: dialogData
