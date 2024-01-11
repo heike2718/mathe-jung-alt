@@ -200,7 +200,7 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogAutorenComponent, {
-      height: '600px',
+      height: 'auto',
       width: '700px',
       data: dialogData
     });

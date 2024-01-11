@@ -256,7 +256,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 
   #initAndOpenEditElementDialog(dialogData: AufgabensammlungselementDialogData): void {
     const dialogRef = this.dialog.open(AufgabensammlungselementDialogComponent, {
-      height: '400px',
+      height: 'auto',
       width: '500px',
       data: dialogData
     });

@@ -24,6 +24,7 @@ export class AufgabensammlungselementDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<AufgabensammlungselementDialogData>,
     @Inject(MAT_DIALOG_DATA) public data: AufgabensammlungselementDialogData) {
+      this.dialogRef.disableClose = true;
   }
 
   save(): void {

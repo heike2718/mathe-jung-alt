@@ -25,5 +25,7 @@ export class GeneratorParametersDialogAutorenComponent {
 
   public dialogRef: MatDialogRef<GeneratorParametersDialogAutorenComponent> = inject(MatDialogRef);
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: SelectGeneratorParametersUIModelAutoren) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: SelectGeneratorParametersUIModelAutoren) {
+    this.dialogRef.disableClose = true;
+  }
 }
