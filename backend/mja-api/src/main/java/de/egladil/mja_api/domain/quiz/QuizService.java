@@ -15,14 +15,18 @@ import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
+import de.egladil.mja_api.domain.quellen.QuelleInfosAdapter;
+import de.egladil.mja_api.domain.quellen.QuelleNameStrategie;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.quiz.impl.QuizaufgabeComparator;
 import de.egladil.mja_api.domain.raetsel.AntwortvorschlaegeMapper;
+import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.infrastructure.persistence.dao.AufgabensammlungDao;
-import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
+import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -31,8 +35,6 @@ import jakarta.inject.Inject;
  */
 @ApplicationScoped
 public class QuizService {
-
-	private static final String QUELLE_HW = "Heike Winkelvoß";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QuizService.class);
 
@@ -44,6 +46,9 @@ public class QuizService {
 
 	@Inject
 	DeskriptorenService descriptorenService;
+
+	@Inject
+	QuellenRepository quellenRepository;
 
 	/**
 	 * Sucht alle Aufgaben des durch die Parameter eindeutig bestimmten Quiz zur Präsentation im Browser. Es werden nur die
@@ -100,7 +105,7 @@ public class QuizService {
 		aufgabe.setSchluessel(dbAufgabe.schluessel);
 		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.filenameVorschauFrage, dbAufgabe.filenameVorschauLoesung));
 		aufgabe.setFreigegeben(dbAufgabe.freigegeben);
-		aufgabe.setQuelle(mapQuelle(dbAufgabe));
+		aufgabe.setQuelle(getQuellenangabe(dbAufgabe));
 		aufgabe.setNummer(dbAufgabe.nummer);
 		aufgabe.setPunkte(dbAufgabe.punkte);
 		aufgabe.setStrafpunkte(berechneStrafpunkte(aufgabe.getPunkte(), aufgabe.getAntwortvorschlaege().length));
@@ -108,36 +113,29 @@ public class QuizService {
 		return aufgabe;
 	}
 
-	String mapQuelle(final PersistenteAufgabeReadonly dbAufgabe) {
+	String getQuellenangabe(final PersistenteAufgabeReadonly ausDB) {
 
-		List<Deskriptor> deskriptoren = descriptorenService.mapToDeskriptoren(dbAufgabe.deskriptoren);
-		Optional<Deskriptor> optAdaptiert = deskriptoren.stream().filter(d -> "adaptiert".equalsIgnoreCase(d.name)).findFirst();
+		if (ausDB == null) {
 
-		if (optAdaptiert.isPresent()) {
-
-			return QUELLE_HW;
+			return null;
 		}
 
-		switch (dbAufgabe.quellenart) {
+		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
+		String text = nameStrategie.getText(new QuelleInfosAdapter().adapt(ausDB));
 
-		case PERSON: {
+		if (ausDB.herkunft == RaetselHerkunftTyp.ADAPTION) {
 
-			return dbAufgabe.person;
+			Optional<PersistenteQuelleReadonly> optQuelle = quellenRepository.findQuelleWithUserId(ausDB.owner);
+
+			if (optQuelle.isPresent()) {
+
+				PersistenteQuelleReadonly quelle = optQuelle.get();
+				text = quelle.person + " (basierend auf einer Idee aus " + text + ")";
+			}
+
 		}
 
-		case BUCH: {
-
-			return dbAufgabe.mediumTitel + ", " + dbAufgabe.seite;
-		}
-
-		case ZEITSCHRIFT: {
-
-			return dbAufgabe.mediumTitel + " (" + dbAufgabe.ausgabe + ") " + dbAufgabe.jahr;
-		}
-
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + dbAufgabe.quellenart);
-		}
+		return text;
 	}
 
 	int berechneStrafpunkte(final int punkte, final int anzahlAntwortvorschlaege) {

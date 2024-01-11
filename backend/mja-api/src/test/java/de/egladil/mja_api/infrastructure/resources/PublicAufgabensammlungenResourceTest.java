@@ -57,8 +57,8 @@ public class PublicAufgabensammlungenResourceTest {
 			.extract()
 			.as(AufgabensammlungSucheTreffer.class);
 
-		assertEquals(5, treffer.getItems().size());
-		assertEquals(5l, treffer.getTrefferGesamt());
+		assertEquals(6, treffer.getItems().size());
+		assertEquals(6l, treffer.getTrefferGesamt());
 
 		{
 
@@ -237,6 +237,21 @@ public class PublicAufgabensammlungenResourceTest {
 				"c09e5d63-9ec1-4884-a01e-08234db9cbf3/latex/v1")
 			.then()
 			.statusCode(403);
+	}
+
+	@Test
+	@Order(14)
+	@TestSecurity(user = "testuser", roles = { "STANDARD" })
+	void test_printArbeitsblatt_when_QuelleWithInternet() {
+
+		given()
+			.queryParam("layoutAntwortvorschlaege", "BUCHSTABEN")
+			.accept(ContentType.JSON)
+			.get(
+				"f2e390b1-0425-4095-b594-9ab91d2ac606/arbeitsblatt/v1")
+			.then()
+			.statusCode(200);
+
 	}
 
 }

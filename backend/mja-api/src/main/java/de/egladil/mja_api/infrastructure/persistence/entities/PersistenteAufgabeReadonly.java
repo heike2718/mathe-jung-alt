@@ -52,6 +52,9 @@ public class PersistenteAufgabeReadonly {
 	public RaetselHerkunftTyp herkunft;
 
 	@Column
+	public String owner;
+
+	@Column
 	public String nummer;
 
 	@Column

@@ -5,14 +5,14 @@
     "tslib": "^2.3.0",
     "@angular/common": "^17.0.6",
     "@angular/core": "^17.0.6",
-    "@mja-ws/core/model": "^2.6.5",
-    "@mja-ws/medien/model": "^2.6.5",
+    "@mja-ws/core/model": "^2.6.6",
+    "@mja-ws/medien/model": "^2.6.6",
     "rxjs": "^7.8.1",
     "@ngrx/store": "^17.0.1",
     "@ngrx/effects": "^17.0.1",
     "@angular/router": "^17.0.6",
-    "@mja-ws/shared/messaging/api": "^2.6.5",
-    "@mja-ws/shared/util": "^2.6.5"
+    "@mja-ws/shared/messaging/api": "^2.6.6",
+    "@mja-ws/shared/util": "^2.6.6"
   },
   "type": "commonjs",
   "main": "./src/index.js",

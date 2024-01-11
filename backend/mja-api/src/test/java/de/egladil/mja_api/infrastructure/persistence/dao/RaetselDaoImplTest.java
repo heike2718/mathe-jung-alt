@@ -355,7 +355,7 @@ public class RaetselDaoImplTest {
 
 			// Assert
 			assertEquals(25, trefferliste.size());
-			assertEquals("02641", trefferliste.get(0).schluessel);
+			assertEquals("02823", trefferliste.get(0).schluessel);
 		}
 	}
 

@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.quellen;
 
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetselMediensucheItemReadonly;
 
@@ -144,6 +145,70 @@ public class QuelleInfosAdapter {
 			}
 		};
 
+	}
+
+	/**
+	 * @param  ausDB
+	 * @return       IQuellenangabeDaten
+	 */
+	public IQuellenangabeDaten adapt(final PersistenteAufgabeReadonly ausDB) {
+
+		return new IQuellenangabeDaten() {
+
+			@Override
+			public String getStufe() {
+
+				return ausDB.stufe;
+			}
+
+			@Override
+			public String getSeite() {
+
+				return ausDB.seite;
+			}
+
+			@Override
+			public Quellenart getQuellenart() {
+
+				return ausDB.quellenart;
+			}
+
+			@Override
+			public String getPerson() {
+
+				return ausDB.person;
+			}
+
+			@Override
+			public String getMediumTitel() {
+
+				return ausDB.mediumTitel;
+			}
+
+			@Override
+			public String getKlasse() {
+
+				return ausDB.klasse;
+			}
+
+			@Override
+			public String getJahr() {
+
+				return ausDB.jahr;
+			}
+
+			@Override
+			public String getAutor() {
+
+				return ausDB.autor;
+			}
+
+			@Override
+			public String getAusgabe() {
+
+				return ausDB.ausgabe;
+			}
+		};
 	}
 
 }
