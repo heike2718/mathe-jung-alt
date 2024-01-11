@@ -1,5 +1,12 @@
 # Release-Notes
 
+__2.6.6__
+
++ [RuntimeException beim Generieren von Aufgabensammlungen mit Herkunft ADAPTION und ZITAT](https://github.com/heike2718/mathe-jung-alt/issues/127)
++ [alle Dialoge mit disableClose true](https://github.com/heike2718/mathe-jung-alt/issues/126)
++ [dice3D-Fonts fehlten](https://github.com/heike2718/mathe-jung-alt/issues/125)
+
+
 __2.6.4__
 
 + [Standarduser 403 bei Navigation von Aufgabensammlung zu Rätseldetails](https://github.com/heike2718/mathe-jung-alt/issues/124)
