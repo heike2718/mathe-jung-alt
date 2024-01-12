@@ -1,5 +1,10 @@
 # Release-Notes
 
+__2.6.7__
+
++ [Für Admins/Autoren: Visualisierung Status Aufgabensammlungselement](https://github.com/heike2718/mathe-jung-alt/issues/128)
+
+
 __2.6.6__
 
 + [RuntimeException beim Generieren von Aufgabensammlungen mit Herkunft ADAPTION und ZITAT](https://github.com/heike2718/mathe-jung-alt/issues/127)

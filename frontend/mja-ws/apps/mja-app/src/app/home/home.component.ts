@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   #configService = inject(Configuration);
 
-  version = "2.6.7";
+  version = "2.6.8";
 
   imageSourceLogo = '';
 
