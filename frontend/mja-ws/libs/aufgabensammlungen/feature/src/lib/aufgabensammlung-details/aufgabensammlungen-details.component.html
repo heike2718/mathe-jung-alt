@@ -67,7 +67,7 @@
 
     <h2>Elemente</h2>
 
-    <mja-aufgabensammlungselement [aufgabensammlung]="sammlung" (showImages)="onShowImagesElement($event)"
+    <mja-aufgabensammlungselement [aufgabensammlung]="sammlung" [benutzerart]="user.benutzerart" (showImages)="onShowImagesElement($event)"
         (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
     </mja-aufgabensammlungselement>
 

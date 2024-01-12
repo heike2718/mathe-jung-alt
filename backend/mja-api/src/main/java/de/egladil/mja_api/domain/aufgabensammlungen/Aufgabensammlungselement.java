@@ -53,6 +53,10 @@ public class Aufgabensammlungselement {
 	@Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
 	private RaetselHerkunftTyp herkunftstyp;
 
+	@JsonProperty
+	@Schema(description = "Ob das referenzierte Rätsel freigegeben ist.")
+	private boolean freigegeben;
+
 	/**
 	 * Erzeugt ein Objekt aus den verschiedenen Daten.
 	 *
@@ -71,6 +75,7 @@ public class Aufgabensammlungselement {
 		result.raetselSchluessel = aufgabe.schluessel;
 		result.name = aufgabe.name;
 		result.herkunftstyp = aufgabe.herkunft;
+		result.freigegeben = aufgabe.freigegeben;
 
 		String antwortvorschlaegeSerialized = aufgabe.antwortvorschlaege;
 

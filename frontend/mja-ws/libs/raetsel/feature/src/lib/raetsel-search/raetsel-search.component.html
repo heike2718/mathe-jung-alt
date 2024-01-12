@@ -41,13 +41,20 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header
             class="mat-header-cell__2">{{getHeaderSchluessel()}}</mat-header-cell>
         <mat-cell *matCellDef="let raetsel" class="mat-cell__2">
+
+
+            @if (isAutor) {
             <div [ngClass]="{
-                'badge-green': raetsel.herkunft === 'EIGENKREATION',
-                'badge-blue': raetsel.herkunft === 'ADAPTION',
-                'badge-orange': raetsel.herkunft === 'ZITAT'
-            }">
+                    'badge-green': raetsel.herkunft === 'EIGENKREATION',
+                    'badge-blue': raetsel.herkunft === 'ADAPTION',
+                    'badge-orange': raetsel.herkunft === 'ZITAT'
+                }">
                 {{raetsel.schluessel}}
             </div>
+            } @else {
+            {{raetsel.schluessel}}
+            }
+
         </mat-cell>
     </ng-container>
 

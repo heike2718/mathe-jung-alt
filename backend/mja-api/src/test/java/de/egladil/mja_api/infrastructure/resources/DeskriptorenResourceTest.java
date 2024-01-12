@@ -54,7 +54,7 @@ public class DeskriptorenResourceTest {
 
 		DeskriptorUI[] deskriptoren = new ObjectMapper().readValue(responsePayload, DeskriptorUI[].class);
 
-		assertEquals(82, deskriptoren.length);
+		assertEquals(85, deskriptoren.length);
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class DeskriptorenResourceTest {
 
 		DeskriptorUI[] deskriptoren = new ObjectMapper().readValue(responsePayload, DeskriptorUI[].class);
 
-		assertEquals(82, deskriptoren.length);
+		assertEquals(85, deskriptoren.length);
 	}
 
 	@Test
@@ -98,6 +98,6 @@ public class DeskriptorenResourceTest {
 
 		DeskriptorUI[] deskriptoren = new ObjectMapper().readValue(responsePayload, DeskriptorUI[].class);
 
-		assertEquals(27, deskriptoren.length);
+		assertEquals(31, deskriptoren.length);
 	}
 }

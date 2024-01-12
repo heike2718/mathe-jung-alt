@@ -4,12 +4,15 @@ import { MatTable, MatTableModule } from '@angular/material/table';
 import { AufgabensammlungDetails, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
 import { AufgabensammlungselementeDataSource } from './aufgabensammlungselemente.datasource';
 import { MatButtonModule } from '@angular/material/button';
+import { MatBadgeModule } from '@angular/material/badge';
+import { Benutzerart } from '@mja-ws/core/model';
 
 @Component({
   selector: 'mja-aufgabensammlungselement',
   standalone: true,
   imports: [
     CommonModule,
+    MatBadgeModule,
     MatButtonModule,
     MatTableModule
   ],
@@ -20,6 +23,9 @@ export class AufgabensammlungselementeComponent implements AfterViewInit {
 
   @Input()
   aufgabensammlung!: AufgabensammlungDetails;
+
+  @Input()
+  benutzerart!: Benutzerart;
 
   @ViewChild(MatTable)
   table!: MatTable<Aufgabensammlungselement>

@@ -2,13 +2,17 @@
   <table mat-table class="full-width-table" aria-label="Elements">
     <!-- Schluessel Column -->
     <ng-container matColumnDef="schluessel">
-      <th mat-header-cell *matHeaderCellDef>{{getHeaderSchluessel()}}</th>
+      <th mat-header-cell *matHeaderCellDef>{{getHeaderSchluessel()}}</th>      
       <td mat-cell *matCellDef="let element">
-        <div [ngClass]="{
-          'badge-green': element.herkunftstyp === 'EIGENKREATION',
-          'badge-blue': element.herkunftstyp === 'ADAPTION',
-          'badge-orange': element.herkunftstyp === 'ZITAT'
-      }">{{element.raetselSchluessel}}</div>
+        @if (benutzerart === 'ADMIN' || benutzerart === 'AUTOR') {
+          <div [ngClass]="{
+            'badge-green': element.herkunftstyp === 'EIGENKREATION',
+            'badge-blue': element.herkunftstyp === 'ADAPTION',
+            'badge-orange': element.herkunftstyp === 'ZITAT'
+        }">{{element.raetselSchluessel}}</div>
+        } @else {
+          {{element.raetselSchluessel}}
+        }
       </td>
     </ng-container>
 
@@ -27,7 +31,13 @@
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">{{element.name}}</td>
+      <td mat-cell *matCellDef="let element">
+        {{element.name}}
+        @if (benutzerart === 'ADMIN' || benutzerart === 'AUTOR') {
+        @if (element.freigegeben) {
+        <span matBadge=p matBadgeColor="accent" class="ml-1"></span>
+        }
+        }
     </ng-container>
 
     <!-- Loesungsbuchstabe Column -->
