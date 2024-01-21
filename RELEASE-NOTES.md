@@ -1,5 +1,12 @@
 # Release-Notes
 
+__2.6.8__
+
++ [Vorschautext für Rätsel in Tabellen](https://github.com/heike2718/mathe-jung-alt/issues/131)
++ [Suchfilter in Aufgabensammlung soll gemerkt werden](https://github.com/heike2718/mathe-jung-alt/issues/129)
++ [Druck: Quellenverzeichnis](https://github.com/heike2718/mathe-jung-alt/issues/109)
+
+
 __2.6.7__
 
 + [Für Admins/Autoren: Visualisierung Status Aufgabensammlungselement](https://github.com/heike2718/mathe-jung-alt/issues/128)
