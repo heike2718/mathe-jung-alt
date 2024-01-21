@@ -17,6 +17,7 @@ export class AufgabensammlungenFacade {
     page$: Observable<AufgabensammlungTrefferItem[]> = this.#store.select(fromAufgabensammlungen.page);
     anzahlTrefferGesamt$: Observable<number> = this.#store.select(fromAufgabensammlungen.anzahlTrefferGesamt);
     paginationState$: Observable<PaginationState> = this.#store.select(fromAufgabensammlungen.paginationState);
+    suchparameter$: Observable<AufgabensammlungenSuchparameter> = this.#store.select(fromAufgabensammlungen.suchparameter);
     editorContent$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromAufgabensammlungen.aufgabensammlungBasisdaten).pipe(filterDefined);
     aufgabensammlungDetails$: Observable<AufgabensammlungDetails> = this.#store.select(fromAufgabensammlungen.aufgabensammlungDetails).pipe(filterDefined);
     aufgabensammlungBasisdaten$: Observable<AufgabensammlungBasisdaten> = this.#store.select(fromAufgabensammlungen.aufgabensammlungBasisdaten).pipe(filterDefined);
@@ -25,6 +26,9 @@ export class AufgabensammlungenFacade {
     selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromAufgabensammlungen.selectedElementImages);
 
 
+    chanchSuchparameter(suchparameter: AufgabensammlungenSuchparameter): void {
+        this.#store.dispatch(aufgabensammlungenActions.sUCHPARAMETER_CHANGED({suchparameter}));
+    }
 
     triggerSearch(aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): void {
         this.#store.dispatch(aufgabensammlungenActions.aUFGABENSAMMLUNGEN_SELECT_PAGE({ pageDefinition }));

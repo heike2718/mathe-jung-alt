@@ -1,5 +1,5 @@
 import { GeneratedImages, initialPaginationState, PaginationState } from "@mja-ws/core/model";
-import { AufgabensammlungBasisdaten, AufgabensammlungDetails, Aufgabensammlungselement, AufgabensammlungTrefferItem } from "@mja-ws/aufgabensammlungen/model";
+import { AufgabensammlungBasisdaten, AufgabensammlungDetails, AufgabensammlungenSuchparameter, Aufgabensammlungselement, AufgabensammlungTrefferItem, initialAufgabensammlungenSuchparameter } from "@mja-ws/aufgabensammlungen/model";
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { aufgabensammlungenActions } from "./aufgabensammlungen.actions";
 import { swallowEmptyArgument } from "@mja-ws/shared/util";
@@ -9,6 +9,7 @@ export interface AufgabensammlungenState {
     readonly anzahlTrefferGesamt: number;
     readonly page: AufgabensammlungTrefferItem[];
     readonly paginationState: PaginationState;
+    readonly suchparameter: AufgabensammlungenSuchparameter;
     readonly aufgabensammlungBasisdaten: AufgabensammlungBasisdaten| undefined;
     readonly aufgabensammlungDetails: AufgabensammlungDetails | undefined;
     readonly selectedAufgabensammlungselement: Aufgabensammlungselement | undefined;
@@ -20,6 +21,7 @@ const initialAufgabensammlungenState: AufgabensammlungenState = {
     anzahlTrefferGesamt: 0,
     page: [],
     paginationState: initialPaginationState,
+    suchparameter: initialAufgabensammlungenSuchparameter,
     aufgabensammlungBasisdaten: undefined,
     aufgabensammlungDetails: undefined,
     selectedAufgabensammlungselement: undefined,
@@ -52,6 +54,7 @@ export const aufgabensammlungenFeature = createFeature({
                 }
             };
         }),
+        on(aufgabensammlungenActions.sUCHPARAMETER_CHANGED, (state, action) => ({ ...state, suchparameter: action.suchparameter })),
         on(aufgabensammlungenActions.eDIT_AUFGABENSAMMLUNG, (state, action) => {
             return {
                 ...state,

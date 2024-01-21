@@ -9,6 +9,7 @@ export const aufgabensammlungenActions = createActionGroup({
         'FIND_AUFGABENSAMMLUNGEN': props<{aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition}>(),
         'AUFGABENSAMMLUNGEN_FOUND': props<{treffer: AufgabensammlungenTreffer}>(),
         'AUFGABENSAMMLUNGEN_SELECT_PAGE': props<{pageDefinition: PageDefinition}>(),
+        'SUCHPARAMETER_CHANGED': props<{suchparameter: AufgabensammlungenSuchparameter}>(),
         'SELECT_AUFGABENSAMMLUNG': props<{ aufgabensammlungId: string }>(),
         'UNSELECT_AUFGABENSAMMLUNG': emptyProps(),
         'AUFGABENSAMMLUNGDETAILS_LOADED': props<{aufgabensammlungDetails: AufgabensammlungDetails, navigateTo: string}>(),

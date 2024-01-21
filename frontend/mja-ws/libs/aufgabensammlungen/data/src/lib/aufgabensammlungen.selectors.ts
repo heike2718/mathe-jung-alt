@@ -23,16 +23,19 @@ const paginationState = createSelector(
     (state) => state.paginationState
 );
 
-// aus irgendwelchen Gründen ist nach F5 der ganze state undefined, obwohl es genauso aufgebaut ist wie in der raetsel-lib. 
+const suchparameter = createSelector(
+    selectAufgabensammlungenState,
+    (state) => state.suchparameter
+);
 
 const aufgabensammlungDetails = createSelector(
     selectAufgabensammlungenState,
-    (state) => state ? state.aufgabensammlungDetails : undefined
+    (state) =>  state.aufgabensammlungDetails
 );
 
 const aufgabensammlungBasisdaten = createSelector(
     selectAufgabensammlungenState,
-    (state) => state ? state.aufgabensammlungBasisdaten : undefined
+    (state) => state.aufgabensammlungBasisdaten
 );
 
 const aufgabensammlungselemente = createSelector(
@@ -42,12 +45,12 @@ const aufgabensammlungselemente = createSelector(
 
 const selectedAufgabensammlungselement = createSelector(
     selectAufgabensammlungenState,
-    (state) => state ? state.selectedAufgabensammlungselement : undefined
+    (state) => state.selectedAufgabensammlungselement
 );
 
 const selectedElementImages = createSelector(
     selectAufgabensammlungenState,
-    (state) => state ? state.selectedElementImages : undefined
+    (state) => state.selectedElementImages
 );
 
 export const fromAufgabensammlungen = {
@@ -55,6 +58,7 @@ export const fromAufgabensammlungen = {
     anzahlTrefferGesamt,
     page,
     paginationState,
+    suchparameter,
     aufgabensammlungBasisdaten: aufgabensammlungBasisdaten,
     aufgabensammlungDetails: aufgabensammlungDetails,
     aufgabensammlungselemente,

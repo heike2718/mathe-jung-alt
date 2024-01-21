@@ -71,13 +71,6 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   schwierigkeitsgrade: GuiSchwierigkeitsgrad[] = new GuiSchwierigkeitsgradeMap().toGuiArray();
   referenztypen: GuiRefereztyp[] = new GuiReferenztypenMap().toGuiArray();
 
-  filterValues = {
-    name: '',
-    schwierigkeitsgrad: '',
-    referenztyp: '',
-    referenz: ''
-  };
-
   /** controls for the MatSelect filter keyword */
   nameFilterControl = new FormControl('');
   referenzFilterControl = new FormControl('');
