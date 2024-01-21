@@ -40,7 +40,7 @@
     <ng-container matColumnDef="schluessel">
         <mat-header-cell *matHeaderCellDef mat-sort-header
             class="mat-header-cell__2">{{getHeaderSchluessel()}}</mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" class="mat-cell__2">
+        <mat-cell *matCellDef="let raetsel" class="mat-cell__2"  [mjaHoverDetails]="raetsel.vorschautext">
 
 
             @if (isAutor) {
@@ -60,7 +60,7 @@
 
     <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef class="mat-header-cell__3">Name</mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" [mjaHoverDetails]="raetsel.vorschautext" class="mat-cell__3">
+        <mat-cell *matCellDef="let raetsel" class="mat-cell__3">
             {{raetsel.name}}
         </mat-cell>
     </ng-container>
