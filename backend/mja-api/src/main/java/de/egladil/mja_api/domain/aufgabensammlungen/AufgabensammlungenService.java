@@ -5,12 +5,17 @@
 package de.egladil.mja_api.domain.aufgabensammlungen;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.mja_api.domain.AbstractDomainEntity;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungDetails;
@@ -28,10 +33,12 @@ import de.egladil.mja_api.domain.generatoren.Verwendungszweck;
 import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
+import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
+import de.egladil.mja_api.domain.utils.VorschauUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.AufgabensammlungDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
@@ -51,6 +58,9 @@ import jakarta.ws.rs.core.Response.Status;
 public class AufgabensammlungenService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungenService.class);
+
+	@ConfigProperty(name = "vorschautext.length")
+	int lengtVorschautext;
 
 	@Inject
 	AuthenticationContext authCtx;
@@ -142,12 +152,48 @@ public class AufgabensammlungenService {
 
 			if (optAufgabe.isPresent()) {
 
-				result.addElement(Aufgabensammlungselement.merge(optAufgabe.get(), r));
+				result.addElement(this.mapFromDB(optAufgabe.get(), r));
 			}
 		});
 
 		result.sortElemente();
 		return Optional.of(result);
+	}
+
+	Aufgabensammlungselement mapFromDB(final PersistenteAufgabeReadonly aufgabe, final PersistentesAufgabensammlugnselement element) {
+
+		Aufgabensammlungselement result = new Aufgabensammlungselement()
+			.withId(element.uuid)
+			.withNummer(element.nummer)
+			.withPunkte(element.punkte)
+			.withRaetselSchluessel(aufgabe.schluessel)
+			.withName(aufgabe.name)
+			.withHerkunftstyp(aufgabe.herkunft)
+			.withFreigegeben(aufgabe.freigegeben)
+			.withVorschautext(VorschauUtils.getVorschautext(aufgabe.frage, lengtVorschautext));
+
+		String antwortvorschlaegeSerialized = aufgabe.antwortvorschlaege;
+
+		if (StringUtils.isNotBlank(antwortvorschlaegeSerialized)) {
+
+			try {
+
+				Antwortvorschlag[] antwortvorschlaege = new ObjectMapper().readValue(antwortvorschlaegeSerialized,
+					Antwortvorschlag[].class);
+
+				Optional<Antwortvorschlag> optKorrekt = Arrays.stream(antwortvorschlaege).filter(v -> v.isKorrekt()).findFirst();
+
+				if (optKorrekt.isPresent()) {
+
+					result.setLoesungsbuchstabe(optKorrekt.get().getBuchstabe());
+				}
+			} catch (JsonProcessingException e) {
+
+				throw new RuntimeException(e.getMessage(), e);
+			}
+		}
+
+		return result;
 	}
 
 	/**

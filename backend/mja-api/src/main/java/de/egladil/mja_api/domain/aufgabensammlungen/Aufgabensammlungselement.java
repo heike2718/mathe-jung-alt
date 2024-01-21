@@ -4,20 +4,11 @@
 // =====================================================
 package de.egladil.mja_api.domain.aufgabensammlungen;
 
-import java.util.Arrays;
-import java.util.Optional;
-
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlugnselement;
 
 /**
  * Aufgabensammlungselement
@@ -50,56 +41,16 @@ public class Aufgabensammlungselement {
 	private String loesungsbuchstabe;
 
 	@JsonProperty
+	@Schema(description = "Vorschautext aus Teilen der Frage")
+	private String vorschautext;
+
+	@JsonProperty
 	@Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
 	private RaetselHerkunftTyp herkunftstyp;
 
 	@JsonProperty
 	@Schema(description = "Ob das referenzierte Rätsel freigegeben ist.")
 	private boolean freigegeben;
-
-	/**
-	 * Erzeugt ein Objekt aus den verschiedenen Daten.
-	 *
-	 * @param  aufgabe
-	 *                 PersistenteAufgabeReadonly
-	 * @param  element
-	 *                 PersistentesAufgabensammlugnselement
-	 * @return         Aufgabensammlungselement
-	 */
-	public static Aufgabensammlungselement merge(final PersistenteAufgabeReadonly aufgabe, final PersistentesAufgabensammlugnselement element) {
-
-		Aufgabensammlungselement result = new Aufgabensammlungselement();
-		result.id = element.uuid;
-		result.nummer = element.nummer;
-		result.punkte = element.punkte;
-		result.raetselSchluessel = aufgabe.schluessel;
-		result.name = aufgabe.name;
-		result.herkunftstyp = aufgabe.herkunft;
-		result.freigegeben = aufgabe.freigegeben;
-
-		String antwortvorschlaegeSerialized = aufgabe.antwortvorschlaege;
-
-		if (StringUtils.isNotBlank(antwortvorschlaegeSerialized)) {
-
-			try {
-
-				Antwortvorschlag[] antwortvorschlaege = new ObjectMapper().readValue(antwortvorschlaegeSerialized,
-					Antwortvorschlag[].class);
-
-				Optional<Antwortvorschlag> optKorrekt = Arrays.stream(antwortvorschlaege).filter(v -> v.isKorrekt()).findFirst();
-
-				if (optKorrekt.isPresent()) {
-
-					result.loesungsbuchstabe = optKorrekt.get().getBuchstabe();
-				}
-			} catch (JsonProcessingException e) {
-
-				throw new RuntimeException(e.getMessage(), e);
-			}
-		}
-
-		return result;
-	}
 
 	public String getNummer() {
 
@@ -124,5 +75,58 @@ public class Aufgabensammlungselement {
 	public String getName() {
 
 		return name;
+	}
+
+	public Aufgabensammlungselement withId(final String id) {
+
+		this.id = id;
+		return this;
+	}
+
+	public Aufgabensammlungselement withNummer(final String nummer) {
+
+		this.nummer = nummer;
+		return this;
+	}
+
+	public Aufgabensammlungselement withPunkte(final int punkte) {
+
+		this.punkte = punkte;
+		return this;
+	}
+
+	public Aufgabensammlungselement withRaetselSchluessel(final String raetselSchluessel) {
+
+		this.raetselSchluessel = raetselSchluessel;
+		return this;
+	}
+
+	public Aufgabensammlungselement withName(final String name) {
+
+		this.name = name;
+		return this;
+	}
+
+	public void setLoesungsbuchstabe(final String loesungsbuchstabe) {
+
+		this.loesungsbuchstabe = loesungsbuchstabe;
+	}
+
+	public Aufgabensammlungselement withVorschautext(final String vorschautext) {
+
+		this.vorschautext = vorschautext;
+		return this;
+	}
+
+	public Aufgabensammlungselement withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
+
+		this.herkunftstyp = herkunftstyp;
+		return this;
+	}
+
+	public Aufgabensammlungselement withFreigegeben(final boolean freigegeben) {
+
+		this.freigegeben = freigegeben;
+		return this;
 	}
 }

@@ -45,6 +45,7 @@ export interface Raetsel {
   readonly freigegeben: boolean;
   readonly kommentar: string | undefined;
   readonly herkunft: Herkunftstyp;
+  readonly vorschautext: string;
   readonly deskriptoren: DeskriptorUI[];
 };
 

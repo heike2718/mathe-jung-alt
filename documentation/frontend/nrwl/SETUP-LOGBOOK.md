@@ -487,6 +487,18 @@ __linked aufgabensammlungen component__
 npx nx generate @nrwl/angular:component linked-aufgabensammlungen --project=raetsel-feature --path=/libs/raetsel/feature/src/lib --selector=mja-linked-as --style=scss --standalone --no-interactive --dry-run
 ```
 
+## Shared Directives library
+
+```
+npx nx generate @nx/angular:lib directives --directory=shared --tags='type:shared:ui' --buildable --no-interactive --dry-run
+```
+
+__hover raetsel directive__
+
+```
+npx nx generate @nrwl/angular:directive hover-details --project=shared-directives --path=/libs/shared/directives/src/lib/hover-details --selector=mja-hover-details --standalone --no-interactive --dry-run
+```
+
 ## FAQ
 
 __refactor-> move in nrwl__

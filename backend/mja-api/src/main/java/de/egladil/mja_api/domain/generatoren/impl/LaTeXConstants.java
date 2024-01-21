@@ -39,4 +39,14 @@ public interface LaTeXConstants {
 
 	String QUELLENANGABE = "{\\bf [Aufgabe {nummer}]} {quellenangabe} \\\\\n";
 
+	String CENTER_START = "\\begin{center}";
+
+	String CENTER_END = "\\end{center}";
+
+	String TIKZ_START = "\\begin{tikzpicture}";
+
+	String TIKZ_END = "\\end{tikzpicture}";
+
+	String INCLUDEGRAPHICS = "\\includegraphics[";
+
 }

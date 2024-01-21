@@ -138,6 +138,11 @@ public class AufgabensammlungDetails {
 		return elemente;
 	}
 
+	public void setElemente(final List<Aufgabensammlungselement> elemente) {
+
+		this.elemente = elemente;
+	}
+
 	public boolean isSchreibgeschuetzt() {
 
 		return schreibgeschuetzt;

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, inject, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, inject, Input, Output, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { AufgabensammlungDetails, Aufgabensammlungselement } from '@mja-ws/aufgabensammlungen/model';
@@ -6,6 +6,7 @@ import { AufgabensammlungselementeDataSource } from './aufgabensammlungselemente
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Benutzerart } from '@mja-ws/core/model';
+import { HoverDetailsDirective } from 'shared/directives';
 
 @Component({
   selector: 'mja-aufgabensammlungselement',
@@ -14,10 +15,12 @@ import { Benutzerart } from '@mja-ws/core/model';
     CommonModule,
     MatBadgeModule,
     MatButtonModule,
-    MatTableModule
+    MatTableModule,
+    HoverDetailsDirective
   ],
   templateUrl: './aufgabensammlungselemente.component.html',
   styleUrls: ['./aufgabensammlungselemente.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AufgabensammlungselementeComponent implements AfterViewInit {
 

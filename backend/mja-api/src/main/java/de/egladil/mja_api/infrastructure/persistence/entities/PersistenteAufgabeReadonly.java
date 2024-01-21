@@ -38,6 +38,9 @@ public class PersistenteAufgabeReadonly {
 	@Column
 	public String name;
 
+	@Column
+	public String frage;
+
 	@Column(name = "SORTNR")
 	public long sortNumber;
 

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,7 @@ import de.egladil.mja_api.domain.raetsel.impl.DeleteUnusedEmbeddableImageFilesSe
 import de.egladil.mja_api.domain.raetsel.impl.FindPathsGrafikParser;
 import de.egladil.mja_api.domain.raetsel.impl.FragenUndLoesungenVO;
 import de.egladil.mja_api.domain.raetsel.impl.RaetselPermissionDelegate;
+import de.egladil.mja_api.domain.utils.VorschauUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
@@ -64,6 +66,9 @@ import jakarta.ws.rs.core.Response.Status;
 public class RaetselService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselService.class);
+
+	@ConfigProperty(name = "vorschautext.length")
+	int lengtVorschautext;
 
 	@Inject
 	AuthenticationContext authCtx;
@@ -618,7 +623,8 @@ public class RaetselService {
 			.withFreigegeben(raetselDB.freigegeben)
 			.withKommentar(raetselDB.kommentar)
 			.withSchluessel(raetselDB.schluessel)
-			.withHerkunft(raetselDB.herkunft);
+			.withHerkunft(raetselDB.herkunft)
+			.withVorschautext(VorschauUtils.getVorschautext(raetselDB.frage, lengtVorschautext));
 
 		return result;
 	}

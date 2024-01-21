@@ -76,6 +76,7 @@ export interface Aufgabensammlungselement extends EditAufgabensammlungselementPa
   readonly herkunftstyp: Herkunftstyp;
   readonly loesungsbuchstabe: string | undefined;
   readonly freigegeben: boolean;
+  readonly vorschautext: string;
 };
 
 export interface AufgabensammlungDetails extends EditAufgabensammlungPayload {

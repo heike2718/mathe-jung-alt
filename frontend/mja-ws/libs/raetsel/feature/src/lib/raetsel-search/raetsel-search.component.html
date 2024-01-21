@@ -60,7 +60,7 @@
 
     <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef class="mat-header-cell__3">Name</mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" class="mat-cell__3">
+        <mat-cell *matCellDef="let raetsel" [mjaHoverDetails]="raetsel.vorschautext" class="mat-cell__3">
             {{raetsel.name}}
         </mat-cell>
     </ng-container>

@@ -37,6 +37,9 @@ public class RaetselsucheTrefferItem {
 	private RaetselHerkunftTyp herkunft;
 
 	@JsonProperty
+	private String vorschautext;
+
+	@JsonProperty
 	private List<Deskriptor> deskriptoren;
 
 	public String getId() {
@@ -119,6 +122,17 @@ public class RaetselsucheTrefferItem {
 	public RaetselsucheTrefferItem withHerkunft(final RaetselHerkunftTyp herkunft) {
 
 		this.herkunft = herkunft;
+		return this;
+	}
+
+	public String getVorschautext() {
+
+		return vorschautext;
+	}
+
+	public RaetselsucheTrefferItem withVorschautext(final String vorschautext) {
+
+		this.vorschautext = vorschautext;
 		return this;
 	}
 

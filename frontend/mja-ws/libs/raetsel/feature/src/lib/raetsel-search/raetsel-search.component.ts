@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -16,6 +16,7 @@ import { RaetselSuchfilterAdminComponent } from '../raetsel-suchfilter-admin/rae
 import { SelectItemsComponent } from '@mja-ws/shared/components';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
+import { HoverDetailsDirective } from 'shared/directives';
 
 @Component({
   selector: 'mja-raetsel-search',
@@ -31,10 +32,12 @@ import { FormsModule } from '@angular/forms';
     MatSortModule,
     MatIconModule,
     RaetselSuchfilterAdminComponent,
-    SelectItemsComponent
+    SelectItemsComponent,
+    HoverDetailsDirective
   ],
   templateUrl: './raetsel-search.component.html',
-  styleUrls: ['./raetsel-search.component.scss']
+  styleUrls: ['./raetsel-search.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit {
 

@@ -57,7 +57,8 @@
         "libs/shared/messaging/api/src/index.ts"
       ],
       "@mja-ws/shared/messaging/ui": ["libs/shared/messaging/ui/src/index.ts"],
-      "@mja-ws/shared/util": ["libs/shared/util/src/index.ts"]
+      "@mja-ws/shared/util": ["libs/shared/util/src/index.ts"],
+      "shared/directives": ["libs/shared/directives/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
