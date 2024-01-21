@@ -68,13 +68,13 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
 
   suchparameterStr = '';
 
-  schwierigkeitsgrade: GuiSchwierigkeitsgrad[] = new GuiSchwierigkeitsgradeMap().toGuiArray();
-  referenztypen: GuiRefereztyp[] = new GuiReferenztypenMap().toGuiArray();
+  selectSchwierigkeitsgradeInput: string[] = new GuiSchwierigkeitsgradeMap().getLabelsSorted();
+  selectReferenztypInput: string[] = new GuiReferenztypenMap().getLabelsSorted();
 
   /** controls for the MatSelect filter keyword */
   nameFilterControl = new FormControl('');
   referenzFilterControl = new FormControl('');
-  schwierigkeitsgradSelectFilterControl: FormControl = new FormControl();
+  schwierigkeitsgradSelectFilterControl: FormControl = new FormControl(initialGuiSchwierigkeitsgrad.label);
   referenztypSelectFilterControl: FormControl = new FormControl();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -94,6 +94,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   #matPaginatorSubscription: Subscription = new Subscription();
   #paginationStateSubscription: Subscription = new Subscription();
   #userSubscription = new Subscription();
+  #suchparameterSubscription = new Subscription();
 
 
   #suchparameter: AufgabensammlungenSuchparameter = initialAufgabensammlungenSuchparameter;
@@ -112,7 +113,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   constructor(private changeDetector: ChangeDetectorRef) {
-    this.schwierigkeitsgradSelectFilterControl.setValue(initialGuiSchwierigkeitsgrad);
+    // this.schwierigkeitsgradSelectFilterControl.setValue(initialGuiSchwierigkeitsgrad.label);
     this.referenztypSelectFilterControl.setValue(initialGuiReferenztyp);
   }
 
@@ -123,6 +124,23 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
         this.anzahlSammlungen = state.anzahlTreffer;
         this.#pageIndex = state.pageDefinition.pageIndex;
         this.#sortDirection = state.pageDefinition.sortDirection === 'asc' ? 'asc' : 'desc';
+      }
+    );
+
+    this.#suchparameterSubscription = this.#aufgabensammlungenFacade.suchparameter$.subscribe(
+      (suchparameter) => {
+        this.#suchparameter = suchparameter;
+
+        // Achtung: niemals emitEvent vergessen, sonst infinite loop xO
+
+        this.nameFilterControl.patchValue(this.#suchparameter.name, { emitEvent: false });
+        this.referenzFilterControl.patchValue(this.#suchparameter.referenz, { emitEvent: false });
+
+        const theSchwierigkeitsgrad: GuiSchwierigkeitsgrad = this.#suchparameter.schwierigkeitsgrad ? new GuiSchwierigkeitsgradeMap().getGuiSchwierigkeitsgrade(this.#suchparameter.schwierigkeitsgrad) : initialGuiSchwierigkeitsgrad;
+        const theReferenztyp: GuiRefereztyp = this.#suchparameter.referenztyp ? new GuiReferenztypenMap().getGuiRefereztyp(this.#suchparameter.referenztyp) : initialGuiReferenztyp;
+ 
+        this.schwierigkeitsgradSelectFilterControl.patchValue(theSchwierigkeitsgrad.label, {emitEvent: false});
+        this.referenztypSelectFilterControl.patchValue(theReferenztyp.label, {emitEvent: false});
       }
     );
 
@@ -169,40 +187,43 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
         // reset Paginator
         this.paginator.pageIndex = 0;
         this.suchparameterStr = JSON.stringify(this.#suchparameter);
+        this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
         this.#triggerSearch();
       })
     ).subscribe();
 
     this.#schwierigkeitsgradFilterSubscription = this.schwierigkeitsgradSelectFilterControl.valueChanges.pipe(
 
-      tap((level: GuiSchwierigkeitsgrad) => {
+      tap((level: string) => {
 
-        const schwierigkeitsgrad: Schwierigkeitsgrad = level.id;
+        const schwierigkeitsgrad: Schwierigkeitsgrad = new GuiSchwierigkeitsgradeMap().getSchwierigkeitsgradOfLabel(level);
 
         if (schwierigkeitsgrad !== 'NOOP') {
-          this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: level.id };
+          this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: schwierigkeitsgrad };
         } else {
           this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: null };
         }
         // reset Paginator
         this.paginator.pageIndex = 0;
         this.suchparameterStr = JSON.stringify(this.#suchparameter);
+        this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
         this.#triggerSearch();
       })
     ).subscribe();
 
     this.#referenztypFilterSubscription = this.referenztypSelectFilterControl.valueChanges.pipe(
-      tap((reftyp: GuiRefereztyp) => {
+      tap((reftyp: string) => {
 
-        const referenztyp: Referenztyp = reftyp.id;
+        const referenztyp: Referenztyp = new GuiReferenztypenMap().getReferenztypOfLabel(reftyp);
         if (referenztyp !== 'NOOP') {
-          this.#suchparameter = { ...this.#suchparameter, referenztyp: reftyp.id }
+          this.#suchparameter = { ...this.#suchparameter, referenztyp: referenztyp}
         } else {
           this.#suchparameter = { ...this.#suchparameter, referenztyp: null }
         }
         // reset Paginator
         this.paginator.pageIndex = 0;
         this.suchparameterStr = JSON.stringify(this.#suchparameter);
+        this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
         this.#triggerSearch();
       })
     ).subscribe();
@@ -226,6 +247,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
         // reset Paginator
         this.paginator.pageIndex = 0;
         this.suchparameterStr = JSON.stringify(this.#suchparameter);
+        this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
         this.#triggerSearch();
       })
     ).subscribe();
@@ -244,6 +266,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
     this.#matPaginatorSubscription.unsubscribe();
     this.#matSortChangedSubscription.unsubscribe();
     this.#userSubscription.unsubscribe();
+    this.#suchparameterSubscription.unsubscribe();
   }
 
   showSuchparameter(): boolean {
@@ -286,10 +309,8 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
     this.nameFilterControl.patchValue('');
     this.referenzFilterControl.patchValue('');
     this.schwierigkeitsgradSelectFilterControl.patchValue('NOOP');
-
-    this.#adjusting = false;
-
     this.referenztypSelectFilterControl.patchValue('NOOP');
+    this.#adjusting = false;
   }
 
   #initPaginator(): void {

@@ -26,7 +26,7 @@ export class AufgabensammlungenFacade {
     selectedElementImages$: Observable<GeneratedImages | undefined> = this.#store.select(fromAufgabensammlungen.selectedElementImages);
 
 
-    chanchSuchparameter(suchparameter: AufgabensammlungenSuchparameter): void {
+    changeSuchparameter(suchparameter: AufgabensammlungenSuchparameter): void {
         this.#store.dispatch(aufgabensammlungenActions.sUCHPARAMETER_CHANGED({suchparameter}));
     }
 
