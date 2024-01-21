@@ -40,6 +40,9 @@ public class LaTeXSelfcontainedGenerator implements LaTeXDocGeneratorStrategy {
 		String textLizenzFont = new GeneratorFontsDelegate().getTextLizenzFont(input.getFont());
 		template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), textLizenzFont);
 
+		String quellen = new QuellenverzeichnisLaTeXGenerator().generiereQuellenverzeichnis(aufgaben);
+		template = template.replace(LaTeXPlaceholder.QUELLEN.placeholder(), quellen);
+
 		return template;
 	}
 

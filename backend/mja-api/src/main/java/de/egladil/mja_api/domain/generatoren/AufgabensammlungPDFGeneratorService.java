@@ -19,6 +19,7 @@ import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.mja_api.domain.generatoren.impl.AufgabensammlungGeneratorStrategy;
+import de.egladil.mja_api.domain.generatoren.impl.QuellenverzeichnisLaTeXGenerator;
 import de.egladil.mja_api.domain.generatoren.impl.QuizitemLaTeXGenerator;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
@@ -57,7 +58,7 @@ public class AufgabensammlungPDFGeneratorService {
 	RaetselService raetselService;
 
 	/**
-	 * Generiert LaTeX für die gegebene raetselguppe.
+	 * Generiert LaTeX für die gegebene Aufgabensammlung.
 	 *
 	 * @param  input
 	 *               AufgabensammlungGeneratorInput
@@ -78,6 +79,10 @@ public class AufgabensammlungPDFGeneratorService {
 		AufgabensammlungGeneratorStrategy strategy = AufgabensammlungGeneratorStrategy.getStrategy(verwendungszweck);
 
 		String template = strategy.generateLaTeX(input, raetselService, quizitemLaTeXGenerator);
+
+		String quellenverzeichnis = new QuellenverzeichnisLaTeXGenerator().generiereQuellenverzeichnis(input.getAufgaben());
+
+		template += quellenverzeichnis;
 
 		String fileNameWithoutExtension = writeToDoc(template, aufgabensammlung.uuid, aufgabensammlung.name);
 		return generatePdf(fileNameWithoutExtension, aufgabensammlung.uuid);

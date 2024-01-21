@@ -37,4 +37,6 @@ public interface LaTeXConstants {
 
 	String INPUT_LOESUNG = "{\\bf Lösung {nummer} }\\\\ \\input{./{schluessel}_l}\\par\n";
 
+	String QUELLENANGABE = "{\\bf [Aufgabe {nummer}]} {quellenangabe} \\\\\n";
+
 }

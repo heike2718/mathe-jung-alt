@@ -26,6 +26,8 @@ public enum LaTeXPlaceholder {
 	NEWPAGE("{newpage}"),
 	PAR("{par}"),
 	PUNKTE("{punkte}"),
+	QUELLEN("{quellen}"),
+	QUELLENANGABE("{quellenangabe}"),
 	SCHLUESSEL("{schluessel}"),
 	SCHRIFTGROESSE("{schriftgroesse}"),
 	UEBERSCHRIFT("{ueberschrift}"),

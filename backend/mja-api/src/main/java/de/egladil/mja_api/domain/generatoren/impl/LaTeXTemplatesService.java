@@ -39,6 +39,8 @@ public class LaTeXTemplatesService {
 
 	private static final String LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK = "/latex/lizenz-fonts-by-wok.tex";
 
+	private static final String QUELLENVERZEICHNIS = "/latex/template-pdf-quellenverzeichnis.tex";
+
 	private String templatePDFRaetselFrage;
 
 	private String templatePDFRaetselLoesung;
@@ -58,6 +60,8 @@ public class LaTeXTemplatesService {
 	private String lizenzFontsFibel;
 
 	private String lizenzFontsDruckschrift;
+
+	private String templateQuellenverzeichnis;
 
 	/**
 	 *
@@ -196,6 +200,18 @@ public class LaTeXTemplatesService {
 		}
 
 		return lizenzFontsDruckschrift;
+	}
+
+	public synchronized String getTemplateQuellenverzeichnis() {
+
+		if (templateQuellenverzeichnis == null) {
+
+			LOGGER.debug("Lade Template {}", QUELLENVERZEICHNIS);
+
+			templateQuellenverzeichnis = MjaFileUtils.loadTemplate(QUELLENVERZEICHNIS);
+		}
+
+		return templateQuellenverzeichnis;
 	}
 
 }

@@ -67,6 +67,10 @@ public class AufgabenLoesungenLaTeXGeneratorStrategy implements Aufgabensammlung
 			throw new IllegalArgumentException("Unexpected value: " + input.getFont());
 		}
 
+		String quellen = new QuellenverzeichnisLaTeXGenerator().generiereQuellenverzeichnis(aufgaben);
+
+		template = template.replace(LaTeXPlaceholder.QUELLEN.placeholder(), quellen);
+
 		return template;
 	}
 
