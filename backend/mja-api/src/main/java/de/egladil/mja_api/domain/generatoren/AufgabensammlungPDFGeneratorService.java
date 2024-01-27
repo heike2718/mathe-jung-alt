@@ -84,14 +84,14 @@ public class AufgabensammlungPDFGeneratorService {
 
 		template += quellenverzeichnis;
 
-		String fileNameWithoutExtension = writeToDoc(template, aufgabensammlung.uuid, aufgabensammlung.name);
+		String fileNameWithoutExtension = writeToDoc(template, aufgabensammlung.uuid, aufgabensammlung.name, verwendungszweck);
 		return generatePdf(fileNameWithoutExtension, aufgabensammlung.uuid);
 
 	}
 
-	String writeToDoc(final String template, final String aufgabensammlungID, final String aufgabensammlungName) {
+	String writeToDoc(final String template, final String aufgabensammlungID, final String aufgabensammlungName, final Verwendungszweck verwendungszweck) {
 
-		String filenameWithoutExtension = getFilenameWithoutExcension(aufgabensammlungName);
+		String filenameWithoutExtension = getFilenameWithoutExcension(aufgabensammlungName, verwendungszweck);
 		String fileName = filenameWithoutExtension + ".tex";
 
 		String path = latexBaseDir + File.separator + fileName;
@@ -109,9 +109,10 @@ public class AufgabensammlungPDFGeneratorService {
 	 * @param  aufgabensammlungName
 	 * @return
 	 */
-	String getFilenameWithoutExcension(final String aufgabensammlungName) {
+	String getFilenameWithoutExcension(final String aufgabensammlungName, final Verwendungszweck verwendungszweck) {
 
-		String filenameWithoutExtension = MjaFileUtils.nameToFilenamePart(aufgabensammlungName) + "-"
+		String filenameWithoutExtension = verwendungszweck.getFilenamePrefix()
+			+ MjaFileUtils.nameToFilenamePart(aufgabensammlungName) + "-"
 			+ UUID.randomUUID().toString().substring(0, 8);
 		return filenameWithoutExtension;
 	}

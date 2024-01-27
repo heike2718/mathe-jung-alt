@@ -9,10 +9,10 @@ package de.egladil.mja_api.domain.generatoren;
  */
 public enum Verwendungszweck {
 
-	ARBEITSBLATT,
-	KARTEI,
-	LATEX,
-	VORSCHAU {
+	ARBEITSBLATT("arbeitsblatt_"),
+	KARTEI("kartei_"),
+	LATEX(""),
+	VORSCHAU("vorschau_") {
 
 		@Override
 		public boolean isHeadersWithNummerUndSchluessel() {
@@ -21,11 +21,26 @@ public enum Verwendungszweck {
 		}
 	};
 
+	private final String filenamePrefix;
+
+	/**
+	 * @param filenamePrefix
+	 */
+	private Verwendungszweck(final String filenamePrefix) {
+
+		this.filenamePrefix = filenamePrefix;
+	}
+
 	/**
 	 * @return boolean default ist false
 	 */
 	public boolean isHeadersWithNummerUndSchluessel() {
 
 		return false;
+	}
+
+	public String getFilenamePrefix() {
+
+		return filenamePrefix;
 	}
 }
