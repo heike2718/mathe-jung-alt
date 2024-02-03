@@ -1,5 +1,11 @@
 # Release-Notes
 
+__2.6.9__
+
++ [Sitennummern werden nicht gedruckt](https://github.com/heike2718/mathe-jung-alt/issues/132)
+
+
+
 __2.6.8__
 
 + [Vorschautext für Rätsel in Tabellen](https://github.com/heike2718/mathe-jung-alt/issues/131)
