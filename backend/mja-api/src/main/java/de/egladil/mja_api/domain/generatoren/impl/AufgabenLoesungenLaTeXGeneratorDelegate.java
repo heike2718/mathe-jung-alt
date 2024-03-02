@@ -96,11 +96,6 @@ public class AufgabenLoesungenLaTeXGeneratorDelegate {
 					.withVerwendungszweck(verwendungszweck)
 					.withPunkten(aufgabe.getPunkte());
 
-				if (count > 0) {
-
-					sb.append(LaTeXConstants.ABSTAND_ITEMS);
-				}
-
 				boolean printAsMultipleChoice = GeneratorUtils.shouldPrintAntwortvorschlaege(input.getLayoutAntwortvorschlaege(),
 					aufgabe);
 
