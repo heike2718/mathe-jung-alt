@@ -105,7 +105,6 @@ public class QuizService {
 		aufgabe.setAntwortvorschlaegeEingebettet(dbAufgabe.antwortvorschlaegeEingebettet);
 		aufgabe.setSchluessel(dbAufgabe.schluessel);
 		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.filenameVorschauFrage, dbAufgabe.filenameVorschauLoesung));
-		aufgabe.setFreigegeben(dbAufgabe.freigegeben);
 		aufgabe.setQuelle(getQuellenangabe(dbAufgabe));
 		aufgabe.setNummer(dbAufgabe.nummer);
 		aufgabe.setPunkte(dbAufgabe.punkte);

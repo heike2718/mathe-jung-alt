@@ -6,6 +6,7 @@ package de.egladil.mja_api.infrastructure.resources;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
@@ -18,11 +19,14 @@ import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabe;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenDto;
+import de.egladil.mja_api.domain.quiz.dto.Quiz;
+import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+import io.restassured.http.ContentType;
 
 /**
  * PublicResourceTest
@@ -132,5 +136,97 @@ public class PublicResourceTest {
 			assertNotNull(images.getImageFrage());
 			assertNotNull(images.getImageLoesung());
 		}
+	}
+
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// generateQuizMinikaenguru-Tests
+	// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Test
+	void should_generateQuizMinikaenguruReturn200_when_treffer() {
+
+		Quiz quiz = given()
+			.when().get("quizz/minikaenguru/2020/EINS/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(Quiz.class);
+
+		assertEquals("Klasse 1", quiz.getKlassenstufe());
+		assertEquals("Minikänguru 2020 - Klasse 1", quiz.getName());
+
+		List<Quizaufgabe> aufgaben = quiz.getAufgaben();
+
+		assertEquals(12, aufgaben.size());
+
+		{
+
+			Quizaufgabe aufgabe = aufgaben.get(0);
+			assertEquals(5, aufgabe.getAntwortvorschlaege().length);
+			assertEquals(300, aufgabe.getPunkte());
+			assertEquals("A-1", aufgabe.getNummer());
+			assertEquals(75, aufgabe.getStrafpunkte());
+			assertEquals("02638", aufgabe.getSchluessel());
+			assertFalse(aufgabe.isAntwortvorschlaegeEingebettet());
+
+			Images images = aufgabe.getImages();
+			assertNotNull(images.getImageFrage());
+			assertNotNull(images.getImageLoesung());
+		}
+
+		{
+
+			Quizaufgabe aufgabe = aufgaben.get(11);
+			assertEquals(5, aufgabe.getAntwortvorschlaege().length);
+			assertEquals(500, aufgabe.getPunkte());
+			assertEquals("C-4", aufgabe.getNummer());
+			assertEquals(125, aufgabe.getStrafpunkte());
+			assertEquals("02625", aufgabe.getSchluessel());
+			assertFalse(aufgabe.isAntwortvorschlaegeEingebettet());
+
+			Images images = aufgabe.getImages();
+			assertNotNull(images.getImageFrage());
+			assertNotNull(images.getImageLoesung());
+		}
+	}
+
+	@Test
+	void should_generateQuizMinikaenguruReturn404_when_keinTreffer() {
+
+		given()
+			.when().get("quizz/minikaenguru/2010/EINS/v1")
+			.then()
+			.statusCode(404);
+
+	}
+
+	@Test
+	void should_generateQuizMinikaenguruReturn404_when_nichtFreigegeben() {
+
+		given()
+			.when().get("quizz/minikaenguru/2022/ZWEI/v1")
+			.then()
+			.statusCode(404);
+
+	}
+
+	@Test
+	void should_generateQuizMinikaenguruReturn404_when_falscherSchwierigkeitsgrad() {
+
+		List<Schwierigkeitsgrad> schwierigkeitsgrade = Arrays.stream(Schwierigkeitsgrad.values())
+			.filter(s -> !s.isValidForMinikaenguruResources()).toList();
+
+		Random random = new Random();
+		Integer index = random.nextInt(schwierigkeitsgrade.size());
+
+		Schwierigkeitsgrad schwierigkeitsgrad = schwierigkeitsgrade.get(index.intValue());
+
+		given()
+			.when().get("quizz/minikaenguru/2022/" + schwierigkeitsgrad.toString() + "/v1")
+			.then()
+			.statusCode(404);
+
 	}
 }

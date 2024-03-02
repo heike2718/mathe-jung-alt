@@ -33,10 +33,6 @@ public class Quizaufgabe {
 	private String schluessel;
 
 	@JsonProperty
-	@Schema(description = "ob das Rätsel freigegeben ist")
-	private boolean freigegeben;
-
-	@JsonProperty
 	@Schema(description = "Quelle der Quizaufgabe für eine Zitatsection")
 	private String quelle;
 
@@ -182,16 +178,6 @@ public class Quizaufgabe {
 	public void setStrafpunkte(final int strafpunkte) {
 
 		this.strafpunkte = strafpunkte;
-	}
-
-	public boolean isFreigegeben() {
-
-		return freigegeben;
-	}
-
-	public void setFreigegeben(final boolean freigegeben) {
-
-		this.freigegeben = freigegeben;
 	}
 
 	public boolean isAntwortvorschlaegeEingebettet() {

@@ -19,7 +19,7 @@ public class RestrictedRequestsDelegate {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestrictedRequestsDelegate.class);
 
-	private static final String[] RESTRICED_PATHS_PREFIX = new String[] { "/restricted/" };
+	private static final String[] RESTRICED_PATHS_PREFIX = new String[] { "/mja-api/restricted/" };
 
 	public boolean needsS2SAuthorization(final ContainerRequestContext requestContext) {
 

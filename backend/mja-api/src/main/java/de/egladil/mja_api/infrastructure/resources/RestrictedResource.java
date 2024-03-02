@@ -32,7 +32,7 @@ import jakarta.ws.rs.core.Response;
 /**
  * RestrictedResource
  */
-@Path("/restricted")
+@Path("mja-api/restricted")
 public class RestrictedResource {
 
 	@Inject

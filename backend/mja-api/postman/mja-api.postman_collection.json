@@ -9,29 +9,116 @@
 			"name": "local",
 			"item": [
 				{
-					"name": "local: get minikänguru",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "bWstZ2F0ZXdheTpjaGFuZ2VtZQ==",
-								"type": "default"
+					"name": "restricted",
+					"item": [
+						{
+							"name": "local: get minikänguru - 200",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "bWstZ2F0ZXdheTpjaGFuZ2VtZQ==",
+										"type": "default"
+									},
+									{
+										"key": "X-CLIENT-ID",
+										"value": "mk-gateway",
+										"type": "default"
+									},
+									{
+										"key": "X-STATUS-WETTBEWERB",
+										"value": "DOWNLOAD_LEHRER",
+										"type": "default"
+									}
+								],
+								"url": "http://localhost:9210/mja-api/restricted/minikaenguru/2020/EINS"
 							},
-							{
-								"key": "X-CLIENT-ID",
-								"value": "mk-gateway",
-								"type": "default"
+							"response": []
+						},
+						{
+							"name": "local: get minikänguru - 401 - unexpected ClientId-Header",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "bWstZ2F0ZXdheTpjaGFuZ2VtZQ==",
+										"type": "default"
+									},
+									{
+										"key": "X-CLIENT-ID",
+										"value": "mja-app",
+										"type": "default"
+									},
+									{
+										"key": "X-STATUS-WETTBEWERB",
+										"value": "ERFASST",
+										"type": "default"
+									}
+								],
+								"url": "http://localhost:9210/mja-api/restricted/minikaenguru/2024/EINS"
 							},
-							{
-								"key": "X-STATUS-WETTBEWERB",
-								"value": "ERFASST",
-								"type": "default"
-							}
-						],
-						"url": "http://localhost:9210/restricted/minikaenguru/2024/EINS"
-					},
-					"response": []
+							"response": []
+						},
+						{
+							"name": "local: get minikänguru - 401 - invalid AuthorizationHeader",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "bWstZ2F0ZXdheTpjaGFuZ2VtZQ==L",
+										"type": "default"
+									},
+									{
+										"key": "X-CLIENT-ID",
+										"value": "mk-gateway",
+										"type": "default"
+									},
+									{
+										"key": "X-STATUS-WETTBEWERB",
+										"value": "BEENDET",
+										"type": "default"
+									}
+								],
+								"url": "http://localhost:9210/mja-api/restricted/minikaenguru/2024/EINS"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "public",
+					"item": [
+						{
+							"name": "local: get minikänguru - 200",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:9210/mja-api/public/minikaenguru/2020/EINS"
+							},
+							"response": []
+						},
+						{
+							"name": "local: get quizz minikänguru - 200",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:9210/mja-api/public/quizz/minikaenguru/2020/EINS"
+							},
+							"response": []
+						},
+						{
+							"name": "local: get quizz minikänguru - 404 - path traversal",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:9210/mja-api/public/quizz/minikaenguru/2020/cd ..%2f../2005"
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
