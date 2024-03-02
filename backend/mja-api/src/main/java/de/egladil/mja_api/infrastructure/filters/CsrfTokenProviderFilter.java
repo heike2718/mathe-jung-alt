@@ -1,5 +1,5 @@
 // =====================================================
-// Project: mja-auth
+// Project: mja-api
 // (c) Heike Winkelvoß
 // =====================================================
 package de.egladil.mja_api.infrastructure.filters;

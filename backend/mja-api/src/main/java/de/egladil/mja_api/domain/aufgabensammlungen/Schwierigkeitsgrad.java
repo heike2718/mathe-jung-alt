@@ -17,16 +17,40 @@ public enum Schwierigkeitsgrad {
 	ALLE("von Vorschule bis Erwachsene"),
 	AB_NEUN("ab Klasse 9"),
 	DREI_VIER("Klassen 3/4"),
-	EINS("Klasse 1"),
+	EINS("Klasse 1") {
+
+		@Override
+		public boolean isValidForMinikaenguruResources() {
+
+			return true;
+		}
+
+	},
 	EINS_ZWEI("Klassen 1/2"),
 	FUENF_SECHS("Klassen 5/6"),
 	GRUNDSCHULE("Grundschule"),
-	IKID("Inklusion"),
+	IKID("Inklusion") {
+
+		@Override
+		public boolean isValidForMinikaenguruResources() {
+
+			return true;
+		}
+
+	},
 	SEK_1("Sekundarstufe 1"),
 	SEK_2("Sekundarstufe 2"),
 	SIEBEN_ACHT("Klassen 7/8"),
 	VORSCHULE("Vorschule"),
-	ZWEI("Klasse 2");
+	ZWEI("Klasse 2") {
+
+		@Override
+		public boolean isValidForMinikaenguruResources() {
+
+			return true;
+		}
+
+	};
 
 	private final String label;
 
@@ -41,6 +65,11 @@ public enum Schwierigkeitsgrad {
 	public String getLabel() {
 
 		return label;
+	}
+
+	public boolean isValidForMinikaenguruResources() {
+
+		return false;
 	}
 
 }

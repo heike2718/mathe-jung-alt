@@ -455,7 +455,8 @@ public class AufgabensammlungenResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printVorschau",
-		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein PDF. Diese API funktioniert für Aufgabensammlungen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt. . Es wird immer mit ANKREUTZABELLE gedruckt")
+		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein PDF.",
+		description = "Diese API funktioniert für Aufgabensammlungen mit beliebigem Status. Aufgaben und Lösungen werden zusammen gedruckt. . Es wird immer mit ANKREUTZABELLE gedruckt")
 	@Parameters({
 		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird."),
 		@Parameter(
@@ -516,7 +517,8 @@ public class AufgabensammlungenResource {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Operation(
 		operationId = "downloadLaTeXSource",
-		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID mehrere LaTeX-Dateien. Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
+		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID mehrere LaTeX-Dateien.",
+		description = "Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
 	@Parameters({
 		@Parameter(
 			in = ParameterIn.PATH, name = "aufgabensammlungID",
@@ -591,7 +593,8 @@ public class AufgabensammlungenResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printArbeitsblatt",
-		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein PDF. Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
+		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein Arbeitsblatt-PDF.",
+		description = "Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
 		@Parameter(
 			name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.", required = true),
@@ -655,7 +658,8 @@ public class AufgabensammlungenResource {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Operation(
 		operationId = "printKnobelkartei",
-		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein PDF, in dem jede Seite genau ein Rätsel enthält. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
+		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein Knobelkartei-PDF.",
+		description = "Jede Seite enthält genau ein Rätsel. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
 		@Parameter(
 			name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.", required = true),

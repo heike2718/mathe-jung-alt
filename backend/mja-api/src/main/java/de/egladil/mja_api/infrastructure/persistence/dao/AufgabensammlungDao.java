@@ -18,7 +18,7 @@ import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
 import de.egladil.mja_api.domain.semantik.Repository;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlugnselement;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlungselement;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -287,11 +287,11 @@ public class AufgabensammlungDao {
 	 * @param  aufgabensammlungID
 	 * @return                    List
 	 */
-	public List<PersistentesAufgabensammlugnselement> loadElementeAufgabensammlung(final String aufgabensammlungID) {
+	public List<PersistentesAufgabensammlungselement> loadElementeAufgabensammlung(final String aufgabensammlungID) {
 
 		return entityManager
-			.createNamedQuery(PersistentesAufgabensammlugnselement.LOAD_BY_AUFGABENSAMMLUNG,
-				PersistentesAufgabensammlugnselement.class)
+			.createNamedQuery(PersistentesAufgabensammlungselement.LOAD_BY_AUFGABENSAMMLUNG,
+				PersistentesAufgabensammlungselement.class)
 			.setParameter("aufgabensammlungID", aufgabensammlungID).getResultList();
 	}
 
@@ -343,18 +343,18 @@ public class AufgabensammlungDao {
 
 	/**
 	 * @param  elementID
-	 * @return           PersistentesAufgabensammlugnselement
+	 * @return           PersistentesAufgabensammlungselement
 	 */
-	public PersistentesAufgabensammlugnselement findElementById(final String elementID) {
+	public PersistentesAufgabensammlungselement findElementById(final String elementID) {
 
-		return entityManager.find(PersistentesAufgabensammlugnselement.class, elementID);
+		return entityManager.find(PersistentesAufgabensammlungselement.class, elementID);
 	}
 
 	/**
 	 * @param  element
-	 * @return         PersistentesAufgabensammlugnselement
+	 * @return         PersistentesAufgabensammlungselement
 	 */
-	public PersistentesAufgabensammlugnselement saveElement(final PersistentesAufgabensammlugnselement element) {
+	public PersistentesAufgabensammlungselement saveElement(final PersistentesAufgabensammlungselement element) {
 
 		if (element.isPersistent()) {
 
@@ -371,7 +371,7 @@ public class AufgabensammlungDao {
 	@Transactional
 	public void deleteElement(final String elementID) {
 
-		final PersistentesAufgabensammlugnselement element = entityManager.find(PersistentesAufgabensammlugnselement.class,
+		final PersistentesAufgabensammlungselement element = entityManager.find(PersistentesAufgabensammlungselement.class,
 			elementID);
 
 		if (element != null) {

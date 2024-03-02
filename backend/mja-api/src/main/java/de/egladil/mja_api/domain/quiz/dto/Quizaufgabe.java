@@ -4,9 +4,13 @@
 // =====================================================
 package de.egladil.mja_api.domain.quiz.dto;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
@@ -58,7 +62,7 @@ public class Quizaufgabe {
 
 	@JsonProperty
 	@Schema(description = "Images, die angezeigt werden können")
-	Images images;
+	private Images images;
 
 	@Override
 	public int hashCode() {
@@ -94,6 +98,20 @@ public class Quizaufgabe {
 			return false;
 		}
 		return true;
+	}
+
+	@JsonIgnore
+	public String getLoesungsbuchstabe() {
+
+		if (antwortvorschlaege == null) {
+
+			return null;
+		}
+
+		Optional<String> optAntwortvorschlag = Arrays.stream(antwortvorschlaege).filter(a -> a.isKorrekt())
+			.map(a -> a.getBuchstabe()).findFirst();
+
+		return optAntwortvorschlag.isEmpty() ? null : optAntwortvorschlag.get();
 	}
 
 	public String getNummer() {

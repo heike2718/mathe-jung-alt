@@ -46,7 +46,8 @@ public class QuizzResource {
 	@PermitAll
 	@Operation(
 		operationId = "generateQuizWithUniqueKey",
-		summary = "Generiert ein JSON-Objekt mit allen Aufgaben und Lösungen der Aufgabensammlung, die durch die fachlichen Parameter eindeutig bestimmt ist. Das ist eine Methode, um auf die Minikänguru-Wettbewerbe zuzugreifen, ohne deren ID zu kennen. Die API liefert nur Quiz mit dem Status FREIGEGEBEN zurück.")
+		summary = "Generiert ein JSON-Objekt mit allen Aufgaben und Lösungen der Aufgabensammlung, die durch die fachlichen Parameter eindeutig bestimmt ist.",
+		description = " Das ist eine Methode, um auf die Minikänguru-Wettbewerbe zuzugreifen, ohne deren ID zu kennen. Die API liefert nur Quiz mit dem Status FREIGEGEBEN zurück.")
 	@Parameters({
 		@Parameter(name = "referenztyp", description = "Kontext zur Interpretation der Referenz"),
 		@Parameter(name = "referenz", description = "ID im alten Aufgabenarchiv"),
@@ -85,4 +86,6 @@ public class QuizzResource {
 
 		return Response.ok(optResult.get()).build();
 	}
+
+	// TODO das ist noch dysfunktional weil es nur für Aufgabensammlungen funktioniert, die einen Referenztyp haben.
 }

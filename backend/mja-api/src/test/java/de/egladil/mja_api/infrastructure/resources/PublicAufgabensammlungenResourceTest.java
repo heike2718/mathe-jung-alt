@@ -139,18 +139,15 @@ public class PublicAufgabensammlungenResourceTest {
 		AufgabensammlungSucheTreffer treffer = given()
 			.queryParam("limit", "20")
 			.queryParam("offset", "0")
-			.queryParam("schwierigkeitsgrad", Schwierigkeitsgrad.EINS)
-			.get(
-				"v1")
+			.queryParam("schwierigkeitsgrad", Schwierigkeitsgrad.EINS.toString())
+			.get("v1")
 			.then()
-			.contentType(ContentType.JSON)
 			.and()
 			.extract()
 			.as(AufgabensammlungSucheTreffer.class);
 
 		assertEquals(2, treffer.getItems().size());
 		assertEquals(2l, treffer.getTrefferGesamt());
-
 	}
 
 	@Test

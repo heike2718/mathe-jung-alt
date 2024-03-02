@@ -5,7 +5,9 @@
 package de.egladil.mja_api.domain.aufgabensammlungen;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +26,7 @@ import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTre
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungPayload;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungselementPayload;
 import de.egladil.mja_api.domain.aufgabensammlungen.impl.AufgabensammlungPermissionDelegate;
+import de.egladil.mja_api.domain.aufgabensammlungen.impl.AufgabensammlungselementComparator;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.generatoren.AufgabensammlungLaTeXGeneratorService;
 import de.egladil.mja_api.domain.generatoren.AufgabensammlungPDFGeneratorService;
@@ -43,7 +46,7 @@ import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.AufgabensammlungDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
-import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlugnselement;
+import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesAufgabensammlungselement;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -109,6 +112,29 @@ public class AufgabensammlungenService {
 	}
 
 	/**
+	 * Gibt den eindeutigen Treffer zurück, falls er existiert. Sonst null.
+	 *
+	 * @param  referenztyp
+	 *                            Referenztyp
+	 * @param  referenz
+	 *                            String - z.B. das Jahr oder eine SerieId
+	 * @param  schwierigkeitsgrad
+	 *                            Schwierigkeitsgrad
+	 * @return                    AufgabensammlungSucheTrefferItem oder null
+	 */
+	public AufgabensammlungSucheTrefferItem findAufgabensammlungByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
+
+		PersistenteAufgabensammlung uniqueTreffer = aufgabensammlungDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
+
+		if (uniqueTreffer == null) {
+
+			return null;
+		}
+
+		return mapFromDB(uniqueTreffer);
+	}
+
+	/**
 	 * @param  aufgabensammlungID
 	 * @param  userId
 	 *                            String die ID des eingeloggten Users
@@ -129,22 +155,27 @@ public class AufgabensammlungenService {
 
 		permissionDelegate.checkReadPermission(aufgabensammlung);
 
-		// try {
-		//
-		// permissionDelegate.checkWritePermission(aufgabensammlung);
-		// result.setSchreibgeschuetzt(false);
-		//
-		// } catch (WebApplicationException e) {
-		//
-		// LOGGER.info(e.getMessage());
-		// result.setSchreibgeschuetzt(true);
-		// }
-
 		result.setSchreibgeschuetzt(permissionDelegate.isSchreibgeschuetztFuerUser(aufgabensammlung));
+		List<Aufgabensammlungselement> elemente = loadElementeSorted(aufgabensammlungID);
 
-		List<PersistentesAufgabensammlugnselement> elementeDB = aufgabensammlungDao
+		result.setElemente(elemente);
+		return Optional.of(result);
+	}
+
+	/**
+	 * Läd die Elemente der Aufgabensammlung.
+	 *
+	 * @param  aufgabensammlungID
+	 *                            String
+	 * @return                    List
+	 */
+	List<Aufgabensammlungselement> loadElementeSorted(final String aufgabensammlungID) {
+
+		List<PersistentesAufgabensammlungselement> elementeDB = aufgabensammlungDao
 			.loadElementeAufgabensammlung(aufgabensammlungID);
 		List<PersistenteAufgabeReadonly> aufgaben = aufgabensammlungDao.loadAufgabenByAufgabensammlung(aufgabensammlungID);
+
+		final List<Aufgabensammlungselement> result = new ArrayList<>();
 
 		elementeDB.forEach(r -> {
 
@@ -152,15 +183,17 @@ public class AufgabensammlungenService {
 
 			if (optAufgabe.isPresent()) {
 
-				result.addElement(this.mapFromDB(optAufgabe.get(), r));
+				result.add(this.mapFromDB(optAufgabe.get(), r));
 			}
 		});
 
-		result.sortElemente();
-		return Optional.of(result);
+		AufgabensammlungselementComparator comparator = new AufgabensammlungselementComparator();
+		Collections.sort(result, comparator);
+
+		return result;
 	}
 
-	Aufgabensammlungselement mapFromDB(final PersistenteAufgabeReadonly aufgabe, final PersistentesAufgabensammlugnselement element) {
+	Aufgabensammlungselement mapFromDB(final PersistenteAufgabeReadonly aufgabe, final PersistentesAufgabensammlungselement element) {
 
 		Aufgabensammlungselement result = new Aufgabensammlungselement()
 			.withId(element.uuid)
@@ -406,10 +439,10 @@ public class AufgabensammlungenService {
 			throw new WebApplicationException(response);
 		}
 
-		List<PersistentesAufgabensammlugnselement> persistenteElemente = aufgabensammlungDao
+		List<PersistentesAufgabensammlungselement> persistenteElemente = aufgabensammlungDao
 			.loadElementeAufgabensammlung(aufgabensammlungID);
 
-		Optional<PersistentesAufgabensammlugnselement> optElementMitGleicherNummer = persistenteElemente.stream()
+		Optional<PersistentesAufgabensammlungselement> optElementMitGleicherNummer = persistenteElemente.stream()
 			.filter(el -> el.nummer.equalsIgnoreCase(payload.getNummer())).findFirst();
 
 		if (optElementMitGleicherNummer.isPresent()) {
@@ -423,7 +456,7 @@ public class AufgabensammlungenService {
 
 		final String raetselUuid = optRaetselId.get();
 
-		Optional<PersistentesAufgabensammlugnselement> optElementMitGleichemRaetsel = persistenteElemente.stream()
+		Optional<PersistentesAufgabensammlungselement> optElementMitGleichemRaetsel = persistenteElemente.stream()
 			.filter(el -> el.raetselID.equals(raetselUuid)).findFirst();
 
 		if (optElementMitGleichemRaetsel.isPresent()) {
@@ -453,15 +486,15 @@ public class AufgabensammlungenService {
 	}
 
 	@Transactional
-	PersistentesAufgabensammlugnselement createAndPersistNeuesElement(final String aufgabensammlungID, final String raetselID, final EditAufgabensammlungselementPayload payload) {
+	PersistentesAufgabensammlungselement createAndPersistNeuesElement(final String aufgabensammlungID, final String raetselID, final EditAufgabensammlungselementPayload payload) {
 
-		PersistentesAufgabensammlugnselement neues = new PersistentesAufgabensammlugnselement();
+		PersistentesAufgabensammlungselement neues = new PersistentesAufgabensammlungselement();
 		neues.nummer = payload.getNummer();
 		neues.punkte = payload.getPunkte();
 		neues.aufgabensammlungID = aufgabensammlungID;
 		neues.raetselID = raetselID;
 
-		PersistentesAufgabensammlugnselement persisted = aufgabensammlungDao.saveElement(neues);
+		PersistentesAufgabensammlungselement persisted = aufgabensammlungDao.saveElement(neues);
 
 		return persisted;
 	}
@@ -476,7 +509,7 @@ public class AufgabensammlungenService {
 	@Transactional
 	public AufgabensammlungDetails elementAendern(final String aufgabensammlungID, final EditAufgabensammlungselementPayload payload) {
 
-		PersistentesAufgabensammlugnselement persistentesElement = aufgabensammlungDao.findElementById(payload.getId());
+		PersistentesAufgabensammlungselement persistentesElement = aufgabensammlungDao.findElementById(payload.getId());
 
 		if (persistentesElement == null) {
 
@@ -509,10 +542,10 @@ public class AufgabensammlungenService {
 			throw new WebApplicationException(response);
 		}
 
-		List<PersistentesAufgabensammlugnselement> persistenteElemente = aufgabensammlungDao
+		List<PersistentesAufgabensammlungselement> persistenteElemente = aufgabensammlungDao
 			.loadElementeAufgabensammlung(aufgabensammlungID);
 
-		Optional<PersistentesAufgabensammlugnselement> optElementMitGleicherNummer = persistenteElemente.stream()
+		Optional<PersistentesAufgabensammlungselement> optElementMitGleicherNummer = persistenteElemente.stream()
 			.filter(el -> el.nummer.equalsIgnoreCase(payload.getNummer()) && !el.uuid.equals(payload.getId())).findFirst();
 
 		if (optElementMitGleicherNummer.isPresent()) {
@@ -540,7 +573,7 @@ public class AufgabensammlungenService {
 		return opt.get();
 	}
 
-	void mergeAndSaveElement(final PersistentesAufgabensammlugnselement persistentesElement, final EditAufgabensammlungselementPayload payload) {
+	void mergeAndSaveElement(final PersistentesAufgabensammlungselement persistentesElement, final EditAufgabensammlungselementPayload payload) {
 
 		persistentesElement.nummer = payload.getNummer();
 		persistentesElement.punkte = payload.getPunkte();
@@ -682,7 +715,7 @@ public class AufgabensammlungenService {
 
 		permissionDelegate.checkReadPermission(dbResult);
 
-		List<Quizaufgabe> result = this.quizService.getItemsAsQuizaufgaben(dbResult.uuid);
+		List<Quizaufgabe> result = this.loadElementeAsQuizzaufgaben(dbResult.uuid);
 
 		if (result.isEmpty()) {
 
@@ -692,6 +725,17 @@ public class AufgabensammlungenService {
 
 		return result;
 
+	}
+
+	/**
+	 * Läd die Elemente der gegebenen Aufgabensammlung als Quizzaufgaben.
+	 *
+	 * @param  aufgabensammlungID
+	 * @return                    List sortiert nach Nummer.
+	 */
+	public List<Quizaufgabe> loadElementeAsQuizzaufgaben(final String aufgabensammlungID) {
+
+		return this.quizService.getItemsAsQuizaufgaben(aufgabensammlungID);
 	}
 
 	/**

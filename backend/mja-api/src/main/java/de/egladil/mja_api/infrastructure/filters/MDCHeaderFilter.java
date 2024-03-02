@@ -11,6 +11,7 @@ import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.MjaApiApplication;
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -31,8 +32,6 @@ public class MDCHeaderFilter implements ContainerRequestFilter, ContainerRespons
 	private static final Logger LOGGER = LoggerFactory.getLogger(MDCHeaderFilter.class);
 
 	private static final String X_CORRELATION_ID_HEADER_NAME = "X-CORRELATION-ID";
-
-	private static final String X_CLIENT_ID_HEADER_NAME = "X-CLIENT-ID";
 
 	private static final String MDC_KEY_USER_ID = "userId";
 
@@ -77,7 +76,7 @@ public class MDCHeaderFilter implements ContainerRequestFilter, ContainerRespons
 
 	String getClientId(final ContainerRequestContext ctx) {
 
-		String clientId = ctx.getHeaderString(X_CLIENT_ID_HEADER_NAME);
+		String clientId = ctx.getHeaderString(MjaApiApplication.X_CLIENT_ID_HEADER_NAME);
 		return clientId != null ? clientId : "unknown";
 	}
 

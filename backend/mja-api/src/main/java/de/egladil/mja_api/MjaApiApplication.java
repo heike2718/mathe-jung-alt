@@ -11,5 +11,5 @@ import jakarta.ws.rs.core.Application;
  */
 public class MjaApiApplication extends Application {
 
-	// aktuell leer
+	public static final String X_CLIENT_ID_HEADER_NAME = "X-CLIENT-ID";
 }

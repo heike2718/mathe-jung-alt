@@ -5,7 +5,6 @@
 package de.egladil.mja_api.domain.aufgabensammlungen.dto;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -16,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.egladil.mja_api.domain.aufgabensammlungen.Aufgabensammlungselement;
 import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
-import de.egladil.mja_api.domain.aufgabensammlungen.impl.AufgabensammlungselementComparator;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 
 /**
@@ -91,11 +89,6 @@ public class AufgabensammlungDetails {
 	public void addElement(final Aufgabensammlungselement element) {
 
 		this.elemente.add(element);
-	}
-
-	public void sortElemente() {
-
-		Collections.sort(elemente, new AufgabensammlungselementComparator());
 	}
 
 	public String getId() {

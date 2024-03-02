@@ -91,7 +91,8 @@ public class QuizService {
 			Quizaufgabe aufgabe = mapFromDB(aufgabeDB);
 			aufgaben.add(aufgabe);
 		});
-		aufgaben.sort(new QuizaufgabeComparator());
+		QuizaufgabeComparator comparator = new QuizaufgabeComparator();
+		aufgaben.sort(comparator);
 
 		return aufgaben;
 

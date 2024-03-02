@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "29a58fe8-d412-446c-976e-bddccd5616f8",
+		"name": "mja-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "local",
+			"item": [
+				{
+					"name": "local: get minikänguru",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "bWstZ2F0ZXdheTpjaGFuZ2VtZQ==",
+								"type": "default"
+							},
+							{
+								"key": "X-CLIENT-ID",
+								"value": "mk-gateway",
+								"type": "default"
+							},
+							{
+								"key": "X-STATUS-WETTBEWERB",
+								"value": "ERFASST",
+								"type": "default"
+							}
+						],
+						"url": "http://localhost:9210/restricted/minikaenguru/2024/EINS"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
