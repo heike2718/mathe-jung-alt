@@ -9,7 +9,7 @@ import io.smallrye.config.ConfigMapping;
 /**
  * MkGatewayAuthConfig gruppiert die Konfigurationsparameter mit dem Präfix mk-gateway.auth
  */
-@ConfigMapping(prefix = "mk-gateway.auth")
+@ConfigMapping(prefix = "mkgateway.auth")
 public interface MkGatewayAuthConfig {
 
 	String client();

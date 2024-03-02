@@ -29,19 +29,25 @@ public class ClientAuthService {
 
 	public Pair<String, Boolean> authorize(final String authorizationHeaderValue) {
 
-		LOGGER.debug("expect header={}", StringUtils.abbreviate(authConfig.header(), 11));
 		String headerValue = StringUtils.remove(authorizationHeaderValue, AUTH_METHOD_PREFIX);
+		LOGGER.debug("expect header={}, headerValue={}", StringUtils.abbreviate(authConfig.header(), 20),
+			StringUtils.abbreviate(headerValue, 20));
 
 		try {
 
 			String decodedHeader = new String(Base64.getDecoder().decode(headerValue.getBytes()));
-			LOGGER.debug("actual header={}", StringUtils.abbreviate(decodedHeader, 11));
 			boolean authenticated = authConfig.header().equals(decodedHeader);
 			String clientId = extractClient(decodedHeader);
+
+			if (!authenticated) {
+
+				LOGGER.error("clientId={}, actual header decoded={}, authConfic.header={}", clientId,
+					StringUtils.abbreviate(decodedHeader, 20), StringUtils.abbreviate(authConfig.header(), 20));
+			}
 			return Pair.of(clientId, authenticated);
 		} catch (IllegalArgumentException e) {
 
-			LOGGER.debug("Base64-Dekodierung des Authorization-Headers fehlgeschlagen: {}", e.getMessage());
+			LOGGER.error("Base64-Dekodierung des Authorization-Headers fehlgeschlagen: {}", e.getMessage());
 			return Pair.of("", false);
 		}
 	}

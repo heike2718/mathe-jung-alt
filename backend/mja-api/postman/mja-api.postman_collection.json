@@ -62,13 +62,38 @@
 							"response": []
 						},
 						{
-							"name": "local: get minikänguru - 401 - invalid AuthorizationHeader",
+							"name": "local: get minikänguru - 401 - Authorization-Header not base64",
 							"request": {
 								"method": "GET",
 								"header": [
 									{
 										"key": "Authorization",
 										"value": "bWstZ2F0ZXdheTpjaGFuZ2VtZQ==L",
+										"type": "default"
+									},
+									{
+										"key": "X-CLIENT-ID",
+										"value": "mk-gateway",
+										"type": "default"
+									},
+									{
+										"key": "X-STATUS-WETTBEWERB",
+										"value": "BEENDET",
+										"type": "default"
+									}
+								],
+								"url": "http://localhost:9210/mja-api/restricted/minikaenguru/2024/EINS"
+							},
+							"response": []
+						},
+						{
+							"name": "local: get minikänguru - 401 - Authorization-Header invalid",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "bWstZ2F0ZXdheTpzaG91bGQtYmUtY2hhbmdlZA==",
 										"type": "default"
 									},
 									{

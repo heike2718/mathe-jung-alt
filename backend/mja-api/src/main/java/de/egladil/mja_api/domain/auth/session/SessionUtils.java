@@ -165,7 +165,7 @@ public final class SessionUtils {
 
 		if (!path.toLowerCase().contains("aufgabensammlungen")) {
 
-			LOGGER.warn("{}: Request ohne {}-Cookie", path, SESSION_COOKIE_NAME);
+			LOGGER.debug("{}: Request ohne {}-Cookie", path, SESSION_COOKIE_NAME);
 		}
 		return null;
 	}

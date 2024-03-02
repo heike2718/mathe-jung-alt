@@ -56,16 +56,16 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 
 		if (authorizationHeader == null) {
 
-			LOGGER.info("Aufruf {} ohne Authorization-Header. AuthorizationHeader ist erforderlich!", path);
+			LOGGER.warn("Aufruf {} ohne Authorization-Header. AuthorizationHeader ist erforderlich!", path);
 			throw new WebApplicationException(
 				Response.status(400)
 					.entity(MessagePayload.error("S2S-Authentifizierung fehlgeschlagen. Authorization-Header ist erforderlich."))
 					.build());
 		}
 
-		LOGGER.debug("AuthorizationHeader={}", StringUtils.abbreviate(authorizationHeader, 11));
+		LOGGER.debug("AuthorizationHeader={}", StringUtils.abbreviate(authorizationHeader, 20));
 
-		String clientId = getClientId(requestContext);
+		String clientIdFromHeader = getClientId(requestContext);
 
 		Pair<String, Boolean> authResult = authService.authorize(authorizationHeader);
 
@@ -76,21 +76,21 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 				.build());
 		} else {
 
-			if (!clientId.equals(authResult.getLeft())) {
+			if (!clientIdFromHeader.equals(authResult.getLeft())) {
 
-				LOGGER.warn("clientId aus Authorization-Header und {} stimmen nicht überein: [clientId={}, {}={}]",
+				LOGGER.error("clientId aus Authorization-Header und {} stimmen nicht überein: [clientId={}, {}={}]",
 					MjaApiApplication.X_CLIENT_ID_HEADER_NAME, authResult.getLeft(), MjaApiApplication.X_CLIENT_ID_HEADER_NAME,
-					clientId);
+					clientIdFromHeader);
 
 				throw new WebApplicationException(Response.status(401).entity(MessagePayload.error(
 					"keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte Konfiguration von mk-gateway.auth.client und Header X-CLIENT-ID pruefen."))
 					.build());
 			}
-			LOGGER.info("path={}", path);
+			LOGGER.debug("path={}", path);
 		}
 	}
 
-	String getClientId(final ContainerRequestContext ctx) {
+	private String getClientId(final ContainerRequestContext ctx) {
 
 		String clientId = ctx.getHeaderString(MjaApiApplication.X_CLIENT_ID_HEADER_NAME);
 		return clientId != null ? clientId : "unknown";
