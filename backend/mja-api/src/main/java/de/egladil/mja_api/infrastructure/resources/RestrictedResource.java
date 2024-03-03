@@ -36,7 +36,7 @@ import jakarta.ws.rs.core.Response;
 public class RestrictedResource {
 
 	@Inject
-	MinikaenguruService minikaengiruService;
+	MinikaenguruService minikaenguruService;
 
 	@Path("/minikaenguru/{jahr}/{klasse}")
 	@GET
@@ -52,7 +52,7 @@ public class RestrictedResource {
 			required = true),
 		@Parameter(
 			in = ParameterIn.PATH,
-			name = "schwierigkeitsgrad",
+			name = "klasse",
 			description = "Eins von IKID,EINS,ZWEI - die Klassenstufe.",
 			required = true),
 		@Parameter(
@@ -93,14 +93,15 @@ public class RestrictedResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	public Response getAufgabenMinikaenguruwettbewerb(@HeaderParam(
-		value = "X-STATUS-WETTBEWERB") final StatusWettbewerb statusWettbewerb, @Pattern(
-			regexp = MjaRegexps.VALID_JAHR,
-			message = "jahr enthält ungültige Zeichen oder hat nicht die Länge 4") @PathParam(
-				value = "jahr") final String jahr, @PathParam(
-					value = "klasse") final Schwierigkeitsgrad schwierigkeitsgrad) {
+	// @formatter:off
+	public Response getAufgabenMinikaenguruwettbewerb(
+		@HeaderParam(value = "X-STATUS-WETTBEWERB") final StatusWettbewerb statusWettbewerb,
+		@Pattern(regexp = MjaRegexps.VALID_JAHR, message = "jahr enthält ungültige Zeichen oder hat nicht die Länge 4")
+			@PathParam(value = "jahr") final String jahr,
+		@PathParam(value = "klasse") final Schwierigkeitsgrad schwierigkeitsgrad) {
+	// @formatter:on
 
-		MinikaenguruAufgabenDto aufgaben = minikaengiruService.getAufgabenNichtFreigegebenerWettbewerb(jahr, schwierigkeitsgrad,
+		MinikaenguruAufgabenDto aufgaben = minikaenguruService.getAufgabenNichtFreigegebenerWettbewerb(jahr, schwierigkeitsgrad,
 			statusWettbewerb);
 
 		return Response.ok(aufgaben).build();

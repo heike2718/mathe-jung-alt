@@ -16,15 +16,8 @@ public enum StatusWettbewerb {
 
 			return false;
 		}
-
 	},
-	ANMELDUNG {
-		@Override
-		public boolean isAllowedForRestrictedAccessToWettbewerb() {
-
-			return false;
-		}
-	},
+	ANMELDUNG,
 	DOWNLOAD_LEHRER,
 	DOWNLOAD_PRIVAT,
 	BEENDET;
