@@ -21,7 +21,6 @@ import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.s2s.MkGatewayAuthConfig;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabe;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenDto;
-import de.egladil.mja_api.domain.minikaenguru.StatusWettbewerb;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
@@ -86,12 +85,9 @@ public class RestrictedResourceTest {
 
 		Schwierigkeitsgrad schwierigkeitsgrad = schwierigkeitsgrade.get(index.intValue());
 
-		StatusWettbewerb statusWettbewerb = StatusWettbewerb.DOWNLOAD_LEHRER;
-
 		MessagePayload messagePayload = given()
 			.header(MjaApiApplication.X_CLIENT_ID_HEADER_NAME, authConfig.client())
 			.header("Authorization", new String(Base64.getEncoder().encode(authConfig.header().getBytes())))
-			.header("X-STATUS-WETTBEWERB", statusWettbewerb.toString())
 			.when().get("/minikaenguru/2020/" + schwierigkeitsgrad.toString())
 			.then()
 			.statusCode(400)
@@ -108,12 +104,10 @@ public class RestrictedResourceTest {
 	void should_getAufgabenMinikaenguruwettbewerb_return404_when_keinTreffer() {
 
 		Schwierigkeitsgrad schwierigkeitsgrad = Schwierigkeitsgrad.EINS;
-		StatusWettbewerb statusWettbewerb = StatusWettbewerb.DOWNLOAD_LEHRER;
 
 		MessagePayload messagePayload = given()
 			.header(MjaApiApplication.X_CLIENT_ID_HEADER_NAME, authConfig.client())
 			.header("Authorization", new String(Base64.getEncoder().encode(authConfig.header().getBytes())))
-			.header("X-STATUS-WETTBEWERB", statusWettbewerb.toString())
 			.when().get("/minikaenguru/2016/" + schwierigkeitsgrad.toString())
 			.then()
 			.statusCode(404)
@@ -127,44 +121,13 @@ public class RestrictedResourceTest {
 	}
 
 	@Test
-	void should_getAufgabenMinikaenguruwettbewerb_return400_when_statusWettbewerbNotAsExpected() {
-
-		List<StatusWettbewerb> status = Arrays.stream(StatusWettbewerb.values())
-			.filter(s -> !s.isAllowedForRestrictedAccessToWettbewerb()).toList();
-
-		Random random = new Random();
-		Integer index = random.nextInt(status.size());
-
-		Schwierigkeitsgrad schwierigkeitsgrad = Schwierigkeitsgrad.EINS;
-
-		StatusWettbewerb statusWettbewerb = status.get(index.intValue());
-
-		MessagePayload messagePayload = given()
-			.header(MjaApiApplication.X_CLIENT_ID_HEADER_NAME, authConfig.client())
-			.header("Authorization", new String(Base64.getEncoder().encode(authConfig.header().getBytes())))
-			.header("X-STATUS-WETTBEWERB", statusWettbewerb.toString())
-			.when().get("/minikaenguru/2021/" + schwierigkeitsgrad.toString())
-			.then()
-			.statusCode(400)
-			.extract()
-			.as(MessagePayload.class);
-
-		assertEquals("ERROR", messagePayload.getLevel());
-		assertEquals(
-			"Der Wettbewerb hat noch nicht den erlaubten Status, um seine Aufgaben herauszugeben.",
-			messagePayload.getMessage());
-	}
-
-	@Test
 	void should_getAufgabenMinikaenguruwettbewerb_return200_when_everythingIsOK() {
 
 		Schwierigkeitsgrad schwierigkeitsgrad = Schwierigkeitsgrad.EINS;
-		StatusWettbewerb statusWettbewerb = StatusWettbewerb.DOWNLOAD_LEHRER;
 
 		MinikaenguruAufgabenDto responsePayload = given()
 			.header(MjaApiApplication.X_CLIENT_ID_HEADER_NAME, authConfig.client())
 			.header("Authorization", new String(Base64.getEncoder().encode(authConfig.header().getBytes())))
-			.header("X-STATUS-WETTBEWERB", statusWettbewerb.toString())
 			.when().get("/minikaenguru/2020/" + schwierigkeitsgrad.toString())
 			.then()
 			.statusCode(200)

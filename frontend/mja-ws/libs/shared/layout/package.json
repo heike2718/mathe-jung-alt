@@ -2,7 +2,7 @@
   "name": "@mja-ws/shared/layout",
   "version": "0.0.1",
   "dependencies": {
-    "tslib": "^3.0.1"
+    "tslib": "^3.0.2"
   },
   "type": "commonjs",
   "main": "./src/index.js",

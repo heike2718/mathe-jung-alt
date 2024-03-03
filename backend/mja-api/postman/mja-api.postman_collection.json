@@ -25,11 +25,6 @@
 										"key": "X-CLIENT-ID",
 										"value": "mk-gateway",
 										"type": "default"
-									},
-									{
-										"key": "X-STATUS-WETTBEWERB",
-										"value": "DOWNLOAD_LEHRER",
-										"type": "default"
 									}
 								],
 								"url": "http://localhost:9210/mja-api/restricted/minikaenguru/2020/EINS"
@@ -49,11 +44,6 @@
 									{
 										"key": "X-CLIENT-ID",
 										"value": "mja-app",
-										"type": "default"
-									},
-									{
-										"key": "X-STATUS-WETTBEWERB",
-										"value": "ERFASST",
 										"type": "default"
 									}
 								],
@@ -75,11 +65,6 @@
 										"key": "X-CLIENT-ID",
 										"value": "mk-gateway",
 										"type": "default"
-									},
-									{
-										"key": "X-STATUS-WETTBEWERB",
-										"value": "BEENDET",
-										"type": "default"
 									}
 								],
 								"url": "http://localhost:9210/mja-api/restricted/minikaenguru/2024/EINS"
@@ -94,11 +79,6 @@
 									{
 										"key": "Authorization",
 										"value": "bWstZ2F0ZXdheTpzaG91bGQtYmUtY2hhbmdlZA==",
-										"type": "default"
-									},
-									{
-										"key": "X-CLIENT-ID",
-										"value": "mk-gateway",
 										"type": "default"
 									},
 									{

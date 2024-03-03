@@ -31,23 +31,14 @@ public class MinikaenguruService {
 	 *
 	 * @param  jahr
 	 * @param  schwierigkeitsgrad
-	 * @param  statusWettbewerb
 	 * @return                         MinikaenguruAufgabenDto
 	 * @throws WebApplicationException
 	 *                                 wenn der schwierigkeitsgrad nicht korrekt ist, der statusWettbewerb nicht korrekt ist oder
 	 *                                 bei anderen Exceptions.
 	 */
-	public MinikaenguruAufgabenDto getAufgabenNichtFreigegebenerWettbewerb(final String jahr, final Schwierigkeitsgrad schwierigkeitsgrad, final StatusWettbewerb statusWettbewerb) throws WebApplicationException {
+	public MinikaenguruAufgabenDto getAufgabenNichtFreigegebenerWettbewerb(final String jahr, final Schwierigkeitsgrad schwierigkeitsgrad) throws WebApplicationException {
 
 		checkSchwierigkeitsgrad(schwierigkeitsgrad);
-
-		if (!statusWettbewerb.isAllowedForRestrictedAccessToWettbewerb()) {
-
-			MessagePayload messagePayload = MessagePayload
-				.error("Der Wettbewerb hat noch nicht den erlaubten Status, um seine Aufgaben herauszugeben.");
-			Response response = Response.status(400).entity(messagePayload).build();
-			throw new WebApplicationException(response);
-		}
 
 		AufgabensammlungSucheTrefferItem aufgabensammlung = aufgabensammlungenervice
 			.findAufgabensammlungByUniqueKey(Referenztyp.MINIKAENGURU, jahr, schwierigkeitsgrad);

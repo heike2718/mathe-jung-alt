@@ -16,13 +16,11 @@ import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenDto;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruService;
-import de.egladil.mja_api.domain.minikaenguru.StatusWettbewerb;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -54,11 +52,6 @@ public class RestrictedResource {
 			in = ParameterIn.PATH,
 			name = "klasse",
 			description = "Eins von IKID,EINS,ZWEI - die Klassenstufe.",
-			required = true),
-		@Parameter(
-			in = ParameterIn.HEADER,
-			name = "X-STATUS-WETTBEWERB",
-			description = "Status des Wettbewerbs",
 			required = true),
 		@Parameter(
 			in = ParameterIn.HEADER,
@@ -95,14 +88,12 @@ public class RestrictedResource {
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public Response getAufgabenMinikaenguruwettbewerb(
-		@HeaderParam(value = "X-STATUS-WETTBEWERB") final StatusWettbewerb statusWettbewerb,
 		@Pattern(regexp = MjaRegexps.VALID_JAHR, message = "jahr enthält ungültige Zeichen oder hat nicht die Länge 4")
 			@PathParam(value = "jahr") final String jahr,
 		@PathParam(value = "klasse") final Schwierigkeitsgrad schwierigkeitsgrad) {
 	// @formatter:on
 
-		MinikaenguruAufgabenDto aufgaben = minikaenguruService.getAufgabenNichtFreigegebenerWettbewerb(jahr, schwierigkeitsgrad,
-			statusWettbewerb);
+		MinikaenguruAufgabenDto aufgaben = minikaenguruService.getAufgabenNichtFreigegebenerWettbewerb(jahr, schwierigkeitsgrad);
 
 		return Response.ok(aufgaben).build();
 	}
