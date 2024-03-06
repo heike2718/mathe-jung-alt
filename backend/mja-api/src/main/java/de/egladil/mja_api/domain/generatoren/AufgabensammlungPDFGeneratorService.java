@@ -154,7 +154,8 @@ public class AufgabensammlungPDFGeneratorService {
 				return result;
 			}
 
-			LOGGER.error("Mist: generieren des PDFs hat nicht geklappt: " + message.getMessage());
+			LOGGER.error("Mist: generieren des PDFs hat nicht geklappt: aufgabensammlungID={} - {}", aufgabensammlungID,
+				message.getMessage());
 			throw new LaTeXCompileException("Beim Generieren des PDFs ist etwas schiefgegangen: " + message.getMessage())
 				.withNameFile(filename);
 

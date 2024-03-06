@@ -312,11 +312,14 @@ public class MjaFileUtils {
 
 		for (String path : paths) {
 
-			boolean deleted = new File(path).delete();
+			File file = new File(path);
 
-			if (!deleted) {
+			boolean exists = file.exists() && file.canRead();
+			boolean deleted = file.delete();
 
-				LOGGER.warn("File {} wurde nicht gelöscht", path);
+			if (exists && !deleted) {
+
+				LOGGER.warn("File {} wurde nicht geloescht", path);
 			}
 		}
 	}
@@ -328,7 +331,7 @@ public class MjaFileUtils {
 			FileUtils.deleteDirectory(file);
 		} catch (IOException e) {
 
-			LOGGER.warn("Verzeichnis {} wurde nicht gelöscht: {}", file.getAbsolutePath(), e.getMessage());
+			LOGGER.warn("Verzeichnis {} wurde nicht geloescht: {}", file.getAbsolutePath(), e.getMessage());
 
 		}
 	}

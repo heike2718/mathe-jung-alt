@@ -13,6 +13,7 @@ import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 /**
  * MediumDto
@@ -22,6 +23,7 @@ public class MediumDto {
 
 	@Schema(description = "technische ID, 'neu' für neue Medien", example = "22b1a484-e9ff-43cc-a658-bd0f77e580cc")
 	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält ungültige Zeichen")
+	@Size(max = 36, message = "ID darf nicht länger als 36 Zeichen sein.")
 	private String id;
 
 	@Schema(description = "Art des Mediums", required = true)
@@ -30,17 +32,23 @@ public class MediumDto {
 
 	@Schema(description = "Titel des Mediums", example = "2 mal 3 plus Spaß dabei", required = true)
 	@NotBlank(message = "titel ist erforderlich")
+	@Size(max = 100, message = "titel darf nicht länger als 100 Zeichen sein")
+	@Pattern(regexp = MjaRegexps.VALID_TITEL, message = "titel enthält ungültige Zeichen")
 	private String titel;
 
 	@Schema(description = "Autor, bei mehreren kommaseparierte Liste", example = "Johannes Lehmann")
 	@Pattern(regexp = MjaRegexps.VALID_PERSON, message = "autor enthält ungültige Zeichen")
+	@Size(max = 100, message = "person darf nicht länger als 100 Zeichen sein")
 	private String autor;
 
 	@Schema(description = "falls vorhanden und bekannt, die Website", example = "https://mathe-jung-alt.de")
 	@Pattern(regexp = MjaRegexps.VALID_URL, message = "url enthält ungültige Zeichen")
+	@Size(max = 255, message = "url darf nicht länger als 255 Zeichen sein")
 	private String url;
 
 	@Schema(description = "Platz für Notizen, die bei der Suche berücksichtigt werden.", example = "wird nicht mehr aufgelegt")
+	@Pattern(regexp = MjaRegexps.VALID_KOMMENTAR, message = "kommentar enthält ungültige Zeichen")
+	@Size(max = 200, message = "kommentar darf nicht länger als 200 Zeichen sein")
 	private String kommentar;
 
 	@JsonProperty

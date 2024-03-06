@@ -265,6 +265,16 @@ label {
     font-weight: bold;
 }
 
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
+}
+
 /* styles.css (or your component-specific styles file) */
 .hover-details {
     position: fixed;

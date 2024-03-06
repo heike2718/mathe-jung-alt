@@ -37,9 +37,7 @@ public interface MjaRegexps {
 
 	String VALID_DOMAIN_OBJECT_ID = "^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}|neu$";
 
-	String VALID_SUCHSTRING = "^[\\w ÄÖÜäöüß \\% ; \\+ \\- \\. \\,]{4,200}$";
-
-	String VALID_SUCHSTRING_MEDIEN = "^[\\w ÄÖÜäöüß \\% ; \\+ \\- \\. \\,]{0,200}$";
+	String VALID_SUCHSTRING = "^[^'\"<>]*$";
 
 	String VALID_DATEINAME = "^[\\da-zA-ZÄÖÜäöüß_\\-\\.]{1,100}$";
 
@@ -51,10 +49,16 @@ public interface MjaRegexps {
 
 	String VALID_SEITE = "^[\\w -]{0,4}$";
 
-	String VALID_PERSON = "^[^<>/#~%$]{0,100}$";
+	String VALID_PERSON = "^[^\"<>/#~%$]*$";
 
-	String VALID_PFAD = "^/[\\w/.]{0,500}$";
+	String VALID_PFAD = "^/[\\w/.]*$";
 
-	String VALID_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+	String VALID_URL = "^((https?|file)://(?:/)?[^\\s/$.?#].[^\\s]*|.{0})*$";
+
+	String VALID_TITEL = "^[^\\^_\"%&$#{}~\\\\]*$";
+
+	String VALID_ANTWORTVORSCHLAGTEXT = "^[^\\^_\"%&$#{}~\\\\]*$";
+
+	String VALID_KOMMENTAR = "^[^'\"<>]*$";
 
 }

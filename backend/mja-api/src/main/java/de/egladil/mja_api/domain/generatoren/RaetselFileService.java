@@ -292,7 +292,7 @@ public class RaetselFileService {
 
 			if (!deleted) {
 
-				LOGGER.warn("File {} wurde nicht gelöscht", path);
+				LOGGER.warn("File {} wurde nicht geloescht", path);
 			}
 		}
 	}

@@ -251,7 +251,8 @@ public class AdminMedienResourceTest {
 		// Arrange
 		MediumDto mediumDto = new MediumDto()
 			.withTitel("quant")
-			.withId("neu").withKommentar("russische Zeitschrift für Mathematik und Physik")
+			.withId("neu")
+			.withKommentar("russische Zeitschrift für Mathematik und Physik")
 			.withMedienart(Medienart.ZEITSCHRIFT);
 
 		// Act 2
@@ -452,4 +453,37 @@ public class AdminMedienResourceTest {
 		assertEquals("Das Medium existiert nicht.", result.getMessage());
 	}
 
+	@Test
+	@TestSecurity(user = "admin", roles = { "ADMIN" })
+	@Order(15)
+	void should_mediumAnlegenReturn400_when_inputInvalid() {
+
+		// Arrange
+		MediumDto mediumDto = new MediumDto()
+			.withTitel("Olympiade \"Herbstolimp\"")
+			.withId("neu")
+			.withAutor("Ludovico der gr#ße<\">")
+			.withUrl("hallo")
+			.withKommentar("Wettbewerb <\" findet jährlich statt")
+			.withMedienart(Medienart.ZEITSCHRIFT);
+
+		// Act
+		MessagePayload result = given()
+			.accept(ContentType.JSON)
+			.contentType(ContentType.JSON)
+			.body(mediumDto)
+			.when()
+			.post("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.extract()
+			.as(MessagePayload.class);
+
+		// Assert
+		assertEquals("ERROR", result.getLevel());
+		assertEquals(
+			"autor enthält ungültige Zeichen,kommentar enthält ungültige Zeichen,titel enthält ungültige Zeichen,url enthält ungültige Zeichen",
+			result.getMessage());
+	}
 }

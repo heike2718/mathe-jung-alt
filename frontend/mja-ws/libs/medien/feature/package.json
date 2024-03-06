@@ -10,11 +10,11 @@
     "@angular/forms": "^17.0.6",
     "@angular/cdk": "^17.0.3",
     "rxjs": "^7.8.1",
-    "@mja-ws/medien/api": "^3.0.2",
-    "@mja-ws/medien/model": "^3.0.2",
-    "@mja-ws/core/api": "^3.0.2",
-    "@mja-ws/core/model": "^3.0.2",
-    "@mja-ws/raetsel/api": "^3.0.2"
+    "@mja-ws/medien/api": "^3.0.3",
+    "@mja-ws/medien/model": "^3.0.3",
+    "@mja-ws/core/api": "^3.0.3",
+    "@mja-ws/core/model": "^3.0.3",
+    "@mja-ws/raetsel/api": "^3.0.3"
   },
   "type": "commonjs",
   "main": "./src/index.js",

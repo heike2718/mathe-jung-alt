@@ -33,41 +33,42 @@ public class QuelleDto {
 		description = "Falls es sich z.B. um einen Wettbewerb handelte, ist dies der Text, der die Klasse beschreibt.",
 		example = "Klasse 2")
 	@Pattern(regexp = MjaRegexps.VALID_KLASSE_STUFE, message = "klasse enthält ungültige Zeichen")
-	@Size(max = 20)
+	@Size(max = 20, message = "klasse darf höchstens 20 Zeichen lang sein")
 	private String klasse;
 
 	@Schema(
 		description = "Falls es sich z.B. um einen Wettbewerb handelte, ist dies der Text, der die Stufe beschreibt.",
 		example = "Stufe 1")
 	@Pattern(regexp = MjaRegexps.VALID_KLASSE_STUFE, message = "stufe enthält ungültige Zeichen")
-	@Size(max = 10)
+	@Size(max = 10, message = "stufe darf höchstens 10 Zeichen lang sein")
 	private String stufe;
 
 	@Schema(description = "Bei einer Zeitschrift die Nummer der Ausgabe.", example = "11")
 	@Pattern(regexp = MjaRegexps.VALID_AUSGABE, message = "ausgabe enthält ungültige Zeichen")
-	@Size(max = 10)
+	@Size(max = 10, message = "ausgabe darf höchstens 10 Zeichen lang sein")
 	private String ausgabe;
 
 	@Schema(
 		description = "Bei einer Zeitschrift, das Erscheinungsjahr, bei einem Wettbewerb das Wettbewerbsjahr.", example = "1976")
 	@Pattern(regexp = MjaRegexps.VALID_JAHR, message = "jahr enthält ungültige Zeichen")
-	@Size(max = 4)
+	@Size(max = 4, message = "jahr darf höchstens 4 Zeichen lang sein")
 	private String jahr;
 
 	@Schema(description = "Bei einem Buch oder einer Zeitschrift die Seite", example = "32")
 	@Pattern(regexp = MjaRegexps.VALID_SEITE, message = "seite enthält ungültige Zeichen")
-	@Size(max = 10)
+	@Size(max = 10, message = "seite darf höchstens 10 Zeichen lang sein")
 	private String seite;
 
 	@Schema(description = "Wenn es eine bekannte Person ist, deren vollständiger Name", example = "David Hilbert")
 	@Pattern(regexp = MjaRegexps.VALID_PERSON, message = "person enthält ungültige Zeichen")
+	@Size(max = 100, message = "person darf höchstens 100 Zeichen lang sein")
 	private String person;
 
 	@Schema(
 		description = "Pfad zu einer Datei im eigenen Filesystem, in dem die Vorlage der Aufgabe oder die Aufgabe steht.",
 		example = "/mathe/aufgabensammlungen/buch.pdf")
 	@Pattern(regexp = MjaRegexps.VALID_PFAD, message = "pfad enthält ungültige Zeichen")
-	@Size(max = 255)
+	@Size(max = 255, message = "pfad darf höchstens 255 Zeichen lang sein")
 	private String pfad;
 
 	@Schema(

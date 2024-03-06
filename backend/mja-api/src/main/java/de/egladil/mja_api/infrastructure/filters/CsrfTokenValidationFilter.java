@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.config.ConfigService;
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -32,15 +33,7 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CsrfTokenValidationFilter.class);
 
-	private static final Response INVALID_CSRF_HEADER_RESPONSE = Response.status(Response.Status.BAD_REQUEST)
-		.entity("CSRF-Token-Validierung fehlgeschlagen. kein oder mehr als ein CSRF-Token-Header-Value: "
-			+ AuthConstants.CSRF_TOKEN_HEADER_NAME)
-		.build();
-
-	private static final Response INVALID_CSRF_TOKEN_RESPONSE = Response.status(Response.Status.BAD_REQUEST)
-		.entity("CSRF-Token-Validierung fehlgeschlagen. Brauchen CSRF-Token im Header: " + AuthConstants.CSRF_TOKEN_HEADER_NAME
-			+ " und cookie: " + AuthConstants.CSRF_TOKEN_COOKIE_NAME)
-		.build();
+	private static final String INVALID_CSRF_RESPONSE_PAYLOD = "CSRF-Token-Validierung fehlgeschlagen";
 
 	private static final List<String> SECURE_HTTP_METHODS = Arrays.asList(new String[] { "OPTIONS", "GET", "HEAD" });
 
@@ -72,14 +65,16 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
 
 		if (csrfTokenCookie == null) {
 
-			requestContext.abortWith(INVALID_CSRF_HEADER_RESPONSE);
+			LOGGER.warn("csrfTokenCookie == null bei path={}", path);
+			requestContext.abortWith(Response.status(400).entity(MessagePayload.error(INVALID_CSRF_RESPONSE_PAYLOD)).build());
 		}
 
 		List<String> csrfTokenHeader = requestContext.getHeaders().get(AuthConstants.CSRF_TOKEN_HEADER_NAME);
 
-		if (csrfTokenHeader == null || csrfTokenHeader.size() != 1) {
+		if (csrfTokenHeader == null || csrfTokenHeader.isEmpty()) {
 
-			requestContext.abortWith(INVALID_CSRF_HEADER_RESPONSE);
+			LOGGER.warn("csrfTokenHeader == null oder csrfTokenHeader.size() != 1 bei path={}", path);
+			requestContext.abortWith(Response.status(400).entity(MessagePayload.error(INVALID_CSRF_RESPONSE_PAYLOD)).build());
 		}
 
 		String headerValue = csrfTokenHeader.get(0);
@@ -87,11 +82,9 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
 
 		if (!identifyAsEquals(headerValue, cookieValue)) {
 
-			LOGGER.warn("[headerValue={}, cookieValue={}", headerValue, cookieValue);
-			requestContext.abortWith(INVALID_CSRF_TOKEN_RESPONSE);
+			LOGGER.warn("cookieValue != headerValue: [headerValue={}, cookieValue={}, path={}", headerValue, cookieValue, path);
+			requestContext.abortWith(Response.status(400).entity(MessagePayload.error(INVALID_CSRF_RESPONSE_PAYLOD)).build());
 		}
-
-		return;
 	}
 
 	boolean identifyAsEquals(final String headerValue, final String cookieValue) {

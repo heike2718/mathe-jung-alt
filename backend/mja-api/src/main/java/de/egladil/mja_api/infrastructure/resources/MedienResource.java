@@ -29,8 +29,10 @@ import de.egladil.mja_api.domain.medien.dto.RaetselMediensucheTrefferItem;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -148,9 +150,9 @@ public class MedienResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public Response findMedien(
-		@QueryParam(value = "suchstring") @Pattern(
-			regexp = MjaRegexps.VALID_SUCHSTRING_MEDIEN,
-			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring,
+		@QueryParam(value = "suchstring") @Size(max = 200, message = "suchstring darf höchstens 100 Zeichen lang sein")  @Pattern(
+			regexp = MjaRegexps.VALID_SUCHSTRING,
+			message = "suchstring darf keine Hochkommata und keine mathematischen Vergleichszeichen enthalten") final String suchstring,
 		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset) {
 	// formatter:on
@@ -243,7 +245,7 @@ public class MedienResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response mediumAnlegen(final MediumDto medium) {
+	public Response mediumAnlegen(@Valid final MediumDto medium) {
 
 		MediumDto result = medienService.mediumAnlegen(medium);
 
@@ -298,7 +300,7 @@ public class MedienResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response mediumAendern(final MediumDto medium) {
+	public Response mediumAendern(@Valid final MediumDto medium) {
 
 		MediumDto result = medienService.mediumAendern(medium);
 

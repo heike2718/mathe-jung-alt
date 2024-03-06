@@ -230,7 +230,7 @@ public class AufgabensammlungenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
-	public Response aufgabensammlungAendern(final EditAufgabensammlungPayload requestPayload) {
+	public Response aufgabensammlungAendern(@Valid final EditAufgabensammlungPayload requestPayload) {
 
 		delayService.pause();
 

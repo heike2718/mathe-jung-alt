@@ -7,6 +7,8 @@ package de.egladil.mja_api.domain.raetsel;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import de.egladil.mja_api.domain.semantik.ValueObject;
+import de.egladil.mja_api.domain.validation.MjaRegexps;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * Antwortvorschlag
@@ -19,6 +21,7 @@ public class Antwortvorschlag {
 	private String buchstabe;
 
 	@Schema(description = "optionaler Text der Antwort", example = "237")
+	@Pattern(regexp = MjaRegexps.VALID_ANTWORTVORSCHLAGTEXT, message = "Der Text des Antwortvorschlags enthält ungültige Zeichen")
 	private String text;
 
 	@Schema(description = "Flag, ob dies die korrekte Antwort ist.")

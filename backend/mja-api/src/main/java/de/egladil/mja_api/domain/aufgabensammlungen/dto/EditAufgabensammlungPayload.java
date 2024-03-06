@@ -30,14 +30,14 @@ public class EditAufgabensammlungPayload {
 	private String id;
 
 	@JsonProperty
-	@Pattern(regexp = "[\\w äöüß\\:\\-\\.\\,]*", message = "name enthält ungültige Zeichen")
-	@Size(min = 1, max = 100, message = "name darf nicht länger als 100 Zeichen sein")
+	@Pattern(regexp = MjaRegexps.VALID_TITEL, message = "name enthält ungültige Zeichen")
+	@Size(max = 100, message = "name darf nicht länger als 100 Zeichen sein")
 	@NotBlank(message = "name darf nicht leer sein")
 	@Schema(description = "Name der Aufgabensammlung", example = "Serie 42")
 	private String name;
 
 	@JsonProperty
-	@Pattern(regexp = "[\\w äöüß\\:\\-\\.\\,]*", message = "kommentar enthält ungültige Zeichen")
+	@Pattern(regexp = MjaRegexps.VALID_KOMMENTAR, message = "kommentar enthält ungültige Zeichen")
 	@Size(max = 200, message = "kommentar darf nicht länger als 200 Zeichen sein")
 	@Schema(description = "optionaler Kommentar", example = "Aufgaben der Serie 42")
 	private String kommentar;

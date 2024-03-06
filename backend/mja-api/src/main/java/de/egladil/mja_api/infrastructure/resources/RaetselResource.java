@@ -50,6 +50,7 @@ import jakarta.persistence.EnumType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -153,9 +154,9 @@ public class RaetselResource {
 			schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public Response findRaetselAdmin(
-		@QueryParam(value = "suchstring") @Pattern(
-		regexp = MjaRegexps.VALID_SUCHSTRING,
-		message = "ungültige Eingabe: mindestens 4 höchstens 200 Zeichen, erlaubte Zeichen sind die deutschen Buchstaben, Ziffern, Leerzeichen und die Sonderzeichen %+-_.,") final String suchstring,
+		@QueryParam(value = "suchstring") @Size(max = 200, message = "suchstring darf höchstens 200 Zeichen lang sein")  @Pattern(
+			regexp = MjaRegexps.VALID_SUCHSTRING,
+			message = "suchstring darf keine Hochkommata und keine mathematischen Vergleichszeichen enthalten") final String suchstring,
 		@QueryParam(value = "deskriptoren") @Pattern(
 			regexp = "^[a-zA-ZäöüßÄÖÜ\\d\\,\\- ]{0,200}$",
 			message = "ungültige Eingabe: höchstens 200 Zeichen, erlaubte Zeichen sind Zahlen, deutsche Buchstaben, Leerzeichen, Komma und Minus") final String deskriptoren,

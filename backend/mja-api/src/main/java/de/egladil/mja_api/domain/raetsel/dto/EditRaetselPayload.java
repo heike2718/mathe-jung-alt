@@ -43,6 +43,8 @@ public class EditRaetselPayload {
 	@Schema(
 		description = "kurzer Titel zum Anzeigen in Suchergebnissen, volltextsuchfähig", required = true,
 		example = "Subtraktion")
+	@Pattern(regexp = MjaRegexps.VALID_TITEL, message = "name enthält ungültige Zeichen")
+	@Size(max = 100, message = "name darf nicht länger als 100 Zeichen sein")
 	private String name;
 
 	@JsonProperty
@@ -57,6 +59,8 @@ public class EditRaetselPayload {
 
 	@JsonProperty
 	@Schema(description = "Kommentar, volltextsuchfähig", example = "Serie Serie-1, 1, Serie-65, 65")
+	@Pattern(regexp = MjaRegexps.VALID_KOMMENTAR, message = "kommentar enthält ungültige Zeichen")
+	@Size(max = 200, message = "kommentar darf nicht länger als 200 Zeichen sein")
 	private String kommentar;
 
 	@JsonProperty
