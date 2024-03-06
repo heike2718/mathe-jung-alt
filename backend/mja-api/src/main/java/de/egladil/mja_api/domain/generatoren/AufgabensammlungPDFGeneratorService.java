@@ -122,14 +122,14 @@ public class AufgabensammlungPDFGeneratorService {
 		Response response = null;
 		LOGGER.debug("vor Aufruf LaTeXRestClient");
 
+		String filename = fileNameWithoutExtension + Outputformat.PDF.getFilenameExtension();
+
 		try {
 
 			response = laTeXClient.latex2PDF(fileNameWithoutExtension);
 
 			LOGGER.debug("nach Aufruf LaTeXRestClient");
 			MessagePayload message = response.readEntity(MessagePayload.class);
-
-			String filename = fileNameWithoutExtension + Outputformat.PDF.getFilenameExtension();
 
 			String path = latexBaseDir + File.separator + filename;
 
@@ -139,7 +139,8 @@ public class AufgabensammlungPDFGeneratorService {
 
 				if (pdf == null) {
 
-					String msg = "Das generierte PDF zur Aufgabensammlung [uuid=" + aufgabensammlungID
+					String msg = "Das generierte PDF zur Aufgabensammlung [fileNameWithoutExtension=" + fileNameWithoutExtension
+						+ ", aufgabensammlungID=" + aufgabensammlungID
 						+ "] konnte nicht geladen werden. Bitte mal das doc-Verzeichnis prüfen.";
 					LOGGER.error(msg);
 					throw new MjaRuntimeException(msg);
@@ -154,7 +155,7 @@ public class AufgabensammlungPDFGeneratorService {
 				return result;
 			}
 
-			LOGGER.error("Mist: generieren des PDFs hat nicht geklappt: aufgabensammlungID={} - {}", aufgabensammlungID,
+			LOGGER.error("Mist: generieren des PDFs hat nicht geklappt: fileNameWithoutExtension={} - {}", fileNameWithoutExtension,
 				message.getMessage());
 			throw new LaTeXCompileException("Beim Generieren des PDFs ist etwas schiefgegangen: " + message.getMessage())
 				.withNameFile(filename);
@@ -167,8 +168,9 @@ public class AufgabensammlungPDFGeneratorService {
 			throw e;
 		} catch (Exception e) {
 
-			String msg = "Beim Generieren des Outputs " + Outputformat.PDF + " zu Aufgabensammlung [uuid=" + aufgabensammlungID
-				+ "] ist ein Fehler aufgetreten: " + e.getMessage();
+			String msg = "Beim Generieren des Outputs " + Outputformat.PDF + " zu Aufgabensammlung [fileNameWithoutExtension="
+				+ fileNameWithoutExtension
+				+ ", aufgabensammlungID=" + aufgabensammlungID + "] ist ein Fehler aufgetreten: " + e.getMessage();
 			LOGGER.error(msg, e);
 			throw new MjaRuntimeException(msg, e);
 		} finally {
