@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
-import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.raetsel.dto.AufgabensammlungRaetselsucheTrefferItem;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTrefferItem;
@@ -147,23 +146,6 @@ public class PublicRaetselResourceTest {
 		assertTrue(suchergebnis.getTrefferGesamt() >= 6);
 
 		assertEquals("01219", alleRaetsel.get(0).getSchluessel());
-	}
-
-	@Test
-	@Order(6)
-	void testGetAnzahlFreigegebeneRaetsel() throws Exception {
-
-		AnzahlabfrageResponseDto result = given()
-			.when()
-			.get("/public/anzahl/v1")
-			.then()
-			.statusCode(200)
-			.and()
-			.extract()
-			.as(AnzahlabfrageResponseDto.class);
-
-		// Je nach Testkontext kann ein Rätsel hinzugekommen sein.
-		assertTrue(result.getErgebnis() >= 31);
 	}
 
 	@Test

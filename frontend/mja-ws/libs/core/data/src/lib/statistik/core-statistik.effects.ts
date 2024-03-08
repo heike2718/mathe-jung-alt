@@ -19,7 +19,7 @@ export class CoreStatistikEffects {
         return this.#actions.pipe(
             ofType(coreStatistikActions.lOAD_ANZAHL_RAETSEL_PUBLIC),
             switchMap(() =>
-                this.#httpClient.get<AnzahlabfrageErgebnis>('/mja-api/raetsel/public/anzahl/v1', { context: new HttpContext().set(SILENT_LOAD_CONTEXT, true) })
+                this.#httpClient.get<AnzahlabfrageErgebnis>('/mja-api/public/raetsel/anzahl/v1', { context: new HttpContext().set(SILENT_LOAD_CONTEXT, true) })
             ),
             map((payload: AnzahlabfrageErgebnis) => coreStatistikActions.aNZAHL_RAETSEL_PUBLIC_LOADED({ payload }))
         )

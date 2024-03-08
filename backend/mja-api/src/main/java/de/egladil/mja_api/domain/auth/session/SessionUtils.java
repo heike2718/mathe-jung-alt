@@ -148,7 +148,7 @@ public final class SessionUtils {
 	/**
 	 * @param  requestContext
 	 * @param  clientPrefix
-	 * @return
+	 * @return                String oder null
 	 */
 	private static String getSessionIdFromCookie(final ContainerRequestContext requestContext) {
 
@@ -161,12 +161,9 @@ public final class SessionUtils {
 			return sessionCookie.getValue();
 		}
 
-		String path = requestContext.getUriInfo().getAbsolutePath().getPath();
+		String path = requestContext.getUriInfo().getPath();
+		LOGGER.debug("{}: Request ohne {}-Cookie", path, SESSION_COOKIE_NAME);
 
-		if (!path.toLowerCase().contains("aufgabensammlungen")) {
-
-			LOGGER.debug("{}: Request ohne {}-Cookie", path, SESSION_COOKIE_NAME);
-		}
 		return null;
 	}
 }

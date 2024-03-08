@@ -17,10 +17,12 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenDto;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruService;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
+import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
@@ -44,6 +46,9 @@ public class PublicResource {
 
 	@Inject
 	QuizService quizService;
+
+	@Inject
+	RaetselService raetselService;
 
 	@Path("/minikaenguru/{jahr}/{klasse}")
 	@GET
@@ -143,5 +148,31 @@ public class PublicResource {
 		}
 
 		return Response.ok(optResult.get()).build();
+	}
+
+	@GET
+	@Path("/raetsel/anzahl/v1")
+	@PermitAll
+	@Operation(
+		operationId = "getAnzahlFreigegebenerRaetsel",
+		summary = "Gibt die Anzahl der zum Abfragezeitpunkt freigegebenen Rätsel zurück.")
+	@APIResponse(
+		name = "OKResponse",
+		responseCode = "200",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = AnzahlabfrageResponseDto.class)))
+	@APIResponse(
+		name = "ServerError",
+		responseCode = "500",
+		description = "Fehler aufgetreten",
+		content = @Content(
+			mediaType = "application/json",
+			schema = @Schema(implementation = MessagePayload.class)))
+	// @formatter:off
+	public Response getAnzahlFreigegebenerRaetsel() {
+	// @formatter:on
+
+		return Response.ok(raetselService.zaehleFreigegebeneRaetsel()).build();
 	}
 }

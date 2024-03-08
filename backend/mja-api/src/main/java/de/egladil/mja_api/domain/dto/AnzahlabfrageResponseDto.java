@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * AnzahlabfrageResponseDto
  */
-@Schema(name = "AnzahlabfrageResponseDto", description = "Ergebnis ist die Zah, die die Anzahlabrfage ermittelt hat.")
+@Schema(name = "AnzahlabfrageResponseDto", description = "Ergebnis ist die Zahl, die die Anzahlabfrage ermittelt hat.")
 public class AnzahlabfrageResponseDto {
 
 	@JsonProperty

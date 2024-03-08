@@ -24,7 +24,6 @@ import de.egladil.mja_api.domain.SuchmodusDeskriptoren;
 import de.egladil.mja_api.domain.SuchmodusVolltext;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
-import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.dto.SortDirection;
 import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.generatoren.FontName;
@@ -43,7 +42,6 @@ import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.persistence.EnumType;
@@ -266,32 +264,6 @@ public class RaetselResource {
 		RaetselsucheTreffer treffer = raetselService.sucheRaetsel(suchfilter, limit, offset,
 			sortDirection);
 		return Response.ok(treffer).build();
-	}
-
-	@GET
-	@Path("/public/anzahl/v1")
-	@PermitAll
-	@Operation(
-		operationId = "getAnzahlFreigegebenerRaetsel",
-		summary = "Gibt die Anzahl der zum Abfragezeitpunkt freigegebenen Rätsel zurück.")
-	@APIResponse(
-		name = "OKResponse",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = AnzahlabfrageResponseDto.class)))
-	@APIResponse(
-		name = "ServerError",
-		responseCode = "500",
-		description = "Fehler aufgetreten",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = MessagePayload.class)))
-	// @formatter:off
-	public Response getAnzahlFreigegebenerRaetsel() {
-	// @formatter:on
-
-		return Response.ok(raetselService.zaehleFreigegebeneRaetsel()).build();
 	}
 
 	@GET

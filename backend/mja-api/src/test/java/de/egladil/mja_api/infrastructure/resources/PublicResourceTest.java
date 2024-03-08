@@ -8,6 +8,7 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabe;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenDto;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
@@ -228,5 +230,25 @@ public class PublicResourceTest {
 			.then()
 			.statusCode(404);
 
+	}
+
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// generateQuizMinikaenguru-Tests
+	// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Test
+	void testGetAnzahlFreigegebeneRaetsel() throws Exception {
+
+		AnzahlabfrageResponseDto result = given()
+			.when()
+			.get("/raetsel/anzahl/v1")
+			.then()
+			.statusCode(200)
+			.and()
+			.extract()
+			.as(AnzahlabfrageResponseDto.class);
+
+		// Je nach Testkontext kann ein Rätsel hinzugekommen sein.
+		assertTrue(result.getErgebnis() >= 31);
 	}
 }

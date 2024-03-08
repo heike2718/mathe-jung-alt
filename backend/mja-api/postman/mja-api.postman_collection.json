@@ -106,11 +106,20 @@
 							"response": []
 						},
 						{
+							"name": "local: get anzahl freigegebene raetsel - 200",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:9210/mja-api/public/raetsel/anzahl/v1"
+							},
+							"response": []
+						},
+						{
 							"name": "local: get quizz minikänguru - 200",
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": "http://localhost:9210/mja-api/public/quizz/minikaenguru/2020/EINS"
+								"url": "http://localhost:9210/mja-api/public/quizz/minikaenguru/2020/EINS/v1"
 							},
 							"response": []
 						},
