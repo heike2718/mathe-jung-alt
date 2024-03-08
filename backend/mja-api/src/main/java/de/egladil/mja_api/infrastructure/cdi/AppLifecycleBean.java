@@ -71,7 +71,7 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "target.origin")
 	String targetOrigin;
 
-	@ConfigProperty(name = "version")
+	@ConfigProperty(name = "quarkus.application.version")
 	String version;
 
 	@ConfigProperty(name = "latex.generator.preserve.tempfiles")
