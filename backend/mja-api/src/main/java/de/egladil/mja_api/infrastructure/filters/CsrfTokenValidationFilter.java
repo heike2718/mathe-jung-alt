@@ -37,7 +37,7 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
 
 	private static final List<String> SECURE_HTTP_METHODS = Arrays.asList(new String[] { "OPTIONS", "GET", "HEAD" });
 
-	private static final List<String> SECURE_PATHS = Arrays.asList(new String[] { "/session/logout" });
+	private static final List<String> SECURE_PATHS = Arrays.asList(new String[] { "/", "/session/logout" });
 
 	@Inject
 	ConfigService configService;
@@ -55,34 +55,42 @@ public class CsrfTokenValidationFilter implements ContainerRequestFilter {
 		}
 
 		String path = requestContext.getUriInfo().getPath();
+		String method = requestContext.getMethod();
 
-		if (SECURE_HTTP_METHODS.contains(requestContext.getMethod()) || SECURE_PATHS.contains(path)) {
+		if (SECURE_HTTP_METHODS.contains(method) || SECURE_PATHS.contains(path)) {
 
 			return;
 		}
 
 		Cookie csrfTokenCookie = requestContext.getCookies().get(AuthConstants.CSRF_TOKEN_COOKIE_NAME);
 
-		if (csrfTokenCookie == null) {
+		if (csrfTokenCookie != null) {
 
-			LOGGER.warn("csrfTokenCookie == null bei path={}", path);
-			requestContext.abortWith(Response.status(400).entity(MessagePayload.error(INVALID_CSRF_RESPONSE_PAYLOD)).build());
-		}
+			LOGGER.info("{} {}", method, path);
 
-		List<String> csrfTokenHeader = requestContext.getHeaders().get(AuthConstants.CSRF_TOKEN_HEADER_NAME);
+			List<String> csrfTokenHeader = requestContext.getHeaders().get(AuthConstants.CSRF_TOKEN_HEADER_NAME);
 
-		if (csrfTokenHeader == null || csrfTokenHeader.isEmpty()) {
+			if (csrfTokenHeader != null && !csrfTokenHeader.isEmpty()) {
 
-			LOGGER.warn("csrfTokenHeader == null oder csrfTokenHeader.size() != 1 bei path={}", path);
-			requestContext.abortWith(Response.status(400).entity(MessagePayload.error(INVALID_CSRF_RESPONSE_PAYLOD)).build());
-		}
+				String headerValue = csrfTokenHeader.get(0);
+				String cookieValue = csrfTokenCookie.getValue();
 
-		String headerValue = csrfTokenHeader.get(0);
-		String cookieValue = csrfTokenCookie.getValue();
+				if (!identifyAsEquals(headerValue, cookieValue)) {
 
-		if (!identifyAsEquals(headerValue, cookieValue)) {
+					LOGGER.warn("cookieValue != headerValue: [headerValue={}, cookieValue={}, path={}", headerValue, cookieValue,
+						path);
+					requestContext
+						.abortWith(Response.status(400).entity(MessagePayload.error(INVALID_CSRF_RESPONSE_PAYLOD)).build());
+				}
+			} else {
 
-			LOGGER.warn("cookieValue != headerValue: [headerValue={}, cookieValue={}, path={}", headerValue, cookieValue, path);
+				LOGGER.warn("csrfTokenHeader == null oder csrfTokenHeader.size() != 1 bei path={}", path);
+				requestContext.abortWith(Response.status(400).entity(MessagePayload.error(INVALID_CSRF_RESPONSE_PAYLOD)).build());
+			}
+
+		} else {
+
+			LOGGER.warn("csrfTokenCookie == null bei {} path={}", method, path);
 			requestContext.abortWith(Response.status(400).entity(MessagePayload.error(INVALID_CSRF_RESPONSE_PAYLOD)).build());
 		}
 	}

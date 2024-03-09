@@ -8,7 +8,7 @@
 
 	<groupId>de.egladil</groupId>
 	<artifactId>mja-api</artifactId>
-	<version>3.0.4</version>
+	<version>3.0.5</version>
 
 	<description>Webservice für "Mathe für jung und alt"- Administration</description>
 
@@ -21,7 +21,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-		<quarkus.platform.version>3.8.0</quarkus.platform.version>
+		<quarkus.platform.version>3.8.2</quarkus.platform.version>
 		<com.auth0.java.jwt.version>4.4.0</com.auth0.java.jwt.version>
 		<surefire-plugin.version>3.1.2</surefire-plugin.version>
 		<dependency-check.version>9.0.9</dependency-check.version>

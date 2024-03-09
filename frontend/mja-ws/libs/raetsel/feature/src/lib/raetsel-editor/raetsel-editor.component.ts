@@ -393,26 +393,6 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       anzahlAntwortvorschlaege: this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length + '',
     });
 
-
-    // this.form.get('schluessel')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.schluessel);
-    // this.form.get('name')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.name);
-    // this.form.get('herkunftstyp')?.setValue(theGuiHerkunftstyp.label);
-    // this.form.get('status')?.setValue(theStatus);
-    // this.form.get('frage')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.frage);
-    // this.form.get('loesung')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.loesung);
-    // this.form.get('kommentar')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.kommentar);
-    // this.form.get('quellenart')?.setValue(theGuiQuellenart.label);
-
-    // this.form.get('person')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.person ? this.guiEditRaetselPayload.editRaetselPayload.quelle.person : '');
-    // this.form.get('jahr')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr ? this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr : '');
-    // this.form.get('ausgabe')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.ausgabe : '');
-    // this.form.get('seite')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.seite ? this.guiEditRaetselPayload.editRaetselPayload.quelle.seite : '');
-    // this.form.get('klasse')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse ? this.guiEditRaetselPayload.editRaetselPayload.quelle.klasse : '');
-    // this.form.get('stufe')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe ? this.guiEditRaetselPayload.editRaetselPayload.quelle.stufe : '');
-    // this.form.get('pfad')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad ? this.guiEditRaetselPayload.editRaetselPayload.quelle.pfad : '');
-
-    // this.form.get('anzahlAntwortvorschlaege')?.setValue(this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length + '');
-
     this.#addOrRemoveAntowrtvorschlagFormParts(this.guiEditRaetselPayload.editRaetselPayload.antwortvorschlaege.length);
 
     if (!this.isRoot) {
