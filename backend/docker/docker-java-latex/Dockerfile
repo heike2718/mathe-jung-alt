@@ -1,7 +1,7 @@
 #
 # heike2718/docker-java-latex
 #
-# This is an image with an openjdk-11-headless and the full TeX Live installation from Thomas Weise <tweise@hfuu.edu.cn>
+# This is an image with an openjdk-17-headless and the full TeX Live installation from Thomas Weise <tweise@hfuu.edu.cn>
 #
 # Source: http://github.com/thomasWeise/docker-texlive-full/
 # License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
