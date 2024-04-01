@@ -58,7 +58,7 @@ public class SPARouteFilter {
 				if (path.startsWith(DEFAULT_APP)) {
 
 					// I0094: deep-Angular-Router-Links (z.B. /mja-app/aufgabensammlungen/) müssen zur SPA Grund-URL
-					// (/mja-app/) umgeleited werden. Danach übernimmt wieder das Angular-Routing
+					// (/mja-app/) umgeleitet werden. Danach übernimmt wieder das Angular-Routing
 					// Jetzt funktionieren Bookmarking, Back-Button sowie F5 ohne dass es ein 404 gibt.
 					String[] tokens = path.split("/");
 					LOGGER.debug("(6) Anzahl token = {}", tokens.length);

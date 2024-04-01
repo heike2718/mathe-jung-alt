@@ -6,6 +6,9 @@ package de.egladil.mja_api.domain.minikaenguru;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.egladil.mja_api.domain.aufgabensammlungen.AufgabensammlungenService;
 import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
@@ -22,6 +25,8 @@ import jakarta.ws.rs.core.Response;
  */
 @ApplicationScoped
 public class MinikaenguruService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MinikaenguruService.class);
 
 	@Inject
 	AufgabensammlungenService aufgabensammlungenervice;
@@ -83,9 +88,10 @@ public class MinikaenguruService {
 
 		if (aufgabensammlung == null || !aufgabensammlung.isFreigegeben()) {
 
-			MessagePayload messagePayload = MessagePayload
-				.error("Es gibt keine Minikänguru-Aufgaben mit jahr und schwierigkeitsgrad.");
-			Response response = Response.status(404).entity(messagePayload).build();
+			LOGGER.warn("Zugriffsversuch auf Aufgaben eines nicht freigegebenen Minikaenguru-Wettbewerbs: {}, {}", jahr,
+				schwierigkeitsgrad);
+
+			Response response = Response.status(404).build();
 			throw new WebApplicationException(response);
 		}
 

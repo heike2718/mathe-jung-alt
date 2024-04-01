@@ -24,12 +24,12 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 /**
- * MjaAdminExceptionMapper
+ * MjaApiExceptionMapper
  */
 @Provider
-public class MjaAdminExceptionMapper implements ExceptionMapper<Throwable> {
+public class MjaApiExceptionMapper implements ExceptionMapper<Throwable> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MjaAdminExceptionMapper.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MjaApiExceptionMapper.class);
 
 	private final ResourceBundle applicationMessages = ResourceBundle.getBundle("ApplicationMessages", Locale.GERMAN);
 

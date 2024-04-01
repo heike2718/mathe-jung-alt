@@ -67,17 +67,10 @@ public class PublicResourceTest {
 
 		Schwierigkeitsgrad schwierigkeitsgrad = Schwierigkeitsgrad.EINS;
 
-		MessagePayload messagePayload = given()
+		given()
 			.when().get("/minikaenguru/2017/" + schwierigkeitsgrad.toString())
 			.then()
-			.statusCode(404)
-			.extract()
-			.as(MessagePayload.class);
-
-		assertEquals("ERROR", messagePayload.getLevel());
-		assertEquals(
-			"Es gibt keine Minikänguru-Aufgaben mit jahr und schwierigkeitsgrad.",
-			messagePayload.getMessage());
+			.statusCode(404);
 	}
 
 	@Test
@@ -85,17 +78,10 @@ public class PublicResourceTest {
 
 		Schwierigkeitsgrad schwierigkeitsgrad = Schwierigkeitsgrad.ZWEI;
 
-		MessagePayload messagePayload = given()
+		given()
 			.when().get("/minikaenguru/2022/" + schwierigkeitsgrad.toString())
 			.then()
-			.statusCode(404)
-			.extract()
-			.as(MessagePayload.class);
-
-		assertEquals("ERROR", messagePayload.getLevel());
-		assertEquals(
-			"Es gibt keine Minikänguru-Aufgaben mit jahr und schwierigkeitsgrad.",
-			messagePayload.getMessage());
+			.statusCode(404);
 	}
 
 	@Test

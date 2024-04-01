@@ -19,6 +19,8 @@ import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.container.ContainerResponseFilter;
 import jakarta.ws.rs.container.PreMatching;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.ext.Provider;
 
 /**
@@ -28,6 +30,10 @@ import jakarta.ws.rs.ext.Provider;
 @PreMatching
 @Priority(Priorities.AUTHENTICATION)
 public class MDCHeaderFilter implements ContainerRequestFilter, ContainerResponseFilter {
+
+	private static final String USER_AGENT = "User-Agent";
+
+	private static final String UNKNOWN_CLIENT_ID = "unknown";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MDCHeaderFilter.class);
 
@@ -39,6 +45,9 @@ public class MDCHeaderFilter implements ContainerRequestFilter, ContainerRespons
 
 	private static final String MDC_KEY_CORRELATION_ID = "correlationId";
 
+	@Context
+	private HttpHeaders headers;
+
 	@Override
 	public void filter(final ContainerRequestContext requestContext) throws IOException {
 
@@ -47,13 +56,16 @@ public class MDCHeaderFilter implements ContainerRequestFilter, ContainerRespons
 		if (!"OPTIONS".equals(method)) {
 
 			String path = requestContext.getUriInfo().getPath();
-			LOGGER.debug("request.path={}", path);
-
-			String correlationId = getOrCreateCorrelationId(requestContext);
-			String clientId = getClientId(requestContext);
+			String correlationId = getOrCreateCorrelationId();
+			String clientId = getClientId();
 
 			MDC.put(MDC_KEY_CORRELATION_ID, correlationId);
 			MDC.put(MDC_KEY_CLIENT_ID, clientId);
+
+			if (!UNKNOWN_CLIENT_ID.equals(clientId)) {
+
+				LOGGER.info("request.path={}", path);
+			}
 		}
 
 	}
@@ -67,17 +79,25 @@ public class MDCHeaderFilter implements ContainerRequestFilter, ContainerRespons
 
 	}
 
-	String getOrCreateCorrelationId(final ContainerRequestContext ctx) {
+	String getOrCreateCorrelationId() {
 
-		String correlationId = ctx.getHeaderString(X_CORRELATION_ID_HEADER_NAME);
+		String correlationId = headers.getHeaderString(X_CORRELATION_ID_HEADER_NAME);
 		return correlationId != null ? correlationId : UUID.randomUUID().toString();
 
 	}
 
-	String getClientId(final ContainerRequestContext ctx) {
+	String getClientId() {
 
-		String clientId = ctx.getHeaderString(MjaApiApplication.X_CLIENT_ID_HEADER_NAME);
-		return clientId != null ? clientId : "unknown";
+		String clientId = headers.getHeaderString(MjaApiApplication.X_CLIENT_ID_HEADER_NAME);
+
+		if (clientId != null) {
+
+			return clientId;
+		}
+
+		// wegen der public API
+		String userAgent = headers.getHeaderString(USER_AGENT);
+		return userAgent != null ? userAgent : UNKNOWN_CLIENT_ID;
 	}
 
 }

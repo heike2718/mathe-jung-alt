@@ -42,7 +42,7 @@ import jakarta.ws.rs.core.Response.Status;
 public class PublicResource {
 
 	@Inject
-	MinikaenguruService minikaengiruService;
+	MinikaenguruService minikaenguruService;
 
 	@Inject
 	QuizService quizService;
@@ -59,6 +59,11 @@ public class PublicResource {
 		summary = "Gibt die Aufgaben eines bestimmten Minikänguru-Wettbewerbs für eine bestimmte Klassenstufe zur Anzeige in anderen Webanwendungen zurück.",
 		description = "Nur freigegebene Wettbewerbe werden geliefert.")
 	@Parameters({
+		@Parameter(
+			in = ParameterIn.HEADER,
+			name = "X-CLIENT-ID",
+			description = "ClientId",
+			required = false),
 		@Parameter(
 			in = ParameterIn.PATH,
 			name = "jahr",
@@ -88,13 +93,14 @@ public class PublicResource {
 		description = "Serverfehler",
 		responseCode = "500",
 		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
-	public Response getAufgabenMinikaenguruwettbewerb(@Pattern(
-		regexp = MjaRegexps.VALID_JAHR,
-		message = "jahr enthält ungültige Zeichen oder hat nicht die Länge 4") @PathParam(
-			value = "jahr") final String jahr, @PathParam(
-				value = "klasse") final Schwierigkeitsgrad schwierigkeitsgrad) {
+	// @formatter:off
+	public Response getAufgabenMinikaenguruwettbewerb(
+		@Pattern(regexp = MjaRegexps.VALID_JAHR, message = "jahr enthält ungültige Zeichen oder hat nicht die Länge 4")
+		   @PathParam(value = "jahr") final String jahr,
+		@PathParam(value = "klasse") final Schwierigkeitsgrad schwierigkeitsgrad) {
+	// @formatter:on
 
-		MinikaenguruAufgabenDto aufgaben = minikaengiruService.getAufgabenFreigegebenerWettbewerb(jahr, schwierigkeitsgrad);
+		MinikaenguruAufgabenDto aufgaben = minikaenguruService.getAufgabenFreigegebenerWettbewerb(jahr, schwierigkeitsgrad);
 
 		return Response.ok(aufgaben).build();
 	}
@@ -108,6 +114,11 @@ public class PublicResource {
 		summary = "Gibt die Aufgaben eines Minikänguru-Wettbewerbs für eine gegebene Klassenstufe zur Verwendung als Quizz zurück.",
 		description = "Nur freigegebene Wettbewerbe werden geliefert.")
 	@Parameters({
+		@Parameter(
+			in = ParameterIn.HEADER,
+			name = "X-CLIENT-ID",
+			description = "ClientId",
+			required = false),
 		@Parameter(
 			in = ParameterIn.PATH,
 			name = "jahr",

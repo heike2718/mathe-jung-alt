@@ -106,6 +106,30 @@
 							"response": []
 						},
 						{
+							"name": "local: get minikänguru - 404 wegen level",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-CLIENT-ID",
+										"value": "mkbiza",
+										"type": "default"
+									}
+								],
+								"url": "http://localhost:9210/mja-api/public/minikaenguru/2020/FUENF"
+							},
+							"response": []
+						},
+						{
+							"name": "local: get minikänguru - 404 wegen Status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:9210/mja-api/public/minikaenguru/2024/IKID"
+							},
+							"response": []
+						},
+						{
 							"name": "local: get anzahl freigegebene raetsel - 200",
 							"request": {
 								"method": "GET",
@@ -118,7 +142,13 @@
 							"name": "local: get quizz minikänguru - 200",
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "X-CLIENT-ID",
+										"value": "mkbiza",
+										"type": "default"
+									}
+								],
 								"url": "http://localhost:9210/mja-api/public/quizz/minikaenguru/2020/EINS/v1"
 							},
 							"response": []
@@ -129,6 +159,48 @@
 								"method": "GET",
 								"header": [],
 								"url": "http://localhost:9210/mja-api/public/quizz/minikaenguru/2020/cd ..%2f../2005"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "AboutResource Copy",
+					"item": [
+						{
+							"name": "local : about",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:9210/mja-api/about"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "prod",
+			"item": [
+				{
+					"name": "public",
+					"item": [
+						{
+							"name": "prod mja-api: aufgabenvorschau - 200",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "https://mathe-jung-alt.de/mja-api/public/minikaenguru/2023/IKID"
+							},
+							"response": []
+						},
+						{
+							"name": "prod mja-api: quizz - 200",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "https://mathe-jung-alt.de/mja-api/public/quizz/minikaenguru/2022/ZWEI/v1"
 							},
 							"response": []
 						}

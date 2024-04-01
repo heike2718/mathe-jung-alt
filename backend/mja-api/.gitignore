@@ -48,3 +48,5 @@ nb-configuration.xml
 /src/main/resources/META-INF/openapi
 /src/main/resources/META-INF/resources/mja-app
 
+#restricted
+/postman/mja-api-prod-resticted-do-not-push.postman_collection.json

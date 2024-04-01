@@ -25,24 +25,24 @@ public class ClientAuthService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientAuthService.class);
 
 	@Inject
-	MkGatewayAuthConfig authConfig;
+	MkGatewayAuthConfig mkGatewayAuthConfig;
 
 	public Pair<String, Boolean> authorize(final String authorizationHeaderValue) {
 
 		String headerValue = StringUtils.remove(authorizationHeaderValue, AUTH_METHOD_PREFIX);
-		LOGGER.debug("expect header={}, headerValue={}", StringUtils.abbreviate(authConfig.header(), 20),
+		LOGGER.debug("expect header={}, headerValue={}", StringUtils.abbreviate(mkGatewayAuthConfig.header(), 20),
 			StringUtils.abbreviate(headerValue, 20));
 
 		try {
 
 			String decodedHeader = new String(Base64.getDecoder().decode(headerValue.getBytes()));
-			boolean authenticated = authConfig.header().equals(decodedHeader);
+			boolean authenticated = mkGatewayAuthConfig.header().equals(decodedHeader);
 			String clientId = extractClient(decodedHeader);
 
 			if (!authenticated) {
 
 				LOGGER.error("clientId={}, actual header decoded={}, authConfic.header={}", clientId,
-					StringUtils.abbreviate(decodedHeader, 20), StringUtils.abbreviate(authConfig.header(), 20));
+					StringUtils.abbreviate(decodedHeader, 20), StringUtils.abbreviate(mkGatewayAuthConfig.header(), 20));
 			}
 			return Pair.of(clientId, authenticated);
 		} catch (IllegalArgumentException e) {
