@@ -10,7 +10,13 @@ import { AuthFacade } from '@mja-ws/core/api';
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss'],
   standalone: true,
-  imports: [MatListModule, MatIconModule, NgIf, AsyncPipe, RouterLinkWithHref],
+  imports: [
+    MatListModule,
+    MatIconModule,
+    NgIf,
+    AsyncPipe,
+    RouterLinkWithHref
+  ],
 })
 export class SidenavComponent {
 

@@ -18,7 +18,7 @@ import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
-import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenDto;
+import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenKlassenstufeDto;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruService;
 import de.egladil.mja_api.domain.quiz.QuizService;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
@@ -79,7 +79,7 @@ public class PublicResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = MinikaenguruAufgabenDto.class)))
+			schema = @Schema(implementation = MinikaenguruAufgabenKlassenstufeDto.class)))
 	@APIResponse(
 		name = "BadRequest",
 		description = "Input-Validierung ging schief.",
@@ -100,7 +100,7 @@ public class PublicResource {
 		@PathParam(value = "klasse") final Schwierigkeitsgrad schwierigkeitsgrad) {
 	// @formatter:on
 
-		MinikaenguruAufgabenDto aufgaben = minikaenguruService.getAufgabenFreigegebenerWettbewerb(jahr, schwierigkeitsgrad);
+		MinikaenguruAufgabenKlassenstufeDto aufgaben = minikaenguruService.getAufgabenFreigegebenerWettbewerb(jahr, schwierigkeitsgrad);
 
 		return Response.ok(aufgaben).build();
 	}

@@ -20,7 +20,7 @@ import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabe;
-import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenDto;
+import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenKlassenstufeDto;
 import de.egladil.mja_api.domain.quiz.dto.Quiz;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
@@ -89,12 +89,12 @@ public class PublicResourceTest {
 
 		Schwierigkeitsgrad schwierigkeitsgrad = Schwierigkeitsgrad.EINS;
 
-		MinikaenguruAufgabenDto responsePayload = given()
+		MinikaenguruAufgabenKlassenstufeDto responsePayload = given()
 			.when().get("/minikaenguru/2020/" + schwierigkeitsgrad.toString())
 			.then()
 			.statusCode(200)
 			.extract()
-			.as(MinikaenguruAufgabenDto.class);
+			.as(MinikaenguruAufgabenKlassenstufeDto.class);
 
 		assertEquals("2020", responsePayload.getWettbewerbsjahr());
 		assertEquals("Klasse 1", responsePayload.getKlassenstufe());

@@ -11,10 +11,10 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * MinikaenguruAufgabenDto
+ * MinikaenguruAufgabenKlassenstufeDto
  */
 @Schema(description = "Aufgaben und Lösungen eines Minkänguru-Wettbewerbs für eine gegebene Klassenstufe")
-public class MinikaenguruAufgabenDto {
+public class MinikaenguruAufgabenKlassenstufeDto {
 
 	@JsonProperty
 	@Schema(description = "Jahr des Wettbewerbs")

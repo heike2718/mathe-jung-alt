@@ -36,12 +36,12 @@ public class MinikaenguruService {
 	 *
 	 * @param  jahr
 	 * @param  schwierigkeitsgrad
-	 * @return                         MinikaenguruAufgabenDto
+	 * @return                         MinikaenguruAufgabenKlassenstufeDto
 	 * @throws WebApplicationException
 	 *                                 wenn der schwierigkeitsgrad nicht korrekt ist, der statusWettbewerb nicht korrekt ist oder
 	 *                                 bei anderen Exceptions.
 	 */
-	public MinikaenguruAufgabenDto getAufgabenNichtFreigegebenerWettbewerb(final String jahr, final Schwierigkeitsgrad schwierigkeitsgrad) throws WebApplicationException {
+	public MinikaenguruAufgabenKlassenstufeDto getAufgabenNichtFreigegebenerWettbewerb(final String jahr, final Schwierigkeitsgrad schwierigkeitsgrad) throws WebApplicationException {
 
 		checkSchwierigkeitsgrad(schwierigkeitsgrad);
 
@@ -74,12 +74,12 @@ public class MinikaenguruService {
 	 *
 	 * @param  jahr
 	 * @param  schwierigkeitsgrad
-	 * @return                         MinikaenguruAufgabenDto
+	 * @return                         MinikaenguruAufgabenKlassenstufeDto
 	 * @throws WebApplicationException
 	 *                                 wenn irgendwas ist (schwoerigkeitsgrad falsch, kein Wettbewerb zum angegebenen Jahr, noch
 	 *                                 nicht freigegeben oder andere Dinge
 	 */
-	public MinikaenguruAufgabenDto getAufgabenFreigegebenerWettbewerb(final String jahr, final Schwierigkeitsgrad schwierigkeitsgrad) throws WebApplicationException {
+	public MinikaenguruAufgabenKlassenstufeDto getAufgabenFreigegebenerWettbewerb(final String jahr, final Schwierigkeitsgrad schwierigkeitsgrad) throws WebApplicationException {
 
 		checkSchwierigkeitsgrad(schwierigkeitsgrad);
 
@@ -117,12 +117,12 @@ public class MinikaenguruService {
 	 * @param  aufgabensammlung
 	 * @return
 	 */
-	private MinikaenguruAufgabenDto loadAufgaben(final String jahr, final AufgabensammlungSucheTrefferItem aufgabensammlung) {
+	private MinikaenguruAufgabenKlassenstufeDto loadAufgaben(final String jahr, final AufgabensammlungSucheTrefferItem aufgabensammlung) {
 
 		List<Quizaufgabe> elemente = aufgabensammlungenervice.loadElementeAsQuizzaufgaben(aufgabensammlung.getId());
 		List<MinikaenguruAufgabe> aufgaben = elemente.stream().map(this::mapToMinikaenguruAufgabe).toList();
 
-		MinikaenguruAufgabenDto result = new MinikaenguruAufgabenDto();
+		MinikaenguruAufgabenKlassenstufeDto result = new MinikaenguruAufgabenKlassenstufeDto();
 		result.setAufgaben(aufgaben);
 		result.setKlassenstufe(aufgabensammlung.getSchwierigkeitsgrad().getLabel());
 		result.setWettbewerbsjahr(jahr);

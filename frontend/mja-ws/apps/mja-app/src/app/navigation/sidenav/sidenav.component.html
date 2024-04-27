@@ -35,8 +35,6 @@
     </a>
     }
 
-
-
     @if (authFacade.userIsLoggedIn$ | async) {
     <a mat-list-item (click)="logout()">
         <mat-icon>logout</mat-icon>

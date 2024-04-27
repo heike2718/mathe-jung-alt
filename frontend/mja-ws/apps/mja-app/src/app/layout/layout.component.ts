@@ -12,7 +12,6 @@ import { tap } from 'rxjs';
 })
 export class LayoutComponent implements OnInit {
 
-  isMenuOpen = true;
   #isHandset = false;
 
   #breakpointObserver = inject(BreakpointObserver);
@@ -26,10 +25,8 @@ export class LayoutComponent implements OnInit {
       tap((state: BreakpointState) => {
         if (state.matches) {
           this.#isHandset = true;
-          this.isMenuOpen = false;
         } else {
           this.#isHandset = false;
-          this.isMenuOpen = true;
         }
       })
     ).subscribe();

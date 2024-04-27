@@ -17,7 +17,7 @@ import de.egladil.mja_api.domain.raetsel.dto.Images;
 public class MinikaenguruAufgabe {
 
 	@JsonProperty
-	@Schema(description = "Nummer der Aufgabe im Wettbewerb")
+	@Schema(description = "Nummer der Aufgabe")
 	private String nummer;
 
 	@JsonProperty

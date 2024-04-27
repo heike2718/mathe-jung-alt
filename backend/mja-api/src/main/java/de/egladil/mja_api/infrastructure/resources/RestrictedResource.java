@@ -14,7 +14,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
-import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenDto;
+import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenKlassenstufeDto;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.PermitAll;
@@ -68,7 +68,7 @@ public class RestrictedResource {
 		responseCode = "200",
 		content = @Content(
 			mediaType = "application/json",
-			schema = @Schema(implementation = MinikaenguruAufgabenDto.class)))
+			schema = @Schema(implementation = MinikaenguruAufgabenKlassenstufeDto.class)))
 	@APIResponse(
 		name = "Forbidden",
 		description = "S2S-Authentifizierung ging schief",
@@ -93,7 +93,7 @@ public class RestrictedResource {
 		@PathParam(value = "klasse") final Schwierigkeitsgrad schwierigkeitsgrad) {
 	// @formatter:on
 
-		MinikaenguruAufgabenDto aufgaben = minikaenguruService.getAufgabenNichtFreigegebenerWettbewerb(jahr, schwierigkeitsgrad);
+		MinikaenguruAufgabenKlassenstufeDto aufgaben = minikaenguruService.getAufgabenNichtFreigegebenerWettbewerb(jahr, schwierigkeitsgrad);
 
 		return Response.ok(aufgaben).build();
 	}

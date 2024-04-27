@@ -20,7 +20,7 @@ import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.s2s.MkGatewayAuthConfig;
 import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabe;
-import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenDto;
+import de.egladil.mja_api.domain.minikaenguru.MinikaenguruAufgabenKlassenstufeDto;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
 import de.egladil.mja_api.profiles.FullDatabaseAdminTestProfile;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
@@ -125,14 +125,14 @@ public class RestrictedResourceTest {
 
 		Schwierigkeitsgrad schwierigkeitsgrad = Schwierigkeitsgrad.EINS;
 
-		MinikaenguruAufgabenDto responsePayload = given()
+		MinikaenguruAufgabenKlassenstufeDto responsePayload = given()
 			.header(MjaApiApplication.X_CLIENT_ID_HEADER_NAME, authConfig.client())
 			.header("Authorization", new String(Base64.getEncoder().encode(authConfig.header().getBytes())))
 			.when().get("/minikaenguru/2020/" + schwierigkeitsgrad.toString())
 			.then()
 			.statusCode(200)
 			.extract()
-			.as(MinikaenguruAufgabenDto.class);
+			.as(MinikaenguruAufgabenKlassenstufeDto.class);
 
 		assertEquals("2020", responsePayload.getWettbewerbsjahr());
 		assertEquals("Klasse 1", responsePayload.getKlassenstufe());

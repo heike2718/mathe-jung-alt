@@ -28,6 +28,13 @@
         <div></div>
     </div>    
 }
+
+@if (messageService.message$ | async; as msg) {
+    <div (click)="close()" class="mpx-1"></div>
+}
+
+<!--
 <div *ngIf="messageService.message$ | async as msg" (click)="close()" class="mpx-1">
     <div></div>
 </div>
+-->
