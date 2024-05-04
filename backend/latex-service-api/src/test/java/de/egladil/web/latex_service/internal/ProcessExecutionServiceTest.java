@@ -15,7 +15,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import de.egladil.web.latex_service.LaTeXCommand;
-import de.egladil.web.latex_service.internal.ProcessExecutionService;
 
 /**
  * ProcessExecutionServiceTest

@@ -24,6 +24,7 @@ import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselService;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
+import de.egladil.mja_api.domain.raetsel.dto.MjaImage;
 import de.egladil.mja_api.domain.raetsel.impl.RaetselPermissionDelegate;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
@@ -123,7 +124,7 @@ public class RaetselGeneratorService {
 
 				raetselFileService.moveVorschau(raetsel);
 
-				byte[] imageFrage = this.raetselFileService.findVorschau(raetsel.getFilenameVorschauFrage());
+				MjaImage imageFrage = this.raetselFileService.findVorschau(raetsel.getFilenameVorschauFrage());
 
 				Images result = new Images().withImageFrage(imageFrage);
 
@@ -133,7 +134,7 @@ public class RaetselGeneratorService {
 
 					if (message.isOk()) {
 
-						byte[] imageLoesung = this.raetselFileService.findVorschau(raetsel.getFilenameVorschauLoesung());
+						MjaImage imageLoesung = this.raetselFileService.findVorschau(raetsel.getFilenameVorschauLoesung());
 
 						// System.out.println(new String(Base64.getEncoder().encode(imageLoesung)));
 

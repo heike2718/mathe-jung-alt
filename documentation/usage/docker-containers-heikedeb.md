@@ -5,7 +5,7 @@ Folgende Docker container benötigt die lokale Entwicklung von mathe-jung-alt:
 + die Datenbank
 + clamav
 + authprovider
-+ docker-latex-client
++ latex-service
 
 ## Starten und stoppen der DB
 
@@ -37,17 +37,17 @@ Stoppscript: /home/heike/bin/stop-authprovider.sh
 
 ```
 #!/bin/bash
-cd /home/heike/git/mathe-jung-alt/backend/docker/docker-latex-client
+cd /home/heike/git/mathe-jung-alt/backend/docker/latex-service
 docker-compose up -d
 ```
 
-## Starten und stoppen des docker-latex-clients
+## Starten und stoppen des latex-services
 
 Startscript: ~/bin/start-docker-latex.sh
 
 ```
 #!/bin/bash
-cd ~/git/mathe-jung-alt/backend/docker/docker-latex-client
+cd ~/git/mathe-jung-alt/backend/docker/latex-service
 docker-compose up -d
 cd ~
 ```

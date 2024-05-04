@@ -2,9 +2,11 @@ version: '2'
 networks:
   mja-network:
 services:
-  latex-sercice-api:
+  latex-service-api:
     image: heike2718/latex-service-api
     container_name: latex-service-api
+    ports:
+      - 9200:8080
     environment:
       - TZ=Europe/Berlin
       - JAVA_OPTS=-Xmx1024m

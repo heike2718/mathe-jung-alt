@@ -113,9 +113,15 @@ export const initialPaginationState: PaginationState = {
   pageDefinition: initialPageDefinition
 };
 
+export interface GeneratedImage {
+  readonly width: number;
+  readonly height: number;
+  readonly data: string;
+};
+
 export interface GeneratedImages {
-  readonly imageFrage: string | null;
-  readonly imageLoesung: string | null;
+  readonly imageFrage: GeneratedImage | undefined;
+  readonly imageLoesung: GeneratedImage | undefined;
 };
 
 // #### PrintDialoge

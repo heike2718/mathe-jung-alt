@@ -59,7 +59,7 @@ public class EmbeddableImagesResource {
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "generatePreview",
-		summary = "generiert eine Vorschau (png) für eine Image-Datei, die in ein Rätsel eingebunden wurde oder werden kann.")
+		summary = "generiert eine Vorschau (png) für eine MjaImage-Datei, die in ein Rätsel eingebunden wurde oder werden kann.")
 	@Parameters({
 		@Parameter(
 			name = "pfad",
@@ -141,7 +141,7 @@ public class EmbeddableImagesResource {
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Operation(
 		operationId = "updateEmbeddableImage",
-		summary = "Ersetzt eine vorhandene Image-Datei, die in ein vorhandenes Rätsel eingebettet ist.")
+		summary = "Ersetzt eine vorhandene MjaImage-Datei, die in ein vorhandenes Rätsel eingebettet ist.")
 	@APIResponse(
 		name = "OKResponse",
 		description = "Datei erfolgreich hochgeladen",

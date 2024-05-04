@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.utils;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -21,12 +22,15 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.raetsel.dto.Rectangle;
 
 /**
  * MjaFileUtils
@@ -72,7 +76,7 @@ public class MjaFileUtils {
 		} catch (IOException e) {
 
 			LOGGER.error("Fehler beim Speichern im Filesystem: " + e.getMessage(), e);
-			throw new MjaRuntimeException("Konnte Image nicht ins Filesystem speichern: " + e.getMessage(), e);
+			throw new MjaRuntimeException("Konnte MjaImage nicht ins Filesystem speichern: " + e.getMessage(), e);
 		}
 	}
 
@@ -302,6 +306,45 @@ public class MjaFileUtils {
 
 					file.delete();
 				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Läd ein binäres File, also png oder pdf oder so.
+	 *
+	 * @param  path
+	 * @return      Rectangle - 0x0, wenn es nicht existiert
+	 */
+	public static Rectangle getImageDimensions(final String path) {
+
+		LOGGER.debug("path={}", path);
+
+		File file = new File(path);
+
+		if (file.exists() && file.isFile()) {
+
+			try (FileInputStream in = new FileInputStream(file)) {
+
+				BufferedImage image = ImageIO.read(in);
+
+				if (image != null) {
+
+					int width = image.getWidth();
+					int height = image.getHeight();
+					return new Rectangle(width, height);
+
+				}
+
+				return new Rectangle(0, 0);
+
+			} catch (IOException e) {
+
+				LOGGER.warn("konnte {}.png nicht laden - wird ignoriert: {}", path, e.getMessage(), e);
+				return null;
+
 			}
 		}
 

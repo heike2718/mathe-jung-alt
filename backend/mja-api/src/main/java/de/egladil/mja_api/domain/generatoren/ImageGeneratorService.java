@@ -38,7 +38,7 @@ public class ImageGeneratorService {
 	LaTeXRestClient laTeXClient;
 
 	/**
-	 * Erzeugt eine LaTeX-Datei mit dem Image, compiliert sie zu einem png und gibt das png als byte-Array zurück.
+	 * Erzeugt eine LaTeX-Datei mit dem MjaImage, compiliert sie zu einem png und gibt das png als byte-Array zurück.
 	 *
 	 * @param  relativerPfad
 	 *                       String

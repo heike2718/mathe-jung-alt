@@ -139,8 +139,8 @@ public class EmbeddableImageService {
 	}
 
 	/**
-	 * Das gegebene Image (ein eps) bekommt einen generierten Namen und wird in das passende Unterverzeichnis geschoben. Der String,
-	 * mit dem das Image in LaTeX eingebettet wird, wird an den gegebenen Text angehängt. Es wird eine Grafig generiert und mit dem
+	 * Das gegebene MjaImage (ein eps) bekommt einen generierten Namen und wird in das passende Unterverzeichnis geschoben. Der String,
+	 * mit dem das MjaImage in LaTeX eingebettet wird, wird an den gegebenen Text angehängt. Es wird eine Grafig generiert und mit dem
 	 * Response zurückgegeben, damit sie nach dem Hochladen direkt angezeigt werden kann.
 	 *
 	 * @param  uploadedFile

@@ -46,4 +46,15 @@ public interface LaTeXRestClient {
 	@Path("latex2png")
 	Response latex2PNG(@QueryParam(value = "filename") String filename);
 
+	/**
+	 * Ruft das latex2svg-Command für das gegebene tex-File auf.
+	 *
+	 * @param  filename
+	 *                  String der Name ohne Extension
+	 * @return          Response
+	 */
+	@GET
+	@Path("latex2svg")
+	Response latex2SVG(@QueryParam(value = "filename") String filename);
+
 }

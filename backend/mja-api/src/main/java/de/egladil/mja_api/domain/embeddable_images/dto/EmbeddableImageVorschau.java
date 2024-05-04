@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * EmbeddableImageVorschau
  */
-@Schema(name = "EmbeddableImageVorschau", description = "Vorschau (png) einr Image-Datei, die in LaTeX eingebunden wird.")
+@Schema(name = "EmbeddableImageVorschau", description = "Vorschau (png) einr MjaImage-Datei, die in LaTeX eingebunden wird.")
 public class EmbeddableImageVorschau {
 
 	@JsonProperty

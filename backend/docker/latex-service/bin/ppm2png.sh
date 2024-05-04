@@ -9,3 +9,6 @@ rm $1.log &&\
 #rm $1.out &&\
 rm $1.ppm &&\
 rm $1.ps
+echo "======="
+echo "done :)"
+echo "======="

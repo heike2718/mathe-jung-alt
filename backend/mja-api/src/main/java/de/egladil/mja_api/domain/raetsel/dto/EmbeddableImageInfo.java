@@ -17,7 +17,7 @@ import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
  */
 @Schema(
 	name = "EmbeddableImageInfo",
-	description = "Info über ein im LaTeX-Code der Frage oder Lösung eingebundenes eps-Image.")
+	description = "Info über ein im LaTeX-Code der Frage oder Lösung eingebundenes eps-MjaImage.")
 public class EmbeddableImageInfo {
 
 	@JsonProperty

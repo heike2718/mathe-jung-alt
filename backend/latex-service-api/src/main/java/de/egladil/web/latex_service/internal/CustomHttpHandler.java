@@ -106,7 +106,7 @@ public class CustomHttpHandler implements HttpHandler {
 		return new ProcessExecutionService().performCommand(cmd, fileName);
 	}
 
-	private String getUsage() {
+	String getUsage() {
 
 		StringBuffer sb = new StringBuffer();
 

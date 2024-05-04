@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,10 @@ import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
+import de.egladil.mja_api.domain.raetsel.dto.ImageFormat;
 import de.egladil.mja_api.domain.raetsel.dto.Images;
+import de.egladil.mja_api.domain.raetsel.dto.MjaImage;
+import de.egladil.mja_api.domain.raetsel.dto.Rectangle;
 import de.egladil.mja_api.domain.utils.GeneratorUtils;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -173,10 +177,23 @@ public class RaetselFileService {
 	 * @param  filename
 	 * @return          byte[] oder null
 	 */
-	public byte[] findVorschau(final String filename) {
+	public MjaImage findVorschau(final String filename) {
 
 		String path = latexBaseDir + FIRST_SUBDIR + filename.substring(0, 1) + File.separator + filename;
-		return MjaFileUtils.loadBinaryFile(path, false);
+		byte[] data = MjaFileUtils.loadBinaryFile(path, false);
+
+		if (data == null) {
+
+			return null;
+		}
+
+		Rectangle dimensions = MjaFileUtils.getImageDimensions(path);
+
+		String extensionWithoutDot = FilenameUtils.getExtension(filename);
+		ImageFormat imageFormat = ImageFormat.valueOfFileExtension(extensionWithoutDot);
+
+		return new MjaImage().withData(data).withWidth(dimensions.getWidth()).withHeight(dimensions.getHeight())
+			.withFormat(imageFormat.getFormatStringForResponse());
 	}
 
 	/**
@@ -203,7 +220,10 @@ public class RaetselFileService {
 	 */
 	public Images findImages(final String filenameFrage, final String filenameLoesung) {
 
-		return new Images().withImageFrage(findVorschau(filenameFrage)).withImageLoesung(findVorschau(filenameLoesung));
+		MjaImage vorschauFrage = findVorschau(filenameFrage);
+		MjaImage vorschauLoesung = findVorschau(filenameLoesung);
+
+		return new Images().withImageFrage(vorschauFrage).withImageLoesung(vorschauLoesung);
 	}
 
 	/**

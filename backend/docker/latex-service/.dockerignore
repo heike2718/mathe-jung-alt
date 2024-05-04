@@ -1,0 +1,4 @@
+deb/autotrace_0.40.0-20240428_all.deb
+bin/convert_ps2ppm.sh
+bin/latex2svg.sh
+bin/ppm2svg.sh
