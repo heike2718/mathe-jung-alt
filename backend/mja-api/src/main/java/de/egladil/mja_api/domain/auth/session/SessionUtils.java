@@ -80,7 +80,7 @@ public final class SessionUtils {
 
 	}
 
-	public static NewCookie createSessionCookie(final String sessionId) {
+	public static NewCookie createSessionCookie(final String sessionId, final boolean cookiesSecure) {
 
 		// @formatter:off
 		return new NewCookie.Builder(SESSION_COOKIE_NAME)
@@ -90,11 +90,11 @@ public final class SessionUtils {
 			.comment(null)
 			.maxAge(360000) // maximum age of the cookie in seconds
 			.httpOnly(true)
-			.secure(true).build();
+			.secure(cookiesSecure).build();
 		// @formatter:on
 	}
 
-	public static NewCookie createSessionInvalidatedCookie() {
+	public static NewCookie createSessionInvalidatedCookie(final boolean cookiesSecure) {
 
 		long dateInThePast = LocalDateTime.now(ZoneId.systemDefault()).minus(10, ChronoUnit.YEARS).toEpochSecond(ZoneOffset.UTC);
 
@@ -104,7 +104,7 @@ public final class SessionUtils {
 			.expiry(new Date(dateInThePast))
 			.version(1)
 			.httpOnly(true)
-			.secure(true).build();
+			.secure(cookiesSecure).build();
 			// @formatter:on
 	}
 

@@ -5,6 +5,7 @@
 package de.egladil.mja_api.domain.auth.login.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,9 @@ import jakarta.ws.rs.core.Response.Status;
 public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginLogoutServiceImpl.class);
+
+	@ConfigProperty(name = "cookies.secure")
+	boolean cookiesSecure;
 
 	@Inject
 	OAuthClientCredentialsProvider clientCredentialsProvider;
@@ -79,7 +83,7 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 				.build();
 		}
 
-		NewCookie sessionCookie = SessionUtils.createSessionCookie(session.getSessionId());
+		NewCookie sessionCookie = SessionUtils.createSessionCookie(session.getSessionId(), cookiesSecure);
 
 		if (!ConfigService.STAGE_DEV.equals(configService.getStage())) {
 
@@ -94,7 +98,7 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 
 		this.sessionService.invalidateSession(sessionId);
 
-		NewCookie invalidatedSessionCookie = SessionUtils.createSessionInvalidatedCookie();
+		NewCookie invalidatedSessionCookie = SessionUtils.createSessionInvalidatedCookie(cookiesSecure);
 
 		return Response.ok(MessagePayload.info("erfolgreich ausgeloggt")).cookie(csrfCookieService.createCsrfTokenCookie())
 			.cookie(invalidatedSessionCookie).build();
@@ -110,7 +114,7 @@ public class LoginLogoutServiceImpl implements LoginLogoutService {
 			LOGGER.warn("stage={}" + configService.getStage());
 			return Response.status(401)
 				.entity(MessagePayload.error("böse böse. Dieser Request wurde geloggt!"))
-				.cookie(SessionUtils.createSessionInvalidatedCookie()).build();
+				.cookie(SessionUtils.createSessionInvalidatedCookie(cookiesSecure)).build();
 		}
 
 		return Response.ok(MessagePayload.info("erfolgreich ausgeloggt")).build();

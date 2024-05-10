@@ -7,7 +7,7 @@
     "postinstall": "node ./decorate-angular-cli.js",
     "start": "nx serve",
     "build:mja-app:local": "npx nx build mja-app -c local --output-hashing=all --base-href /mja-app/ --skip-nx-cache",
-    "build:mja-app:a300": "npx nx build mja-app -c a300 --output-hashing=all --base-href /mja-app/ --skip-nx-cache",
+    "build:mja-app:heikeqs": "npx nx build mja-app -c heikeqs --output-hashing=all --base-href /mja-app/ --skip-nx-cache",
     "build:mja-app:prod": "npx nx run mja-app:build:production --output-hashing=all --base-href /mja-app/ --skip-nx-cache",
     "test": "npx nx test",
     "test:all": "npx nx run-many --target=test --all",

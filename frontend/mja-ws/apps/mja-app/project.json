@@ -74,7 +74,7 @@
           ],
           "outputHashing": "all"
         },
-        "a300": {
+        "heikeqs": {
           "budgets": [
             {
               "type": "initial",
@@ -88,13 +88,13 @@
             }
           ],
           "index": {
-            "input": "build-env/mja-app/index.a300.html",
+            "input": "build-env/mja-app/index.heikeqs.html",
             "output": "index.html"
           },
           "fileReplacements": [
             {
               "replace": "apps/mja-app/src/environments/environment.ts",
-              "with": "build-env/mja-app/environment.a300.ts"
+              "with": "build-env/mja-app/environment.heikeqs.ts"
             }
           ],
           "outputHashing": "all"

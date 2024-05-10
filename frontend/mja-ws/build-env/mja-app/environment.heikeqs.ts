@@ -2,7 +2,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 // export const environment = {
 //     production: false,
-//     baseUrl: 'http://a300/mja-api',
+//     baseUrl: 'http://heikeqs/mja-api',
 //     withCredentials: true,
 //     assetsPath: '/mja-app/assets/'
 //   };

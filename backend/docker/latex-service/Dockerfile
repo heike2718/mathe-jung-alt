@@ -29,6 +29,4 @@ RUN chown 1001 /bin/latex2*.sh &&\
     chmod 766 /bin/start-latex-client.sh &&\
     texhash
 
-# RUN . /bin/start-latex-client.sh
-
 ENTRYPOINT [ "/bin/start-latex-client.sh" ]

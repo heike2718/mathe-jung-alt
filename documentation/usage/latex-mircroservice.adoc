@@ -165,8 +165,25 @@ docker container run -it -v /media/veracrypt1/knobelarchiv_2/latex/temp:/doc -p 
 
 Im docker-Volume liegt eine fehlerfrei compilierbare Datei test1.tex.
 
-curl -X GET -i 'http://localhost:8080/latex2pdf?filename=test1'
-curl -X GET -i 'http://localhost:8080/latex2png?filename=test1'
+```
+curl -X GET -i 'http://localhost:9200/latex2pdf?filename=test'
+curl -X GET -i 'http://localhost:9200/latex2png?filename=test'
+```
+
+```
+curl -X GET -i 'http://localhost:9200/latex2pdf?filename=test-fibel-nord'
+curl -X GET -i 'http://localhost:9200/latex2png?filename=test-fibel-nord'
+```
+
+```
+curl -X GET -i 'http://localhost:9200/latex2pdf?filename=test-fibel-sued'
+curl -X GET -i 'http://localhost:9200/latex2png?filename=test-fibel-sued'
+```
+
+```
+curl -X GET -i 'http://localhost:9200/latex2pdf?filename=test-druck-by-wok'
+curl -X GET -i 'http://localhost:9200/latex2png?filename=test-druck-by-wok'
+```
 
 Testdateien
 ----------

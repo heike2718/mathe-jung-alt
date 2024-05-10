@@ -4,6 +4,7 @@
 // =====================================================
 package de.egladil.mja_api.domain.auth.util;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,9 @@ public class CsrfCookieService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CsrfCookieService.class);
 
+	@ConfigProperty(name = "cookies.secure")
+	boolean cookiesSecure;
+
 	@Inject
 	SecureTokenService csrfTokenService;
 
@@ -35,6 +39,6 @@ public class CsrfCookieService {
 		LOGGER.debug("csrfToken={}", csrfToken);
 
 		return new NewCookie.Builder(AuthConstants.CSRF_TOKEN_COOKIE_NAME).path("/").comment("csrf").maxAge(-1)
-			.httpOnly(false).secure(true).build();
+			.httpOnly(false).secure(cookiesSecure).build();
 	}
 }

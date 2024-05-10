@@ -1,0 +1,48 @@
+\documentclass[11pt,a4paper,twoside]{article}
+
+\input{./include/minimal}
+\input{./include/tikz}
+\input{./include/layout}
+
+% layout.tex definiert pagestyle{empty} und parindent0em Das kann hier überschrieben werden
+\pagestyle{plain}
+
+\input{./include/druck-by-wok}
+
+\DeclareFontFamily{U}{dice3d}{}
+\DeclareFontShape{U}{dice3d}{m}{n}{<-> s*[4] dice3d}{}
+
+\renewcommand\arraystretch{1.1}
+
+\definecolor{black}{rgb}{0.0, 0.0, 0.0}
+\definecolor{blue}{rgb}{0.0, 0.0, 1.0}
+\definecolor{green}{rgb}{0.0, 0.5, 0.0}
+\definecolor{orange}{rgb}{1.0, 0.49, 0.0}
+
+\begin{document}
+
+{\Large
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+\begin{center}
+{\LARGE \bf Fonttest druck-by-wok}
+\end{center}
+
+Julias Vater kauft 4 Tüten Zucker und 3 Tüten Mehl.\\
+In einen Beutel passen genau 2 Tüten.\par
+Wie viele Beutel braucht er mindestens?
+\begin{center}
+\begin{tabular}{*{5}{|C{2cm}}|}
+\hline
+2 & 3 & 4 & 5 & 6\\
+\hline
+ &  &  &  & \\
+\hline
+\end{tabular}
+\end{center}
+
+}
+\end{document}
