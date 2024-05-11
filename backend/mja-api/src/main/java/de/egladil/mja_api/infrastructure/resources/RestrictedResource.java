@@ -11,6 +11,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
@@ -32,6 +34,8 @@ import jakarta.ws.rs.core.Response;
  */
 @Path("mja-api/restricted")
 public class RestrictedResource {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestrictedResource.class);
 
 	@Inject
 	MinikaenguruService minikaenguruService;
@@ -93,7 +97,12 @@ public class RestrictedResource {
 		@PathParam(value = "klasse") final Schwierigkeitsgrad schwierigkeitsgrad) {
 	// @formatter:on
 
-		MinikaenguruAufgabenKlassenstufeDto aufgaben = minikaenguruService.getAufgabenNichtFreigegebenerWettbewerb(jahr, schwierigkeitsgrad);
+		LOGGER.info("called with Parameters jahr={}, klasse={}", jahr, schwierigkeitsgrad);
+
+		MinikaenguruAufgabenKlassenstufeDto aufgaben = minikaenguruService.getAufgabenNichtFreigegebenerWettbewerb(jahr,
+			schwierigkeitsgrad);
+
+		LOGGER.info("ok with Parameters jahr={}, klasse={}", jahr, schwierigkeitsgrad);
 
 		return Response.ok(aufgaben).build();
 	}

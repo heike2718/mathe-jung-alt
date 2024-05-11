@@ -69,14 +69,14 @@ public class SessionUtilsTest {
 		String sessionId = SessionUtils.createIdReference();
 
 		// Act + Assert
-		assertNotNull(SessionUtils.createSessionCookie(sessionId));
+		assertNotNull(SessionUtils.createSessionCookie(sessionId, true));
 	}
 
 	@Test
 	void should_createSessionInvalidatedCookieWork() {
 
 		// Act + Assert
-		assertNotNull(SessionUtils.createSessionInvalidatedCookie());
+		assertNotNull(SessionUtils.createSessionInvalidatedCookie(true));
 	}
 
 }

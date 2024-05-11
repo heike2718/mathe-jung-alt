@@ -63,7 +63,7 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 					.build());
 		}
 
-		LOGGER.debug("AuthorizationHeader={}", StringUtils.abbreviate(authorizationHeader, 20));
+		LOGGER.info("AuthorizationHeader={}", StringUtils.abbreviate(authorizationHeader, 20));
 
 		String clientIdFromHeader = getClientId(requestContext);
 
@@ -72,7 +72,7 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 		if (!authResult.getRight().booleanValue()) {
 
 			throw new WebApplicationException(Response.status(401).entity(MessagePayload.error(
-				"keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte konfigurierten Authorization-Header pruefen."))
+				"keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte konfigurierten Authorization-Header und X-CLIENT-ID pruefen."))
 				.build());
 		} else {
 
