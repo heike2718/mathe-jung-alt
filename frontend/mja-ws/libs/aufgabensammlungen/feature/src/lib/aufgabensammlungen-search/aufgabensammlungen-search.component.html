@@ -1,15 +1,15 @@
 <h1>Aufgabensammlungen</h1>
 
 <div class="button-container">
-  <div>
-    <button mat-raised-button color="primary" (click)="resetAllFilters()"
-      [disabled]="buttonResetAllFiltersDisabled()">Filter leeren</button>
-  </div>
-  <div>
-    <button mat-raised-button color="primary" (click)="neueAufgabensammlung()"
-      title="neue Aufgabensammlung anlegen">neue
-      Sammlung</button>
-  </div>
+  <button mat-raised-button color="primary" (click)="resetAllFilters()"
+    [disabled]="buttonResetAllFiltersDisabled()">Filter leeren</button>
+
+  <!-- solange es noch keine personalisierten Aufgabensammlungen gibt, nur für Admins -->
+  @if (user.isAdmin) {
+  <button mat-raised-button color="primary" (click)="neueAufgabensammlung()" title="neue Aufgabensammlung anlegen">neue
+    Sammlung</button>
+  }
+
 </div>
 
 @if (showSuchparameter()) {
@@ -18,8 +18,6 @@
   <div>{{suchparameterStr}}</div>
 </div>
 }
-
-
 
 <mat-paginator [length]="anzahlSammlungen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
 
@@ -75,9 +73,9 @@
           <mat-select floatLabel="always" [formControl]="referenztypSelectFilterControl">
 
             @for (reftyp of selectReferenztypInput; track $index) {
-              <mat-option [value]="reftyp">{{reftyp}}</mat-option>
+            <mat-option [value]="reftyp">{{reftyp}}</mat-option>
             }
-            
+
           </mat-select>
         </mat-form-field>
       </div>

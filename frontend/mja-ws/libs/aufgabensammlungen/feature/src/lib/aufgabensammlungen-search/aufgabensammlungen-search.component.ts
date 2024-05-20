@@ -84,7 +84,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   #aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
   #authFacade = inject(AuthFacade);
 
-  #user!: User;
+  user!: User;
 
   #nameFilterSubscription = new Subscription();
   #schwierigkeitsgradFilterSubscription = new Subscription();
@@ -144,7 +144,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
       }
     );
 
-    this.#userSubscription = this.#authFacade.user$.subscribe((user) => this.#user = user);
+    this.#userSubscription = this.#authFacade.user$.subscribe((user) => this.user = user);
 
     this.#triggerSearch();
   }
@@ -291,7 +291,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   neueAufgabensammlung(): void {
-    this.#aufgabensammlungenFacade.createAndEditAufgabensammlung(this.#user);
+    this.#aufgabensammlungenFacade.createAndEditAufgabensammlung(this.user);
   }
 
   onRowClicked(aufgabensammlung: AufgabensammlungTrefferItem): void {

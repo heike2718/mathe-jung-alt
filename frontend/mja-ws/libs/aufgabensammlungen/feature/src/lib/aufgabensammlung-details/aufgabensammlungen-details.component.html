@@ -11,19 +11,17 @@
         <div>
             {{sammlung.id}}
         </div>
-        }
+
 
         <label>Kommentar:</label>
         <div>
             {{sammlung.kommentar}}
         </div>
 
-        @if (user.isAdmin) {
         <label>geändert durch:</label>
         <div>
             {{sammlung.geaendertDurch}}
         </div>
-        }
 
         <label>freigegeben:</label>
         <mat-checkbox [(ngModel)]="freigegeben" [disabled]="true"></mat-checkbox>
@@ -40,6 +38,7 @@
         <div>
             {{sammlung.referenz}}
         </div>
+        }
     </div>
 
     <div class="button-container">
@@ -59,7 +58,9 @@
             (click)="openGenerateDialog()">PDF</button>
         }
 
+        @if (user.isAdmin) {
         <button mat-raised-button color="primary" (click)="reload()">aktualisieren</button>
+        }
 
         <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
 
@@ -67,8 +68,9 @@
 
     <h2>Elemente</h2>
 
-    <mja-aufgabensammlungselement [aufgabensammlung]="sammlung" [benutzerart]="user.benutzerart" (showImages)="onShowImagesElement($event)"
-        (editElement)="onEditElement($event)" (deleteElement)="onDeleteElement($event)">
+    <mja-aufgabensammlungselement [aufgabensammlung]="sammlung" [benutzerart]="user.benutzerart"
+        (showImages)="onShowImagesElement($event)" (editElement)="onEditElement($event)"
+        (deleteElement)="onDeleteElement($event)">
     </mja-aufgabensammlungselement>
 
     @if (schluessel.length > 0) {

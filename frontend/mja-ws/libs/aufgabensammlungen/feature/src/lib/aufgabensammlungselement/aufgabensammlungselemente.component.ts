@@ -59,10 +59,10 @@ export class AufgabensammlungselementeComponent implements AfterViewInit {
   getDisplayedColumns(): string[] {
 
     if (this.aufgabensammlung.schreibgeschuetzt) {
-      return ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'show'];
+      return ['schluessel', 'nummer', 'name'];
 
     } else {
-      return ['schluessel', 'nummer', 'punkte', 'name', 'loesungsbuchstabe', 'show', 'edit', 'delete'];
+      return ['schluessel', 'nummer', 'loesungsbuchstabe', 'name', 'edit', 'delete'];
     }
   }
 
@@ -72,6 +72,19 @@ export class AufgabensammlungselementeComponent implements AfterViewInit {
       return 'SCHLUESSEL';
     } else {
       return 'SCHL';
+    }
+  }
+
+  getButtonClass(points: number): string {
+    switch (points) {
+      case 300:
+        return 'green-button';
+      case 400:
+        return 'blue-button';
+      case 500:
+        return 'orange-button';
+      default:
+        return 'black-button';
     }
   }
 

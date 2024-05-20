@@ -1,3 +1,78 @@
-.full-width-table {
-    width: 100%;
+.table-container {
+    max-width: 80%;
+    /* Adjust the max-width as needed */
+    margin: 0 auto;
+    /* Center the container */
+    padding: 10px;
+    /* Optional: add padding */
+}
+
+@media (max-width: 600px) {
+    .table-container {
+        max-width: 800px;
+    }
+}
+
+.schluessel-column {
+    width: 2em;
+    text-align: center;
+}
+
+.nummer-column {
+    width: 4em;
+    text-align: center;
+}
+
+.loesung-column {
+    width: 2em;
+    text-align: center;
+}
+
+.action-column {
+    width: 10em;
+    text-align: center;
+}
+
+.green-button {
+    border: 2px solid green;
+    color: green;
+    background-color: transparent;
+}
+
+.green-button:hover {
+    background-color: green;
+    color: white;
+}
+
+.blue-button {
+    border: 2px solid blue;
+    color: blue;
+    background-color: transparent;
+}
+
+.blue-button:hover {
+    background-color: blue;
+    color: white;
+}
+
+.orange-button {
+    border: 2px solid orange;
+    color: orange;
+    background-color: transparent;
+}
+
+.orange-button:hover {
+    background-color: orange;
+    color: white;
+}
+
+.black-button {
+    border: 2px solid black;
+    color: black;
+    background-color: transparent;
+}
+
+.black-button:hover {
+    background-color: black;
+    color: white;
 }

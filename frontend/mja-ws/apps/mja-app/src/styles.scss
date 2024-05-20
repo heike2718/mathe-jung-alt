@@ -42,23 +42,20 @@ h2 {
 }
 
 .badge-green {
-    background-color: green;
-    color: white;
-    padding: 5px;
+    border: 2px solid green;
+    padding: 0.2em 0.4em;
     border-radius: 3px;
 }
 
 .badge-blue {
-    background-color: blue;
-    color: white;
-    padding: 5px;
+    border: 2px solid blue;
+    padding: 0.2em 0.4em;
     border-radius: 3px;
 }
 
 .badge-orange {
-    background-color: rgba(255, 145, 0, 0.692);
-    color: white;
-    padding: 5px;
+    border: 2px solid rgba(255, 145, 0, 0.692);
+    padding: 0.2em 0.4em;
     border-radius: 3px;
 }
 
@@ -261,6 +258,19 @@ mat-dialog-content {
     grid-gap: 2rem;
 }
 
+@media (max-width: 600px) {
+
+    /* Breakpoint for smartphones */
+    .button-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        /* Stack buttons in a single column */
+        align-items: center;
+        margin-left: 2rem;
+        grid-gap: 2rem;
+    }
+}
+
 label {
     font-weight: bold;
 }
@@ -283,26 +293,30 @@ footer {
     border-radius: 4px;
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1; /* Ensure the tooltip is above other elements */
-    max-width: 600px; /* Set a maximum width for the tooltip */
-    max-height: 400px; /* Set a maximum height for the tooltip */
-    overflow-y: auto; /* Add scrollbar for overflow-y (vertical) */
-    white-space: pre-wrap; /* Allow line breaks */
-  }
-  
-  /* Optional: Add transition for a smoother appearance */
-  .hover-details {
+    z-index: 1000;
+    /* Ensure the tooltip is above other elements */
+    max-width: 600px;
+    /* Set a maximum width for the tooltip */
+    max-height: 400px;
+    /* Set a maximum height for the tooltip */
+    overflow-y: auto;
+    /* Add scrollbar for overflow-y (vertical) */
+    white-space: pre-wrap;
+    /* Allow line breaks */
+}
+
+/* Optional: Add transition for a smoother appearance */
+.hover-details {
     transition: opacity 0.3s ease-in-out;
-  }
-  
-  /* Hide the tooltip by default */
-  .hover-details.hidden {
+}
+
+/* Hide the tooltip by default */
+.hover-details.hidden {
     display: none;
-  }
-  
-  /* Show the tooltip when active */
-  .hover-details.active {
+}
+
+/* Show the tooltip when active */
+.hover-details.active {
     display: block;
     opacity: 1;
-  }
-
+}
