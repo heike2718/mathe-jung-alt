@@ -71,7 +71,7 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 
 		if (!authResult.getRight().booleanValue()) {
 
-			throw new WebApplicationException(Response.status(401).entity(MessagePayload.error(
+			throw new WebApplicationException(Response.status(403).entity(MessagePayload.error(
 				"keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte konfigurierten Authorization-Header und X-CLIENT-ID pruefen."))
 				.build());
 		} else {
