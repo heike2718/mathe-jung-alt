@@ -351,6 +351,20 @@
                         </div>
                     </mat-expansion-panel>
 
+                    <!-- Autor Lösung -->
+                    <div class="mb-2 mt-2">
+                        <mat-form-field>
+                            <mat-label>Autor:in Lösung</mat-label>
+                            <input matInput maxlength="100" formControlName="autorLoesung" #autorLoesungInput>
+                            <mat-hint>Nur ausfüllen, wenn Sie nicht selbst Autor:in der Lösung sind.</mat-hint>
+                            <mat-hint align="end">{{autorLoesungInput.value.length}}/100</mat-hint>
+
+                            @if (raetselDataError('autorLoesung', 'maxLength')) {
+                            <mat-error>maximal 100 Zeichen</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
                     <!-- Antwortvorschläge - Anzahl -->
 
                     <div class="mb-2 mt-2">

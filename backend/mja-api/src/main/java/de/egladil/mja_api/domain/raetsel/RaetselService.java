@@ -593,6 +593,11 @@ public class RaetselService {
 		persistentesRaetsel.herkunft = payload.getHerkunftstyp();
 		persistentesRaetsel.owner = persistentesRaetsel.isPersistent() ? persistentesRaetsel.owner : userId;
 		persistentesRaetsel.antwortvorschlaegeEingebettet = payload.isAntwortvorschlaegeEingebettet();
+
+		if (StringUtils.isNotBlank(payload.getAutorLoesung())) {
+
+			persistentesRaetsel.autorLoesung = payload.getAutorLoesung();
+		}
 	}
 
 	Raetsel mapFromDB(final PersistentesRaetsel raetselDB) {
@@ -609,7 +614,8 @@ public class RaetselService {
 			.withHerkunftstyp(raetselDB.herkunft)
 			.withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
-			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung);
+			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung)
+			.withAutorLoesung(raetselDB.autorLoesung);
 
 		return result;
 	}

@@ -69,7 +69,8 @@ export interface RaetselDetails {
   readonly raetselPDF: Blob | null;
   readonly embeddableImageInfos: EmbeddableImageInfo[];
   readonly quelle: QuelleDto,
-  readonly quellenangabe: string
+  readonly quellenangabe: string,
+  readonly autorLoesung: string | undefined;
 };
 
 export interface LinkedAufgabensammlung  {
@@ -103,7 +104,8 @@ export const initialRaetselDetails: RaetselDetails = {
   raetselPDF: null,
   embeddableImageInfos: [],
   quelle: initialQuelleDto,
-  quellenangabe: ''
+  quellenangabe: '',
+  autorLoesung: ''
 };
 
 export interface EditRaetselPayload {
@@ -120,6 +122,7 @@ export interface EditRaetselPayload {
   readonly antwortvorschlaege: Antwortvorschlag[];
   readonly deskriptoren: DeskriptorUI[];
   readonly quelle: QuelleDto;
+  readonly autorLoesung: string | undefined;
 };
 
 export interface GUIEditRaetselPayload {
@@ -168,7 +171,8 @@ export function createEditRaetselPayload(raetselDetails: RaetselDetails): GUIEdi
     loesung: raetselDetails.loesung,
     name: raetselDetails.name,
     schluessel: raetselDetails.schluessel.length > 0 ? raetselDetails.schluessel : null,
-    quelle: raetselDetails.quelle
+    quelle: raetselDetails.quelle,
+    autorLoesung: raetselDetails.autorLoesung
   };
 
   const quellenangabe = raetselDetails.quellenangabe;

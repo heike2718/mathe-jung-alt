@@ -34,6 +34,13 @@
             <div>{{raetsel.quellenangabe}}</div>
         </div>
 
+        @if (raetsel.autorLoesung) {
+            <div class="grid-container-2 mt-2 mb-2">
+                <label>Autor:in Lösung:</label>
+                <div>{{raetsel.autorLoesung}}</div>
+            </div>
+        }
+
         <div class="button-container">
 
             @if (!user.isAdmin) {

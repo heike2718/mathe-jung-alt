@@ -106,6 +106,9 @@ public class PersistentesRaetsel implements PersistenteMjaEntity {
 	@NotNull
 	public String quelle;
 
+	@Column(name = "AUTOR_LOESUNG")
+	public String autorLoesung;
+
 	@Column
 	public String deskriptoren;
 

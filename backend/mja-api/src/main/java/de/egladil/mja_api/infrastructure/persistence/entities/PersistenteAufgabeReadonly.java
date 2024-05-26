@@ -66,6 +66,9 @@ public class PersistenteAufgabeReadonly {
 	@Column
 	public String sammlung;
 
+	@Column(name = "AUTOR_LOESUNG")
+	public String autorLoesung;
+
 	@Column
 	public String antwortvorschlaege;
 

@@ -208,6 +208,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       frage: ['', [Validators.required]],
       loesung: [''],
       kommentar: ['', [Validators.maxLength(200)]],
+      autorLoesung: ['', Validators.maxLength(100)],
       antwortvorschlaegeEingebettet: [false],
       anzahlAntwortvorschlaege: ['0'],
       antwortvorschlaege: new UntypedFormArray([]),  // ab hier die Teile für die Quelle
@@ -382,6 +383,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       frage: this.guiEditRaetselPayload.editRaetselPayload.frage,
       loesung: this.guiEditRaetselPayload.editRaetselPayload.loesung,
       kommentar: this.guiEditRaetselPayload.editRaetselPayload.kommentar,
+      autorLoesung: this.guiEditRaetselPayload.editRaetselPayload.autorLoesung,
       quellenart: theGuiQuellenart.label,
       person: this.guiEditRaetselPayload.editRaetselPayload.quelle.person ? this.guiEditRaetselPayload.editRaetselPayload.quelle.person : '',
       jahr: this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr ? this.guiEditRaetselPayload.editRaetselPayload.quelle.jahr : '',
@@ -743,6 +745,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       freigegeben: formValue['freigegeben'],
       antwortvorschlaegeEingebettet: formValue['antwortvorschlaegeEingebettet'],
       kommentar: formValue['kommentar'] !== null ? formValue['kommentar'].trim() : null,
+      autorLoesung: formValue['autorLoesung'] !== null ? formValue['autorLoesung'].trim() : null,
       frage: formValue['frage'] !== null ? formValue['frage'].trim() : '',
       loesung: formValue['loesung'] !== null ? formValue['loesung'].trim() : null,
       antwortvorschlaege: antwortvorschlaegeNeu,

@@ -135,6 +135,11 @@ public class QuizService {
 
 		}
 
+		if (ausDB.autorLoesung != null) {
+
+			text += " (Lösung: " + ausDB.autorLoesung + ")";
+		}
+
 		return text;
 	}
 

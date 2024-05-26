@@ -72,8 +72,13 @@ public class Raetsel extends AbstractDomainEntity {
 		description = "Daten einer Quelle für ein Raetsel. Nicht alle Attribute zusammen sind sinnvoll. Eingie schließen einander aus.")
 	private QuelleDto quelle;
 
+	@JsonProperty
 	@Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe", example = "alpha (6) 1976, S.32")
 	private String quellenangabe;
+
+	@JsonProperty
+	@Schema(description = "Autor der Lösung", example = "Nicht Autor des Rätsels")
+	private String autorLoesung;
 
 	@JsonProperty
 	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
@@ -340,6 +345,17 @@ public class Raetsel extends AbstractDomainEntity {
 	public Raetsel withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
 
 		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
+		return this;
+	}
+
+	public String getAutorLoesung() {
+
+		return autorLoesung;
+	}
+
+	public Raetsel withAutorLoesung(final String autorLoesung) {
+
+		this.autorLoesung = autorLoesung;
 		return this;
 	}
 }

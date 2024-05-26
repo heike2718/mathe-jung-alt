@@ -33,6 +33,7 @@ import de.egladil.mja_api.domain.auth.config.AuthConstants;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quellen.Quellenart;
 import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
+import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.raetsel.dto.EditRaetselPayload;
@@ -884,6 +885,39 @@ public class AdminRaetselResourceTest {
 
 		assertEquals("ERROR", messagePayload.getLevel());
 		assertEquals("Tja, dieses Rätsel gibt es leider nicht.", messagePayload.getMessage());
+	}
+
+	@Test
+	@TestSecurity(user = "autor", roles = { "AUTOR" })
+	@Order(44)
+	@DisplayName("when the POST raetsel request is called with invalid input, I expect statuscode 400")
+	void testRaetselAnlegenBadRequest() throws Exception {
+
+		Antwortvorschlag[] ave = new Antwortvorschlag[3];
+		ave[0] = new Antwortvorschlag().withBuchstabe("A").withKorrekt(false).withText("Nein");
+		ave[1] = new Antwortvorschlag().withBuchstabe("B").withKorrekt(true).withText("<script>\"alert\"</script>");
+		ave[2] = new Antwortvorschlag().withBuchstabe("C").withKorrekt(true).withText("Doch");
+
+		EditRaetselPayload payload = new EditRaetselPayload().withSchluessel("hallo").withAntwortvorschlaege(ave)
+			.withAutorLoesung("<script>\"alert\"</script>").withFrage("Was ist sieben mal sieben?")
+			.withKommentar("<script>\"alert\"</script>").withName("<script>\"alert\"</script>");
+
+		MessagePayload messagePayload = given()
+			.header(AuthConstants.CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN)
+			.cookie(AuthConstants.CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN)
+			.contentType(ContentType.JSON)
+			.body(payload)
+			.post("v1")
+			.then()
+			.statusCode(400)
+			.and()
+			.contentType(ContentType.JSON)
+			.extract()
+			.as(MessagePayload.class);
+
+		assertEquals("ERROR", messagePayload.getLevel());
+
+		System.out.println(messagePayload.getMessage());
 	}
 
 	@Test

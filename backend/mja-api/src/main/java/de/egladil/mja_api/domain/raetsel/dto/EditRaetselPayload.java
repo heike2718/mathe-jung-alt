@@ -15,6 +15,7 @@ import de.egladil.mja_api.domain.quellen.dto.QuelleDto;
 import de.egladil.mja_api.domain.raetsel.Antwortvorschlag;
 import de.egladil.mja_api.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
+import de.egladil.mja_api.domain.validation.ValidAntwortvorschlaege;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -64,6 +65,12 @@ public class EditRaetselPayload {
 	private String kommentar;
 
 	@JsonProperty
+	@Schema(description = "Autor der Lösung", example = "Super Solver")
+	@Pattern(regexp = MjaRegexps.VALID_PERSON, message = "autorLoesung enthält ungültige Zeichen")
+	@Size(max = 100, message = "autorLoesung darf nicht länger als 100 Zeichen sein")
+	private String autorLoesung;
+
+	@JsonProperty
 	@Schema(description = "ob das Rätsel freigegeben ist.")
 	private boolean freigegeben;
 
@@ -79,6 +86,7 @@ public class EditRaetselPayload {
 	@Schema(
 		type = SchemaType.ARRAY, implementation = Antwortvorschlag.class,
 		description = "optionale Antwortvorschläge, wenn es für multiple choice genutzt werden kann")
+	@ValidAntwortvorschlaege
 	private Antwortvorschlag[] antwortvorschlaege;
 
 	@JsonProperty
@@ -233,6 +241,17 @@ public class EditRaetselPayload {
 	public EditRaetselPayload withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
 
 		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
+		return this;
+	}
+
+	public String getAutorLoesung() {
+
+		return autorLoesung;
+	}
+
+	public EditRaetselPayload withAutorLoesung(final String autorLoesung) {
+
+		this.autorLoesung = autorLoesung;
 		return this;
 	}
 }
