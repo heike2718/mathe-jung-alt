@@ -50,3 +50,4 @@ nb-configuration.xml
 
 #restricted
 /postman/mja-api-prod-resticted-do-not-push.postman_collection.json
+/postman/curl
