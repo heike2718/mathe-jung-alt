@@ -14,6 +14,12 @@ Es basiert auf einer TexLive-full- Installation von
 
 __Achtung:__ Ich habe keine halben Sachen gemacht, damit später nicht irgendwelche LaTeX-Packages fehlen. Die full-installation dauert eine ganze Weile.
 
+```
+cd docker-java-latex
+docker image build -t heike2718/docker-java-latex .
+```
+
+
 ### Der Java-basierte LaTeX-Service - heike2718/latex-service-api
 
 Dieses Image basiert auf heike2718/docker-java-latex, also dem Container mit texlive-full und einer JRE (aktuell Java 17).
