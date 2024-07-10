@@ -511,7 +511,7 @@ npx nx g mv bookings --project-name bookings --destination customers/bookings
 
 __Sessionid-Cookie wird nicht in den Request gesetzt__
 
-Man muss den httpClient-Call mit {withCredentials: true} konfigurieren (wird bei mir im AddBaseUrlInterceptor gemacht) __und__ das Session-Cookie muss mit JSESSIONID beginnen.
+Man muss den httpClient-Call mit {withCredentials: true} konfigurieren (wird bei mir im MjaAPIHttpInterceptor gemacht) __und__ das Session-Cookie muss mit JSESSIONID beginnen.
 Habe das Session-Cookie jetzt JSESSIONID_MJA_ADMIN genannt.
 
 __Laufzeitfehler aus auth.effects__
