@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { tap } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'mja-app-layout',
@@ -10,25 +10,16 @@ import { tap } from 'rxjs';
   standalone: true,
   imports: [CommonModule]
 })
-export class LayoutComponent implements OnInit {
-
-  #isHandset = false;
+export class LayoutComponent implements OnInit, OnDestroy {
 
   #breakpointObserver = inject(BreakpointObserver);
-
-  get isHandset(): boolean {
-    return this.#isHandset;
-  }
+  #subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
-    this.#breakpointObserver.observe(Breakpoints.Handset).pipe(
-      tap((state: BreakpointState) => {
-        if (state.matches) {
-          this.#isHandset = true;
-        } else {
-          this.#isHandset = false;
-        }
-      })
-    ).subscribe();
+    this.#breakpointObserver.observe(Breakpoints.Handset).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.#subscription.unsubscribe();
   }
 }

@@ -1,21 +1,24 @@
 import { DOCUMENT } from "@angular/common";
-import { Inject, Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Inject, Injectable, signal } from "@angular/core";
 import { Message } from "./messaging.model";
 
 
 @Injectable({ providedIn: 'root' })
 export class MessageService {
 
-    #messageSubject$ = new BehaviorSubject<Message | undefined>(undefined);
+    #messageSignal = signal<Message | undefined>(undefined);
 
     constructor(@Inject(DOCUMENT) private document: Document) { }
 
-    public message$: Observable<Message | undefined> = this.#messageSubject$.asObservable();
+    get message() {
+        return this.#messageSignal;
+    }
 
     public info(text: string) {
-
         this.#add({ message: text, level: 'INFO' });
+        setTimeout(() => {
+            this.clear();
+        }, 3000); // Clear after 3 seconds
     }
 
     public warn(text: string) {
@@ -28,17 +31,17 @@ export class MessageService {
         this.#add({ message: text, level: 'ERROR' });
     }
 
-    public message(message: Message): void {
+    public setMessage(message: Message): void {
         this.#add(message);
     }
 
     public clear(): void {
 
-        this.#messageSubject$.next(undefined);
+        this.#messageSignal.set(undefined);
     }
 
     #add(message: Message) {
-        this.#messageSubject$.next(message);
+        this.#messageSignal.set(message);
         this.#scrollToTop();
     }
 

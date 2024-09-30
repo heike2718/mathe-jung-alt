@@ -1,4 +1,4 @@
-@if ((messageService.message$ | async); as msg) {
+@if ((messageService.message()); as msg) {
     @if (msg) {
         <div class="mpx-1 cmn-message-section" (click)="close()">
 
@@ -22,19 +22,3 @@
         </div>
     }
 }
-
-@if (messageService.message$ | async) {
-    <div (click)="close()" class="mpx-1">
-        <div></div>
-    </div>    
-}
-
-@if (messageService.message$ | async; as msg) {
-    <div (click)="close()" class="mpx-1"></div>
-}
-
-<!--
-<div *ngIf="messageService.message$ | async as msg" (click)="close()" class="mpx-1">
-    <div></div>
-</div>
--->
