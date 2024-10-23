@@ -32,7 +32,6 @@ import { Subscription } from 'rxjs';
     MatButtonModule,
     MatGridListModule,
     MatInputModule,
-    MatInputModule,
     MatFormFieldModule,
     MatListModule,
     FormsModule,

@@ -73,7 +73,7 @@ export class AuthFacade {
 
       if (authResult.state) {
         if (authResult.state === 'login') {
-          this.#store.dispatch(authActions.iNIT_SESSION({ authResult }));          
+          this.#store.dispatch(authActions.iNIT_SESSION({ authResult }));
         }
         if (authResult.state === 'signup') {
           window.location.hash = '';
@@ -123,5 +123,5 @@ export class AuthFacade {
     }
     window.location.hash = '';
     return result;
-  }  
-};
+  }
+}
