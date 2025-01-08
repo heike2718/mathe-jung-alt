@@ -102,6 +102,8 @@ public final class SessionUtils {
 
 		// @formatter:off
 		return new NewCookie.Builder(SESSION_COOKIE_NAME)
+			.value("")
+			.path("/")
 			.maxAge(0) // maximum age of the cookie in seconds
 			.expiry(new Date(dateInThePast))
 			.version(1)

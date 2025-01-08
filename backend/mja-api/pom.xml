@@ -20,10 +20,13 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-		<quarkus.platform.version>3.10.2</quarkus.platform.version>
+		<quarkus.platform.version>3.15.1</quarkus.platform.version>
 		<com.auth0.java.jwt.version>4.4.0</com.auth0.java.jwt.version>
 		<surefire-plugin.version>3.2.5</surefire-plugin.version>
-		<dependency-check.version>9.2.0</dependency-check.version>
+		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+		<pitest-maven.version>1.17.0</pitest-maven.version>
+		<pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
+		<dependency-check.version>10.0.4</dependency-check.version>
 		<version.pitest>1.15.3</version.pitest>
 	</properties>
 
@@ -265,7 +268,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.10</version>
+				<version>${jacoco-maven-plugin.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>**/session/*</exclude>
@@ -392,12 +395,12 @@
 					<plugin>
 						<groupId>org.pitest</groupId>
 						<artifactId>pitest-maven</artifactId>
-						<version>1.15.2</version>
+						<version>${pitest-maven.version}</version>
 						<dependencies>
 							<dependency>
 								<groupId>org.pitest</groupId>
 								<artifactId>pitest-junit5-plugin</artifactId>
-								<version>1.2.1</version>
+								<version>${pitest-junit5-plugin.version}</version>
 							</dependency>
 						</dependencies>
 					</plugin>

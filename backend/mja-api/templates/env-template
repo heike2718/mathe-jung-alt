@@ -10,12 +10,12 @@ MKGATEWAY_AUTH_HEADER=mk-gateway:changeme
 
 QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_LATEXRESTCLIENT__URL=http://localhost:9200
 QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_FILESCANNERRESTCLIENT__URL=http://localhost:9800
-QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_INITACCESSTOKENRESTCLIENT__URL=http://heikedeb:9000/authprovider
-QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_TOKENEXCHANGERESTCLIENT__URL=http://heikedeb:9000/authprovider
+QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_INITACCESSTOKENRESTCLIENT__URL=http://heiketux:9000/authprovider
+QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_TOKENEXCHANGERESTCLIENT__URL=http://heiketux:9000/authprovider
 
-TARGET_ORIGIN = heikedeb,heikedeb:4200,heikedeb:4300,localhost:4200,localhost:4300,heikedeb:9600,https://mathe-jung-alt.de
+TARGET_ORIGIN = heiketux,heiketux:4200,heiketux:4300,localhost:4200,localhost:4300,heiketux:9600,https://mathe-jung-alt.de
 
-QUARKUS_HTTP_CORS_ORIGINS = http://localhost:9210,http://localhost:4200,http://heikedeb:9000,https://fonts.googleapis.com
+QUARKUS_HTTP_CORS_ORIGINS = http://localhost:9210,http://localhost:4200,http://heiketux:9000,https://fonts.googleapis.com
 QUARKUS_LOG_FILE_PATH = /home/heike/quarkus/log/mja-api/server.log
 QUARKUS_HTTP_ACCESS_LOG_LOG_DIRECTORy = /home/heike/quarkus/log/mja-api
 QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE=true
@@ -34,8 +34,8 @@ QUARKUS_HIBERNATE_ORM_LOG_BIND_PARAMETERS=true
 QUARKUS_HIBERNATE_ORM_LOG_SQL=true
 
 
-AUTHPROVIDER_URL=http://heikedeb:9000/authprovider
-AUTH_APP_URL=http://heikedeb:80/auth-app
+AUTHPROVIDER_URL=http://heiketux:9000/authprovider
+AUTH_APP_URL=http://heiketux:80/auth-app
 
 #=================================================================#
 #        Redirect URL                                             #

@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import io.quarkus.hibernate.validator.runtime.jaxrs.ViolationReport;
 import io.quarkus.hibernate.validator.runtime.jaxrs.ViolationReport.Violation;
-import io.quarkus.resteasy.reactive.jackson.runtime.mappers.DefaultMismatchedInputException.MismatchedJsonInputError;
+import io.quarkus.resteasy.reactive.jackson.runtime.mappers.BuiltinMismatchedInputExceptionMapper.MismatchedJsonInputError;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;
