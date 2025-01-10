@@ -29,14 +29,8 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient\".url")
 	String latexRestClientUrl;
 
-	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.FilescannerRestClient\".url")
+	@ConfigProperty(name = "quarkus.rest-client.filescannerrestclient.url")
 	String fileScannerRestClientUrl;
-
-	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.InitAccessTokenRestClient\".url")
-	String initAccesstokenUrl;
-
-	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.TokenExchangeRestClient\".url")
-	String tokenExchangeRestClientUrl;
 
 	@ConfigProperty(name = "quarkus.datasource.jdbc.url")
 	String jdbcUrl;
@@ -55,6 +49,12 @@ public class AppLifecycleBean {
 
 	@ConfigProperty(name = "quarkus.http.cors.origins")
 	String corsAllowedOrigins;
+
+	@ConfigProperty(name = "quarkus.rest-client.authprovider.url")
+	String authProviderUrl;
+
+	@ConfigProperty(name = "auth-app.url")
+	String authAppUrl;
 
 	@ConfigProperty(name = "delay.milliseconds")
 	long delayMillis = 0;
@@ -89,10 +89,10 @@ public class AppLifecycleBean {
 		LOGGER.info(" ===========>  preserve temporary files: {}", preserveTempFiles);
 		LOGGER.info(" ===========>  quarkus.http.cors.origins={}", corsAllowedOrigins);
 		LOGGER.info(" ===========>  jdbcUrl={}", jdbcUrl);
+		LOGGER.info(" ===========>  authAppUrl={}", authAppUrl);
+		LOGGER.info(" ===========>  authProviderUrl={}", authProviderUrl);
 		LOGGER.info(" ===========>  latexRestClientUrl={}", latexRestClientUrl);
 		LOGGER.info(" ===========>  fileScannerRestClientUrl={}", fileScannerRestClientUrl);
-		LOGGER.info(" ===========>  initAccesstokenUrl={}", initAccesstokenUrl);
-		LOGGER.info(" ===========>  tokenExchangeRestClientUrl={}", tokenExchangeRestClientUrl);
 		LOGGER.info(" ===========>  targetOrigin={}", targetOrigin);
 		LOGGER.info(" ===========>  loginRedirectUrl={}", loginRedirectUrl);
 		LOGGER.info(" ===========>  csrfEnabled={}", csrfEnabled);

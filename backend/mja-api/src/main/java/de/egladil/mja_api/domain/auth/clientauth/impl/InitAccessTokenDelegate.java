@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.auth.dto.OAuthClientCredentials;
 import de.egladil.mja_api.domain.auth.dto.ResponsePayload;
 import de.egladil.mja_api.domain.exceptions.MjaAuthRuntimeException;
-import de.egladil.mja_api.infrastructure.restclient.InitAccessTokenRestClient;
+import de.egladil.mja_api.infrastructure.restclient.AuthproviderRestClient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
@@ -28,7 +28,7 @@ public class InitAccessTokenDelegate {
 
 	@Inject
 	@RestClient
-	InitAccessTokenRestClient initAccessTokenRestClient;
+	AuthproviderRestClient authProviderRestClient;
 
 	/**
 	 * @param  clientSecrets
@@ -40,7 +40,7 @@ public class InitAccessTokenDelegate {
 
 		try {
 
-			authResponse = initAccessTokenRestClient.authenticateClient(credentials);
+			authResponse = authProviderRestClient.authenticateClient(credentials);
 
 			ResponsePayload responsePayload = authResponse.readEntity(ResponsePayload.class);
 

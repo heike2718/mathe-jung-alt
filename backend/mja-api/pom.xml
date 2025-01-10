@@ -7,26 +7,25 @@
 
 	<groupId>de.egladil</groupId>
 	<artifactId>mja-api</artifactId>
-	<version>3.1.2</version>
+	<version>3.2.0</version>
 
 	<description>Webservice für "Mathe für jung und alt"- Administration</description>
 
 	<properties>
-		<compiler-plugin.version>3.12.1</compiler-plugin.version>
 		<filescanner.version>5.0.0</filescanner.version>
-		<failsafe.useModulePath>false</failsafe.useModulePath>
 		<maven.compiler.release>17</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-		<quarkus.platform.version>3.15.1</quarkus.platform.version>
+		<quarkus.platform.version>3.15.2</quarkus.platform.version>
 		<com.auth0.java.jwt.version>4.4.0</com.auth0.java.jwt.version>
 		<surefire-plugin.version>3.2.5</surefire-plugin.version>
+		<failsafe.useModulePath>false</failsafe.useModulePath>
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 		<pitest-maven.version>1.17.0</pitest-maven.version>
 		<pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
-		<dependency-check.version>10.0.4</dependency-check.version>
+		<dependency-check.version>11.1.1</dependency-check.version>
 		<version.pitest>1.15.3</version.pitest>
 	</properties>
 
@@ -230,7 +229,6 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${compiler-plugin.version}</version>
 				<configuration>
 					<source>${maven.compiler.release}</source>
 					<target>${maven.compiler.relese}</target>

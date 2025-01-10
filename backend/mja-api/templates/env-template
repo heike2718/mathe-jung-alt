@@ -8,41 +8,54 @@ PUBLIC-CLIENT-SECRET=start123
 
 MKGATEWAY_AUTH_HEADER=mk-gateway:changeme
 
-QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_LATEXRESTCLIENT__URL=http://localhost:9200
-QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_FILESCANNERRESTCLIENT__URL=http://localhost:9800
-QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_INITACCESSTOKENRESTCLIENT__URL=http://heiketux:9000/authprovider
-QUARKUS_REST-CLIENT__DE_EGLADIL_MJA_API_INFRASTRUCTURE_RESTCLIENT_TOKENEXCHANGERESTCLIENT__URL=http://heiketux:9000/authprovider
 
-TARGET_ORIGIN = heiketux,heiketux:4200,heiketux:4300,localhost:4200,localhost:4300,heiketux:9600,https://mathe-jung-alt.de
-
-QUARKUS_HTTP_CORS_ORIGINS = http://localhost:9210,http://localhost:4200,http://heiketux:9000,https://fonts.googleapis.com
-QUARKUS_LOG_FILE_PATH = /home/heike/quarkus/log/mja-api/server.log
-QUARKUS_HTTP_ACCESS_LOG_LOG_DIRECTORy = /home/heike/quarkus/log/mja-api
-QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE=true
-QUARKUS_SWAGGER_UI_PATH=/swagger-ui
+TARGET_ORIGIN=heiketux,heiketux:4200,heiketux:4300,localhost:4200,localhost:4300,heiketux:9600,https://mathe-jung-alt.de
+QUARKUS_HTTP_CORS_ORIGINS=http://localhost:9020,http://localhost:4200,http://localhost:9000,http://localhost:9510,https://fonts.googleapis.com
 
 LATEX_GENERATOR_PRESERVE_TEMPFILES=true
 LATEX_BASE_DIR=/home/heike/docker-volumes/latex/doc
 
-QUARKUS_DATASOURCE_JDBC_URL=jdbc:mariadb://172.18.0.2:3306/mathe_jung_alt
-QUARKUS_DATASOURCE_PASSWORD=hwinkel
-QUARKUS_HIBERNATE_ORM_LOG_SQL=true
+#=================================================================#
+#    authprovider, Redirect URLs, REST-Client, CORS               #
+#                                                                 #
+# PUBLIC_REDIRECT_URL muss ohne http:// und endenden / in         #
+# CLIENTS.REDIRECT_URLS vorkommen!! Für das korrekte redirect     #
+# sollten sie aber u.U. vorhanden sein.                           #
+#                                                                 #
+#=================================================================#
+QUARKUS_REST_CLIENT_LATEXRESTCLIENT_URL=http://localhost:9200
+QUARKUS_REST_CLIENT_FILESCANNERRESTCLIENT_URL=http://localhost:9800
+QUARKUS_REST_CLIENT_MKGATEWAY_URL=http://localhost:9510/mk-gateway
 
-# man muss auch das MIN-Level auf TRACE setzen, wenn man das SQL von namedQueries sehen will
+# ---- lokale Entwicklung (authprovider in docker, mja-app mit npm gestartet) ----
+AUTH_APP_URL=http://localhost:9000/authprovider/
+PUBLIC_REDIRECT_URL=http://localhost:4200
+QUARKUS_REST_CLIENT_AUTHPROVIDER_URL=http://localhost:9000
+AUTHPROVIDER_URL=http://localhost:9000/authprovider
+
+# ---- lokale Entwicklung (authprovider in docker, mja-app von quarkus geserved) ----
+#AUTH_APP_URL=http://localhost:9000/authprovider/
+#PUBLIC_REDIRECT_URL=http://localhost:9210/mja-app/
+#QUARKUS_REST_CLIENT_AUTHPROVIDER_URL=http://localhost:9000
+#AUTHPROVIDER_URL=http://localhost:9000/authprovider
+
+# ---- lokale Entwicklung (auch authprovider lokal mit npm gestartet) ----
+#AUTH_APP_URL=http://localhost:4300
+#PUBLIC_REDIRECT_URL=http://localhost:4200
+#QUARKUS_REST_CLIENT_AUTHPROVIDER_URL=http://localhost:10000
+#AUTHPROVIDER_URL=http://localhost:10000/authprovider
+
+#=================================================================#
+#        Database                                                 #
+#=================================================================#
+# falls die IP sich geändert hat, startet Quarkus nicht
+# docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb-all
+QUARKUS_DATASOURCE_JDBC_URL=jdbc:mariadb://172.18.0.2:3306/mathe_jung_alt
+QUARKUS_DATASOURCE_PASSWORD=ueberschreiben
+# ---- man muss auch das MIN-Level auf TRACE setzen, wenn man das SQL von namedQueries sehen will ---
 QUARKUS_LOG_MIN_LEVEL=TRACE
 QUARKUS_HIBERNATE_ORM_LOG_BIND_PARAMETERS=true
 QUARKUS_HIBERNATE_ORM_LOG_SQL=true
-
-
-AUTHPROVIDER_URL=http://heiketux:9000/authprovider
-AUTH_APP_URL=http://heiketux:80/auth-app
-
-#=================================================================#
-#        Redirect URL                                             #
-#=================================================================#
-
-PUBLIC_REDIRECT_URL=http://localhost:4200
-#PUBLIC_REDIRECT_URL=http://localhost:9210/mja-app/
 
 #=============================================================================================#
 #        Logging                                                                              #
@@ -54,15 +67,21 @@ QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_DOMAIN_GENERATOREN_IMPL_IMAGEGENERATORS
 QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_DOMAIN_UTILS_MJAFILEUTILS__LEVEL=WARN
 QUARKUS_LOG_CATEGORY__DE_EGLADIL_MJA_API_INFRASTRUCTURE_CDI_AUTHENTICATIONCONTEXTIMPL__LEVEL=WARN
 
+QUARKUS_LOG_CATEGORY__ORG_JBOSS_RESTEASY_REACTIVE_CLIENT_LOGGING_DEFAULTCLIENTLOGGER__LEVEL=WARN
+QUARKUS_LOG_CATEGORY__ORG_HIBERNATE_SQL__LEVEL=ERROR
+
+QUARKUS_LOG_FILE_ENABLE=false
+QUARKUS_HTTP_ACCESS_LOG_LOG_TO_FILE=false
 
 
+QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE=true
+QUARKUS_SWAGGER_UI_PATH=/swagger-ui
+
+QUARKUS_HTTP_TEST_TIMEOUT=1m
 
 #=============================================================================================#
 #        _TEST_                                                                               #
 #=============================================================================================#
-
-QUARKUS_HTTP_TEST_TIMEOUT=1m
-
 _TEST_QUARKUS_DATASOURCE_JDBC_URL=jdbc:mariadb://172.28.0.2:3306/mathe_jung_alt
 _TEST_QUARKUS_HTTP_PORT=9212
 _TEST_CSRF_ENABLED=false

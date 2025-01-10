@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import de.egladil.mja_api.domain.auth.clientauth.ClientAccessTokenService;
 import de.egladil.mja_api.domain.auth.clientauth.OAuthClientCredentialsProvider;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.dto.OAuthClientCredentials;
@@ -31,7 +32,7 @@ import jakarta.inject.Inject;
 public class ClientAccessTokenServiceImplTest {
 
 	@Inject
-	ClientAccessTokenServiceImpl service;
+	ClientAccessTokenService service;
 
 	@InjectMock
 	OAuthClientCredentialsProvider clientCredentialsProvider;

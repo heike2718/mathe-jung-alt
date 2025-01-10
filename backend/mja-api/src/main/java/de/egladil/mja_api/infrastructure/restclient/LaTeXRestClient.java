@@ -17,8 +17,7 @@ import jakarta.ws.rs.core.Response;
 /**
  * LaTeXRestClient
  */
-// @RegisterRestClient(configKey = "latex-api")
-@RegisterRestClient
+@RegisterRestClient(configKey = "latexrestclient")
 @Path("")
 @Consumes(MediaType.TEXT_PLAIN)
 @Produces(MediaType.APPLICATION_JSON)
