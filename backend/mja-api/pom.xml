@@ -25,7 +25,7 @@
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 		<pitest-maven.version>1.17.0</pitest-maven.version>
 		<pitest-junit5-plugin.version>1.2.1</pitest-junit5-plugin.version>
-		<dependency-check.version>11.1.1</dependency-check.version>
+		<dependency-check.version>12.1.0</dependency-check.version>
 		<version.pitest>1.15.3</version.pitest>
 	</properties>
 

@@ -26,7 +26,7 @@ public class AppLifecycleBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AppLifecycleBean.class);
 
-	@ConfigProperty(name = "quarkus.rest-client.\"de.egladil.mja_api.infrastructure.restclient.LaTeXRestClient\".url")
+	@ConfigProperty(name = "quarkus.rest-client.latexrestclient.url")
 	String latexRestClientUrl;
 
 	@ConfigProperty(name = "quarkus.rest-client.filescannerrestclient.url")
@@ -77,7 +77,8 @@ public class AppLifecycleBean {
 	@ConfigProperty(name = "latex.generator.preserve.tempfiles")
 	boolean preserveTempFiles;
 
-	void onStartup(@Observes final StartupEvent ev) {
+	void onStartup(@Observes
+	final StartupEvent ev) {
 
 		LOGGER.info(" ===========> Version {} of the application is starting with profiles {}", version,
 			StringUtils.join(ConfigUtils.getProfiles()));
