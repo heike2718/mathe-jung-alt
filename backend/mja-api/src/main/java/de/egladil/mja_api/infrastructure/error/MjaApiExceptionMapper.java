@@ -15,8 +15,11 @@ import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.exceptions.AuthException;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.exceptions.SessionExpiredException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
+import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -33,6 +36,9 @@ public class MjaApiExceptionMapper implements ExceptionMapper<Throwable> {
 
 	private final ResourceBundle applicationMessages = ResourceBundle.getBundle("ApplicationMessages", Locale.GERMAN);
 
+	@Inject
+	AuthenticationContext authCtx;
+
 	@Override
 	public Response toResponse(final Throwable exception) {
 
@@ -41,9 +47,23 @@ public class MjaApiExceptionMapper implements ExceptionMapper<Throwable> {
 		if (exception instanceof LaTeXCompileException) {
 
 			LaTeXCompileException ex = (LaTeXCompileException) exception;
-			return Response.status(500)
-				.entity(MessagePayload.error(MessageFormat.format(applicationMessages.getString("latex.error"), ex.getNameFile())))
-				.build();
+
+			String message = "";
+
+			if (authCtx != null && authCtx.getUser().isAdminOrAutor()) {
+				message = MessageFormat.format(applicationMessages.getString("admin.latex.error"), ex.getNameFile());
+			} else {
+				message = applicationMessages.getString("latex.error");
+			}
+			return Response.status(500).entity(MessagePayload.error(message)).build();
+
+		}
+
+		if (exception instanceof MjaWebApplicationException) {
+
+			MjaWebApplicationException ex = (MjaWebApplicationException) exception;
+
+			return Response.status(ex.getStatus()).entity(MessagePayload.error(ex.getMessage())).build();
 
 		}
 
@@ -69,14 +89,12 @@ public class MjaApiExceptionMapper implements ExceptionMapper<Throwable> {
 
 		if (exception instanceof SessionExpiredException) {
 
-			return Response.status(440).entity(MessagePayload.warn(exception.getMessage()))
-				.build();
+			return Response.status(440).entity(MessagePayload.warn(exception.getMessage())).build();
 		}
 
 		if (exception instanceof UploadFormatException) {
 
-			return Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(exception.getMessage()))
-				.build();
+			return Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(exception.getMessage())).build();
 
 		}
 
@@ -84,8 +102,7 @@ public class MjaApiExceptionMapper implements ExceptionMapper<Throwable> {
 
 		if (exception instanceof MjaRuntimeException) {
 
-			return Response.status(500).entity(MessagePayload.error(exception.getMessage()))
-				.build();
+			return Response.status(500).entity(MessagePayload.error(exception.getMessage())).build();
 		}
 
 		return Response.status(500).entity(MessagePayload.error(applicationMessages.getString("general.internalServerError")))

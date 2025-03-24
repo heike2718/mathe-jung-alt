@@ -17,7 +17,6 @@
         "inlineStyleLanguage": "scss",
         "assets": ["apps/mja-app/src/favicon.ico", "apps/mja-app/src/assets"],
         "styles": [
-          "libs/shared/styles/theme.scss",
           "apps/mja-app/src/styles.scss",
           "node_modules/material-icons/iconfont/material-icons.scss"
         ],

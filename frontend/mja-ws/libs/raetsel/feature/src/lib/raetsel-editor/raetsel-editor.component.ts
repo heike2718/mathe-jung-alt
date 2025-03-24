@@ -812,7 +812,8 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
       fontNamen: fontNamenSelectInput,
       selectedFontName: undefined,
       schriftgroessen: schriftgroessenSelectInput,
-      selectedSchriftgroesse: undefined
+      selectedSchriftgroesse: undefined,
+      submitLabel: 'generieren'
     };
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogComponent, {

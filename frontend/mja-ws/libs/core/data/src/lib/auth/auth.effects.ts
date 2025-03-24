@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -7,6 +6,7 @@ import { authActions } from './auth.actions';
 import { Message } from '@mja-ws/shared/messaging/api';
 import { Router } from '@angular/router';
 import { Session } from '@mja-ws/core/model';
+import { AuthHttpService } from './auth-http.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,14 +14,14 @@ import { Session } from '@mja-ws/core/model';
 export class AuthEffects {
 
     #actions = inject(Actions);
-    #httpClient = inject(HttpClient);
     #router = inject(Router);
+    #authHttpService = inject(AuthHttpService);
 
     requestLoginUrl$ = createEffect(() => {
 
         return this.#actions.pipe(
             ofType(authActions.rEQUEST_LOGIN_URL),
-            switchMap(() => this.#httpClient.get<Message>('/mja-api/session/authurls/login')),
+            switchMap(() => this.#authHttpService.getLoginUrl()),
             map((message: Message) => authActions.rEDIRECT_TO_AUTH({ authUrl: message.message }))
         );
 
@@ -31,7 +31,7 @@ export class AuthEffects {
 
         return this.#actions.pipe(
             ofType(authActions.rEQUEST_SIGNUP_URL),
-            switchMap(() => this.#httpClient.get<Message>('/mja-api/session/authurls/signup')),
+            switchMap(() => this.#authHttpService.getSignupUrl()),
             map((message: Message) => authActions.rEDIRECT_TO_AUTH({ authUrl: message.message }))
         );
 
@@ -50,7 +50,7 @@ export class AuthEffects {
         return this.#actions.pipe(
             ofType(authActions.iNIT_SESSION),
             switchMap(({ authResult }) =>
-                this.#httpClient.post<Session>('/mja-api/session/login', authResult)
+                this.#authHttpService.createSession(authResult)
             ),
             map((session: Session) => authActions.sESSION_CREATED({ session }))
         );
@@ -61,7 +61,7 @@ export class AuthEffects {
         return this.#actions.pipe(
             ofType(authActions.lOG_OUT),
             switchMap(() =>
-                this.#httpClient.delete<Message>('/mja-api/session/logout')),
+                this.#authHttpService.logOut()),
             map(() => authActions.lOGGED_OUT()),
             catchError(() => of(authActions.lOGGED_OUT()))
         );
@@ -71,6 +71,6 @@ export class AuthEffects {
         this.#actions.pipe(
             ofType(authActions.lOGGED_OUT),
             tap(() => this.#router.navigateByUrl('/'))
-        ), { dispatch: false });
+        ), { dispatch: false });   
 
 }

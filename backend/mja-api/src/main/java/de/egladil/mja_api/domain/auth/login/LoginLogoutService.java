@@ -57,8 +57,11 @@ public class LoginLogoutService {
 
 			LOGGER.warn("login wurde ohne payload aufgerufen");
 
-			throw new WebApplicationException(
-				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("login: erwarte authResult")).build());
+			try (Response response = Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("login: erwarte authResult"))
+				.build()) {
+				throw new WebApplicationException(response);
+
+			}
 		}
 
 		String oneTimeToken = authResult.getIdToken();
@@ -107,8 +110,7 @@ public class LoginLogoutService {
 		if (!ConfigService.STAGE_DEV.equals(configService.getStage())) {
 
 			LOGGER.warn("stage={}" + configService.getStage());
-			return Response.status(401)
-				.entity(MessagePayload.error("böse böse. Dieser Request wurde geloggt!"))
+			return Response.status(401).entity(MessagePayload.error("böse böse. Dieser Request wurde geloggt!"))
 				.cookie(SessionUtils.createSessionInvalidatedCookie(cookiesSecure)).build();
 		}
 

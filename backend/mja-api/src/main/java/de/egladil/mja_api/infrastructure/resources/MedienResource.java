@@ -30,6 +30,7 @@ import de.egladil.mja_api.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -60,42 +61,16 @@ public class MedienResource {
 	@GET
 	@Path("{id}/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Operation(
-		operationId = "getMedium", summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen.")
-	@Parameters({
-		@Parameter(
-			in = ParameterIn.PATH,
-			name = "id",
-			description = "technische ID eines Mediums"),
-	})
-	@APIResponse(
-		name = "OKResponse",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = MediensucheResult.class)))
-	@APIResponse(
-		name = "BadRequestResponse",
-		responseCode = "400",
-		description = "fehlgeschlagene Input-Validierung")
-	@APIResponse(
-		name = "NotAuthorized",
-		responseCode = "401",
-		content = @Content(
-			mediaType = "application/json"))
-	@APIResponse(
-		name = "NotFound",
-		responseCode = "404",
-		content = @Content(
-			mediaType = "application/json"))
-	@APIResponse(
-		name = "ServerError",
-		description = "server error",
-		responseCode = "500", content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = MessagePayload.class)))
-	public Response getMedium(@PathParam(value = "id") @Pattern(
-		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält unerlaubte Zeichen") final String id) {
+	@Operation(operationId = "getMedium", summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen.")
+	@Parameters({ @Parameter(in = ParameterIn.PATH, name = "id", description = "technische ID eines Mediums"), })
+	@APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MediensucheResult.class)))
+	@APIResponse(name = "BadRequestResponse", responseCode = "400", description = "fehlgeschlagene Input-Validierung")
+	@APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+	@APIResponse(name = "NotFound", responseCode = "404", content = @Content(mediaType = "application/json"))
+	@APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+	public Response getMedium(@PathParam(value = "id")
+	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält unerlaubte Zeichen")
+	final String id) {
 
 		Optional<MediumDto> opt = medienService.getMediumWithId(id);
 
@@ -110,50 +85,21 @@ public class MedienResource {
 	@GET
 	@Path("/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Operation(
-		operationId = "findMedien",
-		summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen. Admins sehen alle, Autoren nur die eigenen")
+	@Operation(operationId = "findMedien", summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen. Admins sehen alle, Autoren nur die eigenen")
 	@Parameters({
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "suchstring",
-			description = "Freitext zum Suchen. Es erfolgt eine Suche mit like titel or like kommentar. Sortiert wird nach titel. Wenn nicht angegeben, werden alle aus der page geladen"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "limit",
-			description = "Pagination: pageSize"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "offset",
-			description = "Pagination: pageIndex"),
-	})
-	@APIResponse(
-		name = "OKResponse",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = MediensucheResult.class)))
-	@APIResponse(
-		name = "BadRequestResponse",
-		responseCode = "400",
-		description = "fehlgeschlagene Input-Validierung")
-	@APIResponse(
-		name = "NotAuthorized",
-		responseCode = "401",
-		content = @Content(
-			mediaType = "application/json"))
-	@APIResponse(
-		name = "ServerError",
-		description = "server error",
-		responseCode = "500", content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = MessagePayload.class)))
+		@Parameter(in = ParameterIn.QUERY, name = "suchstring", description = "Freitext zum Suchen. Es erfolgt eine Suche mit like titel or like kommentar. Sortiert wird nach titel. Wenn nicht angegeben, werden alle aus der page geladen"),
+		@Parameter(in = ParameterIn.QUERY, name = "limit", description = "Pagination: pageSize"),
+		@Parameter(in = ParameterIn.QUERY, name = "offset", description = "Pagination: pageIndex"), })
+	@APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MediensucheResult.class)))
+	@APIResponse(name = "BadRequestResponse", responseCode = "400", description = "fehlgeschlagene Input-Validierung")
+	@APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+	@APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public Response findMedien(
 		@QueryParam(value = "suchstring") @Size(max = 200, message = "suchstring darf höchstens 100 Zeichen lang sein")  @Pattern(
 			regexp = MjaRegexps.VALID_SUCHSTRING,
 			message = "suchstring darf keine Hochkommata und keine mathematischen Vergleichszeichen enthalten") final String suchstring,
-		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
+		@QueryParam(value = "limit") @Max(200) @DefaultValue("20") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset) {
 	// formatter:on
 

@@ -86,7 +86,8 @@ public class AufgabensammlungenService {
 	@Inject
 	AufgabensammlungLaTeXGeneratorService aufgabensammlungLaTeXGenerator;
 
-	public AufgabensammlungSucheTreffer findAufgabensammlungen(final AufgabensammlungenSuchparameter suchparameter, final int limit, final int offset) {
+	public AufgabensammlungSucheTreffer findAufgabensammlungen(final AufgabensammlungenSuchparameter suchparameter, final int limit,
+		final int offset) {
 
 		AufgabensammlungSucheTreffer result = new AufgabensammlungSucheTreffer();
 		long anzahlGesamt = aufgabensammlungDao.countByFilter(suchparameter);
@@ -114,15 +115,13 @@ public class AufgabensammlungenService {
 	/**
 	 * Gibt den eindeutigen Treffer zurück, falls er existiert. Sonst null.
 	 *
-	 * @param  referenztyp
-	 *                            Referenztyp
-	 * @param  referenz
-	 *                            String - z.B. das Jahr oder eine SerieId
-	 * @param  schwierigkeitsgrad
-	 *                            Schwierigkeitsgrad
-	 * @return                    AufgabensammlungSucheTrefferItem oder null
+	 * @param referenztyp Referenztyp
+	 * @param referenz String - z.B. das Jahr oder eine SerieId
+	 * @param schwierigkeitsgrad Schwierigkeitsgrad
+	 * @return AufgabensammlungSucheTrefferItem oder null
 	 */
-	public AufgabensammlungSucheTrefferItem findAufgabensammlungByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
+	public AufgabensammlungSucheTrefferItem findAufgabensammlungByUniqueKey(final Referenztyp referenztyp, final String referenz,
+		final Schwierigkeitsgrad schwierigkeitsgrad) {
 
 		PersistenteAufgabensammlung uniqueTreffer = aufgabensammlungDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
 
@@ -135,12 +134,10 @@ public class AufgabensammlungenService {
 	}
 
 	/**
-	 * @param  aufgabensammlungID
-	 * @param  userId
-	 *                            String die ID des eingeloggten Users
-	 * @param  isAdmin
-	 *                            boolean
-	 * @return                    Optional
+	 * @param aufgabensammlungID
+	 * @param userId String die ID des eingeloggten Users
+	 * @param isAdmin boolean
+	 * @return Optional
 	 */
 	public Optional<AufgabensammlungDetails> loadDetails(final String aufgabensammlungID) {
 
@@ -165,9 +162,8 @@ public class AufgabensammlungenService {
 	/**
 	 * Läd die Elemente der Aufgabensammlung.
 	 *
-	 * @param  aufgabensammlungID
-	 *                            String
-	 * @return                    List
+	 * @param aufgabensammlungID String
+	 * @return List
 	 */
 	List<Aufgabensammlungselement> loadElementeSorted(final String aufgabensammlungID) {
 
@@ -193,16 +189,12 @@ public class AufgabensammlungenService {
 		return result;
 	}
 
-	Aufgabensammlungselement mapFromDB(final PersistenteAufgabeReadonly aufgabe, final PersistentesAufgabensammlungselement element) {
+	Aufgabensammlungselement mapFromDB(final PersistenteAufgabeReadonly aufgabe,
+		final PersistentesAufgabensammlungselement element) {
 
-		Aufgabensammlungselement result = new Aufgabensammlungselement()
-			.withId(element.uuid)
-			.withNummer(element.nummer)
-			.withPunkte(element.punkte)
-			.withRaetselSchluessel(aufgabe.schluessel)
-			.withName(aufgabe.name)
-			.withHerkunftstyp(aufgabe.herkunft)
-			.withFreigegeben(aufgabe.freigegeben)
+		Aufgabensammlungselement result = new Aufgabensammlungselement().withId(element.uuid).withNummer(element.nummer)
+			.withPunkte(element.punkte).withRaetselSchluessel(aufgabe.schluessel).withName(aufgabe.name)
+			.withHerkunftstyp(aufgabe.herkunft).withFreigegeben(aufgabe.freigegeben)
 			.withVorschautext(VorschauUtils.getVorschautext(aufgabe.frage, lengtVorschautext));
 
 		String antwortvorschlaegeSerialized = aufgabe.antwortvorschlaege;
@@ -230,19 +222,17 @@ public class AufgabensammlungenService {
 	}
 
 	/**
-	 * Erstellt eine neue Aufgabensammlung. Dabei wird geprüft, ob es eine mit den Keys bereits gibt oder dem Namen. In diesem Fall
-	 * wird eine
-	 * WebApplicationException mit Status 409 - Conflict geworfen.
+	 * Erstellt eine neue Aufgabensammlung. Dabei wird geprüft, ob es eine mit den Keys bereits gibt oder dem Namen. In
+	 * diesem Fall wird eine WebApplicationException mit Status 409 - Conflict geworfen.
 	 *
-	 * @param  payload
-	 * @param  userId
-	 *                 String die ID des eingeloggten Users
-	 * @param  isAdmin
-	 *                 boolean
-	 * @return         AufgabensammlungSucheTrefferItem
+	 * @param payload
+	 * @param userId String die ID des eingeloggten Users
+	 * @param isAdmin boolean
+	 * @return AufgabensammlungSucheTrefferItem
 	 */
 	@Transactional
-	public AufgabensammlungSucheTrefferItem aufgabensammlungAnlegen(final EditAufgabensammlungPayload payload) throws WebApplicationException {
+	public AufgabensammlungSucheTrefferItem aufgabensammlungAnlegen(final EditAufgabensammlungPayload payload)
+		throws WebApplicationException {
 
 		String userId = authCtx.getUser().getName();
 
@@ -250,25 +240,20 @@ public class AufgabensammlungenService {
 
 			LOGGER.error("POST mit vorhandener Entity uuid={} aufgerufen", payload.getId());
 
-			throw new WebApplicationException(
-				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("POST darf nur mit id='neu' aufgerufen werden"))
-					.build());
+			throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
+				.entity(MessagePayload.error("POST darf nur mit id='neu' aufgerufen werden")).build());
 		}
 
 		if (dupletteNachKeysExistiert(payload)) {
 
-			throw new WebApplicationException(
-				Response.status(Status.CONFLICT)
-					.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz."))
-					.build());
+			throw new WebApplicationException(Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz.")).build());
 		}
 
 		if (namensdubletteExistiert(payload.getName(), payload.getId())) {
 
-			throw new WebApplicationException(
-				Response.status(Status.CONFLICT)
-					.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit diesem Namen."))
-					.build());
+			throw new WebApplicationException(Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit diesem Namen.")).build());
 		}
 
 		PersistenteAufgabensammlung aufgabensammlung = new PersistenteAufgabensammlung();
@@ -286,35 +271,32 @@ public class AufgabensammlungenService {
 	}
 
 	/**
-	 * Ändert die Basisdaten einer Aufgabensammlung. Dabei wird geprüft, ob es eine mit den Keys oder dem Namen bereits gibt. In
-	 * diesem Fall wird eine WebApplicationException mit Status 409 - Conflict geworfen.
+	 * Ändert die Basisdaten einer Aufgabensammlung. Dabei wird geprüft, ob es eine mit den Keys oder dem Namen bereits
+	 * gibt. In diesem Fall wird eine WebApplicationException mit Status 409 - Conflict geworfen.
 	 *
-	 * @param  payload
-	 * @param  userId
-	 *                 String die ID des eingeloggten Users
-	 * @param  isAdmin
-	 *                 boolean
-	 * @return         AufgabensammlungSucheTrefferItem
+	 * @param payload
+	 * @param userId String die ID des eingeloggten Users
+	 * @param isAdmin boolean
+	 * @return AufgabensammlungSucheTrefferItem
 	 */
 	@Transactional
-	public AufgabensammlungSucheTrefferItem aufgabensammlungBasisdatenAendern(final EditAufgabensammlungPayload payload) throws WebApplicationException {
+	public AufgabensammlungSucheTrefferItem aufgabensammlungBasisdatenAendern(final EditAufgabensammlungPayload payload)
+		throws WebApplicationException {
 
 		String userId = authCtx.getUser().getName();
 
 		if (dupletteNachKeysExistiert(payload)) {
 
-			throw new WebApplicationException(
-				Response.status(Status.CONFLICT)
-					.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz."))
-					.build());
+			try (Response response = Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz.")).build()) {
+				throw new WebApplicationException(response);
+			}
 		}
 
 		if (namensdubletteExistiert(payload.getName(), payload.getId())) {
 
-			throw new WebApplicationException(
-				Response.status(Status.CONFLICT)
-					.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit diesem Namen."))
-					.build());
+			throw new WebApplicationException(Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit diesem Namen.")).build());
 		}
 
 		PersistenteAufgabensammlung ausDB = aufgabensammlungDao.findByID(payload.getId());
@@ -322,9 +304,7 @@ public class AufgabensammlungenService {
 		if (ausDB == null) {
 
 			throw new WebApplicationException(
-				Response.status(Status.NOT_FOUND)
-					.entity(MessagePayload.error("Diese Aufgabensammlung gibt es nicht."))
-					.build());
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("Diese Aufgabensammlung gibt es nicht.")).build());
 		}
 
 		permissionDelegate.checkWritePermission(ausDB);
@@ -411,19 +391,19 @@ public class AufgabensammlungenService {
 	/**
 	 * Legt ein neues Element an
 	 *
-	 * @param  aufgabensammlungID
-	 * @param  payload
-	 * @return                    AufgabensammlungDetails
+	 * @param aufgabensammlungID
+	 * @param payload
+	 * @return AufgabensammlungDetails
 	 */
-	public AufgabensammlungDetails elementAnlegen(final String aufgabensammlungID, final EditAufgabensammlungselementPayload payload) {
+	public AufgabensammlungDetails elementAnlegen(final String aufgabensammlungID,
+		final EditAufgabensammlungselementPayload payload) {
 
 		PersistenteAufgabensammlung aufgabensammlung = aufgabensammlungDao.findByID(aufgabensammlungID);
 
 		if (aufgabensammlung == null) {
 
 			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht."))
-				.build();
+				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht.")).build();
 			throw new WebApplicationException(response);
 		}
 
@@ -434,8 +414,7 @@ public class AufgabensammlungenService {
 		if (optRaetselId.isEmpty()) {
 
 			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Tja, mit dem gewünschen Schlüssel gibt es gar kein Rätsel."))
-				.build();
+				.entity(MessagePayload.error("Tja, mit dem gewünschen Schlüssel gibt es gar kein Rätsel.")).build();
 			throw new WebApplicationException(response);
 		}
 
@@ -462,14 +441,12 @@ public class AufgabensammlungenService {
 		if (optElementMitGleichemRaetsel.isPresent()) {
 
 			Response response = Response.status(Status.CONFLICT)
-				.entity(MessagePayload.error("Das Rätsel gibt es in dieser Aufgabensammlung schon."))
-				.build();
+				.entity(MessagePayload.error("Das Rätsel gibt es in dieser Aufgabensammlung schon.")).build();
 			throw new WebApplicationException(response);
 
 		}
 
-		this.createAndPersistNeuesElement(aufgabensammlungID,
-			optRaetselId.get(), payload);
+		this.createAndPersistNeuesElement(aufgabensammlungID, optRaetselId.get(), payload);
 
 		Optional<AufgabensammlungDetails> opt = this.loadDetails(aufgabensammlungID);
 
@@ -477,8 +454,7 @@ public class AufgabensammlungenService {
 
 			LOGGER.error("Aufgabensammlung mit der UUID={} wurde ein paar Zeilen später nicht mehr gefunden", aufgabensammlungID);
 			Response response = Response.status(Status.INTERNAL_SERVER_ERROR)
-				.entity(MessagePayload.error("Ups, da ist aber etwas komplett schiefgelaufen"))
-				.build();
+				.entity(MessagePayload.error("Ups, da ist aber etwas komplett schiefgelaufen")).build();
 			throw new WebApplicationException(response);
 		}
 
@@ -486,7 +462,8 @@ public class AufgabensammlungenService {
 	}
 
 	@Transactional
-	PersistentesAufgabensammlungselement createAndPersistNeuesElement(final String aufgabensammlungID, final String raetselID, final EditAufgabensammlungselementPayload payload) {
+	PersistentesAufgabensammlungselement createAndPersistNeuesElement(final String aufgabensammlungID, final String raetselID,
+		final EditAufgabensammlungselementPayload payload) {
 
 		PersistentesAufgabensammlungselement neues = new PersistentesAufgabensammlungselement();
 		neues.nummer = payload.getNummer();
@@ -502,20 +479,20 @@ public class AufgabensammlungenService {
 	/**
 	 * Ändert ein vorhandenes Element
 	 *
-	 * @param  aufgabensammlungID
-	 * @param  payload
-	 * @return                    AufgabensammlungDetails
+	 * @param aufgabensammlungID
+	 * @param payload
+	 * @return AufgabensammlungDetails
 	 */
 	@Transactional
-	public AufgabensammlungDetails elementAendern(final String aufgabensammlungID, final EditAufgabensammlungselementPayload payload) {
+	public AufgabensammlungDetails elementAendern(final String aufgabensammlungID,
+		final EditAufgabensammlungselementPayload payload) {
 
 		PersistentesAufgabensammlungselement persistentesElement = aufgabensammlungDao.findElementById(payload.getId());
 
 		if (persistentesElement == null) {
 
 			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Tja, dieses Element gibt es gar nicht."))
-				.build();
+				.entity(MessagePayload.error("Tja, dieses Element gibt es gar nicht.")).build();
 			throw new WebApplicationException(response);
 		}
 
@@ -524,8 +501,7 @@ public class AufgabensammlungenService {
 		if (aufgabensammlung == null) {
 
 			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht."))
-				.build();
+				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht.")).build();
 			throw new WebApplicationException(response);
 		}
 
@@ -536,9 +512,7 @@ public class AufgabensammlungenService {
 			LOGGER.error("Konflikt: persistentesElement.aufgabensammlungID={}, aufgabensammlungID={}",
 				persistentesElement.aufgabensammlungID, aufgabensammlungID);
 
-			Response response = Response.status(Status.CONFLICT)
-				.entity(MessagePayload.error("Konflikt"))
-				.build();
+			Response response = Response.status(Status.CONFLICT).entity(MessagePayload.error("Konflikt")).build();
 			throw new WebApplicationException(response);
 		}
 
@@ -565,15 +539,15 @@ public class AufgabensammlungenService {
 
 			LOGGER.error("Aufgabensammlung mit der UUID={} wurde ein paar Zeilen später nicht mehr gefunden", aufgabensammlungID);
 			Response response = Response.status(Status.INTERNAL_SERVER_ERROR)
-				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht."))
-				.build();
+				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht.")).build();
 			throw new WebApplicationException(response);
 		}
 
 		return opt.get();
 	}
 
-	void mergeAndSaveElement(final PersistentesAufgabensammlungselement persistentesElement, final EditAufgabensammlungselementPayload payload) {
+	void mergeAndSaveElement(final PersistentesAufgabensammlungselement persistentesElement,
+		final EditAufgabensammlungselementPayload payload) {
 
 		persistentesElement.nummer = payload.getNummer();
 		persistentesElement.punkte = payload.getPunkte();
@@ -584,9 +558,9 @@ public class AufgabensammlungenService {
 	/**
 	 * Löscht das gegebene Element der Aufgabensammlung.
 	 *
-	 * @param  aufgabensammlungID
-	 * @param  elementID
-	 * @return                    AufgabensammlungDetails
+	 * @param aufgabensammlungID
+	 * @param elementID
+	 * @return AufgabensammlungDetails
 	 */
 	public AufgabensammlungDetails elementLoeschen(final String aufgabensammlungID, final String elementID) {
 
@@ -596,8 +570,7 @@ public class AufgabensammlungenService {
 
 			LOGGER.error("Aufgabensammlung mit der UUID={} gibt es nicht", aufgabensammlungID);
 			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht."))
-				.build();
+				.entity(MessagePayload.error("Tja, diese Aufgabensammlung gibt es gar nicht.")).build();
 			throw new WebApplicationException(response);
 		}
 
@@ -610,8 +583,7 @@ public class AufgabensammlungenService {
 
 			LOGGER.error("Aufgabensammlung mit der UUID={} gibt es nicht", aufgabensammlungID);
 			Response response = Response.status(Status.NOT_FOUND)
-				.entity(MessagePayload.error("Ups, da ist aber etwas komplett schiefgelaufen"))
-				.build();
+				.entity(MessagePayload.error("Ups, da ist aber etwas komplett schiefgelaufen")).build();
 			throw new WebApplicationException(response);
 		}
 
@@ -619,19 +591,17 @@ public class AufgabensammlungenService {
 	}
 
 	/**
-	 * Generiert die Vorschau des Quiz als PDF. Dabei werden Aufgaben und Lösungen gemischt.
-	 * Bei Aufgaben ohne Antwortvorschläge wird keine Tabelle gedruckt.
+	 * Generiert die Vorschau des Quiz als PDF. Dabei werden Aufgaben und Lösungen gemischt. Bei Aufgaben ohne
+	 * Antwortvorschläge wird keine Tabelle gedruckt.
 	 *
-	 * @param  aufgabensammlungID
-	 * @param  font
-	 *                                  FontName
-	 * @param  schriftgroesse
-	 *                                  Schriftgroesse
-	 * @param  layoutAntwortvorschlaege
-	 *                                  LayoutAntwortvorschlaege
+	 * @param aufgabensammlungID
+	 * @param font FontName
+	 * @param schriftgroesse Schriftgroesse
+	 * @param layoutAntwortvorschlaege LayoutAntwortvorschlaege
 	 * @return
 	 */
-	public GeneratedFile printVorschau(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile printVorschau(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse,
+		final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
 
@@ -650,18 +620,17 @@ public class AufgabensammlungenService {
 	}
 
 	/**
-	 * Generiert eine Kartei. Für jedes Element wird auf eine Seite die Frage gedruckt, auf die folgende Seite die Lösung.
+	 * Generiert eine Kartei. Für jedes Element wird auf eine Seite die Frage gedruckt, auf die folgende Seite die
+	 * Lösung.
 	 *
-	 * @param  aufgabensammlungID
-	 * @param  font
-	 *                                  FontName
-	 * @param  schriftgroesse
-	 *                                  Schriftgroesse
-	 * @param  layoutAntwortvorschlaege
-	 *                                  LayoutAntwortvorschlaege
-	 * @return                          GeneratedFile
+	 * @param aufgabensammlungID
+	 * @param font FontName
+	 * @param schriftgroesse Schriftgroesse
+	 * @param layoutAntwortvorschlaege LayoutAntwortvorschlaege
+	 * @return GeneratedFile
 	 */
-	public GeneratedFile printKartei(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile printKartei(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse,
+		final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
 		List<Quizaufgabe> quizzaufgaben = this.getQuizzaufgaben(dbResult);
@@ -673,26 +642,23 @@ public class AufgabensammlungenService {
 	}
 
 	/**
-	 * Generiert eine PDF-Datei mit Aufgabenblättern und Lösungen. Zuerst kommen die Aufgaben, danach, beginnend mit einer neuen
-	 * Seite, die Lösungen in der gewünschten Reihenfolge.
+	 * Generiert eine PDF-Datei mit Aufgabenblättern und Lösungen. Zuerst kommen die Aufgaben, danach, beginnend mit
+	 * einer neuen Seite, die Lösungen in der gewünschten Reihenfolge.
 	 *
-	 * @param  aufgabensammlungID
-	 * @param  font
-	 *                                  FontName
-	 * @param  schriftgroesse
-	 *                                  Schriftgroesse
-	 * @param  layoutAntwortvorschlaege
-	 *                                  LayoutAntwortvorschlaege
-	 * @return                          GeneratedFile
+	 * @param aufgabensammlungID
+	 * @param font FontName
+	 * @param schriftgroesse Schriftgroesse
+	 * @param layoutAntwortvorschlaege LayoutAntwortvorschlaege
+	 * @return GeneratedFile
 	 */
-	public GeneratedFile printArbeitsblattMitLoesungen(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public GeneratedFile printArbeitsblattMitLoesungen(final String aufgabensammlungID, final FontName font,
+		final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
 		List<Quizaufgabe> quizaufgaben = this.getQuizzaufgaben(dbResult);
 
 		AufgabensammlungGeneratorInput input = createAufgabensammlungGeneratorInput(Verwendungszweck.ARBEITSBLATT, font,
-			schriftgroesse,
-			layoutAntwortvorschlaege, dbResult, quizaufgaben);
+			schriftgroesse, layoutAntwortvorschlaege, dbResult, quizaufgaben);
 
 		return aufgabensammlungPDFGenerator.generate(input);
 	}
@@ -700,10 +666,9 @@ public class AufgabensammlungenService {
 	/**
 	 * Gibt die Quizzaugaben zurück, die der eingeloggte User als Kartei oder Arbeitsblatt drucken darf.
 	 *
-	 * @param  dbResult
+	 * @param dbResult
 	 * @return
-	 * @throws WebApplicationException
-	 *                                 wenn nicht vorhanden, keine Leseberechtigung oder Aufgabensammlung leer
+	 * @throws WebApplicationException wenn nicht vorhanden, keine Leseberechtigung oder Aufgabensammlung leer
 	 */
 	List<Quizaufgabe> getQuizzaufgaben(final PersistenteAufgabensammlung dbResult) throws WebApplicationException {
 
@@ -730,8 +695,8 @@ public class AufgabensammlungenService {
 	/**
 	 * Läd die Elemente der gegebenen Aufgabensammlung als Quizzaufgaben.
 	 *
-	 * @param  aufgabensammlungID
-	 * @return                    List sortiert nach Nummer.
+	 * @param aufgabensammlungID
+	 * @return List sortiert nach Nummer.
 	 */
 	public List<Quizaufgabe> loadElementeAsQuizzaufgaben(final String aufgabensammlungID) {
 
@@ -739,13 +704,14 @@ public class AufgabensammlungenService {
 	}
 
 	/**
-	 * Generiert das LaTeX-File für die Aufgabensammlung. Die Grafiken muss man sowieso lokal haben. Sollte sich mit kleineren
-	 * Textreplacements lokal compilieren lassen.
+	 * Generiert das LaTeX-File für die Aufgabensammlung. Die Grafiken muss man sowieso lokal haben. Sollte sich mit
+	 * kleineren Textreplacements lokal compilieren lassen.
 	 *
-	 * @param  aufgabensammlungID
-	 * @return                    GeneratedFile
+	 * @param aufgabensammlungID
+	 * @return GeneratedFile
 	 */
-	public File downloadLaTeXSources(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+	public File downloadLaTeXSources(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse,
+		final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
 		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByID(aufgabensammlungID);
 
@@ -764,22 +730,20 @@ public class AufgabensammlungenService {
 	}
 
 	/**
-	 * @param  font
-	 * @param  schriftgroesse
-	 * @param  layoutAntwortvorschlaege
-	 * @param  dbResult
-	 * @param  aufgaben
+	 * @param font
+	 * @param schriftgroesse
+	 * @param layoutAntwortvorschlaege
+	 * @param dbResult
+	 * @param aufgaben
 	 * @return
 	 */
-	private AufgabensammlungGeneratorInput createAufgabensammlungGeneratorInput(final Verwendungszweck verwendungszweck, final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final PersistenteAufgabensammlung dbResult, final List<Quizaufgabe> aufgaben) {
+	private AufgabensammlungGeneratorInput createAufgabensammlungGeneratorInput(final Verwendungszweck verwendungszweck,
+		final FontName font, final Schriftgroesse schriftgroesse, final LayoutAntwortvorschlaege layoutAntwortvorschlaege,
+		final PersistenteAufgabensammlung dbResult, final List<Quizaufgabe> aufgaben) {
 
-		AufgabensammlungGeneratorInput input = new AufgabensammlungGeneratorInput()
-			.withAufgaben(aufgaben)
-			.withFont(font)
-			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
-			.withAufgabensammlung(dbResult)
-			.withVerwendungszweck(verwendungszweck)
-			.withSchriftgroesse(schriftgroesse);
+		AufgabensammlungGeneratorInput input = new AufgabensammlungGeneratorInput().withAufgaben(aufgaben).withFont(font)
+			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege).withAufgabensammlung(dbResult)
+			.withVerwendungszweck(verwendungszweck).withSchriftgroesse(schriftgroesse);
 		return input;
 	}
 

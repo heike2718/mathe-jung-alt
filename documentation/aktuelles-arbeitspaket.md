@@ -2,6 +2,17 @@
 
 Damit ich mich nach einigen Tagen Pause wieder erinnere, wo ich weitermachen muss.
 
+## 24.03.2025
+
+- Ressource leak wegen
+
+```java
+throw new WebApplicationException(Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit diesem Namen.")).build());
+```
+
+im backend
+
 ## 17.12.2023
 
 - Medien: feature-search begonnen. Komponente ist schon eingehängt.

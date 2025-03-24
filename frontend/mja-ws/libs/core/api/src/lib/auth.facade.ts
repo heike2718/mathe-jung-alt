@@ -92,6 +92,7 @@ export class AuthFacade {
 
   handleSessionExpired(): void {
     this.#store.dispatch(authActions.lOGGED_OUT());
+    this.#coreFacade.handleLogout();
     this.#messageService.warn('Die Session ist abgelaufen. Bitte erneut einloggen.');
   }
 

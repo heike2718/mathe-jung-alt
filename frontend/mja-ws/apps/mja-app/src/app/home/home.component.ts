@@ -3,43 +3,57 @@ import { CommonModule } from '@angular/common';
 import { AuthFacade } from '@mja-ws/core/api';
 import { CoreFacade } from '@mja-ws/core/api';
 import { Configuration } from '@mja-ws/shared/config';
-import { MatButtonModule } from '@angular/material/button';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { User } from '@mja-ws/core/model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'mja-app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatButtonModule]
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule
+  ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
   authFacade = inject(AuthFacade);
 
-  coreFacade = inject(CoreFacade);
+  #coreFacade = inject(CoreFacade);
 
   user!: User;
 
   #configService = inject(Configuration);
+  #router = inject(Router);
 
   version = "3.1.2";
+  anzahlRaetsel = 0;
 
   imageSourceLogo = '';
 
-  #userSubscription = new Subscription();
+  #subscriptions = new Subscription();
 
   ngOnInit(): void {
 
-    this.imageSourceLogo = this.#configService.assetsPath + 'mja_logo_2.svg';
-    this.coreFacade.loadAnzahlPublicRaetsel(); 
-    
-    this.#userSubscription = this.authFacade.user$.subscribe((user) => this.user = user);
+    this.imageSourceLogo = this.#configService.assetsPath + 'mja_logo_2-gruen.svg';
+    this.#coreFacade.loadAnzahlPublicRaetsel();
+
+    const userSubscription = this.authFacade.user$.subscribe((user) => this.user = user);
+    this.#subscriptions.add(userSubscription);
+
+    const anzahlRaetselSubscription = this.#coreFacade.anzahlPublicRaetsel$.subscribe(anzahl => this.anzahlRaetsel = anzahl);
+    this.#subscriptions.add(anzahlRaetselSubscription);
   }
 
   ngOnDestroy(): void {
-      this.#userSubscription.unsubscribe();
+    this.#subscriptions.unsubscribe();
   }
 
   login(): void {
@@ -48,5 +62,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   signup(): void {
     this.authFacade.signup();
+  }
+
+  navigateTo(route: string) {
+    this.#router.navigate([route]);
   }
 }

@@ -57,10 +57,12 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 		if (authorizationHeader == null) {
 
 			LOGGER.warn("Aufruf {} ohne Authorization-Header. AuthorizationHeader ist erforderlich!", path);
-			throw new WebApplicationException(
-				Response.status(400)
-					.entity(MessagePayload.error("S2S-Authentifizierung fehlgeschlagen. Authorization-Header ist erforderlich."))
-					.build());
+
+			try (Response response = Response.status(400)
+				.entity(MessagePayload.error("S2S-Authentifizierung fehlgeschlagen. Authorization-Header ist erforderlich."))
+				.build()) {
+				throw new WebApplicationException(response);
+			}
 		}
 
 		LOGGER.info("AuthorizationHeader={}", StringUtils.abbreviate(authorizationHeader, 20));
@@ -71,9 +73,11 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 
 		if (!authResult.getRight().booleanValue()) {
 
-			throw new WebApplicationException(Response.status(403).entity(MessagePayload.error(
+			try (Response response = Response.status(403).entity(MessagePayload.error(
 				"keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte konfigurierten Authorization-Header und X-CLIENT-ID pruefen."))
-				.build());
+				.build()) {
+				throw new WebApplicationException(response);
+			}
 		} else {
 
 			if (!clientIdFromHeader.equals(authResult.getLeft())) {
@@ -82,9 +86,11 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 					MjaApiApplication.X_CLIENT_ID_HEADER_NAME, authResult.getLeft(), MjaApiApplication.X_CLIENT_ID_HEADER_NAME,
 					clientIdFromHeader);
 
-				throw new WebApplicationException(Response.status(401).entity(MessagePayload.error(
+				try (Response response = Response.status(401).entity(MessagePayload.error(
 					"keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte Konfiguration von mk-gateway.auth.client und Header X-CLIENT-ID pruefen."))
-					.build());
+					.build()) {
+					throw new WebApplicationException(response);
+				}
 			}
 			LOGGER.debug("path={}", path);
 		}

@@ -34,7 +34,7 @@ public class AntwortvorschlaegeValidator implements ConstraintValidator<ValidAnt
 	@Override
 	public boolean isValid(final Antwortvorschlag[] value, final ConstraintValidatorContext context) {
 
-		if (value == null) {
+		if (value == null || value.length == 0) {
 
 			return true;
 		}
@@ -64,8 +64,7 @@ public class AntwortvorschlaegeValidator implements ConstraintValidator<ValidAnt
 		if (!violationMessages.isEmpty()) {
 
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(String.join(", ", violationMessages))
-				.addConstraintViolation();
+			context.buildConstraintViolationWithTemplate(String.join(", ", violationMessages)).addConstraintViolation();
 			return false;
 		}
 

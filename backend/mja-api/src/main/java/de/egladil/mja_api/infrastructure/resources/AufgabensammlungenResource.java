@@ -32,6 +32,7 @@ import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungsele
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.dto.SortDirection;
+import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -39,9 +40,11 @@ import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.utils.DevDelayService;
 import de.egladil.mja_api.domain.validation.MjaRegexps;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
+import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -55,7 +58,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
@@ -64,6 +66,7 @@ import jakarta.ws.rs.core.Response.Status;
 /**
  * AufgabensammlungenResource
  */
+@Authenticated
 @Path("mja-api/aufgabensammlungen")
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 @Tag(name = "Aufgabensammlungen")
@@ -83,48 +86,16 @@ public class AufgabensammlungenResource {
 	@GET
 	@Path("v1")
 	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
-	@Operation(
-		operationId = "findAufgabensammlungen",
-		summary = "Gibt alle Aufgabensammlungen zurück, die auf die gegebene Suchanfrage passen.")
-	@Parameters({
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "name",
-			description = "Teil des Namens der Gruppe (Suche mit like)"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "schwierigkeitsgrad",
-			description = "Klassenstufe, für die die Aufgabensammlung gedacht ist (enum)"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "referenztyp",
-			description = "Kontext zur Interpretation des Parameters 'referenz'"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "referenz",
-			description = "ID im alten Aufgabenarchiv"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "sortAttribute",
-			description = "Attribut, nach dem sortiert wird"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "sortDirection",
-			description = "Sortierrichtung für das gewählte Attribut"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "limit",
-			description = "Pagination: pageSize"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "offset",
-			description = "Pagination: pageIndex") })
-	@APIResponse(
-		name = "OKResponse",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(type = SchemaType.ARRAY, implementation = AufgabensammlungSucheTreffer.class)))
+	@Operation(operationId = "findAufgabensammlungen", summary = "Gibt alle Aufgabensammlungen zurück, die auf die gegebene Suchanfrage passen.")
+	@Parameters({ @Parameter(in = ParameterIn.QUERY, name = "name", description = "Teil des Namens der Gruppe (Suche mit like)"),
+		@Parameter(in = ParameterIn.QUERY, name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Aufgabensammlung gedacht ist (enum)"),
+		@Parameter(in = ParameterIn.QUERY, name = "referenztyp", description = "Kontext zur Interpretation des Parameters 'referenz'"),
+		@Parameter(in = ParameterIn.QUERY, name = "referenz", description = "ID im alten Aufgabenarchiv"),
+		@Parameter(in = ParameterIn.QUERY, name = "sortAttribute", description = "Attribut, nach dem sortiert wird"),
+		@Parameter(in = ParameterIn.QUERY, name = "sortDirection", description = "Sortierrichtung für das gewählte Attribut"),
+		@Parameter(in = ParameterIn.QUERY, name = "limit", description = "Pagination: pageSize"),
+		@Parameter(in = ParameterIn.QUERY, name = "offset", description = "Pagination: pageIndex") })
+	@APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = AufgabensammlungSucheTreffer.class)))
 	// @formatter:off
 	public AufgabensammlungSucheTreffer findAufgabensammlungen(
 		@QueryParam(value = "name") @Pattern(regexp = "[\\w äöüß\\:\\-\\.\\,]*", message = "name enthält unerlaubte Zeichen")
@@ -135,13 +106,9 @@ public class AufgabensammlungenResource {
 		@Size(min = 1, max = 36, message = "nicht mehr als 36 Zeichen") final String referenz,
 		@QueryParam(value = "sortAttribute") @DefaultValue("name") final AufgabensammlungenSortattribute sortAttribute,
 		@QueryParam(value = "sortDirection") @DefaultValue("asc")  final SortDirection sortDirection,
-		@QueryParam(value = "limit") @DefaultValue("20") final int limit,
+		@QueryParam(value = "limit") @Max(200) @DefaultValue("200") final int limit,
 		@QueryParam(value = "offset") @DefaultValue("0") final int offset) {
 		// @formatter:off
-
-		if (limit > 50) {
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("nicht mehr als 50 auf einmal abfragen.")).build());
-		}
 
 		AuthenticatedUser user = authCtx.getUser();
 
@@ -287,7 +254,7 @@ public class AufgabensammlungenResource {
 		Optional<AufgabensammlungDetails> optDetails = aufgabensammlungenService.loadDetails(aufgabensammlungID);
 
 		if (optDetails.isEmpty()) {
-			throw new WebApplicationException(Response.status(404).entity(MessagePayload.error("kein Treffer")).build());
+			throw new MjaWebApplicationException("kein Treffer", Status.NOT_FOUND);
 		}
 
 		AufgabensammlungDetails result = optDetails.get();
@@ -515,55 +482,17 @@ public class AufgabensammlungenResource {
 	@Path("{aufgabensammlungID}/latex/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR" })
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	@Operation(
-		operationId = "downloadLaTeXSource",
-		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID mehrere LaTeX-Dateien.",
-		description = "Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
+	@Operation(operationId = "downloadLaTeXSource", summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID mehrere LaTeX-Dateien.", description = "Eine ist expandiert und enthält erst die Aufgaben, dann die Lösungen, zwei weitere importieren einzelne LaTeX-Dateien. Alle erforderlichen sourcen werden heruntergeladen, so dass nach dem Verschieben der eingebundenen Grafiken sofort generiert werden kann. Es wird ein Zip-Archiv generiert.")
 	@Parameters({
-		@Parameter(
-			in = ParameterIn.PATH, name = "aufgabensammlungID",
-			description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.",
-			required = true),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "font",
-			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
-			required = false),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "size",
-			description = "wird in LaTeX-Größenangaben umgewandelt.",
-			required = false)
-	})
-	@APIResponse(
-		name = "OKResponse",
-		description = "LaTeX erfolgreich generiert",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/octet-stram"))
-	@APIResponse(
-		name = "Unauthorized",
-		description = "nur Admins und Autoren dürfen Aufgabensammlungen LaTeX herunterladen",
-		responseCode = "401")
-	@APIResponse(
-		name = "Forbidden",
-		description = "Admins dürfen das LaTeX jeder Aufgabensammlung herunterladen, Autoren nur das der eigenen.",
-		responseCode = "403", content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = MessagePayload.class)))
-	@APIResponse(
-		name = "NotFound",
-		description = "Gibt es nicht",
-		responseCode = "404")
-	@APIResponse(
-		name = "Servererror",
-		description = "Serverfehler",
-		responseCode = "500",
-		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
+		@Parameter(in = ParameterIn.PATH, name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.", required = true),
+		@Parameter(in = ParameterIn.QUERY, name = "layoutAntwortvorschlaege", description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)"),
+		@Parameter(in = ParameterIn.QUERY, name = "font", description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.", required = false),
+		@Parameter(in = ParameterIn.QUERY, name = "size", description = "wird in LaTeX-Größenangaben umgewandelt.", required = false) })
+	@APIResponse(name = "OKResponse", description = "LaTeX erfolgreich generiert", responseCode = "200", content = @Content(mediaType = "application/octet-stram"))
+	@APIResponse(name = "Unauthorized", description = "nur Admins und Autoren dürfen Aufgabensammlungen LaTeX herunterladen", responseCode = "401")
+	@APIResponse(name = "Forbidden", description = "Admins dürfen das LaTeX jeder Aufgabensammlung herunterladen, Autoren nur das der eigenen.", responseCode = "403", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+	@APIResponse(name = "NotFound", description = "Gibt es nicht", responseCode = "404")
+	@APIResponse(name = "Servererror", description = "Serverfehler", responseCode = "500", content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public Response downloadLaTeX(
 		@PathParam( value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String aufgabensammlungID,
@@ -591,49 +520,16 @@ public class AufgabensammlungenResource {
 	@Path("{aufgabensammlungID}/arbeitsblatt/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Operation(
-		operationId = "printArbeitsblatt",
-		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein Arbeitsblatt-PDF.",
-		description = "Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
+	@Operation(operationId = "printArbeitsblatt", summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein Arbeitsblatt-PDF.", description = "Die Lösungen werden am Ende des PDFs von den Aufgaben separiert gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
-		@Parameter(
-			name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.", required = true),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)",
-			required = false),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "font",
-			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
-			required = false),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "size",
-			description = "wird in LaTeX-Größenangaben umgewandelt.",
-			required = false)
-	})
-	@APIResponse(
-		name = "OKResponse",
-		description = "Quiz erfolgreich geladen",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = GeneratedFile.class)))
-	@APIResponse(
-		name = "Unauthorized",
-		description = "nur authentifizierte Benutzer mit den erforderlichen Rollen dürfen Arbeitsblätter generieren",
-		responseCode = "401")
-	@APIResponse(
-		name = "NotFound",
-		description = "Gibt es nicht",
-		responseCode = "404")
-	@APIResponse(
-		name = "ServerError",
-		description = "Serverfehler",
-		responseCode = "500",
-		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
+		@Parameter(name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.", required = true),
+		@Parameter(in = ParameterIn.QUERY, name = "layoutAntwortvorschlaege", description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)", required = false),
+		@Parameter(in = ParameterIn.QUERY, name = "font", description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.", required = false),
+		@Parameter(in = ParameterIn.QUERY, name = "size", description = "wird in LaTeX-Größenangaben umgewandelt.", required = false) })
+	@APIResponse(name = "OKResponse", description = "Quiz erfolgreich geladen", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GeneratedFile.class)))
+	@APIResponse(name = "Unauthorized", description = "nur authentifizierte Benutzer mit den erforderlichen Rollen dürfen Arbeitsblätter generieren", responseCode = "401")
+	@APIResponse(name = "NotFound", description = "Gibt es nicht", responseCode = "404")
+	@APIResponse(name = "ServerError", description = "Serverfehler", responseCode = "500", content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printArbeitsblattMitLoesungen(
 		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String aufgabensammlungID,
@@ -656,49 +552,16 @@ public class AufgabensammlungenResource {
 	@Path("{aufgabensammlungID}/knobelkartei/v1")
 	@RolesAllowed({ "ADMIN", "AUTOR", "STANDARD" })
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Operation(
-		operationId = "printKnobelkartei",
-		summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein Knobelkartei-PDF.",
-		description = "Jede Seite enthält genau ein Rätsel. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
+	@Operation(operationId = "printKnobelkartei", summary = "Generiert aus der Aufgabensammlung mit der gegebenen ID ein Knobelkartei-PDF.", description = "Jede Seite enthält genau ein Rätsel. Frage und Lösung werden nacheinander auf einzelne Blätter gedruckt. Die Sortierung erfolgt anhand der Nummer der Elemente. Die aufrufende Person muss für diese Aufgabensammlung berechtigt sein. Es wird immer ohne Antwortvorschläge gedruckt.")
 	@Parameters({
-		@Parameter(
-			name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.", required = true),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "layoutAntwortvorschlaege",
-			description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)",
-			required = false),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "font",
-			description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.",
-			required = false),
-		@Parameter(
-			in = ParameterIn.QUERY,
-			name = "size",
-			description = "wird in LaTeX-Größenangaben umgewandelt.",
-			required = false)
-	})
-	@APIResponse(
-		name = "OKResponse",
-		description = "Quiz erfolgreich geladen",
-		responseCode = "200",
-		content = @Content(
-			mediaType = "application/json",
-			schema = @Schema(implementation = GeneratedFile.class)))
-	@APIResponse(
-		name = "Unauthorized",
-		description = "nur authentifizierte Benutzer mit den erforderlichen Rollen dürfen Knobelkarteien generieren",
-		responseCode = "401")
-	@APIResponse(
-		name = "NotFound",
-		description = "Gibt es nicht",
-		responseCode = "404")
-	@APIResponse(
-		name = "ServerError",
-		description = "Serverfehler",
-		responseCode = "500",
-		content = @Content(schema = @Schema(implementation = MessagePayload.class)))
+		@Parameter(name = "aufgabensammlungID", description = "ID der Aufgabensammlung, für das ein Quiz gedruckt wird.", required = true),
+		@Parameter(in = ParameterIn.QUERY, name = "layoutAntwortvorschlaege", description = "Layout, wie die Antwortvorschläge dargestellt werden sollen, wenn es welche gibt (Details siehe LayoutAntwortvorschlaege)", required = false),
+		@Parameter(in = ParameterIn.QUERY, name = "font", description = "Font, mit dem der Text gedruckt werden soll. Wenn null, dann wird der Standard-LaTeX-Font (STANDARD) verwendet.", required = false),
+		@Parameter(in = ParameterIn.QUERY, name = "size", description = "wird in LaTeX-Größenangaben umgewandelt.", required = false) })
+	@APIResponse(name = "OKResponse", description = "Quiz erfolgreich geladen", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = GeneratedFile.class)))
+	@APIResponse(name = "Unauthorized", description = "nur authentifizierte Benutzer mit den erforderlichen Rollen dürfen Knobelkarteien generieren", responseCode = "401")
+	@APIResponse(name = "NotFound", description = "Gibt es nicht", responseCode = "404")
+	@APIResponse(name = "ServerError", description = "Serverfehler", responseCode = "500", content = @Content(schema = @Schema(implementation = MessagePayload.class)))
 	// @formatter:off
 	public GeneratedFile printKnobelkartei(
 		@PathParam(value = "aufgabensammlungID") @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "Pfad (ID) enthält ungültige Zeichen") final String aufgabensammlungID,

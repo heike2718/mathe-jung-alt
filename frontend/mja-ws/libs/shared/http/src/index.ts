@@ -1,8 +1,8 @@
 export { MjaAPIHttpInterceptor } from './lib/mja-api-http.interceptor';
 
-export { OPEN_API_HTTP_TOKEN, ERROR_MESSAGE_CONTEXT } from './lib/http.context';
+export { ERROR_MESSAGE_CONTEXT } from './lib/http.context';
 
-export { withErrorMessageContext} from './lib/with-error-message-context';
+export { withErrorMessageContext } from './lib/with-http-context';
 export { getHttpErrorResponse } from './lib/get-error-response';
 export { extractServerErrorMessage } from './lib/extract-server-errorMessage';
 

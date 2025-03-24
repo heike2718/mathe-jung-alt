@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.auth.dto.MessagePayload;
+import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
@@ -33,7 +33,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
@@ -59,8 +58,8 @@ public class MedienService {
 	/**
 	 * Holt das Medium mit dieser id.
 	 *
-	 * @param  id
-	 * @return    Optional
+	 * @param id
+	 * @return Optional
 	 */
 	public Optional<MediumDto> getMediumWithId(final String id) {
 
@@ -74,13 +73,8 @@ public class MedienService {
 
 	MediumDto mapFullFromDB(final PersistentesMedium ausDB) {
 
-		MediumDto medium = new MediumDto()
-			.withAutor(ausDB.autor)
-			.withId(ausDB.uuid)
-			.withKommentar(ausDB.kommentar)
-			.withMedienart(ausDB.medienart)
-			.withTitel(ausDB.titel)
-			.withUrl(ausDB.url);
+		MediumDto medium = new MediumDto().withAutor(ausDB.autor).withId(ausDB.uuid).withKommentar(ausDB.kommentar)
+			.withMedienart(ausDB.medienart).withTitel(ausDB.titel).withUrl(ausDB.url);
 
 		try {
 
@@ -103,10 +97,7 @@ public class MedienService {
 
 	MediumQuelleDto mapToMediumForQuelleFromDB(final PersistentesMedium ausDB) {
 
-		MediumQuelleDto medium = new MediumQuelleDto()
-			.withId(ausDB.uuid)
-			.withMedienart(ausDB.medienart)
-			.withTitel(ausDB.titel);
+		MediumQuelleDto medium = new MediumQuelleDto().withId(ausDB.uuid).withMedienart(ausDB.medienart).withTitel(ausDB.titel);
 
 		return medium;
 	}
@@ -114,8 +105,7 @@ public class MedienService {
 	/**
 	 * Legt ein neues Medium an.
 	 *
-	 * @param  medium
-	 *                MediumDto - die Daten
+	 * @param medium MediumDto - die Daten
 	 * @return
 	 */
 	@Transactional
@@ -125,8 +115,7 @@ public class MedienService {
 
 		if (anzahlDubletten > 0) {
 
-			throw new WebApplicationException(Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben."))
-				.build());
+			throw new MjaWebApplicationException("Der Titel ist bereits vergeben.", Status.CONFLICT);
 		}
 
 		int maxSortnr = mediumDao.getMaximumOfAllSortNumbers();
@@ -160,8 +149,7 @@ public class MedienService {
 
 		if (persistentesMedium == null) {
 
-			throw new WebApplicationException(
-				Response.status(404).entity(MessagePayload.error("Das Medium existiert nicht.")).build());
+			throw new MjaWebApplicationException("Das Medium existiert nicht.", Status.NOT_FOUND);
 		}
 
 		permissionDelegate.checkWritePermission(persistentesMedium);
@@ -170,8 +158,7 @@ public class MedienService {
 
 		if (anzahlDubletten > 0) {
 
-			throw new WebApplicationException(Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben."))
-				.build());
+			throw new MjaWebApplicationException("Der Titel ist bereits vergeben.", Status.CONFLICT);
 		}
 
 		String userId = authCtx.getUser().getUuid();
@@ -192,9 +179,9 @@ public class MedienService {
 	/**
 	 * Läd die durch limit und offset eingegrenzte Teilmenge aller Medien. Sortierung nach titel.
 	 *
-	 * @param  limit
-	 * @param  offset
-	 * @return        MediensucheResult
+	 * @param limit
+	 * @param offset
+	 * @return MediensucheResult
 	 */
 	public MediensucheResult loadMedien(final int limit, final int offset) {
 
@@ -213,19 +200,19 @@ public class MedienService {
 
 	/**
 	 * Innerhalb aller Medien wird nach allen Einträgen gesucht, deren Titel oder Kommentare unabhängig von Groß- und
-	 * Kleinschreibung den suchstring einthält. Sortiert wird nach titel. Admins bekommen alle Treffer, Autoren nur die eigenen.
+	 * Kleinschreibung den suchstring einthält. Sortiert wird nach titel. Admins bekommen alle Treffer, Autoren nur die
+	 * eigenen.
 	 *
-	 * @param  suchstring
-	 * @param  limit
-	 * @param  offset
-	 * @return            MediensucheResult
+	 * @param suchstring
+	 * @param limit
+	 * @param offset
+	 * @return MediensucheResult
 	 */
 	public MediensucheResult findMedien(final String suchstring, final int limit, final int offset) {
 
 		if (StringUtils.isBlank(suchstring)) {
 
-			throw new WebApplicationException(
-				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("suchstring darf nicht leer sein")).build());
+			throw new MjaWebApplicationException("suchstring darf nicht leer sein", Status.BAD_REQUEST);
 		}
 
 		long gesamtzahl = mediumDao.countAllMedienWithSuchstring(suchstring);
@@ -241,12 +228,11 @@ public class MedienService {
 	}
 
 	/**
-	 * Innerhalb aller Medien der gegebenen Medienart wird nach allen Einträgen gesucht, deren Titel unabhängig von Groß- und
-	 * Kleinschreibung den suchstring einthält. Sortiert wird nach titel.
+	 * Innerhalb aller Medien der gegebenen Medienart wird nach allen Einträgen gesucht, deren Titel unabhängig von
+	 * Groß- und Kleinschreibung den suchstring einthält. Sortiert wird nach titel.
 	 *
-	 * @param  medienart
-	 *                   Medienart
-	 * @return           List
+	 * @param medienart Medienart
+	 * @return List
 	 */
 	public List<MediumQuelleDto> findMedienForUseInQuelle(final Medienart medienart) {
 
@@ -257,26 +243,21 @@ public class MedienService {
 
 	MediensucheTrefferItem mapToTrefferitemFromDB(final PersistentesMedium ausDB) {
 
-		return new MediensucheTrefferItem()
-			.withId(ausDB.uuid)
-			.withKommentar(ausDB.kommentar)
-			.withMedienart(ausDB.medienart)
+		return new MediensucheTrefferItem().withId(ausDB.uuid).withKommentar(ausDB.kommentar).withMedienart(ausDB.medienart)
 			.withTitel(ausDB.titel);
 	}
 
 	/**
 	 * Gibt alle Raetsel zurück, die das gegebene Medium als Quelle referenzieren.
 	 *
-	 * @param  mediumId
-	 *                  String
-	 * @return          List
+	 * @param mediumId String
+	 * @return List
 	 */
 	public List<RaetselMediensucheTrefferItem> findRaetselWithMedium(final String mediumId) {
 
 		List<PersistentesRaetselMediensucheItemReadonly> treffermenge = this.mediumDao.findAllRaetselWithMedium(mediumId);
 
-		List<RaetselMediensucheTrefferItem> result = treffermenge.stream()
-			.map(this::mapToRaetselMediensucheTrefferItem)
+		List<RaetselMediensucheTrefferItem> result = treffermenge.stream().map(this::mapToRaetselMediensucheTrefferItem)
 			.collect(Collectors.toList());
 
 		return result;
@@ -299,13 +280,8 @@ public class MedienService {
 			}
 		}
 
-		return new RaetselMediensucheTrefferItem()
-			.withFreigegeben(ausDB.freigegeben)
-			.withHerkunftstyp(ausDB.herkunft)
-			.withId(ausDB.uuid)
-			.withName(ausDB.name)
-			.withPfad(ausDB.pfad)
-			.withQuellenangabe(quellenangabe)
+		return new RaetselMediensucheTrefferItem().withFreigegeben(ausDB.freigegeben).withHerkunftstyp(ausDB.herkunft)
+			.withId(ausDB.uuid).withName(ausDB.name).withPfad(ausDB.pfad).withQuellenangabe(quellenangabe)
 			.withSchluessel(ausDB.schluessel);
 	}
 }

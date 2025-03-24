@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.embeddable_images.EmbeddableImageService;
@@ -22,6 +21,7 @@ import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageContext;
 import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageResponseDto;
 import de.egladil.mja_api.domain.embeddable_images.dto.ReplaceEmbeddableImageRequestDto;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
 import de.egladil.mja_api.domain.raetsel.impl.RaetselPermissionDelegate;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
@@ -30,7 +30,6 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetse
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
@@ -61,12 +60,12 @@ public class EmbeddableImageUplodService {
 	RaetselDao raetselDao;
 
 	/**
-	 * Wenn mit den UploadData alles palletti ist, werden ein Dateiname generiert, die Datei in ein entsprechendes Verzeichnis
-	 * gespeichert, der LaTeX-includegraphics-Befehl an den text im requestDto angehängt und ein Vorschaubild generiert.
+	 * Wenn mit den UploadData alles palletti ist, werden ein Dateiname generiert, die Datei in ein entsprechendes
+	 * Verzeichnis gespeichert, der LaTeX-includegraphics-Befehl an den text im requestDto angehängt und ein
+	 * Vorschaubild generiert.
 	 *
-	 * @param  requestDto
-	 *                    CreateEmbeddableImageRequestDto
-	 * @return            EmbeddableImageResponseDto
+	 * @param requestDto CreateEmbeddableImageRequestDto
+	 * @return EmbeddableImageResponseDto
 	 */
 	public EmbeddableImageResponseDto createEmbeddableImage(final CreateEmbeddableImageRequestDto requestDto) {
 
@@ -96,16 +95,14 @@ public class EmbeddableImageUplodService {
 
 			UploadedFile upload = requestDto.getFile();
 
-			uploadScanner.scanUpload(new ReplaceEmbeddableImageRequestDto()
-				.withUpload(upload), ACCEPTABLE_FILETYPES);
+			uploadScanner.scanUpload(new ReplaceEmbeddableImageRequestDto().withUpload(upload), ACCEPTABLE_FILETYPES);
 
 			return embeddableImageService.createAndEmbedImage(uploadContext, upload);
 
 		} catch (UploadFormatException e) {
 			// wurde schon geloggt
 
-			throw new WebApplicationException(
-				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(e.getMessage())).build());
+			throw new MjaWebApplicationException(e.getMessage(), Status.BAD_REQUEST);
 
 		} catch (Exception e) {
 
@@ -117,10 +114,10 @@ public class EmbeddableImageUplodService {
 	}
 
 	/**
-	 * @param  raetselId
-	 * @param  uploadData
-	 * @param  relativerPfad
-	 * @return               MessagePayload
+	 * @param raetselId
+	 * @param uploadData
+	 * @param relativerPfad
+	 * @return MessagePayload
 	 */
 	public EmbeddableImageResponseDto replaceTheEmbeddableImage(final ReplaceEmbeddableImageRequestDto requestDto) {
 
@@ -160,8 +157,7 @@ public class EmbeddableImageUplodService {
 		} catch (UploadFormatException e) {
 			// wurde schon geloggt
 
-			throw new WebApplicationException(
-				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(e.getMessage())).build());
+			throw new MjaWebApplicationException(e.getMessage(), Status.BAD_REQUEST);
 
 		} catch (Exception e) {
 

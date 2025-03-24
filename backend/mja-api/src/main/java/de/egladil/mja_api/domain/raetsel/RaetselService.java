@@ -17,7 +17,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
@@ -26,6 +25,7 @@ import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.quellen.QuelleInfosAdapter;
 import de.egladil.mja_api.domain.quellen.QuelleNameStrategie;
@@ -55,8 +55,6 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetse
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
@@ -99,16 +97,14 @@ public class RaetselService {
 	/**
 	 * Sucht alle Rätsel, die zum Suchfilter passen und gibt sie der Permission enstprechend zurück.
 	 *
-	 * @param  suchfilter
-	 * @param  limit
-	 *                       int Anzahl Treffer in page
-	 * @param  offset
-	 *                       int Aufsetzpunkt für page
-	 * @param  sortDirection
-	 *                       SortDirection nach schluessel
-	 * @return               RaetselsucheTreffer
+	 * @param suchfilter
+	 * @param limit int Anzahl Treffer in page
+	 * @param offset int Aufsetzpunkt für page
+	 * @param sortDirection SortDirection nach schluessel
+	 * @return RaetselsucheTreffer
 	 */
-	public RaetselsucheTreffer sucheRaetsel(final Suchfilter suchfilter, final int limit, final int offset, final SortDirection sortDirection) {
+	public RaetselsucheTreffer sucheRaetsel(final Suchfilter suchfilter, final int limit, final int offset,
+		final SortDirection sortDirection) {
 
 		SuchfilterVariante suchfilterVariante = suchfilter.suchfilterVariante();
 
@@ -123,8 +119,7 @@ public class RaetselService {
 
 		case COMPLETE -> anzahlGesamt = raetselDao.countRaetselWithFilter(suchfilter, nurFreigegebene);
 		case DESKRIPTOREN -> anzahlGesamt = raetselDao.countWithDeskriptoren(suchfilter.getDeskriptorenIds(),
-			suchfilter.getModusDeskriptoren(),
-			nurFreigegebene);
+			suchfilter.getModusDeskriptoren(), nurFreigegebene);
 		case VOLLTEXT -> anzahlGesamt = raetselDao.countRaetselVolltext(suchfilter.getSuchstring(), suchfilter.getModusVolltext(),
 			nurFreigegebene);
 		default -> throw new IllegalArgumentException("unerwartete SuchfilterVariante " + suchfilterVariante);
@@ -139,11 +134,9 @@ public class RaetselService {
 
 		case COMPLETE -> trefferliste = raetselDao.findRaetselWithFilter(suchfilter, limit, offset, sortDirection, nurFreigegebene);
 		case DESKRIPTOREN -> trefferliste = raetselDao.findWithDeskriptoren(suchfilter.getDeskriptorenIds(),
-			suchfilter.getModusDeskriptoren(), limit,
-			offset, sortDirection, nurFreigegebene);
+			suchfilter.getModusDeskriptoren(), limit, offset, sortDirection, nurFreigegebene);
 		case VOLLTEXT -> trefferliste = raetselDao.findRaetselVolltext(suchfilter.getSuchstring(), suchfilter.getModusVolltext(),
-			limit,
-			offset, sortDirection, nurFreigegebene);
+			limit, offset, sortDirection, nurFreigegebene);
 
 		default -> new IllegalArgumentException("Unexpected value: " + suchfilterVariante);
 		}
@@ -160,13 +153,13 @@ public class RaetselService {
 	/**
 	 * Legt ein neues Rätsel an. Durfen nur Autoren und Admins.
 	 *
-	 * @param  payload
-	 *                 EditRaetselPayload die Daten und Metainformationen
-	 * @return         RaetselPayloadDaten mit einer generierten UUID.
+	 * @param payload EditRaetselPayload die Daten und Metainformationen
+	 * @return RaetselPayloadDaten mit einer generierten UUID.
 	 */
 	public Raetsel raetselAnlegen(final EditRaetselPayload payload) {
 
-		// TODO semantische Validierung Herkunftstyp - Quellenart!!! EIGENKREATION nur mit PERSON, ADAPTION und ZITAT brauchen
+		// TODO semantische Validierung Herkunftstyp - Quellenart!!! EIGENKREATION nur mit PERSON, ADAPTION und ZITAT
+		// brauchen
 		// MEDIUM oder PERSON.
 
 		String raetselId = doInsertRaetsel(payload);
@@ -195,8 +188,7 @@ public class RaetselService {
 
 		if (schluesselExistiert) {
 
-			throw new WebApplicationException(
-				Response.status(409).entity(MessagePayload.error("Der Schlüssel ist bereits vergeben.")).build());
+			throw new MjaWebApplicationException("Der Schlüssel ist bereits vergeben.", Status.CONFLICT);
 		}
 
 		PersistentesRaetsel neuesRaetsel = new PersistentesRaetsel();
@@ -239,7 +231,7 @@ public class RaetselService {
 	}
 
 	/**
-	 * @param  payload
+	 * @param payload
 	 * @return
 	 */
 	boolean schluesselGenerieren(final EditRaetselPayload payload) {
@@ -259,9 +251,8 @@ public class RaetselService {
 	/**
 	 * Ändert ein vorhandenes Raetsel
 	 *
-	 * @param  payload
-	 *                 EditRaetselPayload die Daten und Metainformationen
-	 * @return         RaetselPayloadDaten mit einer generierten UUID.
+	 * @param payload EditRaetselPayload die Daten und Metainformationen
+	 * @return RaetselPayloadDaten mit einer generierten UUID.
 	 */
 	public Raetsel raetselAendern(final EditRaetselPayload payload) {
 
@@ -269,9 +260,8 @@ public class RaetselService {
 
 		if (quelle.getQuellenart() != Quellenart.PERSON && quelle.getMediumUuid() == null) {
 
-			Response response = Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("mediumUuid ist erforderlich"))
-				.build();
-			throw new WebApplicationException(response);
+			throw new MjaWebApplicationException("mediumUuid ist erforderlich", Status.BAD_REQUEST);
+
 		}
 
 		String raetselId = payload.getId();
@@ -293,11 +283,9 @@ public class RaetselService {
 
 		if (persistentesRaetsel == null) {
 
-			LOGGER.error("Aendern raetsel mit UUID {}: raetsel existiert nicht. uuidAendernderUser={}", raetselId,
-				userId);
+			LOGGER.error("Aendern raetsel mit UUID {}: raetsel existiert nicht. uuidAendernderUser={}", raetselId, userId);
 
-			throw new WebApplicationException(
-				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
+			throw new MjaWebApplicationException("Tja, dieses Rätsel gibt es leider nicht.", Status.NOT_FOUND);
 		}
 
 		permissionDelegate.checkWritePermission(persistentesRaetsel);
@@ -306,8 +294,7 @@ public class RaetselService {
 
 		if (schluesselExistiert) {
 
-			throw new WebApplicationException(
-				Response.status(409).entity(MessagePayload.error("Der Schlüssel ist bereits vergeben.")).build());
+			throw new MjaWebApplicationException("Der Schlüssel ist bereits vergeben.", Status.CONFLICT);
 		}
 
 		if (payload.isLatexHistorisieren()) {
@@ -323,8 +310,7 @@ public class RaetselService {
 		}
 
 		FragenUndLoesungenVO fragenLoesungenVo = new FragenUndLoesungenVO().withFrageAlt(persistentesRaetsel.frage)
-			.withFrageNeu(payload.getFrage()).withLoesungAlt(persistentesRaetsel.loesung)
-			.withLoesungNeu(payload.getLoesung());
+			.withFrageNeu(payload.getFrage()).withLoesungAlt(persistentesRaetsel.loesung).withLoesungNeu(payload.getLoesung());
 
 		if (persistentesRaetsel.filenameVorschauFrage == null) {
 
@@ -392,11 +378,11 @@ public class RaetselService {
 	}
 
 	/**
-	 * Holt die Details des Rätsels zu der gegebenen id. Falls das Rätsel existiert, wird der Schreibschutz anhand der Permissions
-	 * für den User aufgehoben.
+	 * Holt die Details des Rätsels zu der gegebenen id. Falls das Rätsel existiert, wird der Schreibschutz anhand der
+	 * Permissions für den User aufgehoben.
 	 *
-	 * @param  id
-	 * @return    Raetsel oder null.
+	 * @param id
+	 * @return Raetsel oder null.
 	 */
 	public Raetsel getRaetselZuId(final String id) {
 
@@ -490,11 +476,11 @@ public class RaetselService {
 	}
 
 	/**
-	 * Parsed den Text von Frage und Lösung (sofern vorhanden) nach includegraphics-Statements und erzeugt daraus Listen von
-	 * EmbeddableImageInfos.
+	 * Parsed den Text von Frage und Lösung (sofern vorhanden) nach includegraphics-Statements und erzeugt daraus Listen
+	 * von EmbeddableImageInfos.
 	 *
-	 * @param  raetsel
-	 * @return         Pair left = grafikInfosFrage, right = grafikInfosLoesung. Sie sind nie null, höchstens leer.
+	 * @param raetsel
+	 * @return Pair left = grafikInfosFrage, right = grafikInfosLoesung. Sie sind nie null, höchstens leer.
 	 */
 	public Pair<List<EmbeddableImageInfo>, List<EmbeddableImageInfo>> loadEmbeddableImageInfos(final PersistentesRaetsel raetsel) {
 
@@ -518,9 +504,8 @@ public class RaetselService {
 	}
 
 	/**
-	 * @param  schluessel
-	 *                    String
-	 * @return            Optional
+	 * @param schluessel String
+	 * @return Optional
 	 */
 	public Images findImagesForRaetsel(final String raetselId) {
 
@@ -535,9 +520,8 @@ public class RaetselService {
 	}
 
 	/**
-	 * @param  schluessel
-	 *                    String
-	 * @return            Optional
+	 * @param schluessel String
+	 * @return Optional
 	 */
 	public Images findImagesZuSchluessel(final String schluessel) {
 
@@ -554,9 +538,8 @@ public class RaetselService {
 	/**
 	 * Läd das, was als Input für ein LaTeX-File erforderlich ist.
 	 *
-	 * @param  schluesselliste
-	 *                         List eine Liste von Schlüsseln.
-	 * @return                 List
+	 * @param schluesselliste List eine Liste von Schlüsseln.
+	 * @return List
 	 */
 	public List<RaetselLaTeXDto> findRaetselLaTeXwithSchluesselliste(final List<String> schluesselliste) {
 
@@ -604,18 +587,12 @@ public class RaetselService {
 
 		Raetsel result = new Raetsel(raetselDB.uuid)
 			.withAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(raetselDB.antwortvorschlaege))
-			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
-			.withFrage(raetselDB.frage)
-			.withKommentar(raetselDB.kommentar)
-			.withLoesung(raetselDB.loesung)
-			.withSchluessel(raetselDB.schluessel)
-			.withFreigegeben(raetselDB.freigegeben)
-			.withAntwortvorschlaegeEingebettet(raetselDB.antwortvorschlaegeEingebettet)
-			.withHerkunftstyp(raetselDB.herkunft)
-			.withName(raetselDB.name)
+			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren)).withFrage(raetselDB.frage)
+			.withKommentar(raetselDB.kommentar).withLoesung(raetselDB.loesung).withSchluessel(raetselDB.schluessel)
+			.withFreigegeben(raetselDB.freigegeben).withAntwortvorschlaegeEingebettet(raetselDB.antwortvorschlaegeEingebettet)
+			.withHerkunftstyp(raetselDB.herkunft).withName(raetselDB.name)
 			.withFilenameVorschauFrage(raetselDB.filenameVorschauFrage)
-			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung)
-			.withAutorLoesung(raetselDB.autorLoesung);
+			.withFilenameVorschauLoesung(raetselDB.filenameVorschauLoesung).withAutorLoesung(raetselDB.autorLoesung);
 
 		return result;
 	}
@@ -623,21 +600,17 @@ public class RaetselService {
 	RaetselsucheTrefferItem mapToSucheTrefferFromDB(final PersistentesRaetsel raetselDB) {
 
 		RaetselsucheTrefferItem result = new RaetselsucheTrefferItem()
-			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren))
-			.withId(raetselDB.uuid)
-			.withName(raetselDB.name)
-			.withFreigegeben(raetselDB.freigegeben)
-			.withKommentar(raetselDB.kommentar)
-			.withSchluessel(raetselDB.schluessel)
-			.withHerkunft(raetselDB.herkunft)
+			.withDeskriptoren(deskriptorenService.mapToDeskriptoren(raetselDB.deskriptoren)).withId(raetselDB.uuid)
+			.withName(raetselDB.name).withFreigegeben(raetselDB.freigegeben).withKommentar(raetselDB.kommentar)
+			.withSchluessel(raetselDB.schluessel).withHerkunft(raetselDB.herkunft)
 			.withVorschautext(VorschauUtils.getVorschautext(raetselDB.frage, lengtVorschautext));
 
 		return result;
 	}
 
 	/**
-	 * @param  schluessel
-	 * @return            Optional
+	 * @param schluessel
+	 * @return Optional
 	 */
 	public Optional<String> getRaetselIdWithSchluessel(final String schluessel) {
 
@@ -669,9 +642,8 @@ public class RaetselService {
 	/**
 	 * Sucht alle Aufgabensammlungen, die das gegebene Rätsel enthalten.
 	 *
-	 * @param  raetselId
-	 *                   String
-	 * @return           List
+	 * @param raetselId String
+	 * @return List
 	 */
 	public List<AufgabensammlungRaetselsucheTrefferItem> findAufgabensammlungenWithRaetsel(final String raetselId) {
 
@@ -697,8 +669,7 @@ public class RaetselService {
 		}
 
 		List<AufgabensammlungRaetselsucheTrefferItem> items = trefferliste.stream()
-			.map(this::mapToAufgabensammlungRaetselsucheTrefferItem)
-			.collect(Collectors.toList());
+			.map(this::mapToAufgabensammlungRaetselsucheTrefferItem).collect(Collectors.toList());
 
 		if (nurFreigegebene) {
 
@@ -708,15 +679,12 @@ public class RaetselService {
 		return items;
 	}
 
-	AufgabensammlungRaetselsucheTrefferItem mapToAufgabensammlungRaetselsucheTrefferItem(final PersistentesAufgabensammlungRaetselsucheItemReadonly ausDB) {
+	AufgabensammlungRaetselsucheTrefferItem mapToAufgabensammlungRaetselsucheTrefferItem(
+		final PersistentesAufgabensammlungRaetselsucheItemReadonly ausDB) {
 
-		return new AufgabensammlungRaetselsucheTrefferItem().withFreigegeben(ausDB.sammlungFreigegeben)
-			.withId(ausDB.sammlungId)
-			.withName(ausDB.sammlungName)
-			.withNummer(ausDB.elementNummer)
-			.withPrivat(ausDB.sammlungPrivat)
-			.withPunkte(ausDB.elementPunkte)
-			.withSchwierigkeitsgrad(ausDB.schwierigkeitsgrad)
+		return new AufgabensammlungRaetselsucheTrefferItem().withFreigegeben(ausDB.sammlungFreigegeben).withId(ausDB.sammlungId)
+			.withName(ausDB.sammlungName).withNummer(ausDB.elementNummer).withPrivat(ausDB.sammlungPrivat)
+			.withPunkte(ausDB.elementPunkte).withSchwierigkeitsgrad(ausDB.schwierigkeitsgrad)
 			.withOwner(StringUtils.abbreviate(ausDB.sammlungOwner, 11));
 	}
 

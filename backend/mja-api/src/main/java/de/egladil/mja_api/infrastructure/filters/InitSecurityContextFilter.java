@@ -20,7 +20,7 @@ import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.auth.session.Session;
 import de.egladil.mja_api.domain.auth.session.SessionService;
 import de.egladil.mja_api.domain.auth.session.SessionUtils;
-import de.egladil.mja_api.domain.exceptions.MjaAuthRuntimeException;
+import de.egladil.mja_api.domain.exceptions.AuthException;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContextImpl;
 import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,8 +43,8 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InitSecurityContextFilter.class);
 
-	private static List<String> OPEN_DATA_PATHS = Arrays
-		.asList(new String[] { "/mja-api/public", "/mja-api/restricted" });
+	private static List<String> OPEN_DATA_PATHS = Arrays.asList(new String[] { "/mja-api/public", "/mja-api/restricted",
+		"/mja-api/session/logout", "/mja-api/session/authurls/login", "/mja-api/session/login" });
 
 	@ConfigProperty(name = "mock.benutzerart")
 	String mockBenutzerart;
@@ -83,9 +83,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 		boolean noSessionRequired = this.noSessionRequired(path);
 
 		LOGGER.debug("stage={}, mockSession={}, path={}, noSessionRequired={}", configService.getStage(),
-			configService.isMockSession(),
-			path,
-			noSessionRequired);
+			configService.isMockSession(), path, noSessionRequired);
 
 		if (noSessionRequired) {
 
@@ -93,46 +91,50 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 			return;
 		}
 
-		try {
+		// try {
 
-			if (!ConfigService.STAGE_PROD.equals(configService.getStage()) && configService.isMockSession()) {
+		if (!ConfigService.STAGE_PROD.equals(configService.getStage()) && configService.isMockSession()) {
 
-				LOGGER.warn("Achtung: mock-Session!!! check properties 'stage' und 'mock.session' [stage={}, mockSession=",
-					configService.getStage(), configService.isMockSession());
+			LOGGER.warn("Achtung: mock-Session!!! check properties 'stage' und 'mock.session' [stage={}, mockSession=",
+				configService.getStage(), configService.isMockSession());
 
-				initMockSecurityContext(requestContext);
-			} else {
+			initMockSecurityContext(requestContext);
+		} else {
 
-				LOGGER.debug("path={}", path);
+			LOGGER.debug("path={}", path);
 
-				String sessionId = SessionUtils.getSessionId(requestContext, configService.getStage());
+			String sessionId = SessionUtils.getSessionId(requestContext, configService.getStage());
 
-				LOGGER.debug("sessionId={}", sessionId);
+			LOGGER.debug("sessionId={}", sessionId);
 
-				if (sessionId != null) {
+			if (sessionId != null) {
 
-					Session session = sessionService.getAndRefreshSessionIfValid(sessionId);
+				Session session = sessionService.getAndRefreshSessionIfValid(sessionId);
 
-					if (session != null) {
+				if (session != null) {
 
-						AuthenticatedUser user = session.getUser();
+					AuthenticatedUser user = session.getUser();
 
-						if (user != null) {
+					if (user != null) {
 
-							addUserToAuthAndSecurityContext(user, requestContext);
-						} else {
+						addUserToAuthAndSecurityContext(user, requestContext);
+					} else {
 
-							LOGGER.warn("path={}, user ist null, die Anwendung wird nicht funktionieren!", path);
-						}
-
+						LOGGER.warn("path={}, user ist null, die Anwendung wird nicht funktionieren!", path);
 					}
-				}
-			}
-		} catch (Exception e) {
 
-			LOGGER.error("{}: {}", path, e.getMessage(), e);
-			throw new MjaAuthRuntimeException("Unerwarterer Fehler bei Request " + method + " path=" + path);
+				}
+			} else {
+				LOGGER.warn("{} {} ohne Session aufgerufen", method, path);
+				throw new AuthException("Nicht erlaubt");
+			}
 		}
+		// }
+		// catch (Exception e) {
+		//
+		// LOGGER.error("{}: {}", path, e.getMessage(), e);
+		// throw new MjaAuthRuntimeException("Unerwarterer Fehler bei Request " + method + " path=" + path);
+		// }
 	}
 
 	/**
@@ -185,8 +187,8 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 
 		Benutzerart benutzerart = Benutzerart.valueOf(mockBenutzerart);
 
-		AuthenticatedUser user = new AuthenticatedUser(mockBenutzerid).withFullName(mockBenutzerFullName)
-			.withIdReference("bla").withRoles(new String[] { mockBenutzerart }).withBenutzerart(benutzerart);
+		AuthenticatedUser user = new AuthenticatedUser(mockBenutzerid).withFullName(mockBenutzerFullName).withIdReference("bla")
+			.withRoles(new String[] { mockBenutzerart }).withBenutzerart(benutzerart);
 
 		authCtx.setUser(user);
 		LOGGER.warn("config property 'mock.session' is true => authCtx with mocked admin: ");

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import jakarta.ws.rs.container.ContainerRequestContext;
 
 /**
- * RestrictedRequestsDelegate gibt nur die URLs zurück, die per s2s authetifiziert werden müssen.
+ * RestrictedRequestsDelegate gibt nur die URLs zurück, die per s2s authentifiziert werden müssen.
  */
 public class RestrictedRequestsDelegate {
 

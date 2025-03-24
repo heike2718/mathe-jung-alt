@@ -17,18 +17,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenNameComparator;
 import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
+import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
@@ -49,7 +47,7 @@ public class DeskriptorenService {
 	DeskriptorenRepository deskriptorenRepository;
 
 	/**
-	 * @param  deskriptorenIds
+	 * @param deskriptorenIds
 	 * @return
 	 */
 	public List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds) {
@@ -82,8 +80,8 @@ public class DeskriptorenService {
 	 * <br>
 	 * <strong>Achtung: </strong> Nicht vorhandenen Namen werden ignoriert.
 	 *
-	 * @param  deskriptorenNames
-	 * @return                   String kommaseparierte IDs
+	 * @param deskriptorenNames
+	 * @return String kommaseparierte IDs
 	 */
 	public String transformToDeskriptorenOrdinal(final String deskriptorenNames) {
 
@@ -128,8 +126,7 @@ public class DeskriptorenService {
 
 			LOGGER.warn("loadDeskriptorenV2 wurde ohne oder mit anonymer Session aufgerufen");
 
-			throw new WebApplicationException(
-				Response.status(Status.FORBIDDEN).entity(MessagePayload.error("verbotene URL aufgerufen")).build());
+			throw new MjaWebApplicationException("verbotene URL aufgerufen", Status.FORBIDDEN);
 		}
 
 		boolean admin = user.isAdminOrAutor();
@@ -153,9 +150,8 @@ public class DeskriptorenService {
 	/**
 	 * Sucht den Deskriptor anhand seines Namens.
 	 *
-	 * @param  name
-	 *              String
-	 * @return      Optional
+	 * @param name String
+	 * @return Optional
 	 */
 	public Optional<Deskriptor> findByName(final String name) {
 
@@ -167,8 +163,8 @@ public class DeskriptorenService {
 	/**
 	 * Gibt alle Ids sortiert als kommaseparierten String zurück. Dubletten werden zuvor entfernt.
 	 *
-	 * @param  deskriptoren
-	 * @return              String oder null, wenn leere oder null-Liste
+	 * @param deskriptoren
+	 * @return String oder null, wenn leere oder null-Liste
 	 */
 	public String sortAndStringifyIdsDeskriptoren(final List<Deskriptor> deskriptoren) {
 

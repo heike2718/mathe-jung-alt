@@ -142,7 +142,7 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
     }
 
     const dialogData: SelectGeneratorParametersUIModel = {
-      titel: 'File generieren',
+      titel: 'Aufgabensammlung herunterladen',
       showVerwendungszwecke: true,
       verwendungszwecke: this.user.isAdmin ? verwendungszweckeAutorenSelectInput : verwendungszweckePublicSelectInput,
       selectedVerwendungszweck: undefined,
@@ -152,10 +152,11 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
       selectedFontName: undefined,
       schriftgroessen: schriftgroessenSelectInput,
       selectedSchriftgroesse: undefined,
+      submitLabel: 'herunterladen'
     }
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogComponent, {
-      height: '750px',
+      height: 'auto',
       width: '700px',
       data: dialogData
     });

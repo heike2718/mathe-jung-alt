@@ -1,4 +1,11 @@
 <h1>Aufgabensammlungen</h1>
+<p>Klicken Sie eine Aufgabensammlung an.</p>
+@if(scrWidth > 995) {  
+<p>Nutzen Sie die Filter zum Suchen.</p>
+<p> Z.B. Jahreszahl bei Name oder eine Klassenstufe wählen.</p>
+} @else {
+  <p>Nutzen Sie den Filter zum Suchen.</p>
+}
 
 <div class="button-container">
   <button mat-raised-button color="primary" (click)="resetAllFilters()"
@@ -19,7 +26,7 @@
 </div>
 }
 
-<mat-paginator [length]="anzahlSammlungen" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
+<mat-paginator [length]="anzahlSammlungen" [pageSizeOptions]="[100,150,200]" showFirstLastButtons></mat-paginator>
 
 <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mt-2" matSort matSortActive="name"
   matSortDirection="asc" matSortDisableClear>
@@ -46,7 +53,7 @@
     <mat-header-cell *matHeaderCellDef>
       <div class="grid-container-1">
         <label>
-          Level
+          Klassenstufe
         </label>
         <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
           <mat-select floatLabel="always" [formControl]="schwierigkeitsgradSelectFilterControl">

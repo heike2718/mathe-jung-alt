@@ -27,7 +27,7 @@ export class ErrorHandlerService implements ErrorHandler {
 
     #handleHttpError(httpErrorResponse: HttpErrorResponse, messageService: MessageService): void {
 
-        if (httpErrorResponse.status === 440) {
+        if (httpErrorResponse.status === 440 || httpErrorResponse.status === 401) {
             this.injector.get(AuthFacade).handleSessionExpired();
         } else {
             const message = extractServerErrorMessage(httpErrorResponse);
@@ -36,7 +36,7 @@ export class ErrorHandlerService implements ErrorHandler {
             } else {
                 messageService.error(message.message);
             }
-        }        
+        }
     }
 
     #handleAnyOtherError(error: unknown, messageService: MessageService): void {

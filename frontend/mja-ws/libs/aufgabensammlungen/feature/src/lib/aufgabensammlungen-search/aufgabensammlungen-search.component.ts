@@ -104,12 +104,12 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   #adjusting = false;
 
   // Declare height and width variables
-  #scrWidth = window.innerWidth;
+  scrWidth = window.innerWidth;
 
   @HostListener('window:resize', ['$event'])
   getScreenSize() {
     // this.#scrHeight = window.innerHeight;
-    this.#scrWidth = window.innerWidth;
+    this.scrWidth = window.innerWidth;
   }
 
   constructor(private changeDetector: ChangeDetectorRef) {
@@ -274,8 +274,12 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   getDisplayedColumns(): string[] {
-    if (this.#scrWidth > 959) {
+    if (this.scrWidth > 959) {
+      if (this.user.isAdmin) {
       return [NAME, LEVEL, REFERENZTYP, REFERENZ];
+      } else {
+        return [NAME, LEVEL];
+      }
     } else {
       return [NAME];
     }

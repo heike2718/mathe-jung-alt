@@ -1,42 +1,51 @@
+@use '@angular/material' as mat;
+@use '../../../theme.scss' as theme;
+
+/* Base styling for toolbar and items */
 mat-toolbar {
-    /** border-radius: 3px;*/
-    background-color: #133d6b;
-    color: white;
+    background-color: mat.get-color-from-palette(theme.$primary-palette, 700);
+    color: mat.get-contrast-color-from-palette(theme.$primary-palette, 700);
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
 }
 
+/* Styling for menu items */
+mat-toolbar a {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: mat.get-color-from-palette(theme.$primary-palette, 700);
+    background-color: mat.get-contrast-color-from-palette(theme.$primary-palette, 700);
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    margin-right: 1em;
+    border-radius: 8px; // Adjust the value for more or less rounding
+}
+
+/* Hover effect for menu items */
+mat-toolbar a:hover, mat-toolbar a:active{
+    color: mat.get-color-from-palette(theme.$primary-palette, 700);
+    background-color: mat.get-contrast-color-from-palette(theme.$primary-palette, 700);
+    border-radius: 8px;
+}
+
+
+/* Spacer for alignment */
 .toolbar-spacer {
     flex: 1 1 auto;
 }
 
-a {
-    text-decoration: none;
-    color: white;
-}
-
-a:hover,
-a:active {
-    color: lightgray;
-}
-
-.nav-caption {
-    color: white;
-    display: inline-block;
-    padding-left: 6px;
-    font-size: 1.1rem;
-}
-
+/* Icon styling */
+mat-icon,
 .nav-item {
-    color: white;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+    margin-right: 8px;
+    color: inherit;
 }
 
-
-/** ======================   */
-
-@media(max-width: 959px) {
-    mat-toolbar {
-        border-radius: 0px;
-    }
+/* Adjust text spacing */
+.nav-caption {
+    font-size: 14px;
+    font-weight: 500;
 }
+

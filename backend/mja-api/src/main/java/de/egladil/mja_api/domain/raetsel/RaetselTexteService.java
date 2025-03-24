@@ -11,17 +11,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
+import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * RaetselTexteService
@@ -38,11 +37,11 @@ public class RaetselTexteService {
 	RaetselDao raetselDao;
 
 	/**
-	 * Läd die Texte des gegebenen Rätsels in 2 Dateien herunter: schluessel.tex mit dem Text der Frage, schluessel_l.tex mit dem
-	 * Text der Lösung.
+	 * Läd die Texte des gegebenen Rätsels in 2 Dateien herunter: schluessel.tex mit dem Text der Frage,
+	 * schluessel_l.tex mit dem Text der Lösung.
 	 *
-	 * @param  raetselId
-	 * @return           List
+	 * @param raetselId
+	 * @return List
 	 */
 	public List<GeneratedFile> getTexte(final String raetselId) {
 
@@ -50,18 +49,15 @@ public class RaetselTexteService {
 
 		if (persistentesRaetsel == null) {
 
-			throw new WebApplicationException(
-				Response.status(404).entity(MessagePayload.error("Tja, dieses Rätsel gibt es leider nicht.")).build());
+			throw new MjaWebApplicationException("Tja, dieses Rätsel gibt es leider nicht.", Status.NOT_FOUND);
 		}
 
 		if (isNotAllowedToDownloadLaTeXForRaetsel(persistentesRaetsel, authCtx.getUser())) {
 
-			LOGGER.warn("User {} versucht, LaTeX-Texte von Raetsel {} mit owner {} herunterzuladen",
-				authCtx.getUser().toString(),
+			LOGGER.warn("User {} versucht, LaTeX-Texte von Raetsel {} mit owner {} herunterzuladen", authCtx.getUser().toString(),
 				persistentesRaetsel.schluessel, StringUtils.abbreviate(persistentesRaetsel.owner, 11));
 
-			throw new WebApplicationException(
-				Response.status(403).entity(MessagePayload.error("Zugriff auf Resource nicht erlaubt")).build());
+			throw new MjaWebApplicationException("Zugriff auf Ressource nicht erlaubt", Status.FORBIDDEN);
 		}
 
 		List<GeneratedFile> files = new ArrayList<>();
@@ -78,11 +74,12 @@ public class RaetselTexteService {
 	}
 
 	/**
-	 * @param  persistentesRaetsel
-	 * @param  user
+	 * @param persistentesRaetsel
+	 * @param user
 	 * @return
 	 */
-	private boolean isNotAllowedToDownloadLaTeXForRaetsel(final PersistentesRaetsel persistentesRaetsel, final AuthenticatedUser user) {
+	private boolean isNotAllowedToDownloadLaTeXForRaetsel(final PersistentesRaetsel persistentesRaetsel,
+		final AuthenticatedUser user) {
 
 		return !persistentesRaetsel.owner.equals(user.getUuid()) && user.getBenutzerart() != Benutzerart.ADMIN;
 	}

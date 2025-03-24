@@ -14,6 +14,7 @@
     <p>Suchkriterien: {{suchfilter | json}}</p>
 </div>
 } @else {
+    <h2>Wählen Sie ein oder mehrere Tags, um nach Rätseln zu suchen.</h2>
 <div class="grid-container-1">
     <mja-select-items [model]="selectItemsCompomentModel"
         (modelChanged)="onSelectItemsCompomentModelChanged($event)"></mja-select-items>
@@ -32,7 +33,7 @@
     }
 </div>
 
-<mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[20,30,50]" showFirstLastButtons></mat-paginator>
+<mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[100,150,200]" showFirstLastButtons></mat-paginator>
 
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortActive="schluessel" matSortDirection="asc"
     matSortDisableClear>

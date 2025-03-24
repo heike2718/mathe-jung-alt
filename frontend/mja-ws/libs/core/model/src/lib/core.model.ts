@@ -103,7 +103,7 @@ export interface PaginationState {
 };
 
 export const initialPageDefinition: PageDefinition = {
-  pageSize: 20,
+  pageSize: 100,
   pageIndex: 0,
   sortDirection: 'asc'
 };
@@ -143,8 +143,8 @@ export const fontNamenSelectInput: string[] = [
 ];
 
 export const verwendungszweckePublicSelectInput: string[] = [
-  'Arbeitsblatt',
-  'Kartei'
+  'Kartei',
+  'Arbeitsblatt'
 ];
 
 export const verwendungszweckeAutorenSelectInput: string[] = [
@@ -178,6 +178,7 @@ export interface SelectGeneratorParametersUIModel {
   selectedFontName: string | undefined;
   schriftgroessen: string[];
   selectedSchriftgroesse: undefined;
+  submitLabel: string;
 };
 
 // //////////////////////////////////

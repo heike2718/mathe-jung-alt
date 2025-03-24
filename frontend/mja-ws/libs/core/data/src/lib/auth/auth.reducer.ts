@@ -28,7 +28,8 @@ export const authFeature = createFeature({
 
                 return {
                     ...state,
-                    session: session
+                    session: session,
+                    sessionExists: true
                 };
             }
         ),
@@ -36,7 +37,8 @@ export const authFeature = createFeature({
             swallowEmptyArgument(action, false);
             return {
                 ...state,
-                session: anonymousSession
+                session: anonymousSession,
+                sessionExists: false
             }
         })
     )

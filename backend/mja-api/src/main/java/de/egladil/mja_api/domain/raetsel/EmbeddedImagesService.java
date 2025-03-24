@@ -15,9 +15,9 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
+import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.raetsel.dto.EmbeddableImageInfo;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.domain.utils.MjaFileUtils;
@@ -26,8 +26,7 @@ import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 /**
  * EmbeddedImagesService
@@ -52,7 +51,7 @@ public class EmbeddedImagesService {
 	/**
 	 * Gibt alle zum Rätsel gehörenden eingebetteten Grafiken zurück.
 	 *
-	 * @param  raetselId
+	 * @param raetselId
 	 * @return
 	 */
 	public List<GeneratedFile> getEmbeddedImages(final String raetselId) {
@@ -61,8 +60,7 @@ public class EmbeddedImagesService {
 
 		if (persistentesRaetsel == null) {
 
-			throw new WebApplicationException(
-				Response.status(404).entity(MessagePayload.error("Tja, dieses Rätsel gibt es leider nicht.")).build());
+			throw new MjaWebApplicationException("Tja, dieses Rätsel gibt es leider nicht.", Status.NOT_FOUND);
 		}
 
 		AuthenticatedUser user = authCtx.getUser();
@@ -72,8 +70,7 @@ public class EmbeddedImagesService {
 			LOGGER.warn("User {} versucht, embedded images von Raetsel {} mit owner {} herunterzuladen", user.toString(),
 				persistentesRaetsel.schluessel, StringUtils.abbreviate(persistentesRaetsel.owner, 11));
 
-			throw new WebApplicationException(
-				Response.status(403).entity(MessagePayload.error("Zugriff auf Resource nicht erlaubt")).build());
+			throw new MjaWebApplicationException("Zugriff auf Resource nicht erlaubt", Status.FORBIDDEN);
 
 		}
 
@@ -83,8 +80,7 @@ public class EmbeddedImagesService {
 		List<EmbeddableImageInfo> imageInfos = embeddedImagesInfos.getLeft();
 		imageInfos.addAll(embeddedImagesInfos.getRight());
 
-		Set<EmbeddableImageInfo> existingFiles = imageInfos.stream().filter(ei -> ei.isExistiert())
-			.collect(Collectors.toSet());
+		Set<EmbeddableImageInfo> existingFiles = imageInfos.stream().filter(ei -> ei.isExistiert()).collect(Collectors.toSet());
 
 		List<GeneratedFile> result = new ArrayList<>();
 
@@ -100,11 +96,12 @@ public class EmbeddedImagesService {
 	}
 
 	/**
-	 * @param  persistentesRaetsel
-	 * @param  user
+	 * @param persistentesRaetsel
+	 * @param user
 	 * @return
 	 */
-	private boolean isNotAllowedToDownloadGraphicsForRaetsel(final PersistentesRaetsel persistentesRaetsel, final AuthenticatedUser user) {
+	private boolean isNotAllowedToDownloadGraphicsForRaetsel(final PersistentesRaetsel persistentesRaetsel,
+		final AuthenticatedUser user) {
 
 		return !persistentesRaetsel.owner.equals(user.getUuid()) && user.getBenutzerart() != Benutzerart.ADMIN;
 	}

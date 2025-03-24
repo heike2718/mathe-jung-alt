@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
+import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -68,18 +69,16 @@ public class RaetselGeneratorService {
 	RaetselFileService raetselFileService;
 
 	/**
-	 * Generiert den output des Raetsels im gewünschten Format und gibt die Url als String zurück. Nur admin mit Änderungsrecht auf
-	 * das Rätsel dürfen diese Methode aufrufen.
+	 * Generiert den output des Raetsels im gewünschten Format und gibt die Url als String zurück. Nur admin mit
+	 * Änderungsrecht auf das Rätsel dürfen diese Methode aufrufen.
 	 *
-	 * @param  raetselUuid
-	 *                                  String
-	 * @param  layoutAntwortvorschlaege
-	 *                                  AnzeigeAntwortvorschlaegeTyp
-	 * @param  schriftgroesse
-	 *                                  Schriftgroesse
+	 * @param raetselUuid String
+	 * @param layoutAntwortvorschlaege AnzeigeAntwortvorschlaegeTyp
+	 * @param schriftgroesse Schriftgroesse
 	 * @return
 	 */
-	public synchronized Images generatePNGsRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
+	public synchronized Images generatePNGsRaetsel(final String raetselUuid,
+		final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
 
 		LOGGER.debug("start generate output");
 
@@ -149,14 +148,12 @@ public class RaetselGeneratorService {
 
 				}
 
-				raetselFileService
-					.deleteTemporaryFiles(new String[] { raetsel.getSchluessel() + ".tex" });
+				raetselFileService.deleteTemporaryFiles(new String[] { raetsel.getSchluessel() + ".tex" });
 
 				if (generateLoesung) {
 
-					raetselFileService
-						.deleteTemporaryFiles(
-							new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN + ".tex" });
+					raetselFileService.deleteTemporaryFiles(
+						new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN + ".tex" });
 				}
 
 				LOGGER.info("Raetsel Images generiert: [raetsel={}, admin={}]", raetselUuid,
@@ -175,8 +172,7 @@ public class RaetselGeneratorService {
 			throw e;
 		} catch (Exception e) {
 
-			String msg = "Beim Generieren des Outputs " + Outputformat.PNG + " zu Raetsel [schluessel="
-				+ raetsel.getSchluessel()
+			String msg = "Beim Generieren des Outputs " + Outputformat.PNG + " zu Raetsel [schluessel=" + raetsel.getSchluessel()
 				+ ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: " + e.getMessage();
 			LOGGER.error(msg, e);
 			throw new MjaRuntimeException(msg, e);
@@ -196,16 +192,16 @@ public class RaetselGeneratorService {
 	}
 
 	/**
-	 * Generiert das Rätsel als 2seitiges PDF: Frage auf Seite 1, Lösung auf Seite 2. Minderprivilegierte User bekommen nur bei
-	 * freigegebenen Rätseln ein PDF.
+	 * Generiert das Rätsel als 2seitiges PDF: Frage auf Seite 1, Lösung auf Seite 2. Minderprivilegierte User bekommen
+	 * nur bei freigegebenen Rätseln ein PDF.
 	 *
-	 * @param  raetselUuid
-	 * @param  layoutAntwortvorschlaege
-	 * @param  schriftgroesse
-	 *                                  Schriftgroesse
-	 * @return                          GeneratedFile
+	 * @param raetselUuid
+	 * @param layoutAntwortvorschlaege
+	 * @param schriftgroesse Schriftgroesse
+	 * @return GeneratedFile
 	 */
-	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
+	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid,
+		final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
 
 		LOGGER.debug("start generate output");
 
@@ -234,9 +230,8 @@ public class RaetselGeneratorService {
 
 				if (pdf == null) {
 
-					String msg = "Das generierte PDF zu Raetsel [schluessel="
-						+ raetsel.getSchluessel()
-						+ ", uuid=" + raetselUuid + "] konnte nicht geladen werden. Bitte mal das doc-Verzeichnis prüfen.";
+					String msg = "Das generierte PDF zu Raetsel [schluessel=" + raetsel.getSchluessel() + ", uuid=" + raetselUuid
+						+ "] konnte nicht geladen werden. Bitte mal das doc-Verzeichnis prüfen.";
 					LOGGER.error(msg);
 					throw new MjaRuntimeException(msg);
 				}
@@ -268,8 +263,7 @@ public class RaetselGeneratorService {
 			throw e;
 		} catch (Exception e) {
 
-			String msg = "Beim Generieren des Outputs " + Outputformat.PDF + " zu Raetsel [schluessel="
-				+ raetsel.getSchluessel()
+			String msg = "Beim Generieren des Outputs " + Outputformat.PDF + " zu Raetsel [schluessel=" + raetsel.getSchluessel()
 				+ ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: " + e.getMessage();
 			LOGGER.error(msg, e);
 			throw new MjaRuntimeException(msg, e);
@@ -283,11 +277,10 @@ public class RaetselGeneratorService {
 	}
 
 	/**
-	 * @param  raetselUuid
-	 * @return                         Raetsel
-	 * @throws WebApplicationException
-	 *                                 wenn es keinen Eintrag mit der URI gibt oder noch nicht alle erforderlichen Grafikdateien
-	 *                                 vorhanden sind.
+	 * @param raetselUuid
+	 * @return Raetsel
+	 * @throws WebApplicationException wenn es keinen Eintrag mit der URI gibt oder noch nicht alle erforderlichen
+	 * Grafikdateien vorhanden sind.
 	 */
 	Raetsel loadRaetsel(final String raetselUuid) throws WebApplicationException {
 
@@ -295,13 +288,11 @@ public class RaetselGeneratorService {
 
 		if (raetsel == null) {
 
-			throw new WebApplicationException(
-				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
+			throw new MjaWebApplicationException("Es gibt kein Raetsel mit dieser UUID", Status.NOT_FOUND);
 		}
 
 		List<String> fehlendeGrafiken = raetsel.getEmbeddableImageInfos().stream().filter(gi -> !gi.isExistiert())
-			.map(gi -> gi.getPfad())
-			.collect(Collectors.toList());
+			.map(gi -> gi.getPfad()).collect(Collectors.toList());
 
 		if (!fehlendeGrafiken.isEmpty()) {
 
@@ -316,8 +307,7 @@ public class RaetselGeneratorService {
 					message += ", ";
 				}
 			}
-
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
+			throw new MjaWebApplicationException(message, Status.BAD_REQUEST);
 		}
 		return raetsel;
 	}

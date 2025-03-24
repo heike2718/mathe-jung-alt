@@ -14,13 +14,13 @@
     </a>
 
     @if (authFacade.userIsLoggedIn$ | async) {
-    <a mat-button routerLink="/raetsel">
-        <mat-icon class="nav-item">library_books</mat-icon>
-        <span class="nav-caption">Rätsel</span>
-    </a>
     <a mat-button routerLink="/aufgabensammlungen">
         <mat-icon class="nav-item">menu_book</mat-icon>
         <span class="nav-caption">Aufgabensammlungen</span>
+    </a>
+    <a mat-button routerLink="/raetsel">
+        <mat-icon class="nav-item">library_books</mat-icon>
+        <span class="nav-caption">Rätsel</span>
     </a>
 
     }
