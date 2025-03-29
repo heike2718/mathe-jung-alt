@@ -17,6 +17,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.DeskriptorenService;
 import de.egladil.mja_api.domain.dto.AnzahlabfrageResponseDto;
@@ -25,7 +26,6 @@ import de.egladil.mja_api.domain.dto.Suchfilter;
 import de.egladil.mja_api.domain.dto.SuchfilterVariante;
 import de.egladil.mja_api.domain.embeddable_images.dto.Textart;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
-import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.quellen.QuelleInfosAdapter;
 import de.egladil.mja_api.domain.quellen.QuelleNameStrategie;
@@ -55,6 +55,8 @@ import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetse
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
@@ -171,6 +173,7 @@ public class RaetselService {
 		return result;
 	}
 
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	@Transactional
 	String doInsertRaetsel(final EditRaetselPayload payload) {
 
@@ -188,7 +191,8 @@ public class RaetselService {
 
 		if (schluesselExistiert) {
 
-			throw new MjaWebApplicationException("Der Schlüssel ist bereits vergeben.", Status.CONFLICT);
+			throw new WebApplicationException(
+				Response.status(409).entity(MessagePayload.error("Der Schlüssel ist bereits vergeben.")).build());
 		}
 
 		PersistentesRaetsel neuesRaetsel = new PersistentesRaetsel();
@@ -260,8 +264,9 @@ public class RaetselService {
 
 		if (quelle.getQuellenart() != Quellenart.PERSON && quelle.getMediumUuid() == null) {
 
-			throw new MjaWebApplicationException("mediumUuid ist erforderlich", Status.BAD_REQUEST);
-
+			Response response = Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("mediumUuid ist erforderlich"))
+				.build();
+			throw new WebApplicationException(response);
 		}
 
 		String raetselId = payload.getId();
@@ -273,6 +278,7 @@ public class RaetselService {
 		return getRaetselZuId(raetselId);
 	}
 
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	@Transactional
 	void doUpdateRaetsel(final EditRaetselPayload payload) {
 
@@ -285,7 +291,8 @@ public class RaetselService {
 
 			LOGGER.error("Aendern raetsel mit UUID {}: raetsel existiert nicht. uuidAendernderUser={}", raetselId, userId);
 
-			throw new MjaWebApplicationException("Tja, dieses Rätsel gibt es leider nicht.", Status.NOT_FOUND);
+			throw new WebApplicationException(
+				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
 		permissionDelegate.checkWritePermission(persistentesRaetsel);
@@ -294,7 +301,8 @@ public class RaetselService {
 
 		if (schluesselExistiert) {
 
-			throw new MjaWebApplicationException("Der Schlüssel ist bereits vergeben.", Status.CONFLICT);
+			throw new WebApplicationException(
+				Response.status(409).entity(MessagePayload.error("Der Schlüssel ist bereits vergeben.")).build());
 		}
 
 		if (payload.isLatexHistorisieren()) {

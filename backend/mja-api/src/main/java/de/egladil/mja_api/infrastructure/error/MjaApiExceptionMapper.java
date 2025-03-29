@@ -15,7 +15,6 @@ import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.exceptions.AuthException;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
-import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.exceptions.SessionExpiredException;
 import de.egladil.mja_api.domain.exceptions.UploadFormatException;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
@@ -56,14 +55,6 @@ public class MjaApiExceptionMapper implements ExceptionMapper<Throwable> {
 				message = applicationMessages.getString("latex.error");
 			}
 			return Response.status(500).entity(MessagePayload.error(message)).build();
-
-		}
-
-		if (exception instanceof MjaWebApplicationException) {
-
-			MjaWebApplicationException ex = (MjaWebApplicationException) exception;
-
-			return Response.status(ex.getStatus()).entity(MessagePayload.error(ex.getMessage())).build();
 
 		}
 

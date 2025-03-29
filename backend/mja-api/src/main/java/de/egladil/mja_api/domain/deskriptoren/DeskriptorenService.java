@@ -17,16 +17,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
 import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenNameComparator;
 import de.egladil.mja_api.domain.deskriptoren.impl.DeskriptorenRepository;
-import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.semantik.DomainService;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.entities.Deskriptor;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
@@ -116,6 +118,7 @@ public class DeskriptorenService {
 	 *
 	 * @return List
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	public List<DeskriptorUI> loadDeskriptoren() {
 
 		AuthenticatedUser user = authCtx.getUser();
@@ -126,7 +129,8 @@ public class DeskriptorenService {
 
 			LOGGER.warn("loadDeskriptorenV2 wurde ohne oder mit anonymer Session aufgerufen");
 
-			throw new MjaWebApplicationException("verbotene URL aufgerufen", Status.FORBIDDEN);
+			throw new WebApplicationException(
+				Response.status(Status.FORBIDDEN).entity(MessagePayload.error("verbotene URL aufgerufen")).build());
 		}
 
 		boolean admin = user.isAdminOrAutor();

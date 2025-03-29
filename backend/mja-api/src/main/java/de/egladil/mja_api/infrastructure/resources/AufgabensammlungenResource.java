@@ -32,7 +32,6 @@ import de.egladil.mja_api.domain.aufgabensammlungen.dto.EditAufgabensammlungsele
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.dto.SortDirection;
-import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.generatoren.FontName;
 import de.egladil.mja_api.domain.generatoren.Schriftgroesse;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
@@ -58,10 +57,10 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
-import jakarta.ws.rs.core.Response.Status;
 
 /**
  * AufgabensammlungenResource
@@ -247,6 +246,7 @@ public class AufgabensammlungenResource {
 		responseCode = "500", content = @Content(
 			mediaType = "application/json",
 			schema = @Schema(implementation = MessagePayload.class)))
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	public AufgabensammlungDetails aufgabensammlungDetailsLaden(@PathParam(value = "aufgabensammlungID") @Pattern(
 		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
 		message = "aufgabensammlungID enthält ungültige Zeichen") final String aufgabensammlungID) {
@@ -254,7 +254,7 @@ public class AufgabensammlungenResource {
 		Optional<AufgabensammlungDetails> optDetails = aufgabensammlungenService.loadDetails(aufgabensammlungID);
 
 		if (optDetails.isEmpty()) {
-			throw new MjaWebApplicationException("kein Treffer", Status.NOT_FOUND);
+			throw new WebApplicationException(Response.status(404).entity(MessagePayload.error("kein Treffer")).build());
 		}
 
 		AufgabensammlungDetails result = optDetails.get();

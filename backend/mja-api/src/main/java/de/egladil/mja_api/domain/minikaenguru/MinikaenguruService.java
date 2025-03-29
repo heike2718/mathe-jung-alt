@@ -13,12 +13,12 @@ import de.egladil.mja_api.domain.aufgabensammlungen.AufgabensammlungenService;
 import de.egladil.mja_api.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.mja_api.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.mja_api.domain.aufgabensammlungen.dto.AufgabensammlungSucheTrefferItem;
-import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.quiz.dto.Quizaufgabe;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response;
 
 /**
  * MinikaenguruService
@@ -34,14 +34,14 @@ public class MinikaenguruService {
 	/**
 	 * Gibt die Aufgaben der Klassenstufe eines noch nicht freigegebenen Wettbewerbs zurück.
 	 *
-	 * @param jahr
-	 * @param schwierigkeitsgrad
-	 * @return MinikaenguruAufgabenKlassenstufeDto
-	 * @throws WebApplicationException wenn der schwierigkeitsgrad nicht korrekt ist, der statusWettbewerb nicht korrekt
-	 * ist oder bei anderen Exceptions.
+	 * @param  jahr
+	 * @param  schwierigkeitsgrad
+	 * @return                         MinikaenguruAufgabenKlassenstufeDto
+	 * @throws WebApplicationException
+	 *                                 wenn der schwierigkeitsgrad nicht korrekt ist, der statusWettbewerb nicht korrekt ist oder
+	 *                                 bei anderen Exceptions.
 	 */
-	public MinikaenguruAufgabenKlassenstufeDto getAufgabenNichtFreigegebenerWettbewerb(final String jahr,
-		final Schwierigkeitsgrad schwierigkeitsgrad) throws WebApplicationException {
+	public MinikaenguruAufgabenKlassenstufeDto getAufgabenNichtFreigegebenerWettbewerb(final String jahr, final Schwierigkeitsgrad schwierigkeitsgrad) throws WebApplicationException {
 
 		checkSchwierigkeitsgrad(schwierigkeitsgrad);
 
@@ -50,8 +50,10 @@ public class MinikaenguruService {
 
 		if (aufgabensammlung == null) {
 
-			throw new MjaWebApplicationException("Es gibt keine Minikänguru-Aufgaben mit jahr und schwierigkeitsgrad.",
-				Status.NOT_FOUND);
+			MessagePayload messagePayload = MessagePayload
+				.error("Es gibt keine Minikänguru-Aufgaben mit jahr und schwierigkeitsgrad.");
+			Response response = Response.status(404).entity(messagePayload).build();
+			throw new WebApplicationException(response);
 		}
 
 		return loadAufgaben(jahr, aufgabensammlung);
@@ -60,22 +62,24 @@ public class MinikaenguruService {
 	MinikaenguruAufgabe mapToMinikaenguruAufgabe(final Quizaufgabe quizaufgabe) {
 
 		return new MinikaenguruAufgabe().withImages(quizaufgabe.getImages())
-			.withLoesungsbuchstabe(quizaufgabe.getLoesungsbuchstabe()).withNummer(quizaufgabe.getNummer())
-			.withPunkte(quizaufgabe.getPunkte() / 100).withQuelle(quizaufgabe.getQuelle());
+			.withLoesungsbuchstabe(quizaufgabe.getLoesungsbuchstabe())
+			.withNummer(quizaufgabe.getNummer())
+			.withPunkte(quizaufgabe.getPunkte() / 100)
+			.withQuelle(quizaufgabe.getQuelle());
 
 	}
 
 	/**
 	 * Gibt die Aufgaben der Klassenstufe eines bereits freigegebenen Wettbewerbs zurück.
 	 *
-	 * @param jahr
-	 * @param schwierigkeitsgrad
-	 * @return MinikaenguruAufgabenKlassenstufeDto
-	 * @throws WebApplicationException wenn irgendwas ist (schwoerigkeitsgrad falsch, kein Wettbewerb zum angegebenen
-	 * Jahr, noch nicht freigegeben oder andere Dinge
+	 * @param  jahr
+	 * @param  schwierigkeitsgrad
+	 * @return                         MinikaenguruAufgabenKlassenstufeDto
+	 * @throws WebApplicationException
+	 *                                 wenn irgendwas ist (schwoerigkeitsgrad falsch, kein Wettbewerb zum angegebenen Jahr, noch
+	 *                                 nicht freigegeben oder andere Dinge
 	 */
-	public MinikaenguruAufgabenKlassenstufeDto getAufgabenFreigegebenerWettbewerb(final String jahr,
-		final Schwierigkeitsgrad schwierigkeitsgrad) throws WebApplicationException {
+	public MinikaenguruAufgabenKlassenstufeDto getAufgabenFreigegebenerWettbewerb(final String jahr, final Schwierigkeitsgrad schwierigkeitsgrad) throws WebApplicationException {
 
 		checkSchwierigkeitsgrad(schwierigkeitsgrad);
 
@@ -87,7 +91,8 @@ public class MinikaenguruService {
 			LOGGER.warn("Zugriffsversuch auf Aufgaben eines nicht freigegebenen Minikaenguru-Wettbewerbs: {}, {}", jahr,
 				schwierigkeitsgrad);
 
-			throw new WebApplicationException(Status.NOT_FOUND);
+			Response response = Response.status(404).build();
+			throw new WebApplicationException(response);
 		}
 
 		return loadAufgaben(jahr, aufgabensammlung);
@@ -100,18 +105,19 @@ public class MinikaenguruService {
 
 		if (!schwierigkeitsgrad.isValidForMinikaenguruResources()) {
 
-			throw new MjaWebApplicationException("Es gibt keine Aufgaben für den angefragten Schwierigkeitsgrad", Status.NOT_FOUND);
+			MessagePayload messagePayload = MessagePayload.error("Es gibt keine Aufgaben für den angefragten Schwierigkeitsgrad");
+			Response response = Response.status(400).entity(messagePayload).build();
+			throw new WebApplicationException(response);
 
 		}
 	}
 
 	/**
-	 * @param jahr
-	 * @param aufgabensammlung
+	 * @param  jahr
+	 * @param  aufgabensammlung
 	 * @return
 	 */
-	private MinikaenguruAufgabenKlassenstufeDto loadAufgaben(final String jahr,
-		final AufgabensammlungSucheTrefferItem aufgabensammlung) {
+	private MinikaenguruAufgabenKlassenstufeDto loadAufgaben(final String jahr, final AufgabensammlungSucheTrefferItem aufgabensammlung) {
 
 		List<Quizaufgabe> elemente = aufgabensammlungenervice.loadElementeAsQuizzaufgaben(aufgabensammlung.getId());
 		List<MinikaenguruAufgabe> aufgaben = elemente.stream().map(this::mapToMinikaenguruAufgabe).toList();

@@ -230,6 +230,7 @@ public class AufgabensammlungenService {
 	 * @param isAdmin boolean
 	 * @return AufgabensammlungSucheTrefferItem
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	@Transactional
 	public AufgabensammlungSucheTrefferItem aufgabensammlungAnlegen(final EditAufgabensammlungPayload payload)
 		throws WebApplicationException {
@@ -280,6 +281,7 @@ public class AufgabensammlungenService {
 	 * @return AufgabensammlungSucheTrefferItem
 	 */
 	@Transactional
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	public AufgabensammlungSucheTrefferItem aufgabensammlungBasisdatenAendern(final EditAufgabensammlungPayload payload)
 		throws WebApplicationException {
 
@@ -287,10 +289,8 @@ public class AufgabensammlungenService {
 
 		if (dupletteNachKeysExistiert(payload)) {
 
-			try (Response response = Response.status(Status.CONFLICT)
-				.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz.")).build()) {
-				throw new WebApplicationException(response);
-			}
+			throw new WebApplicationException(Response.status(Status.CONFLICT)
+				.entity(MessagePayload.error("Es gibt bereits eine Aufgabensammlung mit der gleichen Referenz.")).build());
 		}
 
 		if (namensdubletteExistiert(payload.getName(), payload.getId())) {
@@ -600,6 +600,7 @@ public class AufgabensammlungenService {
 	 * @param layoutAntwortvorschlaege LayoutAntwortvorschlaege
 	 * @return
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	public GeneratedFile printVorschau(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse,
 		final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
@@ -670,6 +671,7 @@ public class AufgabensammlungenService {
 	 * @return
 	 * @throws WebApplicationException wenn nicht vorhanden, keine Leseberechtigung oder Aufgabensammlung leer
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	List<Quizaufgabe> getQuizzaufgaben(final PersistenteAufgabensammlung dbResult) throws WebApplicationException {
 
 		if (dbResult == null) {
@@ -710,6 +712,7 @@ public class AufgabensammlungenService {
 	 * @param aufgabensammlungID
 	 * @return GeneratedFile
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	public File downloadLaTeXSources(final String aufgabensammlungID, final FontName font, final Schriftgroesse schriftgroesse,
 		final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 

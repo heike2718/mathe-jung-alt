@@ -11,16 +11,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.auth.session.AuthenticatedUser;
 import de.egladil.mja_api.domain.auth.session.Benutzerart;
-import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.raetsel.dto.GeneratedFile;
 import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import de.egladil.mja_api.infrastructure.persistence.dao.RaetselDao;
 import de.egladil.mja_api.infrastructure.persistence.entities.PersistentesRaetsel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 
 /**
  * RaetselTexteService
@@ -43,13 +44,15 @@ public class RaetselTexteService {
 	 * @param raetselId
 	 * @return List
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	public List<GeneratedFile> getTexte(final String raetselId) {
 
 		PersistentesRaetsel persistentesRaetsel = raetselDao.findById(raetselId);
 
 		if (persistentesRaetsel == null) {
 
-			throw new MjaWebApplicationException("Tja, dieses Rätsel gibt es leider nicht.", Status.NOT_FOUND);
+			throw new WebApplicationException(
+				Response.status(404).entity(MessagePayload.error("Tja, dieses Rätsel gibt es leider nicht.")).build());
 		}
 
 		if (isNotAllowedToDownloadLaTeXForRaetsel(persistentesRaetsel, authCtx.getUser())) {
@@ -57,7 +60,8 @@ public class RaetselTexteService {
 			LOGGER.warn("User {} versucht, LaTeX-Texte von Raetsel {} mit owner {} herunterzuladen", authCtx.getUser().toString(),
 				persistentesRaetsel.schluessel, StringUtils.abbreviate(persistentesRaetsel.owner, 11));
 
-			throw new MjaWebApplicationException("Zugriff auf Ressource nicht erlaubt", Status.FORBIDDEN);
+			throw new WebApplicationException(
+				Response.status(403).entity(MessagePayload.error("Zugriff auf Resource nicht erlaubt")).build());
 		}
 
 		List<GeneratedFile> files = new ArrayList<>();

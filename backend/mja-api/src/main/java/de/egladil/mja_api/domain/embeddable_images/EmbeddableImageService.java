@@ -19,12 +19,12 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageContext;
 import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageResponseDto;
 import de.egladil.mja_api.domain.embeddable_images.dto.EmbeddableImageVorschau;
 import de.egladil.mja_api.domain.embeddable_images.dto.ReplaceEmbeddableImageRequestDto;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
-import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.generatoren.ImageGeneratorService;
 import de.egladil.mja_api.domain.generatoren.RaetselFileService;
 import de.egladil.mja_api.domain.generatoren.impl.IncludegraphicsTextGenerator;
@@ -35,6 +35,8 @@ import de.egladil.mja_api.infrastructure.cdi.AuthenticationContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
@@ -106,6 +108,7 @@ public class EmbeddableImageService {
 	 * @param dto
 	 * @return MessagePayload
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	public EmbeddableImageResponseDto replaceEmbeddedImage(@Valid
 	final ReplaceEmbeddableImageRequestDto uploadRequestDto) {
 
@@ -116,7 +119,8 @@ public class EmbeddableImageService {
 
 			LOGGER.error("Zu ersetzende Datei nicht gefunden: pfad={}!", file.getAbsolutePath());
 
-			throw new MjaWebApplicationException("404 - Datei nicht gefunden", Status.NOT_FOUND);
+			throw new WebApplicationException(
+				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("404 - Datei nicht gefunden")).build());
 		}
 
 		byte[] data = uploadRequestDto.getFile().getDecodedData();

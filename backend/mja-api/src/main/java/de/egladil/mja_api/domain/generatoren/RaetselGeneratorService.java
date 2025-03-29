@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.exceptions.LaTeXCompileException;
 import de.egladil.mja_api.domain.exceptions.MjaRuntimeException;
-import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
 import de.egladil.mja_api.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.mja_api.domain.raetsel.Outputformat;
 import de.egladil.mja_api.domain.raetsel.Raetsel;
@@ -282,13 +281,15 @@ public class RaetselGeneratorService {
 	 * @throws WebApplicationException wenn es keinen Eintrag mit der URI gibt oder noch nicht alle erforderlichen
 	 * Grafikdateien vorhanden sind.
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	Raetsel loadRaetsel(final String raetselUuid) throws WebApplicationException {
 
 		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
 
 		if (raetsel == null) {
 
-			throw new MjaWebApplicationException("Es gibt kein Raetsel mit dieser UUID", Status.NOT_FOUND);
+			throw new WebApplicationException(
+				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
 		}
 
 		List<String> fehlendeGrafiken = raetsel.getEmbeddableImageInfos().stream().filter(gi -> !gi.isExistiert())
@@ -307,7 +308,8 @@ public class RaetselGeneratorService {
 					message += ", ";
 				}
 			}
-			throw new MjaWebApplicationException(message, Status.BAD_REQUEST);
+
+			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
 		}
 		return raetsel;
 	}

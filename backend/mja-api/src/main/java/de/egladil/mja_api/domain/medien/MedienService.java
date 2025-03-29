@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.egladil.mja_api.domain.exceptions.MjaWebApplicationException;
+import de.egladil.mja_api.domain.auth.dto.MessagePayload;
 import de.egladil.mja_api.domain.medien.dto.MediensucheResult;
 import de.egladil.mja_api.domain.medien.dto.MediensucheTrefferItem;
 import de.egladil.mja_api.domain.medien.dto.MediumDto;
@@ -33,6 +33,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
@@ -108,6 +109,7 @@ public class MedienService {
 	 * @param medium MediumDto - die Daten
 	 * @return
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	@Transactional
 	public MediumDto mediumAnlegen(final MediumDto medium) {
 
@@ -115,7 +117,8 @@ public class MedienService {
 
 		if (anzahlDubletten > 0) {
 
-			throw new MjaWebApplicationException("Der Titel ist bereits vergeben.", Status.CONFLICT);
+			throw new WebApplicationException(
+				Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben.")).build());
 		}
 
 		int maxSortnr = mediumDao.getMaximumOfAllSortNumbers();
@@ -142,6 +145,7 @@ public class MedienService {
 		return medium;
 	}
 
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	@Transactional
 	public MediumDto mediumAendern(final MediumDto medium) {
 
@@ -149,7 +153,8 @@ public class MedienService {
 
 		if (persistentesMedium == null) {
 
-			throw new MjaWebApplicationException("Das Medium existiert nicht.", Status.NOT_FOUND);
+			throw new WebApplicationException(
+				Response.status(404).entity(MessagePayload.error("Das Medium existiert nicht.")).build());
 		}
 
 		permissionDelegate.checkWritePermission(persistentesMedium);
@@ -158,7 +163,8 @@ public class MedienService {
 
 		if (anzahlDubletten > 0) {
 
-			throw new MjaWebApplicationException("Der Titel ist bereits vergeben.", Status.CONFLICT);
+			throw new WebApplicationException(
+				Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben.")).build());
 		}
 
 		String userId = authCtx.getUser().getUuid();
@@ -208,11 +214,13 @@ public class MedienService {
 	 * @param offset
 	 * @return MediensucheResult
 	 */
+	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
 	public MediensucheResult findMedien(final String suchstring, final int limit, final int offset) {
 
 		if (StringUtils.isBlank(suchstring)) {
 
-			throw new MjaWebApplicationException("suchstring darf nicht leer sein", Status.BAD_REQUEST);
+			throw new WebApplicationException(
+				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("suchstring darf nicht leer sein")).build());
 		}
 
 		long gesamtzahl = mediumDao.countAllMedienWithSuchstring(suchstring);
