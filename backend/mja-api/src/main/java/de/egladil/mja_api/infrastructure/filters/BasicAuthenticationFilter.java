@@ -18,7 +18,6 @@ import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Priorities;
-import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.PreMatching;
@@ -58,11 +57,9 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 
 			LOGGER.warn("Aufruf {} ohne Authorization-Header. AuthorizationHeader ist erforderlich!", path);
 
-			try (Response response = Response.status(400)
+			requestContext.abortWith(Response.status(400)
 				.entity(MessagePayload.error("S2S-Authentifizierung fehlgeschlagen. Authorization-Header ist erforderlich."))
-				.build()) {
-				throw new WebApplicationException(response);
-			}
+				.build());
 		}
 
 		LOGGER.info("AuthorizationHeader={}", StringUtils.abbreviate(authorizationHeader, 20));
@@ -72,12 +69,9 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 		Pair<String, Boolean> authResult = authService.authorize(authorizationHeader);
 
 		if (!authResult.getRight().booleanValue()) {
-
-			try (Response response = Response.status(403).entity(MessagePayload.error(
+			requestContext.abortWith(Response.status(403).entity(MessagePayload.error(
 				"keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte konfigurierten Authorization-Header und X-CLIENT-ID pruefen."))
-				.build()) {
-				throw new WebApplicationException(response);
-			}
+				.build());
 		} else {
 
 			if (!clientIdFromHeader.equals(authResult.getLeft())) {
@@ -86,11 +80,9 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
 					MjaApiApplication.X_CLIENT_ID_HEADER_NAME, authResult.getLeft(), MjaApiApplication.X_CLIENT_ID_HEADER_NAME,
 					clientIdFromHeader);
 
-				try (Response response = Response.status(401).entity(MessagePayload.error(
+				requestContext.abortWith(Response.status(401).entity(MessagePayload.error(
 					"keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte Konfiguration von mk-gateway.auth.client und Header X-CLIENT-ID pruefen."))
-					.build()) {
-					throw new WebApplicationException(response);
-				}
+					.build());
 			}
 			LOGGER.debug("path={}", path);
 		}

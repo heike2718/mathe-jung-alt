@@ -47,12 +47,12 @@ public class RestrictedResourceTest {
 			.header("Authorization", getInvalidAuthHeader())
 			.when().get("/minikaenguru/2021/ZWEI")
 			.then()
-			.statusCode(401)
+			.statusCode(403)
 			.extract()
 			.as(MessagePayload.class);
 
 		assertEquals("ERROR", messagePayload.getLevel());
-		assertEquals("keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte konfigurierten Authorization-Header pruefen.",
+		assertEquals("keine Berechtigung: S2S-Authentifizierung fehlgeschlagen. Bitte konfigurierten Authorization-Header und X-CLIENT-ID pruefen.",
 			messagePayload.getMessage());
 	}
 
