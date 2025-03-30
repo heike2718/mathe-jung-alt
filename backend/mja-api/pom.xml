@@ -19,7 +19,7 @@
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
 		<quarkus.platform.version>3.21.0</quarkus.platform.version>
-		<com.auth0.java.jwt.version>4.4.0</com.auth0.java.jwt.version>
+		<java-jwt.version>4.5.0</java-jwt.version>
 		<surefire-plugin.version>3.2.5</surefire-plugin.version>
 		<failsafe.useModulePath>false</failsafe.useModulePath>
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
@@ -151,7 +151,7 @@
 		<dependency>
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
-			<version>4.4.0</version>
+			<version>${java-jwt.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.fasterxml.jackson.core</groupId>

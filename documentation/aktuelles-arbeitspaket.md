@@ -2,6 +2,12 @@
 
 Damit ich mich nach einigen Tagen Pause wieder erinnere, wo ich weitermachen muss.
 
+## 30.03.2025
+
+Backend muss nochmal für heikeqs gebaut werden, da java-jwt neuere Version.
+
+Für prod ist noch nichts gebaut. Dockerfile ist evtl schon vorbereitet mit ubi9/open-jdk-21. Aber wenn, dann muss quarkus-app nochmal gebaut werden.
+
 ## 29.03.2025
 
 - schauen, ob ich nicht doch gleich den reverse proxy einsparen kann.
