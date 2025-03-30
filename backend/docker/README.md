@@ -10,9 +10,9 @@ umwandeln von LaTeX- Files anstoßen kann.
 Muss zuerst gebaut werden.
 
 Es basiert auf einer TexLive-full- Installation von
-[Thomas Weise](http://github.com/thomasWeise/docker-texlive-full) und erweitert diese um ein Open-JDK-17
+[Thomas Weise](http://github.com/thomasWeise/docker-texlive-full) und erweitert diese um ein ~~Open-JDK-17~~ Open-JDK-21
 
-__Achtung:__ Ich habe keine halben Sachen gemacht, damit später nicht irgendwelche LaTeX-Packages fehlen. Die full-installation dauert eine ganze Weile.
+**Achtung:** Ich habe keine halben Sachen gemacht, damit später nicht irgendwelche LaTeX-Packages fehlen. Die full-installation dauert eine ganze Weile.
 
 ```
 cd docker-java-latex
@@ -22,7 +22,7 @@ docker image build -t heike2718/docker-java-latex .
 
 ### Der Java-basierte LaTeX-Service - heike2718/latex-service-api
 
-Dieses Image basiert auf heike2718/docker-java-latex, also dem Container mit texlive-full und einer JRE (aktuell Java 17).
+Dieses Image basiert auf heike2718/docker-java-latex, also dem Container mit texlive-full und einer JRE (aktuell ~~Java 17~~ Java 21).
 
 und erweitert es um
 
@@ -40,6 +40,11 @@ docker image build -t heike2718/latex-service-api .
 ### Testen des docker-latex-clients
 
 Ist [hier](../../documentation/usage/latex-mircroservice.adoc) beschrieben.
+
+
+## Ansible
+
+die java-latex-api.jar liegt hier: /media/veracrypt1/ansible/vserver/common-software/latex/latex-service/deployment
 
 
 

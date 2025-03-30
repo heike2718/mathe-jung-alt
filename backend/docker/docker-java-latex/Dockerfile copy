@@ -1,9 +1,7 @@
 #
 # heike2718/docker-java-latex
-# 
-# docker image build -t heike2718/docker-java-latex:2.0 .
 #
-# This is an image with an openjdk-21-headless and the full TeX Live installation from Thomas Weise <tweise@hfuu.edu.cn>
+# This is an image with an openjdk-17-headless and the full TeX Live installation from Thomas Weise <tweise@hfuu.edu.cn>
 #
 # Source: http://github.com/thomasWeise/docker-texlive-full/
 # License: GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
@@ -11,7 +9,9 @@
 # software components inside the image are under the respective
 # licenses chosen by their respective copyright holders.
 #
+#FROM ubuntu:20.04
 FROM ubuntu:25.04
+MAINTAINER heike2718 <public@egladil.de>
 
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -70,8 +70,8 @@ RUN echo "Initial update." &&\
           fonts-symbola \
           fonts-texgyre \
           fonts-unfonts-core \
-#          ttf-wqy-microhei \
-#          ttf-wqy-zenhei \
+          ttf-wqy-microhei \
+          ttf-wqy-zenhei \
           xfonts-intl-chinese \
           xfonts-intl-chinese-big \
           xfonts-wqy &&\

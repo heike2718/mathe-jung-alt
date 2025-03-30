@@ -2,6 +2,10 @@
 
 Damit ich mich nach einigen Tagen Pause wieder erinnere, wo ich weitermachen muss.
 
+## 29.03.2025
+
+- schauen, ob ich nicht doch gleich den reverse proxy einsparen kann.
+
 ## 24.03.2025
 
 - Ressource leak wegen

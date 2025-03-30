@@ -1,5 +1,10 @@
 # syntax=docker/dockerfile:experimental
-FROM heike2718/docker-java-latex:latest
+# 
+# docker image build -t heike2718/latex-service-api:2.0 .
+# docker container run -it heike2718/latex-service-api:2.0 bash
+#
+#FROM heike2718/docker-java-latex:latest
+FROM heike2718/docker-java-latex:2.0
 
 # install image manipulation program
 COPY deb/*.deb /tmp/
