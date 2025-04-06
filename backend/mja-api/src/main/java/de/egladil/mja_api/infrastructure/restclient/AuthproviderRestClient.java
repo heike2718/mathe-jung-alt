@@ -45,5 +45,4 @@ public interface AuthproviderRestClient {
 	@Timeout(value = 10, unit = ChronoUnit.SECONDS)
 	public Response exchangeOneTimeTokenWithJwt(@PathParam(value = "oneTimeToken")
 	final String oneTimeToken, final OAuthClientCredentials clientCredentials);
-
 }
