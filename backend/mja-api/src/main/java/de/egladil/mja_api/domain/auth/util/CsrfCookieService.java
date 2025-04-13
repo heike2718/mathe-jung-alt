@@ -38,7 +38,7 @@ public class CsrfCookieService {
 
 		LOGGER.debug("csrfToken={}", csrfToken);
 
-		return new NewCookie.Builder(AuthConstants.CSRF_TOKEN_COOKIE_NAME).path("/").comment("csrf").maxAge(-1)
+		return new NewCookie.Builder(AuthConstants.CSRF_TOKEN_COOKIE_NAME).path(AuthConstants.COOKIE_PATH).comment("csrf").maxAge(-1)
 			.httpOnly(false).secure(cookiesSecure).build();
 	}
 }

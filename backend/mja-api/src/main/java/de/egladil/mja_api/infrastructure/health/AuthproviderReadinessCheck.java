@@ -18,7 +18,7 @@ import jakarta.ws.rs.HttpMethod;
 @ApplicationScoped
 public class AuthproviderReadinessCheck {
 
-	@ConfigProperty(name = "authprovider.url")
+	@ConfigProperty(name = "quarkus.rest-client.authprovider.url")
 	String authProviderURL;
 
 	@Readiness

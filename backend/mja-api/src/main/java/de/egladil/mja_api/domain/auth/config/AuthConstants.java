@@ -13,4 +13,9 @@ public interface AuthConstants {
 
 	final String CSRF_TOKEN_HEADER_NAME = "X-XSRF-TOKEN";
 
+	/**
+	 * Dient zur Unterscheidung im Browser: Cookie wird nur an diese Sub-URL gesendet.
+	 */
+	final String COOKIE_PATH = "/mja-app";
+
 }

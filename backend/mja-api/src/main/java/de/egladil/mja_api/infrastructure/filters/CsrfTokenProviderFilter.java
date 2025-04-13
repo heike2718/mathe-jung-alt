@@ -35,7 +35,7 @@ public class CsrfTokenProviderFilter implements ContainerResponseFilter {
 
 			return;
 		}
-		LOGGER.debug("==> Set-Cookie {}");
+		LOGGER.debug("==> Set-Cookie");
 		responseContext.getHeaders().add("Set-Cookie", csrfCookieService.createCsrfTokenCookie());
 	}
 }

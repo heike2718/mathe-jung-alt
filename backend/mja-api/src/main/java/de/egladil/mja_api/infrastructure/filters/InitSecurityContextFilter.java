@@ -44,7 +44,7 @@ public class InitSecurityContextFilter implements ContainerRequestFilter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InitSecurityContextFilter.class);
 
 	private static List<String> OPEN_DATA_PATHS = Arrays.asList(new String[] { "/mja-api/public", "/mja-api/restricted",
-		"/mja-api/session/logout", "/mja-api/session/authurls/login", "/mja-api/session/login" });
+		"/mja-api/session/logout", "/mja-api/session/authurls/login", "/mja-api/session/login", "/mja-api/session/authurls/signup" });
 
 	@ConfigProperty(name = "mock.benutzerart")
 	String mockBenutzerart;
