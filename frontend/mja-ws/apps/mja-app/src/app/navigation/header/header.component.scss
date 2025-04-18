@@ -3,8 +3,8 @@
 
 /* Base styling for toolbar and items */
 mat-toolbar {
-    background-color: mat.get-color-from-palette(theme.$primary-palette, 700);
-    color: mat.get-contrast-color-from-palette(theme.$primary-palette, 700);
+    background-color: mat.m2-get-color-from-palette(theme.$primary-palette, 700);
+    color: mat.m2-get-contrast-color-from-palette(theme.$primary-palette, 700);
     display: flex;
     align-items: center;
     padding: 10px 20px;
@@ -15,8 +15,8 @@ mat-toolbar a {
     display: flex;
     align-items: center;
     padding: 10px 15px;
-    color: mat.get-color-from-palette(theme.$primary-palette, 700);
-    background-color: mat.get-contrast-color-from-palette(theme.$primary-palette, 700);
+    color: mat.m2-get-color-from-palette(theme.$primary-palette, 700);
+    background-color: mat.m2-get-contrast-color-from-palette(theme.$primary-palette, 700);
     text-decoration: none;
     transition: background-color 0.3s, color 0.3s;
     margin-right: 1em;
@@ -25,8 +25,8 @@ mat-toolbar a {
 
 /* Hover effect for menu items */
 mat-toolbar a:hover, mat-toolbar a:active{
-    color: mat.get-color-from-palette(theme.$primary-palette, 700);
-    background-color: mat.get-contrast-color-from-palette(theme.$primary-palette, 700);
+    color: mat.m2-get-color-from-palette(theme.$primary-palette, 700);
+    background-color: mat.m2-get-contrast-color-from-palette(theme.$primary-palette, 700);
     border-radius: 8px;
 }
 

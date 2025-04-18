@@ -14,7 +14,7 @@ body {
 
 a,
 .link {
-    color: mat.get-color-from-palette(theme.$primary-palette, 500);
+    color: mat.m2-get-color-from-palette(theme.$primary-palette, 500);
 }
 
 .centered {
@@ -115,7 +115,7 @@ button.mat-mdc-button[color="primary"] .mdc-button__label,
 button.mat-mdc-raised-button[color="primary"] mat-icon,
 button.mat-mdc-outlined-button[color="primary"] mat-icon,
 button.mat-mdc-button[color="primary"] mat-icon {
-    color: mat.get-contrast-color-from-palette(theme.$primary-palette, 500);
+    color: mat.m2-get-contrast-color-from-palette(theme.$primary-palette, 500);
 }
 
 .unselectable-font {

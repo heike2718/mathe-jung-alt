@@ -24,11 +24,7 @@ import {
   // isDevMode,
   LOCALE_ID,
 } from '@angular/core';
-import {
-  HttpClientModule,
-  HttpClientXsrfModule,
-  HTTP_INTERCEPTORS,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import { Configuration } from '@mja-ws/shared/config';
 import { ErrorInterceptor, MjaAPIHttpInterceptor } from '@mja-ws/shared/http';
 import { LoadingInterceptor } from '@mja-ws/shared/messaging/api';
@@ -81,13 +77,10 @@ export const appConfig: ApplicationConfig = {
     aufgabensammlungenDataProvider,
     raetselDataProvider,
     medienDataProvider,
-    importProvidersFrom(
-      HttpClientModule,
-      HttpClientXsrfModule.withOptions({
-        cookieName: 'XSRF-TOKEN',
-        headerName: 'X-XSRF-TOKEN',
-      })
-    ),
+    provideHttpClient(withInterceptorsFromDi(), withXsrfConfiguration({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'X-XSRF-TOKEN',
+    })),
     {
       provide: Configuration,
       useFactory: () =>
