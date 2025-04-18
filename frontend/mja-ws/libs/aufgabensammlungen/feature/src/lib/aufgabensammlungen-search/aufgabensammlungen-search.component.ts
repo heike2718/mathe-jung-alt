@@ -42,23 +42,22 @@ const REFERENZTYP = 'referenztyp';
 const REFERENZ = 'referenz';
 
 @Component({
-  selector: 'mja-aufgabensammlungen-search',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatButtonModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatIconModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  templateUrl: './aufgabensammlungen-search.component.html',
-  styleUrls: ['./aufgabensammlungen-search.component.scss'],
+    selector: 'mja-aufgabensammlungen-search',
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatButtonModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatIconModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        FormsModule,
+        ReactiveFormsModule,
+    ],
+    templateUrl: './aufgabensammlungen-search.component.html',
+    styleUrls: ['./aufgabensammlungen-search.component.scss']
 })
 export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 

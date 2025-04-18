@@ -7,15 +7,14 @@ import { SelectItemsFacade } from '@mja-ws/core/api';
 import { SelectableItem, SelectItemsCompomentModel } from '@mja-ws/core/model';
 
 @Component({
-  selector: 'mja-select-items',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatChipsModule,
-    MatListModule
-  ],
-  templateUrl: './select-items.component.html',
-  styleUrls: ['./select-items.component.scss'],
+    selector: 'mja-select-items',
+    imports: [
+        CommonModule,
+        MatChipsModule,
+        MatListModule
+    ],
+    templateUrl: './select-items.component.html',
+    styleUrls: ['./select-items.component.scss']
 })
 export class SelectItemsComponent implements OnInit, OnDestroy {
 

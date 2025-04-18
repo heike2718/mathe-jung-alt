@@ -10,17 +10,16 @@ import { InfoDialogComponent, InfoDialogModel } from '@mja-ws/shared/components'
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'mja-ws-embeddable-image-info',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDialogModule,
-    InfoDialogComponent
-  ],
-  templateUrl: './embeddable-image-info.component.html',
-  styleUrls: ['./embeddable-image-info.component.scss'],
+    selector: 'mja-ws-embeddable-image-info',
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        MatDialogModule,
+        InfoDialogComponent
+    ],
+    templateUrl: './embeddable-image-info.component.html',
+    styleUrls: ['./embeddable-image-info.component.scss']
 })
 export class EmbeddableImageInfoComponent implements OnInit, OnDestroy {
 

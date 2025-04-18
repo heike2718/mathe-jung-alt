@@ -6,16 +6,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'mja-linked-as',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatBadgeModule,
-    MatButtonModule,
-    MatCardModule
-  ],
-  templateUrl: './linked-aufgabensammlungen.component.html',
-  styleUrl: './linked-aufgabensammlungen.component.scss',
+    selector: 'mja-linked-as',
+    imports: [
+        CommonModule,
+        MatBadgeModule,
+        MatButtonModule,
+        MatCardModule
+    ],
+    templateUrl: './linked-aufgabensammlungen.component.html',
+    styleUrl: './linked-aufgabensammlungen.component.scss'
 })
 export class LinkedAufgabensammlungenComponent {
 

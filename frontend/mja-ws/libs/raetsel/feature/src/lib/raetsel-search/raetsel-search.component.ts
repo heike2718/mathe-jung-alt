@@ -19,25 +19,24 @@ import { FormsModule } from '@angular/forms';
 import { HoverDetailsDirective } from 'shared/directives';
 
 @Component({
-  selector: 'mja-raetsel-search',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatTableModule,
-    MatBadgeModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatIconModule,
-    RaetselSuchfilterAdminComponent,
-    SelectItemsComponent,
-    HoverDetailsDirective
-  ],
-  templateUrl: './raetsel-search.component.html',
-  styleUrls: ['./raetsel-search.component.scss'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    selector: 'mja-raetsel-search',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatTableModule,
+        MatBadgeModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatIconModule,
+        RaetselSuchfilterAdminComponent,
+        SelectItemsComponent,
+        HoverDetailsDirective
+    ],
+    templateUrl: './raetsel-search.component.html',
+    styleUrls: ['./raetsel-search.component.scss'],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit {
 

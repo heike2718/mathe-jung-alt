@@ -5,11 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
-  selector: 'mja-message',
-  standalone: true,
-  imports: [CommonModule, MatIconModule],
-  templateUrl: './message.component.html',
-  styleUrls: ['./message.component.scss'],
+    selector: 'mja-message',
+    imports: [CommonModule, MatIconModule],
+    templateUrl: './message.component.html',
+    styleUrls: ['./message.component.scss']
 })
 export class MessageComponent {
 

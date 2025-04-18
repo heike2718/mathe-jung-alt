@@ -4,11 +4,10 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'mja-app-layout',
-  templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss'],
-  standalone: true,
-  imports: [CommonModule]
+    selector: 'mja-app-layout',
+    templateUrl: './layout.component.html',
+    styleUrls: ['./layout.component.scss'],
+    imports: [CommonModule]
 })
 export class LayoutComponent implements OnInit, OnDestroy {
 

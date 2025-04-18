@@ -13,19 +13,18 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { RaetselFacade } from '@mja-ws/raetsel/api';
 
 @Component({
-  selector: 'mja-medium-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatBadgeModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatTooltipModule,
-    LinkedRaetselComponent
-  ],
-  templateUrl: './medium-details.component.html',
-  styleUrl: './medium-details.component.scss',
+    selector: 'mja-medium-details',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatBadgeModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatTooltipModule,
+        LinkedRaetselComponent
+    ],
+    templateUrl: './medium-details.component.html',
+    styleUrl: './medium-details.component.scss'
 })
 export class MediumDetailsComponent implements OnInit, OnDestroy {
 

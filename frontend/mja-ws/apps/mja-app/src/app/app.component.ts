@@ -10,20 +10,19 @@ import { LoadingIndicatorComponent, MessageComponent } from '@mja-ws/shared/mess
 
 
 @Component({
-  selector: 'mja-app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    MatToolbarModule,
-    MatSidenavModule,
-    LayoutComponent,
-    HeaderComponent,
-    SidenavComponent,
-    MessageComponent,
-    LoadingIndicatorComponent
-  ]
+    selector: 'mja-app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    imports: [
+        RouterOutlet,
+        MatToolbarModule,
+        MatSidenavModule,
+        LayoutComponent,
+        HeaderComponent,
+        SidenavComponent,
+        MessageComponent,
+        LoadingIndicatorComponent
+    ]
 })
 export class AppComponent implements OnInit {
 

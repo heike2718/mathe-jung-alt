@@ -14,22 +14,21 @@ import { MediumDto, GuiMedienartenMap, GuiMedienart, initialGuiMedienart } from 
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'mja-medium-edit',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatGridListModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatListModule,
-    FormsModule,
-    TextFieldModule,
-    ReactiveFormsModule
-  ],
-  templateUrl: './medium-edit.component.html',
-  styleUrl: './medium-edit.component.scss',
+    selector: 'mja-medium-edit',
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatButtonModule,
+        MatGridListModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatListModule,
+        FormsModule,
+        TextFieldModule,
+        ReactiveFormsModule
+    ],
+    templateUrl: './medium-edit.component.html',
+    styleUrl: './medium-edit.component.scss'
 })
 export class MediumEditComponent implements OnInit, OnDestroy {
 

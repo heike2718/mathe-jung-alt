@@ -8,18 +8,17 @@ import { FormsModule } from '@angular/forms';
 import { SelectGeneratorParametersUIModel } from '@mja-ws/core/model';
 
 @Component({
-  selector: 'mja-generator-parameters-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule
-  ],
-  templateUrl: './generator-parameters-dialog.component.html',
-  styleUrls: ['./generator-parameters-dialog.component.scss'],
+    selector: 'mja-generator-parameters-dialog',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule
+    ],
+    templateUrl: './generator-parameters-dialog.component.html',
+    styleUrls: ['./generator-parameters-dialog.component.scss']
 })
 export class GeneratorParametersDialogComponent {
 

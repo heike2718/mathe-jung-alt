@@ -8,16 +8,15 @@ import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, T
 import { Configuration } from '@mja-ws/shared/config';
 
 @Component({
-  selector: 'mja-embeddable-image-vorschau',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    SelectFileComponent,
-    FileInfoComponent
-  ],
-  templateUrl: './embeddable-image-vorschau.component.html',
-  styleUrls: ['./embeddable-image-vorschau.component.scss'],
+    selector: 'mja-embeddable-image-vorschau',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        SelectFileComponent,
+        FileInfoComponent
+    ],
+    templateUrl: './embeddable-image-vorschau.component.html',
+    styleUrls: ['./embeddable-image-vorschau.component.scss']
 })
 export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
 

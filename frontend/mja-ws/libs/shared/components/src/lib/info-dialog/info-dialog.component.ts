@@ -5,16 +5,15 @@ import { InfoDialogModel } from './info-dialog.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 @Component({
-  selector: 'mja-ws-info-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule
-  ],
-  templateUrl: './info-dialog.component.html',
-  styleUrls: ['./info-dialog.component.scss'],
+    selector: 'mja-ws-info-dialog',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatInputModule
+    ],
+    templateUrl: './info-dialog.component.html',
+    styleUrls: ['./info-dialog.component.scss']
 })
 export class InfoDialogComponent {
 

@@ -7,15 +7,14 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Configuration } from '@mja-ws/shared/config';
 
 @Component({
-  selector: 'mja-frage-loesung-images',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CdkAccordionModule,
-    MatExpansionModule
-  ],
-  templateUrl: './frage-loesung-images.component.html',
-  styleUrls: ['./frage-loesung-images.component.scss'],
+    selector: 'mja-frage-loesung-images',
+    imports: [
+        CommonModule,
+        CdkAccordionModule,
+        MatExpansionModule
+    ],
+    templateUrl: './frage-loesung-images.component.html',
+    styleUrls: ['./frage-loesung-images.component.scss']
 })
 export class FrageLoesungImagesComponent implements OnInit {
 

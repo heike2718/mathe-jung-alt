@@ -3,13 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Antwortvorschlag } from '@mja-ws/raetsel/model';
 
 @Component({
-  selector: 'mja-antwortvorschlag',
-  standalone: true,
-  imports: [
-    CommonModule,
-  ],
-  templateUrl: './antwortvorschlag.component.html',
-  styleUrls: ['./antwortvorschlag.component.scss'],
+    selector: 'mja-antwortvorschlag',
+    imports: [
+        CommonModule,
+    ],
+    templateUrl: './antwortvorschlag.component.html',
+    styleUrls: ['./antwortvorschlag.component.scss']
 })
 export class AntwortvorschlagComponent {
 

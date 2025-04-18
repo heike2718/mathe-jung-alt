@@ -6,16 +6,15 @@ import { MatInputModule } from '@angular/material/input';
 import { JaNeinDialogData } from './ja-nein-dialog.model';
 
 @Component({
-  selector: 'mja-ja-nein',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule
-  ],
-  templateUrl: './ja-nein-dialog.component.html',
-  styleUrls: ['./ja-nein-dialog.component.scss'],
+    selector: 'mja-ja-nein',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatInputModule
+    ],
+    templateUrl: './ja-nein-dialog.component.html',
+    styleUrls: ['./ja-nein-dialog.component.scss']
 })
 export class JaNeinDialogComponent {
 

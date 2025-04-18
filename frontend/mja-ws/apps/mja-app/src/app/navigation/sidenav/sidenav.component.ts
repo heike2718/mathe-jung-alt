@@ -6,17 +6,16 @@ import { RouterLinkWithHref } from '@angular/router';
 import { AuthFacade } from '@mja-ws/core/api';
 
 @Component({
-  selector: 'mja-app-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss'],
-  standalone: true,
-  imports: [
-    MatListModule,
-    MatIconModule,
-    NgIf,
-    AsyncPipe,
-    RouterLinkWithHref
-  ],
+    selector: 'mja-app-sidenav',
+    templateUrl: './sidenav.component.html',
+    styleUrls: ['./sidenav.component.scss'],
+    imports: [
+        MatListModule,
+        MatIconModule,
+        NgIf,
+        AsyncPipe,
+        RouterLinkWithHref
+    ]
 })
 export class SidenavComponent {
 
