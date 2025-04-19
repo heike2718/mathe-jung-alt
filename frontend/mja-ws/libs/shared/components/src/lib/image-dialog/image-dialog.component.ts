@@ -6,16 +6,15 @@ import { ImageDialogModel } from './image-dialog.model';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'mja-ws-image-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule
-  ],
-  templateUrl: './image-dialog.component.html',
-  styleUrls: ['./image-dialog.component.scss'],
+    selector: 'mja-ws-image-dialog',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatInputModule
+    ],
+    templateUrl: './image-dialog.component.html',
+    styleUrls: ['./image-dialog.component.scss']
 })
 export class ImageDialogComponent {
 

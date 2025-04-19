@@ -9,18 +9,17 @@ import { Benutzerart } from '@mja-ws/core/model';
 import { HoverDetailsDirective } from 'shared/directives';
 
 @Component({
-  selector: 'mja-aufgabensammlungselement',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatBadgeModule,
-    MatButtonModule,
-    MatTableModule,
-    HoverDetailsDirective
-  ],
-  templateUrl: './aufgabensammlungselemente.component.html',
-  styleUrls: ['./aufgabensammlungselemente.component.scss'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    selector: 'mja-aufgabensammlungselement',
+    imports: [
+        CommonModule,
+        MatBadgeModule,
+        MatButtonModule,
+        MatTableModule,
+        HoverDetailsDirective
+    ],
+    templateUrl: './aufgabensammlungselemente.component.html',
+    styleUrls: ['./aufgabensammlungselemente.component.scss'],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AufgabensammlungselementeComponent implements AfterViewInit {
 

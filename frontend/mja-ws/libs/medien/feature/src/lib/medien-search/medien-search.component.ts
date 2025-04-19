@@ -13,20 +13,19 @@ import { Subscription, of, tap } from 'rxjs';
 import { MediensucheTrefferItem } from '@mja-ws/medien/model';
 
 @Component({
-  selector: 'mja-medien-search',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatButtonModule,
-    MatPaginatorModule,
-    MatIconModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule
-  ],
-  templateUrl: './medien-search.component.html',
-  styleUrl: './medien-search.component.scss',
+    selector: 'mja-medien-search',
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatButtonModule,
+        MatPaginatorModule,
+        MatIconModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule
+    ],
+    templateUrl: './medien-search.component.html',
+    styleUrl: './medien-search.component.scss'
 })
 export class MedienSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 

@@ -10,11 +10,10 @@ import { Subscription } from 'rxjs';
 import { User } from '@mja-ws/core/model';
 
 @Component({
-  selector: 'mja-app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatToolbarModule, NgIf, AsyncPipe, RouterLinkWithHref]
+    selector: 'mja-app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    imports: [MatButtonModule, MatIconModule, MatToolbarModule, NgIf, AsyncPipe, RouterLinkWithHref]
 })
 export class HeaderComponent implements OnInit, OnDestroy{
 

@@ -30,27 +30,26 @@ import { FormsModule } from '@angular/forms';
 import { AuthFacade } from '@mja-ws/core/api';
 
 @Component({
-  selector: 'mja-aufgabensammlungen-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatBadgeModule,
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatGridListModule,
-    MatInputModule,
-    MatListModule,
-    MatFormFieldModule,
-    FrageLoesungImagesComponent,
-    GeneratorParametersDialogComponent,
-    AufgabensammlungselementDialogComponent,
-    AufgabensammlungselementeComponent
-  ],
-  templateUrl: './aufgabensammlungen-details.component.html',
-  styleUrls: ['./aufgabensammlungen-details.component.scss'],
+    selector: 'mja-aufgabensammlungen-details',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatBadgeModule,
+        MatButtonModule,
+        MatCardModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatGridListModule,
+        MatInputModule,
+        MatListModule,
+        MatFormFieldModule,
+        FrageLoesungImagesComponent,
+        GeneratorParametersDialogComponent,
+        AufgabensammlungselementDialogComponent,
+        AufgabensammlungselementeComponent
+    ],
+    templateUrl: './aufgabensammlungen-details.component.html',
+    styleUrls: ['./aufgabensammlungen-details.component.scss']
 })
 export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
 

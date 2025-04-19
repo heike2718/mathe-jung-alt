@@ -24,22 +24,21 @@ import {
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'mja-aufgabensammlung-edit',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatGridListModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatListModule,
-    FormsModule,
-    TextFieldModule,
-    ReactiveFormsModule
-  ],
-  templateUrl: './aufgabensammlung-edit.component.html',
-  styleUrls: ['./aufgabensammlung-edit.component.scss'],
+    selector: 'mja-aufgabensammlung-edit',
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatButtonModule,
+        MatGridListModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatListModule,
+        FormsModule,
+        TextFieldModule,
+        ReactiveFormsModule
+    ],
+    templateUrl: './aufgabensammlung-edit.component.html',
+    styleUrls: ['./aufgabensammlung-edit.component.scss']
 })
 export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
 

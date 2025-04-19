@@ -8,16 +8,15 @@ import { RaetselFacade } from '@mja-ws/raetsel/api';
 import { SelectItemsComponent } from '@mja-ws/shared/components';
 
 @Component({
-  selector: 'mja-raetsel-suchfilter-admin',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    SelectItemsComponent
-  ],
-  templateUrl: './raetsel-suchfilter-admin.component.html',
-  styleUrls: ['./raetsel-suchfilter-admin.component.scss'],
+    selector: 'mja-raetsel-suchfilter-admin',
+    imports: [
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        SelectItemsComponent
+    ],
+    templateUrl: './raetsel-suchfilter-admin.component.html',
+    styleUrls: ['./raetsel-suchfilter-admin.component.scss']
 })
 export class RaetselSuchfilterAdminComponent implements AfterViewInit, OnDestroy {
 

@@ -11,16 +11,15 @@ import { User } from '@mja-ws/core/model';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'mja-app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule
-  ]
+    selector: 'mja-app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule
+    ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
 

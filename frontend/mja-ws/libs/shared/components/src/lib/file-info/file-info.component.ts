@@ -7,14 +7,13 @@ import { calculateFileSize } from "@mja-ws/shared/util";
 
 @Component({
     selector: 'mja-file-info',
-    standalone: true,
     imports: [
         CommonModule,
         MatButtonModule,
         MatIconModule
     ],
     templateUrl: './file-info.component.html',
-    styleUrls: ['./file-info.component.scss'],
+    styleUrls: ['./file-info.component.scss']
 })
 export class FileInfoComponent implements OnInit {
 

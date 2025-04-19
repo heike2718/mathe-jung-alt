@@ -40,31 +40,30 @@ import { LinkedAufgabensammlungenComponent } from '../linked-aufgabensammlungen/
 import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
-  selector: 'mja-raetsel-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CdkAccordionModule,
-    FormsModule,
-    MatExpansionModule,
-    MatBadgeModule,    
-    MatButtonModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatListModule,
-    MatTooltipModule,
-    TextFieldModule,
-    FrageLoesungImagesComponent,
-    AntwortvorschlagComponent,
-    EmbeddableImageVorschauComponent,
-    EmbeddableImageInfoComponent,
-    GeneratorParametersDialogComponent,
-    LinkedAufgabensammlungenComponent    
-  ],
-  templateUrl: './raetsel-details.component.html',
-  styleUrls: ['./raetsel-details.component.scss'],
+    selector: 'mja-raetsel-details',
+    imports: [
+        CommonModule,
+        CdkAccordionModule,
+        FormsModule,
+        MatExpansionModule,
+        MatBadgeModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatChipsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatListModule,
+        MatTooltipModule,
+        TextFieldModule,
+        FrageLoesungImagesComponent,
+        AntwortvorschlagComponent,
+        EmbeddableImageVorschauComponent,
+        EmbeddableImageInfoComponent,
+        GeneratorParametersDialogComponent,
+        LinkedAufgabensammlungenComponent
+    ],
+    templateUrl: './raetsel-details.component.html',
+    styleUrls: ['./raetsel-details.component.scss']
 })
 export class RaetselDetailsComponent implements OnInit, OnDestroy {
 

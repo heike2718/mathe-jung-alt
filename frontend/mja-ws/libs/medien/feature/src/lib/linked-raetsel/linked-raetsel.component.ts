@@ -6,16 +6,15 @@ import { LinkedRaetsel } from '@mja-ws/medien/model';
 import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
-  selector: 'mja-linked-raetsel',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatBadgeModule,
-    MatButtonModule,
-    MatCardModule
-  ],
-  templateUrl: './linked-raetsel.component.html',
-  styleUrl: './linked-raetsel.component.scss',
+    selector: 'mja-linked-raetsel',
+    imports: [
+        CommonModule,
+        MatBadgeModule,
+        MatButtonModule,
+        MatCardModule
+    ],
+    templateUrl: './linked-raetsel.component.html',
+    styleUrl: './linked-raetsel.component.scss'
 })
 export class LinkedRaetselComponent {
 

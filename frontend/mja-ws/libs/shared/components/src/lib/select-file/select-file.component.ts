@@ -11,14 +11,13 @@ import { isValidFileName } from "@mja-ws/shared/util";
 
 @Component({
     selector: 'mja-select-file',
-    standalone: true,
     imports: [
         CommonModule,
         MatButtonModule,
         MatIconModule
     ],
     templateUrl: './select-file.component.html',
-    styleUrls: ['./select-file.component.scss'],
+    styleUrls: ['./select-file.component.scss']
 })
 export class SelectFileComponent implements OnInit {
 

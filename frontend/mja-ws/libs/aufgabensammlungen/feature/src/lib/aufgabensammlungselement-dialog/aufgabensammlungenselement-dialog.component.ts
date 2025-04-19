@@ -7,17 +7,16 @@ import { AufgabensammlungselementDialogData } from './aufgabensammlungselement-d
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'mja-Aufgabensammlungselement',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule,
-    FormsModule
-  ],
-  templateUrl: './aufgabensammlungenselement-dialog.component.html',
-  styleUrls: ['./aufgabensammlungenselement-dialog.component.scss'],
+    selector: 'mja-Aufgabensammlungselement',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatInputModule,
+        FormsModule
+    ],
+    templateUrl: './aufgabensammlungenselement-dialog.component.html',
+    styleUrls: ['./aufgabensammlungenselement-dialog.component.scss']
 })
 export class AufgabensammlungselementDialogComponent {
 
