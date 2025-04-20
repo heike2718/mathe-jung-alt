@@ -11,20 +11,20 @@ export class AuthHttpService {
 
     getLoginUrl(): Observable<Message> {
 
-        return this.#httpClient.get<Message>('/mja-api/session/authurls/login');
+        return this.#httpClient.get<Message>('/api/session/authurls/login');
     }
 
     getSignupUrl(): Observable<Message> {
 
-        return this.#httpClient.get<Message>('/mja-api/session/authurls/signup');
+        return this.#httpClient.get<Message>('/api/session/authurls/signup');
     }
 
     createSession(authResult: AuthResult): Observable<Session> {
-        return this.#httpClient.post<Session>('/mja-api/session/login', authResult);
+        return this.#httpClient.post<Session>('/api/session/login', authResult);
     }
 
     logOut(): Observable<Message> {
-        return this.#httpClient.delete<Message>('/mja-api/session/logout');
+        return this.#httpClient.delete<Message>('/api/session/logout');
     }
 
 }

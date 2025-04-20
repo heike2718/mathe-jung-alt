@@ -26,7 +26,7 @@ export class RaetselHttpService {
 
     #http = inject(HttpClient);
 
-    #url = '/mja-api/raetsel';
+    #url = '/api/raetsel';
 
     findRaetsel(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
 
@@ -140,7 +140,7 @@ export class RaetselHttpService {
     findByMedienart(medienart: Medienart): Observable<MediumQuelleDto[]> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        const url = '/mja-api/medien/quelle/v1';
+        const url = '/api/medien/quelle/v1';
         let theMedienartStr: string = '';
         switch(medienart) {
             case 'BUCH': theMedienartStr = 'BUCH'; break;

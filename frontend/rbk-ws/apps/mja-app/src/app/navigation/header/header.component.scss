@@ -1,0 +1,51 @@
+@use '@angular/material' as mat;
+@use '../../../theme.scss' as theme;
+
+/* Base styling for toolbar and items */
+mat-toolbar {
+    background-color: mat.m2-get-color-from-palette(theme.$primary-palette, 700);
+    color: mat.m2-get-contrast-color-from-palette(theme.$primary-palette, 700);
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/* Styling for menu items */
+mat-toolbar a {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: mat.m2-get-color-from-palette(theme.$primary-palette, 700);
+    background-color: mat.m2-get-contrast-color-from-palette(theme.$primary-palette, 700);
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    margin-right: 1em;
+    border-radius: 8px; // Adjust the value for more or less rounding
+}
+
+/* Hover effect for menu items */
+mat-toolbar a:hover, mat-toolbar a:active{
+    color: mat.m2-get-color-from-palette(theme.$primary-palette, 700);
+    background-color: mat.m2-get-contrast-color-from-palette(theme.$primary-palette, 700);
+    border-radius: 8px;
+}
+
+
+/* Spacer for alignment */
+.toolbar-spacer {
+    flex: 1 1 auto;
+}
+
+/* Icon styling */
+mat-icon,
+.nav-item {
+    margin-right: 8px;
+    color: inherit;
+}
+
+/* Adjust text spacing */
+.nav-caption {
+    font-size: 14px;
+    font-weight: 500;
+}
+

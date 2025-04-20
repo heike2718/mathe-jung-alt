@@ -1,0 +1,30 @@
+{
+  "name": "core-data",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/core/data/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/core/data",
+        "main": "libs/core/data/src/index.ts",
+        "tsConfig": "libs/core/data/tsconfig.lib.json",
+        "assets": ["libs/core/data/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/core/data"],
+      "options": {
+        "jestConfig": "libs/core/data/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["type:core:data"]
+}

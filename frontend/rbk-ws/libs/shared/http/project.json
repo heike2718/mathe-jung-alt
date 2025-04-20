@@ -1,0 +1,30 @@
+{
+  "name": "shared-http",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/http/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/http",
+        "main": "libs/shared/http/src/index.ts",
+        "tsConfig": "libs/shared/http/tsconfig.lib.json",
+        "assets": ["libs/shared/http/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/http"],
+      "options": {
+        "jestConfig": "libs/shared/http/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["type:shared:http"]
+}

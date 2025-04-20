@@ -1,0 +1,30 @@
+{
+  "name": "local-storage-data",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/local-storage-data/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/local-storage-data",
+        "main": "libs/local-storage-data/src/index.ts",
+        "tsConfig": "libs/local-storage-data/tsconfig.lib.json",
+        "assets": ["libs/local-storage-data/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/local-storage-data"],
+      "options": {
+        "jestConfig": "libs/local-storage-data/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["type:local-storage-data"]
+}

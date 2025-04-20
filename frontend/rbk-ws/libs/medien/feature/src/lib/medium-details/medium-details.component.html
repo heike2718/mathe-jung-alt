@@ -1,0 +1,62 @@
+<div class="mja-container">
+    @if ((medienFacade.selectedMediumDetails$ | async); as medium) {
+    <div class="mja-container">
+        <h1>{{medium.titel}} ({{medium.medienart}})</h1>
+
+        @if (medium.autor) {
+        <div class="grid-container-2 mt-2 mb-2">
+            <label>Autor:</label>
+            <div>{{medium.autor}}</div>
+        </div>
+        }
+
+        @if (medium.url) {
+        <div class="grid-container-2 mt-2 mb-2">
+            <label>URL:</label>
+            <div>{{medium.url}}</div>
+        </div>
+        }
+
+        @if (medium.kommentar) {
+        <div class="grid-container-2 mt-2 mb-2">
+            <label>Kommentar:</label>
+            <div>{{medium.kommentar}}</div>
+        </div>
+        }
+
+        <label>gehört mir?</label>
+        <mat-checkbox [(ngModel)]="owner" [disabled]="true"></mat-checkbox>
+
+        <div class="button-container mt-2 mb-2">
+
+            @if (!medium.schreibgeschuetzt) {
+            <button class="label" mat-raised-button color="primary" title="{{medium.titel}} bearbeiten"
+                (click)="startEdit()">bearbeiten</button>
+            }
+
+            <button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+                (click)="gotoMedienuebersicht()">Medien</button>
+        </div>
+
+        @if ((medienFacade.linkedRaetsel$ | async); as liste) {
+
+        @if (liste.length > 0) {
+        <h2>
+            verknüfte Rätsel
+            <span matBadge={{liste.length}} matBadgeColor="accent" class="ml-1"></span>
+        </h2>
+
+        @for (raetsel of liste; track $index) {
+        <mja-linked-raetsel [raetsel]="raetsel" (detailsClicked)="raetselDetailsClicked($event)"></mja-linked-raetsel>
+        }
+        }
+        }
+    </div>
+    } @else {
+    <h1>Medium: Details</h1>
+    <p>kein Medium gewählt</p>
+    <button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
+        (click)="gotoMedienuebersicht()">Medien</button>
+    }
+
+</div>

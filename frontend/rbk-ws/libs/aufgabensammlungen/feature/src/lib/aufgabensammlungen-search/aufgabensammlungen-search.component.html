@@ -1,0 +1,113 @@
+<h1>Aufgabensammlungen</h1>
+<p>Klicken Sie eine Aufgabensammlung an.</p>
+@if(scrWidth > 995) {  
+<p>Nutzen Sie die Filter zum Suchen.</p>
+<p> Z.B. Jahreszahl bei Name oder eine Klassenstufe wählen.</p>
+} @else {
+  <p>Nutzen Sie den Filter zum Suchen.</p>
+}
+
+<div class="button-container">
+  <button mat-raised-button color="primary" (click)="resetAllFilters()"
+    [disabled]="buttonResetAllFiltersDisabled()">Filter leeren</button>
+
+  <!-- solange es noch keine personalisierten Aufgabensammlungen gibt, nur für Admins -->
+  @if (user.isAdmin) {
+  <button mat-raised-button color="primary" (click)="neueAufgabensammlung()" title="neue Aufgabensammlung anlegen">neue
+    Sammlung</button>
+  }
+
+</div>
+
+@if (showSuchparameter()) {
+<div class="grid-container-2 mt-2 mb-2">
+  <label>Suchparameter</label>
+  <div>{{suchparameterStr}}</div>
+</div>
+}
+
+<mat-paginator [length]="anzahlSammlungen" [pageSizeOptions]="[100,150,200]" showFirstLastButtons></mat-paginator>
+
+<mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mt-2" matSort matSortActive="name"
+  matSortDirection="asc" matSortDisableClear>
+
+  <!-- name -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef>
+      <div class="grid-container-1">
+        <label mat-sort-header>
+          Name
+        </label>
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
+          <input matInput [formControl]="nameFilterControl" type="text" #nameFilterInput />
+        </mat-form-field>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let sammlung">
+      {{sammlung.name}} ({{sammlung.anzahlElemente}})
+    </mat-cell>>
+  </ng-container>
+
+  <!-- schwierigkeitsgrad -->
+  <ng-container matColumnDef="schwierigkeitsgrad">
+    <mat-header-cell *matHeaderCellDef>
+      <div class="grid-container-1">
+        <label>
+          Klassenstufe
+        </label>
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
+          <mat-select floatLabel="always" [formControl]="schwierigkeitsgradSelectFilterControl">
+
+            @for (level of selectSchwierigkeitsgradeInput; track $index) {
+            <mat-option [value]="level">{{level}}</mat-option>
+            }
+
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let sammlung"> {{sammlung.schwierigkeitsgrad}} </mat-cell>
+  </ng-container>
+
+  <!-- referenztyp -->
+  <ng-container matColumnDef="referenztyp">
+    <mat-header-cell *matHeaderCellDef>
+      <div class="grid-container-1">
+        <label mat-sort-header>
+          Referenztyp
+        </label>
+        <mat-form-field class="filter input-wrapper__non-suffix" floatLabel="always" appearance="outline">
+          <mat-select floatLabel="always" [formControl]="referenztypSelectFilterControl">
+
+            @for (reftyp of selectReferenztypInput; track $index) {
+            <mat-option [value]="reftyp">{{reftyp}}</mat-option>
+            }
+
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let sammlung" class="mat-cell__4"> {{sammlung.referenztyp}} </mat-cell>
+  </ng-container>
+
+  <!-- referenz -->
+  <ng-container matColumnDef="referenz">
+    <mat-header-cell *matHeaderCellDef>
+      <div class="grid-container-1">
+        <label mat-sort-header>
+          Referenz
+        </label>
+        <mat-form-field class="filter">
+          <input matInput [formControl]="referenzFilterControl" type="text" #referenzFilterInput />
+        </mat-form-field>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let sammlung"> {{sammlung.referenz}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: getDisplayedColumns()" (click)="onRowClicked(row)" [ngClass]="{
+    'bg-beige': !row.freigegeben
+  }"></mat-row>
+
+</mat-table>

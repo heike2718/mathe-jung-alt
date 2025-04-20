@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>{{data.titel}}</h1>
+<mat-dialog-content class="mat-typography">
+    @if (data.hinweis) {
+        <mat-hint>{{data.hinweis}}</mat-hint>
+    }
+    @if (data.image) {
+        <div class="bg-white mt-1">
+            <img src="data:image/png;base64,{{data.image}}" />
+        </div>
+    }   
+    
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary"
+        [mat-dialog-close]="true" cdkFocusInitial>schließen</button>    
+</mat-dialog-actions>
+

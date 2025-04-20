@@ -11,7 +11,7 @@ import { Observable } from "rxjs";
 export class MedienHttpService {
 
     #http = inject(HttpClient);
-    #url = '/mja-api/medien';
+    #url = '/api/medien';
 
 
     findMedien(suchstring: string, pageDefinition: PageDefinition): Observable<MediensucheResult> {

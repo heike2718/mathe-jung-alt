@@ -19,7 +19,7 @@ import { generateUUID } from "@mja-ws/shared/util";
 export class AufgabensammlungenHttpService {
 
     #http = inject(HttpClient);
-    #url = '/mja-api/aufgabensammlungen';
+    #url = '/api/aufgabensammlungen';
 
     findAufgabensammlungen(suchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): Observable<AufgabensammlungenTreffer> {
 

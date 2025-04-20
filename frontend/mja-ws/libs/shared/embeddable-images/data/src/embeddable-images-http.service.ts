@@ -9,7 +9,7 @@ import { Observable } from "rxjs";
 })
 export class EmbeddableImagesHttpService {
 
-    #url = '/mja-api/embeddable-images';
+    #url = '/api/embeddable-images';
     #httpClient = inject(HttpClient);
 
     loadGrafik(relativerPfad: string): Observable<EmbeddableImageVorschau> {

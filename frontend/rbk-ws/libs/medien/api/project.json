@@ -1,0 +1,30 @@
+{
+  "name": "medien-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/medien/api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/medien/api",
+        "main": "libs/medien/api/src/index.ts",
+        "tsConfig": "libs/medien/api/tsconfig.lib.json",
+        "assets": ["libs/medien/api/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/medien/api/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["type:api"]
+}

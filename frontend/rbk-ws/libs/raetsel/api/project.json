@@ -1,0 +1,30 @@
+{
+  "name": "raetsel-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/raetsel/api/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/raetsel/api",
+        "main": "libs/raetsel/api/src/index.ts",
+        "tsConfig": "libs/raetsel/api/tsconfig.lib.json",
+        "assets": ["libs/raetsel/api/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/raetsel/api"],
+      "options": {
+        "jestConfig": "libs/raetsel/api/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["type:api"]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "shared-components",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/components/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/components",
+        "main": "libs/shared/components/src/index.ts",
+        "tsConfig": "libs/shared/components/tsconfig.lib.json",
+        "assets": ["libs/shared/components/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/components"],
+      "options": {
+        "jestConfig": "libs/shared/components/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["type:shared:ui"]
+}

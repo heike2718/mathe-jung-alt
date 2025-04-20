@@ -1,0 +1,32 @@
+<mat-card [ngClass]="{
+    'bg-gray': !aufgabensammlung.freigegeben
+  }">
+    <mat-card-header>
+        @if (aufgabensammlung.privat) {
+            <mat-card-title>{{aufgabensammlung.name}} (privat)</mat-card-title>
+        } @else {
+            <mat-card-title>{{aufgabensammlung.name}} (öffentlich)</mat-card-title>
+        }
+       
+    </mat-card-header>
+    <mat-card-content>
+        <div class="grid-container-2 mt-2 mb-2">
+
+            <label>Schwierigkeitsgrad:</label>
+            <div>{{aufgabensammlung.schwierigkeitsgrad}}</div>
+
+            <label>Nummer:</label>
+            <div>{{aufgabensammlung.nummer}}</div>
+
+            <label>Punkte:</label>
+            <div>{{aufgabensammlung.punkte}}</div>
+
+            <label>Owner:</label>
+            <div>{{aufgabensammlung.owner}}</div>
+        </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-raised-button color="primary" title="{{aufgabensammlung.name}}-Details"
+            (click)="showDetails()">Details</button>
+    </mat-card-actions>
+</mat-card>
