@@ -22,7 +22,7 @@ Streng genommen entspricht der PDF-Druck eines einzelnen Rätsels dem Druck eine
 + Aufgabenblätter
   + aus Zusammenstellungen von Rätseln sollen sich Aufgabenblätter drucken lassen
   + Schwierigkeit: möglichst keine Seitenunbrüche innerhalb einer Augabe? Oder sollte das egal sein?
-  + Es werden 2 PDFs generiert: eins mit den Fragen, eins mit den Lösungen.
+  + Aufgaben werden von Lösungen durch einen Seitenumbruch getrennt, so dass beides separat verteilt werden kann.
   + Es soll gewählt werden können, ob die Antwortvorschläge mit gedruckt werden sollen.
 
   

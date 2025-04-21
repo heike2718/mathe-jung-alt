@@ -1,6 +1,6 @@
 # Aufgabenarchiv
 
-Neue Anwendung: __mja-aufgabenarchiv-admin__
+Anwendung: __raetselbaukasten__
 
 ## Entitäten
 

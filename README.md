@@ -1,8 +1,10 @@
-# mathe-jung-alt
+# raetselbaukasten
+
+Sammlung von Aufgaben als LaTeX und mit Metadaten in einer Datenbank. Tools, um daraus Aufgabenblätter und Karteien für den Unterricht zu generieren oder Daten für Online-Quizzspiele sowie die Aufgaben für den Minikaenguru- Wettbewerb.
 
 ## Documentation
 
-The documentation can be found here:
+Links zur Dokumentation:
 
 * [Verzeichnis mit adoc](./documentation/usage)
 * [pdflatex and create png from LaTeX](./documentation/usage/latex-mircroservice.adoc)

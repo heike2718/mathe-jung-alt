@@ -221,11 +221,11 @@ npx nx generate @nx/angular:lib model --directory=core --tags='domain:core, type
 Unterschieden wird zwischen Anlegen (also Hochladen einer neuen eps) und Ändern (also Austauschen einer vorhandenen)
 
 ```
-npx nx generate @nx/angular:library --name=embeddable-images-api --buildable=true --directory=libs/shared/embeddable-images/api --importPath=@mja-ws/libs/shared/embeddable-image/api --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:embeddable-images", "type:api" --no-interactive --dry-run
+npx nx generate @nx/angular:library --name=embeddable-images-api --buildable=true --directory=libs/shared/embeddable-images/api --importPath=@rbk-ws/libs/shared/embeddable-image/api --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:embeddable-images", "type:api" --no-interactive --dry-run
 
-npx nx generate @nx/angular:library --name=embeddable-images-data --buildable=true --directory=libs/shared/embeddable-images/data --importPath=@mja-ws/libs/shared/embeddable-images/data --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:embeddable-images, type:data" --no-interactive --dry-run
+npx nx generate @nx/angular:library --name=embeddable-images-data --buildable=true --directory=libs/shared/embeddable-images/data --importPath=@rbk-ws/libs/shared/embeddable-images/data --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:embeddable-images, type:data" --no-interactive --dry-run
 
-npx nx generate @nx/angular:library --name=embeddable-images-model --buildable=true --directory=libs/shared/embeddable-images/model --importPath=@mja-ws/libs/shared/embeddable-images/model --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:embeddable-images, type:model" --no-interactive
+npx nx generate @nx/angular:library --name=embeddable-images-model --buildable=true --directory=libs/shared/embeddable-images/model --importPath=@rbk-ws/libs/shared/embeddable-images/model --projectNameAndRootFormat=as-provided --skipModule=true --style=scss --tags="domain:embeddable-images, type:model" --no-interactive
 ```
 
 __lint:__

@@ -1,6 +1,6 @@
 # Neuerungen von Angular 17 einbauen
 
-apps/mja-app/project.json
+apps/raetselbaukasten/project.json
 
 ```
       "executor": "@angular-devkit/build-angular:browser-esbuild",

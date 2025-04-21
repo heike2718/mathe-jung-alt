@@ -8,9 +8,9 @@ und
 
 [A project without tags matching at least one constraint cannot depend on any libraries](https://www.jvandemo.com/how-to-deal-with-the-tslint-error-a-project-without-tags-cannot-depend-on-any-libraries-in-an-nx-monorepo/)
 
-## mja-app mit direkten Abhängigkeiten
+## raetselbaukasten mit direkten Abhängigkeiten
 
-![mja-app mit direkten Abhängigkeiten](./mja-app-direct-dependencies.png "direkte Abhängigkeiten mja-app")
+![raetselbaukasten mit direkten Abhängigkeiten](./raetselbaukasten-direct-dependencies.png "direkte Abhängigkeiten raetselbaukasten")
 
 __dependencies:__
 
@@ -150,7 +150,7 @@ __dependencies:__
 
 | library | tags | 
 |---------|------|
-| mja-app | type:app |
+| raetselbaukasten | type:app |
 | core-api |  type:core:api |
 | core-data | type:core:data |
 | core-model | type:core:model |

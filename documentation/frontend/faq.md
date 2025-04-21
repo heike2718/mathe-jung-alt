@@ -16,9 +16,9 @@ app.config.ts
 
 ```
 ...
-import { aufgabensammlungenDataProvider } from '@mja-ws/aufgabensammlungen/api';
-import { raetselDataProvider } from '@mja-ws/raetsel/api';
-import { medienDataProvider } from '@mja-ws/medien/api';
+import { aufgabensammlungenDataProvider } from '@rbk-ws/aufgabensammlungen/api';
+import { raetselDataProvider } from '@rbk-ws/raetsel/api';
+import { medienDataProvider } from '@rbk-ws/medien/api';
 
 ...
 

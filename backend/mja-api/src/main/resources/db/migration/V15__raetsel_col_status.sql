@@ -1,1 +1,0 @@
-ALTER TABLE RAETSEL ADD COLUMN STATUS varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT 'ERFASST' NOT NULL COMMENT 'Status eines Rätsels entsprechend Enum';

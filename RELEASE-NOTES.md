@@ -1,8 +1,12 @@
 # Release-Notes
 
+__4.0.0__
+
+Umbenannt zu raetselbaukasten
+
 __2.6.9__
 
-+ [Sitennummern werden nicht gedruckt](https://github.com/heike2718/mathe-jung-alt/issues/132)
++ [Seitennummern werden nicht gedruckt](https://github.com/heike2718/mathe-jung-alt/issues/132)
 
 
 
