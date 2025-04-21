@@ -1,0 +1,33 @@
+ALTER TABLE RAETSEL ADD COLUMN FILENAME_VORSCHAU_FRAGE varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'Name PNG-Datei für die Frage - die ersten 13 Zeichen einer UUID und Endung.png';
+ALTER TABLE RAETSEL ADD COLUMN FILENAME_VORSCHAU_LOESUNG varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT 'Name PNG-Datei für die Lösung - die ersten 13 Zeichen einer UUID und Endung.png';
+
+
+CREATE OR REPLACE VIEW mathe_jung_alt.VW_AUFGABEN
+AS
+select
+	r.UUID,
+	r.NAME,
+	r.SCHLUESSEL,
+	r.STATUS,
+	r.FILENAME_VORSCHAU_FRAGE,
+	r.FILENAME_VORSCHAU_LOESUNG,
+	e.NUMMER,
+	e.PUNKTE,
+	e.GRUPPE,
+	r.ANTWORTVORSCHLAEGE,
+	vq.ART as QUELLE_ART,
+	vq.MEDIUM_TITEL,
+	vq.SEITE,
+	vq.AUSGABE,
+	vq.JAHRGANG,
+	vq.PERSON,
+	vq.USER_ID,
+	vq.DESKRIPTOREN
+from
+	RAETSEL r,
+	RAETSELGRUPPENELEMENTE e,
+	VW_QUELLEN vq
+where
+    e.RAETSEL = r.UUID
+	AND r.QUELLE = vq.UUID;
+

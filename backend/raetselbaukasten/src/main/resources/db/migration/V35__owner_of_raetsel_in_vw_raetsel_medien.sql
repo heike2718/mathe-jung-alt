@@ -1,0 +1,30 @@
+use mathe_jung_alt;
+
+CREATE OR REPLACE VIEW mathe_jung_alt.VW_MEDIEN_RAETSEL
+AS
+SELECT
+	r.UUID as RAETSEL_ID ,
+	r.SCHLUESSEL ,
+	r.NAME,
+	r.FREIGEGEBEN ,
+	r.HERKUNFT,
+	r.OWNER AS RAETSEL_OWNER,
+	vq.MEDIUM_UUID,
+	vq.MEDIUM_TITEL,
+	vq.MEDIUM_ART,
+	vq.AUTOR,
+	vq.AUSGABE,
+	vq.JAHR,
+	vq.KLASSE,
+	vq.STUFE,
+	vq.SEITE,
+	vq.PFAD
+from
+	VW_QUELLEN vq ,
+	RAETSEL r
+where
+	r.QUELLE = vq.UUID
+	and vq.MEDIUM_UUID is not NULL
+order by
+	r.SCHLUESSEL;
+

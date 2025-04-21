@@ -26,7 +26,3 @@ hs_err_pid*
 .nx/
 
 .quarkus/
-
-backend/mja-api/src/main/resources/META-INF/resources/mja-admin/
-backend/mja-api/src/main/resources/META-INF/resources/bla/
-backend/raetselbaukasten/

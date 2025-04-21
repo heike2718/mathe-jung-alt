@@ -2,6 +2,8 @@
 
 Sammlung von Aufgaben als LaTeX und mit Metadaten in einer Datenbank. Tools, um daraus Aufgabenblätter und Karteien für den Unterricht zu generieren oder Daten für Online-Quizzspiele sowie die Aufgaben für den Minikaenguru- Wettbewerb.
 
+Ist Client vom minikaenguru-statistik.
+
 ## Documentation
 
 Links zur Dokumentation:
