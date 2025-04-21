@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Antwortvorschlag } from '@rbk-ws/raetsel/model';
 
 @Component({
-    selector: 'mja-antwortvorschlag',
+    selector: 'rbk-antwortvorschlag',
     imports: [
         CommonModule,
     ],

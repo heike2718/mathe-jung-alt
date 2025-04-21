@@ -6,7 +6,7 @@ import { Configuration } from "@rbk-ws/shared/config";
 import { calculateFileSize } from "@rbk-ws/shared/util";
 
 @Component({
-    selector: 'mja-file-info',
+    selector: 'rbk-file-info',
     imports: [
         CommonModule,
         MatButtonModule,

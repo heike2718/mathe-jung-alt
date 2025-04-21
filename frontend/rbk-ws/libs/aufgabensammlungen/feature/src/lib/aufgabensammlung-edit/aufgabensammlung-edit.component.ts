@@ -24,7 +24,7 @@ import {
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'mja-aufgabensammlung-edit',
+    selector: 'rbk-aufgabensammlung-edit',
     imports: [
         CommonModule,
         MatCardModule,

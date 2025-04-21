@@ -269,8 +269,8 @@
                             @for (embeddableImageInfo of embeddableImageInfosFrage; track $index) {
 
                             <mat-list-item>
-                                <mja-ws-embeddable-image-info
-                                    [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
+                                <rbk-embeddable-image-info
+                                    [embeddableImageInfo]="embeddableImageInfo"></rbk-embeddable-image-info>
                             </mat-list-item>
                             }
 
@@ -282,14 +282,14 @@
 
                             @if (!fileInfoFrage) {
                             <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-                            <mja-select-file [selectFileModel]="selectFileFrageModel"
-                                (fileSelected)="onFileSelected($event, 'FRAGE')"></mja-select-file>
+                            <rbk-select-file [selectFileModel]="selectFileFrageModel"
+                                (fileSelected)="onFileSelected($event, 'FRAGE')"></rbk-select-file>
                             } @else {
-                            <mja-file-info [titel]="selectFileFrageModel.titel"
+                            <rbk-file-info [titel]="selectFileFrageModel.titel"
                                 [beschreibung]="selectFileFrageModel.beschreibung" [fileName]="fileInfoFrage.file.name"
                                 [maxSizeBytes]="selectFileFrageModel.maxSizeBytes"
                                 [actualFileSize]="fileInfoFrage.fileSize">
-                            </mja-file-info>
+                            </rbk-file-info>
 
                             <button mat-raised-button color="primary" title="gewählte Datei hochladen"
                                 (click)="uploadFile('FRAGE')">Datei hochladen</button>
@@ -322,8 +322,8 @@
 
                             @for (embeddableImageInfo of embeddableImageInfosLoesung; track $index) {
                             <mat-list-item>
-                                <mja-ws-embeddable-image-info
-                                    [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
+                                <rbk-embeddable-image-info
+                                    [embeddableImageInfo]="embeddableImageInfo"></rbk-embeddable-image-info>
                             </mat-list-item>
                             }
 
@@ -334,15 +334,15 @@
 
                             @if (!fileInfoLoesung) {
                             <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-                            <mja-select-file [selectFileModel]="selectFileLoesungModel"
-                                (fileSelected)="onFileSelected($event, 'LOESUNG')"></mja-select-file>
+                            <rbk-select-file [selectFileModel]="selectFileLoesungModel"
+                                (fileSelected)="onFileSelected($event, 'LOESUNG')"></rbk-select-file>
                             } @else {
-                            <mja-file-info [titel]="selectFileLoesungModel.titel"
+                            <rbk-file-info [titel]="selectFileLoesungModel.titel"
                                 [beschreibung]="selectFileLoesungModel.beschreibung"
                                 [fileName]="fileInfoLoesung.file.name"
                                 [maxSizeBytes]="selectFileLoesungModel.maxSizeBytes"
                                 [actualFileSize]="fileInfoLoesung.fileSize">
-                            </mja-file-info>
+                            </rbk-file-info>
 
                             <button mat-raised-button color="primary" title="gewählte Datei hochladen"
                                 (click)="uploadFile('LOESUNG')">Datei
@@ -412,9 +412,9 @@
 
             <!-- Deskriptoren -->
 
-            @if (selectItemsCompomentModel) {
-            <mja-select-items [model]="selectItemsCompomentModel"
-                (modelChanged)="onSelectItemsCompomentModelChanged($event)"></mja-select-items>
+            @if (SelectItemsComponentModel) {
+            <rbk-select-items [model]="SelectItemsComponentModel"
+                (modelChanged)="onSelectItemsComponentModelChanged($event)"></rbk-select-items>
             }
         </mat-card-content>
 

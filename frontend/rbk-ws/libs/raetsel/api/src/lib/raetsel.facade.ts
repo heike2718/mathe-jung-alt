@@ -10,7 +10,7 @@ import {
   PaginationState,
   Schriftgroesse,
   SelectableItem,
-  SelectItemsCompomentModel,
+  SelectItemsComponentModel,
   Quellenart,
   Medienart,
   QuelleDto
@@ -148,17 +148,17 @@ export class RaetselFacade {
 
   
 
-  initSelectItemsCompomentModel(selectedDeskriptoren: DeskriptorUI[], alleDeskriptoren: DeskriptorUI[]): SelectItemsCompomentModel {
+  initSelectItemsComponentModel(selectedDeskriptoren: DeskriptorUI[], alleDeskriptoren: DeskriptorUI[]): SelectItemsComponentModel {
 
     const gewaehlteItems: SelectableItem[] = [];
-    selectedDeskriptoren.forEach(d => gewaehlteItems.push({ id: d.id, name: d.name, selected: true }));
+    selectedDeskriptoren.forEach(d => gewaehlteItems.push({ id: d.id, name: d.name }));
 
     const vorrat: SelectableItem[] = [];
     alleDeskriptoren.forEach(d => {
 
       const found = selectedDeskriptoren.find((descr) => { return descr.id === d.id });
       if (!found) {
-        vorrat.push({ id: d.id, name: d.name, selected: false })
+        vorrat.push({ id: d.id, name: d.name })
       }
     });
 

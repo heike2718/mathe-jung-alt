@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { JaNeinDialogData } from './ja-nein-dialog.model';
 
 @Component({
-    selector: 'mja-ja-nein',
+    selector: 'rbk-ja-nein',
     imports: [
         CommonModule,
         MatButtonModule,

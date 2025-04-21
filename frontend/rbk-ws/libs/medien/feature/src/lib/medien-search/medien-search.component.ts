@@ -13,7 +13,7 @@ import { Subscription, of, tap } from 'rxjs';
 import { MediensucheTrefferItem } from '@rbk-ws/medien/model';
 
 @Component({
-    selector: 'mja-medien-search',
+    selector: 'rbk-medien-search',
     imports: [
         CommonModule,
         MatTableModule,

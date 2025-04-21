@@ -40,7 +40,7 @@ import { LinkedAufgabensammlungenComponent } from '../linked-aufgabensammlungen/
 import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
-    selector: 'mja-raetsel-details',
+    selector: 'rbk-raetsel-details',
     imports: [
         CommonModule,
         CdkAccordionModule,
@@ -59,7 +59,6 @@ import { MatBadgeModule } from '@angular/material/badge';
         AntwortvorschlagComponent,
         EmbeddableImageVorschauComponent,
         EmbeddableImageInfoComponent,
-        GeneratorParametersDialogComponent,
         LinkedAufgabensammlungenComponent
     ],
     templateUrl: './raetsel-details.component.html',

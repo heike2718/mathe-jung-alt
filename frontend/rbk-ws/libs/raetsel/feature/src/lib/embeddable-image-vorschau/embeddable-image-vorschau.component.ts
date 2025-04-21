@@ -8,7 +8,7 @@ import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, T
 import { Configuration } from '@rbk-ws/shared/config';
 
 @Component({
-    selector: 'mja-embeddable-image-vorschau',
+    selector: 'rbk-embeddable-image-vorschau',
     imports: [
         CommonModule,
         MatButtonModule,

@@ -14,7 +14,7 @@ import { MediumDto, GuiMedienartenMap, GuiMedienart, initialGuiMedienart } from 
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'mja-medium-edit',
+    selector: 'rbk-medium-edit',
     imports: [
         CommonModule,
         MatCardModule,

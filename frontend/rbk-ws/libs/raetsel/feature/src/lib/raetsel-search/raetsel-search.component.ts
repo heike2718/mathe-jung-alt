@@ -8,7 +8,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
 import { RaetselDataSource, RaetselFacade } from '@rbk-ws/raetsel/api';
 import { deskriptorenToString, initialRaetselSuchfilter, isSuchfilterEmpty, ModusSucheMitDeskriptoren, ModusVolltextsuche, Raetsel, RaetselSuchfilter } from '@rbk-ws/raetsel/model';
-import { initialSelectItemsComponentModel, PageDefinition, PaginationState, QuelleDto, SelectableItem, SelectItemsCompomentModel } from '@rbk-ws/core/model';
+import { initialSelectItemsComponentModel, PageDefinition, PaginationState, QuelleDto, SelectableItem, SelectItemsComponentModel } from '@rbk-ws/core/model';
 import { combineLatest, debounceTime, merge, Subscription, tap } from 'rxjs';
 import { AuthFacade } from '@rbk-ws/core/api';
 import { CoreFacade } from '@rbk-ws/core/api';
@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { HoverDetailsDirective } from 'shared/directives';
 
 @Component({
-    selector: 'mja-raetsel-search',
+    selector: 'rbk-raetsel-search',
     imports: [
         CommonModule,
         FormsModule,
@@ -51,7 +51,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
   isAutor = false;
   anzahlRaetsel = 0;
 
-  selectItemsCompomentModel: SelectItemsCompomentModel = initialSelectItemsComponentModel;
+  SelectItemsComponentModel: SelectItemsComponentModel = initialSelectItemsComponentModel;
 
   #raetselFacade = inject(RaetselFacade);
   #authFacade = inject(AuthFacade);
@@ -105,7 +105,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
 
       ([selectedSuchfilter, alleDeskriptoren]) => {
         if (selectedSuchfilter) {
-          this.selectItemsCompomentModel = this.#raetselFacade.initSelectItemsCompomentModel(selectedSuchfilter.deskriptoren, alleDeskriptoren);
+          this.SelectItemsComponentModel = this.#raetselFacade.initSelectItemsComponentModel(selectedSuchfilter.deskriptoren, alleDeskriptoren);
         }
       }
     );
@@ -242,7 +242,7 @@ export class RaetselSearchComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  onSelectItemsCompomentModelChanged(model: SelectItemsCompomentModel): void {
+  onSelectItemsComponentModelChanged(model: SelectItemsComponentModel): void {
 
     const selectableItems: SelectableItem[] = model.gewaehlteItems.length > 0 ? model.gewaehlteItems : [];
 

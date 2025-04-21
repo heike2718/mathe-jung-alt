@@ -9,7 +9,7 @@ import { Benutzerart } from '@rbk-ws/core/model';
 import { HoverDetailsDirective } from 'shared/directives';
 
 @Component({
-    selector: 'mja-aufgabensammlungselement',
+    selector: 'rbk-aufgabensammlungselement',
     imports: [
         CommonModule,
         MatBadgeModule,

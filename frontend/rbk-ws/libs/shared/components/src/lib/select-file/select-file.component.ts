@@ -10,7 +10,7 @@ import { isValidFileName } from "@rbk-ws/shared/util";
 
 
 @Component({
-    selector: 'mja-select-file',
+    selector: 'rbk-select-file',
     imports: [
         CommonModule,
         MatButtonModule,

@@ -1,4 +1,4 @@
-export { MjaAPIHttpInterceptor } from './lib/api-http.interceptor';
+export { RaetselbaukastenAPIHttpInterceptor } from './lib/raetselbaukasten-api-http.interceptor';
 
 export { ERROR_MESSAGE_CONTEXT } from './lib/http.context';
 

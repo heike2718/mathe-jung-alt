@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { initialSelectItemsComponentModel, SelectableItem, SelectItemsCompomentModel } from "@rbk-ws/core/model";
+import { initialSelectItemsComponentModel, SelectableItem, SelectItemsComponentModel, sortByName } from "@rbk-ws/core/model";
 import { BehaviorSubject, Observable } from "rxjs";
 
 
@@ -8,14 +8,14 @@ import { BehaviorSubject, Observable } from "rxjs";
 })
 export class SelectItemsFacade {
 
-    #model: SelectItemsCompomentModel = initialSelectItemsComponentModel;
-    #selectableItemsModelSubject = new BehaviorSubject<SelectItemsCompomentModel>(initialSelectItemsComponentModel);
+    #model: SelectItemsComponentModel = initialSelectItemsComponentModel;
+    #selectableItemsModelSubject = new BehaviorSubject<SelectItemsComponentModel>(initialSelectItemsComponentModel);
 
     #initialVorrat: SelectableItem[] = [];
 
-    selectableItemsModel$: Observable<SelectItemsCompomentModel> = this.#selectableItemsModelSubject.asObservable();
+    selectableItemsModel$: Observable<SelectItemsComponentModel> = this.#selectableItemsModelSubject.asObservable();
 
-    init(model: SelectItemsCompomentModel): void {
+    init(model: SelectItemsComponentModel): void {
         this.#initialVorrat = model.vorrat;
         const restliste: SelectableItem[] = this.#getDifferenzmenge(model.vorrat, model.gewaehlteItems);
         this.#model = { ...model, vorrat: restliste };
@@ -38,7 +38,7 @@ export class SelectItemsFacade {
             }
         });
 
-        this.#model = { ...this.#model, vorrat: vorrat, gewaehlteItems: gewaehlt };
+        this.#model = { ...this.#model, vorrat: sortByName(vorrat), gewaehlteItems: sortByName(gewaehlt) };
         this.#fireModelChanged(this.#model);
     }
 
@@ -53,11 +53,11 @@ export class SelectItemsFacade {
             }
         });
 
-        this.#model = { ...this.#model, vorrat: vorrat, gewaehlteItems: gewaehlt };
+        this.#model = { ...this.#model, vorrat: sortByName(vorrat), gewaehlteItems: sortByName(gewaehlt) };
         this.#fireModelChanged(this.#model);
     }
 
-    #fireModelChanged(model: SelectItemsCompomentModel): void {
+    #fireModelChanged(model: SelectItemsComponentModel): void {
         this.#selectableItemsModelSubject.next(model);
     }
 
@@ -67,7 +67,7 @@ export class SelectItemsFacade {
             return !auszuschliessen.includes(ele)
         });
 
-        return result;
+        return sortByName(result);
     };
 
 

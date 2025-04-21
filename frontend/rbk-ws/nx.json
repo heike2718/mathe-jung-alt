@@ -69,7 +69,7 @@
       }
     }
   },
-  "defaultProject": "mja-app",
+  "defaultProject": "raetselbaukasten",
   "useInferencePlugins": false,
   "defaultBase": "main",
   "useLegacyCache": true

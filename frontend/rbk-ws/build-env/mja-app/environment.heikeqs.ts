@@ -4,14 +4,14 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 //     production: false,
 //     baseUrl: 'http://heikeqs/api',
 //     withCredentials: true,
-//     assetsPath: '/mja-app/assets/'
+//     assetsPath: '/raetselbaukasten/assets/'
 //   };
 
 export const environment = {
   production: false,
   baseUrl: '',
   withCredentials: true,
-  assetsPath: '/mja-app/assets/',
+  assetsPath: '/raetselbaukasten/assets/',
   providers: [
     provideStoreDevtools({ maxAge: 25 , connectInZone: true})
   ],

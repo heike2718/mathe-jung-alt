@@ -1,0 +1,28 @@
+li {
+  margin-bottom: 1em;
+}
+
+.emphasized {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem; // Abstand zwischen den Karten
+  flex-wrap: wrap; // Falls nicht genug Platz ist, rutschen die Karten in die nächste Zeile
+  padding: 2rem 1rem;
+}
+
+.dashboard-card {
+  cursor: pointer;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+}

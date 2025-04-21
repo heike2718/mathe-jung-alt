@@ -4,7 +4,7 @@ import { LoadingService } from '@rbk-ws/shared/messaging/api';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 @Component({
-    selector: 'mja-loader',
+    selector: 'rbk-loader',
     imports: [CommonModule, MatProgressSpinnerModule],
     templateUrl: './loading-indicator.component.html',
     styleUrls: ['./loading-indicator.component.scss']

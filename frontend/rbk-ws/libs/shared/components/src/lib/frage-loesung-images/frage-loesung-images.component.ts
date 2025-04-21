@@ -7,7 +7,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Configuration } from '@rbk-ws/shared/config';
 
 @Component({
-    selector: 'mja-frage-loesung-images',
+    selector: 'rbk-frage-loesung-images',
     imports: [
         CommonModule,
         CdkAccordionModule,

@@ -1,0 +1,27 @@
+{
+  "name": "raetselbaukasten-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/raetselbaukasten-e2e/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["raetselbaukasten"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/raetselbaukasten-e2e/cypress.config.ts",
+        "devServerTarget": "raetselbaukasten:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "raetselbaukasten:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  }
+}

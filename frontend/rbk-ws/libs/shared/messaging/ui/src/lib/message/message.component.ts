@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
-    selector: 'mja-message',
+    selector: 'rbk-message',
     imports: [CommonModule, MatIconModule],
     templateUrl: './message.component.html',
     styleUrls: ['./message.component.scss']

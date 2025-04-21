@@ -30,14 +30,14 @@
 
 <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
 @if (showSelectFileComponent()) {
-<mja-select-file [selectFileModel]="selectFileModel" (fileSelected)="onFileSelected($event)"></mja-select-file>
+<rbk-select-file [selectFileModel]="selectFileModel" (fileSelected)="onFileSelected($event)"></rbk-select-file>
 
 }
 
 @if (fileInfo) {
-<mja-file-info [titel]="selectFileModel.titel" [beschreibung]="selectFileModel.beschreibung"
+<rbk-file-info [titel]="selectFileModel.titel" [beschreibung]="selectFileModel.beschreibung"
     [fileName]="fileInfo.file.name" [maxSizeBytes]="selectFileModel.maxSizeBytes" [actualFileSize]="fileInfo.fileSize">
-</mja-file-info>
+</rbk-file-info>
 }
 
 <div class="button-container mt-2">

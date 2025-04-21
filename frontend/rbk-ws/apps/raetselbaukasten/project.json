@@ -1,0 +1,142 @@
+{
+  "name": "raetselbaukasten",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/raetselbaukasten/src",
+  "prefix": "raetselbaukasten",
+  "tags": ["type:app"],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser-esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/raetselbaukasten",
+        "index": "apps/raetselbaukasten/src/index.html",
+        "main": "apps/raetselbaukasten/src/main.ts",
+        "polyfills": "apps/raetselbaukasten/src/polyfills.ts",
+        "tsConfig": "apps/raetselbaukasten/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/raetselbaukasten/src/favicon.ico",
+          "apps/raetselbaukasten/src/assets"
+        ],
+        "styles": [
+          "apps/raetselbaukasten/src/styles.scss",
+          "node_modules/material-icons/iconfont/material-icons.scss"
+        ],
+        "allowedCommonJsDependencies": ["angular2-uuid", "deepmerge"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1mb",
+              "maximumError": "1.2mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "200kb"
+            }
+          ],
+          "index": {
+            "input": "build-env/raetselbaukasten/index.prod.html",
+            "output": "index.html"
+          },
+          "fileReplacements": [
+            {
+              "replace": "apps/raetselbaukasten/src/environments/environment.ts",
+              "with": "apps/raetselbaukasten/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "local": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1mb",
+              "maximumError": "1.2mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "200kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/raetselbaukasten/src/environments/environment.ts",
+              "with": "build-env/raetselbaukasten/environment.local.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "heikeqs": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1mb",
+              "maximumError": "1.2mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "200kb"
+            }
+          ],
+          "index": {
+            "input": "build-env/raetselbaukasten/index.heikeqs.html",
+            "output": "index.html"
+          },
+          "fileReplacements": [
+            {
+              "replace": "apps/raetselbaukasten/src/environments/environment.ts",
+              "with": "build-env/raetselbaukasten/environment.heikeqs.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "raetselbaukasten:build:production"
+        },
+        "development": {
+          "buildTarget": "raetselbaukasten:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "raetselbaukasten:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/raetselbaukasten"],
+      "options": {
+        "jestConfig": "apps/raetselbaukasten/jest.config.ts"
+      }
+    }
+  }
+}

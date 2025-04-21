@@ -7,7 +7,7 @@ import { AufgabensammlungselementDialogData } from './aufgabensammlungselement-d
 import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'mja-Aufgabensammlungselement',
+    selector: 'rbk-Aufgabensammlungselement',
     imports: [
         CommonModule,
         MatButtonModule,

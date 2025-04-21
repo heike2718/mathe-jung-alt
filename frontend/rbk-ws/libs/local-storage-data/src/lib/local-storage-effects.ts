@@ -8,7 +8,7 @@ import { filterDefined } from '@rbk-ws/shared/util';
 export class LocalStorageEffects {
   storageEvent = createEffect(() => {
     return fromEvent<StorageEvent>(window, 'storage').pipe(
-      map(x => x?'key':''),
+      map(evt => evt.key),
       // pluck('key'),
       filterDefined,
       map((featureState) => syncLocalStorage({ featureState }))

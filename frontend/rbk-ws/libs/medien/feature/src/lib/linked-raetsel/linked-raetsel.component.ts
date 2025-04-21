@@ -6,7 +6,7 @@ import { LinkedRaetsel } from '@rbk-ws/medien/model';
 import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
-    selector: 'mja-linked-raetsel',
+    selector: 'rbk-linked-raetsel',
     imports: [
         CommonModule,
         MatBadgeModule,

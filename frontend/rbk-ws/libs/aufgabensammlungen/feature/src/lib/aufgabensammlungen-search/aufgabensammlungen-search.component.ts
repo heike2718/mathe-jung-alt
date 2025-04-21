@@ -42,7 +42,7 @@ const REFERENZTYP = 'referenztyp';
 const REFERENZ = 'referenz';
 
 @Component({
-    selector: 'mja-aufgabensammlungen-search',
+    selector: 'rbk-aufgabensammlungen-search',
     imports: [
         CommonModule,
         MatTableModule,

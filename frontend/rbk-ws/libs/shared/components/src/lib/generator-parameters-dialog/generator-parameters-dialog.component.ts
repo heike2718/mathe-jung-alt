@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectGeneratorParametersUIModel } from '@rbk-ws/core/model';
 
 @Component({
-    selector: 'mja-generator-parameters-dialog',
+    selector: 'rbk-generator-parameters-dialog',
     imports: [
         CommonModule,
         FormsModule,

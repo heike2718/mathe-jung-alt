@@ -5,7 +5,7 @@ import { InfoDialogModel } from './info-dialog.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 @Component({
-    selector: 'mja-ws-info-dialog',
+    selector: 'rbk-info-dialog',
     imports: [
         CommonModule,
         MatButtonModule,

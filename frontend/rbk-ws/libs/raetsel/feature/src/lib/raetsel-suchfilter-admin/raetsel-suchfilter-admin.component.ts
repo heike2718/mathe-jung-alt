@@ -2,13 +2,13 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnDe
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { SelectItemsCompomentModel } from '@rbk-ws/core/model';
+import { SelectItemsComponentModel } from '@rbk-ws/core/model';
 import { debounceTime, distinctUntilChanged, fromEvent, Subscription, tap } from 'rxjs';
 import { RaetselFacade } from '@rbk-ws/raetsel/api';
 import { SelectItemsComponent } from '@rbk-ws/shared/components';
 
 @Component({
-    selector: 'mja-raetsel-suchfilter-admin',
+    selector: 'rbk-raetsel-suchfilter-admin',
     imports: [
         CommonModule,
         MatFormFieldModule,
@@ -29,13 +29,13 @@ export class RaetselSuchfilterAdminComponent implements AfterViewInit, OnDestroy
   @ViewChild('input') input!: ElementRef;
 
   @Input()
-  selectItemsCompomentModel!: SelectItemsCompomentModel;
+  SelectItemsComponentModel!: SelectItemsComponentModel;
 
   @Output()
   private inputChanged: EventEmitter<string> = new EventEmitter<string>();
 
   @Output()
-  private selectableItemsChanged: EventEmitter<SelectItemsCompomentModel> = new EventEmitter<SelectItemsCompomentModel>();
+  private selectableItemsChanged: EventEmitter<SelectItemsComponentModel> = new EventEmitter<SelectItemsComponentModel>();
 
   ngAfterViewInit(): void {
 
@@ -65,7 +65,7 @@ export class RaetselSuchfilterAdminComponent implements AfterViewInit, OnDestroy
     this.#suchfilterSubscription.unsubscribe();
   }
 
-  public onSelectItemsCompomentModelChanged($event: SelectItemsCompomentModel) {
+  public onSelectItemsComponentModelChanged($event: SelectItemsComponentModel) {
     this.selectableItemsChanged.emit($event);
   }
 

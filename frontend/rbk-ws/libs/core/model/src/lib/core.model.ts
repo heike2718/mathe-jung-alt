@@ -59,17 +59,17 @@ export type Schwierigkeitsgrad =
 export interface SelectableItem {
   readonly id: string | number;
   readonly name: string;
-  readonly selected: boolean;
+  // readonly selected: boolean;
 };
 
-export interface SelectItemsCompomentModel {
+export interface SelectItemsComponentModel {
   ueberschriftAuswahlliste: string;
   ueberschriftGewaehlteItems: string;
   vorrat: SelectableItem[];
   gewaehlteItems: SelectableItem[];
 };
 
-export const initialSelectItemsComponentModel: SelectItemsCompomentModel = {
+export const initialSelectItemsComponentModel: SelectItemsComponentModel = {
   ueberschriftAuswahlliste: '',
   ueberschriftGewaehlteItems: 'gewählt:',
   vorrat: [],
@@ -187,3 +187,7 @@ export interface SelectGeneratorParametersUIModel {
 export interface AnzahlabfrageErgebnis {
   readonly ergebnis: number;
 };
+
+export function sortByName(items: SelectableItem[]): SelectableItem[] {
+  return [...items].sort((a, b) => a.name.localeCompare(b.name, 'de'));
+}

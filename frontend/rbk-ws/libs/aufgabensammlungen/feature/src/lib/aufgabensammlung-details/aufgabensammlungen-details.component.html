@@ -70,10 +70,10 @@
 
     <p>Klicken Sie auf die Nummer. Die Aufgabe wird dann am Ende der Tabelle angezeigt.</p>
 
-    <mja-aufgabensammlungselement [aufgabensammlung]="sammlung" [benutzerart]="user.benutzerart"
+    <rbk-aufgabensammlungselement [aufgabensammlung]="sammlung" [benutzerart]="user.benutzerart"
         (showImages)="onShowImagesElement($event)" (editElement)="onEditElement($event)"
         (deleteElement)="onDeleteElement($event)">
-    </mja-aufgabensammlungselement>
+    </rbk-aufgabensammlungselement>
 
     @if (schluessel.length > 0) {
 
@@ -94,7 +94,7 @@
     }
 
     @if (images) {
-    <mja-frage-loesung-images [images]="images"></mja-frage-loesung-images>
+    <rbk-frage-loesung-images [images]="images"></rbk-frage-loesung-images>
     } @else {
     <p>Entweder wurde die Vorschau nicht geladen oder sie existiert nicht</p>
     }

@@ -9,7 +9,7 @@
         </mat-chip-listbox>
 
         @if (raetsel.images) {
-        <mja-frage-loesung-images [images]="raetsel.images"></mja-frage-loesung-images>
+        <rbk-frage-loesung-images [images]="raetsel.images"></rbk-frage-loesung-images>
         }
 
         @if (raetsel.antwortvorschlaege.length > 0) {
@@ -23,7 +23,7 @@
                 </mat-expansion-panel-header>
 
                 @for (antwortvorschlag of raetsel.antwortvorschlaege; track $index) {
-                <mja-antwortvorschlag [antwortvorschlag]="antwortvorschlag"></mja-antwortvorschlag>
+                <rbk-antwortvorschlag [antwortvorschlag]="antwortvorschlag"></rbk-antwortvorschlag>
                 }
             </mat-expansion-panel>
         </mat-accordion>
@@ -116,14 +116,14 @@
                 <mat-nav-list>
                     @for (embeddableImageInfo of raetsel.embeddableImageInfos; track $index) {
                     <mat-list-item>
-                        <mja-ws-embeddable-image-info
-                            [embeddableImageInfo]="embeddableImageInfo"></mja-ws-embeddable-image-info>
+                        <rbk-embeddable-image-info
+                            [embeddableImageInfo]="embeddableImageInfo"></rbk-embeddable-image-info>
                     </mat-list-item>
                     }
                 </mat-nav-list>
 
-                <mja-embeddable-image-vorschau [schluessel]=raetsel.schluessel
-                    [raetselId]=raetsel.id></mja-embeddable-image-vorschau>
+                <rbk-embeddable-image-vorschau [schluessel]=raetsel.schluessel
+                    [raetselId]=raetsel.id></rbk-embeddable-image-vorschau>
             </mat-expansion-panel>
             }
 
@@ -175,8 +175,8 @@
         </h2>
 
         @for (aufgabensammlung of liste; track $index) {
-        <mja-linked-as [aufgabensammlung]="aufgabensammlung"
-            (detailsClicked)="aufgabenammlungDetailsClicked($event)"></mja-linked-as>
+        <rbk-linked-as [aufgabensammlung]="aufgabensammlung"
+            (detailsClicked)="aufgabenammlungDetailsClicked($event)"></rbk-linked-as>
         }
         }
 

@@ -6,7 +6,7 @@ import { ImageDialogModel } from './image-dialog.model';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-    selector: 'mja-ws-image-dialog',
+    selector: 'rbk-image-dialog',
     imports: [
         CommonModule,
         MatButtonModule,

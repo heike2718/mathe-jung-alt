@@ -61,7 +61,7 @@ export const raetselFeature = createFeature({
                 selectableDeskriptoren.push({
                     id: d.id,
                     name: d.name,
-                    selected: true
+                    // selected: true
                 })
             });
 
@@ -101,7 +101,7 @@ export const raetselFeature = createFeature({
                 selectableDeskriptoren.push({
                     id: d.id,
                     name: d.name,
-                    selected: true
+                    // selected: true
                 })
             });
 

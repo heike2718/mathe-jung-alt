@@ -13,7 +13,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { RaetselFacade } from '@rbk-ws/raetsel/api';
 
 @Component({
-    selector: 'mja-medium-details',
+    selector: 'rbk-medium-details',
     imports: [
         CommonModule,
         FormsModule,

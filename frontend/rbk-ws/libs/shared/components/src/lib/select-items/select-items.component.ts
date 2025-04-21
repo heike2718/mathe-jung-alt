@@ -4,10 +4,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { Subscription } from 'rxjs';
 import { SelectItemsFacade } from '@rbk-ws/core/api';
-import { SelectableItem, SelectItemsCompomentModel } from '@rbk-ws/core/model';
+import { SelectableItem, SelectItemsComponentModel } from '@rbk-ws/core/model';
 
 @Component({
-    selector: 'mja-select-items',
+    selector: 'rbk-select-items',
     imports: [
         CommonModule,
         MatChipsModule,
@@ -23,10 +23,10 @@ export class SelectItemsComponent implements OnInit, OnDestroy {
   selectItemsFacade = inject(SelectItemsFacade);
 
   @Input()
-  model!: SelectItemsCompomentModel;
+  model!: SelectItemsComponentModel;
 
   @Output()
-  modelChanged: EventEmitter<SelectItemsCompomentModel> = new EventEmitter<SelectItemsCompomentModel>();
+  modelChanged: EventEmitter<SelectItemsComponentModel> = new EventEmitter<SelectItemsComponentModel>();
 
   ngOnInit(): void {
 

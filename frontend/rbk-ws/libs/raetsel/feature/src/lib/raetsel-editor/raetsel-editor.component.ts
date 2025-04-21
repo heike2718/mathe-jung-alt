@@ -32,7 +32,7 @@ import {
   LaTeXLayoutAntwortvorschlaege,
   OutputFormat,
   SelectableItem,
-  SelectItemsCompomentModel,
+  SelectItemsComponentModel,
   SelectGeneratorParametersUIModel,
   fontNamenSelectInput,
   FontName,
@@ -70,7 +70,7 @@ interface AntwortvorschlagFormValue {
 };
 
 @Component({
-    selector: 'mja-raetsel-editor',
+    selector: 'rbk-raetsel-editor',
     imports: [
         CommonModule,
         FormsModule,
@@ -89,13 +89,8 @@ interface AntwortvorschlagFormValue {
         CdkAccordionModule,
         TextFieldModule,
         ReactiveFormsModule,
-        FrageLoesungImagesComponent,
         SelectItemsComponent,
-        JaNeinDialogComponent,
-        EmbeddableImageVorschauComponent,
         EmbeddableImageInfoComponent,
-        GeneratorParametersDialogComponent,
-        ImageDialogComponent,
         SelectFileComponent,
         FileInfoComponent,
     ],
@@ -152,7 +147,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
   selectHerkunftstypInput: string[] = new GuiHerkunftstypenMap().getLabelsSorted();
 
-  selectItemsCompomentModel!: SelectItemsCompomentModel;
+  SelectItemsComponentModel!: SelectItemsComponentModel;
   dialog = inject(MatDialog);
 
   raetselFacade = inject(RaetselFacade);
@@ -241,7 +236,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
 
         this.#editRaetselPayloadCache = { ...this.guiEditRaetselPayload.editRaetselPayload };
         this.#selectedDeskriptoren = this.guiEditRaetselPayload.editRaetselPayload.deskriptoren;
-        this.selectItemsCompomentModel = this.raetselFacade.initSelectItemsCompomentModel(this.guiEditRaetselPayload.editRaetselPayload.deskriptoren, alleDeskriptoren);
+        this.SelectItemsComponentModel = this.raetselFacade.initSelectItemsComponentModel(this.guiEditRaetselPayload.editRaetselPayload.deskriptoren, alleDeskriptoren);
         this.embeddableImageInfosFrage = guiEditRaetselPayload.embeddableImageInfos.filter((info) => info.textart === 'FRAGE');
         this.embeddableImageInfosLoesung = guiEditRaetselPayload.embeddableImageInfos.filter((info) => info.textart === 'LOESUNG');
 
@@ -501,7 +496,7 @@ export class RaetselEditorComponent implements OnInit, OnDestroy {
     this.#addOrRemoveAntowrtvorschlagFormParts(anz);
   }
 
-  onSelectItemsCompomentModelChanged($event: SelectItemsCompomentModel) {
+  onSelectItemsComponentModelChanged($event: SelectItemsComponentModel) {
 
     if ($event) {
       const selectedItems: SelectableItem[] = $event.gewaehlteItems;

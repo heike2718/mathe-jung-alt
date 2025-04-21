@@ -2,9 +2,9 @@
 
 @if (isAutor) {
 <div class="grid-container-1">
-    <mja-raetsel-suchfilter-admin [selectItemsCompomentModel]="selectItemsCompomentModel"
+    <rbk-raetsel-suchfilter-admin [SelectItemsComponentModel]="SelectItemsComponentModel"
         (inputChanged)="onSuchfilterSuchstringChanged($event)"
-        (selectableItemsChanged)="onSelectItemsCompomentModelChanged($event)"></mja-raetsel-suchfilter-admin>
+        (selectableItemsChanged)="onSelectItemsComponentModelChanged($event)"></rbk-raetsel-suchfilter-admin>
 
     <mat-checkbox [(ngModel)]="modeFullTextSearchUnion" (change)="onSuchmodusChanged($event.checked)">Volltextsuche mit
         OR? (sonst AND)</mat-checkbox>
@@ -16,8 +16,8 @@
 } @else {
     <h2>Wählen Sie ein oder mehrere Tags, um nach Rätseln zu suchen.</h2>
 <div class="grid-container-1">
-    <mja-select-items [model]="selectItemsCompomentModel"
-        (modelChanged)="onSelectItemsCompomentModelChanged($event)"></mja-select-items>
+    <rbk-select-items [model]="SelectItemsComponentModel"
+        (modelChanged)="onSelectItemsComponentModelChanged($event)"></rbk-select-items>
 </div>
 }
 

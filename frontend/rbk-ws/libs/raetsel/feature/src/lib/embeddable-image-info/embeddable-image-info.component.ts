@@ -10,13 +10,12 @@ import { InfoDialogComponent, InfoDialogModel } from '@rbk-ws/shared/components'
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'mja-ws-embeddable-image-info',
+    selector: 'rbk-embeddable-image-info',
     imports: [
         CommonModule,
         MatIconModule,
         MatButtonModule,
-        MatDialogModule,
-        InfoDialogComponent
+        MatDialogModule
     ],
     templateUrl: './embeddable-image-info.component.html',
     styleUrls: ['./embeddable-image-info.component.scss']

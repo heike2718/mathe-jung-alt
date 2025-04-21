@@ -1,0 +1,15 @@
+<rbk-loader></rbk-loader>
+<rbk-layout>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav role="navigation">
+      <rbk-sidenav (sidenavClose)="sidenav.close()"></rbk-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <rbk-header (sidenavToggle)="sidenav.toggle()"></rbk-header>
+      <rbk-message></rbk-message>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</rbk-layout>

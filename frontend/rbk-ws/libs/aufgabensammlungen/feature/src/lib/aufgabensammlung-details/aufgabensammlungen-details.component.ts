@@ -30,7 +30,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthFacade } from '@rbk-ws/core/api';
 
 @Component({
-    selector: 'mja-aufgabensammlungen-details',
+    selector: 'rbk-aufgabensammlungen-details',
     imports: [
         CommonModule,
         FormsModule,
@@ -44,8 +44,6 @@ import { AuthFacade } from '@rbk-ws/core/api';
         MatListModule,
         MatFormFieldModule,
         FrageLoesungImagesComponent,
-        GeneratorParametersDialogComponent,
-        AufgabensammlungselementDialogComponent,
         AufgabensammlungselementeComponent
     ],
     templateUrl: './aufgabensammlungen-details.component.html',
