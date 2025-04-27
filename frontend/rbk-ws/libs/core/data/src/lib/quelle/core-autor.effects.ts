@@ -20,7 +20,7 @@ export class CoreAutorEffects {
         return this.#actions.pipe(
             ofType(coreQuelleActions.lOAD_AUTOR),
             switchMap(() =>
-                this.#httpClient.get<QuelleDto>('/api/quellen/autor/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
+                this.#httpClient.get<QuelleDto>('/raetselbaukasten/api/quellen/autor/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
             ),
             map((quelle: QuelleDto) => coreQuelleActions.cORE_AUTOR_LOADED({ quelle }))
         );

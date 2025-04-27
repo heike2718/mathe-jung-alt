@@ -26,7 +26,7 @@ export class RaetselHttpService {
 
     #http = inject(HttpClient);
 
-    #url = '/api/raetsel';
+    #url = '/raetselbaukasten/api/raetsel';
 
     findRaetsel(admin: boolean, suchfilter: RaetselSuchfilter, pageDefinition: PageDefinition): Observable<RaetselsucheTreffer> {
 

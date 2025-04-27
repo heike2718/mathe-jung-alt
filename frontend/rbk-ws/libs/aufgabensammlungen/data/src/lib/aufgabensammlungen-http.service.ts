@@ -19,7 +19,7 @@ import { generateUUID } from "@rbk-ws/shared/util";
 export class AufgabensammlungenHttpService {
 
     #http = inject(HttpClient);
-    #url = '/api/aufgabensammlungen';
+    #url = '/raetselbaukasten/api/aufgabensammlungen';
 
     findAufgabensammlungen(suchparameter: AufgabensammlungenSuchparameter, pageDefinition: PageDefinition): Observable<AufgabensammlungenTreffer> {
 

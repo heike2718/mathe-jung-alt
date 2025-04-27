@@ -19,7 +19,7 @@ export class CoreDeskriptorUIEffects {
         return this.#actions.pipe(
             ofType(coreDeskriptorenActions.lOAD_DESKRIPTOREN),
             switchMap(() =>
-                this.#httpClient.get<DeskriptorUI[]>('/api/deskriptoren/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
+                this.#httpClient.get<DeskriptorUI[]>('/raetselbaukasten/api/deskriptoren/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
             ),
             map((deskriptoren: DeskriptorUI[]) => coreDeskriptorenActions.cORE_DESKRIPTOREN_LOADED({ deskriptoren }))
         )
