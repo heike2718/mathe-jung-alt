@@ -11,7 +11,7 @@ export class ImagesHttpService {
 
     loadRaetselPNGs(schluessel: string): Observable<GeneratedImages> {
 
-        const url = '/api/raetsel/PNG/' + schluessel + '/v1';
+        const url = '/raetselbaukasten/api/raetsel/PNG/' + schluessel + '/v1';
         const headers = new HttpHeaders().set('Accept', 'application/json');
         return this.#http.get<GeneratedImages>(url, { headers: headers });
       }

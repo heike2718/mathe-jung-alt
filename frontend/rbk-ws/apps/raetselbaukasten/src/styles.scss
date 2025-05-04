@@ -217,7 +217,7 @@ mat-icon .clickable {
 // Standard `mat-card` bleibt flexibel
 mat-card {
   width: 80%;
-  max-width: 600px; // Anstatt min-width → Damit es sich anpassen kann
+  max-width: 1000px; // Anstatt min-width, damit es sich anpassen kann
   margin: 26px;
   align-items: center;
   padding: 10px;
