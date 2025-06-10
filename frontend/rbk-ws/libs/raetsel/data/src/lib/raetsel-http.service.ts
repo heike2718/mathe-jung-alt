@@ -140,7 +140,7 @@ export class RaetselHttpService {
     findByMedienart(medienart: Medienart): Observable<MediumQuelleDto[]> {
 
         const headers = new HttpHeaders().set('Accept', 'application/json');
-        const url = '/api/medien/quelle/v1';
+        const url = '/raetselbaukasten/api/medien/quelle/v1';
         let theMedienartStr: string = '';
         switch(medienart) {
             case 'BUCH': theMedienartStr = 'BUCH'; break;
