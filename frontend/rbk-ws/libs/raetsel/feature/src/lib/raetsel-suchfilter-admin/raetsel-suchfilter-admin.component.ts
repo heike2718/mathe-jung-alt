@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnDestroy, Output, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SelectItemsComponentModel } from '@rbk-ws/core/model';
@@ -10,11 +10,10 @@ import { SelectItemsComponent } from '@rbk-ws/shared/components';
 @Component({
     selector: 'rbk-raetsel-suchfilter-admin',
     imports: [
-        CommonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        SelectItemsComponent
-    ],
+    MatFormFieldModule,
+    MatInputModule,
+    SelectItemsComponent
+],
     templateUrl: './raetsel-suchfilter-admin.component.html',
     styleUrls: ['./raetsel-suchfilter-admin.component.scss']
 })

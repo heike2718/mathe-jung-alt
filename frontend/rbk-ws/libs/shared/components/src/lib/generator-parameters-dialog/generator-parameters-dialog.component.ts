@@ -1,5 +1,5 @@
 import { Component, Inject, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -10,13 +10,12 @@ import { SelectGeneratorParametersUIModel } from '@rbk-ws/core/model';
 @Component({
     selector: 'rbk-generator-parameters-dialog',
     imports: [
-        CommonModule,
-        FormsModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule
-    ],
+    FormsModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule
+],
     templateUrl: './generator-parameters-dialog.component.html',
     styleUrls: ['./generator-parameters-dialog.component.scss']
 })

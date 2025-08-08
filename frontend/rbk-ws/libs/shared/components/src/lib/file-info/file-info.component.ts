@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, Input, OnInit, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -8,10 +8,9 @@ import { calculateFileSize } from "@rbk-ws/shared/util";
 @Component({
     selector: 'rbk-file-info',
     imports: [
-        CommonModule,
-        MatButtonModule,
-        MatIconModule
-    ],
+    MatButtonModule,
+    MatIconModule
+],
     templateUrl: './file-info.component.html',
     styleUrls: ['./file-info.component.scss']
 })

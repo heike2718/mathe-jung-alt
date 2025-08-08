@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ImageDialogModel } from './image-dialog.model';
@@ -8,11 +8,10 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
     selector: 'rbk-image-dialog',
     imports: [
-        CommonModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatInputModule
-    ],
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule
+],
     templateUrl: './image-dialog.component.html',
     styleUrls: ['./image-dialog.component.scss']
 })

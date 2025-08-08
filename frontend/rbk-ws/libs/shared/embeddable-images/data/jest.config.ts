@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'embeddable-images-data',
-  preset: '../../../jest.preset.js',
+  preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../../../coverage/libs/shared/embeddable-images/data',
   transform: {

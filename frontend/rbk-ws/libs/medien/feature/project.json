@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/medien/feature/src",
   "projectType": "library",
+  "tags": ["type:feature"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -25,6 +26,5 @@
         "jestConfig": "libs/medien/feature/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:feature"]
+  }
 }
