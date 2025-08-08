@@ -1,5 +1,5 @@
 import { Component, Input, HostListener, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { GeneratedImage, GeneratedImages } from '@rbk-ws/core/model';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -9,10 +9,9 @@ import { Configuration } from '@rbk-ws/shared/config';
 @Component({
     selector: 'rbk-frage-loesung-images',
     imports: [
-        CommonModule,
-        CdkAccordionModule,
-        MatExpansionModule
-    ],
+    CdkAccordionModule,
+    MatExpansionModule
+],
     templateUrl: './frage-loesung-images.component.html',
     styleUrls: ['./frage-loesung-images.component.scss']
 })

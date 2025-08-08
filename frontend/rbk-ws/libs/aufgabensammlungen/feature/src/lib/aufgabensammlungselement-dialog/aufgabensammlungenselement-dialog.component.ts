@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -9,12 +9,11 @@ import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'rbk-Aufgabensammlungselement',
     imports: [
-        CommonModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatInputModule,
-        FormsModule
-    ],
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    FormsModule
+],
     templateUrl: './aufgabensammlungenselement-dialog.component.html',
     styleUrls: ['./aufgabensammlungenselement-dialog.component.scss']
 })

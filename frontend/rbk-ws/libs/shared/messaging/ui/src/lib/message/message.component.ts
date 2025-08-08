@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MessageService } from '@rbk-ws/shared/messaging/api';
 import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
     selector: 'rbk-message',
-    imports: [CommonModule, MatIconModule],
+    imports: [MatIconModule],
     templateUrl: './message.component.html',
     styleUrls: ['./message.component.scss']
 })

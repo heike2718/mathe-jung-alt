@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Configuration } from '@rbk-ws/shared/config';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,11 +12,10 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'rbk-embeddable-image-info',
     imports: [
-        CommonModule,
-        MatIconModule,
-        MatButtonModule,
-        MatDialogModule
-    ],
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule
+],
     templateUrl: './embeddable-image-info.component.html',
     styleUrls: ['./embeddable-image-info.component.scss']
 })

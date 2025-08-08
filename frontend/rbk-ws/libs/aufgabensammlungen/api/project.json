@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/aufgabensammlungen/api/src",
   "projectType": "library",
+  "tags": ["type:api"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -25,6 +26,5 @@
         "jestConfig": "libs/aufgabensammlungen/api/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:api"]
+  }
 }

@@ -3,6 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/messaging/api/src",
   "projectType": "library",
+  "tags": ["type:shared:api"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -25,6 +26,5 @@
         "jestConfig": "libs/shared/messaging/api/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:shared:api"]
+  }
 }

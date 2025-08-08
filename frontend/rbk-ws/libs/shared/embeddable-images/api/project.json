@@ -3,8 +3,8 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/embeddable-images/api/src",
   "prefix": "mja-ws",
-  "tags": ["type:api"],
   "projectType": "library",
+  "tags": ["type:api"],
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",

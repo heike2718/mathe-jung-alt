@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, Input, EventEmitter, Output, OnInit, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -12,10 +12,9 @@ import { isValidFileName } from "@rbk-ws/shared/util";
 @Component({
     selector: 'rbk-select-file',
     imports: [
-        CommonModule,
-        MatButtonModule,
-        MatIconModule
-    ],
+    MatButtonModule,
+    MatIconModule
+],
     templateUrl: './select-file.component.html',
     styleUrls: ['./select-file.component.scss']
 })

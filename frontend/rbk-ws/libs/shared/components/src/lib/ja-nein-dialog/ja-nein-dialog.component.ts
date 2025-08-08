@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -8,11 +8,10 @@ import { JaNeinDialogData } from './ja-nein-dialog.model';
 @Component({
     selector: 'rbk-ja-nein',
     imports: [
-        CommonModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatInputModule
-    ],
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule
+],
     templateUrl: './ja-nein-dialog.component.html',
     styleUrls: ['./ja-nein-dialog.component.scss']
 })
