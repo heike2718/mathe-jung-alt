@@ -43,11 +43,7 @@ if (environment.production) {
   enableProdMode();
 }
 
-const localStorageMetaReducer = localStorageReducer(
-  'mjaAuth',
-  'mjaCoreAutor',
-  'mjaCoreDeskriptoren',
-); // <-- synchronisiert diese Slices des Store mit localStorage wegen F5.
+const localStorageMetaReducer = localStorageReducer(); // <-- synchronisiert die im reducer genannten Slices des Store mit localStorage wegen F5.
 const clearStoreMetaReducer = loggedOutMetaReducer;
 
 const allMetaReducers = environment.production
