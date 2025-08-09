@@ -4,15 +4,6 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.egladil.raetselbaukasten.domain.SuchmodusDeskriptoren;
 import de.egladil.raetselbaukasten.domain.SuchmodusVolltext;
 import de.egladil.raetselbaukasten.domain.dto.SortDirection;
@@ -27,6 +18,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * RaetselDao
@@ -419,7 +418,7 @@ public class RaetselDao {
 	}
 
 	/**
-	 * @param  status
+	 * @param freigegeben boolean
 	 * @return        long
 	 */
 	public long countRaetselWithStatus(final boolean freigegeben) {
@@ -486,8 +485,8 @@ public class RaetselDao {
 	}
 
 	/**
-	 * @param  worte
-	 * @param  suchmodus
+	 * @param  anzahlWorte int
+	 * @param  suchmodus SuchmodusVolltext
 	 * @return
 	 */
 	String getVolltextMatcher(final int anzahlWorte, final SuchmodusVolltext suchmodus) {

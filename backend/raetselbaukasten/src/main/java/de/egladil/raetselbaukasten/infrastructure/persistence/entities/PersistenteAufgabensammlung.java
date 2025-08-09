@@ -4,26 +4,13 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
-import java.util.Date;
-
-import org.hibernate.annotations.GenericGenerator;
-
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Schwierigkeitsgrad;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.Date;
 
 /**
  * PersistenteAufgabensammlung
@@ -38,19 +25,15 @@ import jakarta.validation.constraints.Size;
 		name = "PersistenteAufgabensammlung.FIND_BY_UNIQUE_KEY",
 		query = "select s from PersistenteAufgabensammlung s where s.referenztyp = :referenztyp and s. referenz = :referenz and s.schwierigkeitsgrad = :schwierigkeitsgrad")
 })
-public class PersistenteAufgabensammlung implements PersistenteMjaEntity {
+public class PersistenteAufgabensammlung {
 
 	public static final String FIND_BY_NAME = "PersistenteAufgabensammlung.FIND_BY_NAME";
 
 	public static final String FIND_BY_UNIQUE_KEY = "PersistenteAufgabensammlung.FIND_BY_UNIQUE_KEY";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
-	@GenericGenerator(
-		name = "uuid_generator", type = UuidGenerator.class)
-	@NotNull
-	@Size(min = 1, max = 40)
-	@Column
+	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
+	@Column(name = "UUID", updatable = false, nullable = false, length = 36)
 	public String uuid;
 
 	@Column
@@ -91,26 +74,11 @@ public class PersistenteAufgabensammlung implements PersistenteMjaEntity {
 	@Column(name = "VERSION")
 	public int version;
 
-	@Transient
-	private String importierteUuid;
-
 	/**
 	 * @return
 	 */
-	@Override
 	public boolean isPersistent() {
 
 		return uuid != null;
-	}
-
-	@Override
-	public String getImportierteUuid() {
-
-		return importierteUuid;
-	}
-
-	public void setImportierteUuid(final String importierteUuid) {
-
-		this.importierteUuid = importierteUuid;
 	}
 }

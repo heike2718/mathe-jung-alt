@@ -4,40 +4,24 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
-import java.util.Date;
-
-import org.hibernate.annotations.GenericGenerator;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.egladil.raetselbaukasten.domain.quellen.Quellenart;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.Date;
 
 /**
  * PersistenteQuelle
  */
 @Entity
 @Table(name = "QUELLEN")
-public class PersistenteQuelle implements PersistenteMjaEntity {
+public class PersistenteQuelle {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
-	@GenericGenerator(
-		name = "uuid_generator", type = UuidGenerator.class)
-	@NotNull
-	@Size(min = 1, max = 40)
-	@Column
+	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
+	@Column(name = "UUID", updatable = false, nullable = false, length = 36)
 	public String uuid;
 
 	@Column(name = "SORTNR")
@@ -92,24 +76,20 @@ public class PersistenteQuelle implements PersistenteMjaEntity {
 	@Transient
 	private String importierteUuid;
 
-	/**
-	 * @return
-	 */
-	@Override
-	public boolean isPersistent() {
-
-		return uuid != null;
+	public String getImportierteUuid() {
+		return importierteUuid;
 	}
 
-	public void setImportierteUuid(final String importierteUuid) {
-
+	public void setImportierteUuid(String importierteUuid) {
 		this.importierteUuid = importierteUuid;
 	}
 
-	@Override
-	public String getImportierteUuid() {
+	/**
+	 * @return
+	 */
+	public boolean isPersistent() {
 
-		return importierteUuid;
+		return uuid != null;
 	}
 
 }
