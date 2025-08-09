@@ -18,7 +18,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
 		<quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-		<quarkus.platform.version>3.25.0</quarkus.platform.version>
+		<quarkus.platform.version>3.24.0</quarkus.platform.version>
 		<java-jwt.version>4.5.0</java-jwt.version>
 		<surefire-plugin.version>3.5.3</surefire-plugin.version>
 		<failsafe.useModulePath>false</failsafe.useModulePath>
@@ -136,17 +136,11 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.18.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 
 		<dependency>
@@ -230,7 +224,6 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.14.0</version>
 				<configuration>
 					<source>${maven.compiler.release}</source>
 					<target>${maven.compiler.release}</target>

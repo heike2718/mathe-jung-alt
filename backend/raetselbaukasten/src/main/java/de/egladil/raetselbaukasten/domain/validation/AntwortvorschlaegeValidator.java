@@ -4,32 +4,26 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.validation;
 
+import de.egladil.raetselbaukasten.domain.raetsel.Antwortvorschlag;
+import jakarta.inject.Inject;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import de.egladil.raetselbaukasten.domain.raetsel.Antwortvorschlag;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-
 /**
  * AntwortvorschlaegeValidator
  */
+//@Dependent
 public class AntwortvorschlaegeValidator implements ConstraintValidator<ValidAntwortvorschlaege, Antwortvorschlag[]> {
 
+	@Inject
 	private Validator validator;
-
-	@Override
-	public void initialize(final ValidAntwortvorschlaege constraintAnnotation) {
-
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		validator = factory.getValidator();
-	}
 
 	@Override
 	public boolean isValid(final Antwortvorschlag[] value, final ConstraintValidatorContext context) {

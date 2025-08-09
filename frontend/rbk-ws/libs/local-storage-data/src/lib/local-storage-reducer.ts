@@ -5,11 +5,14 @@ import {
 import { isSyncLocalStorage } from './is-sync-local-storage';
 import { ActionReducer } from '@ngrx/store';
 
+const LOCAL_STORAGE_KEYS = ['mjaAuth',
+            'mjaCoreAutor',
+            'mjaCoreDeskriptoren'];
 
-export const localStorageReducer = (...featureStateNames: string[]) => {
+export const localStorageReducer = () => {
 
   const syncerFn = localStorageSync({
-    keys: featureStateNames,
+    keys: LOCAL_STORAGE_KEYS,
     rehydrate: true,
     restoreDates: false        // kein automatisches Date‑Mapping mehr
   });
@@ -18,9 +21,7 @@ export const localStorageReducer = (...featureStateNames: string[]) => {
     (state, action) => {
       if (isSyncLocalStorage(action)) {
         const rehydratedFeatureState = rehydrateApplicationState({
-          keys: ['mjaAuth',
-            'mjaCoreAutor',
-            'mjaCoreDeskriptoren'], //[action.featureState],     // welche Slices
+          keys: LOCAL_STORAGE_KEYS, //[action.featureState],     // welche Slices
           storage: localStorage,              // Storage-Objekt
           storageKeySerializer: (key: string) => key,      // Identity für den storage‑Key
           restoreDates: false                      // hier restoreDates=false

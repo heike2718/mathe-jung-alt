@@ -53,11 +53,6 @@ public class UploadedFile {
 		return this;
 	}
 
-	public String getDataBase64() {
-
-		return dataBase64;
-	}
-
 	/**
 	 * data wird Base64-encoded und im Attribut dataBase64 abgelegt.
 	 *
@@ -68,21 +63,6 @@ public class UploadedFile {
 
 		this.dataBase64 = new String(Base64.getEncoder().encode(data));
 		return this;
-	}
-
-	public void wipe() {
-
-		if (dataBase64 != null) {
-
-			char[] chars = dataBase64.toCharArray();
-
-			for (int i = 0; i < chars.length; i++) {
-
-				chars[i] = 0x00;
-			}
-
-			dataBase64 = null;
-		}
 	}
 
 }

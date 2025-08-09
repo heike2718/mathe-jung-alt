@@ -4,27 +4,13 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
-import java.util.Date;
-
-import org.hibernate.annotations.GenericGenerator;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import de.egladil.raetselbaukasten.domain.raetsel.RaetselHerkunftTyp;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.Date;
 
 /**
  * PersistentesRaetsel
@@ -63,7 +49,7 @@ import jakarta.validation.constraints.Size;
 		name = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL_LIST",
 		query = "select r from PersistentesRaetsel r where r.schluessel IN :schluessel")
 })
-public class PersistentesRaetsel implements PersistenteMjaEntity {
+public class PersistentesRaetsel {
 
 	public static final String FIND_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN";
 
@@ -86,12 +72,8 @@ public class PersistentesRaetsel implements PersistenteMjaEntity {
 	public static final String FIND_WITH_SCHLUESSEL_LIST = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL_LIST";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid_generator")
-	@GenericGenerator(
-		name = "uuid_generator", type = UuidGenerator.class)
-	@NotNull
-	@Size(min = 1, max = 40)
-	@Column(name = "UUID")
+	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
+	@Column(name = "UUID", updatable = false, nullable = false, length = 36)
 	public String uuid;
 
 	@Column
@@ -160,24 +142,22 @@ public class PersistentesRaetsel implements PersistenteMjaEntity {
 	@Transient
 	private String importierteUuid;
 
-	@Override
 	public String getImportierteUuid() {
-
 		return importierteUuid;
 	}
 
-	public void setImportierteUuid(final String importierteUuid) {
-
+	public void setImportierteUuid(String importierteUuid) {
 		this.importierteUuid = importierteUuid;
 	}
 
 	/**
 	 * @return
 	 */
-	@Override
 	public boolean isPersistent() {
 
 		return uuid != null;
 	}
+
+
 
 }
