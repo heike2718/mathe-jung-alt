@@ -1,43 +1,41 @@
-// =====================================================
-// Project: raetselbaukasten
+//=====================================================
+// Projekt: raetselbaukasten
 // (c) Heike Winkelvoß
-// =====================================================
-package de.egladil.raetselbaukasten.domain.utils;
+//=====================================================
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+package de.egladil.raetselbaukasten.domain.utils;
 
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
-/**
- * MjaFileUtilsTest
- */
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 public class MjaFileUtilsTest {
 
-	private static final String PATH_DIR_TO_ZIP = "/home/heike/docker-volumes/latex/doc/testdir-to-zip";
+    private static final String PATH_DIR_TO_ZIP = "/home/heike/docker-volumes/latex/doc/testdir-to-zip";
 
-	private static final String PATH_ZIP_FILE = "/home/heike/docker-volumes/latex/doc/testdir-to-zip.zip";
+    private static final String PATH_ZIP_FILE = "/home/heike/docker-volumes/latex/doc/testdir-to-zip.zip";
 
-	@Test
-	void should_zip_dir_recursively() {
+    @Test
+    void should_zip_dir_recursively() {
 
-		// Arrange
-		File dirToZip = new File(PATH_DIR_TO_ZIP);
+        // Arrange
+        File dirToZip = new File(PATH_DIR_TO_ZIP);
 
-		if (!dirToZip.exists() || !dirToZip.exists()) {
+        if (!dirToZip.exists() || !dirToZip.exists()) {
 
-			fail("test setup: irgendein Honk hat das Verzeichnis gelöscht.");
-		}
+            fail("test setup: irgendein Honk hat das Verzeichnis gelöscht.");
+        }
 
-		FileUtils.deleteQuietly(new File(PATH_ZIP_FILE));
+        FileUtils.deleteQuietly(new File(PATH_ZIP_FILE));
 
-		// Act
-		File zipFile = MjaFileUtils.createZipArchive(new File(PATH_DIR_TO_ZIP));
+        // Act
+        File zipFile = MjaFileUtils.createZipArchive(new File(PATH_DIR_TO_ZIP));
 
-		// Assert
-		assertTrue(zipFile.isFile());
-	}
+        // Assert
+        assertTrue(zipFile.isFile());
+    }
 }
