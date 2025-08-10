@@ -13,10 +13,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * PersistenteQuelleReadonly
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "VW_QUELLEN")
 @NamedQueries({
@@ -35,46 +43,46 @@ public class PersistenteQuelleReadonly {
 	public static final String FIND_WITH_USER_ID = "PersistenteQuelleReadonly.FIND_WITH_USER_ID";
 
 	@Id
-	public String uuid;
+	private String uuid;
 
 	@Column(name = "ART")
 	@Enumerated(EnumType.STRING)
-	public Quellenart quellenart;
+	private Quellenart quellenart;
 
 	@Column(name = "SORTNR")
-	public long sortNumber;
+	private long sortNumber;
 
 	@Column(name = "MEDIUM_UUID")
-	public String mediumUuid;
+	private String mediumUuid;
 
 	@Column(name = "MEDIUM_TITEL")
-	public String mediumTitel;
+	private String mediumTitel;
 
 	@Column
-	public String autor;
+	private String autor;
 
 	@Column
-	public String ausgabe;
+	private String ausgabe;
 
 	@Column
-	public String jahr;
+	private String jahr;
 
 	@Column
-	public String klasse;
+	private String klasse;
 
 	@Column
-	public String stufe;
+	private String stufe;
 
 	@Column
-	public String seite;
+	private String seite;
 
 	@Column
-	public String person;
+	private String person;
 
 	@Column
-	public String pfad;
+	private String pfad;
 
 	@Column(name = "USER_ID")
-	public String userId;
+	private String userId;
 
 }

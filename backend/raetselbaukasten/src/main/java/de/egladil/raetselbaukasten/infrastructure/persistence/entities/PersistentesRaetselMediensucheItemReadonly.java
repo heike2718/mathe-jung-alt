@@ -14,10 +14,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * PersistentesRaetselMediensucheItemReadonly
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "VW_MEDIEN_RAETSEL")
 @NamedQueries({
@@ -31,52 +39,52 @@ public class PersistentesRaetselMediensucheItemReadonly {
 
 	@Id
 	@Column(name = "RAETSEL_ID")
-	public String uuid;
+	private String uuid;
 
 	@Column
-	public String schluessel;
+	private String schluessel;
 
 	@Column
-	public String name;
+	private String name;
 
 	@Column
-	public boolean freigegeben;
+	private boolean freigegeben;
 
 	@Column(name = "RAETSEL_OWNER")
-	public String raetselOwner;
+	private String raetselOwner;
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	public RaetselHerkunftTyp herkunft;
+	private RaetselHerkunftTyp herkunft;
 
 	@Column(name = "MEDIUM_UUID")
-	public String mediumUuid;
+	private String mediumUuid;
 
 	@Column(name = "MEDIUM_TITEL")
-	public String mediumTitel;
+	private String mediumTitel;
 
 	@Column(name = "MEDIUM_ART")
 	@Enumerated(EnumType.STRING)
-	public Medienart medienart;
+	private Medienart medienart;
 
 	@Column
-	public String autor;
+	private String autor;
 
 	@Column
-	public String ausgabe;
+	private String ausgabe;
 
 	@Column
-	public String jahr;
+	private String jahr;
 
 	@Column
-	public String klasse;
+	private String klasse;
 
 	@Column
-	public String stufe;
+	private String stufe;
 
 	@Column
-	public String seite;
+	private String seite;
 
 	@Column
-	public String pfad;
+	private String pfad;
 }

@@ -16,12 +16,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 /**
  * PersistentesRaetselHistorieItem
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "HISTORIE_RAETSEL")
 public class PersistentesRaetselHistorieItem {
@@ -32,21 +39,21 @@ public class PersistentesRaetselHistorieItem {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH })
-	public PersistentesRaetsel raetsel;
+	private PersistentesRaetsel raetsel;
 
 	@Column
-	public String frage;
+	private String frage;
 
 	@Column
-	public String loesung;
+	private String loesung;
 
 	@Column(name = "GEAENDERT_DURCH")
-	public String geaendertDurch;
+	private String geaendertDurch;
 
 	@Column(name = "GEAENDERT_AM")
-	public Date geaendertAm;
+	private Date geaendertAm;
 
 	@Version
 	@Column(name = "VERSION")
-	public int version;
+	private int version;
 }

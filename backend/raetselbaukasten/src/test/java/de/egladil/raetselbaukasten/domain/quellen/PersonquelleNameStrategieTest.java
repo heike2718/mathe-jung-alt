@@ -29,7 +29,7 @@ public class PersonquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.BUCH;
+		quelle.setQuellenart(Quellenart.BUCH);
 
 		// Act
 		try {
@@ -48,8 +48,8 @@ public class PersonquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.PERSON;
-		quelle.person = "  ";
+		quelle.setQuellenart(Quellenart.PERSON);
+		quelle.setPerson(" ");
 
 		// Act
 		try {
@@ -68,7 +68,7 @@ public class PersonquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.PERSON;
+		quelle.setQuellenart(Quellenart.PERSON);
 
 		// Act
 		String name = strategie.getText(quelleAdapter.adapt(quelle));

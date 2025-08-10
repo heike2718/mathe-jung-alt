@@ -4,16 +4,15 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.generatoren.impl;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.egladil.raetselbaukasten.domain.generatoren.dto.AufgabensammlungGeneratorInput;
 import de.egladil.raetselbaukasten.domain.quiz.dto.Quizaufgabe;
 import de.egladil.raetselbaukasten.domain.raetsel.dto.RaetselLaTeXDto;
 import de.egladil.raetselbaukasten.domain.utils.GeneratorUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * LaTeXMainDocAufgabenGenerator generiert ein LaTeX-File, in dem tex-Files der Aufgabeb mittels input integriert sind. Die
@@ -21,80 +20,80 @@ import de.egladil.raetselbaukasten.domain.utils.GeneratorUtils;
  */
 public class LaTeXMainDocAufgabenGenerator implements LaTeXDocGeneratorStrategy {
 
-	private static final String AUFGABENTRENNER = "\n\n% ==================================================================\n\n";
+    private static final String AUFGABENTRENNER = "\n\n% ==================================================================\n\n";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXMainDocAufgabenGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXMainDocAufgabenGenerator.class);
 
-	@Override
-	public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
+    @Override
+    public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
 
-		LOGGER.warn("Font={}", input.getFont());
+        LOGGER.warn("Font={}", input.getFont());
 
-		String template = LaTeXTemplatesService.getInstance().getTemplateMainLaTeXDocument();
+        String template = LaTeXTemplatesService.getInstance().getTemplateMainLaTeXDocument();
 
-		template = template.replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
-		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
-			input.getSchriftgroesse().getLaTeXReplacement());
-		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
-		template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), input.getAufgabensammlung().name + " (Aufgaben)");
+        template = template.replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
+        template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
+                input.getSchriftgroesse().getLaTeXReplacement());
+        template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
+        template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), input.getAufgabensammlung().getName() + " (Aufgaben)");
 
-		String content = printContentAufgaben(aufgaben, raetselLaTeX, input);
+        String content = printContentAufgaben(aufgaben, raetselLaTeX, input);
 
-		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), content);
+        template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), content);
 
-		String textLizenzFont = new GeneratorFontsDelegate().getTextLizenzFont(input.getFont());
-		template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), textLizenzFont);
+        String textLizenzFont = new GeneratorFontsDelegate().getTextLizenzFont(input.getFont());
+        template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), textLizenzFont);
 
-		String quellen = new QuellenverzeichnisLaTeXGenerator().generiereQuellenverzeichnis(aufgaben);
+        String quellen = new QuellenverzeichnisLaTeXGenerator().generiereQuellenverzeichnis(aufgaben);
 
-		template = template.replace(LaTeXPlaceholder.QUELLEN.placeholder(), quellen);
+        template = template.replace(LaTeXPlaceholder.QUELLEN.placeholder(), quellen);
 
-		return template;
-	}
+        return template;
+    }
 
-	String printContentAufgaben(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final AufgabensammlungGeneratorInput input) {
+    String printContentAufgaben(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final AufgabensammlungGeneratorInput input) {
 
-		AntwortvorschlagGeneratorStrategegy antwortvorschlaegeGeneratorStrategy = AntwortvorschlagGeneratorStrategegy
-			.create(input.getLayoutAntwortvorschlaege());
+        AntwortvorschlagGeneratorStrategegy antwortvorschlaegeGeneratorStrategy = AntwortvorschlagGeneratorStrategegy
+                .create(input.getLayoutAntwortvorschlaege());
 
-		StringBuffer sb = new StringBuffer();
-		int count = 0;
+        StringBuffer sb = new StringBuffer();
+        int count = 0;
 
-		for (Quizaufgabe aufgabe : aufgaben) {
+        for (Quizaufgabe aufgabe : aufgaben) {
 
-			Optional<RaetselLaTeXDto> opt = raetselLaTeX.stream().filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
-				.findFirst();
+            Optional<RaetselLaTeXDto> opt = raetselLaTeX.stream().filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
+                    .findFirst();
 
-			if (opt.isPresent()) {
+            if (opt.isPresent()) {
 
-				if (count > 0) {
+                if (count > 0) {
 
-					sb.append(LaTeXConstants.ABSTAND_ITEMS);
-				}
+                    sb.append(LaTeXConstants.ABSTAND_ITEMS);
+                }
 
-				boolean printAsMultipleChoice = GeneratorUtils.shouldPrintAntwortvorschlaege(input.getLayoutAntwortvorschlaege(),
-					aufgabe);
+                boolean printAsMultipleChoice = GeneratorUtils.shouldPrintAntwortvorschlaege(input.getLayoutAntwortvorschlaege(),
+                        aufgabe);
 
-				String text = LaTeXConstants.INPUT_AUFGABE;
-				text = text.replace(LaTeXPlaceholder.NUMMER.placeholder(), aufgabe.getNummer());
-				text = text.replace(LaTeXPlaceholder.SCHLUESSEL.placeholder(), aufgabe.getSchluessel());
+                String text = LaTeXConstants.INPUT_AUFGABE;
+                text = text.replace(LaTeXPlaceholder.NUMMER.placeholder(), aufgabe.getNummer());
+                text = text.replace(LaTeXPlaceholder.SCHLUESSEL.placeholder(), aufgabe.getSchluessel());
 
-				if (printAsMultipleChoice) {
+                if (printAsMultipleChoice) {
 
-					text = text
-						+ antwortvorschlaegeGeneratorStrategy.generateLaTeXAntwortvorschlaege(aufgabe.getAntwortvorschlaege());
-				}
+                    text = text
+                            + antwortvorschlaegeGeneratorStrategy.generateLaTeXAntwortvorschlaege(aufgabe.getAntwortvorschlaege());
+                }
 
-				sb.append(text);
-				sb.append(AUFGABENTRENNER);
+                sb.append(text);
+                sb.append(AUFGABENTRENNER);
 
-			} else {
+            } else {
 
-				LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
-			}
+                LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
+            }
 
-		}
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 }

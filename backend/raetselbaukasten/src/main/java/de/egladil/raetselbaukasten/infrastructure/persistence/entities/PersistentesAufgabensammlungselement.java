@@ -5,10 +5,18 @@
 package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * PersistentesAufgabensammlungselement
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "AUFGABENSAMMLUNGSELEMENTE")
 @NamedQueries({
@@ -23,23 +31,23 @@ public class PersistentesAufgabensammlungselement {
 	@Id
 	@org.hibernate.annotations.UuidGenerator
 	@Column(name = "UUID", updatable = false, nullable = false, length = 36)
-	public String uuid;
+	private String uuid;
 
 	@Column
-	public String nummer;
+	private String nummer;
 
 	@Column(name = "SAMMLUNG")
-	public String aufgabensammlungID;
+	private String aufgabensammlungID;
 
 	@Column(name = "RAETSEL")
-	public String raetselID;
+	private String raetselID;
 
 	@Column
-	public int punkte;
+	private int punkte;
 
 	@Version
 	@Column(name = "VERSION")
-	public int version;
+	private int version;
 
 	/**
 	 * @return

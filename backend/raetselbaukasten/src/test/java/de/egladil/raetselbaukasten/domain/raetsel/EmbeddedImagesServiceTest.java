@@ -78,8 +78,8 @@ public class EmbeddedImagesServiceTest {
 
 		// Arrange
 		PersistentesRaetsel persistentesRaetsel = new PersistentesRaetsel();
-		persistentesRaetsel.uuid = RAETSEL_ID;
-		persistentesRaetsel.owner = AUTOR_UUID;
+		persistentesRaetsel.setUuid(RAETSEL_ID);
+		persistentesRaetsel.setOwner(AUTOR_UUID);
 
 		List<EmbeddableImageInfo> imageInfosFrage = new ArrayList<>();
 
@@ -136,8 +136,8 @@ public class EmbeddedImagesServiceTest {
 
 		// Arrange
 		PersistentesRaetsel persistentesRaetsel = new PersistentesRaetsel();
-		persistentesRaetsel.uuid = RAETSEL_ID;
-		persistentesRaetsel.owner = AUTOR_UUID;
+		persistentesRaetsel.setUuid(RAETSEL_ID);
+		persistentesRaetsel.setOwner(AUTOR_UUID);
 
 		List<EmbeddableImageInfo> imageInfosFrage = new ArrayList<>();
 
@@ -194,8 +194,8 @@ public class EmbeddedImagesServiceTest {
 
 		// Arrange
 		PersistentesRaetsel persistentesRaetsel = new PersistentesRaetsel();
-		persistentesRaetsel.uuid = RAETSEL_ID;
-		persistentesRaetsel.owner = ADMIN_UUID;
+		persistentesRaetsel.setUuid(RAETSEL_ID);
+		persistentesRaetsel.setOwner(AUTOR_UUID);
 
 		when(raetselDao.findById(RAETSEL_ID)).thenReturn(persistentesRaetsel);
 		when(authCtx.getUser()).thenReturn(autor);

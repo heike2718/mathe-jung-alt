@@ -13,10 +13,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * PersistentesAufgabensammlungRaetselsucheItemReadonly
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "VW_RAETSEL_AUFGABENSAMMLUNGEN")
 @NamedQueries({
@@ -30,37 +38,37 @@ public class PersistentesAufgabensammlungRaetselsucheItemReadonly {
 
 	@Id
 	@Column
-	public String id;
+	private String id;
 
 	@Column(name = "SAMMLUNG_ID")
-	public String sammlungId;
+	private String sammlungId;
 
 	@Column(name = "SAMMLUNG_NAME")
-	public String sammlungName;
+	private String sammlungName;
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	public Schwierigkeitsgrad schwierigkeitsgrad;
+	private Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@Column(name = "FREIGEGEBEN")
-	public boolean sammlungFreigegeben;
+	private boolean sammlungFreigegeben;
 
 	@Column(name = "PRIVAT")
-	public boolean sammlungPrivat;
+	private boolean sammlungPrivat;
 
 	@Column(name = "SAMMLUNG_OWNER")
-	public String sammlungOwner;
+	private String sammlungOwner;
 
 	@Column(name = "ELEMENT_NUMMER")
-	public String elementNummer;
+	private String elementNummer;
 
 	@Column(name = "ELEMENT_PUNKTE")
-	public int elementPunkte;
+	private int elementPunkte;
 
 	@Column(name = "RAETSEL_ID")
-	public String raetselId;
+	private String raetselId;
 
 	@Column(name = "RAETSEL_SCHLUESSEL")
-	public String raetselSchluessel;
+	private String raetselSchluessel;
 
 }

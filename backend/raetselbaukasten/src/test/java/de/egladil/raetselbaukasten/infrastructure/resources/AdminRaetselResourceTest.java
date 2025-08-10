@@ -1037,11 +1037,11 @@ public class AdminRaetselResourceTest {
 		assertEquals(quelleId, quelleUI.getId());
 
 		PersistenteQuelle quelleDB = quellenRepository.findQuelleEntityWithId(quelleId);
-		assertEquals(owner, quelleDB.owner);
-		assertEquals(owner, quelleDB.userId);
+		assertEquals(owner, quelleDB.getOwner());
+		assertEquals(owner, quelleDB.getUserId());
 
 		PersistentesRaetsel raetselDB = raetselDao.findById(raetselId);
-		assertEquals(owner, raetselDB.owner);
+		assertEquals(owner, raetselDB.getOwner());
 
 	}
 }

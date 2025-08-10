@@ -6,116 +6,117 @@ package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
 import de.egladil.raetselbaukasten.domain.quellen.Quellenart;
 import de.egladil.raetselbaukasten.domain.raetsel.RaetselHerkunftTyp;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * PersistenteAufgabeReadonly
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "VW_AUFGABEN")
 @NamedQueries({
-	@NamedQuery(
-		name = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG",
-		query = "select a from PersistenteAufgabeReadonly a where a.sammlung = :sammlung")
+        @NamedQuery(
+                name = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG",
+                query = "select a from PersistenteAufgabeReadonly a where a.sammlung = :sammlung")
 })
 public class PersistenteAufgabeReadonly {
 
-	public static final String LOAD_AUFGABEN_IN_SAMMLUNG = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG";
+    public static final String LOAD_AUFGABEN_IN_SAMMLUNG = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG";
 
-	@Id
-	public String uuid;
+    @Id
+    private String uuid;
 
-	@Column
-	public String schluessel;
+    @Column
+    private String schluessel;
 
-	@Column
-	public String name;
+    @Column
+    private String name;
 
-	@Column
-	public String frage;
+    @Column
+    private String frage;
 
-	@Column(name = "SORTNR")
-	public long sortNumber;
+    @Column(name = "SORTNR")
+    private long sortNumber;
 
-	@Column
-	public boolean freigegeben;
+    @Column
+    private boolean freigegeben;
 
-	@Column(name = "ANTWORTVORSCHLAEGE_EINGEBETTET")
-	public boolean antwortvorschlaegeEingebettet;
+    @Column(name = "ANTWORTVORSCHLAEGE_EINGEBETTET")
+    private boolean antwortvorschlaegeEingebettet;
 
-	@Column
-	@Enumerated(EnumType.STRING)
-	public RaetselHerkunftTyp herkunft;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private RaetselHerkunftTyp herkunft;
 
-	@Column
-	public String owner;
+    @Column
+    private String owner;
 
-	@Column
-	public String nummer;
+    @Column
+    private String nummer;
 
-	@Column
-	public int punkte;
+    @Column
+    private int punkte;
 
-	@Column
-	public String sammlung;
+    @Column
+    private String sammlung;
 
-	@Column(name = "AUTOR_LOESUNG")
-	public String autorLoesung;
+    @Column(name = "AUTOR_LOESUNG")
+    private String autorLoesung;
 
-	@Column
-	public String antwortvorschlaege;
+    @Column
+    private String antwortvorschlaege;
 
-	@Column(name = "FILENAME_VORSCHAU_FRAGE")
-	public String filenameVorschauFrage;
+    @Column(name = "FILENAME_VORSCHAU_FRAGE")
+    private String filenameVorschauFrage;
 
-	@Column(name = "FILENAME_VORSCHAU_LOESUNG")
-	public String filenameVorschauLoesung;
+    @Column(name = "FILENAME_VORSCHAU_LOESUNG")
+    private String filenameVorschauLoesung;
 
-	@Column(name = "QUELLE_ART")
-	@Enumerated(EnumType.STRING)
-	public Quellenart quellenart;
+    @Column(name = "QUELLE_ART")
+    @Enumerated(EnumType.STRING)
+    private Quellenart quellenart;
 
-	@Column
-	public String person;
+    @Column
+    private String person;
 
-	@Column(name = "USER_ID")
-	public String userId;
+    @Column(name = "USER_ID")
+    private String userId;
 
-	@Column(name = "MEDIUM_TITEL")
-	public String mediumTitel;
+    @Column(name = "MEDIUM_TITEL")
+    private String mediumTitel;
 
-	@Column
-	public String autor;
+    @Column
+    private String autor;
 
-	@Column
-	public String klasse;
+    @Column
+    private String klasse;
 
-	@Column
-	public String stufe;
+    @Column
+    private String stufe;
 
-	@Column
-	public String jahr;
+    @Column
+    private String jahr;
 
-	@Column
-	public String ausgabe;
+    @Column
+    private String ausgabe;
 
-	@Column
-	public String seite;
+    @Column
+    private String seite;
 
-	@Column(name = "DESKRIPTOREN")
-	public String deskriptoren;
+    @Column(name = "DESKRIPTOREN")
+    private String deskriptoren;
 
-	@Column
-	private boolean seitenumbruch;
+    @Column
+    private boolean seitenumbruch;
 
-	@Column(name = "MARGIN_BOTTOM")
-	private int marginBottom;
+    @Column(name = "MARGIN_BOTTOM")
+    private int marginBottom;
 
 }

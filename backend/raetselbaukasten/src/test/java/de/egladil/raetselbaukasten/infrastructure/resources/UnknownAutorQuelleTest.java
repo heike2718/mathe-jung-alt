@@ -63,8 +63,8 @@ public class UnknownAutorQuelleTest {
 		assertTrue(optAusDB.isPresent());
 
 		PersistenteQuelleReadonly ausDB = optAusDB.get();
-		assertEquals(result.getId(), ausDB.uuid);
-		assertEquals(userId, ausDB.userId);
+		assertEquals(result.getId(), ausDB.getUuid());
+		assertEquals(userId, ausDB.getUserId());
 
 	}
 

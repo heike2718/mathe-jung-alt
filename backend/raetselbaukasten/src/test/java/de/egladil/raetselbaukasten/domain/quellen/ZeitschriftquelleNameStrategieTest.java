@@ -29,7 +29,7 @@ public class ZeitschriftquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.PERSON;
+		quelle.setQuellenart(Quellenart.PERSON);
 
 		// Act
 		try {
@@ -48,8 +48,8 @@ public class ZeitschriftquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.ZEITSCHRIFT;
-		quelle.mediumTitel = "  ";
+		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
+		quelle.setMediumTitel(" ");
 
 		// Act
 		try {
@@ -68,10 +68,10 @@ public class ZeitschriftquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.ZEITSCHRIFT;
-		quelle.ausgabe = " ";
-		quelle.seite = null;
-		quelle.jahr = "";
+		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
+		quelle.setAusgabe(" ");
+		quelle.setSeite(null);
+		quelle.setJahr("");
 
 		String expected = "Grunschulolympiade 2x2";
 
@@ -88,9 +88,9 @@ public class ZeitschriftquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.ZEITSCHRIFT;
-		quelle.ausgabe = "  ";
-		quelle.seite = null;
+		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
+		quelle.setAusgabe(" ");
+		quelle.setSeite(null);
 
 		String expected = "Grunschulolympiade 2x2 1987";
 
@@ -107,8 +107,8 @@ public class ZeitschriftquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.ZEITSCHRIFT;
-		quelle.seite = null;
+		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
+		quelle.setSeite(null);
 
 		String expected = "Grunschulolympiade 2x2 (11) 1987";
 
@@ -125,7 +125,7 @@ public class ZeitschriftquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.ZEITSCHRIFT;
+		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
 
 		String expected = "Grunschulolympiade 2x2 (11) 1987, S.42";
 

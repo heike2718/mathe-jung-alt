@@ -13,202 +13,213 @@ import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Persisten
  */
 public class QuelleInfosAdapter {
 
-	public IQuellenangabeDaten adapt(final PersistenteQuelleReadonly quelle) {
+    /**
+     * Adaptiert eine PersistenteQuelleReadonly
+     * @param quelle PersistenteQuelleReadonly
+     * @return IQuellenangabeDaten
+     */
+    public IQuellenangabeDaten adapt(final PersistenteQuelleReadonly quelle) {
 
-		return new IQuellenangabeDaten() {
+        return new IQuellenangabeDaten() {
 
-			@Override
-			public String getStufe() {
+            @Override
+            public String getStufe() {
 
-				return quelle.stufe;
-			}
+                return quelle.getStufe();
+            }
 
-			@Override
-			public String getSeite() {
+            @Override
+            public String getSeite() {
 
-				return quelle.seite;
-			}
+                return quelle.getSeite();
+            }
 
-			@Override
-			public Quellenart getQuellenart() {
+            @Override
+            public Quellenart getQuellenart() {
 
-				return quelle.quellenart;
-			}
+                return quelle.getQuellenart();
+            }
 
-			@Override
-			public String getPerson() {
+            @Override
+            public String getPerson() {
 
-				return quelle.person;
-			}
+                return quelle.getPerson();
+            }
 
-			@Override
-			public String getMediumTitel() {
+            @Override
+            public String getMediumTitel() {
 
-				return quelle.mediumTitel;
-			}
+                return quelle.getMediumTitel();
+            }
 
-			@Override
-			public String getKlasse() {
+            @Override
+            public String getKlasse() {
 
-				return quelle.klasse;
-			}
+                return quelle.getKlasse();
+            }
 
-			@Override
-			public String getJahr() {
+            @Override
+            public String getJahr() {
 
-				return quelle.jahr;
-			}
+                return quelle.getJahr();
+            }
 
-			@Override
-			public String getAutor() {
+            @Override
+            public String getAutor() {
 
-				return quelle.autor;
-			}
+                return quelle.getAutor();
+            }
 
-			@Override
-			public String getAusgabe() {
+            @Override
+            public String getAusgabe() {
 
-				return quelle.ausgabe;
-			}
-		};
-	}
+                return quelle.getAusgabe();
+            }
+        };
+    }
 
-	public IQuellenangabeDaten adapt(final PersistentesRaetselMediensucheItemReadonly quelle) {
+    /**
+     * Adaptiert ein PersistentesRaetselMediensucheItemReadonly
+     * @param quelle PersistentesRaetselMediensucheItemReadonly
+     * @return IQuellenangabeDaten
+     */
+    public IQuellenangabeDaten adapt(final PersistentesRaetselMediensucheItemReadonly quelle) {
 
-		return new IQuellenangabeDaten() {
+        return new IQuellenangabeDaten() {
 
-			@Override
-			public String getStufe() {
+            @Override
+            public String getStufe() {
 
-				return quelle.stufe;
-			}
+                return quelle.getStufe();
+            }
 
-			@Override
-			public String getSeite() {
+            @Override
+            public String getSeite() {
 
-				return quelle.seite;
-			}
+                return quelle.getSeite();
+            }
 
-			@Override
-			public Quellenart getQuellenart() {
+            @Override
+            public Quellenart getQuellenart() {
 
-				switch (quelle.medienart) {
+                switch (quelle.getMedienart()) {
 
-				case BUCH:
-					return Quellenart.BUCH;
+                    case BUCH:
+                        return Quellenart.BUCH;
 
-				case INTERNET:
-					return Quellenart.INTERNET;
+                    case INTERNET:
+                        return Quellenart.INTERNET;
 
-				case ZEITSCHRIFT:
-					return Quellenart.ZEITSCHRIFT;
+                    case ZEITSCHRIFT:
+                        return Quellenart.ZEITSCHRIFT;
 
-				default:
-					throw new IllegalArgumentException("Unexpected medienart: " + quelle.medienart);
-				}
-			}
+                    default:
+                        throw new IllegalArgumentException("Unexpected medienart: " + quelle.getMediumTitel());
+                }
+            }
 
-			@Override
-			public String getPerson() {
+            @Override
+            public String getPerson() {
 
-				return "";
-			}
+                return "";
+            }
 
-			@Override
-			public String getMediumTitel() {
+            @Override
+            public String getMediumTitel() {
 
-				return quelle.mediumTitel;
-			}
+                return quelle.getMediumTitel();
+            }
 
-			@Override
-			public String getKlasse() {
+            @Override
+            public String getKlasse() {
 
-				return quelle.klasse;
-			}
+                return quelle.getKlasse();
+            }
 
-			@Override
-			public String getJahr() {
+            @Override
+            public String getJahr() {
 
-				return quelle.jahr;
-			}
+                return quelle.getJahr();
+            }
 
-			@Override
-			public String getAutor() {
+            @Override
+            public String getAutor() {
 
-				return quelle.autor;
-			}
+                return quelle.getAutor();
+            }
 
-			@Override
-			public String getAusgabe() {
+            @Override
+            public String getAusgabe() {
 
-				return quelle.ausgabe;
-			}
-		};
+                return quelle.getAusgabe();
+            }
+        };
 
-	}
+    }
 
-	/**
-	 * @param  ausDB
-	 * @return       IQuellenangabeDaten
-	 */
-	public IQuellenangabeDaten adapt(final PersistenteAufgabeReadonly ausDB) {
+    /**
+     * Adaptiert eine PersistenteAufgabeReadonly
+     * @param ausDB PersistenteAufgabeReadonly
+     * @return IQuellenangabeDaten
+     */
+    public IQuellenangabeDaten adapt(final PersistenteAufgabeReadonly ausDB) {
 
-		return new IQuellenangabeDaten() {
+        return new IQuellenangabeDaten() {
 
-			@Override
-			public String getStufe() {
+            @Override
+            public String getStufe() {
 
-				return ausDB.stufe;
-			}
+                return ausDB.getStufe();
+            }
 
-			@Override
-			public String getSeite() {
+            @Override
+            public String getSeite() {
 
-				return ausDB.seite;
-			}
+                return ausDB.getSeite();
+            }
 
-			@Override
-			public Quellenart getQuellenart() {
+            @Override
+            public Quellenart getQuellenart() {
 
-				return ausDB.quellenart;
-			}
+                return ausDB.getQuellenart();
+            }
 
-			@Override
-			public String getPerson() {
+            @Override
+            public String getPerson() {
 
-				return ausDB.person;
-			}
+                return ausDB.getPerson();
+            }
 
-			@Override
-			public String getMediumTitel() {
+            @Override
+            public String getMediumTitel() {
 
-				return ausDB.mediumTitel;
-			}
+                return ausDB.getMediumTitel();
+            }
 
-			@Override
-			public String getKlasse() {
+            @Override
+            public String getKlasse() {
 
-				return ausDB.klasse;
-			}
+                return ausDB.getKlasse();
+            }
 
-			@Override
-			public String getJahr() {
+            @Override
+            public String getJahr() {
 
-				return ausDB.jahr;
-			}
+                return ausDB.getJahr();
+            }
 
-			@Override
-			public String getAutor() {
+            @Override
+            public String getAutor() {
 
-				return ausDB.autor;
-			}
+                return ausDB.getAutor();
+            }
 
-			@Override
-			public String getAusgabe() {
+            @Override
+            public String getAusgabe() {
 
-				return ausDB.ausgabe;
-			}
-		};
-	}
+                return ausDB.getAusgabe();
+            }
+        };
+    }
 
 }
