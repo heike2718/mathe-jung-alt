@@ -7,6 +7,10 @@ package de.egladil.raetselbaukasten.domain.aufgabensammlungen.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -20,6 +24,10 @@ import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Persisten
 /**
  * AufgabensammlungDetails
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Schema(
 	name = "AufgabensammlungDetails",
 	description = "Details einer Aufgabensammlung für die Anzeige oder zum Generieren von PDF oder LaTeX. Eine Rätselruppe ist eine freie Zusammenstellung von Rätseln. Ziel ist die Erzeugung eines PDFs. Die Rästel werden in der Reihenfolge gedruckt, in der sie in der Aufgabensammlung eingetragen werden.")
@@ -69,90 +77,28 @@ public class AufgabensammlungDetails {
 
 	@JsonProperty
 	@Schema(type = SchemaType.ARRAY, description = "Elemente der Aufgabensammlung")
-	private List<Aufgabensammlungselement> elemente = new ArrayList<>();
+	private List<Aufgabensammlungselement> elemente;
 
 	public static AufgabensammlungDetails createFromDB(final PersistenteAufgabensammlung aufgabensammlungDB) {
 
 		AufgabensammlungDetails result = new AufgabensammlungDetails();
-		result.geaendertDurch = aufgabensammlungDB.geaendertDurch;
-		result.id = aufgabensammlungDB.uuid;
-		result.kommentar = aufgabensammlungDB.kommentar;
-		result.name = aufgabensammlungDB.name;
-		result.referenz = aufgabensammlungDB.referenz;
-		result.referenztyp = aufgabensammlungDB.referenztyp;
-		result.schwierigkeitsgrad = aufgabensammlungDB.schwierigkeitsgrad;
-		result.freigegeben = aufgabensammlungDB.freigegeben;
-		result.privat = aufgabensammlungDB.privat;
+		result.geaendertDurch = aufgabensammlungDB.getGeaendertDurch();
+		result.id = aufgabensammlungDB.getUuid();
+		result.kommentar = aufgabensammlungDB.getKommentar();
+		result.name = aufgabensammlungDB.getName();
+		result.referenz = aufgabensammlungDB.getReferenz();
+		result.referenztyp = aufgabensammlungDB.getReferenztyp();
+		result.schwierigkeitsgrad = aufgabensammlungDB.getSchwierigkeitsgrad();
+		result.freigegeben = aufgabensammlungDB.isFreigegeben();
+		result.privat = aufgabensammlungDB.isPrivat();
 		return result;
 	}
 
 	public void addElement(final Aufgabensammlungselement element) {
 
+		if (this.elemente == null) {
+			this.elemente = new ArrayList<>();		}
+
 		this.elemente.add(element);
-	}
-
-	public String getId() {
-
-		return id;
-	}
-
-	public String getName() {
-
-		return name;
-	}
-
-	public String getKommentar() {
-
-		return kommentar;
-	}
-
-	public Schwierigkeitsgrad getSchwierigkeitsgrad() {
-
-		return schwierigkeitsgrad;
-	}
-
-	public Referenztyp getReferenztyp() {
-
-		return referenztyp;
-	}
-
-	public String getReferenz() {
-
-		return referenz;
-	}
-
-	public String getGeaendertDurch() {
-
-		return geaendertDurch;
-	}
-
-	public List<Aufgabensammlungselement> getElemente() {
-
-		return elemente;
-	}
-
-	public void setElemente(final List<Aufgabensammlungselement> elemente) {
-
-		this.elemente = elemente;
-	}
-
-	public boolean isSchreibgeschuetzt() {
-
-		return schreibgeschuetzt;
-	}
-
-	public void setSchreibgeschuetzt(final boolean schreibgeschuetzt) {
-
-		this.schreibgeschuetzt = schreibgeschuetzt;
-	}
-
-	public boolean isFreigegeben() {
-
-		return freigegeben;
-	}
-
-	public boolean isPrivat() {
-
-		return privat;
 	}
 }

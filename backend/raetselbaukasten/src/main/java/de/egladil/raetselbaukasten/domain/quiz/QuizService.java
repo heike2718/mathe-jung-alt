@@ -4,16 +4,8 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.quiz;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Schwierigkeitsgrad;
-import de.egladil.raetselbaukasten.domain.deskriptoren.DeskriptorenService;
 import de.egladil.raetselbaukasten.domain.generatoren.RaetselFileService;
 import de.egladil.raetselbaukasten.domain.quellen.QuelleInfosAdapter;
 import de.egladil.raetselbaukasten.domain.quellen.QuelleNameStrategie;
@@ -29,6 +21,12 @@ import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Persisten
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteQuelleReadonly;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * QuizService
@@ -36,121 +34,118 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class QuizService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(QuizService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuizService.class);
 
-	@Inject
-	AufgabensammlungDao aufgabensammlungDao;
+    @Inject
+    AufgabensammlungDao aufgabensammlungDao;
 
-	@Inject
-	RaetselFileService raetselFileService;
+    @Inject
+    RaetselFileService raetselFileService;
 
-	@Inject
-	DeskriptorenService descriptorenService;
+    @Inject
+    QuellenRepository quellenRepository;
 
-	@Inject
-	QuellenRepository quellenRepository;
+    /**
+     * Sucht alle Aufgaben des durch die Parameter eindeutig bestimmten Quiz zur Präsentation im Browser. Es werden nur die
+     * Gruppen mit Status FREIGEGEBEN gefunden.
+     *
+     * @param referenztyp        Referenztyp
+     * @param referenz           String
+     * @param schwierigkeitsgrad Schwierigkeitsgrad
+     * @return Optional
+     */
+    public Optional<Quiz> generateQuiz(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
 
-	/**
-	 * Sucht alle Aufgaben des durch die Parameter eindeutig bestimmten Quiz zur Präsentation im Browser. Es werden nur die
-	 * Gruppen mit Status FREIGEGEBEN gefunden.
-	 *
-	 * @param  referenztyp
-	 * @param  referenz
-	 * @param  schwierigkeitsgrad
-	 * @return                    Optional
-	 */
-	public Optional<Quiz> generateQuiz(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
+        LOGGER.debug(" ==> (1)");
+        PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
 
-		LOGGER.debug(" ==> (1)");
-		PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
+        LOGGER.debug(" ==> (4)");
 
-		LOGGER.debug(" ==> (4)");
+        // nur öffentliche und freigegebene Aufgabensammlungen.
+        if (dbResult == null || !dbResult.isFreigegeben() || dbResult.isPrivat()) {
 
-		// nur öffentliche und freigegebene Aufgabensammlungen.
-		if (dbResult == null || !dbResult.freigegeben || dbResult.privat) {
+            return Optional.empty();
+        }
 
-			return Optional.empty();
-		}
+        List<Quizaufgabe> aufgaben = getItemsAsQuizaufgaben(dbResult.getUuid());
 
-		List<Quizaufgabe> aufgaben = getItemsAsQuizaufgaben(dbResult.uuid);
+        Quiz quiz = new Quiz().withKlassenstufe(dbResult.getSchwierigkeitsgrad().getLabel())
+                .withName(dbResult.getName());
+        quiz.setAufgaben(aufgaben);
 
-		Quiz quiz = new Quiz().withKlassenstufe(dbResult.schwierigkeitsgrad.getLabel())
-			.withName(dbResult.name);
-		quiz.setAufgaben(aufgaben);
+        return Optional.of(quiz);
+    }
 
-		return Optional.of(quiz);
-	}
+    public List<Quizaufgabe> getItemsAsQuizaufgaben(final String aufgabensammlungID) {
 
-	public List<Quizaufgabe> getItemsAsQuizaufgaben(final String aufgabensammlungID) {
+        List<PersistenteAufgabeReadonly> aufgabenReadonly = aufgabensammlungDao.loadAufgabenByAufgabensammlung(aufgabensammlungID);
+        List<Quizaufgabe> aufgaben = new ArrayList<>();
 
-		List<PersistenteAufgabeReadonly> aufgabenReadonly = aufgabensammlungDao.loadAufgabenByAufgabensammlung(aufgabensammlungID);
-		List<Quizaufgabe> aufgaben = new ArrayList<>();
+        aufgabenReadonly.forEach(aufgabeDB -> {
 
-		aufgabenReadonly.forEach(aufgabeDB -> {
+            Quizaufgabe aufgabe = mapFromDB(aufgabeDB);
+            aufgaben.add(aufgabe);
+        });
+        QuizaufgabeComparator comparator = new QuizaufgabeComparator();
+        aufgaben.sort(comparator);
 
-			Quizaufgabe aufgabe = mapFromDB(aufgabeDB);
-			aufgaben.add(aufgabe);
-		});
-		QuizaufgabeComparator comparator = new QuizaufgabeComparator();
-		aufgaben.sort(comparator);
+        return aufgaben;
 
-		return aufgaben;
+    }
 
-	}
+    Quizaufgabe mapFromDB(final PersistenteAufgabeReadonly dbAufgabe) {
 
-	Quizaufgabe mapFromDB(final PersistenteAufgabeReadonly dbAufgabe) {
+        Quizaufgabe aufgabe = new Quizaufgabe();
+        aufgabe.setAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(dbAufgabe.getAntwortvorschlaege()));
+        aufgabe.setAntwortvorschlaegeEingebettet(dbAufgabe.isAntwortvorschlaegeEingebettet());
+        aufgabe.setSchluessel(dbAufgabe.getSchluessel());
+        aufgabe.setImages(raetselFileService.findImages(dbAufgabe.getFilenameVorschauFrage(), dbAufgabe.getFilenameVorschauLoesung()));
+        aufgabe.setQuelle(getQuellenangabe(dbAufgabe));
+        aufgabe.setNummer(dbAufgabe.getNummer());
+        aufgabe.setPunkte(dbAufgabe.getPunkte());
+        aufgabe.setStrafpunkte(berechneStrafpunkte(aufgabe.getPunkte(), aufgabe.getAntwortvorschlaege().length));
 
-		Quizaufgabe aufgabe = new Quizaufgabe();
-		aufgabe.setAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(dbAufgabe.antwortvorschlaege));
-		aufgabe.setAntwortvorschlaegeEingebettet(dbAufgabe.antwortvorschlaegeEingebettet);
-		aufgabe.setSchluessel(dbAufgabe.schluessel);
-		aufgabe.setImages(raetselFileService.findImages(dbAufgabe.filenameVorschauFrage, dbAufgabe.filenameVorschauLoesung));
-		aufgabe.setQuelle(getQuellenangabe(dbAufgabe));
-		aufgabe.setNummer(dbAufgabe.nummer);
-		aufgabe.setPunkte(dbAufgabe.punkte);
-		aufgabe.setStrafpunkte(berechneStrafpunkte(aufgabe.getPunkte(), aufgabe.getAntwortvorschlaege().length));
+        return aufgabe;
+    }
 
-		return aufgabe;
-	}
+    String getQuellenangabe(final PersistenteAufgabeReadonly ausDB) {
 
-	String getQuellenangabe(final PersistenteAufgabeReadonly ausDB) {
+        if (ausDB == null) {
 
-		if (ausDB == null) {
+            return null;
+        }
 
-			return null;
-		}
+        QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.getQuellenart());
+        String text = nameStrategie.getText(new QuelleInfosAdapter().adapt(ausDB));
 
-		QuelleNameStrategie nameStrategie = QuelleNameStrategie.getStrategie(ausDB.quellenart);
-		String text = nameStrategie.getText(new QuelleInfosAdapter().adapt(ausDB));
+        if (ausDB.getHerkunft() == RaetselHerkunftTyp.ADAPTION) {
 
-		if (ausDB.herkunft == RaetselHerkunftTyp.ADAPTION) {
+            Optional<PersistenteQuelleReadonly> optQuelle = quellenRepository.findQuelleWithUserId(ausDB.getOwner());
 
-			Optional<PersistenteQuelleReadonly> optQuelle = quellenRepository.findQuelleWithUserId(ausDB.owner);
+            if (optQuelle.isPresent()) {
 
-			if (optQuelle.isPresent()) {
+                PersistenteQuelleReadonly quelle = optQuelle.get();
+                text = quelle.getPerson() + " (basierend auf einer Idee aus " + text + ")";
+            }
 
-				PersistenteQuelleReadonly quelle = optQuelle.get();
-				text = quelle.person + " (basierend auf einer Idee aus " + text + ")";
-			}
+        }
 
-		}
+        if (ausDB.getAutorLoesung() != null) {
 
-		if (ausDB.autorLoesung != null) {
+            text += " (Lösung: " + ausDB.getAutorLoesung() + ")";
+        }
 
-			text += " (Lösung: " + ausDB.autorLoesung + ")";
-		}
+        return text;
+    }
 
-		return text;
-	}
+    int berechneStrafpunkte(final int punkte, final int anzahlAntwortvorschlaege) {
 
-	int berechneStrafpunkte(final int punkte, final int anzahlAntwortvorschlaege) {
+        if (anzahlAntwortvorschlaege == 0 || anzahlAntwortvorschlaege == 1) {
 
-		if (anzahlAntwortvorschlaege == 0 || anzahlAntwortvorschlaege == 1) {
+            return 0;
+        }
 
-			return 0;
-		}
-
-		return punkte / (anzahlAntwortvorschlaege - 1);
-	}
+        return punkte / (anzahlAntwortvorschlaege - 1);
+    }
 
 }

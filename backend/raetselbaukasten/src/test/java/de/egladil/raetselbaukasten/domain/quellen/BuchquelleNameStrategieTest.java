@@ -29,7 +29,7 @@ public class BuchquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.PERSON;
+		quelle.setQuellenart(Quellenart.PERSON);
 
 		// Act
 		try {
@@ -48,8 +48,8 @@ public class BuchquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.BUCH;
-		quelle.mediumTitel = "  ";
+		quelle.setQuellenart(Quellenart.BUCH);
+		quelle.setMediumTitel("  ");
 
 		// Act
 		try {
@@ -68,8 +68,8 @@ public class BuchquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.BUCH;
-		quelle.autor = "  ";
+		quelle.setQuellenart(Quellenart.BUCH);
+		quelle.setAutor("  ");
 
 		// Act
 		try {
@@ -88,8 +88,8 @@ public class BuchquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.BUCH;
-		quelle.seite = "  ";
+		quelle.setQuellenart(Quellenart.BUCH);
+		quelle.setSeite("  ");
 
 		// Act
 		try {
@@ -108,7 +108,7 @@ public class BuchquelleNameStrategieTest {
 
 		// Arrange
 		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.quellenart = Quellenart.BUCH;
+		quelle.setQuellenart(Quellenart.BUCH);
 
 		String expected = "Johannes Lehmann: Grunschulolympiade 2x2, S.42";
 

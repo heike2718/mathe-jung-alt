@@ -4,12 +4,6 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.dao;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.AufgabensammlungenSuchparameter;
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Schwierigkeitsgrad;
@@ -27,6 +21,11 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * AufgabensammlungDao
@@ -35,348 +34,347 @@ import jakarta.validation.constraints.Size;
 @ApplicationScoped
 public class AufgabensammlungDao {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungDao.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungDao.class);
 
-	@Inject
-	EntityManager entityManager;
+    @Inject
+    EntityManager entityManager;
 
-	/**
-	 * Zählt die Treffermenge bei Anwendung des gegebenen Filters. Die Parameter können null sein. Bei name und kommentar wird mit
-	 * like gesucht, alle anderen mit equal.
-	 *
-	 * @param  suchparameter
-	 * @return               long
-	 */
-	public long countByFilter(final AufgabensammlungenSuchparameter suchparameter) {
+    /**
+     * Zählt die Treffermenge bei Anwendung des gegebenen Filters. Die Parameter können null sein. Bei name und kommentar wird mit
+     * like gesucht, alle anderen mit equal.
+     *
+     * @param suchparameter
+     * @return long
+     */
+    public long countByFilter(final AufgabensammlungenSuchparameter suchparameter) {
 
-		String stmt = "select count(*) from PersistenteAufgabensammlung g";
-		String whereStmt = createWhereCondition(suchparameter);
+        String stmt = "select count(*) from PersistenteAufgabensammlung g";
+        String whereStmt = createWhereCondition(suchparameter);
 
-		if (StringUtils.isNotBlank(whereStmt)) {
+        if (StringUtils.isNotBlank(whereStmt)) {
 
-			stmt += " where " + whereStmt;
-		}
+            stmt += " where " + whereStmt;
+        }
 
-		LOGGER.debug("stmt={}", stmt);
+        LOGGER.debug("stmt={}", stmt);
 
-		Query query = entityManager.createQuery(stmt);
+        Query query = entityManager.createQuery(stmt);
 
-		if (StringUtils.isNotBlank(whereStmt)) {
+        if (StringUtils.isNotBlank(whereStmt)) {
 
-			setParameters(query, suchparameter);
-		}
+            setParameters(query, suchparameter);
+        }
 
-		@SuppressWarnings("unchecked")
-		List<Long> trefferliste = query
-			.getResultList();
+        @SuppressWarnings("unchecked")
+        List<Long> trefferliste = query
+                .getResultList();
 
-		int anzahl = trefferliste.get(0).intValue();
+        int anzahl = trefferliste.get(0).intValue();
 
-		return anzahl;
-	}
+        return anzahl;
+    }
 
-	/**
-	 * Sucht die Aufgabensammlung die den Filterkriterien entsprechen, sortiert nach name. Die Parameter können null sein. Bei name
-	 * und kommentar wird mit like gesucht, alle anderen mit equal.
-	 *
-	 * @param  suchparameter
-	 * @param  limit
-	 * @param  offset
-	 * @return               List
-	 */
-	public List<PersistenteAufgabensammlung> findByFilter(final AufgabensammlungenSuchparameter suchparameter, final int limit, final int offset) {
+    /**
+     * Sucht die Aufgabensammlung die den Filterkriterien entsprechen, sortiert nach name. Die Parameter können null sein. Bei name
+     * und kommentar wird mit like gesucht, alle anderen mit equal.
+     *
+     * @param suchparameter
+     * @param limit
+     * @param offset
+     * @return List
+     */
+    public List<PersistenteAufgabensammlung> findByFilter(final AufgabensammlungenSuchparameter suchparameter, final int limit, final int offset) {
 
-		String stmt = "select g from PersistenteAufgabensammlung g";
-		String whereStmt = createWhereCondition(suchparameter);
+        String stmt = "select g from PersistenteAufgabensammlung g";
+        String whereStmt = createWhereCondition(suchparameter);
 
-		if (StringUtils.isNotBlank(whereStmt)) {
+        if (StringUtils.isNotBlank(whereStmt)) {
 
-			stmt += " where " + whereStmt;
-		}
+            stmt += " where " + whereStmt;
+        }
 
-		String sortStmt = " order by g." + suchparameter.sortAttribute().toString() + " "
-			+ suchparameter.sortDirection().toString();
+        String sortStmt = " order by g." + suchparameter.sortAttribute().toString() + " "
+                + suchparameter.sortDirection().toString();
 
-		stmt += sortStmt;
+        stmt += sortStmt;
 
-		TypedQuery<PersistenteAufgabensammlung> query = entityManager.createQuery(stmt,
-			PersistenteAufgabensammlung.class).setFirstResult(offset)
-			.setMaxResults(limit);
+        TypedQuery<PersistenteAufgabensammlung> query = entityManager.createQuery(stmt,
+                        PersistenteAufgabensammlung.class).setFirstResult(offset)
+                .setMaxResults(limit);
 
-		setParameters(query, suchparameter);
+        setParameters(query, suchparameter);
 
-		LOGGER.debug("stmt={}", stmt);
+        LOGGER.debug("stmt={}", stmt);
 
-		return query.getResultList();
-	}
+        return query.getResultList();
+    }
 
-	String createWhereCondition(final AufgabensammlungenSuchparameter suchparameter) {
+    String createWhereCondition(final AufgabensammlungenSuchparameter suchparameter) {
 
-		String whereStmt = "";
+        String whereStmt = "";
 
-		boolean addAnd = false;
+        boolean addAnd = false;
 
-		if (StringUtils.isNotBlank(suchparameter.name())) {
+        if (StringUtils.isNotBlank(suchparameter.name())) {
 
-			whereStmt = " g.name like :name";
-			addAnd = true;
-		}
+            whereStmt = " g.name like :name";
+            addAnd = true;
+        }
 
-		if (suchparameter.schwierigkeitsgrad() != null) {
+        if (suchparameter.schwierigkeitsgrad() != null) {
 
-			if (addAnd) {
+            if (addAnd) {
 
-				whereStmt += " and g.schwierigkeitsgrad = :schwierigkeitsgrad";
-			} else {
+                whereStmt += " and g.schwierigkeitsgrad = :schwierigkeitsgrad";
+            } else {
 
-				whereStmt += " g.schwierigkeitsgrad = :schwierigkeitsgrad";
-				addAnd = true;
-			}
+                whereStmt += " g.schwierigkeitsgrad = :schwierigkeitsgrad";
+                addAnd = true;
+            }
 
-		}
+        }
 
-		if (suchparameter.referenztyp() != null) {
+        if (suchparameter.referenztyp() != null) {
 
-			if (addAnd) {
+            if (addAnd) {
 
-				whereStmt += " and g.referenztyp = :referenztyp";
-			} else {
+                whereStmt += " and g.referenztyp = :referenztyp";
+            } else {
 
-				whereStmt += " g.referenztyp = :referenztyp";
-				addAnd = true;
-			}
-		}
+                whereStmt += " g.referenztyp = :referenztyp";
+                addAnd = true;
+            }
+        }
 
-		if (StringUtils.isNotBlank(suchparameter.referenz())) {
+        if (StringUtils.isNotBlank(suchparameter.referenz())) {
 
-			if (addAnd) {
+            if (addAnd) {
 
-				whereStmt += " and g.referenz like :referenz";
-			} else {
+                whereStmt += " and g.referenz like :referenz";
+            } else {
 
-				whereStmt += " g.referenz like :referenz";
-				addAnd = true;
-			}
-		}
+                whereStmt += " g.referenz like :referenz";
+                addAnd = true;
+            }
+        }
 
-		if (Benutzerart.STANDARD == suchparameter.benutzerart()) {
+        if (Benutzerart.STANDARD == suchparameter.benutzerart()) {
 
-			if (addAnd) {
+            if (addAnd) {
 
-				whereStmt += " and (g.freigegeben = :freigegeben and g.privat = :privatFalse or g.privat=:privatTrue and g.owner = :owner) ";
+                whereStmt += " and (g.freigegeben = :freigegeben and g.privat = :privatFalse or g.privat=:privatTrue and g.owner = :owner) ";
 
-			} else {
+            } else {
 
-				whereStmt += " (g.freigegeben = :freigegeben and g.privat = :privatFalse or g.privat=:privatTrue and g.owner = :owner) ";
-				addAnd = true;
-			}
+                whereStmt += " (g.freigegeben = :freigegeben and g.privat = :privatFalse or g.privat=:privatTrue and g.owner = :owner) ";
+                addAnd = true;
+            }
 
-		}
+        }
 
-		if (Benutzerart.AUTOR == suchparameter.benutzerart()) {
+        if (Benutzerart.AUTOR == suchparameter.benutzerart()) {
 
-			if (addAnd) {
+            if (addAnd) {
 
-				whereStmt += " and (g.privat = false or g.privat=:privatTrue and g.owner = :owner) ";
-			} else {
+                whereStmt += " and (g.privat = false or g.privat=:privatTrue and g.owner = :owner) ";
+            } else {
 
-				whereStmt += " (g.privat = false or g.privat=:privatTrue and g.owner = :owner) ";
-			}
-		}
+                whereStmt += " (g.privat = false or g.privat=:privatTrue and g.owner = :owner) ";
+            }
+        }
 
-		return whereStmt;
-	}
+        return whereStmt;
+    }
 
-	void setParameters(final Query query, final AufgabensammlungenSuchparameter suchparameter) {
+    void setParameters(final Query query, final AufgabensammlungenSuchparameter suchparameter) {
 
-		if (StringUtils.isNotBlank(suchparameter.name())) {
+        if (StringUtils.isNotBlank(suchparameter.name())) {
 
-			query.setParameter("name", "%" + suchparameter.name().trim().toLowerCase() + "%");
-		}
+            query.setParameter("name", "%" + suchparameter.name().trim().toLowerCase() + "%");
+        }
 
-		if (suchparameter.schwierigkeitsgrad() != null) {
+        if (suchparameter.schwierigkeitsgrad() != null) {
 
-			query.setParameter("schwierigkeitsgrad", suchparameter.schwierigkeitsgrad());
-		}
+            query.setParameter("schwierigkeitsgrad", suchparameter.schwierigkeitsgrad());
+        }
 
-		if (suchparameter.referenztyp() != null) {
+        if (suchparameter.referenztyp() != null) {
 
-			query.setParameter("referenztyp", suchparameter.referenztyp());
-		}
+            query.setParameter("referenztyp", suchparameter.referenztyp());
+        }
 
-		if (StringUtils.isNotBlank(suchparameter.referenz())) {
+        if (StringUtils.isNotBlank(suchparameter.referenz())) {
 
-			query.setParameter("referenz", "%" + suchparameter.referenz().trim().toLowerCase() + "%");
-		}
+            query.setParameter("referenz", "%" + suchparameter.referenz().trim().toLowerCase() + "%");
+        }
 
-		if (Benutzerart.STANDARD == suchparameter.benutzerart()) {
+        if (Benutzerart.STANDARD == suchparameter.benutzerart()) {
 
-			query.setParameter("freigegeben", true)
-				.setParameter("privatTrue", true)
-				.setParameter("privatFalse", false)
-				.setParameter("owner", suchparameter.owner());
-		}
+            query.setParameter("freigegeben", true)
+                    .setParameter("privatTrue", true)
+                    .setParameter("privatFalse", false)
+                    .setParameter("owner", suchparameter.owner());
+        }
 
-		if (Benutzerart.AUTOR == suchparameter.benutzerart()) {
+        if (Benutzerart.AUTOR == suchparameter.benutzerart()) {
 
-			query.setParameter("privatTrue", true).setParameter("owner", suchparameter.owner());
-		}
-	}
+            query.setParameter("privatTrue", true).setParameter("owner", suchparameter.owner());
+        }
+    }
 
-	/**
-	 * @param  referenztyp
-	 * @param  referenz
-	 * @param  schwierigkeitsgrad
-	 * @return                    PersistenteAufgabensammlung oder null
-	 */
-	public PersistenteAufgabensammlung findByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
+    /**
+     * @param referenztyp
+     * @param referenz
+     * @param schwierigkeitsgrad
+     * @return PersistenteAufgabensammlung oder null
+     */
+    public PersistenteAufgabensammlung findByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
 
-		LOGGER.debug(" ==> (2)");
-		List<PersistenteAufgabensammlung> trefferliste = entityManager
-			.createNamedQuery(PersistenteAufgabensammlung.FIND_BY_UNIQUE_KEY, PersistenteAufgabensammlung.class)
-			.setParameter("schwierigkeitsgrad", schwierigkeitsgrad)
-			.setParameter("referenztyp", referenztyp)
-			.setParameter("referenz", referenz)
-			.getResultList();
+        LOGGER.debug(" ==> (2)");
+        List<PersistenteAufgabensammlung> trefferliste = entityManager
+                .createNamedQuery(PersistenteAufgabensammlung.FIND_BY_UNIQUE_KEY, PersistenteAufgabensammlung.class)
+                .setParameter("schwierigkeitsgrad", schwierigkeitsgrad)
+                .setParameter("referenztyp", referenztyp)
+                .setParameter("referenz", referenz)
+                .getResultList();
 
-		LOGGER.debug(" ==> (3)");
+        LOGGER.debug(" ==> (3)");
 
-		if (trefferliste.size() > 1) {
+        if (trefferliste.size() > 1) {
 
-			LOGGER.error("{} Treffer zu einem eigentlich eindeutigen key referenzty={}, referenz={}, schwierigkeitsgrad={}",
-				trefferliste.size(), referenztyp, referenz, schwierigkeitsgrad);
-			throw new MjaRuntimeException("mehr als 1 Treffer zu einem eigentlich eindeutigen key");
-		}
+            LOGGER.error("{} Treffer zu einem eigentlich eindeutigen key referenzty={}, referenz={}, schwierigkeitsgrad={}",
+                    trefferliste.size(), referenztyp, referenz, schwierigkeitsgrad);
+            throw new MjaRuntimeException("mehr als 1 Treffer zu einem eigentlich eindeutigen key");
+        }
 
-		return trefferliste.isEmpty() ? null : trefferliste.get(0);
-	}
+        return trefferliste.isEmpty() ? null : trefferliste.get(0);
+    }
 
-	/**
-	 * @param  aufgabensammlungID
-	 * @return
-	 */
-	public PersistenteAufgabensammlung findByID(final String aufgabensammlungID) {
+    /**
+     * @param aufgabensammlungID
+     * @return
+     */
+    public PersistenteAufgabensammlung findByID(final String aufgabensammlungID) {
 
-		return entityManager.find(PersistenteAufgabensammlung.class, aufgabensammlungID);
-	}
+        return entityManager.find(PersistenteAufgabensammlung.class, aufgabensammlungID);
+    }
 
-	/**
-	 * @param  name
-	 * @return      PersistenteAufgabensammlung oder null
-	 */
-	public PersistenteAufgabensammlung findByName(final String name) {
+    /**
+     * @param name
+     * @return PersistenteAufgabensammlung oder null
+     */
+    public PersistenteAufgabensammlung findByName(final String name) {
 
-		List<PersistenteAufgabensammlung> trefferliste = entityManager
-			.createNamedQuery(PersistenteAufgabensammlung.FIND_BY_NAME, PersistenteAufgabensammlung.class)
-			.setParameter("name", name)
-			.getResultList();
+        List<PersistenteAufgabensammlung> trefferliste = entityManager
+                .createNamedQuery(PersistenteAufgabensammlung.FIND_BY_NAME, PersistenteAufgabensammlung.class)
+                .setParameter("name", name)
+                .getResultList();
 
-		if (trefferliste.size() > 1) {
+        if (trefferliste.size() > 1) {
 
-			LOGGER.error("{} Treffer mit dem Namen name={}",
-				trefferliste.size(), name);
-			throw new MjaRuntimeException("mehr als 1 Treffer mit diesem Namen");
-		}
+            LOGGER.error("{} Treffer mit dem Namen name={}",
+                    trefferliste.size(), name);
+            throw new MjaRuntimeException("mehr als 1 Treffer mit diesem Namen");
+        }
 
-		return trefferliste.isEmpty() ? null : trefferliste.get(0);
-	}
+        return trefferliste.isEmpty() ? null : trefferliste.get(0);
+    }
 
-	/**
-	 * Gibt alle Elemente der gegebenen Aufgabensammlung zurück.
-	 *
-	 * @param  aufgabensammlungID
-	 * @return                    List
-	 */
-	public List<PersistentesAufgabensammlungselement> loadElementeAufgabensammlung(final String aufgabensammlungID) {
+    /**
+     * Gibt alle Elemente der gegebenen Aufgabensammlung zurück.
+     *
+     * @param aufgabensammlungID
+     * @return List
+     */
+    public List<PersistentesAufgabensammlungselement> loadElementeAufgabensammlung(final String aufgabensammlungID) {
 
-		return entityManager
-			.createNamedQuery(PersistentesAufgabensammlungselement.LOAD_BY_AUFGABENSAMMLUNG,
-				PersistentesAufgabensammlungselement.class)
-			.setParameter("aufgabensammlungID", aufgabensammlungID).getResultList();
-	}
+        return entityManager
+                .createNamedQuery(PersistentesAufgabensammlungselement.LOAD_BY_AUFGABENSAMMLUNG,
+                        PersistentesAufgabensammlungselement.class)
+                .setParameter("aufgabensammlungID", aufgabensammlungID).getResultList();
+    }
 
-	/**
-	 * Läd alle Aufgaben der gegebenen Aufgabensammlungen.
-	 *
-	 * @param  aufgabensammlungID
-	 * @return                    List
-	 */
-	public List<PersistenteAufgabeReadonly> loadAufgabenByAufgabensammlung(final String aufgabensammlungID) {
+    /**
+     * Läd alle Aufgaben der gegebenen Aufgabensammlungen.
+     *
+     * @param aufgabensammlungID
+     * @return List
+     */
+    public List<PersistenteAufgabeReadonly> loadAufgabenByAufgabensammlung(final String aufgabensammlungID) {
 
-		return entityManager
-			.createNamedQuery(PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG, PersistenteAufgabeReadonly.class)
-			.setParameter("sammlung", aufgabensammlungID).getResultList();
-	}
+        return entityManager
+                .createNamedQuery(PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG, PersistenteAufgabeReadonly.class)
+                .setParameter("sammlung", aufgabensammlungID).getResultList();
+    }
 
-	/**
-	 * Speichert die gegebene Aufgabensammlung und gibt die gespeicherte Entity zurück.
-	 *
-	 * @param  sammlung
-	 *                  PersistenteAufgabensammlung
-	 * @return          PersistenteAufgabensammlung
-	 */
-	public PersistenteAufgabensammlung saveAufgabensammlung(final PersistenteAufgabensammlung aufgabensammlung) {
+    /**
+     * Speichert die gegebene Aufgabensammlung und gibt die gespeicherte Entity zurück.
+     *
+     * @param aufgabensammlung PersistenteAufgabensammlung
+     * @return PersistenteAufgabensammlung
+     */
+    public PersistenteAufgabensammlung saveAufgabensammlung(final PersistenteAufgabensammlung aufgabensammlung) {
 
-		if (aufgabensammlung.isPersistent()) {
+        if (aufgabensammlung.isPersistent()) {
 
-			return entityManager.merge(aufgabensammlung);
-		}
+            return entityManager.merge(aufgabensammlung);
+        }
 
-		entityManager.persist(aufgabensammlung);
+        entityManager.persist(aufgabensammlung);
 
-		return aufgabensammlung;
-	}
+        return aufgabensammlung;
+    }
 
-	/**
-	 * @param  uuid
-	 * @return
-	 */
-	public long countElementeAufgabensammlung(@NotNull @Size(min = 1, max = 40) final String uuid) {
+    /**
+     * @param uuid
+     * @return
+     */
+    public long countElementeAufgabensammlung(@NotNull @Size(min = 1, max = 40) final String uuid) {
 
-		String stmt = "SELECT COUNT(*) from AUFGABENSAMMLUNGSELEMENTE e WHERE e.SAMMLUNG = :sammlung";
+        String stmt = "SELECT COUNT(*) from AUFGABENSAMMLUNGSELEMENTE e WHERE e.SAMMLUNG = :sammlung";
 
-		@SuppressWarnings("unchecked")
-		List<Long> trefferliste = entityManager.createNativeQuery(stmt).setParameter("sammlung", uuid).getResultList();
+        @SuppressWarnings("unchecked")
+        List<Long> trefferliste = entityManager.createNativeQuery(stmt).setParameter("sammlung", uuid).getResultList();
 
-		return trefferliste.get(0).longValue();
-	}
+        return trefferliste.get(0).longValue();
+    }
 
-	/**
-	 * @param  elementID
-	 * @return           PersistentesAufgabensammlungselement
-	 */
-	public PersistentesAufgabensammlungselement findElementById(final String elementID) {
+    /**
+     * @param elementID
+     * @return PersistentesAufgabensammlungselement
+     */
+    public PersistentesAufgabensammlungselement findElementById(final String elementID) {
 
-		return entityManager.find(PersistentesAufgabensammlungselement.class, elementID);
-	}
+        return entityManager.find(PersistentesAufgabensammlungselement.class, elementID);
+    }
 
-	/**
-	 * @param  element
-	 * @return         PersistentesAufgabensammlungselement
-	 */
-	public PersistentesAufgabensammlungselement saveElement(final PersistentesAufgabensammlungselement element) {
+    /**
+     * @param element
+     * @return PersistentesAufgabensammlungselement
+     */
+    public PersistentesAufgabensammlungselement saveElement(final PersistentesAufgabensammlungselement element) {
 
-		if (element.isPersistent()) {
+        if (element.isPersistent()) {
 
-			return entityManager.merge(element);
-		}
+            return entityManager.merge(element);
+        }
 
-		entityManager.persist(element);
-		return element;
-	}
+        entityManager.persist(element);
+        return element;
+    }
 
-	/**
-	 * @param element
-	 */
-	@Transactional
-	public void deleteElement(final String elementID) {
+    /**
+     * @param element
+     */
+    @Transactional
+    public void deleteElement(final String elementID) {
 
-		final PersistentesAufgabensammlungselement element = entityManager.find(PersistentesAufgabensammlungselement.class,
-			elementID);
+        final PersistentesAufgabensammlungselement element = entityManager.find(PersistentesAufgabensammlungselement.class,
+                elementID);
 
-		if (element != null) {
+        if (element != null) {
 
-			entityManager.remove(element);
-		}
-	}
+            entityManager.remove(element);
+        }
+    }
 }

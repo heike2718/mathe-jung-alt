@@ -4,13 +4,6 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.quellen;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.egladil.raetselbaukasten.domain.auth.session.AuthenticatedUser;
 import de.egladil.raetselbaukasten.domain.exceptions.MjaRuntimeException;
 import de.egladil.raetselbaukasten.domain.quellen.dto.QuelleDto;
@@ -23,6 +16,11 @@ import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Persisten
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 /**
  * QuellenService
@@ -31,209 +29,202 @@ import jakarta.transaction.Transactional;
 @ApplicationScoped
 public class QuellenService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(QuellenService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuellenService.class);
 
-	@Inject
-	AuthenticationContext authCtx;
+    @Inject
+    AuthenticationContext authCtx;
 
-	@Inject
-	QuellenRepository quellenRepository;
+    @Inject
+    QuellenRepository quellenRepository;
 
-	public QuelleDto findOrCreateQuelleAutor() {
+    public QuelleDto findOrCreateQuelleAutor() {
 
-		AuthenticatedUser user = authCtx.getUser();
-		String userId = user.getUuid();
+        AuthenticatedUser user = authCtx.getUser();
+        String userId = user.getUuid();
 
-		Optional<QuelleDto> optQuelle = this.findQuelleAutor();
+        Optional<QuelleDto> optQuelle = this.findQuelleAutor();
 
-		if (optQuelle.isPresent()) {
+        if (optQuelle.isPresent()) {
 
-			return optQuelle.get();
-		}
-		QuelleDto datenQuelle = new QuelleDto();
-		datenQuelle.setPerson(user.getFullName());
-		datenQuelle.setQuellenart(Quellenart.PERSON);
-		datenQuelle.setId("neu");
+            return optQuelle.get();
+        }
+        QuelleDto datenQuelle = new QuelleDto();
+        datenQuelle.setPerson(user.getFullName());
+        datenQuelle.setQuellenart(Quellenart.PERSON);
+        datenQuelle.setId("neu");
 
-		PersistenteQuelle neueQuelleDB = this.quelleAnlegenOderAendern(RaetselHerkunftTyp.EIGENKREATION, datenQuelle);
+        PersistenteQuelle neueQuelleDB = this.quelleAnlegenOderAendern(RaetselHerkunftTyp.EIGENKREATION, datenQuelle);
 
-		LOGGER.info("Quelle für AUTOR {} angelegt: UUID={}", user.getFullName(), neueQuelleDB);
+        LOGGER.info("Quelle für AUTOR {} angelegt: UUID={}", user.getFullName(), neueQuelleDB);
 
-		optQuelle = this.getQuelleWithId(neueQuelleDB.uuid);
+        optQuelle = this.getQuelleWithId(neueQuelleDB.getUuid());
 
-		if (optQuelle.isEmpty()) {
+        if (optQuelle.isEmpty()) {
 
-			String message = "Da ist etwas fürchterlich schiefgegangen beim Anlegen einer Quelle für den gegebenen Autor "
-				+ StringUtils.abbreviate(userId, 11);
-			LOGGER.error(message);
-			throw new MjaRuntimeException(message);
-		}
+            String message = "Da ist etwas fürchterlich schiefgegangen beim Anlegen einer Quelle für den gegebenen Autor "
+                    + StringUtils.abbreviate(userId, 11);
+            LOGGER.error(message);
+            throw new MjaRuntimeException(message);
+        }
 
-		return optQuelle.get();
-	}
+        return optQuelle.get();
+    }
 
-	Optional<QuelleDto> findQuelleAutor() {
+    Optional<QuelleDto> findQuelleAutor() {
 
-		AuthenticatedUser user = authCtx.getUser();
-		String userId = user.getUuid();
-		Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithUserId(userId);
+        AuthenticatedUser user = authCtx.getUser();
+        String userId = user.getUuid();
+        Optional<PersistenteQuelleReadonly> optAusDB = this.quellenRepository.findQuelleWithUserId(userId);
 
-		if (optAusDB.isEmpty()) {
+        if (optAusDB.isEmpty()) {
 
-			return Optional.empty();
-		}
+            return Optional.empty();
+        }
 
-		return Optional.of(mapFromDB(optAusDB.get()));
+        return Optional.of(mapFromDB(optAusDB.get()));
 
-	}
+    }
 
-	/**
-	 * Gibt die Quelle mit der gegebenen UUID zurück.
-	 *
-	 * @param  id
-	 *            String
-	 * @return    Optional
-	 */
-	public Optional<QuelleDto> getQuelleWithId(final String id) {
+    /**
+     * Gibt die Quelle mit der gegebenen UUID zurück.
+     *
+     * @param id String
+     * @return Optional
+     */
+    public Optional<QuelleDto> getQuelleWithId(final String id) {
 
-		PersistenteQuelleReadonly ausDB = this.quellenRepository.findQuelleReadonlyById(id);
+        PersistenteQuelleReadonly ausDB = this.quellenRepository.findQuelleReadonlyById(id);
 
-		return ausDB == null ? Optional.empty() : Optional.of(mapFromDB(ausDB));
-	}
+        return ausDB == null ? Optional.empty() : Optional.of(mapFromDB(ausDB));
+    }
 
-	QuelleDto mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
+    QuelleDto mapFromDB(final PersistenteQuelleReadonly persistenteQuelle) {
 
-		QuelleDto quelle = new QuelleDto();
-		quelle.setAusgabe(persistenteQuelle.ausgabe);
-		quelle.setId(persistenteQuelle.uuid);
-		quelle.setJahr(persistenteQuelle.jahr);
-		quelle.setKlasse(persistenteQuelle.klasse);
-		quelle.setMediumUuid(persistenteQuelle.mediumUuid);
-		quelle.setPerson(persistenteQuelle.person);
-		quelle.setQuellenart(persistenteQuelle.quellenart);
-		quelle.setSeite(persistenteQuelle.seite);
-		quelle.setStufe(persistenteQuelle.stufe);
-		quelle.setPfad(persistenteQuelle.pfad);
-		return quelle;
-	}
+        QuelleDto quelle = new QuelleDto();
+        quelle.setAusgabe(persistenteQuelle.getAusgabe());
+        quelle.setId(persistenteQuelle.getUuid());
+        quelle.setJahr(persistenteQuelle.getJahr());
+        quelle.setKlasse(persistenteQuelle.getKlasse());
+        quelle.setMediumUuid(persistenteQuelle.getMediumUuid());
+        quelle.setPerson(persistenteQuelle.getPerson());
+        quelle.setQuellenart(persistenteQuelle.getQuellenart());
+        quelle.setSeite(persistenteQuelle.getSeite());
+        quelle.setStufe(persistenteQuelle.getStufe());
+        quelle.setPfad(persistenteQuelle.getPfad());
+        return quelle;
+    }
 
-	public PersistenteQuelle quelleAnlegenOderAendern(final RaetselHerkunftTyp herkunftTyp, final QuelleDto datenQuelle) {
+    public PersistenteQuelle quelleAnlegenOderAendern(final RaetselHerkunftTyp herkunftTyp, final QuelleDto datenQuelle) {
 
-		Quelle quelle = createQuelle(herkunftTyp, datenQuelle);
+        Quelle quelle = createQuelle(herkunftTyp, datenQuelle);
 
-		if ("neu".equals(quelle.getId())) {
+        if ("neu".equals(quelle.getId())) {
 
-			return quelleAnlegen(quelle);
+            return quelleAnlegen(quelle);
 
-		}
+        }
 
-		return quelleAendern(quelle);
-	}
+        return quelleAendern(quelle);
+    }
 
-	@Transactional
-	public void quelleLoeschen(final String quelleId) {
+    @Transactional
+    public void quelleLoeschen(final String quelleId) {
 
-		PersistenteQuelle quelle = this.quellenRepository.findQuelleEntityWithId(quelleId);
+        PersistenteQuelle quelle = this.quellenRepository.findQuelleEntityWithId(quelleId);
 
-		if (quelle != null) {
+        if (quelle != null) {
 
-			this.quellenRepository.deleteQuelle(quelle);
+            this.quellenRepository.deleteQuelle(quelle);
 
-			LOGGER.debug("quelle gelöscht: UUID={}", quelleId);
-		}
-	}
+            LOGGER.debug("quelle gelöscht: UUID={}", quelleId);
+        }
+    }
 
-	/**
-	 * @param  quelle
-	 * @return
-	 */
-	@Transactional
-	PersistenteQuelle quelleAnlegen(final Quelle quelle) {
+    /**
+     * @param quelle
+     * @return
+     */
+    @Transactional
+    PersistenteQuelle quelleAnlegen(final Quelle quelle) {
 
-		int maxSornr = quellenRepository.getMaximumOfAllSortNumbers();
+        int maxSornr = quellenRepository.getMaximumOfAllSortNumbers();
 
-		String userId = authCtx.getUser().getUuid();
-		QuelleDto datenQuelle = quelle.getDatenQuelle();
+        String userId = authCtx.getUser().getUuid();
+        QuelleDto datenQuelle = quelle.getDatenQuelle();
 
-		PersistenteQuelle quelleEntity = new PersistenteQuelle();
+        PersistenteQuelle quelleEntity = PersistenteQuelle.builder()
+                .sortNumber(maxSornr + 1)
+                .owner(userId)
+                .ausgabe(datenQuelle.getAusgabe())
+                .geaendertDurch(userId)
+                .jahr(datenQuelle.getJahr())
+                .klasse(datenQuelle.getKlasse())
+                .mediumID(datenQuelle.getMediumUuid())
+                .person(datenQuelle.getPerson())
+                .quellenart(datenQuelle.getQuellenart())
+                .seite(datenQuelle.getSeite())
+                .pfad(datenQuelle.getPfad())
+                .userId(quelle.getUserId())
+                .build();
 
-		quelleEntity.setImportierteUuid(UUID.randomUUID().toString());
-		quelleEntity.sortNumber = maxSornr + 1;
-		quelleEntity.owner = userId;
-		quelleEntity.ausgabe = datenQuelle.getAusgabe();
-		quelleEntity.geaendertDurch = userId;
-		quelleEntity.jahr = datenQuelle.getJahr();
-		quelleEntity.klasse = datenQuelle.getKlasse();
-		quelleEntity.mediumID = datenQuelle.getMediumUuid();
-		quelleEntity.person = datenQuelle.getPerson();
-		quelleEntity.quellenart = datenQuelle.getQuellenart();
-		quelleEntity.seite = datenQuelle.getSeite();
-		quelleEntity.pfad = datenQuelle.getPfad();
-		quelleEntity.userId = quelle.getUserId();
+        PersistenteQuelle persisted = quellenRepository.save(quelleEntity);
 
-		PersistenteQuelle persisted = quellenRepository.save(quelleEntity);
+        LOGGER.debug("quelle angelegt: {}", quelle.getDatenQuelle().toString());
 
-		LOGGER.debug("quelle angelegt: {}", quelle.getDatenQuelle().toString());
+        return persisted;
+    }
 
-		return persisted;
-	}
+    /**
+     * @param quelle
+     * @return
+     */
+    @Transactional
+    PersistenteQuelle quelleAendern(final Quelle quelle) {
 
-	/**
-	 * @param  quelle
-	 * @return
-	 */
-	@Transactional
-	PersistenteQuelle quelleAendern(final Quelle quelle) {
+        PersistenteQuelle quelleEntity = quellenRepository.findQuelleEntityWithId(quelle.getId());
 
-		PersistenteQuelle quelleEntity = quellenRepository.findQuelleEntityWithId(quelle.getId());
+        if (quelleEntity == null) {
 
-		if (quelleEntity == null) {
+            LOGGER.error(
+                    "keine QUELLE mit uuid={} vorhanden. Das darf nur bei neuen Rätseln (id='neu') der Fall sein. Da stimmt beim Laden der Details eines Rätsels etwas nicht oder beim Mappen der Herkunft auf die Quelle im Frontend!");
+            throw new MjaRuntimeException("Inonsistente Daten Rätsel-Quelle");
+        }
 
-			LOGGER.error(
-				"keine QUELLE mit uuid={} vorhanden. Das darf nur bei neuen Rätseln (id='neu') der Fall sein. Da stimmt beim Laden der Details eines Rätsels etwas nicht oder beim Mappen der Herkunft auf die Quelle im Frontend!");
-			throw new MjaRuntimeException("Inonsistente Daten Rätsel-Quelle");
-		}
+        String userId = authCtx.getUser().getUuid();
+        QuelleDto datenQuelle = quelle.getDatenQuelle();
 
-		String userId = authCtx.getUser().getUuid();
-		QuelleDto datenQuelle = quelle.getDatenQuelle();
+        quelleEntity.setAusgabe(datenQuelle.getAusgabe());
+        quelleEntity.setGeaendertDurch(userId);
+        quelleEntity.setJahr(datenQuelle.getJahr());
+        quelleEntity.setKlasse(datenQuelle.getKlasse());
+        quelleEntity.setMediumID(datenQuelle.getMediumUuid());
+        quelleEntity.setPerson(datenQuelle.getPerson());
+        quelleEntity.setQuellenart(datenQuelle.getQuellenart());
+        quelleEntity.setSeite(datenQuelle.getSeite());
+        quelleEntity.setPfad(datenQuelle.getPfad());
 
-		quelleEntity.ausgabe = datenQuelle.getAusgabe();
-		quelleEntity.geaendertDurch = userId;
-		quelleEntity.jahr = datenQuelle.getJahr();
-		quelleEntity.klasse = datenQuelle.getKlasse();
-		quelleEntity.mediumID = datenQuelle.getMediumUuid();
-		quelleEntity.person = datenQuelle.getPerson();
-		quelleEntity.quellenart = datenQuelle.getQuellenart();
-		quelleEntity.seite = datenQuelle.getSeite();
-		quelleEntity.pfad = datenQuelle.getPfad();
+        PersistenteQuelle persisted = quellenRepository.save(quelleEntity);
 
-		PersistenteQuelle persisted = quellenRepository.save(quelleEntity);
+        LOGGER.debug("quelle geandert: {}", quelle.getDatenQuelle().toString());
 
-		LOGGER.debug("quelle geandert: {}", quelle.getDatenQuelle().toString());
+        return persisted;
+    }
 
-		return persisted;
-	}
+    private Quelle createQuelle(final RaetselHerkunftTyp herkunftstyp, final QuelleDto datenQuelle) {
 
-	/**
-	 * @param  datenQuelle
-	 * @param  persistentesRaetsel
-	 * @return                     Quelle
-	 */
-	private Quelle createQuelle(final RaetselHerkunftTyp herkunftstyp, final QuelleDto datenQuelle) {
+        String theUserId = authCtx.getUser().getUuid();
 
-		String theUserId = authCtx.getUser().getUuid();
+        Quelle quelle = new Quelle(datenQuelle.getId())
+                .withDatenQuelle(datenQuelle);
 
-		Quelle quelle = new Quelle(datenQuelle.getId())
-			.withDatenQuelle(datenQuelle);
+        if ("neu".equals(quelle.getId()) && Quellenart.PERSON == datenQuelle.getQuellenart()
+                && RaetselHerkunftTyp.EIGENKREATION == herkunftstyp) {
 
-		if ("neu".equals(quelle.getId()) && Quellenart.PERSON == datenQuelle.getQuellenart()
-			&& RaetselHerkunftTyp.EIGENKREATION == herkunftstyp) {
+            // Dann ist die userId klar. In anderen Fällen handelt es sich um eine von ein von einer anderen Person erfundenes
+            // Rätsel, das der Admin für diese Person einträgt. Dann benötigt die Quelle keine userId.
+            quelle.setUserId(theUserId);
+        }
 
-			// Dann ist die userId klar. In anderen Fällen handelt es sich um eine von ein von einer anderen Person erfundenes
-			// Rätsel, das der Admin für diese Person einträgt. Dann benötigt die Quelle keine userId.
-			quelle.setUserId(theUserId);
-		}
-
-		return quelle;
-	}
+        return quelle;
+    }
 }

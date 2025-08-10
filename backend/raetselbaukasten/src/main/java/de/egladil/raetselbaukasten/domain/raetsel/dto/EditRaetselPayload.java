@@ -6,6 +6,7 @@ package de.egladil.raetselbaukasten.domain.raetsel.dto;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -86,6 +87,7 @@ public class EditRaetselPayload {
 	@Schema(
 		type = SchemaType.ARRAY, implementation = Antwortvorschlag.class,
 		description = "optionale Antwortvorschläge, wenn es für multiple choice genutzt werden kann")
+	@Valid
 	@ValidAntwortvorschlaege
 	private Antwortvorschlag[] antwortvorschlaege;
 

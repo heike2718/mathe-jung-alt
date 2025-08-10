@@ -11,42 +11,42 @@ import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Persisten
  */
 public class RaetselLaTeXDto {
 
-	private String id;
+    private String id;
 
-	private String schluessel;
+    private String schluessel;
 
-	private String frage;
+    private String frage;
 
-	private String loesung;
+    private String loesung;
 
-	public static RaetselLaTeXDto mapFromDB(final PersistentesRaetsel raetsel) {
+    public static RaetselLaTeXDto mapFromDB(final PersistentesRaetsel raetsel) {
 
-		RaetselLaTeXDto result = new RaetselLaTeXDto();
-		result.id = raetsel.uuid;
-		result.schluessel = raetsel.schluessel;
-		result.frage = raetsel.frage;
-		result.loesung = raetsel.loesung;
-		return result;
-	}
+        RaetselLaTeXDto result = new RaetselLaTeXDto();
+        result.id = raetsel.getUuid();
+        result.schluessel = raetsel.getSchluessel();
+        result.frage = raetsel.getFrage();
+        result.loesung = raetsel.getLoesung();
+        return result;
+    }
 
-	public String getId() {
+    public String getId() {
 
-		return id;
-	}
+        return id;
+    }
 
-	public String getSchluessel() {
+    public String getSchluessel() {
 
-		return schluessel;
-	}
+        return schluessel;
+    }
 
-	public String getFrage() {
+    public String getFrage() {
 
-		return frage;
-	}
+        return frage;
+    }
 
-	public String getLoesung() {
+    public String getLoesung() {
 
-		return loesung;
-	}
+        return loesung;
+    }
 
 }

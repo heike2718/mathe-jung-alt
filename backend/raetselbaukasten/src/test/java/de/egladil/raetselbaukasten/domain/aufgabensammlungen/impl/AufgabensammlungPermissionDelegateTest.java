@@ -52,10 +52,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -81,10 +82,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -109,10 +111,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -137,10 +140,10 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false).build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -170,10 +173,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -197,10 +201,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -219,10 +224,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -239,10 +245,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -272,10 +279,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -299,10 +307,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -319,10 +328,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -339,10 +349,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -372,10 +383,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -393,10 +405,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -413,10 +426,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -433,10 +447,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -463,10 +478,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -492,10 +508,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -520,10 +537,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -548,10 +566,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -581,11 +600,12 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
-			ausDB.freigegeben = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.freigegeben(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -609,11 +629,12 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
-			ausDB.freigegeben = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.freigegeben(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -632,11 +653,12 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
-			ausDB.freigegeben = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.freigegeben(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -653,11 +675,12 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
-			ausDB.freigegeben = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.freigegeben(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -677,11 +700,12 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
-			ausDB.freigegeben = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.freigegeben(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -707,11 +731,12 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
-			ausDB.freigegeben = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.freigegeben(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -741,10 +766,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -768,10 +794,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -788,10 +815,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -808,10 +836,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -835,10 +864,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -856,10 +886,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = true;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(true)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -876,10 +907,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(USER_ID)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -896,10 +928,11 @@ public class AufgabensammlungPermissionDelegateTest {
 			// Arrange
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
-			PersistenteAufgabensammlung ausDB = new PersistenteAufgabensammlung();
-			ausDB.owner = OWNER;
-			ausDB.uuid = AUFGABENSAMMLUNG_ID;
-			ausDB.privat = false;
+			PersistenteAufgabensammlung ausDB = PersistenteAufgabensammlung.builder()
+					.owner(OWNER)
+					.uuid(AUFGABENSAMMLUNG_ID)
+					.privat(false)
+					.build();
 
 			when(authCtx.getUser()).thenReturn(user);
 

@@ -78,7 +78,7 @@ public class EmbeddableImageUplodServiceTest {
 		uploadedFile = new UploadedFile().withName("00000.eps").withData(data);
 
 		raetsel = new PersistentesRaetsel();
-		raetsel.owner = "adhaiohq";
+		raetsel.setOwner("adhaiohq");
 
 		authenticatedUser = new AuthenticatedUser("gdgagsa");
 		authenticatedUser.withRoles(new String[] {});
@@ -229,7 +229,7 @@ public class EmbeddableImageUplodServiceTest {
 		void should_createEmbeddableImageWork_when_UserAutorAndRaetselOwner() {
 
 			authenticatedUser = authenticatedUser.withRoles(new String[] { "AUTOR" }).withBenutzerart(Benutzerart.AUTOR);
-			raetsel.owner = authenticatedUser.getUuid();
+			raetsel.setOwner(authenticatedUser.getUuid());
 
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
 			when(raetselDao.findById(RAETSEL_ID)).thenReturn(raetsel);
@@ -404,7 +404,7 @@ public class EmbeddableImageUplodServiceTest {
 
 			// Arrange
 			authenticatedUser = authenticatedUser.withRoles(new String[] { "AUTOR" }).withBenutzerart(Benutzerart.AUTOR);
-			raetsel.owner = authenticatedUser.getUuid();
+			raetsel.setOwner(authenticatedUser.getUuid());
 
 			when(authCtx.getUser()).thenReturn(authenticatedUser);
 			when(authCtx.isUserInRole("ADMIN")).thenReturn(Boolean.FALSE);

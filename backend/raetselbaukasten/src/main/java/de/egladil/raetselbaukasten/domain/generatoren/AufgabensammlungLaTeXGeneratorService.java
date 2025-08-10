@@ -74,7 +74,7 @@ public class AufgabensammlungLaTeXGeneratorService {
 		List<PersistentesRaetsel> trefferliste = raetselDao.findWithSchluesselListe(schluesselliste);
 		List<RaetselLaTeXDto> raetselLaTeX = trefferliste.stream().map(pr -> RaetselLaTeXDto.mapFromDB(pr)).toList();
 
-		String dirNameAufgabensammlung = MjaFileUtils.nameToFilenamePart(persistenteAufgabensammlung.name) + "_"
+		String dirNameAufgabensammlung = MjaFileUtils.nameToFilenamePart(persistenteAufgabensammlung.getName()) + "_"
 			+ UUID.randomUUID().toString().substring(0, 8);
 
 		// schreiben die generierten Strings zunächst ins Filesystem und zipen dann das Verzeichnis dirNameAufgabensammlung.
@@ -128,20 +128,20 @@ public class AufgabensammlungLaTeXGeneratorService {
 
 		for (PersistentesRaetsel raetselDB : trefferliste) {
 
-			String pathAufgabe = pathDirAufgabensammlung + File.separator + raetselDB.schluessel + ".tex";
-			MjaFileUtils.writeTextfile(new File(pathAufgabe), raetselDB.frage,
-				"Fehler beim Schreiben der Frage von " + raetselDB.schluessel);
+			String pathAufgabe = pathDirAufgabensammlung + File.separator + raetselDB.getSchluessel() + ".tex";
+			MjaFileUtils.writeTextfile(new File(pathAufgabe), raetselDB.getFrage(),
+				"Fehler beim Schreiben der Frage von " + raetselDB.getSchluessel());
 			LOGGER.debug("File {} fertig", pathAufgabe);
 
-			if (StringUtils.isNotBlank(raetselDB.loesung)) {
+			if (StringUtils.isNotBlank(raetselDB.getLoesung())) {
 
-				String pathLoesung = pathDirAufgabensammlung + File.separator + raetselDB.schluessel + "_l.tex";
-				MjaFileUtils.writeTextfile(new File(pathLoesung), raetselDB.loesung,
-					"Fehler beim Schreiben der Frage von " + raetselDB.schluessel);
+				String pathLoesung = pathDirAufgabensammlung + File.separator + raetselDB.getSchluessel() + "_l.tex";
+				MjaFileUtils.writeTextfile(new File(pathLoesung), raetselDB.getLoesung(),
+					"Fehler beim Schreiben der Frage von " + raetselDB.getSchluessel());
 				LOGGER.debug("File {} fertig", pathLoesung);
 			}
 
-			List<GeneratedFile> embeddedImages = embeddedImagesService.getEmbeddedImages(raetselDB.uuid);
+			List<GeneratedFile> embeddedImages = embeddedImagesService.getEmbeddedImages(raetselDB.getUuid());
 
 			for (GeneratedFile generatedFile : embeddedImages) {
 

@@ -113,7 +113,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(1, treffer.size());
 
-			assertEquals("02621", treffer.get(0).schluessel);
+			assertEquals("02621", treffer.get(0).getSchluessel());
 
 		}
 
@@ -130,7 +130,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(1, treffer.size());
 
-			assertEquals("02613", treffer.get(0).schluessel);
+			assertEquals("02613", treffer.get(0).getSchluessel());
 
 		}
 
@@ -147,9 +147,9 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(3, treffer.size());
 
-			assertEquals("02613", treffer.get(0).schluessel);
-			assertEquals("02621", treffer.get(1).schluessel);
-			assertEquals("02818", treffer.get(2).schluessel);
+			assertEquals("02613", treffer.get(0).getSchluessel());
+			assertEquals("02621", treffer.get(1).getSchluessel());
+			assertEquals("02818", treffer.get(2).getSchluessel());
 
 		}
 
@@ -187,7 +187,7 @@ public class RaetselDaoImplTest {
 
 			// Assert
 			assertFalse(trefferliste.isEmpty());
-			assertEquals("02540", trefferliste.get(0).schluessel);
+			assertEquals("02540", trefferliste.get(0).getSchluessel());
 
 		}
 
@@ -205,7 +205,7 @@ public class RaetselDaoImplTest {
 
 			// Assert
 			assertFalse(trefferliste.isEmpty());
-			assertEquals("02816", trefferliste.get(0).schluessel);
+			assertEquals("02816", trefferliste.get(0).getSchluessel());
 
 		}
 
@@ -238,7 +238,7 @@ public class RaetselDaoImplTest {
 
 			// Assert
 			assertFalse(trefferliste.isEmpty());
-			assertEquals("02604", trefferliste.get(0).schluessel);
+			assertEquals("02604", trefferliste.get(0).getSchluessel());
 
 		}
 
@@ -256,7 +256,7 @@ public class RaetselDaoImplTest {
 
 			// Assert
 			assertFalse(trefferliste.isEmpty());
-			assertEquals("02640", trefferliste.get(0).schluessel);
+			assertEquals("02640", trefferliste.get(0).getSchluessel());
 
 		}
 
@@ -290,7 +290,7 @@ public class RaetselDaoImplTest {
 
 			// Assert
 			assertEquals(50, trefferliste.size());
-			assertEquals("00000", trefferliste.get(0).schluessel);
+			assertEquals("00000", trefferliste.get(0).getSchluessel());
 		}
 
 		@Test
@@ -306,7 +306,7 @@ public class RaetselDaoImplTest {
 
 			// Assert
 			assertEquals(50, trefferliste.size());
-			assertEquals("99999", trefferliste.get(0).schluessel);
+			assertEquals("99999", trefferliste.get(0).getSchluessel());
 		}
 
 		@Test
@@ -339,7 +339,7 @@ public class RaetselDaoImplTest {
 
 			// Assert
 			assertEquals(25, trefferliste.size());
-			assertEquals("01219", trefferliste.get(0).schluessel);
+			assertEquals("01219", trefferliste.get(0).getSchluessel());
 		}
 
 		@Test
@@ -355,7 +355,7 @@ public class RaetselDaoImplTest {
 
 			// Assert
 			assertEquals(25, trefferliste.size());
-			assertEquals("02823", trefferliste.get(0).schluessel);
+			assertEquals("02823", trefferliste.get(0).getSchluessel());
 		}
 	}
 
@@ -528,7 +528,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(3, treffer.size());
 
-			assertEquals("02604", treffer.get(0).schluessel);
+			assertEquals("02604", treffer.get(0).getSchluessel());
 
 		}
 
@@ -554,7 +554,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(3, treffer.size());
 
-			assertEquals("02800", treffer.get(0).schluessel);
+			assertEquals("02800", treffer.get(0).getSchluessel());
 
 		}
 
@@ -602,7 +602,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(1, treffer.size());
 
-			assertEquals("02604", treffer.get(0).schluessel);
+			assertEquals("02604", treffer.get(0).getSchluessel());
 
 		}
 
@@ -628,7 +628,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(1, treffer.size());
 
-			assertEquals("02604", treffer.get(0).schluessel);
+			assertEquals("02604", treffer.get(0).getSchluessel());
 
 		}
 
@@ -673,7 +673,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(8, treffer.size());
 
-			assertEquals("02604", treffer.get(0).schluessel);
+			assertEquals("02604", treffer.get(0).getSchluessel());
 
 		}
 
@@ -696,7 +696,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(8, treffer.size());
 
-			assertEquals("02816", treffer.get(0).schluessel);
+			assertEquals("02816", treffer.get(0).getSchluessel());
 
 		}
 
@@ -741,7 +741,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(3, treffer.size());
 
-			assertEquals("02604", treffer.get(0).schluessel);
+			assertEquals("02604", treffer.get(0).getSchluessel());
 
 		}
 
@@ -765,7 +765,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(3, treffer.size());
 
-			assertEquals("02613", treffer.get(0).schluessel);
+			assertEquals("02613", treffer.get(0).getSchluessel());
 
 		}
 
@@ -813,7 +813,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(4, treffer.size());
 
-			assertEquals("02604", treffer.get(0).schluessel);
+			assertEquals("02604", treffer.get(0).getSchluessel());
 
 		}
 
@@ -839,7 +839,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(4, treffer.size());
 
-			assertEquals("02822", treffer.get(0).schluessel);
+			assertEquals("02822", treffer.get(0).getSchluessel());
 
 		}
 
@@ -887,7 +887,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(1, treffer.size());
 
-			assertEquals("02604", treffer.get(0).schluessel);
+			assertEquals("02604", treffer.get(0).getSchluessel());
 
 		}
 
@@ -913,7 +913,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(1, treffer.size());
 
-			assertEquals("02604", treffer.get(0).schluessel);
+			assertEquals("02604", treffer.get(0).getSchluessel());
 
 		}
 
@@ -958,7 +958,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(18, treffer.size());
 
-			assertEquals("02516", treffer.get(0).schluessel);
+			assertEquals("02516", treffer.get(0).getSchluessel());
 
 		}
 
@@ -981,7 +981,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(18, treffer.size());
 
-			assertEquals("02822", treffer.get(0).schluessel);
+			assertEquals("02822", treffer.get(0).getSchluessel());
 
 		}
 
@@ -1026,7 +1026,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(8, treffer.size());
 
-			assertEquals("02516", treffer.get(0).schluessel);
+			assertEquals("02516", treffer.get(0).getSchluessel());
 
 		}
 
@@ -1049,7 +1049,7 @@ public class RaetselDaoImplTest {
 			// Assert
 			assertEquals(8, treffer.size());
 
-			assertEquals("02632", treffer.get(0).schluessel);
+			assertEquals("02632", treffer.get(0).getSchluessel());
 
 		}
 

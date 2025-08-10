@@ -4,10 +4,12 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.egladil.raetselbaukasten.domain.medien.Medienart;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Date;
@@ -15,6 +17,10 @@ import java.util.Date;
 /**
  * PersistentesMedium
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "MEDIEN")
 @NamedNativeQueries({
@@ -44,52 +50,42 @@ public class PersistentesMedium {
 	@Id
 	@UuidGenerator(style = UuidGenerator.Style.RANDOM)
 	@Column(name = "UUID", updatable = false, nullable = false, length = 36)
-	public String uuid;
+	private String uuid;
 
 	@Column(name = "SORTNR")
-	public long sortNumber;
+	private long sortNumber;
 
 	@Column(name = "ART")
 	@Enumerated(EnumType.STRING)
-	public Medienart medienart;
+	private Medienart medienart;
 
 	@Column
-	public String titel;
+	private String titel;
 
 	@Column
-	public String autor;
+	private String autor;
 
 	@Column
-	public String url;
+	private String url;
 
 	@Column
-	public String kommentar;
+	private String kommentar;
 
 	@Column
-	@NotNull
-	public String owner;
+	private String owner;
 
 	@Column(name = "GEAENDERT_DURCH")
-	public String geaendertDurch;
+	private String geaendertDurch;
 
 	@Column(name = "GEAENDERT_AM")
-	public Date geaendertAm;
+	private Date geaendertAm;
 
 	@Version
 	@Column(name = "VERSION")
-	@JsonIgnore
-	public int version;
+	private int version;
 
 	@Transient
 	private String importierteUuid;
-
-	public String getImportierteUuid() {
-		return importierteUuid;
-	}
-
-	public void setImportierteUuid(String importierteUuid) {
-		this.importierteUuid = importierteUuid;
-	}
 
 	/**
 	 * @return

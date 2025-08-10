@@ -56,8 +56,8 @@ public class RaetselPermissionDelegateTest {
 				.withBenutzerart(Benutzerart.ANONYM);
 
 			PersistentesRaetsel ausDB = new PersistentesRaetsel();
-			ausDB.owner = OWNER;
-			ausDB.uuid = RAETSEL_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(RAETSEL_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -85,8 +85,8 @@ public class RaetselPermissionDelegateTest {
 				.withBenutzerart(Benutzerart.ANONYM);
 
 			PersistentesRaetsel ausDB = new PersistentesRaetsel();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = RAETSEL_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(RAETSEL_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -115,8 +115,8 @@ public class RaetselPermissionDelegateTest {
 				.withBenutzerart(Benutzerart.STANDARD);
 
 			PersistentesRaetsel ausDB = new PersistentesRaetsel();
-			ausDB.owner = OWNER;
-			ausDB.uuid = RAETSEL_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(RAETSEL_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -144,8 +144,8 @@ public class RaetselPermissionDelegateTest {
 				.withBenutzerart(Benutzerart.STANDARD);
 
 			PersistentesRaetsel ausDB = new PersistentesRaetsel();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = RAETSEL_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(RAETSEL_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -174,8 +174,8 @@ public class RaetselPermissionDelegateTest {
 				.withBenutzerart(Benutzerart.AUTOR);
 
 			PersistentesRaetsel ausDB = new PersistentesRaetsel();
-			ausDB.owner = OWNER;
-			ausDB.uuid = RAETSEL_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(RAETSEL_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -201,8 +201,8 @@ public class RaetselPermissionDelegateTest {
 				.withBenutzerart(Benutzerart.AUTOR);
 
 			PersistentesRaetsel ausDB = new PersistentesRaetsel();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = RAETSEL_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(RAETSEL_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -224,8 +224,8 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
 			PersistentesRaetsel ausDB = new PersistentesRaetsel();
-			ausDB.owner = OWNER;
-			ausDB.uuid = RAETSEL_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(RAETSEL_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -243,8 +243,8 @@ public class RaetselPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
 			PersistentesRaetsel ausDB = new PersistentesRaetsel();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = RAETSEL_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(RAETSEL_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 

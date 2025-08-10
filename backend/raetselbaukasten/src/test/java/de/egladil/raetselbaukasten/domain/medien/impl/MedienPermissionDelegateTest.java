@@ -53,8 +53,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = OWNER;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -81,8 +81,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -115,8 +115,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = OWNER;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -143,8 +143,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -177,8 +177,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = OWNER;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -199,8 +199,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -226,8 +226,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = OWNER;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -247,8 +247,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -274,8 +274,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = OWNER;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -302,8 +302,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ANONYM);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -336,8 +336,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = OWNER;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -364,8 +364,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.STANDARD);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -398,8 +398,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = OWNER;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -426,8 +426,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -453,8 +453,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.ADMIN);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = OWNER;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(OWNER);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 
@@ -475,8 +475,8 @@ public class MedienPermissionDelegateTest {
 			AuthenticatedUser user = new AuthenticatedUser(USER_ID).withBenutzerart(Benutzerart.AUTOR);
 
 			PersistentesMedium ausDB = new PersistentesMedium();
-			ausDB.owner = USER_ID;
-			ausDB.uuid = MEDIUM_ID;
+			ausDB.setOwner(USER_ID);
+			ausDB.setUuid(MEDIUM_ID);
 
 			when(authCtx.getUser()).thenReturn(user);
 

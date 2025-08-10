@@ -160,7 +160,7 @@ public class AutorRaetselResourceTest {
 		assertNotNull(theMedium);
 
 		// Im Laufe der Tests wird dieses Medium umbenannt. Daher hier den aktuellen titel holen.
-		String expectedHerkunftText = theMedium.autor + ": " + theMedium.titel + ", S.16";
+		String expectedHerkunftText = theMedium.getAutor() + ": " + theMedium.getTitel() + ", S.16";
 
 		// Act ändern
 		result = given()

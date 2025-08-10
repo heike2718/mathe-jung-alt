@@ -4,21 +4,8 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.medien;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.egladil.raetselbaukasten.domain.auth.dto.MessagePayload;
-import de.egladil.raetselbaukasten.domain.medien.dto.MediensucheResult;
-import de.egladil.raetselbaukasten.domain.medien.dto.MediensucheTrefferItem;
-import de.egladil.raetselbaukasten.domain.medien.dto.MediumDto;
-import de.egladil.raetselbaukasten.domain.medien.dto.MediumQuelleDto;
-import de.egladil.raetselbaukasten.domain.medien.dto.RaetselMediensucheTrefferItem;
+import de.egladil.raetselbaukasten.domain.medien.dto.*;
 import de.egladil.raetselbaukasten.domain.medien.impl.MedienPermissionDelegate;
 import de.egladil.raetselbaukasten.domain.quellen.QuelleInfosAdapter;
 import de.egladil.raetselbaukasten.domain.quellen.QuelleNameStrategie;
@@ -35,6 +22,14 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * MedienService
@@ -42,254 +37,259 @@ import jakarta.ws.rs.core.Response.Status;
 @ApplicationScoped
 public class MedienService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MedienService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MedienService.class);
 
-	@Inject
-	AuthenticationContext authCtx;
+    @Inject
+    AuthenticationContext authCtx;
 
-	@Inject
-	MedienPermissionDelegate permissionDelegate;
+    @Inject
+    MedienPermissionDelegate permissionDelegate;
 
-	@Inject
-	MediumDao mediumDao;
+    @Inject
+    MediumDao mediumDao;
 
-	@Inject
-	QuellenRepository quellenRepository;
+    @Inject
+    QuellenRepository quellenRepository;
 
-	/**
-	 * Holt das Medium mit dieser id.
-	 *
-	 * @param id
-	 * @return Optional
-	 */
-	public Optional<MediumDto> getMediumWithId(final String id) {
+    /**
+     * Holt das Medium mit dieser id.
+     *
+     * @param id
+     * @return Optional
+     */
+    public Optional<MediumDto> getMediumWithId(final String id) {
 
-		PersistentesMedium ausDB = mediumDao.findMediumById(id);
+        PersistentesMedium ausDB = mediumDao.findMediumById(id);
 
-		permissionDelegate.checkReadPermission(ausDB);
+        permissionDelegate.checkReadPermission(ausDB);
 
-		return ausDB == null ? Optional.empty() : Optional.of(mapFullFromDB(ausDB));
+        return ausDB == null ? Optional.empty() : Optional.of(mapFullFromDB(ausDB));
 
-	}
+    }
 
-	MediumDto mapFullFromDB(final PersistentesMedium ausDB) {
+    MediumDto mapFullFromDB(final PersistentesMedium ausDB) {
 
-		MediumDto medium = new MediumDto().withAutor(ausDB.autor).withId(ausDB.uuid).withKommentar(ausDB.kommentar)
-			.withMedienart(ausDB.medienart).withTitel(ausDB.titel).withUrl(ausDB.url);
+        MediumDto medium = new MediumDto().withAutor(ausDB.getAutor()).withId(ausDB.getUuid()).withKommentar(ausDB.getKommentar())
+                .withMedienart(ausDB.getMedienart()).withTitel(ausDB.getTitel()).withUrl(ausDB.getUrl());
 
-		try {
+        try {
 
-			permissionDelegate.checkWritePermission(ausDB);
+            permissionDelegate.checkWritePermission(ausDB);
 
-			// yes!
-			medium.markiereAlsAenderbar();
-		} catch (WebApplicationException e) {
+            // yes!
+            medium.markiereAlsAenderbar();
+        } catch (WebApplicationException e) {
 
-			// in diesem Fall keine Schreibberechtigung
-		}
+            // in diesem Fall keine Schreibberechtigung
+        }
 
-		if (authCtx.getUser().getName().equals(ausDB.owner)) {
+        if (authCtx.getUser().getName().equals(ausDB.getOwner())) {
 
-			medium.setOwnMedium(true);
-		}
+            medium.setOwnMedium(true);
+        }
 
-		return medium;
-	}
+        return medium;
+    }
 
-	MediumQuelleDto mapToMediumForQuelleFromDB(final PersistentesMedium ausDB) {
+    MediumQuelleDto mapToMediumForQuelleFromDB(final PersistentesMedium ausDB) {
 
-		MediumQuelleDto medium = new MediumQuelleDto().withId(ausDB.uuid).withMedienart(ausDB.medienart).withTitel(ausDB.titel);
+        MediumQuelleDto medium = new MediumQuelleDto().withId(ausDB.getUuid()).withMedienart(ausDB.getMedienart())
+                .withTitel(ausDB.getTitel());
 
-		return medium;
-	}
+        return medium;
+    }
 
-	/**
-	 * Legt ein neues Medium an.
-	 *
-	 * @param medium MediumDto - die Daten
-	 * @return
-	 */
-	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
-	@Transactional
-	public MediumDto mediumAnlegen(final MediumDto medium) {
+    /**
+     * Legt ein neues Medium an.
+     *
+     * @param medium MediumDto - die Daten
+     * @return MediumDto
+     */
+    @Transactional
+    public MediumDto mediumAnlegen(final MediumDto medium) {
 
-		long anzahlDubletten = mediumDao.countMedienWithSameTitel(medium.getTitel(), medium.getId());
+        long anzahlDubletten = mediumDao.countMedienWithSameTitel(medium.getTitel(), medium.getId());
 
-		if (anzahlDubletten > 0) {
+        if (anzahlDubletten > 0) {
 
-			throw new WebApplicationException(
-				Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben.")).build());
-		}
+            throw new WebApplicationException(
+                    Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben.")).build());
+        }
 
-		int maxSortnr = mediumDao.getMaximumOfAllSortNumbers();
+        int maxSortnr = mediumDao.getMaximumOfAllSortNumbers();
 
-		String userId = authCtx.getUser().getUuid();
+        String userId = authCtx.getUser().getUuid();
 
-		String uuid = UUID.randomUUID().toString();
+        PersistentesMedium persistentesMedium = PersistentesMedium.builder()
+                .autor(medium.getAutor())
+                .geaendertDurch(userId)
+                .geaendertAm(new Date())
+                .kommentar(medium.getKommentar())
+                .medienart(medium.getMedienart())
+                .owner(userId)
+                .sortNumber(maxSortnr + 1)
+                .titel(medium.getTitel())
+                .url(medium.getUrl())
+                .build();
 
-		PersistentesMedium persistentesMedium = new PersistentesMedium();
-		persistentesMedium.autor = medium.getAutor();
-		persistentesMedium.geaendertDurch = userId;
-		persistentesMedium.kommentar = medium.getKommentar();
-		persistentesMedium.medienart = medium.getMedienart();
-		persistentesMedium.owner = userId;
-		persistentesMedium.sortNumber = maxSortnr + 1;
-		persistentesMedium.titel = medium.getTitel();
-		persistentesMedium.url = medium.getUrl();
-		persistentesMedium.setImportierteUuid(uuid);
+        mediumDao.saveMedium(persistentesMedium);
 
-		mediumDao.saveMedium(persistentesMedium);
+        medium.withId(persistentesMedium.getUuid());
 
-		medium.withId(uuid);
+        return medium;
+    }
+
+    /**
+     * Ändert ein vorhandenes Medium.
+     *
+     * @param medium MediumDto
+     * @return MediumDto
+     */
+    @Transactional
+    public MediumDto mediumAendern(final MediumDto medium) {
+
+        PersistentesMedium persistentesMedium = mediumDao.findMediumById(medium.getId());
+
+        if (persistentesMedium == null) {
+
+            throw new WebApplicationException(
+                    Response.status(404).entity(MessagePayload.error("Das Medium existiert nicht.")).build());
+        }
+
+        permissionDelegate.checkWritePermission(persistentesMedium);
+
+        long anzahlDubletten = mediumDao.countMedienWithSameTitel(medium.getTitel(), medium.getId());
+
+        if (anzahlDubletten > 0) {
+
+            throw new WebApplicationException(
+                    Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben.")).build());
+        }
+
+        String userId = authCtx.getUser().getUuid();
+
+        // owner darf nicht geändert werden!
+        persistentesMedium.setAutor(medium.getAutor());
+        persistentesMedium.setGeaendertDurch(userId);
+        persistentesMedium.setGeaendertAm(new Date());
+        persistentesMedium.setKommentar(medium.getKommentar());
+        persistentesMedium.setMedienart(medium.getMedienart());
+        persistentesMedium.setTitel(medium.getTitel());
+        persistentesMedium.setUrl(medium.getUrl());
 
-		return medium;
-	}
+        mediumDao.saveMedium(persistentesMedium);
 
-	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
-	@Transactional
-	public MediumDto mediumAendern(final MediumDto medium) {
-
-		PersistentesMedium persistentesMedium = mediumDao.findMediumById(medium.getId());
+        return medium;
+    }
 
-		if (persistentesMedium == null) {
+    /**
+     * Läd die durch limit und offset eingegrenzte Teilmenge aller Medien. Sortierung nach titel.
+     *
+     * @param limit
+     * @param offset
+     * @return MediensucheResult
+     */
+    public MediensucheResult loadMedien(final int limit, final int offset) {
 
-			throw new WebApplicationException(
-				Response.status(404).entity(MessagePayload.error("Das Medium existiert nicht.")).build());
-		}
+        long gesamtzahl = mediumDao.countAllMedien();
+        List<PersistentesMedium> treffermenge = mediumDao.loadAllMedien(limit, offset);
 
-		permissionDelegate.checkWritePermission(persistentesMedium);
+        List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB)
+                .collect(Collectors.toList());
 
-		long anzahlDubletten = mediumDao.countMedienWithSameTitel(medium.getTitel(), medium.getId());
-
-		if (anzahlDubletten > 0) {
-
-			throw new WebApplicationException(
-				Response.status(409).entity(MessagePayload.error("Der Titel ist bereits vergeben.")).build());
-		}
+        MediensucheResult result = new MediensucheResult();
+        result.setTreffer(trefferItems);
+        result.setTrefferGesamt(gesamtzahl);
 
-		String userId = authCtx.getUser().getUuid();
+        return result;
+    }
 
-		// owner darf nicht geändert werden!
-		persistentesMedium.autor = medium.getAutor();
-		persistentesMedium.geaendertDurch = userId;
-		persistentesMedium.kommentar = medium.getKommentar();
-		persistentesMedium.medienart = medium.getMedienart();
-		persistentesMedium.titel = medium.getTitel();
-		persistentesMedium.url = medium.getUrl();
+    /**
+     * Innerhalb aller Medien wird nach allen Einträgen gesucht, deren Titel oder Kommentare unabhängig von Groß- und
+     * Kleinschreibung den suchstring einthält. Sortiert wird nach titel. Admins bekommen alle Treffer, Autoren nur die
+     * eigenen.
+     *
+     * @param suchstring
+     * @param limit
+     * @param offset
+     * @return MediensucheResult
+     */
+    @SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
+    public MediensucheResult findMedien(final String suchstring, final int limit, final int offset) {
 
-		mediumDao.saveMedium(persistentesMedium);
+        if (StringUtils.isBlank(suchstring)) {
 
-		return medium;
-	}
+            throw new WebApplicationException(
+                    Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("suchstring darf nicht leer sein")).build());
+        }
 
-	/**
-	 * Läd die durch limit und offset eingegrenzte Teilmenge aller Medien. Sortierung nach titel.
-	 *
-	 * @param limit
-	 * @param offset
-	 * @return MediensucheResult
-	 */
-	public MediensucheResult loadMedien(final int limit, final int offset) {
+        long gesamtzahl = mediumDao.countAllMedienWithSuchstring(suchstring);
+        List<PersistentesMedium> treffermenge = mediumDao.findAllMedienWithSuchstring(suchstring, limit, offset);
 
-		long gesamtzahl = mediumDao.countAllMedien();
-		List<PersistentesMedium> treffermenge = mediumDao.loadAllMedien(limit, offset);
+        List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB).toList();
 
-		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB)
-			.collect(Collectors.toList());
+        MediensucheResult result = new MediensucheResult();
+        result.setTreffer(trefferItems);
+        result.setTrefferGesamt(gesamtzahl);
 
-		MediensucheResult result = new MediensucheResult();
-		result.setTreffer(trefferItems);
-		result.setTrefferGesamt(gesamtzahl);
+        return result;
+    }
 
-		return result;
-	}
+    /**
+     * Innerhalb aller Medien der gegebenen Medienart wird nach allen Einträgen gesucht, deren Titel unabhängig von
+     * Groß- und Kleinschreibung den suchstring einthält. Sortiert wird nach titel.
+     *
+     * @param medienart Medienart
+     * @return List
+     */
+    public List<MediumQuelleDto> findMedienForUseInQuelle(final Medienart medienart) {
 
-	/**
-	 * Innerhalb aller Medien wird nach allen Einträgen gesucht, deren Titel oder Kommentare unabhängig von Groß- und
-	 * Kleinschreibung den suchstring einthält. Sortiert wird nach titel. Admins bekommen alle Treffer, Autoren nur die
-	 * eigenen.
-	 *
-	 * @param suchstring
-	 * @param limit
-	 * @param offset
-	 * @return MediensucheResult
-	 */
-	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
-	public MediensucheResult findMedien(final String suchstring, final int limit, final int offset) {
+        List<PersistentesMedium> trefferliste = mediumDao.findWithMedienart(medienart);
+        LOGGER.debug("medienart={}, anzahl Treffer: {}", medienart, trefferliste.size());
+        return trefferliste.stream().map(this::mapToMediumForQuelleFromDB).toList();
+    }
 
-		if (StringUtils.isBlank(suchstring)) {
+    MediensucheTrefferItem mapToTrefferitemFromDB(final PersistentesMedium ausDB) {
 
-			throw new WebApplicationException(
-				Response.status(Status.BAD_REQUEST).entity(MessagePayload.error("suchstring darf nicht leer sein")).build());
-		}
+        return new MediensucheTrefferItem().withId(ausDB.getUuid()).withKommentar(ausDB.getKommentar()).withMedienart(ausDB.getMedienart())
+                .withTitel(ausDB.getTitel());
+    }
 
-		long gesamtzahl = mediumDao.countAllMedienWithSuchstring(suchstring);
-		List<PersistentesMedium> treffermenge = mediumDao.findAllMedienWithSuchstring(suchstring, limit, offset);
+    /**
+     * Gibt alle Raetsel zurück, die das gegebene Medium als Quelle referenzieren.
+     *
+     * @param mediumId String
+     * @return List
+     */
+    public List<RaetselMediensucheTrefferItem> findRaetselWithMedium(final String mediumId) {
 
-		List<MediensucheTrefferItem> trefferItems = treffermenge.stream().map(this::mapToTrefferitemFromDB).toList();
+        List<PersistentesRaetselMediensucheItemReadonly> treffermenge = this.mediumDao.findAllRaetselWithMedium(mediumId);
 
-		MediensucheResult result = new MediensucheResult();
-		result.setTreffer(trefferItems);
-		result.setTrefferGesamt(gesamtzahl);
+        List<RaetselMediensucheTrefferItem> result = treffermenge.stream().map(this::mapToRaetselMediensucheTrefferItem)
+                .collect(Collectors.toList());
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Innerhalb aller Medien der gegebenen Medienart wird nach allen Einträgen gesucht, deren Titel unabhängig von
-	 * Groß- und Kleinschreibung den suchstring einthält. Sortiert wird nach titel.
-	 *
-	 * @param medienart Medienart
-	 * @return List
-	 */
-	public List<MediumQuelleDto> findMedienForUseInQuelle(final Medienart medienart) {
+    RaetselMediensucheTrefferItem mapToRaetselMediensucheTrefferItem(final PersistentesRaetselMediensucheItemReadonly ausDB) {
 
-		List<PersistentesMedium> trefferliste = mediumDao.findWithMedienart(medienart);
-		LOGGER.debug("medienart={}, anzahl Treffer: {}", medienart, trefferliste.size());
-		return trefferliste.stream().map(this::mapToMediumForQuelleFromDB).toList();
-	}
+        QuelleNameStrategie quelleNameStrategie = QuelleNameStrategie.getStrategie(ausDB.getMedienart());
 
-	MediensucheTrefferItem mapToTrefferitemFromDB(final PersistentesMedium ausDB) {
+        String quellenangabe = quelleNameStrategie.getText(new QuelleInfosAdapter().adapt(ausDB));
 
-		return new MediensucheTrefferItem().withId(ausDB.uuid).withKommentar(ausDB.kommentar).withMedienart(ausDB.medienart)
-			.withTitel(ausDB.titel);
-	}
+        if (RaetselHerkunftTyp.ADAPTION == ausDB.getHerkunft()) {
 
-	/**
-	 * Gibt alle Raetsel zurück, die das gegebene Medium als Quelle referenzieren.
-	 *
-	 * @param mediumId String
-	 * @return List
-	 */
-	public List<RaetselMediensucheTrefferItem> findRaetselWithMedium(final String mediumId) {
+            Optional<PersistenteQuelleReadonly> optQuelle = quellenRepository.findQuelleWithUserId(ausDB.getRaetselOwner());
 
-		List<PersistentesRaetselMediensucheItemReadonly> treffermenge = this.mediumDao.findAllRaetselWithMedium(mediumId);
+            if (optQuelle.isPresent()) {
 
-		List<RaetselMediensucheTrefferItem> result = treffermenge.stream().map(this::mapToRaetselMediensucheTrefferItem)
-			.collect(Collectors.toList());
+                PersistenteQuelleReadonly quelle = optQuelle.get();
+                quellenangabe = quelle.getPerson() + " (basierend auf einer Idee aus " + quellenangabe + ")";
+            }
+        }
 
-		return result;
-	}
-
-	RaetselMediensucheTrefferItem mapToRaetselMediensucheTrefferItem(final PersistentesRaetselMediensucheItemReadonly ausDB) {
-
-		QuelleNameStrategie quelleNameStrategie = QuelleNameStrategie.getStrategie(ausDB.medienart);
-
-		String quellenangabe = quelleNameStrategie.getText(new QuelleInfosAdapter().adapt(ausDB));
-
-		if (RaetselHerkunftTyp.ADAPTION == ausDB.herkunft) {
-
-			Optional<PersistenteQuelleReadonly> optQuelle = quellenRepository.findQuelleWithUserId(ausDB.raetselOwner);
-
-			if (optQuelle.isPresent()) {
-
-				PersistenteQuelleReadonly quelle = optQuelle.get();
-				quellenangabe = quelle.person + " (basierend auf einer Idee aus " + quellenangabe + ")";
-			}
-		}
-
-		return new RaetselMediensucheTrefferItem().withFreigegeben(ausDB.freigegeben).withHerkunftstyp(ausDB.herkunft)
-			.withId(ausDB.uuid).withName(ausDB.name).withPfad(ausDB.pfad).withQuellenangabe(quellenangabe)
-			.withSchluessel(ausDB.schluessel);
-	}
+        return new RaetselMediensucheTrefferItem().withFreigegeben(ausDB.isFreigegeben()).withHerkunftstyp(ausDB.getHerkunft())
+                .withId(ausDB.getUuid()).withName(ausDB.getName()).withPfad(ausDB.getPfad()).withQuellenangabe(quellenangabe)
+                .withSchluessel(ausDB.getSchluessel());
+    }
 }

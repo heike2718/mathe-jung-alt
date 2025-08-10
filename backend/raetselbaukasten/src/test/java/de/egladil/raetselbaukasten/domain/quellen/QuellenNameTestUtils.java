@@ -11,24 +11,25 @@ import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Persisten
  */
 public class QuellenNameTestUtils {
 
-	static PersistenteQuelleReadonly createQuelleAlleAttributeOhneQuellenart() {
+    static PersistenteQuelleReadonly createQuelleAlleAttributeOhneQuellenart() {
 
-		PersistenteQuelleReadonly quelle = new PersistenteQuelleReadonly();
-		quelle.ausgabe = "11";
-		quelle.autor = "Johannes Lehmann";
-		quelle.jahr = "1987";
-		quelle.klasse = "Klasse 4";
-		quelle.mediumTitel = "Grunschulolympiade 2x2";
-		quelle.mediumUuid = "m-uuid-1";
-		quelle.person = "Hans Manz";
-		quelle.seite = "42";
-		quelle.sortNumber = 1;
-		quelle.stufe = "Stufe 2";
-		quelle.userId = "p-uuid-1";
-		quelle.uuid = "q-uuid-1";
+        PersistenteQuelleReadonly quelle = PersistenteQuelleReadonly.builder()
+                .ausgabe("11")
+                .autor("Johannes Lehmann")
+                .jahr("1987")
+                .klasse("Klasse 4")
+                .mediumTitel("Grundschulolympiade 2x2")
+                .mediumUuid("m-uuid-1")
+                .person("Hans Manz")
+                .seite("42")
+                .sortNumber(1)
+                .stufe("Stufe 2")
+                .userId("p-uuid-1")
+                .uuid("q-uuid-1")
+                .build();
 
-		return quelle;
+        return quelle;
 
-	}
+    }
 
 }

@@ -44,8 +44,8 @@ public class AufgabensammlungPermissionDelegate {
 		case ANONYM: {
 
 			LOGGER.warn("anonymer User {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
-				user.getName(), ausDB.uuid,
-				ausDB.owner);
+				user.getName(), ausDB.getUuid(),
+				ausDB.getOwner());
 			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 
@@ -53,16 +53,16 @@ public class AufgabensammlungPermissionDelegate {
 			if (readForbiddenForSTANDARD(ausDB, user)) {
 
 				LOGGER.warn("User {} mit Benutzerart {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
-					user.getName(), benutzerart, ausDB.uuid,
-					ausDB.owner);
+					user.getName(), benutzerart, ausDB.getUuid(),
+					ausDB.getOwner());
 				throw new WebApplicationException(Status.FORBIDDEN);
 			}
 		case AUTOR:
 			if (readForbiddenForAUTOR(ausDB, user)) {
 
 				LOGGER.warn("User {} mit Benutzerart {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
-					user.getName(), benutzerart, ausDB.uuid,
-					ausDB.owner);
+					user.getName(), benutzerart, ausDB.getUuid(),
+					ausDB.getOwner());
 				throw new WebApplicationException(Status.FORBIDDEN);
 
 			}
@@ -92,8 +92,8 @@ public class AufgabensammlungPermissionDelegate {
 		case ANONYM: {
 
 			LOGGER.warn("anonymer User {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
-				user.getName(), ausDB.uuid,
-				ausDB.owner);
+				user.getName(), ausDB.getUuid(),
+				ausDB.getOwner());
 			throw new WebApplicationException(Status.FORBIDDEN);
 		}
 
@@ -101,11 +101,11 @@ public class AufgabensammlungPermissionDelegate {
 		case AUTOR:
 			// privat oder nicht privat muss nicht gesondert behandelt werden, da Standarduser
 			// nicht owner von public Aufgabensammlungen sein können
-			if (!ausDB.owner.equals(user.getUuid())) {
+			if (!ausDB.getOwner().equals(user.getUuid())) {
 
 				LOGGER.warn("User {} mit Benutzerart {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
-					user.getName(), benutzerart, ausDB.uuid,
-					ausDB.owner);
+					user.getName(), benutzerart, ausDB.getUuid(),
+					ausDB.getOwner());
 				throw new WebApplicationException("keine Schreibberechtigung für Aufgabensammlung", Status.FORBIDDEN);
 			}
 		case ADMIN:
@@ -127,8 +127,8 @@ public class AufgabensammlungPermissionDelegate {
 		case ANONYM: {
 
 			LOGGER.warn("anonymer User {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
-				user.getName(), ausDB.uuid,
-				ausDB.owner);
+				user.getName(), ausDB.getUuid(),
+				ausDB.getOwner());
 			return true;
 		}
 
@@ -136,7 +136,7 @@ public class AufgabensammlungPermissionDelegate {
 		case AUTOR:
 			// privat oder nicht privat muss nicht gesondert behandelt werden, da Standarduser
 			// nicht owner von public Aufgabensammlungen sein können
-			return !ausDB.owner.equals(user.getUuid());
+			return !ausDB.getOwner().equals(user.getUuid());
 
 		case ADMIN:
 			return false;
@@ -153,12 +153,12 @@ public class AufgabensammlungPermissionDelegate {
 	 */
 	private boolean readForbiddenForSTANDARD(final PersistenteAufgabensammlung ausDB, final AuthenticatedUser user) {
 
-		if (ausDB.privat) {
+		if (ausDB.isPrivat()) {
 
-			return !ausDB.owner.equals(user.getUuid());
+			return !ausDB.getOwner().equals(user.getUuid());
 		}
 
-		return !ausDB.freigegeben;
+		return !ausDB.isFreigegeben();
 	}
 
 	/**
@@ -168,9 +168,9 @@ public class AufgabensammlungPermissionDelegate {
 	 */
 	private boolean readForbiddenForAUTOR(final PersistenteAufgabensammlung ausDB, final AuthenticatedUser user) {
 
-		if (ausDB.privat) {
+		if (ausDB.isPrivat()) {
 
-			return !ausDB.owner.equals(user.getUuid());
+			return !ausDB.getOwner().equals(user.getUuid());
 		}
 
 		return false;

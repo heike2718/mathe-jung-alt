@@ -384,8 +384,8 @@ public class AdminMedienResourceTest {
 		assertNull(result.getKommentar());
 
 		PersistentesMedium ausDB = mediumDao.findMediumById(id);
-		assertEquals("412b67dc-132f-465a-a3c3-468269e866cb", ausDB.owner);
-		assertFalse(ausDB.owner.equals(ausDB.geaendertDurch));
+		assertEquals("412b67dc-132f-465a-a3c3-468269e866cb", ausDB.getOwner());
+		assertFalse(ausDB.getOwner().equals(ausDB.getGeaendertDurch()));
 	}
 
 	@Test
