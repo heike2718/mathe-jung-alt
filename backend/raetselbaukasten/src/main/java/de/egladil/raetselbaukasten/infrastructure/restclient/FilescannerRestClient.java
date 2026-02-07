@@ -4,6 +4,8 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.restclient;
 
+import io.quarkus.rest.client.reactive.ClientExceptionMapper;
+import io.smallrye.common.annotation.Blocking;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import de.egladil.raetselbaukasten.domain.upload.ScanRequestPayload;
