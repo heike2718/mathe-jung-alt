@@ -4,16 +4,17 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.validation;
 
-import de.egladil.raetselbaukasten.domain.raetsel.Antwortvorschlag;
+import java.util.Arrays;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.util.Arrays;
+import de.egladil.raetselbaukasten.domain.raetsel.Antwortvorschlag;
 
 /**
  * AntwortvorschlaegeValidator
  */
-//@Dependent
+// @Dependent
 public class AntwortvorschlaegeValidator implements ConstraintValidator<ValidAntwortvorschlaege, Antwortvorschlag[]> {
 
     @Override

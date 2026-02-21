@@ -26,8 +26,9 @@ public record AufgabensammlungenSuchparameter(
 	) {
 	// @formatter:on
 
-	public boolean isLeer() {
+    public boolean isLeer() {
 
-		return StringUtils.isBlank(name) && StringUtils.isBlank(referenz) && referenztyp == null && schwierigkeitsgrad == null;
-	}
+        return StringUtils.isBlank(name) && StringUtils.isBlank(referenz) && referenztyp == null
+                && schwierigkeitsgrad == null;
+    }
 }

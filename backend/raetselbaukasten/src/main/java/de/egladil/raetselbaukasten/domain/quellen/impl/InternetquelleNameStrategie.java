@@ -15,41 +15,41 @@ import de.egladil.raetselbaukasten.domain.quellen.Quellenart;
  * InternetquelleNameStrategie
  */
 public class InternetquelleNameStrategie implements QuelleNameStrategie {
-	@Override
-	public String getText(final IQuellenangabeDaten quelle) {
+    @Override
+    public String getText(final IQuellenangabeDaten quelle) {
 
-		if (quelle.getQuellenart() != Quellenart.INTERNET) {
+        if (quelle.getQuellenart() != Quellenart.INTERNET) {
 
-			throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.INTERNET);
-		}
+            throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.INTERNET);
+        }
 
-		if (StringUtils.isBlank(quelle.getMediumTitel())) {
+        if (StringUtils.isBlank(quelle.getMediumTitel())) {
 
-			throw new MjaRuntimeException("Bei Quellenart INTERNET darf mediumTitel nicht blank sein.");
-		}
+            throw new MjaRuntimeException("Bei Quellenart INTERNET darf mediumTitel nicht blank sein.");
+        }
 
-		StringBuilder sb = new StringBuilder(quelle.getMediumTitel());
+        StringBuilder sb = new StringBuilder(quelle.getMediumTitel());
 
-		if (StringUtils.isNotBlank(quelle.getJahr())) {
+        if (StringUtils.isNotBlank(quelle.getJahr())) {
 
-			sb.append(" (");
-			sb.append(quelle.getJahr());
-			sb.append(")");
-		}
+            sb.append(" (");
+            sb.append(quelle.getJahr());
+            sb.append(")");
+        }
 
-		if (StringUtils.isNotBlank(quelle.getKlasse())) {
+        if (StringUtils.isNotBlank(quelle.getKlasse())) {
 
-			sb.append(", ");
-			sb.append(quelle.getKlasse());
-		}
+            sb.append(", ");
+            sb.append(quelle.getKlasse());
+        }
 
-		if (StringUtils.isNotBlank(quelle.getStufe())) {
+        if (StringUtils.isNotBlank(quelle.getStufe())) {
 
-			sb.append(", ");
-			sb.append(quelle.getStufe());
-		}
+            sb.append(", ");
+            sb.append(quelle.getStufe());
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
 }

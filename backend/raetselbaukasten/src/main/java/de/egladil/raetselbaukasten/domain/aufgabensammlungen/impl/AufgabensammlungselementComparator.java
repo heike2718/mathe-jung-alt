@@ -15,11 +15,11 @@ import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Aufgabensammlungsel
  */
 public class AufgabensammlungselementComparator implements Comparator<Aufgabensammlungselement> {
 
-	private final Collator collator = Collator.getInstance(Locale.GERMANY);
+    private final Collator collator = Collator.getInstance(Locale.GERMANY);
 
-	@Override
-	public int compare(final Aufgabensammlungselement o1, final Aufgabensammlungselement o2) {
+    @Override
+    public int compare(final Aufgabensammlungselement o1, final Aufgabensammlungselement o2) {
 
-		return collator.compare(o1.getNummer(), o2.getNummer());
-	}
+        return collator.compare(o1.getNummer(), o2.getNummer());
+    }
 }

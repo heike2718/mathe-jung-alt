@@ -15,25 +15,25 @@ import de.egladil.raetselbaukasten.domain.quiz.dto.Quizaufgabe;
  */
 public class QuellenverzeichnisLaTeXGenerator {
 
-	public String generiereQuellenverzeichnis(final List<Quizaufgabe> aufgaben) {
+    public String generiereQuellenverzeichnis(final List<Quizaufgabe> aufgaben) {
 
-		String template = LaTeXTemplatesService.getInstance().getTemplateQuellenverzeichnis();
+        String template = LaTeXTemplatesService.getInstance().getTemplateQuellenverzeichnis();
 
-		String quellenangben = StringUtils.join(aufgaben.stream().map(this::mapToQuellenangabe).toList(), "");
-		template = template.replace(LaTeXPlaceholder.QUELLEN.placeholder(), quellenangben);
+        String quellenangben = StringUtils.join(aufgaben.stream().map(this::mapToQuellenangabe).toList(), "");
+        template = template.replace(LaTeXPlaceholder.QUELLEN.placeholder(), quellenangben);
 
-		return template;
+        return template;
 
-	}
+    }
 
-	String mapToQuellenangabe(final Quizaufgabe aufgabe) {
+    String mapToQuellenangabe(final Quizaufgabe aufgabe) {
 
-		String result = LaTeXConstants.QUELLENANGABE;
+        String result = LaTeXConstants.QUELLENANGABE;
 
-		result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), aufgabe.getNummer());
-		result = result.replace(LaTeXPlaceholder.QUELLENANGABE.placeholder(), aufgabe.getQuelle());
+        result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), aufgabe.getNummer());
+        result = result.replace(LaTeXPlaceholder.QUELLENANGABE.placeholder(), aufgabe.getQuelle());
 
-		return result;
-	}
+        return result;
+    }
 
 }

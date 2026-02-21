@@ -11,21 +11,21 @@ import de.egladil.raetselbaukasten.domain.AbstractDomainEntity;
  */
 public class Medium extends AbstractDomainEntity {
 
-	@Override
-	public int hashCode() {
+    @Override
+    public int hashCode() {
 
-		return super.hashCode();
-	}
+        return super.hashCode();
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
 
-		if (!(obj instanceof Medium)) {
+        if (!(obj instanceof Medium)) {
 
-			return false;
-		}
+            return false;
+        }
 
-		return super.equals(obj);
-	}
+        return super.equals(obj);
+    }
 
 }

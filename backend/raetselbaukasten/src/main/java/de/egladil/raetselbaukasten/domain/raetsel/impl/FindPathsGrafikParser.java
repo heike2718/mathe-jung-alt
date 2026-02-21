@@ -18,40 +18,39 @@ import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
  */
 public class FindPathsGrafikParser {
 
-	private final Pattern pattern;
+    private final Pattern pattern;
 
-	/**
-	 *
-	 */
-	public FindPathsGrafikParser() {
+    /**
+     *
+     */
+    public FindPathsGrafikParser() {
 
-		pattern = Pattern.compile(MjaRegexps.REGEXP_RELATIVE_PATH_EPS_IN_TEXT);
+        pattern = Pattern.compile(MjaRegexps.REGEXP_RELATIVE_PATH_EPS_IN_TEXT);
 
-	}
+    }
 
-	/**
-	 * Sucht die relativem Pfade von Grafiken in einem Latex-Text.
-	 *
-	 * @param  latex
-	 *               String darf blank sein
-	 * @return       List immer
-	 */
-	public List<String> findPaths(final String latex) {
+    /**
+     * Sucht die relativem Pfade von Grafiken in einem Latex-Text.
+     *
+     * @param latex String darf blank sein
+     * @return List immer
+     */
+    public List<String> findPaths(final String latex) {
 
-		ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
 
-		if (StringUtils.isBlank(latex)) {
+        if (StringUtils.isBlank(latex)) {
 
-			return result;
-		}
+            return result;
+        }
 
-		Matcher matcher = pattern.matcher(latex);
+        Matcher matcher = pattern.matcher(latex);
 
-		while (matcher.find()) {
+        while (matcher.find()) {
 
-			result.add(matcher.group());
-		}
+            result.add(matcher.group());
+        }
 
-		return result;
-	}
+        return result;
+    }
 }

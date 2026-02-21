@@ -9,11 +9,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.raetselbaukasten.domain.auth.dto.MessagePayload;
 import de.egladil.raetselbaukasten.domain.exceptions.LaTeXCompileException;
@@ -29,11 +37,6 @@ import de.egladil.raetselbaukasten.domain.raetsel.impl.RaetselPermissionDelegate
 import de.egladil.raetselbaukasten.domain.utils.MjaFileUtils;
 import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
 import de.egladil.raetselbaukasten.infrastructure.restclient.LaTeXRestClient;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 
 /**
  * RaetselGeneratorService
@@ -41,293 +44,317 @@ import jakarta.ws.rs.core.Response.Status;
 @ApplicationScoped
 public class RaetselGeneratorService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RaetselGeneratorService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RaetselGeneratorService.class);
 
-	private static List<String> TEMPORARY_FILE_EXTENSIONS = Arrays.asList(new String[] { ".aux", ".log", ".out", ".tex", "" });
+    private static List<String> TEMPORARY_FILE_EXTENSIONS = Arrays
+            .asList(new String[] { ".aux", ".log", ".out", ".tex", "" });
 
-	@ConfigProperty(name = "latex.base.dir")
-	String latexBaseDir;
+    @ConfigProperty(name = "latex.base.dir")
+    String latexBaseDir;
 
-	@ConfigProperty(name = "latex.generator.preserve.tempfiles")
-	boolean preserveTempFiles;
+    @ConfigProperty(name = "latex.generator.preserve.tempfiles")
+    boolean preserveTempFiles;
 
-	@Inject
-	AuthenticationContext authCtx;
+    @Inject
+    AuthenticationContext authCtx;
 
-	@Inject
-	RaetselPermissionDelegate permissionDelegate;
+    @Inject
+    RaetselPermissionDelegate permissionDelegate;
 
-	@RestClient
-	@Inject
-	LaTeXRestClient laTeXClient;
+    @RestClient
+    @Inject
+    LaTeXRestClient laTeXClient;
 
-	@Inject
-	RaetselService raetselService;
+    @Inject
+    RaetselService raetselService;
 
-	@Inject
-	RaetselFileService raetselFileService;
+    @Inject
+    RaetselFileService raetselFileService;
 
-	/**
-	 * Generiert den output des Raetsels im gewünschten Format und gibt die Url als String zurück. Nur admin mit
-	 * Änderungsrecht auf das Rätsel dürfen diese Methode aufrufen.
-	 *
-	 * @param raetselUuid String
-	 * @param layoutAntwortvorschlaege AnzeigeAntwortvorschlaegeTyp
-	 * @param schriftgroesse Schriftgroesse
-	 * @return
-	 */
-	public synchronized Images generatePNGsRaetsel(final String raetselUuid,
-		final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
+    /**
+     * Generiert den output des Raetsels im gewünschten Format und gibt die Url als
+     * String zurück. Nur admin mit Änderungsrecht auf das Rätsel dürfen diese
+     * Methode aufrufen.
+     *
+     * @param raetselUuid              String
+     * @param layoutAntwortvorschlaege AnzeigeAntwortvorschlaegeTyp
+     * @param schriftgroesse           Schriftgroesse
+     * @return
+     */
+    public synchronized Images generatePNGsRaetsel(final String raetselUuid,
+            final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font,
+            final Schriftgroesse schriftgroesse) {
 
-		LOGGER.debug("start generate output");
+        LOGGER.debug("start generate output");
 
-		Raetsel raetsel = loadRaetsel(raetselUuid);
+        Raetsel raetsel = loadRaetsel(raetselUuid);
 
-		if (raetsel.isSchreibgeschuetzt()) {
+        if (raetsel.isSchreibgeschuetzt()) {
 
-			String userId = authCtx.getUser().getName();
+            String userId = authCtx.getUser().getName();
 
-			LOGGER.warn("user {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
-				raetsel.getSchluessel());
+            LOGGER
+                    .warn("user {} nicht berechtigt, PNG fuer Raetsel mit SCHLUESSEL={} zu generieren", userId,
+                            raetsel.getSchluessel());
 
-			throw new WebApplicationException(Status.FORBIDDEN);
-		}
+            throw new WebApplicationException(Status.FORBIDDEN);
+        }
 
-		raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege, font, schriftgroesse);
+        raetselFileService.generateFrageLaTeX(raetsel, layoutAntwortvorschlaege, font, schriftgroesse);
 
-		boolean generateLoesung = StringUtils.isNotBlank(raetsel.getLoesung());
+        boolean generateLoesung = StringUtils.isNotBlank(raetsel.getLoesung());
 
-		if (generateLoesung) {
+        if (generateLoesung) {
 
-			raetselFileService.generateLoesungLaTeX(raetsel, font, schriftgroesse);
-		}
+            raetselFileService.generateLoesungLaTeX(raetsel, font, schriftgroesse);
+        }
 
-		Response responseFrage = null;
-		Response responseLoesung = null;
-		LOGGER.debug("vor Aufruf LaTeXRestClient");
+        Response responseFrage = null;
+        Response responseLoesung = null;
+        LOGGER.debug("vor Aufruf LaTeXRestClient");
 
-		try {
+        try {
 
-			responseFrage = laTeXClient.latex2PNG(raetsel.getSchluessel());
+            responseFrage = laTeXClient.latex2PNG(raetsel.getSchluessel());
 
-			if (generateLoesung) {
+            if (generateLoesung) {
 
-				responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN);
-			}
+                responseLoesung = laTeXClient.latex2PNG(raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN);
+            }
 
-			LOGGER.debug("nach Aufruf LaTeXRestClient");
-			MessagePayload message = responseFrage.readEntity(MessagePayload.class);
+            LOGGER.debug("nach Aufruf LaTeXRestClient");
+            MessagePayload message = responseFrage.readEntity(MessagePayload.class);
 
-			if (message.isOk()) {
+            if (message.isOk()) {
 
-				raetselFileService.moveVorschau(raetsel);
+                raetselFileService.moveVorschau(raetsel);
 
-				MjaImage imageFrage = this.raetselFileService.findVorschau(raetsel.getFilenameVorschauFrage());
+                MjaImage imageFrage = this.raetselFileService.findVorschau(raetsel.getFilenameVorschauFrage());
 
-				Images result = new Images().withImageFrage(imageFrage);
+                Images result = new Images().withImageFrage(imageFrage);
 
-				if (responseLoesung != null) {
+                if (responseLoesung != null) {
 
-					message = responseLoesung.readEntity(MessagePayload.class);
+                    message = responseLoesung.readEntity(MessagePayload.class);
 
-					if (message.isOk()) {
+                    if (message.isOk()) {
 
-						MjaImage imageLoesung = this.raetselFileService.findVorschau(raetsel.getFilenameVorschauLoesung());
+                        MjaImage imageLoesung = this.raetselFileService
+                                .findVorschau(raetsel.getFilenameVorschauLoesung());
 
-						// System.out.println(new String(Base64.getEncoder().encode(imageLoesung)));
+                        // System.out.println(new String(Base64.getEncoder().encode(imageLoesung)));
 
-						result.withImageLoesung(imageLoesung);
-					} else {
+                        result.withImageLoesung(imageLoesung);
+                    } else {
 
-						LOGGER.error("Mist: generieren der Lösung hat nicht geklappt: " + message.getMessage());
-						throw new LaTeXCompileException(
-							"Beim Generieren der Lösung ist etwas schiefgegangen: " + message.getMessage())
-								.withNameFile(raetsel.getFilenameVorschauLoesung());
-					}
+                        LOGGER.error("Mist: generieren der Lösung hat nicht geklappt: " + message.getMessage());
+                        throw new LaTeXCompileException(
+                                "Beim Generieren der Lösung ist etwas schiefgegangen: " + message.getMessage())
+                                .withNameFile(raetsel.getFilenameVorschauLoesung());
+                    }
 
-				}
+                }
 
-				raetselFileService.deleteTemporaryFiles(new String[] { raetsel.getSchluessel() + ".tex" });
+                raetselFileService.deleteTemporaryFiles(new String[] { raetsel.getSchluessel() + ".tex" });
 
-				if (generateLoesung) {
+                if (generateLoesung) {
 
-					raetselFileService.deleteTemporaryFiles(
-						new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN + ".tex" });
-				}
+                    raetselFileService
+                            .deleteTemporaryFiles(new String[] {
+                                    raetsel.getSchluessel() + RaetselFileService.SUFFIX_LOESUNGEN + ".tex" });
+                }
 
-				LOGGER.info("Raetsel Images generiert: [raetsel={}, admin={}]", raetselUuid,
-					StringUtils.abbreviate(authCtx.getUser().getName(), 11));
+                LOGGER
+                        .info("Raetsel Images generiert: [raetsel={}, admin={}]", raetselUuid,
+                                StringUtils.abbreviate(authCtx.getUser().getName(), 11));
 
-				return result;
+                return result;
 
-			}
+            }
 
-			LOGGER.error("Mist: generieren der Frage hat nicht geklappt: " + message.getMessage());
-			throw new LaTeXCompileException("Beim Generieren der Frage ist etwas schiefgegangen: " + message.getMessage())
-				.withNameFile(raetsel.getFilenameVorschauFrage());
+            LOGGER.error("Mist: generieren der Frage hat nicht geklappt: " + message.getMessage());
+            throw new LaTeXCompileException(
+                    "Beim Generieren der Frage ist etwas schiefgegangen: " + message.getMessage())
+                    .withNameFile(raetsel.getFilenameVorschauFrage());
 
-		} catch (LaTeXCompileException e) {
+        } catch (LaTeXCompileException e) {
 
-			throw e;
-		} catch (Exception e) {
+            throw e;
+        } catch (Exception e) {
 
-			String msg = "Beim Generieren des Outputs " + Outputformat.PNG + " zu Raetsel [schluessel=" + raetsel.getSchluessel()
-				+ ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: " + e.getMessage();
-			LOGGER.error(msg, e);
-			throw new MjaRuntimeException(msg, e);
+            String msg = "Beim Generieren des Outputs " + Outputformat.PNG + " zu Raetsel [schluessel="
+                    + raetsel.getSchluessel() + ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: "
+                    + e.getMessage();
+            LOGGER.error(msg, e);
+            throw new MjaRuntimeException(msg, e);
 
-		} finally {
+        } finally {
 
-			if (responseFrage != null) {
+            if (responseFrage != null) {
 
-				responseFrage.close();
-			}
+                responseFrage.close();
+            }
 
-			if (responseLoesung != null) {
+            if (responseLoesung != null) {
 
-				responseLoesung.close();
-			}
-		}
-	}
+                responseLoesung.close();
+            }
+        }
+    }
 
-	/**
-	 * Generiert das Rätsel als 2seitiges PDF: Frage auf Seite 1, Lösung auf Seite 2. Minderprivilegierte User bekommen
-	 * nur bei freigegebenen Rätseln ein PDF.
-	 *
-	 * @param raetselUuid
-	 * @param layoutAntwortvorschlaege
-	 * @param schriftgroesse Schriftgroesse
-	 * @return GeneratedFile
-	 */
-	public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid,
-		final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font, final Schriftgroesse schriftgroesse) {
+    /**
+     * Generiert das Rätsel als 2seitiges PDF: Frage auf Seite 1, Lösung auf Seite
+     * 2. Minderprivilegierte User bekommen nur bei freigegebenen Rätseln ein PDF.
+     *
+     * @param raetselUuid
+     * @param layoutAntwortvorschlaege
+     * @param schriftgroesse           Schriftgroesse
+     * @return GeneratedFile
+     */
+    public synchronized GeneratedFile generatePDFRaetsel(final String raetselUuid,
+            final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final FontName font,
+            final Schriftgroesse schriftgroesse) {
 
-		LOGGER.debug("start generate output");
+        LOGGER.debug("start generate output");
 
-		Raetsel raetsel = loadRaetsel(raetselUuid);
+        Raetsel raetsel = loadRaetsel(raetselUuid);
 
-		// Das wirft eine Exception
-		permissionDelegate.checkReadPermission(raetsel);
+        // Das wirft eine Exception
+        permissionDelegate.checkReadPermission(raetsel);
 
-		raetselFileService.generiereLaTeXRaetselPDF(raetsel, layoutAntwortvorschlaege, font, schriftgroesse);
+        raetselFileService.generiereLaTeXRaetselPDF(raetsel, layoutAntwortvorschlaege, font, schriftgroesse);
 
-		Response response = null;
-		LOGGER.debug("vor Aufruf LaTeXRestClient");
+        Response response = null;
+        LOGGER.debug("vor Aufruf LaTeXRestClient");
 
-		try {
+        try {
 
-			response = laTeXClient.latex2PDF(raetsel.getSchluessel() + RaetselFileService.SUFFIX_PDF);
+            response = laTeXClient.latex2PDF(raetsel.getSchluessel() + RaetselFileService.SUFFIX_PDF);
 
-			LOGGER.debug("nach Aufruf LaTeXRestClient");
-			MessagePayload message = response.readEntity(MessagePayload.class);
+            LOGGER.debug("nach Aufruf LaTeXRestClient");
+            MessagePayload message = response.readEntity(MessagePayload.class);
 
-			String filename = raetsel.getSchluessel() + Outputformat.PDF.getFilenameExtension();
+            String filename = raetsel.getSchluessel() + Outputformat.PDF.getFilenameExtension();
 
-			if (message.isOk()) {
+            if (message.isOk()) {
 
-				byte[] pdf = this.raetselFileService.findPDF(raetsel.getSchluessel());
+                byte[] pdf = this.raetselFileService.findPDF(raetsel.getSchluessel());
 
-				if (pdf == null) {
+                if (pdf == null) {
 
-					String msg = "Das generierte PDF zu Raetsel [schluessel=" + raetsel.getSchluessel() + ", uuid=" + raetselUuid
-						+ "] konnte nicht geladen werden. Bitte mal das doc-Verzeichnis prüfen.";
-					LOGGER.error(msg);
-					throw new MjaRuntimeException(msg);
-				}
+                    String msg = "Das generierte PDF zu Raetsel [schluessel=" + raetsel.getSchluessel() + ", uuid="
+                            + raetselUuid + "] konnte nicht geladen werden. Bitte mal das doc-Verzeichnis prüfen.";
+                    LOGGER.error(msg);
+                    throw new MjaRuntimeException(msg);
+                }
 
-				GeneratedFile result = new GeneratedFile();
-				result.setFileData(pdf);
-				result.setFileName(filename);
+                GeneratedFile result = new GeneratedFile();
+                result.setFileData(pdf);
+                result.setFileName(filename);
 
-				raetselFileService
-					.deleteTemporaryFiles(new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_PDF + ".tex" });
+                raetselFileService
+                        .deleteTemporaryFiles(
+                                new String[] { raetsel.getSchluessel() + RaetselFileService.SUFFIX_PDF + ".tex" });
 
-				LOGGER.info("Raetsel PDF generiert: [raetsel={}, admin={}]", raetselUuid,
-					StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
+                LOGGER
+                        .info("Raetsel PDF generiert: [raetsel={}, admin={}]", raetselUuid,
+                                StringUtils.abbreviate(authCtx.getUser().getUuid(), 11));
 
-				this.deleteTemporaryFiles(raetsel.getSchluessel());
+                this.deleteTemporaryFiles(raetsel.getSchluessel());
 
-				return result;
-			}
+                return result;
+            }
 
-			LOGGER.error("Mist: generieren des PDFs hat nicht geklappt: " + message.getMessage());
-			throw new LaTeXCompileException("Beim Generieren des PDFs ist etwas schiefgegangen: " + message.getMessage())
-				.withNameFile(filename);
+            LOGGER.error("Mist: generieren des PDFs hat nicht geklappt: " + message.getMessage());
+            throw new LaTeXCompileException(
+                    "Beim Generieren des PDFs ist etwas schiefgegangen: " + message.getMessage())
+                    .withNameFile(filename);
 
-		} catch (LaTeXCompileException e) {
+        } catch (LaTeXCompileException e) {
 
-			throw e;
-		} catch (MjaRuntimeException e) {
+            throw e;
+        } catch (MjaRuntimeException e) {
 
-			throw e;
-		} catch (Exception e) {
+            throw e;
+        } catch (Exception e) {
 
-			String msg = "Beim Generieren des Outputs " + Outputformat.PDF + " zu Raetsel [schluessel=" + raetsel.getSchluessel()
-				+ ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: " + e.getMessage();
-			LOGGER.error(msg, e);
-			throw new MjaRuntimeException(msg, e);
-		} finally {
+            String msg = "Beim Generieren des Outputs " + Outputformat.PDF + " zu Raetsel [schluessel="
+                    + raetsel.getSchluessel() + ", uuid=" + raetselUuid + "] ist ein Fehler aufgetreten: "
+                    + e.getMessage();
+            LOGGER.error(msg, e);
+            throw new MjaRuntimeException(msg, e);
+        } finally {
 
-			if (response != null) {
+            if (response != null) {
 
-				response.close();
-			}
-		}
-	}
+                response.close();
+            }
+        }
+    }
 
-	/**
-	 * @param raetselUuid
-	 * @return Raetsel
-	 * @throws WebApplicationException wenn es keinen Eintrag mit der URI gibt oder noch nicht alle erforderlichen
-	 * Grafikdateien vorhanden sind.
-	 */
-	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
-	Raetsel loadRaetsel(final String raetselUuid) throws WebApplicationException {
+    /**
+     * @param raetselUuid
+     * @return Raetsel
+     * @throws WebApplicationException wenn es keinen Eintrag mit der URI gibt oder
+     *                                 noch nicht alle erforderlichen Grafikdateien
+     *                                 vorhanden sind.
+     */
+    @SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
+    Raetsel loadRaetsel(final String raetselUuid) throws WebApplicationException {
 
-		Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
+        Raetsel raetsel = raetselService.getRaetselZuId(raetselUuid);
 
-		if (raetsel == null) {
+        if (raetsel == null) {
 
-			throw new WebApplicationException(
-				Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
-		}
+            throw new WebApplicationException(
+                    Response.status(404).entity(MessagePayload.error("Es gibt kein Raetsel mit dieser UUID")).build());
+        }
 
-		List<String> fehlendeGrafiken = raetsel.getEmbeddableImageInfos().stream().filter(gi -> !gi.isExistiert())
-			.map(gi -> gi.getPfad()).collect(Collectors.toList());
+        List<String> fehlendeGrafiken = raetsel
+                .getEmbeddableImageInfos()
+                .stream()
+                .filter(gi -> !gi.isExistiert())
+                .map(gi -> gi.getPfad())
+                .collect(Collectors.toList());
 
-		if (!fehlendeGrafiken.isEmpty()) {
+        if (!fehlendeGrafiken.isEmpty()) {
 
-			String message = "Es fehlen noch Grafiken: ";
+            String message = "Es fehlen noch Grafiken: ";
 
-			for (int i = 0; i < fehlendeGrafiken.size(); i++) {
+            for (int i = 0; i < fehlendeGrafiken.size(); i++) {
 
-				message += fehlendeGrafiken.get(i);
+                message += fehlendeGrafiken.get(i);
 
-				if (i < fehlendeGrafiken.size() - 2) {
+                if (i < fehlendeGrafiken.size() - 2) {
 
-					message += ", ";
-				}
-			}
+                    message += ", ";
+                }
+            }
 
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
-		}
-		return raetsel;
-	}
+            throw new WebApplicationException(
+                    Response.status(Status.BAD_REQUEST).entity(MessagePayload.error(message)).build());
+        }
+        return raetsel;
+    }
 
-	void deleteTemporaryFiles(final String fileNameWithoutExtension) {
+    void deleteTemporaryFiles(final String fileNameWithoutExtension) {
 
-		if (preserveTempFiles) {
+        if (preserveTempFiles) {
 
-			LOGGER.debug("tempfiles sollen aufgehoben werden, also fuer {} nicht loeschen", fileNameWithoutExtension);
+            LOGGER.debug("tempfiles sollen aufgehoben werden, also fuer {} nicht loeschen", fileNameWithoutExtension);
 
-			return;
-		}
+            return;
+        }
 
-		final String path = latexBaseDir + File.separator + fileNameWithoutExtension;
+        final String path = latexBaseDir + File.separator + fileNameWithoutExtension;
 
-		String[] paths = TEMPORARY_FILE_EXTENSIONS.stream().map(ext -> new String(path + ext)).toList().toArray(new String[0]);
+        String[] paths = TEMPORARY_FILE_EXTENSIONS
+                .stream()
+                .map(ext -> new String(path + ext))
+                .toList()
+                .toArray(new String[0]);
 
-		MjaFileUtils.deleteFiles(paths);
+        MjaFileUtils.deleteFiles(paths);
 
-	}
+    }
 }

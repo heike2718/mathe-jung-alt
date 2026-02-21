@@ -7,7 +7,14 @@ package de.egladil.raetselbaukasten.domain.auth.login;
 import java.util.Map;
 import java.util.UUID;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,11 +25,6 @@ import de.egladil.raetselbaukasten.domain.exceptions.ClientAuthException;
 import de.egladil.raetselbaukasten.domain.exceptions.InaccessableEndpointException;
 import de.egladil.raetselbaukasten.domain.exceptions.MjaAuthRuntimeException;
 import de.egladil.raetselbaukasten.infrastructure.restclient.AuthproviderRestClient;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.ProcessingException;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 
 /**
  * TokenExchangeService
@@ -30,80 +32,81 @@ import jakarta.ws.rs.core.Response;
 @RequestScoped
 public class TokenExchangeService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(TokenExchangeService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TokenExchangeService.class);
 
-	@Inject
-	@RestClient
-	AuthproviderRestClient authProviderRestClient;
+    @Inject
+    @RestClient
+    AuthproviderRestClient authProviderRestClient;
 
-	public String exchangeTheOneTimeToken(final String clientId, final String clientSecret, final String oneTimeToken) {
+    public String exchangeTheOneTimeToken(final String clientId, final String clientSecret, final String oneTimeToken) {
 
-		final String nonce = UUID.randomUUID().toString();
+        final String nonce = UUID.randomUUID().toString();
 
-		OAuthClientCredentials clientCredentials = OAuthClientCredentials.create(clientId, clientSecret, nonce);
+        OAuthClientCredentials clientCredentials = OAuthClientCredentials.create(clientId, clientSecret, nonce);
 
-		Response response = null;
+        Response response = null;
 
-		try {
+        try {
 
-			response = authProviderRestClient.exchangeOneTimeTokenWithJwt(oneTimeToken, clientCredentials);
+            response = authProviderRestClient.exchangeOneTimeTokenWithJwt(oneTimeToken, clientCredentials);
 
-			ResponsePayload responsePayload = response.readEntity(ResponsePayload.class);
+            ResponsePayload responsePayload = response.readEntity(ResponsePayload.class);
 
-			return this.checkNonceAndExtractTheJwt(nonce, responsePayload);
+            return this.checkNonceAndExtractTheJwt(nonce, responsePayload);
 
-		} catch (WebApplicationException e) {
+        } catch (WebApplicationException e) {
 
-			ResponsePayload responsePayload = e.getResponse().readEntity(ResponsePayload.class);
+            ResponsePayload responsePayload = e.getResponse().readEntity(ResponsePayload.class);
 
-			MessagePayload messagePayload = responsePayload.getMessage();
+            MessagePayload messagePayload = responsePayload.getMessage();
 
-			String message = "Konnte das oneTimeToken nicht gegen das JWT tauschen: " + messagePayload.getMessage();
+            String message = "Konnte das oneTimeToken nicht gegen das JWT tauschen: " + messagePayload.getMessage();
 
-			LOG.error(message);
+            LOG.error(message);
 
-			throw new MjaAuthRuntimeException(message);
+            throw new MjaAuthRuntimeException(message);
 
-		} catch (ProcessingException processingException) {
+        } catch (ProcessingException processingException) {
 
-			LOG.error("endpoint authprovider ist nicht erreichbar");
+            LOG.error("endpoint authprovider ist nicht erreichbar");
 
-			throw new InaccessableEndpointException("Der Endpoint authprovider ist nicht erreichbar. ");
-		} finally {
+            throw new InaccessableEndpointException("Der Endpoint authprovider ist nicht erreichbar. ");
+        } finally {
 
-			if (response != null) {
+            if (response != null) {
 
-				response.close();
-			}
-		}
-	}
+                response.close();
+            }
+        }
+    }
 
-	private String checkNonceAndExtractTheJwt(final String expectedNonce, final ResponsePayload responsePayload) {
+    private String checkNonceAndExtractTheJwt(final String expectedNonce, final ResponsePayload responsePayload) {
 
-		MessagePayload messagePayload = responsePayload.getMessage();
+        MessagePayload messagePayload = responsePayload.getMessage();
 
-		if (messagePayload.isOk()) {
+        if (messagePayload.isOk()) {
 
-			@SuppressWarnings("unchecked")
-			Map<String, String> dataMap = (Map<String, String>) responsePayload.getData();
-			String responseNonce = dataMap.get("nonce");
+            @SuppressWarnings("unchecked")
+            Map<String, String> dataMap = (Map<String, String>) responsePayload.getData();
+            String responseNonce = dataMap.get("nonce");
 
-			if (!expectedNonce.equals(responseNonce)) {
+            if (!expectedNonce.equals(responseNonce)) {
 
-				{
+                {
 
-					LOG.error("Security Thread: zurückgesendetes nonce stimmt nicht");
-					throw new ClientAuthException();
-				}
-			}
+                    LOG.error("Security Thread: zurückgesendetes nonce stimmt nicht");
+                    throw new ClientAuthException();
+                }
+            }
 
-			return dataMap.get("jwt");
-		} else {
+            return dataMap.get("jwt");
+        } else {
 
-			LOG.error("Authentisierung des Clients hat nicht geklappt: {} - {}", messagePayload.getLevel(),
-				messagePayload.getMessage());
-			throw new ClientAuthException();
-		}
-	}
+            LOG
+                    .error("Authentisierung des Clients hat nicht geklappt: {} - {}", messagePayload.getLevel(),
+                            messagePayload.getMessage());
+            throw new ClientAuthException();
+        }
+    }
 
 }

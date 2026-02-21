@@ -9,8 +9,6 @@ package de.egladil.raetselbaukasten.domain.medien;
  */
 public enum Medienart {
 
-	BUCH,
-	INTERNET,
-	ZEITSCHRIFT;
+    BUCH, INTERNET, ZEITSCHRIFT;
 
 }

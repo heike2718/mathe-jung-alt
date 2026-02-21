@@ -19,64 +19,65 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class SecureTokenService {
 
-	private static final byte TOKEN_BYTES = 16;
+    private static final byte TOKEN_BYTES = 16;
 
-	private static final byte SIGNATURE_BYTES = 32; // Length of SHA-256
+    private static final byte SIGNATURE_BYTES = 32; // Length of SHA-256
 
-	private final SecureRandom secureRandom;
+    private final SecureRandom secureRandom;
 
-	private final byte[] secret = new byte[TOKEN_BYTES];
+    private final byte[] secret = new byte[TOKEN_BYTES];
 
-	/**
-	 *
-	 */
-	public SecureTokenService() throws NoSuchAlgorithmException {
+    /**
+     *
+     */
+    public SecureTokenService() throws NoSuchAlgorithmException {
 
-		super();
-		secureRandom = SecureRandom.getInstanceStrong();
-		secureRandom.nextBytes(secret);
+        super();
+        secureRandom = SecureRandom.getInstanceStrong();
+        secureRandom.nextBytes(secret);
 
-	}
+    }
 
-	public String createRandomToken() {
+    public String createRandomToken() {
 
-		try {
+        try {
 
-			byte[] tokenAndSignature = new byte[TOKEN_BYTES + SIGNATURE_BYTES];
-			// Add random token
-			secureRandom.nextBytes(tokenAndSignature);
+            byte[] tokenAndSignature = new byte[TOKEN_BYTES + SIGNATURE_BYTES];
+            // Add random token
+            secureRandom.nextBytes(tokenAndSignature);
 
-			MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-			messageDigest.update(tokenAndSignature, 0, TOKEN_BYTES);
-			messageDigest.update(secret);
-			// Add signature
-			messageDigest.digest(tokenAndSignature, TOKEN_BYTES, SIGNATURE_BYTES);
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(tokenAndSignature, 0, TOKEN_BYTES);
+            messageDigest.update(secret);
+            // Add signature
+            messageDigest.digest(tokenAndSignature, TOKEN_BYTES, SIGNATURE_BYTES);
 
-			return Base64.getEncoder().encodeToString(tokenAndSignature);
-		} catch (NoSuchAlgorithmException | DigestException e) {
+            return Base64.getEncoder().encodeToString(tokenAndSignature);
+        } catch (NoSuchAlgorithmException | DigestException e) {
 
-			throw new IllegalStateException(e);
-		}
-	}
+            throw new IllegalStateException(e);
+        }
+    }
 
-	public boolean validateToken(final String encodedTokenAndSignature) {
+    public boolean validateToken(final String encodedTokenAndSignature) {
 
-		try {
+        try {
 
-			byte[] tokenAndSignature = Base64.getDecoder().decode(encodedTokenAndSignature);
+            byte[] tokenAndSignature = Base64.getDecoder().decode(encodedTokenAndSignature);
 
-			MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-			// Read only the plain token part
-			messageDigest.update(tokenAndSignature, 0, TOKEN_BYTES);
-			messageDigest.update(secret);
-			byte[] expectedSignature = messageDigest.digest();
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            // Read only the plain token part
+            messageDigest.update(tokenAndSignature, 0, TOKEN_BYTES);
+            messageDigest.update(secret);
+            byte[] expectedSignature = messageDigest.digest();
 
-			// Compare actual signature with the expected one
-			return Arrays.equals(tokenAndSignature, TOKEN_BYTES, TOKEN_BYTES + SIGNATURE_BYTES, expectedSignature, 0,
-				SIGNATURE_BYTES);
-		} catch (NoSuchAlgorithmException e) {
+            // Compare actual signature with the expected one
+            return Arrays
+                    .equals(tokenAndSignature, TOKEN_BYTES, TOKEN_BYTES + SIGNATURE_BYTES, expectedSignature, 0,
+                            SIGNATURE_BYTES);
+        } catch (NoSuchAlgorithmException e) {
 
-			throw new IllegalStateException(e);
-		}
-	}
+            throw new IllegalStateException(e);
+        }
+    }
 }

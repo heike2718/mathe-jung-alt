@@ -4,25 +4,29 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.generatoren.impl;
 
-import de.egladil.raetselbaukasten.domain.generatoren.dto.AufgabensammlungGeneratorInput;
-import de.egladil.raetselbaukasten.domain.quiz.dto.Quizaufgabe;
-import de.egladil.raetselbaukasten.domain.raetsel.dto.RaetselLaTeXDto;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.commons.lang3.StringUtils;
+
+import de.egladil.raetselbaukasten.domain.generatoren.dto.AufgabensammlungGeneratorInput;
+import de.egladil.raetselbaukasten.domain.quiz.dto.Quizaufgabe;
+import de.egladil.raetselbaukasten.domain.raetsel.dto.RaetselLaTeXDto;
+
 /**
- * LaTeXMainDocLoesungenGenerator generiert ein LaTeX-File, in dem die tex-Files mit den Lösungen mittels input integriert sind.
+ * LaTeXMainDocLoesungenGenerator generiert ein LaTeX-File, in dem die tex-Files
+ * mit den Lösungen mittels input integriert sind.
  */
 public class LaTeXMainDocLoesungenGenerator implements LaTeXDocGeneratorStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXMainDocLoesungenGenerator.class);
 
     /**
-     * Generiert das LaTeX-Masterfile für die Lösungen. Es werden die input-Befehle zum Importieren der Lösungen-Files generiert.
+     * Generiert das LaTeX-Masterfile für die Lösungen. Es werden die input-Befehle
+     * zum Importieren der Lösungen-Files generiert.
      *
      * @param aufgaben
      * @param raetselLaTeX
@@ -30,15 +34,21 @@ public class LaTeXMainDocLoesungenGenerator implements LaTeXDocGeneratorStrategy
      * @param input
      * @return
      */
-    public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
+    public String generateLaTeX(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX,
+            final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
 
         String template = LaTeXTemplatesService.getInstance().getTemplateMainLaTeXDocument();
 
-        template = template.replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
-        template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
-                input.getSchriftgroesse().getLaTeXReplacement());
-        template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
-        template = template.replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(), input.getAufgabensammlung().getName() + " (Lösungen)");
+        template = template
+                .replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
+        template = template
+                .replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
+                        input.getSchriftgroesse().getLaTeXReplacement());
+        template = template
+                .replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
+        template = template
+                .replace(LaTeXPlaceholder.UEBERSCHRIFT.placeholder(),
+                        input.getAufgabensammlung().getName() + " (Lösungen)");
 
         String content = printContentLoesungen(aufgaben, raetselLaTeX);
 
@@ -57,7 +67,9 @@ public class LaTeXMainDocLoesungenGenerator implements LaTeXDocGeneratorStrategy
 
         for (Quizaufgabe aufgabe : aufgaben) {
 
-            Optional<RaetselLaTeXDto> opt = raetselLaTeX.stream().filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
+            Optional<RaetselLaTeXDto> opt = raetselLaTeX
+                    .stream()
+                    .filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
                     .findFirst();
 
             if (opt.isPresent() && StringUtils.isNotBlank(opt.get().getLoesung())) {

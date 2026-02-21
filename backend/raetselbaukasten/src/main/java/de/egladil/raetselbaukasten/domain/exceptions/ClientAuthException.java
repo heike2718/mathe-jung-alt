@@ -9,6 +9,6 @@ package de.egladil.raetselbaukasten.domain.exceptions;
  */
 public class ClientAuthException extends RuntimeException {
 
-	private static final long serialVersionUID = -5380769913650712712L;
+    private static final long serialVersionUID = -5380769913650712712L;
 
 }

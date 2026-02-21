@@ -4,15 +4,18 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
-import de.egladil.raetselbaukasten.domain.raetsel.RaetselHerkunftTyp;
+import java.util.Date;
+
 import jakarta.persistence.*;
+
+import org.hibernate.annotations.UuidGenerator;
+
+import de.egladil.raetselbaukasten.domain.raetsel.RaetselHerkunftTyp;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
-
-import java.util.Date;
 
 /**
  * PersistentesRaetsel
@@ -23,10 +26,9 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "RAETSEL")
-@NamedQueries({
-        @NamedQuery(
-                name = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN",
-                query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren order by r.schluessel"),
+@NamedQueries({ @NamedQuery(
+        name = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN",
+        query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') like :deskriptoren order by r.schluessel"),
         @NamedQuery(
                 name = "PersistentesRaetsel.FIND_NOT_WITH_DESKRIPTOREN",
                 query = "select r from PersistentesRaetsel r where CONCAT(CONCAT(',', r.deskriptoren),',') not like :deskriptoren order by r.schluessel"),
@@ -53,8 +55,7 @@ import java.util.Date;
                 query = "select r from PersistentesRaetsel r where r.schluessel = :schluessel"),
         @NamedQuery(
                 name = "PersistentesRaetsel.FIND_WITH_SCHLUESSEL_LIST",
-                query = "select r from PersistentesRaetsel r where r.schluessel IN :schluessel")
-})
+                query = "select r from PersistentesRaetsel r where r.schluessel IN :schluessel") })
 public class PersistentesRaetsel {
 
     public static final String FIND_WITH_DESKRIPTOREN = "PersistentesRaetsel.FIND_WITH_DESKRIPTOREN";
@@ -148,6 +149,5 @@ public class PersistentesRaetsel {
 
         return uuid != null;
     }
-
 
 }

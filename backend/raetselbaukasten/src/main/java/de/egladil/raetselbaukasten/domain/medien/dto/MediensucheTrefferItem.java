@@ -4,78 +4,79 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.medien.dto;
 
+import jakarta.validation.constraints.Pattern;
+
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.raetselbaukasten.domain.medien.Medienart;
 import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
-import jakarta.validation.constraints.Pattern;
 
 /**
  * MediensucheTrefferItem
  */
 public class MediensucheTrefferItem {
 
-	@JsonProperty
-	@Schema(description = "technische ID, 'neu' für neue Medien")
-	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält ungültige Zeichen")
-	private String id;
+    @JsonProperty
+    @Schema(description = "technische ID, 'neu' für neue Medien")
+    @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält ungültige Zeichen")
+    private String id;
 
-	@JsonProperty
-	@Schema(description = "Art des Mediums")
-	private Medienart medienart;
+    @JsonProperty
+    @Schema(description = "Art des Mediums")
+    private Medienart medienart;
 
-	@JsonProperty
-	@Schema(description = "Titel des Mediums")
-	private String titel;
+    @JsonProperty
+    @Schema(description = "Titel des Mediums")
+    private String titel;
 
-	@JsonProperty
-	@Schema(description = "Kommentar des Mediums")
-	private String kommentar;
+    @JsonProperty
+    @Schema(description = "Kommentar des Mediums")
+    private String kommentar;
 
-	public String getId() {
+    public String getId() {
 
-		return id;
-	}
+        return id;
+    }
 
-	public MediensucheTrefferItem withId(final String id) {
+    public MediensucheTrefferItem withId(final String id) {
 
-		this.id = id;
-		return this;
-	}
+        this.id = id;
+        return this;
+    }
 
-	public Medienart getMedienart() {
+    public Medienart getMedienart() {
 
-		return medienart;
-	}
+        return medienart;
+    }
 
-	public MediensucheTrefferItem withMedienart(final Medienart medienart) {
+    public MediensucheTrefferItem withMedienart(final Medienart medienart) {
 
-		this.medienart = medienart;
-		return this;
-	}
+        this.medienart = medienart;
+        return this;
+    }
 
-	public String getTitel() {
+    public String getTitel() {
 
-		return titel;
-	}
+        return titel;
+    }
 
-	public MediensucheTrefferItem withTitel(final String titel) {
+    public MediensucheTrefferItem withTitel(final String titel) {
 
-		this.titel = titel;
-		return this;
-	}
+        this.titel = titel;
+        return this;
+    }
 
-	public String getKommentar() {
+    public String getKommentar() {
 
-		return kommentar;
-	}
+        return kommentar;
+    }
 
-	public MediensucheTrefferItem withKommentar(final String kommentar) {
+    public MediensucheTrefferItem withKommentar(final String kommentar) {
 
-		this.kommentar = kommentar;
-		return this;
-	}
+        this.kommentar = kommentar;
+        return this;
+    }
 
 }

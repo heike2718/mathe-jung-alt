@@ -14,66 +14,65 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Schema(description = "base64 encodete Daten eines png sowie Breite und Höhe")
 public class MjaImage {
 
-	@JsonProperty
-	@Schema(description = "Breite des Images")
-	private int width;
+    @JsonProperty
+    @Schema(description = "Breite des Images")
+    private int width;
 
-	@JsonProperty
-	@Schema(description = "Höhe des Images")
-	private int height;
+    @JsonProperty
+    @Schema(description = "Höhe des Images")
+    private int height;
 
-	@JsonProperty
-	@Schema(
-		description = "das image-Format: 'image/png' oder 'image/svg+xml'. Kann im img-Tag verwendet werden als 'data:image/png' bzw. 'data:image/svg+xml'")
-	private String format;
+    @JsonProperty
+    @Schema(
+            description = "das image-Format: 'image/png' oder 'image/svg+xml'. Kann im img-Tag verwendet werden als 'data:image/png' bzw. 'data:image/svg+xml'")
+    private String format;
 
-	@JsonProperty
-	@Schema(
-		description = "Base64-encodetes png Kann mit einem img src=\"data:image/png;base64- Tag angezeigt werden")
-	private byte[] data;
+    @JsonProperty
+    @Schema(description = "Base64-encodetes png Kann mit einem img src=\"data:image/png;base64- Tag angezeigt werden")
+    private byte[] data;
 
-	public int getWidth() {
+    public int getWidth() {
 
-		return width;
-	}
+        return width;
+    }
 
-	public MjaImage withWidth(final int width) {
+    public MjaImage withWidth(final int width) {
 
-		this.width = width;
-		return this;
-	}
+        this.width = width;
+        return this;
+    }
 
-	public int getHeight() {
+    public int getHeight() {
 
-		return height;
-	}
+        return height;
+    }
 
-	public MjaImage withHeight(final int height) {
+    public MjaImage withHeight(final int height) {
 
-		this.height = height;
-		return this;
-	}
+        this.height = height;
+        return this;
+    }
 
-	public byte[] getData() {
+    public byte[] getData() {
 
-		return data;
-	}
+        return data;
+    }
 
-	public MjaImage withData(final byte[] data) {
+    public MjaImage withData(final byte[] data) {
 
-		this.data = data;
-		return this;
-	}
+        this.data = data;
+        return this;
+    }
 
-	public String getFormat() {
+    public String getFormat() {
 
-		return format;
-	}
+        return format;
+    }
 
-	public MjaImage withFormat(final String format) {
+    public MjaImage withFormat(final String format) {
 
-		this.format = format;
-		return this;
-	}
+        this.format = format;
+        return this;
+    }
 
 }

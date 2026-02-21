@@ -4,15 +4,18 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
-import de.egladil.raetselbaukasten.domain.quellen.Quellenart;
+import java.util.Date;
+
 import jakarta.persistence.*;
+
+import org.hibernate.annotations.UuidGenerator;
+
+import de.egladil.raetselbaukasten.domain.quellen.Quellenart;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
-
-import java.util.Date;
 
 /**
  * PersistenteQuelle

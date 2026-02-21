@@ -9,67 +9,68 @@ package de.egladil.raetselbaukasten.domain.raetsel.dto;
  */
 public enum ImageFormat {
 
-	PNG {
+    PNG {
 
-		@Override
-		public String getFormatStringForResponse() {
+        @Override
+        public String getFormatStringForResponse() {
 
-			return "image/png";
-		}
+            return "image/png";
+        }
 
-		@Override
-		public String getFileExtensionWithDot() {
+        @Override
+        public String getFileExtensionWithDot() {
 
-			return "." + this.getFileExtensionWithoutDot();
+            return "." + this.getFileExtensionWithoutDot();
 
-		}
+        }
 
-		@Override
-		public String getFileExtensionWithoutDot() {
+        @Override
+        public String getFileExtensionWithoutDot() {
 
-			return "png";
-		}
+            return "png";
+        }
 
-	},
-	SVG {
+    },
+    SVG {
 
-		@Override
-		public String getFormatStringForResponse() {
+        @Override
+        public String getFormatStringForResponse() {
 
-			return "image/svg+xml";
-		}
+            return "image/svg+xml";
+        }
 
-		@Override
-		public String getFileExtensionWithDot() {
+        @Override
+        public String getFileExtensionWithDot() {
 
-			return "." + this.getFileExtensionWithoutDot();
+            return "." + this.getFileExtensionWithoutDot();
 
-		}
+        }
 
-		@Override
-		public String getFileExtensionWithoutDot() {
+        @Override
+        public String getFileExtensionWithoutDot() {
 
-			return "svg";
-		}
-	};
+            return "svg";
+        }
+    };
 
-	public abstract String getFormatStringForResponse();
+    public abstract String getFormatStringForResponse();
 
-	public abstract String getFileExtensionWithDot();
+    public abstract String getFileExtensionWithDot();
 
-	public abstract String getFileExtensionWithoutDot();
+    public abstract String getFileExtensionWithoutDot();
 
-	public static ImageFormat valueOfFileExtension(final String extensionWithoutDot) {
+    public static ImageFormat valueOfFileExtension(final String extensionWithoutDot) {
 
-		for (ImageFormat format : ImageFormat.values()) {
+        for (ImageFormat format : ImageFormat.values()) {
 
-			if (format.getFileExtensionWithoutDot().equals(extensionWithoutDot)) {
+            if (format.getFileExtensionWithoutDot().equals(extensionWithoutDot)) {
 
-				return format;
-			}
-		}
+                return format;
+            }
+        }
 
-		throw new IllegalArgumentException("unbekannte extension " + extensionWithoutDot + " - dafuer gibt es kein ImageFormat");
-	}
+        throw new IllegalArgumentException(
+                "unbekannte extension " + extensionWithoutDot + " - dafuer gibt es kein ImageFormat");
+    }
 
 }

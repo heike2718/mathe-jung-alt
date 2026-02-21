@@ -9,20 +9,18 @@ package de.egladil.raetselbaukasten.domain.raetsel;
  */
 public enum RaetselHerkunftTyp {
 
-	EIGENKREATION("selbst erstellt"),
-	ZITAT("zitiert"),
-	ADAPTION("adaptiert");
+    EIGENKREATION("selbst erstellt"), ZITAT("zitiert"), ADAPTION("adaptiert");
 
-	private final String beschreibung;
+    private final String beschreibung;
 
-	RaetselHerkunftTyp(final String beschreibung) {
+    RaetselHerkunftTyp(final String beschreibung) {
 
-		this.beschreibung = beschreibung;
-	}
+        this.beschreibung = beschreibung;
+    }
 
-	public String getBeschreibung() {
+    public String getBeschreibung() {
 
-		return beschreibung;
-	}
+        return beschreibung;
+    }
 
 }

@@ -13,7 +13,8 @@ public class QuellenNameTestUtils {
 
     static PersistenteQuelleReadonly createQuelleAlleAttributeOhneQuellenart() {
 
-        PersistenteQuelleReadonly quelle = PersistenteQuelleReadonly.builder()
+        PersistenteQuelleReadonly quelle = PersistenteQuelleReadonly
+                .builder()
                 .ausgabe("11")
                 .autor("Johannes Lehmann")
                 .jahr("1987")

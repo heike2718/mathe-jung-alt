@@ -11,33 +11,33 @@ import de.egladil.raetselbaukasten.domain.raetsel.Antwortvorschlag;
  */
 public class DescriptionAntwortvorschlagGeneratorStrategegy implements AntwortvorschlagGeneratorStrategegy {
 
-	@Override
-	public String generateLaTeXAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
+    @Override
+    public String generateLaTeXAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
-		if (antwortvorschlaege == null || antwortvorschlaege.length == 0) {
+        if (antwortvorschlaege == null || antwortvorschlaege.length == 0) {
 
-			return "";
-		}
+            return "";
+        }
 
-		StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
-		sb.append("\n");
-		sb.append("\\begin{description}");
-		sb.append("\n");
+        sb.append("\n");
+        sb.append("\\begin{description}");
+        sb.append("\n");
 
-		for (Antwortvorschlag antwortvorschlag : antwortvorschlaege) {
+        for (Antwortvorschlag antwortvorschlag : antwortvorschlaege) {
 
-			sb.append("\\item[(");
-			sb.append(antwortvorschlag.getBuchstabe());
-			sb.append(")] ");
-			sb.append(antwortvorschlag.getText());
+            sb.append("\\item[(");
+            sb.append(antwortvorschlag.getBuchstabe());
+            sb.append(")] ");
+            sb.append(antwortvorschlag.getText());
 
-			sb.append("\n");
-		}
+            sb.append("\n");
+        }
 
-		sb.append("\\end{description}\n");
+        sb.append("\\end{description}\n");
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
 }

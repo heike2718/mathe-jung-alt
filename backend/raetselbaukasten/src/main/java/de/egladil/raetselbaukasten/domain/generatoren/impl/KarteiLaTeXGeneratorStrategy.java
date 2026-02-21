@@ -27,102 +27,113 @@ import de.egladil.raetselbaukasten.domain.utils.GeneratorUtils;
  */
 public class KarteiLaTeXGeneratorStrategy implements AufgabensammlungGeneratorStrategy {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(KarteiLaTeXGeneratorStrategy.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KarteiLaTeXGeneratorStrategy.class);
 
-	@Override
-	public String generateLaTeX(final AufgabensammlungGeneratorInput input, final RaetselService raetselService, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
+    @Override
+    public String generateLaTeX(final AufgabensammlungGeneratorInput input, final RaetselService raetselService,
+            final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
 
-		List<Quizaufgabe> aufgaben = input.getAufgaben();
-		Collections.sort(aufgaben, new QuizaufgabeComparator());
+        List<Quizaufgabe> aufgaben = input.getAufgaben();
+        Collections.sort(aufgaben, new QuizaufgabeComparator());
 
-		String template = LaTeXTemplatesService.getInstance().getTemplateDocumentPDFKartei();
+        String template = LaTeXTemplatesService.getInstance().getTemplateDocumentPDFKartei();
 
-		template = template.replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
-		template = template.replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
-			input.getSchriftgroesse().getLaTeXReplacement());
-		template = template.replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
+        template = template
+                .replace(LaTeXPlaceholder.ARRAYSTRETCH.placeholder(), input.getSchriftgroesse().getArrayStretch());
+        template = template
+                .replace(LaTeXPlaceholder.SCHRIFTGROESSE.placeholder(),
+                        input.getSchriftgroesse().getLaTeXReplacement());
+        template = template
+                .replace(LaTeXPlaceholder.FONT_NAME.placeholder(), input.getFont().getLatexFileInputDefinition());
 
-		List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();
-		List<RaetselLaTeXDto> raetselLaTeX = raetselService.findRaetselLaTeXwithSchluesselliste(schluessel);
+        List<String> schluessel = aufgaben.stream().map(a -> a.getSchluessel()).toList();
+        List<RaetselLaTeXDto> raetselLaTeX = raetselService.findRaetselLaTeXwithSchluesselliste(schluessel);
 
-		int count = 0;
+        int count = 0;
 
-		StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
-		for (Quizaufgabe aufgabe : aufgaben) {
+        for (Quizaufgabe aufgabe : aufgaben) {
 
-			Optional<RaetselLaTeXDto> opt = raetselLaTeX.stream().filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
-				.findFirst();
+            Optional<RaetselLaTeXDto> opt = raetselLaTeX
+                    .stream()
+                    .filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
+                    .findFirst();
 
-			if (opt.isPresent()) {
+            if (opt.isPresent()) {
 
-				appendFrageLoesung(sb, aufgabe, opt.get(), input.getLayoutAntwortvorschlaege(), input.getVerwendungszweck(),
-					quizitemLaTeXGenerator);
+                appendFrageLoesung(sb, aufgabe, opt.get(), input.getLayoutAntwortvorschlaege(),
+                        input.getVerwendungszweck(), quizitemLaTeXGenerator);
 
-			} else {
+            } else {
 
-				LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
-			}
+                LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
+            }
 
-			if (GeneratorUtils.shouldPrintTrenner(aufgaben.size(), count)) {
+            if (GeneratorUtils.shouldPrintTrenner(aufgaben.size(), count)) {
 
-				sb.append(LaTeXConstants.VALUE_NEWPAGE);
-			}
-			count++;
+                sb.append(LaTeXConstants.VALUE_NEWPAGE);
+            }
+            count++;
 
-		}
+        }
 
-		template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), sb.toString());
+        template = template.replace(LaTeXPlaceholder.CONTENT.placeholder(), sb.toString());
 
-		switch (input.getFont()) {
+        switch (input.getFont()) {
 
-		case DRUCK_BY_WOK:
+        case DRUCK_BY_WOK:
 
-			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
-				LaTeXTemplatesService.getInstance().getLizenzFontsDruckschrift());
-			break;
+            template = template
+                    .replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
+                            LaTeXTemplatesService.getInstance().getLizenzFontsDruckschrift());
+            break;
 
-		case FIBEL_NORD:
-		case FIBEL_SUED:
-			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
-				LaTeXTemplatesService.getInstance().getLizenzFontsFibel());
-			break;
+        case FIBEL_NORD:
+        case FIBEL_SUED:
+            template = template
+                    .replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(),
+                            LaTeXTemplatesService.getInstance().getLizenzFontsFibel());
+            break;
 
-		case STANDARD:
-			template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), "");
-			break;
+        case STANDARD:
+            template = template.replace(LaTeXPlaceholder.LIZENZ_FONTS.placeholder(), "");
+            break;
 
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + input.getFont());
-		}
+        default:
+            throw new IllegalArgumentException("Unexpected value: " + input.getFont());
+        }
 
-		String quellen = new QuellenverzeichnisLaTeXGenerator().generiereQuellenverzeichnis(aufgaben);
+        String quellen = new QuellenverzeichnisLaTeXGenerator().generiereQuellenverzeichnis(aufgaben);
 
-		template = template.replace(LaTeXPlaceholder.QUELLEN.placeholder(), quellen);
+        template = template.replace(LaTeXPlaceholder.QUELLEN.placeholder(), quellen);
 
-		return template;
-	}
+        return template;
+    }
 
-	/**
-	 * @param sb
-	 * @param raetselLaTeXDto
-	 */
-	void appendFrageLoesung(final StringBuffer sb, final Quizaufgabe aufgabe, final RaetselLaTeXDto raetsel, final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final Verwendungszweck verwendungszweck, final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
+    /**
+     * @param sb
+     * @param raetselLaTeXDto
+     */
+    void appendFrageLoesung(final StringBuffer sb, final Quizaufgabe aufgabe, final RaetselLaTeXDto raetsel,
+            final LayoutAntwortvorschlaege layoutAntwortvorschlaege, final Verwendungszweck verwendungszweck,
+            final QuizitemLaTeXGenerator quizitemLaTeXGenerator) {
 
-		RaetselGeneratorinput raetselInput = new RaetselGeneratorinput()
-			.withAntwortvorschlaegeEingebettet(aufgabe.isAntwortvorschlaegeEingebettet())
-			.withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
-			.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
-			.withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
-			.withNummer(aufgabe.getNummer())
-			.withSchluessel(aufgabe.getSchluessel())
-			.withVerwendungszweck(verwendungszweck)
-			.withPunkten(aufgabe.getPunkte());
+        RaetselGeneratorinput raetselInput = new RaetselGeneratorinput()
+                .withAntwortvorschlaegeEingebettet(aufgabe.isAntwortvorschlaegeEingebettet())
+                .withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
+                .withFrage(raetsel.getFrage())
+                .withLoesung(raetsel.getLoesung())
+                .withLayoutAntwortvorschlaege(layoutAntwortvorschlaege)
+                .withNummer(aufgabe.getNummer())
+                .withSchluessel(aufgabe.getSchluessel())
+                .withVerwendungszweck(verwendungszweck)
+                .withPunkten(aufgabe.getPunkte());
 
-		boolean printAsMultipleChoice = GeneratorUtils.shouldPrintAntwortvorschlaege(layoutAntwortvorschlaege, aufgabe);
+        boolean printAsMultipleChoice = GeneratorUtils.shouldPrintAntwortvorschlaege(layoutAntwortvorschlaege, aufgabe);
 
-		String text = quizitemLaTeXGenerator.generateLaTeXFrageLoesung(raetselInput, TrennerartFrageLoesung.SEITENUMBRUCH,
-			printAsMultipleChoice);
-		sb.append(text);
-	}
+        String text = quizitemLaTeXGenerator
+                .generateLaTeXFrageLoesung(raetselInput, TrennerartFrageLoesung.SEITENUMBRUCH, printAsMultipleChoice);
+        sb.append(text);
+    }
 }

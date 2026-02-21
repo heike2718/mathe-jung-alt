@@ -4,12 +4,13 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.embeddable_images.dto;
 
+import jakarta.validation.Valid;
+
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.raetselbaukasten.domain.upload.UploadedFile;
-import jakarta.validation.Valid;
 
 /**
  * CreateEmbeddableImageRequestDto
@@ -17,33 +18,34 @@ import jakarta.validation.Valid;
 @Schema(description = "Dto zum Hochladen einer neuen eps-Datei.")
 public class CreateEmbeddableImageRequestDto {
 
-	@JsonProperty
-	@Valid
-	@Schema(description = "dieser Kontext ist zum Rücktransport an den Client gedacht. Er wird ungeändert in die Response gepackt.")
-	private EmbeddableImageContext context;
+    @JsonProperty
+    @Valid
+    @Schema(
+            description = "dieser Kontext ist zum Rücktransport an den Client gedacht. Er wird ungeändert in die Response gepackt.")
+    private EmbeddableImageContext context;
 
-	@JsonProperty
-	@Valid
-	@Schema(description = "die hochgeladene Datei")
-	private UploadedFile file;
+    @JsonProperty
+    @Valid
+    @Schema(description = "die hochgeladene Datei")
+    private UploadedFile file;
 
-	public EmbeddableImageContext getContext() {
+    public EmbeddableImageContext getContext() {
 
-		return context;
-	}
+        return context;
+    }
 
-	public void setContext(final EmbeddableImageContext context) {
+    public void setContext(final EmbeddableImageContext context) {
 
-		this.context = context;
-	}
+        this.context = context;
+    }
 
-	public UploadedFile getFile() {
+    public UploadedFile getFile() {
 
-		return file;
-	}
+        return file;
+    }
 
-	public void setFile(final UploadedFile file) {
+    public void setFile(final UploadedFile file) {
 
-		this.file = file;
-	}
+        this.file = file;
+    }
 }

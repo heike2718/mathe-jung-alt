@@ -19,51 +19,51 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class SetOperationUtils {
 
-	/**
-	 * @param  theSets
-	 *                 Pair das die Mengen repräsentiert, die verglichen werden sollen.
-	 * @return         boolean
-	 */
-	public boolean isLeftSubsetOfRight(final Pair<String, String> theSets) {
+    /**
+     * @param theSets Pair das die Mengen repräsentiert, die verglichen werden
+     *                sollen.
+     * @return boolean
+     */
+    public boolean isLeftSubsetOfRight(final Pair<String, String> theSets) {
 
-		List<String> tokensLeft = Arrays.asList(StringUtils.split(theSets.getLeft(), ','));
-		List<String> tokensRight = Arrays.asList(StringUtils.split(theSets.getRight(), ','));
+        List<String> tokensLeft = Arrays.asList(StringUtils.split(theSets.getLeft(), ','));
+        List<String> tokensRight = Arrays.asList(StringUtils.split(theSets.getRight(), ','));
 
-		for (String elementLeft : tokensLeft) {
+        for (String elementLeft : tokensLeft) {
 
-			if (!tokensRight.contains(elementLeft)) {
+            if (!tokensRight.contains(elementLeft)) {
 
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Verpackt die Deskriptoren in %% und gibt sie als kommaseparierten String zurück - für eine "deskriptoren like"- Suche.
-	 *
-	 * @param  deskriptorenIDs
-	 *                         String kommaseparierte IDs von Deskriptoren.
-	 * @return                 String
-	 */
-	public String prepareForDeskriptorenLikeSearch(final String deskriptorenIDs) {
+    /**
+     * Verpackt die Deskriptoren in %% und gibt sie als kommaseparierten String
+     * zurück - für eine "deskriptoren like"- Suche.
+     *
+     * @param deskriptorenIDs String kommaseparierte IDs von Deskriptoren.
+     * @return String
+     */
+    public String prepareForDeskriptorenLikeSearch(final String deskriptorenIDs) {
 
-		if (StringUtils.isBlank(deskriptorenIDs)) {
+        if (StringUtils.isBlank(deskriptorenIDs)) {
 
-			return null;
-		}
+            return null;
+        }
 
-		String[] ids = StringUtils.split(deskriptorenIDs, ',');
-		Set<Long> idsAsSet = Arrays.stream(ids).map(id -> Long.valueOf(id)).collect(Collectors.toSet());
-		List<Long> idsAsList = new ArrayList<>(idsAsSet);
-		Collections.sort(idsAsList);
+        String[] ids = StringUtils.split(deskriptorenIDs, ',');
+        Set<Long> idsAsSet = Arrays.stream(ids).map(id -> Long.valueOf(id)).collect(Collectors.toSet());
+        List<Long> idsAsList = new ArrayList<>(idsAsSet);
+        Collections.sort(idsAsList);
 
-		List<String> wrappedIds = idsAsList.stream().map(id -> "," + id + ",").toList();
+        List<String> wrappedIds = idsAsList.stream().map(id -> "," + id + ",").toList();
 
-		String result = StringUtils.join(wrappedIds, '%');
-		return "%" + result + "%";
+        String result = StringUtils.join(wrappedIds, '%');
+        return "%" + result + "%";
 
-	}
+    }
 
 }

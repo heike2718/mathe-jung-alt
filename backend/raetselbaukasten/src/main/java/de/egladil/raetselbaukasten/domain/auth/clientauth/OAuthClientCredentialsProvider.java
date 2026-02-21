@@ -4,10 +4,11 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.auth.clientauth;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import de.egladil.raetselbaukasten.domain.auth.dto.OAuthClientCredentials;
-import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * OAuthClientCredentialsProvider
@@ -15,20 +16,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class OAuthClientCredentialsProvider {
 
-	@ConfigProperty(name = "public-client-id")
-	String publicClientId;
+    @ConfigProperty(name = "public-client-id")
+    String publicClientId;
 
-	@ConfigProperty(name = "public-client-secret")
-	String publicClientSecret;
+    @ConfigProperty(name = "public-client-secret")
+    String publicClientSecret;
 
-	/**
-	 * @param  nonce
-	 *               String, darf manchmal null sein.
-	 * @return
-	 */
-	public OAuthClientCredentials getClientCredentials(final String nonce) {
+    /**
+     * @param nonce String, darf manchmal null sein.
+     * @return
+     */
+    public OAuthClientCredentials getClientCredentials(final String nonce) {
 
-		return OAuthClientCredentials.create(publicClientId, publicClientSecret, nonce);
-	}
+        return OAuthClientCredentials.create(publicClientId, publicClientSecret, nonce);
+    }
 
 }

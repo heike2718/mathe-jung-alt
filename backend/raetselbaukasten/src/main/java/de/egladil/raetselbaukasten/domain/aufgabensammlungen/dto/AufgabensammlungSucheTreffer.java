@@ -18,34 +18,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Schema(name = "AufgabensammlungSucheTreffer", description = "Teilmenge der Treffer einer Suchanfrage")
 public class AufgabensammlungSucheTreffer {
 
-	@JsonProperty
-	@Schema(description = "Gesamtzahl aller Treffer der Suchanfrage")
-	private long trefferGesamt = 0;
+    @JsonProperty
+    @Schema(description = "Gesamtzahl aller Treffer der Suchanfrage")
+    private long trefferGesamt = 0;
 
-	@JsonProperty
-	@Schema(
-		type = SchemaType.ARRAY, implementation = AufgabensammlungSucheTrefferItem.class,
-		description = "die abgefragte Teilmenge aller Treffer der Suchanfrage (Page)")
-	private List<AufgabensammlungSucheTrefferItem> items = new ArrayList<>();
+    @JsonProperty
+    @Schema(
+            type = SchemaType.ARRAY,
+            implementation = AufgabensammlungSucheTrefferItem.class,
+            description = "die abgefragte Teilmenge aller Treffer der Suchanfrage (Page)")
+    private List<AufgabensammlungSucheTrefferItem> items = new ArrayList<>();
 
-	public void setTrefferGesamt(final long trefferGesamt) {
+    public void setTrefferGesamt(final long trefferGesamt) {
 
-		this.trefferGesamt = trefferGesamt;
-	}
+        this.trefferGesamt = trefferGesamt;
+    }
 
-	public void addItem(final AufgabensammlungSucheTrefferItem item) {
+    public void addItem(final AufgabensammlungSucheTrefferItem item) {
 
-		items.add(item);
-	}
+        items.add(item);
+    }
 
-	public long getTrefferGesamt() {
+    public long getTrefferGesamt() {
 
-		return trefferGesamt;
-	}
+        return trefferGesamt;
+    }
 
-	public List<AufgabensammlungSucheTrefferItem> getItems() {
+    public List<AufgabensammlungSucheTrefferItem> getItems() {
 
-		return items;
-	}
+        return items;
+    }
 
 }

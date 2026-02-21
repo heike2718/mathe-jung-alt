@@ -7,12 +7,13 @@ package de.egladil.raetselbaukasten.domain.aufgabensammlungen.dto;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import io.quarkus.test.junit.QuarkusTest;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Schwierigkeitsgrad;
-import io.quarkus.test.junit.QuarkusTest;
 
 /**
  * EditAufgabensammlungPayloadTest
@@ -20,27 +21,27 @@ import io.quarkus.test.junit.QuarkusTest;
 @QuarkusTest
 public class EditAufgabensammlungPayloadTest {
 
-	@Nested
-	class JsonMappingTests {
+    @Nested
+    class JsonMappingTests {
 
-		@Test
-		void testSerialize() throws JsonProcessingException {
+        @Test
+        void testSerialize() throws JsonProcessingException {
 
-			// Arrange
-			EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
-			payload.setId("neu");
-			payload.setName("Minikänguruwettbewerb 2022 - Klasse 1");
-			payload.setReferenz("2022");
-			payload.setReferenztyp(Referenztyp.MINIKAENGURU);
-			payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.IKID);
-			payload.setFreigegeben(false);
-			payload.setPrivat(false);
+            // Arrange
+            EditAufgabensammlungPayload payload = new EditAufgabensammlungPayload();
+            payload.setId("neu");
+            payload.setName("Minikänguruwettbewerb 2022 - Klasse 1");
+            payload.setReferenz("2022");
+            payload.setReferenztyp(Referenztyp.MINIKAENGURU);
+            payload.setSchwierigkeitsgrad(Schwierigkeitsgrad.IKID);
+            payload.setFreigegeben(false);
+            payload.setPrivat(false);
 
-			// Act
-			String json = new ObjectMapper().writeValueAsString(payload);
+            // Act
+            String json = new ObjectMapper().writeValueAsString(payload);
 
-			System.out.println(json);
-		}
-	}
+            System.out.println(json);
+        }
+    }
 
 }

@@ -14,74 +14,74 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Schema(description = "Ergebnisse des Scans")
 public class FileScanResult {
 
-	@JsonProperty
-	private String userID;
+    @JsonProperty
+    private String userID;
 
-	@JsonProperty
-	private String uploadName;
+    @JsonProperty
+    private String uploadName;
 
-	@JsonProperty
-	private String mediaType;
+    @JsonProperty
+    private String mediaType;
 
-	@JsonProperty
-	private VirusDetection virusDetection;
+    @JsonProperty
+    private VirusDetection virusDetection;
 
-	@JsonProperty
-	private ThreadDetection threadDetection;
+    @JsonProperty
+    private ThreadDetection threadDetection;
 
-	public String getMediaType() {
+    public String getMediaType() {
 
-		return mediaType;
-	}
+        return mediaType;
+    }
 
-	public FileScanResult withMediaType(final String mediaType) {
+    public FileScanResult withMediaType(final String mediaType) {
 
-		this.mediaType = mediaType;
-		return this;
-	}
+        this.mediaType = mediaType;
+        return this;
+    }
 
-	public VirusDetection getVirusDetection() {
+    public VirusDetection getVirusDetection() {
 
-		return virusDetection;
-	}
+        return virusDetection;
+    }
 
-	public FileScanResult withVirusDetection(final VirusDetection virusDetection) {
+    public FileScanResult withVirusDetection(final VirusDetection virusDetection) {
 
-		this.virusDetection = virusDetection;
-		return this;
-	}
+        this.virusDetection = virusDetection;
+        return this;
+    }
 
-	public String getUserID() {
+    public String getUserID() {
 
-		return userID;
-	}
+        return userID;
+    }
 
-	public FileScanResult withUserID(final String userID) {
+    public FileScanResult withUserID(final String userID) {
 
-		this.userID = userID;
-		return this;
-	}
+        this.userID = userID;
+        return this;
+    }
 
-	public String getUploadName() {
+    public String getUploadName() {
 
-		return uploadName;
-	}
+        return uploadName;
+    }
 
-	public FileScanResult withUploadName(final String uploadName) {
+    public FileScanResult withUploadName(final String uploadName) {
 
-		this.uploadName = uploadName;
-		return this;
-	}
+        this.uploadName = uploadName;
+        return this;
+    }
 
-	public ThreadDetection getThreadDetection() {
+    public ThreadDetection getThreadDetection() {
 
-		return threadDetection;
-	}
+        return threadDetection;
+    }
 
-	public FileScanResult withThreadDetection(final ThreadDetection threadDetection) {
+    public FileScanResult withThreadDetection(final ThreadDetection threadDetection) {
 
-		this.threadDetection = threadDetection;
-		return this;
-	}
+        this.threadDetection = threadDetection;
+        return this;
+    }
 
 }

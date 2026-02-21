@@ -14,95 +14,95 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Schema(description = "Informationen über die API")
 public class AboutDto {
 
-	@JsonProperty
-	private String title;
+    @JsonProperty
+    private String title;
 
-	@JsonProperty
-	private String description;
+    @JsonProperty
+    private String description;
 
-	@JsonProperty
-	private String beschreibung;
+    @JsonProperty
+    private String beschreibung;
 
-	@JsonProperty
-	private String[] urls;
+    @JsonProperty
+    private String[] urls;
 
-	@JsonProperty
-	private String schluesselwoerter;
+    @JsonProperty
+    private String schluesselwoerter;
 
-	@JsonProperty
-	private String keywords;
+    @JsonProperty
+    private String keywords;
 
-	@JsonProperty
-	private String version;
+    @JsonProperty
+    private String version;
 
-	public String getTitle() {
+    public String getTitle() {
 
-		return title;
-	}
+        return title;
+    }
 
-	public void setTitle(final String title) {
+    public void setTitle(final String title) {
 
-		this.title = title;
-	}
+        this.title = title;
+    }
 
-	public String getDescription() {
+    public String getDescription() {
 
-		return description;
-	}
+        return description;
+    }
 
-	public void setDescription(final String description) {
+    public void setDescription(final String description) {
 
-		this.description = description;
-	}
+        this.description = description;
+    }
 
-	public String getBeschreibung() {
+    public String getBeschreibung() {
 
-		return beschreibung;
-	}
+        return beschreibung;
+    }
 
-	public void setBeschreibung(final String beschreibung) {
+    public void setBeschreibung(final String beschreibung) {
 
-		this.beschreibung = beschreibung;
-	}
+        this.beschreibung = beschreibung;
+    }
 
-	public String[] getUrls() {
+    public String[] getUrls() {
 
-		return urls;
-	}
+        return urls;
+    }
 
-	public void setUrls(final String[] urls) {
+    public void setUrls(final String[] urls) {
 
-		this.urls = urls;
-	}
+        this.urls = urls;
+    }
 
-	public String getSchluesselwoerter() {
+    public String getSchluesselwoerter() {
 
-		return schluesselwoerter;
-	}
+        return schluesselwoerter;
+    }
 
-	public void setSchluesselwoerter(final String schluesselwoerter) {
+    public void setSchluesselwoerter(final String schluesselwoerter) {
 
-		this.schluesselwoerter = schluesselwoerter;
-	}
+        this.schluesselwoerter = schluesselwoerter;
+    }
 
-	public String getKeywords() {
+    public String getKeywords() {
 
-		return keywords;
-	}
+        return keywords;
+    }
 
-	public void setKeywords(final String keywords) {
+    public void setKeywords(final String keywords) {
 
-		this.keywords = keywords;
-	}
+        this.keywords = keywords;
+    }
 
-	public String getVersion() {
+    public String getVersion() {
 
-		return version;
-	}
+        return version;
+    }
 
-	public void setVersion(final String version) {
+    public void setVersion(final String version) {
 
-		this.version = version;
-	}
+        this.version = version;
+    }
 
 }

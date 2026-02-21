@@ -4,11 +4,11 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.upload;
 
+import jakarta.validation.constraints.NotNull;
+
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import jakarta.validation.constraints.NotNull;
 
 /**
  * ScanRequestPayload
@@ -16,47 +16,47 @@ import jakarta.validation.constraints.NotNull;
 @Schema(description = "Payload mit einem File, das auf Viren geprüft werden soll.")
 public class ScanRequestPayload {
 
-	@JsonProperty
-	@NotNull
-	private String clientId;
+    @JsonProperty
+    @NotNull
+    private String clientId;
 
-	@JsonProperty
-	private String fileOwner;
+    @JsonProperty
+    private String fileOwner;
 
-	@JsonProperty
-	@NotNull
-	private UploadedFile upload;
+    @JsonProperty
+    @NotNull
+    private UploadedFile upload;
 
-	public String getClientId() {
+    public String getClientId() {
 
-		return clientId;
-	}
+        return clientId;
+    }
 
-	public ScanRequestPayload withClientId(final String clientId) {
+    public ScanRequestPayload withClientId(final String clientId) {
 
-		this.clientId = clientId;
-		return this;
-	}
+        this.clientId = clientId;
+        return this;
+    }
 
-	public String getFileOwner() {
+    public String getFileOwner() {
 
-		return fileOwner;
-	}
+        return fileOwner;
+    }
 
-	public ScanRequestPayload withFileOwner(final String fileOwner) {
+    public ScanRequestPayload withFileOwner(final String fileOwner) {
 
-		this.fileOwner = fileOwner;
-		return this;
-	}
+        this.fileOwner = fileOwner;
+        return this;
+    }
 
-	public UploadedFile getUpload() {
+    public UploadedFile getUpload() {
 
-		return upload;
-	}
+        return upload;
+    }
 
-	public ScanRequestPayload withUpload(final UploadedFile upload) {
+    public ScanRequestPayload withUpload(final UploadedFile upload) {
 
-		this.upload = upload;
-		return this;
-	}
+        this.upload = upload;
+        return this;
+    }
 }

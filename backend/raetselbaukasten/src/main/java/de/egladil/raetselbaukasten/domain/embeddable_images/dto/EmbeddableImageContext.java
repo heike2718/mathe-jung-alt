@@ -4,12 +4,13 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.embeddable_images.dto;
 
+import jakarta.validation.constraints.Pattern;
+
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
-import jakarta.validation.constraints.Pattern;
 
 /**
  * EmbeddableImageContext
@@ -17,79 +18,77 @@ import jakarta.validation.constraints.Pattern;
 @Schema(description = "Kontext der Aktion, die das Hochladen der einzubettenden EmbeddableImageVorschau enthält.")
 public class EmbeddableImageContext {
 
-	@JsonProperty
-	@Schema(
-		description = "transportiert die raetselId aus der Payload unverändert zurück zum Aufrufer. Wenn nicht 'neu', muss das zugehörige Rätsel vorhanden sein.")
-	@Pattern(
-		regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID,
-		message = "die raetselId enthält ungültige Zeichen")
-	private String raetselId;
+    @JsonProperty
+    @Schema(
+            description = "transportiert die raetselId aus der Payload unverändert zurück zum Aufrufer. Wenn nicht 'neu', muss das zugehörige Rätsel vorhanden sein.")
+    @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "die raetselId enthält ungültige Zeichen")
+    private String raetselId;
 
-	@JsonProperty
-	@Schema(description = "transportiert die textart aus der Payload unverändert zurück zum Aufrufer.")
-	private Textart textart;
+    @JsonProperty
+    @Schema(description = "transportiert die textart aus der Payload unverändert zurück zum Aufrufer.")
+    private Textart textart;
 
-	@Override
-	public int hashCode() {
+    @Override
+    public int hashCode() {
 
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((raetselId == null) ? 0 : raetselId.hashCode());
-		result = prime * result + ((textart == null) ? 0 : textart.hashCode());
-		return result;
-	}
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((raetselId == null) ? 0 : raetselId.hashCode());
+        result = prime * result + ((textart == null) ? 0 : textart.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
 
-		if (this == obj) {
+        if (this == obj) {
 
-			return true;
-		}
+            return true;
+        }
 
-		if (!(obj instanceof EmbeddableImageContext)) {
+        if (!(obj instanceof EmbeddableImageContext)) {
 
-			return false;
-		}
-		EmbeddableImageContext other = (EmbeddableImageContext) obj;
+            return false;
+        }
+        EmbeddableImageContext other = (EmbeddableImageContext) obj;
 
-		if (raetselId == null) {
+        if (raetselId == null) {
 
-			if (other.raetselId != null) {
+            if (other.raetselId != null) {
 
-				return false;
-			}
-		} else if (!raetselId.equals(other.raetselId)) {
+                return false;
+            }
+        } else if (!raetselId.equals(other.raetselId)) {
 
-			return false;
-		}
+            return false;
+        }
 
-		if (textart != other.textart) {
+        if (textart != other.textart) {
 
-			return false;
-		}
-		return true;
-	}
+            return false;
+        }
+        return true;
+    }
 
-	public String getRaetselId() {
+    public String getRaetselId() {
 
-		return raetselId;
-	}
+        return raetselId;
+    }
 
-	public EmbeddableImageContext withRaetselId(final String raetselId) {
+    public EmbeddableImageContext withRaetselId(final String raetselId) {
 
-		this.raetselId = raetselId;
-		return this;
-	}
+        this.raetselId = raetselId;
+        return this;
+    }
 
-	public Textart getTextart() {
+    public Textart getTextart() {
 
-		return textart;
-	}
+        return textart;
+    }
 
-	public EmbeddableImageContext withTextart(final Textart textart) {
+    public EmbeddableImageContext withTextart(final Textart textart) {
 
-		this.textart = textart;
-		return this;
-	}
+        this.textart = textart;
+        return this;
+    }
 }

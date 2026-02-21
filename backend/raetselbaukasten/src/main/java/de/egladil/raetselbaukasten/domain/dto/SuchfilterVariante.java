@@ -9,7 +9,5 @@ package de.egladil.raetselbaukasten.domain.dto;
  */
 public enum SuchfilterVariante {
 
-	COMPLETE,
-	DESKRIPTOREN,
-	VOLLTEXT;
+    COMPLETE, DESKRIPTOREN, VOLLTEXT;
 }

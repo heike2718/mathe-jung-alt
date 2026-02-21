@@ -9,33 +9,33 @@ package de.egladil.raetselbaukasten.domain.exceptions;
  */
 public class RequestTimeoutException extends RuntimeException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 *
-	 */
-	public RequestTimeoutException() {
+    /**
+     *
+     */
+    public RequestTimeoutException() {
 
-	}
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public RequestTimeoutException(final String message, final Throwable cause) {
+    /**
+     * @param message
+     * @param cause
+     */
+    public RequestTimeoutException(final String message, final Throwable cause) {
 
-		super(message, cause);
-	}
+        super(message, cause);
+    }
 
-	/**
-	 * @param message
-	 */
-	public RequestTimeoutException(final String message) {
+    /**
+     * @param message
+     */
+    public RequestTimeoutException(final String message) {
 
-		super(message);
-	}
+        super(message);
+    }
 
 }

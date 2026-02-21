@@ -7,6 +7,8 @@ package de.egladil.raetselbaukasten.domain.raetsel;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.Pattern;
+
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -20,7 +22,6 @@ import de.egladil.raetselbaukasten.domain.raetsel.dto.Images;
 import de.egladil.raetselbaukasten.domain.semantik.AggregateRoot;
 import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Deskriptor;
-import jakarta.validation.constraints.Pattern;
 
 /**
  * Raetsel
@@ -29,333 +30,336 @@ import jakarta.validation.constraints.Pattern;
 @Schema(name = "Raetsel", description = "Die Details eines Rätsels - der Einfachheit halber mit Quellenangabe.")
 public class Raetsel extends AbstractDomainEntity {
 
-	@JsonProperty
-	@Schema(description = "fachlicher Schlüssel im Aufgabenarchiv.")
-	@Pattern(regexp = MjaRegexps.VALID_SCHLUESSEL, message = "schluessel muss aus genau 5 Ziffern bestehen")
-	private String schluessel;
+    @JsonProperty
+    @Schema(description = "fachlicher Schlüssel im Aufgabenarchiv.")
+    @Pattern(regexp = MjaRegexps.VALID_SCHLUESSEL, message = "schluessel muss aus genau 5 Ziffern bestehen")
+    private String schluessel;
 
-	@JsonProperty
-	@Schema(description = "kurzer Titel zum Anzeigen in Suchergebnissen, volltextsuchfähig")
-	private String name;
+    @JsonProperty
+    @Schema(description = "kurzer Titel zum Anzeigen in Suchergebnissen, volltextsuchfähig")
+    private String name;
 
-	@JsonProperty
-	@Schema(description = "LaTeX-Code der Frage, volltextsuchfähig")
-	private String frage;
+    @JsonProperty
+    @Schema(description = "LaTeX-Code der Frage, volltextsuchfähig")
+    private String frage;
 
-	@JsonProperty
-	@Schema(description = "LaTeX-Code der Lösung, volltextsuchfähig")
-	private String loesung;
+    @JsonProperty
+    @Schema(description = "LaTeX-Code der Lösung, volltextsuchfähig")
+    private String loesung;
 
-	@JsonProperty
-	@Schema(description = "Kommentar, volltextsuchfähig")
-	private String kommentar;
+    @JsonProperty
+    @Schema(description = "Kommentar, volltextsuchfähig")
+    private String kommentar;
 
-	@JsonProperty
-	@Schema(description = "ob das Rätsel freigegeben ist.")
-	private boolean freigegeben;
+    @JsonProperty
+    @Schema(description = "ob das Rätsel freigegeben ist.")
+    private boolean freigegeben;
 
-	@JsonProperty
-	@Schema(description = "ob der Frage-Text die eventuell vorhandenen Antwortvorschläge bereits enthält.")
-	private boolean antwortvorschlaegeEingebettet;
+    @JsonProperty
+    @Schema(description = "ob der Frage-Text die eventuell vorhandenen Antwortvorschläge bereits enthält.")
+    private boolean antwortvorschlaegeEingebettet;
 
-	@JsonIgnore
-	private String filenameVorschauFrage;
+    @JsonIgnore
+    private String filenameVorschauFrage;
 
-	@JsonIgnore
-	private String filenameVorschauLoesung;
+    @JsonIgnore
+    private String filenameVorschauLoesung;
 
-	@Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
-	private RaetselHerkunftTyp herkunftstyp;
+    @Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
+    private RaetselHerkunftTyp herkunftstyp;
 
-	@JsonProperty
-	@Schema(
-		description = "Daten einer Quelle für ein Raetsel. Nicht alle Attribute zusammen sind sinnvoll. Eingie schließen einander aus.")
-	private QuelleDto quelle;
+    @JsonProperty
+    @Schema(
+            description = "Daten einer Quelle für ein Raetsel. Nicht alle Attribute zusammen sind sinnvoll. Eingie schließen einander aus.")
+    private QuelleDto quelle;
 
-	@JsonProperty
-	@Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe", example = "alpha (6) 1976, S.32")
-	private String quellenangabe;
+    @JsonProperty
+    @Schema(description = "menschenlesbarer Anzeigetext für eine Quellenangabe", example = "alpha (6) 1976, S.32")
+    private String quellenangabe;
 
-	@JsonProperty
-	@Schema(description = "Autor der Lösung", example = "Nicht Autor des Rätsels")
-	private String autorLoesung;
+    @JsonProperty
+    @Schema(description = "Autor der Lösung", example = "Nicht Autor des Rätsels")
+    private String autorLoesung;
 
-	@JsonProperty
-	@Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
-	private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird entschieden, ob es
-												// durch den User änderbar ist.
+    @JsonProperty
+    @Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
+    private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird
+                                              // entschieden, ob es
+                                              // durch den User änderbar ist.
 
-	@JsonProperty
-	@Schema(
-		type = SchemaType.ARRAY, implementation = Antwortvorschlag.class,
-		description = "optionale Antwortvorschläge, wenn es für multiple choice genutzt werden kann")
-	private Antwortvorschlag[] antwortvorschlaege;
+    @JsonProperty
+    @Schema(
+            type = SchemaType.ARRAY,
+            implementation = Antwortvorschlag.class,
+            description = "optionale Antwortvorschläge, wenn es für multiple choice genutzt werden kann")
+    private Antwortvorschlag[] antwortvorschlaege;
 
-	@JsonProperty
-	@Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class, description = "Deskriptoren, für das Rätsel")
-	private List<Deskriptor> deskriptoren;
+    @JsonProperty
+    @Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class, description = "Deskriptoren, für das Rätsel")
+    private List<Deskriptor> deskriptoren;
 
-	@JsonProperty
-	@Schema(
-		type = SchemaType.ARRAY, implementation = EmbeddableImageInfo.class,
-		description = "Info über die im LaTeX-Code der Frage oder Lösung eingebundenen eps-Files")
-	private List<EmbeddableImageInfo> embeddableImageInfos = new ArrayList<>();
+    @JsonProperty
+    @Schema(
+            type = SchemaType.ARRAY,
+            implementation = EmbeddableImageInfo.class,
+            description = "Info über die im LaTeX-Code der Frage oder Lösung eingebundenen eps-Files")
+    private List<EmbeddableImageInfo> embeddableImageInfos = new ArrayList<>();
 
-	@Schema(description = "Images, die angezeigt werden können")
-	@JsonProperty
-	private Images images;
+    @Schema(description = "Images, die angezeigt werden können")
+    @JsonProperty
+    private Images images;
 
-	@JsonProperty
-	@Schema(description = "PDF")
-	private byte[] raetselPDF;
+    @JsonProperty
+    @Schema(description = "PDF")
+    private byte[] raetselPDF;
 
-	/**
-	 *
-	 */
-	protected Raetsel() {
+    /**
+     *
+     */
+    protected Raetsel() {
 
-		super();
+        super();
 
-	}
+    }
 
-	/**
-	 * @param uuid
-	 */
-	public Raetsel(final String uuid) {
+    /**
+     * @param uuid
+     */
+    public Raetsel(final String uuid) {
 
-		super(uuid);
+        super(uuid);
 
-	}
+    }
 
-	public String antwortvorschlaegeAsJSON() {
+    public String antwortvorschlaegeAsJSON() {
 
-		return AntwortvorschlaegeMapper.antwortvorschlaegeAsJSON(antwortvorschlaege);
-	}
+        return AntwortvorschlaegeMapper.antwortvorschlaegeAsJSON(antwortvorschlaege);
+    }
 
-	@Override
-	public int hashCode() {
+    @Override
+    public int hashCode() {
 
-		return super.hashCode();
-	}
+        return super.hashCode();
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
 
-		if (!(obj instanceof Raetsel)) {
+        if (!(obj instanceof Raetsel)) {
 
-			return false;
-		}
+            return false;
+        }
 
-		return super.equals(obj);
-	}
+        return super.equals(obj);
+    }
 
-	public String getSchluessel() {
+    public String getSchluessel() {
 
-		return schluessel;
-	}
+        return schluessel;
+    }
 
-	public void setSchluessel(final String schluessel) {
+    public void setSchluessel(final String schluessel) {
 
-		this.schluessel = schluessel;
-	}
+        this.schluessel = schluessel;
+    }
 
-	public Raetsel withSchluessel(final String schluessel) {
+    public Raetsel withSchluessel(final String schluessel) {
 
-		this.schluessel = schluessel;
-		return this;
-	}
+        this.schluessel = schluessel;
+        return this;
+    }
 
-	public String getName() {
+    public String getName() {
 
-		return name;
-	}
+        return name;
+    }
 
-	public Raetsel withName(final String name) {
+    public Raetsel withName(final String name) {
 
-		this.name = name;
-		return this;
-	}
+        this.name = name;
+        return this;
+    }
 
-	public String getFrage() {
+    public String getFrage() {
 
-		return frage;
-	}
+        return frage;
+    }
 
-	public Raetsel withFrage(final String frage) {
+    public Raetsel withFrage(final String frage) {
 
-		this.frage = frage;
-		return this;
-	}
+        this.frage = frage;
+        return this;
+    }
 
-	public String getLoesung() {
+    public String getLoesung() {
 
-		return loesung;
-	}
+        return loesung;
+    }
 
-	public Raetsel withLoesung(final String loesung) {
+    public Raetsel withLoesung(final String loesung) {
 
-		this.loesung = loesung;
-		return this;
-	}
+        this.loesung = loesung;
+        return this;
+    }
 
-	public String getKommentar() {
+    public String getKommentar() {
 
-		return kommentar;
-	}
+        return kommentar;
+    }
 
-	public Raetsel withKommentar(final String kommentar) {
+    public Raetsel withKommentar(final String kommentar) {
 
-		this.kommentar = kommentar;
-		return this;
-	}
+        this.kommentar = kommentar;
+        return this;
+    }
 
-	public Antwortvorschlag[] getAntwortvorschlaege() {
+    public Antwortvorschlag[] getAntwortvorschlaege() {
 
-		return antwortvorschlaege;
-	}
+        return antwortvorschlaege;
+    }
 
-	public Raetsel withAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
+    public Raetsel withAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
-		this.antwortvorschlaege = antwortvorschlaege;
-		return this;
-	}
+        this.antwortvorschlaege = antwortvorschlaege;
+        return this;
+    }
 
-	public List<Deskriptor> getDeskriptoren() {
+    public List<Deskriptor> getDeskriptoren() {
 
-		return deskriptoren;
-	}
+        return deskriptoren;
+    }
 
-	public Raetsel withDeskriptoren(final List<Deskriptor> deskriptoren) {
+    public Raetsel withDeskriptoren(final List<Deskriptor> deskriptoren) {
 
-		this.deskriptoren = deskriptoren;
-		return this;
-	}
+        this.deskriptoren = deskriptoren;
+        return this;
+    }
 
-	public Images getImages() {
+    public Images getImages() {
 
-		return images;
-	}
+        return images;
+    }
 
-	public void setImages(final Images images) {
+    public void setImages(final Images images) {
 
-		this.images = images;
-	}
+        this.images = images;
+    }
 
-	public List<EmbeddableImageInfo> getEmbeddableImageInfos() {
+    public List<EmbeddableImageInfo> getEmbeddableImageInfos() {
 
-		return embeddableImageInfos;
-	}
+        return embeddableImageInfos;
+    }
 
-	public void addAllEmbeddableImageInfos(final List<EmbeddableImageInfo> embeddableImageInfos) {
+    public void addAllEmbeddableImageInfos(final List<EmbeddableImageInfo> embeddableImageInfos) {
 
-		this.embeddableImageInfos.addAll(embeddableImageInfos);
-	}
+        this.embeddableImageInfos.addAll(embeddableImageInfos);
+    }
 
-	public void setSchreibgeschuetzt(final boolean schreibgeschuetzt) {
+    public void setSchreibgeschuetzt(final boolean schreibgeschuetzt) {
 
-		this.schreibgeschuetzt = schreibgeschuetzt;
-	}
+        this.schreibgeschuetzt = schreibgeschuetzt;
+    }
 
-	public boolean isSchreibgeschuetzt() {
+    public boolean isSchreibgeschuetzt() {
 
-		return schreibgeschuetzt;
-	}
+        return schreibgeschuetzt;
+    }
 
-	public String getFilenameVorschauFrage() {
+    public String getFilenameVorschauFrage() {
 
-		return filenameVorschauFrage;
-	}
+        return filenameVorschauFrage;
+    }
 
-	public Raetsel withFilenameVorschauFrage(final String filenameVorschauFrage) {
+    public Raetsel withFilenameVorschauFrage(final String filenameVorschauFrage) {
 
-		this.filenameVorschauFrage = filenameVorschauFrage;
-		return this;
-	}
+        this.filenameVorschauFrage = filenameVorschauFrage;
+        return this;
+    }
 
-	public String getFilenameVorschauLoesung() {
+    public String getFilenameVorschauLoesung() {
 
-		return filenameVorschauLoesung;
-	}
+        return filenameVorschauLoesung;
+    }
 
-	public Raetsel withFilenameVorschauLoesung(final String filenameVorschauLoesung) {
+    public Raetsel withFilenameVorschauLoesung(final String filenameVorschauLoesung) {
 
-		this.filenameVorschauLoesung = filenameVorschauLoesung;
-		return this;
-	}
+        this.filenameVorschauLoesung = filenameVorschauLoesung;
+        return this;
+    }
 
-	public boolean isFreigegeben() {
+    public boolean isFreigegeben() {
 
-		return freigegeben;
-	}
+        return freigegeben;
+    }
 
-	public Raetsel withFreigegeben(final boolean freigegeben) {
+    public Raetsel withFreigegeben(final boolean freigegeben) {
 
-		this.freigegeben = freigegeben;
-		return this;
-	}
+        this.freigegeben = freigegeben;
+        return this;
+    }
 
-	public QuelleDto getQuelle() {
+    public QuelleDto getQuelle() {
 
-		return quelle;
-	}
+        return quelle;
+    }
 
-	public void setQuelle(final QuelleDto quelle) {
+    public void setQuelle(final QuelleDto quelle) {
 
-		this.quelle = quelle;
-	}
+        this.quelle = quelle;
+    }
 
-	public Raetsel withQuelle(final QuelleDto quelle) {
+    public Raetsel withQuelle(final QuelleDto quelle) {
 
-		this.quelle = quelle;
-		return this;
-	}
+        this.quelle = quelle;
+        return this;
+    }
 
-	public String getQuellenangabe() {
+    public String getQuellenangabe() {
 
-		return quellenangabe;
-	}
+        return quellenangabe;
+    }
 
-	public void setQuellenangabe(final String quellenangabe) {
+    public void setQuellenangabe(final String quellenangabe) {
 
-		this.quellenangabe = quellenangabe;
-	}
+        this.quellenangabe = quellenangabe;
+    }
 
-	public Raetsel withQuellenangabe(final String quellenangabe) {
+    public Raetsel withQuellenangabe(final String quellenangabe) {
 
-		this.quellenangabe = quellenangabe;
-		return this;
-	}
+        this.quellenangabe = quellenangabe;
+        return this;
+    }
 
-	public RaetselHerkunftTyp getHerkunftstyp() {
+    public RaetselHerkunftTyp getHerkunftstyp() {
 
-		return herkunftstyp;
-	}
+        return herkunftstyp;
+    }
 
-	public Raetsel withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
+    public Raetsel withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
 
-		this.herkunftstyp = herkunftstyp;
-		return this;
-	}
+        this.herkunftstyp = herkunftstyp;
+        return this;
+    }
 
-	public boolean isAntwortvorschlaegeEingebettet() {
+    public boolean isAntwortvorschlaegeEingebettet() {
 
-		return antwortvorschlaegeEingebettet;
-	}
+        return antwortvorschlaegeEingebettet;
+    }
 
-	public Raetsel withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
+    public Raetsel withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
 
-		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
-		return this;
-	}
+        this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
+        return this;
+    }
 
-	public String getAutorLoesung() {
+    public String getAutorLoesung() {
 
-		return autorLoesung;
-	}
+        return autorLoesung;
+    }
 
-	public Raetsel withAutorLoesung(final String autorLoesung) {
+    public Raetsel withAutorLoesung(final String autorLoesung) {
 
-		this.autorLoesung = autorLoesung;
-		return this;
-	}
+        this.autorLoesung = autorLoesung;
+        return this;
+    }
 }

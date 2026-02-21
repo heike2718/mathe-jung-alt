@@ -4,15 +4,16 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.quellen;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.junit.QuarkusTest;
 
 import de.egladil.raetselbaukasten.domain.exceptions.MjaRuntimeException;
 import de.egladil.raetselbaukasten.domain.quellen.impl.ZeitschriftquelleNameStrategie;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteQuelleReadonly;
-import io.quarkus.test.junit.QuarkusTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * ZeitschriftquelleNameStrategieTest
@@ -20,121 +21,121 @@ import io.quarkus.test.junit.QuarkusTest;
 @QuarkusTest
 public class ZeitschriftquelleNameStrategieTest {
 
-	ZeitschriftquelleNameStrategie strategie = new ZeitschriftquelleNameStrategie();
+    ZeitschriftquelleNameStrategie strategie = new ZeitschriftquelleNameStrategie();
 
-	QuelleInfosAdapter quelleAdapter = new QuelleInfosAdapter();
+    QuelleInfosAdapter quelleAdapter = new QuelleInfosAdapter();
 
-	@Test
-	void should_getNameThrowIllegalStateException_when_QuellenartNichtZeitschrift() {
+    @Test
+    void should_getNameThrowIllegalStateException_when_QuellenartNichtZeitschrift() {
 
-		// Arrange
-		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.setQuellenart(Quellenart.PERSON);
+        // Arrange
+        PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
+        quelle.setQuellenart(Quellenart.PERSON);
 
-		// Act
-		try {
+        // Act
+        try {
 
-			strategie.getText(quelleAdapter.adapt(quelle));
-			fail("keine IllegalStateException");
-		} catch (IllegalStateException e) {
+            strategie.getText(quelleAdapter.adapt(quelle));
+            fail("keine IllegalStateException");
+        } catch (IllegalStateException e) {
 
-			assertEquals("Funktioniert nur für Quellenart ZEITSCHRIFT", e.getMessage());
-		}
+            assertEquals("Funktioniert nur für Quellenart ZEITSCHRIFT", e.getMessage());
+        }
 
-	}
+    }
 
-	@Test
-	void should_getNameThrowMjaRuntimeException_when_titelBlank() {
+    @Test
+    void should_getNameThrowMjaRuntimeException_when_titelBlank() {
 
-		// Arrange
-		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
-		quelle.setMediumTitel(" ");
+        // Arrange
+        PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
+        quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
+        quelle.setMediumTitel(" ");
 
-		// Act
-		try {
+        // Act
+        try {
 
-			strategie.getText(quelleAdapter.adapt(quelle));
-			fail("keine MjaRuntimeException");
-		} catch (MjaRuntimeException e) {
+            strategie.getText(quelleAdapter.adapt(quelle));
+            fail("keine MjaRuntimeException");
+        } catch (MjaRuntimeException e) {
 
-			assertEquals("Bei Quellenart ZEITSCHRIFT darf mediumTitel nicht blank sein.", e.getMessage());
-		}
+            assertEquals("Bei Quellenart ZEITSCHRIFT darf mediumTitel nicht blank sein.", e.getMessage());
+        }
 
-	}
+    }
 
-	@Test
-	void should_getName_work_whenOnlyMediumTitelSet() {
+    @Test
+    void should_getName_work_whenOnlyMediumTitelSet() {
 
-		// Arrange
-		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
-		quelle.setAusgabe(" ");
-		quelle.setSeite(null);
-		quelle.setJahr("");
+        // Arrange
+        PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
+        quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
+        quelle.setAusgabe(" ");
+        quelle.setSeite(null);
+        quelle.setJahr("");
 
-		String expected = "Grunschulolympiade 2x2";
+        String expected = "Grunschulolympiade 2x2";
 
-		// Act
-		String name = strategie.getText(quelleAdapter.adapt(quelle));
+        // Act
+        String name = strategie.getText(quelleAdapter.adapt(quelle));
 
-		// Assert
-		assertEquals(expected, name);
+        // Assert
+        assertEquals(expected, name);
 
-	}
+    }
 
-	@Test
-	void should_getName_work_whenOnlyMediumTitelUndJahrSet() {
+    @Test
+    void should_getName_work_whenOnlyMediumTitelUndJahrSet() {
 
-		// Arrange
-		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
-		quelle.setAusgabe(" ");
-		quelle.setSeite(null);
+        // Arrange
+        PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
+        quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
+        quelle.setAusgabe(" ");
+        quelle.setSeite(null);
 
-		String expected = "Grunschulolympiade 2x2 1987";
+        String expected = "Grunschulolympiade 2x2 1987";
 
-		// Act
-		String name = strategie.getText(quelleAdapter.adapt(quelle));
+        // Act
+        String name = strategie.getText(quelleAdapter.adapt(quelle));
 
-		// Assert
-		assertEquals(expected, name);
+        // Assert
+        assertEquals(expected, name);
 
-	}
+    }
 
-	@Test
-	void should_getName_work_whenOnlyMediumTitelUndJahrUndAusgabeSet() {
+    @Test
+    void should_getName_work_whenOnlyMediumTitelUndJahrUndAusgabeSet() {
 
-		// Arrange
-		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
-		quelle.setSeite(null);
+        // Arrange
+        PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
+        quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
+        quelle.setSeite(null);
 
-		String expected = "Grunschulolympiade 2x2 (11) 1987";
+        String expected = "Grunschulolympiade 2x2 (11) 1987";
 
-		// Act
-		String name = strategie.getText(quelleAdapter.adapt(quelle));
+        // Act
+        String name = strategie.getText(quelleAdapter.adapt(quelle));
 
-		// Assert
-		assertEquals(expected, name);
+        // Assert
+        assertEquals(expected, name);
 
-	}
+    }
 
-	@Test
-	void should_getName_work_whenAllAttributesSet() {
+    @Test
+    void should_getName_work_whenAllAttributesSet() {
 
-		// Arrange
-		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
+        // Arrange
+        PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
+        quelle.setQuellenart(Quellenart.ZEITSCHRIFT);
 
-		String expected = "Grunschulolympiade 2x2 (11) 1987, S.42";
+        String expected = "Grunschulolympiade 2x2 (11) 1987, S.42";
 
-		// Act
-		String name = strategie.getText(quelleAdapter.adapt(quelle));
+        // Act
+        String name = strategie.getText(quelleAdapter.adapt(quelle));
 
-		// Assert
-		assertEquals(expected, name);
+        // Assert
+        assertEquals(expected, name);
 
-	}
+    }
 
 }

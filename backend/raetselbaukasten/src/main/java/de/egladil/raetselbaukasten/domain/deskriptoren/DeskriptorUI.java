@@ -12,40 +12,40 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Schema(description = "DTO für die Funktion eines Deskriptors bei der Suche.")
 public class DeskriptorUI {
 
-	@Schema(description = "technische ID")
-	private Long id;
+    @Schema(description = "technische ID")
+    private Long id;
 
-	@Schema(description = "Name zum Anzeigen")
-	private String name;
+    @Schema(description = "Name zum Anzeigen")
+    private String name;
 
-	/**
-	 *
-	 */
-	DeskriptorUI() {
+    /**
+     *
+     */
+    DeskriptorUI() {
 
-		super();
+        super();
 
-	}
+    }
 
-	/**
-	 * @param id
-	 * @param name
-	 */
-	public DeskriptorUI(final Long id, final String name) {
+    /**
+     * @param id
+     * @param name
+     */
+    public DeskriptorUI(final Long id, final String name) {
 
-		super();
-		this.id = id;
-		this.name = name;
-	}
+        super();
+        this.id = id;
+        this.name = name;
+    }
 
-	public Long getId() {
+    public Long getId() {
 
-		return id;
-	}
+        return id;
+    }
 
-	public String getName() {
+    public String getName() {
 
-		return name;
-	}
+        return name;
+    }
 
 }

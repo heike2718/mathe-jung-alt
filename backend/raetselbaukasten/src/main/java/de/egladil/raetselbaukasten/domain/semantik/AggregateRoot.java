@@ -4,10 +4,10 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.semantik;
 
-import static java.lang.annotation.ElementType.TYPE;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
 
 @Documented
 @Target({ TYPE })

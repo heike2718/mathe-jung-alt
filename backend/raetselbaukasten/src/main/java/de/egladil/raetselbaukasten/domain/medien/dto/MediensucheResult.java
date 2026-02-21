@@ -20,34 +20,35 @@ import de.egladil.raetselbaukasten.domain.raetsel.dto.RaetselsucheTrefferItem;
 @Schema(name = "MediensucheResult", description = "Resultat einer Mediensuche")
 public class MediensucheResult {
 
-	@JsonProperty
-	@Schema(description = "Gesamtzahl aller Treffer der Suchanfrage")
-	private long trefferGesamt = 0;
+    @JsonProperty
+    @Schema(description = "Gesamtzahl aller Treffer der Suchanfrage")
+    private long trefferGesamt = 0;
 
-	@JsonProperty
-	@Schema(
-		type = SchemaType.ARRAY, implementation = RaetselsucheTrefferItem.class,
-		description = "die abgefragte Teilmenge aller Treffer der Suchanfrage (Page)")
-	private List<MediensucheTrefferItem> treffer = new ArrayList<>();
+    @JsonProperty
+    @Schema(
+            type = SchemaType.ARRAY,
+            implementation = RaetselsucheTrefferItem.class,
+            description = "die abgefragte Teilmenge aller Treffer der Suchanfrage (Page)")
+    private List<MediensucheTrefferItem> treffer = new ArrayList<>();
 
-	public long getTrefferGesamt() {
+    public long getTrefferGesamt() {
 
-		return trefferGesamt;
-	}
+        return trefferGesamt;
+    }
 
-	public void setTrefferGesamt(final long trefferGesamt) {
+    public void setTrefferGesamt(final long trefferGesamt) {
 
-		this.trefferGesamt = trefferGesamt;
-	}
+        this.trefferGesamt = trefferGesamt;
+    }
 
-	public List<MediensucheTrefferItem> getTreffer() {
+    public List<MediensucheTrefferItem> getTreffer() {
 
-		return treffer;
-	}
+        return treffer;
+    }
 
-	public void setTreffer(final List<MediensucheTrefferItem> treffer) {
+    public void setTreffer(final List<MediensucheTrefferItem> treffer) {
 
-		this.treffer = treffer;
-	}
+        this.treffer = treffer;
+    }
 
 }

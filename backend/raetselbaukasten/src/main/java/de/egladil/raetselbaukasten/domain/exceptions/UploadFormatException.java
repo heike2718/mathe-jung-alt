@@ -9,15 +9,15 @@ package de.egladil.raetselbaukasten.domain.exceptions;
  */
 public class UploadFormatException extends RuntimeException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public UploadFormatException(final String message) {
+    public UploadFormatException(final String message) {
 
-		super(message);
+        super(message);
 
-	}
+    }
 
 }

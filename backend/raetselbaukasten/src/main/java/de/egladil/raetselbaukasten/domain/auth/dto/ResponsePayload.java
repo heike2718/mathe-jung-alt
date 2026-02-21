@@ -11,48 +11,50 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * ResponsePayload
  */
-@Schema(name = "ResponsePayload", description = "generisches Response-Objekt, das ein MessagePayload und ggf. Daten enthält")
+@Schema(
+        name = "ResponsePayload",
+        description = "generisches Response-Objekt, das ein MessagePayload und ggf. Daten enthält")
 public class ResponsePayload {
 
-	@JsonProperty
-	@Schema(description = "das MessagePayload")
-	private MessagePayload message;
+    @JsonProperty
+    @Schema(description = "das MessagePayload")
+    private MessagePayload message;
 
-	@JsonProperty
-	@Schema(description = "daten die als JSON mitgegeben werden. Kann null sein")
-	private Object data;
+    @JsonProperty
+    @Schema(description = "daten die als JSON mitgegeben werden. Kann null sein")
+    private Object data;
 
-	ResponsePayload() {
+    ResponsePayload() {
 
-	}
+    }
 
-	/**
-	 * Erzeugt eine Instanz von ResponsePayload
-	 */
-	private ResponsePayload(final MessagePayload message) {
+    /**
+     * Erzeugt eine Instanz von ResponsePayload
+     */
+    private ResponsePayload(final MessagePayload message) {
 
-		super();
-		this.message = message;
-	}
+        super();
+        this.message = message;
+    }
 
-	public MessagePayload getMessage() {
+    public MessagePayload getMessage() {
 
-		return message;
-	}
+        return message;
+    }
 
-	public Object getData() {
+    public Object getData() {
 
-		return data;
-	}
+        return data;
+    }
 
-	public void setData(final Object payload) {
+    public void setData(final Object payload) {
 
-		this.data = payload;
-	}
+        this.data = payload;
+    }
 
-	public static ResponsePayload messageOnly(final MessagePayload messagePayload) {
+    public static ResponsePayload messageOnly(final MessagePayload messagePayload) {
 
-		return new ResponsePayload(messagePayload);
-	}
+        return new ResponsePayload(messagePayload);
+    }
 
 }

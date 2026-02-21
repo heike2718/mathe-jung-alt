@@ -4,18 +4,20 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.raetsel.impl;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response.Status;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.egladil.raetselbaukasten.domain.auth.session.AuthenticatedUser;
 import de.egladil.raetselbaukasten.domain.auth.session.Benutzerart;
 import de.egladil.raetselbaukasten.domain.raetsel.Raetsel;
 import de.egladil.raetselbaukasten.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistentesRaetsel;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response.Status;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * RaetselPermissionDelegate testet Zeug mit permissions für Raetsel.
@@ -36,22 +38,22 @@ public class RaetselPermissionDelegate {
 
         switch (benutzerart) {
 
-            case ANONYM: {
+        case ANONYM: {
 
-                LOGGER.warn("User {} mit Benutzerart {} hat keine Leseberechtigung auf Raetsel",
-                        user.getName(),
-                        benutzerart);
-            }
+            LOGGER
+                    .warn("User {} mit Benutzerart {} hat keine Leseberechtigung auf Raetsel", user.getName(),
+                            benutzerart);
+        }
 
-            case STANDARD:
-                return true;
+        case STANDARD:
+            return true;
 
-            case AUTOR:
-            case ADMIN:
-                return false;
+        case AUTOR:
+        case ADMIN:
+            return false;
 
-            default:
-                throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+        default:
+            throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
         }
 
     }
@@ -67,32 +69,31 @@ public class RaetselPermissionDelegate {
 
         switch (benutzerart) {
 
-            case ANONYM:
-            case STANDARD: {
+        case ANONYM:
+        case STANDARD: {
 
-                LOGGER.warn("User {} mit Benutzerart {} hat keine Schreibberechtigung auf Raetsel {} mit Owner {}",
-                        user.getName(),
-                        benutzerart, ausDB.getSchluessel(),
-                        ausDB.getOwner());
-                throw new WebApplicationException("keine Schreibberechtigung für Rätsel", Status.FORBIDDEN);
+            LOGGER
+                    .warn("User {} mit Benutzerart {} hat keine Schreibberechtigung auf Raetsel {} mit Owner {}",
+                            user.getName(), benutzerart, ausDB.getSchluessel(), ausDB.getOwner());
+            throw new WebApplicationException("keine Schreibberechtigung für Rätsel", Status.FORBIDDEN);
+        }
+
+        case AUTOR: {
+
+            if (!user.getUuid().equals(ausDB.getOwner())) {
+
+                LOGGER
+                        .warn("Autor {} hat keine Schreibberechtigung auf Raetsel {} mit Owner {}", user.getName(),
+                                ausDB.getSchluessel(), ausDB.getOwner());
+                throw new WebApplicationException(Status.FORBIDDEN);
             }
+        }
 
-            case AUTOR: {
+        case ADMIN:
+            return;
 
-                if (!user.getUuid().equals(ausDB.getOwner())) {
-
-                    LOGGER.warn("Autor {} hat keine Schreibberechtigung auf Raetsel {} mit Owner {}",
-                            user.getName(), ausDB.getSchluessel(),
-                            ausDB.getOwner());
-                    throw new WebApplicationException(Status.FORBIDDEN);
-                }
-            }
-
-            case ADMIN:
-                return;
-
-            default:
-                throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+        default:
+            throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
         }
 
     }
@@ -105,26 +106,25 @@ public class RaetselPermissionDelegate {
 
         switch (benutzerart) {
 
-            case ANONYM: {
+        case ANONYM: {
 
-                LOGGER.warn("User {} mit Benutzerart {} hat keine Schreibberechtigung auf Raetsel {} mit Owner {}",
-                        user.getName(),
-                        benutzerart, ausDB.getSchluessel(),
-                        ausDB.getOwner());
-                throw new WebApplicationException(Status.FORBIDDEN);
-            }
+            LOGGER
+                    .warn("User {} mit Benutzerart {} hat keine Schreibberechtigung auf Raetsel {} mit Owner {}",
+                            user.getName(), benutzerart, ausDB.getSchluessel(), ausDB.getOwner());
+            throw new WebApplicationException(Status.FORBIDDEN);
+        }
 
-            case STANDARD:
-                return true;
+        case STANDARD:
+            return true;
 
-            case AUTOR:
-                return !user.getUuid().equals(ausDB.getOwner());
+        case AUTOR:
+            return !user.getUuid().equals(ausDB.getOwner());
 
-            case ADMIN:
-                return false;
+        case ADMIN:
+            return false;
 
-            default:
-                throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+        default:
+            throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
         }
 
     }
@@ -137,33 +137,33 @@ public class RaetselPermissionDelegate {
 
         switch (benutzerart) {
 
-            case ANONYM: {
+        case ANONYM: {
 
-                LOGGER.warn("anonymer User {} hat keine Leseberechtigung auf Raetsel mit SCHLUESSEL={}",
-                        user.getName(),
-                        raetsel.getSchluessel());
+            LOGGER
+                    .warn("anonymer User {} hat keine Leseberechtigung auf Raetsel mit SCHLUESSEL={}", user.getName(),
+                            raetsel.getSchluessel());
+
+            throw new WebApplicationException(Status.FORBIDDEN);
+        }
+
+        case STANDARD: {
+
+            if (!raetsel.isFreigegeben()) {
+
+                LOGGER
+                        .warn("Standarduser {} hat keine Leseberechtigung auf nicht freigegebenes Raetsel mit SCHLUESSEL={}",
+                                user.getName(), raetsel.getSchluessel());
 
                 throw new WebApplicationException(Status.FORBIDDEN);
             }
+        }
 
-            case STANDARD: {
+        case AUTOR:
+        case ADMIN:
+            return;
 
-                if (!raetsel.isFreigegeben()) {
-
-                    LOGGER.warn("Standarduser {} hat keine Leseberechtigung auf nicht freigegebenes Raetsel mit SCHLUESSEL={}",
-                            user.getName(),
-                            raetsel.getSchluessel());
-
-                    throw new WebApplicationException(Status.FORBIDDEN);
-                }
-            }
-
-            case AUTOR:
-            case ADMIN:
-                return;
-
-            default:
-                throw new IllegalArgumentException("Unexpected value: " + benutzerart);
+        default:
+            throw new IllegalArgumentException("Unexpected value: " + benutzerart);
         }
 
     }
@@ -181,33 +181,33 @@ public class RaetselPermissionDelegate {
 
         switch (benutzerart) {
 
-            case ANONYM: {
+        case ANONYM: {
 
-                LOGGER.warn("anonymer User {} hat keine Leseberechtigung auf Raetsel mit SCHLUESSEL={}",
-                        user.getName(),
-                        raetsel.getSchluessel());
+            LOGGER
+                    .warn("anonymer User {} hat keine Leseberechtigung auf Raetsel mit SCHLUESSEL={}", user.getName(),
+                            raetsel.getSchluessel());
+
+            throw new WebApplicationException(Status.FORBIDDEN);
+        }
+
+        case STANDARD: {
+
+            if (!raetsel.isFreigegeben()) {
+
+                LOGGER
+                        .warn("Standarduser {} hat keine Leseberechtigung auf nicht freigegebenes Raetsel mit SCHLUESSEL={}",
+                                user.getName(), raetsel.getSchluessel());
 
                 throw new WebApplicationException(Status.FORBIDDEN);
             }
+        }
 
-            case STANDARD: {
+        case AUTOR:
+        case ADMIN:
+            return;
 
-                if (!raetsel.isFreigegeben()) {
-
-                    LOGGER.warn("Standarduser {} hat keine Leseberechtigung auf nicht freigegebenes Raetsel mit SCHLUESSEL={}",
-                            user.getName(),
-                            raetsel.getSchluessel());
-
-                    throw new WebApplicationException(Status.FORBIDDEN);
-                }
-            }
-
-            case AUTOR:
-            case ADMIN:
-                return;
-
-            default:
-                throw new IllegalArgumentException("Unexpected value: " + benutzerart);
+        default:
+            throw new IllegalArgumentException("Unexpected value: " + benutzerart);
         }
 
     }

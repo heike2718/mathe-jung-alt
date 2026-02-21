@@ -16,30 +16,30 @@ import de.egladil.raetselbaukasten.domain.quellen.Quellenart;
  */
 public class BuchquelleNameStrategie implements QuelleNameStrategie {
 
-	@Override
-	public String getText(final IQuellenangabeDaten quelle) {
+    @Override
+    public String getText(final IQuellenangabeDaten quelle) {
 
-		if (quelle.getQuellenart() != Quellenart.BUCH) {
+        if (quelle.getQuellenart() != Quellenart.BUCH) {
 
-			throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.BUCH);
-		}
+            throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.BUCH);
+        }
 
-		if (StringUtils.isBlank(quelle.getMediumTitel())) {
+        if (StringUtils.isBlank(quelle.getMediumTitel())) {
 
-			throw new MjaRuntimeException("Bei Quellenart BUCH darf mediumTitel nicht blank sein.");
-		}
+            throw new MjaRuntimeException("Bei Quellenart BUCH darf mediumTitel nicht blank sein.");
+        }
 
-		if (StringUtils.isBlank(quelle.getAutor())) {
+        if (StringUtils.isBlank(quelle.getAutor())) {
 
-			throw new MjaRuntimeException("Bei Quellenart BUCH darf autor nicht blank sein.");
-		}
+            throw new MjaRuntimeException("Bei Quellenart BUCH darf autor nicht blank sein.");
+        }
 
-		if (StringUtils.isBlank(quelle.getSeite())) {
+        if (StringUtils.isBlank(quelle.getSeite())) {
 
-			throw new MjaRuntimeException("Bei Quellenart BUCH darf seite nicht blank sein.");
-		}
+            throw new MjaRuntimeException("Bei Quellenart BUCH darf seite nicht blank sein.");
+        }
 
-		return quelle.getAutor() + ": " + quelle.getMediumTitel() + ", S." + quelle.getSeite();
-	}
+        return quelle.getAutor() + ": " + quelle.getMediumTitel() + ", S." + quelle.getSeite();
+    }
 
 }

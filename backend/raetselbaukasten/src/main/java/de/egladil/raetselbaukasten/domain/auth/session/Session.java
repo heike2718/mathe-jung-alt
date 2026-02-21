@@ -12,121 +12,120 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Session {
 
-	@JsonProperty
-	private String sessionId;
+    @JsonProperty
+    private String sessionId;
 
-	@JsonProperty
-	private long expiresAt;
+    @JsonProperty
+    private long expiresAt;
 
-	@JsonProperty
-	private AuthenticatedUser user;
+    @JsonProperty
+    private AuthenticatedUser user;
 
-	public static Session createAnonymous(final String sessionId) {
+    public static Session createAnonymous(final String sessionId) {
 
-		Session session = new Session();
-		session.sessionId = sessionId;
-		return session;
+        Session session = new Session();
+        session.sessionId = sessionId;
+        return session;
 
-	}
+    }
 
-	@Override
-	public String toString() {
+    @Override
+    public String toString() {
 
-		return "Session [sessionId=" + sessionId + ", expiresAt=" + expiresAt + ", admin=" + user + "]";
-	}
+        return "Session [sessionId=" + sessionId + ", expiresAt=" + expiresAt + ", admin=" + user + "]";
+    }
 
-	@JsonIgnore
-	public boolean isAnonym() {
+    @JsonIgnore
+    public boolean isAnonym() {
 
-		return user == null;
-	}
+        return user == null;
+    }
 
-	/**
-	 * In Prod, wo Cookies funktionieren, muss die sessionId im Response-Payload entfernt werden können, da sie über ein Cookie
-	 * übertragen wird.
-	 */
-	public void clearSessionIdInProd() {
+    /**
+     * In Prod, wo Cookies funktionieren, muss die sessionId im Response-Payload
+     * entfernt werden können, da sie über ein Cookie übertragen wird.
+     */
+    public void clearSessionIdInProd() {
 
-		this.sessionId = null;
-	}
+        this.sessionId = null;
+    }
 
-	/**
-	 * @return the expiresAt
-	 */
-	public long getExpiresAt() {
+    /**
+     * @return the expiresAt
+     */
+    public long getExpiresAt() {
 
-		return expiresAt;
-	}
+        return expiresAt;
+    }
 
-	/**
-	 * @param expiresAt
-	 *                  the expiresAt to set
-	 */
-	public void setExpiresAt(final long expiresAt) {
+    /**
+     * @param expiresAt the expiresAt to set
+     */
+    public void setExpiresAt(final long expiresAt) {
 
-		this.expiresAt = expiresAt;
-	}
+        this.expiresAt = expiresAt;
+    }
 
-	@Override
-	public int hashCode() {
+    @Override
+    public int hashCode() {
 
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
-		return result;
-	}
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
 
-		if (this == obj) {
+        if (this == obj) {
 
-			return true;
-		}
+            return true;
+        }
 
-		if (!(obj instanceof Session)) {
+        if (!(obj instanceof Session)) {
 
-			return false;
-		}
-		Session other = (Session) obj;
+            return false;
+        }
+        Session other = (Session) obj;
 
-		if (sessionId == null) {
+        if (sessionId == null) {
 
-			if (other.sessionId != null) {
+            if (other.sessionId != null) {
 
-				return false;
-			}
-		} else if (!sessionId.equals(other.sessionId)) {
+                return false;
+            }
+        } else if (!sessionId.equals(other.sessionId)) {
 
-			return false;
-		}
-		return true;
-	}
+            return false;
+        }
+        return true;
+    }
 
-	/**
-	 * @return the sessionId
-	 */
-	public String getSessionId() {
+    /**
+     * @return the sessionId
+     */
+    public String getSessionId() {
 
-		return sessionId;
-	}
+        return sessionId;
+    }
 
-	/**
-	 * @return the admin
-	 */
-	public AuthenticatedUser getUser() {
+    /**
+     * @return the admin
+     */
+    public AuthenticatedUser getUser() {
 
-		return user;
-	}
+        return user;
+    }
 
-	public Session withUser(final AuthenticatedUser user) {
+    public Session withUser(final AuthenticatedUser user) {
 
-		if (user == null) {
+        if (user == null) {
 
-			throw new IllegalArgumentException("admin null");
-		}
+            throw new IllegalArgumentException("admin null");
+        }
 
-		this.user = user;
-		return this;
-	}
+        this.user = user;
+        return this;
+    }
 }

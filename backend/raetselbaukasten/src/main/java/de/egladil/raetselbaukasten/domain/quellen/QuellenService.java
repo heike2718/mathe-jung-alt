@@ -4,6 +4,17 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.quellen;
 
+import java.util.Optional;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.commons.lang3.StringUtils;
+
 import de.egladil.raetselbaukasten.domain.auth.session.AuthenticatedUser;
 import de.egladil.raetselbaukasten.domain.exceptions.MjaRuntimeException;
 import de.egladil.raetselbaukasten.domain.quellen.dto.QuelleDto;
@@ -13,14 +24,6 @@ import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
 import de.egladil.raetselbaukasten.infrastructure.persistence.dao.QuellenRepository;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteQuelle;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteQuelleReadonly;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
 
 /**
  * QuellenService
@@ -114,7 +117,8 @@ public class QuellenService {
         return quelle;
     }
 
-    public PersistenteQuelle quelleAnlegenOderAendern(final RaetselHerkunftTyp herkunftTyp, final QuelleDto datenQuelle) {
+    public PersistenteQuelle quelleAnlegenOderAendern(final RaetselHerkunftTyp herkunftTyp,
+            final QuelleDto datenQuelle) {
 
         Quelle quelle = createQuelle(herkunftTyp, datenQuelle);
 
@@ -152,7 +156,8 @@ public class QuellenService {
         String userId = authCtx.getUser().getUuid();
         QuelleDto datenQuelle = quelle.getDatenQuelle();
 
-        PersistenteQuelle quelleEntity = PersistenteQuelle.builder()
+        PersistenteQuelle quelleEntity = PersistenteQuelle
+                .builder()
                 .sortNumber(maxSornr + 1)
                 .owner(userId)
                 .ausgabe(datenQuelle.getAusgabe())
@@ -185,8 +190,8 @@ public class QuellenService {
 
         if (quelleEntity == null) {
 
-            LOGGER.error(
-                    "keine QUELLE mit uuid={} vorhanden. Das darf nur bei neuen Rätseln (id='neu') der Fall sein. Da stimmt beim Laden der Details eines Rätsels etwas nicht oder beim Mappen der Herkunft auf die Quelle im Frontend!");
+            LOGGER
+                    .error("keine QUELLE mit uuid={} vorhanden. Das darf nur bei neuen Rätseln (id='neu') der Fall sein. Da stimmt beim Laden der Details eines Rätsels etwas nicht oder beim Mappen der Herkunft auf die Quelle im Frontend!");
             throw new MjaRuntimeException("Inonsistente Daten Rätsel-Quelle");
         }
 
@@ -214,14 +219,15 @@ public class QuellenService {
 
         String theUserId = authCtx.getUser().getUuid();
 
-        Quelle quelle = new Quelle(datenQuelle.getId())
-                .withDatenQuelle(datenQuelle);
+        Quelle quelle = new Quelle(datenQuelle.getId()).withDatenQuelle(datenQuelle);
 
         if ("neu".equals(quelle.getId()) && Quellenart.PERSON == datenQuelle.getQuellenart()
                 && RaetselHerkunftTyp.EIGENKREATION == herkunftstyp) {
 
-            // Dann ist die userId klar. In anderen Fällen handelt es sich um eine von ein von einer anderen Person erfundenes
-            // Rätsel, das der Admin für diese Person einträgt. Dann benötigt die Quelle keine userId.
+            // Dann ist die userId klar. In anderen Fällen handelt es sich um eine von ein
+            // von einer anderen Person erfundenes
+            // Rätsel, das der Admin für diese Person einträgt. Dann benötigt die Quelle
+            // keine userId.
             quelle.setUserId(theUserId);
         }
 

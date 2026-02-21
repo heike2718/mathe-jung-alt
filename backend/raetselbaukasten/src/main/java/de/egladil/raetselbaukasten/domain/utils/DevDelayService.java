@@ -4,9 +4,9 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.utils;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 import jakarta.enterprise.context.ApplicationScoped;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 /**
  *
@@ -14,23 +14,23 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class DevDelayService {
 
-	@ConfigProperty(name = "delay.milliseconds", defaultValue = "0")
-	long delayMillis = 0;
+    @ConfigProperty(name = "delay.milliseconds", defaultValue = "0")
+    long delayMillis = 0;
 
-	public void pause() {
+    public void pause() {
 
-		if (delayMillis == 0) {
+        if (delayMillis == 0) {
 
-			return;
-		}
+            return;
+        }
 
-		try {
+        try {
 
-			Thread.sleep(delayMillis);
-		} catch (InterruptedException e) {
+            Thread.sleep(delayMillis);
+        } catch (InterruptedException e) {
 
-			//
-		}
-	}
+            //
+        }
+    }
 
 }

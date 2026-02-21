@@ -16,151 +16,154 @@ import de.egladil.raetselbaukasten.domain.raetsel.LayoutAntwortvorschlaege;
  */
 public class RaetselGeneratorinput {
 
-	private String nummer;
+    private String nummer;
 
-	private String schluessel;
+    private String schluessel;
 
-	private String frage;
+    private String frage;
 
-	private String loesung;
+    private String loesung;
 
-	private int punkte;
+    private int punkte;
 
-	private boolean antwortvorschlaegeEingebettet;
+    private boolean antwortvorschlaegeEingebettet;
 
-	private Antwortvorschlag[] antwortvorschlaege;
+    private Antwortvorschlag[] antwortvorschlaege;
 
-	private LayoutAntwortvorschlaege layoutAntwortvorschlaege;
+    private LayoutAntwortvorschlaege layoutAntwortvorschlaege;
 
-	private Verwendungszweck verwendungszweck;
+    private Verwendungszweck verwendungszweck;
 
-	public String getTextColor() {
+    public String getTextColor() {
 
-		switch (punkte) {
+        switch (punkte) {
 
-		case 300:
-			return "green";
+        case 300:
+            return "green";
 
-		case 400:
-			return "blue";
+        case 400:
+            return "blue";
 
-		case 500:
-			return "orange";
+        case 500:
+            return "orange";
 
-		default:
-			return "black";
-		}
-	}
+        default:
+            return "black";
+        }
+    }
 
-	public String getLoesungsbuchstabe() {
+    public String getLoesungsbuchstabe() {
 
-		if (antwortvorschlaege == null) {
+        if (antwortvorschlaege == null) {
 
-			return "";
-		}
+            return "";
+        }
 
-		Optional<Antwortvorschlag> optKorrekt = Arrays.stream(antwortvorschlaege).filter(v -> v.isKorrekt()).findFirst();
+        Optional<Antwortvorschlag> optKorrekt = Arrays
+                .stream(antwortvorschlaege)
+                .filter(v -> v.isKorrekt())
+                .findFirst();
 
-		return optKorrekt.isEmpty() ? "" : optKorrekt.get().getBuchstabe();
+        return optKorrekt.isEmpty() ? "" : optKorrekt.get().getBuchstabe();
 
-	}
+    }
 
-	public String getFrage() {
+    public String getFrage() {
 
-		return frage;
-	}
+        return frage;
+    }
 
-	public RaetselGeneratorinput withFrage(final String frage) {
+    public RaetselGeneratorinput withFrage(final String frage) {
 
-		this.frage = frage;
-		return this;
-	}
+        this.frage = frage;
+        return this;
+    }
 
-	public String getLoesung() {
+    public String getLoesung() {
 
-		return loesung;
-	}
+        return loesung;
+    }
 
-	public RaetselGeneratorinput withLoesung(final String loesung) {
+    public RaetselGeneratorinput withLoesung(final String loesung) {
 
-		this.loesung = loesung;
-		return this;
-	}
+        this.loesung = loesung;
+        return this;
+    }
 
-	public Antwortvorschlag[] getAntwortvorschlaege() {
+    public Antwortvorschlag[] getAntwortvorschlaege() {
 
-		return antwortvorschlaege;
-	}
+        return antwortvorschlaege;
+    }
 
-	public RaetselGeneratorinput withAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
+    public RaetselGeneratorinput withAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
-		this.antwortvorschlaege = antwortvorschlaege;
-		return this;
-	}
+        this.antwortvorschlaege = antwortvorschlaege;
+        return this;
+    }
 
-	public LayoutAntwortvorschlaege getLayoutAntwortvorschlaege() {
+    public LayoutAntwortvorschlaege getLayoutAntwortvorschlaege() {
 
-		return layoutAntwortvorschlaege;
-	}
+        return layoutAntwortvorschlaege;
+    }
 
-	public RaetselGeneratorinput withLayoutAntwortvorschlaege(final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+    public RaetselGeneratorinput withLayoutAntwortvorschlaege(final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		this.layoutAntwortvorschlaege = layoutAntwortvorschlaege;
-		return this;
-	}
+        this.layoutAntwortvorschlaege = layoutAntwortvorschlaege;
+        return this;
+    }
 
-	public int getPunkte() {
+    public int getPunkte() {
 
-		return punkte;
-	}
+        return punkte;
+    }
 
-	public RaetselGeneratorinput withPunkten(final int punkte) {
+    public RaetselGeneratorinput withPunkten(final int punkte) {
 
-		this.punkte = punkte;
-		return this;
-	}
+        this.punkte = punkte;
+        return this;
+    }
 
-	public String getNummer() {
+    public String getNummer() {
 
-		return nummer;
-	}
+        return nummer;
+    }
 
-	public RaetselGeneratorinput withNummer(final String nummer) {
+    public RaetselGeneratorinput withNummer(final String nummer) {
 
-		this.nummer = nummer;
-		return this;
-	}
+        this.nummer = nummer;
+        return this;
+    }
 
-	public String getSchluessel() {
+    public String getSchluessel() {
 
-		return schluessel;
-	}
+        return schluessel;
+    }
 
-	public RaetselGeneratorinput withSchluessel(final String schluessel) {
+    public RaetselGeneratorinput withSchluessel(final String schluessel) {
 
-		this.schluessel = schluessel;
-		return this;
-	}
+        this.schluessel = schluessel;
+        return this;
+    }
 
-	public Verwendungszweck getVerwendungszweck() {
+    public Verwendungszweck getVerwendungszweck() {
 
-		return verwendungszweck;
-	}
+        return verwendungszweck;
+    }
 
-	public RaetselGeneratorinput withVerwendungszweck(final Verwendungszweck verwendungszweck) {
+    public RaetselGeneratorinput withVerwendungszweck(final Verwendungszweck verwendungszweck) {
 
-		this.verwendungszweck = verwendungszweck;
-		return this;
-	}
+        this.verwendungszweck = verwendungszweck;
+        return this;
+    }
 
-	public boolean isAntwortvorschlaegeEingebettet() {
+    public boolean isAntwortvorschlaegeEingebettet() {
 
-		return antwortvorschlaegeEingebettet;
-	}
+        return antwortvorschlaegeEingebettet;
+    }
 
-	public RaetselGeneratorinput withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
+    public RaetselGeneratorinput withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
 
-		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
-		return this;
-	}
+        this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
+        return this;
+    }
 }

@@ -4,28 +4,32 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.resources;
 
-import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.List;
+
+import jakarta.persistence.EnumType;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import io.quarkus.test.common.http.TestHTTPEndpoint;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
+import io.quarkus.test.security.TestSecurity;
+
 import de.egladil.raetselbaukasten.domain.SuchmodusDeskriptoren;
 import de.egladil.raetselbaukasten.domain.raetsel.dto.AufgabensammlungRaetselsucheTrefferItem;
 import de.egladil.raetselbaukasten.domain.raetsel.dto.RaetselsucheTreffer;
 import de.egladil.raetselbaukasten.domain.raetsel.dto.RaetselsucheTrefferItem;
 import de.egladil.raetselbaukasten.profiles.FullDatabaseStandarduserTestProfile;
-import io.quarkus.test.common.http.TestHTTPEndpoint;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
-import io.quarkus.test.security.TestSecurity;
+
 import io.restassured.http.ContentType;
-import jakarta.persistence.EnumType;
+
+import static io.restassured.RestAssured.given;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * PublicRaetselResourceTest
@@ -36,171 +40,167 @@ import jakarta.persistence.EnumType;
 @TestMethodOrder(OrderAnnotation.class)
 public class PublicRaetselResourceTest {
 
-	private String deskriptoren = "8,11";
+    private String deskriptoren = "8,11";
 
-	@Test
-	@Order(1)
-	void findRaetselPublic_401() throws Exception {
+    @Test
+    @Order(1)
+    void findRaetselPublic_401() throws Exception {
 
-		given()
-			.queryParam("deskriptoren", deskriptoren)
-			.queryParam("searchModeForDescriptors", SuchmodusDeskriptoren.LIKE)
-			.queryParam("typeDeskriptoren", EnumType.ORDINAL)
-			.when()
-			.get("v2")
-			.then()
-			.statusCode(401);
-	}
+        given()
+                .queryParam("deskriptoren", deskriptoren)
+                .queryParam("searchModeForDescriptors", SuchmodusDeskriptoren.LIKE)
+                .queryParam("typeDeskriptoren", EnumType.ORDINAL)
+                .when()
+                .get("v2")
+                .then()
+                .statusCode(401);
+    }
 
-	@Test
-	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	@Order(2)
-	void findRaetselPublic_when_Deskriptoren_LIKE() throws Exception {
+    @Test
+    @TestSecurity(user = "testuser", roles = { "STANDARD" })
+    @Order(2)
+    void findRaetselPublic_when_Deskriptoren_LIKE() throws Exception {
 
-		RaetselsucheTreffer suchergebnis = given()
-			.queryParam("deskriptoren", deskriptoren)
-			.queryParam("searchModeForDescriptors", SuchmodusDeskriptoren.LIKE)
-			.queryParam("typeDeskriptoren", EnumType.ORDINAL)
-			.when()
-			.get("v2")
-			.then()
-			.statusCode(200)
-			.and()
-			.extract()
-			.as(RaetselsucheTreffer.class);
+        RaetselsucheTreffer suchergebnis = given()
+                .queryParam("deskriptoren", deskriptoren)
+                .queryParam("searchModeForDescriptors", SuchmodusDeskriptoren.LIKE)
+                .queryParam("typeDeskriptoren", EnumType.ORDINAL)
+                .when()
+                .get("v2")
+                .then()
+                .statusCode(200)
+                .and()
+                .extract()
+                .as(RaetselsucheTreffer.class);
 
-		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+        List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		assertEquals(6, alleRaetsel.size());
-		assertEquals(6, suchergebnis.getTrefferGesamt());
+        assertEquals(6, alleRaetsel.size());
+        assertEquals(6, suchergebnis.getTrefferGesamt());
 
-		assertEquals("02604", alleRaetsel.get(0).getSchluessel());
-	}
+        assertEquals("02604", alleRaetsel.get(0).getSchluessel());
+    }
 
-	@Test
-	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	@Order(3)
-	void findRaetselPublic_when_fallbackToDefaultModusDeskriptoren() throws Exception {
+    @Test
+    @TestSecurity(user = "testuser", roles = { "STANDARD" })
+    @Order(3)
+    void findRaetselPublic_when_fallbackToDefaultModusDeskriptoren() throws Exception {
 
-		RaetselsucheTreffer suchergebnis = given()
-			.queryParam("deskriptoren", deskriptoren)
-			.queryParam("typeDeskriptoren", EnumType.ORDINAL)
-			.when()
-			.get("v2")
-			.then()
-			.statusCode(200)
-			.and()
-			.extract()
-			.as(RaetselsucheTreffer.class);
+        RaetselsucheTreffer suchergebnis = given()
+                .queryParam("deskriptoren", deskriptoren)
+                .queryParam("typeDeskriptoren", EnumType.ORDINAL)
+                .when()
+                .get("v2")
+                .then()
+                .statusCode(200)
+                .and()
+                .extract()
+                .as(RaetselsucheTreffer.class);
 
-		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+        List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		assertEquals(6, alleRaetsel.size());
-		assertEquals(6, suchergebnis.getTrefferGesamt());
+        assertEquals(6, alleRaetsel.size());
+        assertEquals(6, suchergebnis.getTrefferGesamt());
 
-		assertEquals("02604", alleRaetsel.get(0).getSchluessel());
-	}
+        assertEquals("02604", alleRaetsel.get(0).getSchluessel());
+    }
 
-	@Test
-	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	@Order(4)
-	void findRaetselPublic_when_deskriptorenBlank() throws Exception {
+    @Test
+    @TestSecurity(user = "testuser", roles = { "STANDARD" })
+    @Order(4)
+    void findRaetselPublic_when_deskriptorenBlank() throws Exception {
 
-		RaetselsucheTreffer suchergebnis = given()
-			.queryParam("deskriptoren", "")
-			.queryParam("typeDeskriptoren", EnumType.ORDINAL)
-			.when()
-			.get("v2")
-			.then()
-			.statusCode(200)
-			.and()
-			.extract()
-			.as(RaetselsucheTreffer.class);
+        RaetselsucheTreffer suchergebnis = given()
+                .queryParam("deskriptoren", "")
+                .queryParam("typeDeskriptoren", EnumType.ORDINAL)
+                .when()
+                .get("v2")
+                .then()
+                .statusCode(200)
+                .and()
+                .extract()
+                .as(RaetselsucheTreffer.class);
 
-		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
-		assertEquals(0, alleRaetsel.size());
-		assertEquals(0, suchergebnis.getTrefferGesamt());
-	}
+        List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+        assertEquals(0, alleRaetsel.size());
+        assertEquals(0, suchergebnis.getTrefferGesamt());
+    }
 
-	@Test
-	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	@Order(5)
-	void findRaetselPublic_when_Deskriptoren_NOT_LIKE() throws Exception {
+    @Test
+    @TestSecurity(user = "testuser", roles = { "STANDARD" })
+    @Order(5)
+    void findRaetselPublic_when_Deskriptoren_NOT_LIKE() throws Exception {
 
-		RaetselsucheTreffer suchergebnis = given()
-			.queryParam("deskriptoren", deskriptoren)
-			.queryParam("searchModeForDescriptors", SuchmodusDeskriptoren.NOT_LIKE)
-			.queryParam("typeDeskriptoren", EnumType.ORDINAL)
-			.when()
-			.get("v2")
-			.then()
-			.statusCode(200)
-			.and()
-			.extract()
-			.as(RaetselsucheTreffer.class);
+        RaetselsucheTreffer suchergebnis = given()
+                .queryParam("deskriptoren", deskriptoren)
+                .queryParam("searchModeForDescriptors", SuchmodusDeskriptoren.NOT_LIKE)
+                .queryParam("typeDeskriptoren", EnumType.ORDINAL)
+                .when()
+                .get("v2")
+                .then()
+                .statusCode(200)
+                .and()
+                .extract()
+                .as(RaetselsucheTreffer.class);
 
-		List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
+        List<RaetselsucheTrefferItem> alleRaetsel = suchergebnis.getTreffer();
 
-		assertEquals(20, alleRaetsel.size());
+        assertEquals(20, alleRaetsel.size());
 
-		assertTrue(suchergebnis.getTrefferGesamt() >= 6);
+        assertTrue(suchergebnis.getTrefferGesamt() >= 6);
 
-		assertEquals("01219", alleRaetsel.get(0).getSchluessel());
-	}
+        assertEquals("01219", alleRaetsel.get(0).getSchluessel());
+    }
 
-	@Test
-	@TestSecurity(user = "testuser", roles = { "STANDARD" })
-	@Order(7)
-	void testGetAufgabensammlungenMitRaetsel_return_only_freigegeben_when_standardUser() {
+    @Test
+    @TestSecurity(user = "testuser", roles = { "STANDARD" })
+    @Order(7)
+    void testGetAufgabensammlungenMitRaetsel_return_only_freigegeben_when_standardUser() {
 
-		// Arrange
-		String raetselId = "08dc5237-505d-4db2-b5f9-3fd3d74981e0";
+        // Arrange
+        String raetselId = "08dc5237-505d-4db2-b5f9-3fd3d74981e0";
 
-		// Act
-		AufgabensammlungRaetselsucheTrefferItem[] result = given()
-			.pathParam("id", raetselId)
-			.accept(ContentType.JSON)
-			.contentType(ContentType.JSON)
-			.when()
-			.get("{id}/aufgabensammlungen/v1")
-			.then()
-			.statusCode(200)
-			.and()
-			.extract()
-			.as(AufgabensammlungRaetselsucheTrefferItem[].class);
+        // Act
+        AufgabensammlungRaetselsucheTrefferItem[] result = given()
+                .pathParam("id", raetselId)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .when()
+                .get("{id}/aufgabensammlungen/v1")
+                .then()
+                .statusCode(200)
+                .and()
+                .extract()
+                .as(AufgabensammlungRaetselsucheTrefferItem[].class);
 
-		// Assert
-		assertEquals(0, result.length);
+        // Assert
+        assertEquals(0, result.length);
 
-	}
+    }
 
-	@Test
-	@Order(8)
-	void testGetAufgabensammlungenMitRaetsel_401_when_unknownUser() {
+    @Test
+    @Order(8)
+    void testGetAufgabensammlungenMitRaetsel_401_when_unknownUser() {
 
-		// Arrange
-		String raetselId = "2c6fc5a1-f27c-4d51-98c4-239a1eead05f";
+        // Arrange
+        String raetselId = "2c6fc5a1-f27c-4d51-98c4-239a1eead05f";
 
-		// Act
-		given()
-			.pathParam("id", raetselId)
-			.accept(ContentType.JSON)
-			.contentType(ContentType.JSON)
-			.when()
-			.get("{id}/aufgabensammlungen/v1")
-			.then()
-			.statusCode(401);
+        // Act
+        given()
+                .pathParam("id", raetselId)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .when()
+                .get("{id}/aufgabensammlungen/v1")
+                .then()
+                .statusCode(401);
 
-	}
+    }
 
-	@Test
-	@TestSecurity(user = "bolle", roles = { "STANDARD" })
-	void testLoadImagesOK() {
+    @Test
+    @TestSecurity(user = "bolle", roles = { "STANDARD" })
+    void testLoadImagesOK() {
 
-		given()
-			.accept(ContentType.JSON)
-			.get("PNG/02610/v1")
-			.then()
-			.statusCode(200);
-	}
+        given().accept(ContentType.JSON).get("PNG/02610/v1").then().statusCode(200);
+    }
 }

@@ -11,26 +11,26 @@ import de.egladil.raetselbaukasten.domain.generatoren.impl.LaTeXConstants;
  */
 public enum TrennerartFrageLoesung {
 
-	ABSTAND {
+    ABSTAND {
 
-		@Override
-		public String getLeTeX() {
+        @Override
+        public String getLeTeX() {
 
-			return LaTeXConstants.ABSTAND_ITEMS;
-		}
+            return LaTeXConstants.ABSTAND_ITEMS;
+        }
 
-	},
-	SEITENUMBRUCH {
+    },
+    SEITENUMBRUCH {
 
-		@Override
-		public String getLeTeX() {
+        @Override
+        public String getLeTeX() {
 
-			return LaTeXConstants.VALUE_NEWPAGE;
-		}
-	};
+            return LaTeXConstants.VALUE_NEWPAGE;
+        }
+    };
 
-	/**
-	 * @return String das LaTeX-Schnipsel für diese Trennerart.
-	 */
-	public abstract String getLeTeX();
+    /**
+     * @return String das LaTeX-Schnipsel für diese Trennerart.
+     */
+    public abstract String getLeTeX();
 }

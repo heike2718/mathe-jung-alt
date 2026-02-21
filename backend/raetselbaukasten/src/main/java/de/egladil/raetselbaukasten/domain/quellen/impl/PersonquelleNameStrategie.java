@@ -16,20 +16,20 @@ import de.egladil.raetselbaukasten.domain.quellen.Quellenart;
  */
 public class PersonquelleNameStrategie implements QuelleNameStrategie {
 
-	@Override
-	public String getText(final IQuellenangabeDaten quelle) {
+    @Override
+    public String getText(final IQuellenangabeDaten quelle) {
 
-		if (quelle.getQuellenart() != Quellenart.PERSON) {
+        if (quelle.getQuellenart() != Quellenart.PERSON) {
 
-			throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.PERSON);
-		}
+            throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.PERSON);
+        }
 
-		if (StringUtils.isBlank(quelle.getPerson())) {
+        if (StringUtils.isBlank(quelle.getPerson())) {
 
-			throw new MjaRuntimeException("Bei Quellenart PERSON darf person nicht blank sein.");
-		}
+            throw new MjaRuntimeException("Bei Quellenart PERSON darf person nicht blank sein.");
+        }
 
-		return quelle.getPerson();
-	}
+        return quelle.getPerson();
+    }
 
 }

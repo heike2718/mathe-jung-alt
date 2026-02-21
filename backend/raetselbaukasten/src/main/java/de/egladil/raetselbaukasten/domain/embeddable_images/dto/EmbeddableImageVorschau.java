@@ -11,54 +11,56 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * EmbeddableImageVorschau
  */
-@Schema(name = "EmbeddableImageVorschau", description = "Vorschau (png) einr MjaImage-Datei, die in LaTeX eingebunden wird.")
+@Schema(
+        name = "EmbeddableImageVorschau",
+        description = "Vorschau (png) einr MjaImage-Datei, die in LaTeX eingebunden wird.")
 public class EmbeddableImageVorschau {
 
-	@JsonProperty
-	@Schema(description = "der relative Pfad im LaTeX")
-	private String pfad;
+    @JsonProperty
+    @Schema(description = "der relative Pfad im LaTeX")
+    private String pfad;
 
-	@JsonProperty
-	@Schema(
-		description = "Flag, ob es die Datei gibt. Es kann zu Fehlern beim Generieren der Vorschau gegeben haben. Dann ist das image auch null")
-	private boolean exists;
+    @JsonProperty
+    @Schema(
+            description = "Flag, ob es die Datei gibt. Es kann zu Fehlern beim Generieren der Vorschau gegeben haben. Dann ist das image auch null")
+    private boolean exists;
 
-	@JsonProperty
-	@Schema(
-		description = "Base64-encodetes png Kann mit einem img src=\\\"data:image/png;base64- Tag angezeigt werden. Kann null sein!")
-	private byte[] image;
+    @JsonProperty
+    @Schema(
+            description = "Base64-encodetes png Kann mit einem img src=\\\"data:image/png;base64- Tag angezeigt werden. Kann null sein!")
+    private byte[] image;
 
-	public String getPfad() {
+    public String getPfad() {
 
-		return pfad;
-	}
+        return pfad;
+    }
 
-	public EmbeddableImageVorschau withPfad(final String pfad) {
+    public EmbeddableImageVorschau withPfad(final String pfad) {
 
-		this.pfad = pfad;
-		return this;
-	}
+        this.pfad = pfad;
+        return this;
+    }
 
-	public byte[] getImage() {
+    public byte[] getImage() {
 
-		return image;
-	}
+        return image;
+    }
 
-	public EmbeddableImageVorschau withImage(final byte[] image) {
+    public EmbeddableImageVorschau withImage(final byte[] image) {
 
-		this.image = image;
-		return this;
-	}
+        this.image = image;
+        return this;
+    }
 
-	public boolean isExists() {
+    public boolean isExists() {
 
-		return exists;
-	}
+        return exists;
+    }
 
-	public EmbeddableImageVorschau markExists() {
+    public EmbeddableImageVorschau markExists() {
 
-		this.exists = true;
-		return this;
-	}
+        this.exists = true;
+        return this;
+    }
 
 }

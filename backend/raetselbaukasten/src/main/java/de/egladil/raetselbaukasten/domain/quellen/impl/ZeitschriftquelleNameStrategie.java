@@ -16,41 +16,41 @@ import de.egladil.raetselbaukasten.domain.quellen.Quellenart;
  */
 public class ZeitschriftquelleNameStrategie implements QuelleNameStrategie {
 
-	@Override
-	public String getText(final IQuellenangabeDaten quelle) {
+    @Override
+    public String getText(final IQuellenangabeDaten quelle) {
 
-		if (quelle.getQuellenart() != Quellenart.ZEITSCHRIFT) {
+        if (quelle.getQuellenart() != Quellenart.ZEITSCHRIFT) {
 
-			throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.ZEITSCHRIFT);
-		}
+            throw new IllegalStateException("Funktioniert nur für Quellenart " + Quellenart.ZEITSCHRIFT);
+        }
 
-		if (StringUtils.isBlank(quelle.getMediumTitel())) {
+        if (StringUtils.isBlank(quelle.getMediumTitel())) {
 
-			throw new MjaRuntimeException("Bei Quellenart ZEITSCHRIFT darf mediumTitel nicht blank sein.");
-		}
+            throw new MjaRuntimeException("Bei Quellenart ZEITSCHRIFT darf mediumTitel nicht blank sein.");
+        }
 
-		StringBuffer sb = new StringBuffer(quelle.getMediumTitel());
+        StringBuffer sb = new StringBuffer(quelle.getMediumTitel());
 
-		if (StringUtils.isNotBlank(quelle.getAusgabe())) {
+        if (StringUtils.isNotBlank(quelle.getAusgabe())) {
 
-			sb.append(" (");
-			sb.append(quelle.getAusgabe());
-			sb.append(")");
-		}
+            sb.append(" (");
+            sb.append(quelle.getAusgabe());
+            sb.append(")");
+        }
 
-		if (StringUtils.isNotBlank(quelle.getJahr())) {
+        if (StringUtils.isNotBlank(quelle.getJahr())) {
 
-			sb.append(" ");
-			sb.append(quelle.getJahr());
-		}
+            sb.append(" ");
+            sb.append(quelle.getJahr());
+        }
 
-		if (StringUtils.isNotBlank(quelle.getSeite())) {
+        if (StringUtils.isNotBlank(quelle.getSeite())) {
 
-			sb.append(", S.");
-			sb.append(quelle.getSeite());
-		}
+            sb.append(", S.");
+            sb.append(quelle.getSeite());
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
 }

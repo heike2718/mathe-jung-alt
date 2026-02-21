@@ -10,19 +10,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import de.egladil.raetselbaukasten.domain.auth.dto.MessagePayload;
-import io.quarkus.hibernate.validator.runtime.jaxrs.ViolationReport;
-import io.quarkus.hibernate.validator.runtime.jaxrs.ViolationReport.Violation;
-import io.quarkus.resteasy.reactive.jackson.runtime.mappers.BuiltinMismatchedInputExceptionMapper.MismatchedJsonInputError;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.container.ContainerResponseFilter;
 import jakarta.ws.rs.ext.Provider;
+
+import io.quarkus.hibernate.validator.runtime.jaxrs.ViolationReport;
+import io.quarkus.hibernate.validator.runtime.jaxrs.ViolationReport.Violation;
+import io.quarkus.resteasy.reactive.jackson.runtime.mappers.BuiltinMismatchedInputExceptionMapper.MismatchedJsonInputError;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.commons.lang3.StringUtils;
+
+import de.egladil.raetselbaukasten.domain.auth.dto.MessagePayload;
 
 /**
  * ValidationReportResponseFilter
@@ -31,84 +34,92 @@ import jakarta.ws.rs.ext.Provider;
 @Provider
 public class ValidationReportResponseFilter implements ContainerResponseFilter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReportResponseFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationReportResponseFilter.class);
 
-	@Override
-	public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) throws IOException {
+    @Override
+    public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext)
+            throws IOException {
 
-		if (responseContext.getStatus() == 400) {
+        if (responseContext.getStatus() == 400) {
 
-			Object entity = responseContext.getEntity();
+            Object entity = responseContext.getEntity();
 
-			if (entity instanceof MessagePayload) {
+            if (entity instanceof MessagePayload) {
 
-				// alles gut
+                // alles gut
 
-			} else {
+            } else {
 
-				if (entity instanceof ViolationReport) {
+                if (entity instanceof ViolationReport) {
 
-					ViolationReport validationReport = (ViolationReport) responseContext.getEntity();
+                    ViolationReport validationReport = (ViolationReport) responseContext.getEntity();
 
-					if (entity != null) {
+                    if (entity != null) {
 
-						String path = requestContext.getUriInfo().getPath();
-						String method = requestContext.getMethod();
+                        String path = requestContext.getUriInfo().getPath();
+                        String method = requestContext.getMethod();
 
-						MessagePayload responsePayload = mapToMessagePayload(validationReport, method, path);
+                        MessagePayload responsePayload = mapToMessagePayload(validationReport, method, path);
 
-						LOGGER.error(responsePayload.toString());
+                        LOGGER.error(responsePayload.toString());
 
-						responseContext.setEntity(responsePayload);
+                        responseContext.setEntity(responsePayload);
 
-					}
-				} else {
+                    }
+                } else {
 
-					if (entity instanceof MismatchedJsonInputError) {
+                    if (entity instanceof MismatchedJsonInputError) {
 
-						MismatchedJsonInputError exception = (MismatchedJsonInputError) entity;
+                        MismatchedJsonInputError exception = (MismatchedJsonInputError) entity;
 
-						MessagePayload responsePayload = mapToMessagePayload(exception);
+                        MessagePayload responsePayload = mapToMessagePayload(exception);
 
-						LOGGER.error(responsePayload.toString());
+                        LOGGER.error(responsePayload.toString());
 
-						responseContext.setEntity(responsePayload);
+                        responseContext.setEntity(responsePayload);
 
-					} else {
+                    } else {
 
-						LOGGER.error("unerwarteted entity type {} im BadRequest-Response.", entity.getClass().getName());
+                        LOGGER
+                                .error("unerwarteted entity type {} im BadRequest-Response.",
+                                        entity.getClass().getName());
 
-						MessagePayload responsePayload = MessagePayload
-							.error("BadRequest in der Request Payload, aber wird noch nicht sauber abgefangen.");
+                        MessagePayload responsePayload = MessagePayload
+                                .error("BadRequest in der Request Payload, aber wird noch nicht sauber abgefangen.");
 
-						responseContext.setEntity(responsePayload);
-					}
-				}
-			}
-		}
-	}
+                        responseContext.setEntity(responsePayload);
+                    }
+                }
+            }
+        }
+    }
 
-	MessagePayload mapToMessagePayload(final ViolationReport entity, final String method, final String path) {
+    MessagePayload mapToMessagePayload(final ViolationReport entity, final String method, final String path) {
 
-		List<Violation> violations = entity.getViolations();
+        List<Violation> violations = entity.getViolations();
 
-		LOGGER.debug("{} - {}: Anzahl Violations={}", method, path, violations.size());
+        LOGGER.debug("{} - {}: Anzahl Violations={}", method, path, violations.size());
 
-		// Dubletten filtern und sortieren, damit in Tests vorhersagbare Reihenfolge entsteht
-		List<String> messages = violations.stream().map(v -> v.getMessage()).collect(Collectors.toSet()).stream()
-			.collect(Collectors.toList());
+        // Dubletten filtern und sortieren, damit in Tests vorhersagbare Reihenfolge
+        // entsteht
+        List<String> messages = violations
+                .stream()
+                .map(v -> v.getMessage())
+                .collect(Collectors.toSet())
+                .stream()
+                .collect(Collectors.toList());
 
-		messages.sort(Collator.getInstance(Locale.GERMAN));
+        messages.sort(Collator.getInstance(Locale.GERMAN));
 
-		return MessagePayload.error(StringUtils.join(messages, ','));
-	}
+        return MessagePayload.error(StringUtils.join(messages, ','));
+    }
 
-	MessagePayload mapToMessagePayload(final MismatchedJsonInputError exception) {
+    MessagePayload mapToMessagePayload(final MismatchedJsonInputError exception) {
 
-		String attributeName = exception.getAttributeName();
-		Object value = exception.getValue();
+        String attributeName = exception.getAttributeName();
+        Object value = exception.getValue();
 
-		return MessagePayload.error("BadRequest: [attributeName=" + attributeName + ", value=" + value + "]");
-	}
+        return MessagePayload.error("BadRequest: [attributeName=" + attributeName + ", value=" + value + "]");
+    }
 
 }

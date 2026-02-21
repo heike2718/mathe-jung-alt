@@ -15,12 +15,12 @@ import de.egladil.raetselbaukasten.domain.quiz.dto.Quizaufgabe;
  */
 public class QuizaufgabeComparator implements Comparator<Quizaufgabe> {
 
-	private final Collator collator = Collator.getInstance(Locale.GERMANY);
+    private final Collator collator = Collator.getInstance(Locale.GERMANY);
 
-	@Override
-	public int compare(final Quizaufgabe o1, final Quizaufgabe o2) {
+    @Override
+    public int compare(final Quizaufgabe o1, final Quizaufgabe o2) {
 
-		return collator.compare(o1.getNummer(), o2.getNummer());
-	}
+        return collator.compare(o1.getNummer(), o2.getNummer());
+    }
 
 }

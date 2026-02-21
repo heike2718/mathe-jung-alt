@@ -4,9 +4,11 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
+import jakarta.persistence.*;
+
 import de.egladil.raetselbaukasten.domain.quellen.Quellenart;
 import de.egladil.raetselbaukasten.domain.raetsel.RaetselHerkunftTyp;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,11 +23,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "VW_AUFGABEN")
-@NamedQueries({
-        @NamedQuery(
-                name = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG",
-                query = "select a from PersistenteAufgabeReadonly a where a.sammlung = :sammlung")
-})
+@NamedQueries({ @NamedQuery(
+        name = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG",
+        query = "select a from PersistenteAufgabeReadonly a where a.sammlung = :sammlung") })
 public class PersistenteAufgabeReadonly {
 
     public static final String LOAD_AUFGABEN_IN_SAMMLUNG = "PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG";

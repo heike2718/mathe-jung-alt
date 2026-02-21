@@ -18,122 +18,122 @@ import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Deskripto
  */
 public class RaetselsucheTrefferItem {
 
-	@JsonProperty
-	private String id;
+    @JsonProperty
+    private String id;
 
-	@JsonProperty
-	private String schluessel;
+    @JsonProperty
+    private String schluessel;
 
-	@JsonProperty
-	private String name;
+    @JsonProperty
+    private String name;
 
-	@JsonProperty
-	private String kommentar;
+    @JsonProperty
+    private String kommentar;
 
-	@JsonProperty
-	private boolean freigegeben;
+    @JsonProperty
+    private boolean freigegeben;
 
-	@JsonProperty
-	private RaetselHerkunftTyp herkunft;
+    @JsonProperty
+    private RaetselHerkunftTyp herkunft;
 
-	@JsonProperty
-	private String vorschautext;
+    @JsonProperty
+    private String vorschautext;
 
-	@JsonProperty
-	private List<Deskriptor> deskriptoren;
+    @JsonProperty
+    private List<Deskriptor> deskriptoren;
 
-	public String getId() {
+    public String getId() {
 
-		return id;
-	}
+        return id;
+    }
 
-	public String getSchluessel() {
+    public String getSchluessel() {
 
-		return schluessel;
-	}
+        return schluessel;
+    }
 
-	public String getName() {
+    public String getName() {
 
-		return name;
-	}
+        return name;
+    }
 
-	public List<Deskriptor> getDeskriptoren() {
+    public List<Deskriptor> getDeskriptoren() {
 
-		return deskriptoren;
-	}
+        return deskriptoren;
+    }
 
-	public RaetselsucheTrefferItem withId(final String id) {
+    public RaetselsucheTrefferItem withId(final String id) {
 
-		this.id = id;
-		return this;
-	}
+        this.id = id;
+        return this;
+    }
 
-	public RaetselsucheTrefferItem withSchluessel(final String schluessel) {
+    public RaetselsucheTrefferItem withSchluessel(final String schluessel) {
 
-		this.schluessel = schluessel;
-		return this;
-	}
+        this.schluessel = schluessel;
+        return this;
+    }
 
-	public RaetselsucheTrefferItem withName(final String name) {
+    public RaetselsucheTrefferItem withName(final String name) {
 
-		this.name = name;
-		return this;
-	}
+        this.name = name;
+        return this;
+    }
 
-	public RaetselsucheTrefferItem withDeskriptoren(final List<Deskriptor> deskriptoren) {
+    public RaetselsucheTrefferItem withDeskriptoren(final List<Deskriptor> deskriptoren) {
 
-		this.deskriptoren = deskriptoren;
-		return this;
-	}
+        this.deskriptoren = deskriptoren;
+        return this;
+    }
 
-	public String deskriptorenIds() {
+    public String deskriptorenIds() {
 
-		List<String> ids = deskriptoren.stream().map(d -> d.id + "").toList();
-		return StringUtils.join(ids, ',');
-	}
+        List<String> ids = deskriptoren.stream().map(d -> d.id + "").toList();
+        return StringUtils.join(ids, ',');
+    }
 
-	public String getKommentar() {
+    public String getKommentar() {
 
-		return kommentar;
-	}
+        return kommentar;
+    }
 
-	public RaetselsucheTrefferItem withKommentar(final String kommentar) {
+    public RaetselsucheTrefferItem withKommentar(final String kommentar) {
 
-		this.kommentar = kommentar;
-		return this;
-	}
+        this.kommentar = kommentar;
+        return this;
+    }
 
-	public boolean isFreigegeben() {
+    public boolean isFreigegeben() {
 
-		return freigegeben;
-	}
+        return freigegeben;
+    }
 
-	public RaetselsucheTrefferItem withFreigegeben(final boolean freigegeben) {
+    public RaetselsucheTrefferItem withFreigegeben(final boolean freigegeben) {
 
-		this.freigegeben = freigegeben;
-		return this;
-	}
+        this.freigegeben = freigegeben;
+        return this;
+    }
 
-	public RaetselHerkunftTyp getHerkunft() {
+    public RaetselHerkunftTyp getHerkunft() {
 
-		return herkunft;
-	}
+        return herkunft;
+    }
 
-	public RaetselsucheTrefferItem withHerkunft(final RaetselHerkunftTyp herkunft) {
+    public RaetselsucheTrefferItem withHerkunft(final RaetselHerkunftTyp herkunft) {
 
-		this.herkunft = herkunft;
-		return this;
-	}
+        this.herkunft = herkunft;
+        return this;
+    }
 
-	public String getVorschautext() {
+    public String getVorschautext() {
 
-		return vorschautext;
-	}
+        return vorschautext;
+    }
 
-	public RaetselsucheTrefferItem withVorschautext(final String vorschautext) {
+    public RaetselsucheTrefferItem withVorschautext(final String vorschautext) {
 
-		this.vorschautext = vorschautext;
-		return this;
-	}
+        this.vorschautext = vorschautext;
+        return this;
+    }
 
 }

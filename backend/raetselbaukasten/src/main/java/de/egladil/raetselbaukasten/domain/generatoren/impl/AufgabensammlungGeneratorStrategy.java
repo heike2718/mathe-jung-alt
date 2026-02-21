@@ -10,41 +10,41 @@ import de.egladil.raetselbaukasten.domain.generatoren.dto.AufgabensammlungGenera
 import de.egladil.raetselbaukasten.domain.raetsel.RaetselService;
 
 /**
- * AufgabensammlungGeneratorStrategy. Erzeugt das LaTeX für eine Aufgabensammlung.
+ * AufgabensammlungGeneratorStrategy. Erzeugt das LaTeX für eine
+ * Aufgabensammlung.
  */
 public interface AufgabensammlungGeneratorStrategy {
 
-	/**
-	 * Generiert das LaTeX für die gegebene Aufgabensammlung.
-	 *
-	 * @param  input
-	 *                                AufgabensammlungGeneratorInput - die Parameter für das Generieren.
-	 * @param  raetselDao
-	 *                                RaetselService
-	 * @param  quizitemLaTeXGenerator
-	 *                                QuizitemLaTeXGenerator
-	 * @return
-	 */
-	String generateLaTeX(AufgabensammlungGeneratorInput input, RaetselService raetselService, QuizitemLaTeXGenerator quizitemLaTeXGenerator);
+    /**
+     * Generiert das LaTeX für die gegebene Aufgabensammlung.
+     *
+     * @param input                  AufgabensammlungGeneratorInput - die Parameter
+     *                               für das Generieren.
+     * @param raetselDao             RaetselService
+     * @param quizitemLaTeXGenerator QuizitemLaTeXGenerator
+     * @return
+     */
+    String generateLaTeX(AufgabensammlungGeneratorInput input, RaetselService raetselService,
+            QuizitemLaTeXGenerator quizitemLaTeXGenerator);
 
-	static AufgabensammlungGeneratorStrategy getStrategy(final Verwendungszweck verwendungszweck) {
+    static AufgabensammlungGeneratorStrategy getStrategy(final Verwendungszweck verwendungszweck) {
 
-		switch (verwendungszweck) {
+        switch (verwendungszweck) {
 
-		case ARBEITSBLATT:
-		case VORSCHAU:
-			return new AufgabenLoesungenLaTeXGeneratorStrategy();
+        case ARBEITSBLATT:
+        case VORSCHAU:
+            return new AufgabenLoesungenLaTeXGeneratorStrategy();
 
-		case KARTEI:
-			return new KarteiLaTeXGeneratorStrategy();
+        case KARTEI:
+            return new KarteiLaTeXGeneratorStrategy();
 
-		case LATEX:
-			throw new MjaRuntimeException("LaTeX wird als zip-Archiv generiert und verwendet andere Generatoren.");
+        case LATEX:
+            throw new MjaRuntimeException("LaTeX wird als zip-Archiv generiert und verwendet andere Generatoren.");
 
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + verwendungszweck);
-		}
+        default:
+            throw new IllegalArgumentException("Unexpected value: " + verwendungszweck);
+        }
 
-	}
+    }
 
 }

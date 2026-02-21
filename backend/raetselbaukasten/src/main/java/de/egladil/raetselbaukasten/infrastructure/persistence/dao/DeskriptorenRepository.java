@@ -4,8 +4,9 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.dao;
 
-import de.egladil.raetselbaukasten.domain.semantik.Repository;
 import jakarta.enterprise.context.ApplicationScoped;
+
+import de.egladil.raetselbaukasten.domain.semantik.Repository;
 
 /**
  * DeskriptorenRepository

@@ -11,24 +11,24 @@ import de.egladil.raetselbaukasten.domain.generatoren.FontName;
  */
 public class GeneratorFontsDelegate {
 
-	public String getTextLizenzFont(final FontName font) {
+    public String getTextLizenzFont(final FontName font) {
 
-		switch (font) {
+        switch (font) {
 
-		case DRUCK_BY_WOK:
+        case DRUCK_BY_WOK:
 
-			return LaTeXTemplatesService.getInstance().getLizenzFontsDruckschrift();
+            return LaTeXTemplatesService.getInstance().getLizenzFontsDruckschrift();
 
-		case FIBEL_NORD:
-		case FIBEL_SUED:
-			return LaTeXTemplatesService.getInstance().getLizenzFontsFibel();
+        case FIBEL_NORD:
+        case FIBEL_SUED:
+            return LaTeXTemplatesService.getInstance().getLizenzFontsFibel();
 
-		case STANDARD:
-			return "";
+        case STANDARD:
+            return "";
 
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + font);
-		}
-	}
+        default:
+            throw new IllegalArgumentException("Unexpected value: " + font);
+        }
+    }
 
 }

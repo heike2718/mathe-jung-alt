@@ -16,86 +16,86 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Schema(name = "MessagePayload", description = "eine kategorisierte Meldung")
 public class MessagePayload {
 
-	@JsonProperty
-	@Schema(description = "Level der Message: INFO | WARN | ERROR")
-	private String level;
+    @JsonProperty
+    @Schema(description = "Level der Message: INFO | WARN | ERROR")
+    private String level;
 
-	@JsonProperty
-	@Schema(description = "die message")
-	private String message;
+    @JsonProperty
+    @Schema(description = "die message")
+    private String message;
 
-	/**
-	 * Erzeugt eine Instanz von MessagePayload
-	 */
-	public MessagePayload() {
+    /**
+     * Erzeugt eine Instanz von MessagePayload
+     */
+    public MessagePayload() {
 
-	}
+    }
 
-	/**
-	 * Erzeugt eine Instanz von MessagePayload
-	 */
-	private MessagePayload(final String level, final String message) {
+    /**
+     * Erzeugt eine Instanz von MessagePayload
+     */
+    private MessagePayload(final String level, final String message) {
 
-		super();
-		this.level = level;
-		this.message = message;
-	}
+        super();
+        this.level = level;
+        this.message = message;
+    }
 
-	@Override
-	public String toString() {
+    @Override
+    public String toString() {
 
-		return "MessagePayload [level=" + level + ", message=" + message + "]";
-	}
+        return "MessagePayload [level=" + level + ", message=" + message + "]";
+    }
 
-	public String getLevel() {
+    public String getLevel() {
 
-		return level;
-	}
+        return level;
+    }
 
-	void setLevel(final String level) {
+    void setLevel(final String level) {
 
-		this.level = level;
-	}
+        this.level = level;
+    }
 
-	public String getMessage() {
+    public String getMessage() {
 
-		return message;
-	}
+        return message;
+    }
 
-	void setMessage(final String message) {
+    void setMessage(final String message) {
 
-		this.message = message;
-	}
+        this.message = message;
+    }
 
-	@JsonIgnore
-	public boolean isOk() {
+    @JsonIgnore
+    public boolean isOk() {
 
-		return "INFO".equals(level);
-	}
+        return "INFO".equals(level);
+    }
 
-	/**
-	 * INFO-MessagePalyod mit Text 'ok'.
-	 *
-	 * @return
-	 */
-	public static MessagePayload ok() {
+    /**
+     * INFO-MessagePalyod mit Text 'ok'.
+     *
+     * @return
+     */
+    public static MessagePayload ok() {
 
-		return info("ok");
-	}
+        return info("ok");
+    }
 
-	public static MessagePayload info(final String message) {
+    public static MessagePayload info(final String message) {
 
-		return new MessagePayload("INFO", message);
-	}
+        return new MessagePayload("INFO", message);
+    }
 
-	public static MessagePayload warn(final String message) {
+    public static MessagePayload warn(final String message) {
 
-		return new MessagePayload("WARN", message);
-	}
+        return new MessagePayload("WARN", message);
+    }
 
-	public static MessagePayload error(final String message) {
+    public static MessagePayload error(final String message) {
 
-		return new MessagePayload("ERROR", message);
-	}
+        return new MessagePayload("ERROR", message);
+    }
 
 }

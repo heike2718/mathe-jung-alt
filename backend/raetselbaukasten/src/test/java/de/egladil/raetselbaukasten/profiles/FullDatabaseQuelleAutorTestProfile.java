@@ -11,11 +11,11 @@ import io.quarkus.test.junit.QuarkusTestProfile;
  */
 public class FullDatabaseQuelleAutorTestProfile implements QuarkusTestProfile {
 
-	@Override
-	public String getConfigProfile() {
+    @Override
+    public String getConfigProfile() {
 
-		// Präfix = _FULL-DB-QUELLE-TEST_ (siehe .env und templates/env-template)
-		return "full-db-quelle-test";
-	}
+        // Präfix = _FULL-DB-QUELLE-TEST_ (siehe .env und templates/env-template)
+        return "full-db-quelle-test";
+    }
 
 }

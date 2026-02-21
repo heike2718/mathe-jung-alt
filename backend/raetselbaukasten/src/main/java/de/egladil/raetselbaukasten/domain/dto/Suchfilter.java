@@ -14,73 +14,73 @@ import de.egladil.raetselbaukasten.domain.SuchmodusVolltext;
  */
 public class Suchfilter {
 
-	private final String suchstring;
+    private final String suchstring;
 
-	private final String deskriptorenIds;
+    private final String deskriptorenIds;
 
-	private SuchmodusVolltext modusVolltext = SuchmodusVolltext.UNION;
+    private SuchmodusVolltext modusVolltext = SuchmodusVolltext.UNION;
 
-	private SuchmodusDeskriptoren modusDeskriptoren = SuchmodusDeskriptoren.LIKE;
+    private SuchmodusDeskriptoren modusDeskriptoren = SuchmodusDeskriptoren.LIKE;
 
-	/**
-	 * @param suchstring
-	 * @param deskriptorenIds
-	 */
-	public Suchfilter(final String suchstring, final String deskriptorenIds) {
+    /**
+     * @param suchstring
+     * @param deskriptorenIds
+     */
+    public Suchfilter(final String suchstring, final String deskriptorenIds) {
 
-		this.suchstring = suchstring;
-		this.deskriptorenIds = deskriptorenIds;
-	}
+        this.suchstring = suchstring;
+        this.deskriptorenIds = deskriptorenIds;
+    }
 
-	public String getSuchstring() {
+    public String getSuchstring() {
 
-		return suchstring;
-	}
+        return suchstring;
+    }
 
-	public String getDeskriptorenIds() {
+    public String getDeskriptorenIds() {
 
-		return deskriptorenIds;
-	}
+        return deskriptorenIds;
+    }
 
-	public SuchfilterVariante suchfilterVariante() {
+    public SuchfilterVariante suchfilterVariante() {
 
-		if (StringUtils.isAllBlank(suchstring, deskriptorenIds)) {
+        if (StringUtils.isAllBlank(suchstring, deskriptorenIds)) {
 
-			throw new IllegalArgumentException("suchstring oder deskriptorenIds erforderlich");
-		}
+            throw new IllegalArgumentException("suchstring oder deskriptorenIds erforderlich");
+        }
 
-		if (StringUtils.isNoneBlank(suchstring, deskriptorenIds)) {
+        if (StringUtils.isNoneBlank(suchstring, deskriptorenIds)) {
 
-			return SuchfilterVariante.COMPLETE;
-		}
+            return SuchfilterVariante.COMPLETE;
+        }
 
-		if (StringUtils.isNotBlank(suchstring)) {
+        if (StringUtils.isNotBlank(suchstring)) {
 
-			return SuchfilterVariante.VOLLTEXT;
-		}
+            return SuchfilterVariante.VOLLTEXT;
+        }
 
-		return SuchfilterVariante.DESKRIPTOREN;
+        return SuchfilterVariante.DESKRIPTOREN;
 
-	}
+    }
 
-	public SuchmodusVolltext getModusVolltext() {
+    public SuchmodusVolltext getModusVolltext() {
 
-		return modusVolltext;
-	}
+        return modusVolltext;
+    }
 
-	public void setModusVolltext(final SuchmodusVolltext modus) {
+    public void setModusVolltext(final SuchmodusVolltext modus) {
 
-		this.modusVolltext = modus;
-	}
+        this.modusVolltext = modus;
+    }
 
-	public SuchmodusDeskriptoren getModusDeskriptoren() {
+    public SuchmodusDeskriptoren getModusDeskriptoren() {
 
-		return modusDeskriptoren;
-	}
+        return modusDeskriptoren;
+    }
 
-	public void setModusDeskriptoren(final SuchmodusDeskriptoren modusDeskriptoren) {
+    public void setModusDeskriptoren(final SuchmodusDeskriptoren modusDeskriptoren) {
 
-		this.modusDeskriptoren = modusDeskriptoren;
-	}
+        this.modusDeskriptoren = modusDeskriptoren;
+    }
 
 }

@@ -9,36 +9,36 @@ package de.egladil.raetselbaukasten.domain;
  */
 public enum SuchmodusVolltext {
 
-	INTERSECTION {
+    INTERSECTION {
 
-		@Override
-		public String getOperator() {
+        @Override
+        public String getOperator() {
 
-			return " AND ";
-		}
+            return " AND ";
+        }
 
-	},
-	UNION {
+    },
+    UNION {
 
-		@Override
-		public String getOperator() {
+        @Override
+        public String getOperator() {
 
-			return " OR ";
-		}
+            return " OR ";
+        }
 
-	};
+    };
 
-	public abstract String getOperator();
+    public abstract String getOperator();
 
-	/**
-	 * Machen explizit, dass UNION der default ist. INTERSECTION wird vom Frontend nicht bedient. Es ist auch fraglich, ob das
-	 * überhaupt sinnvoll ist.
-	 *
-	 * @return
-	 */
-	public static SuchmodusVolltext getDefault() {
+    /**
+     * Machen explizit, dass UNION der default ist. INTERSECTION wird vom Frontend
+     * nicht bedient. Es ist auch fraglich, ob das überhaupt sinnvoll ist.
+     *
+     * @return
+     */
+    public static SuchmodusVolltext getDefault() {
 
-		return SuchmodusVolltext.UNION;
-	}
+        return SuchmodusVolltext.UNION;
+    }
 
 }

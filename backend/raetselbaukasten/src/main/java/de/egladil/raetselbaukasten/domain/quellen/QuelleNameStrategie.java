@@ -15,43 +15,43 @@ import de.egladil.raetselbaukasten.domain.quellen.impl.ZeitschriftquelleNameStra
  */
 public interface QuelleNameStrategie {
 
-	/**
-	 * Bastelt einen Text für ein Quellenverzeichnis zusammen.
-	 *
-	 * @param  quelle
-	 * @return        String
-	 */
-	String getText(IQuellenangabeDaten quelle);
+    /**
+     * Bastelt einen Text für ein Quellenverzeichnis zusammen.
+     *
+     * @param quelle
+     * @return String
+     */
+    String getText(IQuellenangabeDaten quelle);
 
-	static QuelleNameStrategie getStrategie(final Quellenart quellenart) {
+    static QuelleNameStrategie getStrategie(final Quellenart quellenart) {
 
-		QuelleNameStrategie result = null;
+        QuelleNameStrategie result = null;
 
-		switch (quellenart) {
+        switch (quellenart) {
 
-		case PERSON -> result = new PersonquelleNameStrategie();
-		case BUCH -> result = new BuchquelleNameStrategie();
-		case INTERNET -> result = new InternetquelleNameStrategie();
-		case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
-		default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
-		}
+        case PERSON -> result = new PersonquelleNameStrategie();
+        case BUCH -> result = new BuchquelleNameStrategie();
+        case INTERNET -> result = new InternetquelleNameStrategie();
+        case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
+        default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	static QuelleNameStrategie getStrategie(final Medienart quellenart) {
+    static QuelleNameStrategie getStrategie(final Medienart quellenart) {
 
-		QuelleNameStrategie result = null;
+        QuelleNameStrategie result = null;
 
-		switch (quellenart) {
+        switch (quellenart) {
 
-		case BUCH -> result = new BuchquelleNameStrategie();
-		case INTERNET -> result = new InternetquelleNameStrategie();
-		case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
-		default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
-		}
+        case BUCH -> result = new BuchquelleNameStrategie();
+        case INTERNET -> result = new InternetquelleNameStrategie();
+        case ZEITSCHRIFT -> result = new ZeitschriftquelleNameStrategie();
+        default -> throw new IllegalArgumentException("Unexpected value: " + quellenart);
+        }
 
-		return result;
-	}
+        return result;
+    }
 
 }

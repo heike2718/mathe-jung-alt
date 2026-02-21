@@ -4,63 +4,65 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.medien.dto;
 
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
-import de.egladil.raetselbaukasten.domain.medien.Medienart;
-import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import de.egladil.raetselbaukasten.domain.medien.Medienart;
+import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
+
 /**
  * MediumQuelleDto
  */
-@Schema(description = "Daten eines Buchs, einer Zeitschrift oder etwas aus dem Internet zur Referenzierung in einer Rätselquelle")
+@Schema(
+        description = "Daten eines Buchs, einer Zeitschrift oder etwas aus dem Internet zur Referenzierung in einer Rätselquelle")
 public class MediumQuelleDto {
 
-	@Schema(description = "technische ID, 'neu' für neue Medien", example = "22b1a484-e9ff-43cc-a658-bd0f77e580cc")
-	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält ungültige Zeichen")
-	private String id;
+    @Schema(description = "technische ID, 'neu' für neue Medien", example = "22b1a484-e9ff-43cc-a658-bd0f77e580cc")
+    @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält ungültige Zeichen")
+    private String id;
 
-	@Schema(description = "Art des Mediums", required = true)
-	@NotNull(message = "medienart ist erforderlich")
-	private Medienart medienart;
+    @Schema(description = "Art des Mediums", required = true)
+    @NotNull(message = "medienart ist erforderlich")
+    private Medienart medienart;
 
-	@Schema(description = "Titel des Mediums", example = "2 mal 3 plus Spaß dabei", required = true)
-	@NotBlank(message = "titel ist erforderlich")
-	private String titel;
+    @Schema(description = "Titel des Mediums", example = "2 mal 3 plus Spaß dabei", required = true)
+    @NotBlank(message = "titel ist erforderlich")
+    private String titel;
 
-	public String getId() {
+    public String getId() {
 
-		return id;
-	}
+        return id;
+    }
 
-	public MediumQuelleDto withId(final String id) {
+    public MediumQuelleDto withId(final String id) {
 
-		this.id = id;
-		return this;
-	}
+        this.id = id;
+        return this;
+    }
 
-	public Medienart getMedienart() {
+    public Medienart getMedienart() {
 
-		return medienart;
-	}
+        return medienart;
+    }
 
-	public MediumQuelleDto withMedienart(final Medienart medienart) {
+    public MediumQuelleDto withMedienart(final Medienart medienart) {
 
-		this.medienart = medienart;
-		return this;
-	}
+        this.medienart = medienart;
+        return this;
+    }
 
-	public String getTitel() {
+    public String getTitel() {
 
-		return titel;
-	}
+        return titel;
+    }
 
-	public MediumQuelleDto withTitel(final String titel) {
+    public MediumQuelleDto withTitel(final String titel) {
 
-		this.titel = titel;
-		return this;
-	}
+        this.titel = titel;
+        return this;
+    }
 
 }

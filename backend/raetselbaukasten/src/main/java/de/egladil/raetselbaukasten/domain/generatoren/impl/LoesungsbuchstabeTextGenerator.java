@@ -16,33 +16,36 @@ import de.egladil.raetselbaukasten.domain.raetsel.Antwortvorschlag;
  */
 public class LoesungsbuchstabeTextGenerator {
 
-	/**
-	 * Generiert den Text, mit dem das LaTeX einer Lösung beginnen soll.
-	 *
-	 * @param  antwortvorschlaege
-	 * @return
-	 */
-	public String getTextLoesungsbuchstabe(final Antwortvorschlag[] antwortvorschlaege) {
+    /**
+     * Generiert den Text, mit dem das LaTeX einer Lösung beginnen soll.
+     *
+     * @param antwortvorschlaege
+     * @return
+     */
+    public String getTextLoesungsbuchstabe(final Antwortvorschlag[] antwortvorschlaege) {
 
-		if (antwortvorschlaege == null || antwortvorschlaege.length == 0) {
+        if (antwortvorschlaege == null || antwortvorschlaege.length == 0) {
 
-			return "";
-		}
+            return "";
+        }
 
-		Optional<Antwortvorschlag> optKorrekter = Arrays.stream(antwortvorschlaege).filter(av -> av.isKorrekt()).findFirst();
+        Optional<Antwortvorschlag> optKorrekter = Arrays
+                .stream(antwortvorschlaege)
+                .filter(av -> av.isKorrekt())
+                .findFirst();
 
-		if (optKorrekter.isEmpty()) {
+        if (optKorrekter.isEmpty()) {
 
-			return "";
-		}
+            return "";
+        }
 
-		Antwortvorschlag korrekter = optKorrekter.get();
+        Antwortvorschlag korrekter = optKorrekter.get();
 
-		if (StringUtils.isNotBlank(korrekter.getText()) && !korrekter.getText().equals(korrekter.getBuchstabe())) {
+        if (StringUtils.isNotBlank(korrekter.getText()) && !korrekter.getText().equals(korrekter.getBuchstabe())) {
 
-			return "{\\it Lösung ist " + korrekter.getBuchstabe() + " (" + korrekter.getText() + ")}\\par";
-		}
+            return "{\\it Lösung ist " + korrekter.getBuchstabe() + " (" + korrekter.getText() + ")}\\par";
+        }
 
-		return "{\\it Lösung ist " + korrekter.getBuchstabe() + "}\\par";
-	}
+        return "{\\it Lösung ist " + korrekter.getBuchstabe() + "}\\par";
+    }
 }

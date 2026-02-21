@@ -9,21 +9,21 @@ package de.egladil.raetselbaukasten.domain.quellen;
  */
 public interface IQuellenangabeDaten {
 
-	Quellenart getQuellenart();
+    Quellenart getQuellenart();
 
-	String getMediumTitel();
+    String getMediumTitel();
 
-	String getKlasse();
+    String getKlasse();
 
-	String getStufe();
+    String getStufe();
 
-	String getAutor();
+    String getAutor();
 
-	String getAusgabe();
+    String getAusgabe();
 
-	String getJahr();
+    String getJahr();
 
-	String getSeite();
+    String getSeite();
 
-	String getPerson();
+    String getPerson();
 }

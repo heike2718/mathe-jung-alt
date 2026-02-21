@@ -11,37 +11,37 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class VirusDetection {
 
-	@JsonProperty
-	private boolean virusDetected;
+    @JsonProperty
+    private boolean virusDetected;
 
-	@JsonProperty
-	private String scannerMessage;
+    @JsonProperty
+    private String scannerMessage;
 
-	@Override
-	public String toString() {
+    @Override
+    public String toString() {
 
-		return "VirusDetection [virusDetected=" + virusDetected + ", scannerMessage=" + scannerMessage + "]";
-	}
+        return "VirusDetection [virusDetected=" + virusDetected + ", scannerMessage=" + scannerMessage + "]";
+    }
 
-	public boolean isVirusDetected() {
+    public boolean isVirusDetected() {
 
-		return virusDetected;
-	}
+        return virusDetected;
+    }
 
-	public VirusDetection withVirusDetected(final boolean virusDetected) {
+    public VirusDetection withVirusDetected(final boolean virusDetected) {
 
-		this.virusDetected = virusDetected;
-		return this;
-	}
+        this.virusDetected = virusDetected;
+        return this;
+    }
 
-	public String getScannerMessage() {
+    public String getScannerMessage() {
 
-		return scannerMessage;
-	}
+        return scannerMessage;
+    }
 
-	public VirusDetection withScannerMessage(final String scannerMessage) {
+    public VirusDetection withScannerMessage(final String scannerMessage) {
 
-		this.scannerMessage = scannerMessage;
-		return this;
-	}
+        this.scannerMessage = scannerMessage;
+        return this;
+    }
 }

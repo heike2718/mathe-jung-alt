@@ -4,16 +4,19 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.entities;
 
+import java.util.Date;
+
+import jakarta.persistence.*;
+
+import org.hibernate.annotations.UuidGenerator;
+
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Schwierigkeitsgrad;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
-
-import java.util.Date;
 
 /**
  * PersistenteAufgabensammlung
@@ -30,8 +33,7 @@ import java.util.Date;
                 query = "select s from PersistenteAufgabensammlung s where s.name = :name"),
         @NamedQuery(
                 name = "PersistenteAufgabensammlung.FIND_BY_UNIQUE_KEY",
-                query = "select s from PersistenteAufgabensammlung s where s.referenztyp = :referenztyp and s. referenz = :referenz and s.schwierigkeitsgrad = :schwierigkeitsgrad")
-})
+                query = "select s from PersistenteAufgabensammlung s where s.referenztyp = :referenztyp and s. referenz = :referenz and s.schwierigkeitsgrad = :schwierigkeitsgrad") })
 public class PersistenteAufgabensammlung {
 
     public static final String FIND_BY_NAME = "PersistenteAufgabensammlung.FIND_BY_NAME";

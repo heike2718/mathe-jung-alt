@@ -11,16 +11,17 @@ import de.egladil.raetselbaukasten.domain.auth.session.AuthenticatedUser;
  */
 public interface AuthenticationContext {
 
-	/**
-	 * Der admin wird vom InitSecurityContextFilter in den AuthenticationContext gepackt und hier dann herausgeholt.
-	 *
-	 * @return
-	 */
-	AuthenticatedUser getUser();
+    /**
+     * Der admin wird vom InitSecurityContextFilter in den AuthenticationContext
+     * gepackt und hier dann herausgeholt.
+     *
+     * @return
+     */
+    AuthenticatedUser getUser();
 
-	/**
-	 * @param  role
-	 * @return      boolean
-	 */
-	boolean isUserInRole(String role);
+    /**
+     * @param role
+     * @return boolean
+     */
+    boolean isUserInRole(String role);
 }

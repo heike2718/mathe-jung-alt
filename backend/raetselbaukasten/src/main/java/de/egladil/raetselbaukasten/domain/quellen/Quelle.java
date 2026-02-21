@@ -12,77 +12,77 @@ import de.egladil.raetselbaukasten.domain.quellen.dto.QuelleDto;
  */
 public class Quelle extends AbstractDomainEntity {
 
-	private QuelleDto datenQuelle;
+    private QuelleDto datenQuelle;
 
-	private String userId;
+    private String userId;
 
-	private String owner;
+    private String owner;
 
-	/**
-	 *
-	 */
-	protected Quelle() {
+    /**
+     *
+     */
+    protected Quelle() {
 
-		super();
+        super();
 
-	}
+    }
 
-	/**
-	 * @param uuid
-	 */
-	public Quelle(final String uuid) {
+    /**
+     * @param uuid
+     */
+    public Quelle(final String uuid) {
 
-		super(uuid);
+        super(uuid);
 
-	}
+    }
 
-	@Override
-	public int hashCode() {
+    @Override
+    public int hashCode() {
 
-		return super.hashCode();
-	}
+        return super.hashCode();
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
 
-		if (!(obj instanceof Quelle)) {
+        if (!(obj instanceof Quelle)) {
 
-			return false;
-		}
+            return false;
+        }
 
-		return super.equals(obj);
-	}
+        return super.equals(obj);
+    }
 
-	public QuelleDto getDatenQuelle() {
+    public QuelleDto getDatenQuelle() {
 
-		return datenQuelle;
-	}
+        return datenQuelle;
+    }
 
-	public Quelle withDatenQuelle(final QuelleDto datenQuelle) {
+    public Quelle withDatenQuelle(final QuelleDto datenQuelle) {
 
-		this.datenQuelle = datenQuelle;
-		return this;
-	}
+        this.datenQuelle = datenQuelle;
+        return this;
+    }
 
-	public String getUserId() {
+    public String getUserId() {
 
-		return userId;
-	}
+        return userId;
+    }
 
-	public void setUserId(final String userId) {
+    public void setUserId(final String userId) {
 
-		this.userId = userId;
-	}
+        this.userId = userId;
+    }
 
-	public String getOwner() {
+    public String getOwner() {
 
-		return owner;
-	}
+        return owner;
+    }
 
-	public Quelle withOwner(final String owner) {
+    public Quelle withOwner(final String owner) {
 
-		this.owner = owner;
-		return this;
-	}
+        this.owner = owner;
+        return this;
+    }
 
 }

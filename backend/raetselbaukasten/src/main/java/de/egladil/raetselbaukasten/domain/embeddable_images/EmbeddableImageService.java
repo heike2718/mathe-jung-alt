@@ -13,11 +13,20 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.raetselbaukasten.domain.auth.dto.MessagePayload;
 import de.egladil.raetselbaukasten.domain.embeddable_images.dto.EmbeddableImageContext;
@@ -32,12 +41,6 @@ import de.egladil.raetselbaukasten.domain.upload.UploadedFile;
 import de.egladil.raetselbaukasten.domain.utils.MjaFileUtils;
 import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
 import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.validation.Valid;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 
 /**
  * EmbeddableImageService
@@ -45,148 +48,154 @@ import jakarta.ws.rs.core.Response.Status;
 @ApplicationScoped
 public class EmbeddableImageService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddableImageService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddableImageService.class);
 
-	private final Pattern patternRelativePathForEps;
+    private final Pattern patternRelativePathForEps;
 
-	private final IncludegraphicsTextGenerator includegraphicsTextGenerator;
+    private final IncludegraphicsTextGenerator includegraphicsTextGenerator;
 
-	@Inject
-	AuthenticationContext authCtx;
+    @Inject
+    AuthenticationContext authCtx;
 
-	@Inject
-	EmbeddableImagesFilenameDelegate filenameDelegate;
+    @Inject
+    EmbeddableImagesFilenameDelegate filenameDelegate;
 
-	@Inject
-	RaetselFileService fileService;
+    @Inject
+    RaetselFileService fileService;
 
-	@Inject
-	ImageGeneratorService imageGeneratorService;
+    @Inject
+    ImageGeneratorService imageGeneratorService;
 
-	@ConfigProperty(name = "latex.base.dir")
-	String latexBaseDir;
+    @ConfigProperty(name = "latex.base.dir")
+    String latexBaseDir;
 
-	/**
-	 *
-	 */
-	public EmbeddableImageService() {
+    /**
+     *
+     */
+    public EmbeddableImageService() {
 
-		patternRelativePathForEps = Pattern.compile(MjaRegexps.REGEXP_RELATIVE_PATH_EPS_IN_TEXT);
-		includegraphicsTextGenerator = new IncludegraphicsTextGenerator();
+        patternRelativePathForEps = Pattern.compile(MjaRegexps.REGEXP_RELATIVE_PATH_EPS_IN_TEXT);
+        includegraphicsTextGenerator = new IncludegraphicsTextGenerator();
 
-	}
+    }
 
-	/**
-	 * Generiert eine Vorschau der eingebetteten EmbeddableImageVorschau, falls sie existiert.
-	 *
-	 * @param relativerPfad
-	 * @return EmbeddableImageVorschau oder null;
-	 */
-	public EmbeddableImageVorschau generatePreview(final String relativerPfad) {
+    /**
+     * Generiert eine Vorschau der eingebetteten EmbeddableImageVorschau, falls sie
+     * existiert.
+     *
+     * @param relativerPfad
+     * @return EmbeddableImageVorschau oder null;
+     */
+    public EmbeddableImageVorschau generatePreview(final String relativerPfad) {
 
-		boolean exists = fileService.fileExists(relativerPfad);
+        boolean exists = fileService.fileExists(relativerPfad);
 
-		if (!exists) {
+        if (!exists) {
 
-			return new EmbeddableImageVorschau().withPfad(relativerPfad);
-		}
+            return new EmbeddableImageVorschau().withPfad(relativerPfad);
+        }
 
-		try {
+        try {
 
-			byte[] image = imageGeneratorService.generiereGrafikvorschau(relativerPfad);
-			return new EmbeddableImageVorschau().withPfad(relativerPfad).withImage(image).markExists();
-		} catch (Exception e) {
+            byte[] image = imageGeneratorService.generiereGrafikvorschau(relativerPfad);
+            return new EmbeddableImageVorschau().withPfad(relativerPfad).withImage(image).markExists();
+        } catch (Exception e) {
 
-			LOGGER.error("Exception beim Laden des Images: " + e.getMessage(), e);
-			return new EmbeddableImageVorschau().withPfad(relativerPfad).markExists();
-		}
-	}
+            LOGGER.error("Exception beim Laden des Images: " + e.getMessage(), e);
+            return new EmbeddableImageVorschau().withPfad(relativerPfad).markExists();
+        }
+    }
 
-	/**
-	 * Speichert die EmbeddableImageVorschau-Datei, sofern sie virenfrei ist und alle anderen Validierungen passen.
-	 *
-	 * @param dto
-	 * @return MessagePayload
-	 */
-	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
-	public EmbeddableImageResponseDto replaceEmbeddedImage(@Valid
-	final ReplaceEmbeddableImageRequestDto uploadRequestDto) {
+    /**
+     * Speichert die EmbeddableImageVorschau-Datei, sofern sie virenfrei ist und
+     * alle anderen Validierungen passen.
+     *
+     * @param dto
+     * @return MessagePayload
+     */
+    @SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
+    public EmbeddableImageResponseDto replaceEmbeddedImage(
+            @Valid final ReplaceEmbeddableImageRequestDto uploadRequestDto) {
 
-		String relativerPfad = uploadRequestDto.getRelativerPfad();
-		File file = new File(latexBaseDir + relativerPfad);
+        String relativerPfad = uploadRequestDto.getRelativerPfad();
+        File file = new File(latexBaseDir + relativerPfad);
 
-		if (!file.canRead()) {
+        if (!file.canRead()) {
 
-			LOGGER.error("Zu ersetzende Datei nicht gefunden: pfad={}!", file.getAbsolutePath());
+            LOGGER.error("Zu ersetzende Datei nicht gefunden: pfad={}!", file.getAbsolutePath());
 
-			throw new WebApplicationException(
-				Response.status(Status.NOT_FOUND).entity(MessagePayload.error("404 - Datei nicht gefunden")).build());
-		}
+            throw new WebApplicationException(Response
+                    .status(Status.NOT_FOUND)
+                    .entity(MessagePayload.error("404 - Datei nicht gefunden"))
+                    .build());
+        }
 
-		byte[] data = uploadRequestDto.getFile().getDecodedData();
-		MjaFileUtils.writeBinaryFile(file, data);
+        byte[] data = uploadRequestDto.getFile().getDecodedData();
+        MjaFileUtils.writeBinaryFile(file, data);
 
-		LOGGER.info("Grafikdatei hochgeladen: {} - {}", StringUtils.abbreviate(authCtx.getUser().getName(), 11),
-			file.getAbsolutePath());
+        LOGGER
+                .info("Grafikdatei hochgeladen: {} - {}", StringUtils.abbreviate(authCtx.getUser().getName(), 11),
+                        file.getAbsolutePath());
 
-		String includegraphicsCommand = includegraphicsTextGenerator.generateIncludegraphicsText(relativerPfad);
+        String includegraphicsCommand = includegraphicsTextGenerator.generateIncludegraphicsText(relativerPfad);
 
-		EmbeddableImageResponseDto result = new EmbeddableImageResponseDto().with(uploadRequestDto.getContext());
-		result.setPfad(relativerPfad);
-		result.setIncludegraphicsCommand(includegraphicsCommand);
+        EmbeddableImageResponseDto result = new EmbeddableImageResponseDto().with(uploadRequestDto.getContext());
+        result.setPfad(relativerPfad);
+        result.setIncludegraphicsCommand(includegraphicsCommand);
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Das gegebene MjaImage (ein eps) bekommt einen generierten Namen und wird in das passende Unterverzeichnis
-	 * geschoben. Der String, mit dem das MjaImage in LaTeX eingebettet wird, wird an den gegebenen Text angehängt. Es
-	 * wird eine Grafig generiert und mit dem Response zurückgegeben, damit sie nach dem Hochladen direkt angezeigt
-	 * werden kann.
-	 *
-	 * @param uploadedFile UploadedFile
-	 * @return EmbeddableImageResponseDto
-	 */
-	public EmbeddableImageResponseDto createAndEmbedImage(final EmbeddableImageContext context, @Valid
-	final UploadedFile uploadedFile) {
+    /**
+     * Das gegebene MjaImage (ein eps) bekommt einen generierten Namen und wird in
+     * das passende Unterverzeichnis geschoben. Der String, mit dem das MjaImage in
+     * LaTeX eingebettet wird, wird an den gegebenen Text angehängt. Es wird eine
+     * Grafig generiert und mit dem Response zurückgegeben, damit sie nach dem
+     * Hochladen direkt angezeigt werden kann.
+     *
+     * @param uploadedFile UploadedFile
+     * @return EmbeddableImageResponseDto
+     */
+    public EmbeddableImageResponseDto createAndEmbedImage(final EmbeddableImageContext context,
+            @Valid final UploadedFile uploadedFile) {
 
-		String uuid = UUID.randomUUID().toString();
-		String filenameUpload = uploadedFile.getName();
+        String uuid = UUID.randomUUID().toString();
+        String filenameUpload = uploadedFile.getName();
 
-		String relativePath = filenameDelegate.getRelativePathForEmbeddableImage(uuid, filenameUpload);
-		File file = new File(latexBaseDir + relativePath);
+        String relativePath = filenameDelegate.getRelativePathForEmbeddableImage(uuid, filenameUpload);
+        File file = new File(latexBaseDir + relativePath);
 
-		File uploadDir = new File(file.getParent());
+        File uploadDir = new File(file.getParent());
 
-		if (!uploadDir.exists()) {
+        if (!uploadDir.exists()) {
 
-			uploadDir.mkdirs();
-		}
+            uploadDir.mkdirs();
+        }
 
-		try (FileOutputStream fos = new FileOutputStream(file);
-			InputStream in = new ByteArrayInputStream(uploadedFile.getDecodedData())) {
+        try (FileOutputStream fos = new FileOutputStream(file);
+                InputStream in = new ByteArrayInputStream(uploadedFile.getDecodedData())) {
 
-			IOUtils.copy(in, fos);
-			fos.flush();
+            IOUtils.copy(in, fos);
+            fos.flush();
 
-		} catch (IOException e) {
+        } catch (IOException e) {
 
-			LOGGER.error("Fehler beim Speichern im Filesystem: " + e.getMessage(), e);
-			throw new MjaRuntimeException("Fehler beim speichern des embeddable image: " + e.getMessage(), e);
-		}
+            LOGGER.error("Fehler beim Speichern im Filesystem: " + e.getMessage(), e);
+            throw new MjaRuntimeException("Fehler beim speichern des embeddable image: " + e.getMessage(), e);
+        }
 
-		String includegraphicsCommand = includegraphicsTextGenerator.generateIncludegraphicsText(relativePath);
+        String includegraphicsCommand = includegraphicsTextGenerator.generateIncludegraphicsText(relativePath);
 
-		EmbeddableImageResponseDto result = new EmbeddableImageResponseDto().with(context);
-		result.setPfad(relativePath);
-		result.setIncludegraphicsCommand(includegraphicsCommand);
+        EmbeddableImageResponseDto result = new EmbeddableImageResponseDto().with(context);
+        result.setPfad(relativePath);
+        result.setIncludegraphicsCommand(includegraphicsCommand);
 
-		return result;
-	}
+        return result;
+    }
 
-	boolean validPath(final String relativerPfad) {
+    boolean validPath(final String relativerPfad) {
 
-		Matcher matcher = patternRelativePathForEps.matcher(relativerPfad);
-		return matcher.matches();
-	}
+        Matcher matcher = patternRelativePathForEps.matcher(relativerPfad);
+        return matcher.matches();
+    }
 }

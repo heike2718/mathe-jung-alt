@@ -12,46 +12,45 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Schema(description = "Ergebnis des Hochladens eines eps zum Einbetten in LaTeX.")
 public class EmbeddableImageResponseDto {
 
-	@Schema(description = "der Kontext, den der Client mitgegeben hat")
-	private EmbeddableImageContext context;
+    @Schema(description = "der Kontext, den der Client mitgegeben hat")
+    private EmbeddableImageContext context;
 
-	@Schema(
-		description = "Dieses command kann an den text (FRAGE oder LOESUNG) angehängt werden. Es sorgt dafür, dass die EmbeddableImageVorschau beim Compilieren eingebettet wird.")
-	private String includegraphicsCommand;
+    @Schema(
+            description = "Dieses command kann an den text (FRAGE oder LOESUNG) angehängt werden. Es sorgt dafür, dass die EmbeddableImageVorschau beim Compilieren eingebettet wird.")
+    private String includegraphicsCommand;
 
-	@Schema(
-		description = "Pfad, mit dem die Vorschau generiert werden kann.")
-	private String pfad;
+    @Schema(description = "Pfad, mit dem die Vorschau generiert werden kann.")
+    private String pfad;
 
-	public EmbeddableImageContext getContext() {
+    public EmbeddableImageContext getContext() {
 
-		return context;
-	}
+        return context;
+    }
 
-	public EmbeddableImageResponseDto with(final EmbeddableImageContext context) {
+    public EmbeddableImageResponseDto with(final EmbeddableImageContext context) {
 
-		this.context = context;
-		return this;
-	}
+        this.context = context;
+        return this;
+    }
 
-	public String getIncludegraphicsCommand() {
+    public String getIncludegraphicsCommand() {
 
-		return includegraphicsCommand;
-	}
+        return includegraphicsCommand;
+    }
 
-	public void setIncludegraphicsCommand(final String includegraphicsCommand) {
+    public void setIncludegraphicsCommand(final String includegraphicsCommand) {
 
-		this.includegraphicsCommand = includegraphicsCommand;
-	}
+        this.includegraphicsCommand = includegraphicsCommand;
+    }
 
-	public String getPfad() {
+    public String getPfad() {
 
-		return pfad;
-	}
+        return pfad;
+    }
 
-	public void setPfad(final String pfad) {
+    public void setPfad(final String pfad) {
 
-		this.pfad = pfad;
-	}
+        this.pfad = pfad;
+    }
 
 }

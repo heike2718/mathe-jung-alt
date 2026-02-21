@@ -4,17 +4,18 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.raetsel.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
+
+import org.apache.commons.io.IOUtils;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * FindPathsGrafikParserTest
@@ -22,147 +23,152 @@ import io.quarkus.test.junit.QuarkusTest;
 @QuarkusTest
 public class FindPathsGrafikParserTest {
 
-	@Test
-	void should_returnEmptyGrafikPfade_when_latexNull() throws Exception {
+    @Test
+    void should_returnEmptyGrafikPfade_when_latexNull() throws Exception {
 
-		// Act
-		List<String> result = new FindPathsGrafikParser().findPaths(null);
+        // Act
+        List<String> result = new FindPathsGrafikParser().findPaths(null);
 
-		// Assert
-		assertTrue(result.isEmpty());
+        // Assert
+        assertTrue(result.isEmpty());
 
-	}
+    }
 
-	@Test
-	void should_returnEmptyGrafikPfade_when_latexBlank() throws Exception {
+    @Test
+    void should_returnEmptyGrafikPfade_when_latexBlank() throws Exception {
 
-		// Arrange
-		String latex = "  ";
+        // Arrange
+        String latex = "  ";
 
-		// Act
-		List<String> result = new FindPathsGrafikParser().findPaths(latex);
+        // Act
+        List<String> result = new FindPathsGrafikParser().findPaths(latex);
 
-		// Assert
-		assertTrue(result.isEmpty());
+        // Assert
+        assertTrue(result.isEmpty());
 
-	}
+    }
 
-	@Test
-	void should_returnEmptyGrafikPfade_when_keineGrafik() throws Exception {
+    @Test
+    void should_returnEmptyGrafikPfade_when_keineGrafik() throws Exception {
 
-		// Arrange
-		String latex = "";
+        // Arrange
+        String latex = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-2.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-2.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latex = sw.toString();
+            latex = sw.toString();
 
-		}
+        }
 
-		// Act
-		List<String> result = new FindPathsGrafikParser().findPaths(latex);
+        // Act
+        List<String> result = new FindPathsGrafikParser().findPaths(latex);
 
-		// Assert
-		assertTrue(result.isEmpty());
+        // Assert
+        assertTrue(result.isEmpty());
 
-	}
+    }
 
-	@Test
-	void should_returnGrafikPfadeSize1_when_eineGrafik() throws Exception {
+    @Test
+    void should_returnGrafikPfadeSize1_when_eineGrafik() throws Exception {
 
-		// Arrange
-		String latex = "";
+        // Arrange
+        String latex = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-1.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-1.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latex = sw.toString();
+            latex = sw.toString();
 
-		}
+        }
 
-		// Act
-		List<String> result = new FindPathsGrafikParser().findPaths(latex);
+        // Act
+        List<String> result = new FindPathsGrafikParser().findPaths(latex);
 
-		// Assert
-		assertEquals(1, result.size());
-		assertEquals("/resources/002/00963.eps", result.get(0));
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals("/resources/002/00963.eps", result.get(0));
 
-	}
+    }
 
-	@Test
-	void should_returnGrafikPfadeSize2_when_zweiGrafiken() throws Exception {
+    @Test
+    void should_returnGrafikPfadeSize2_when_zweiGrafiken() throws Exception {
 
-		// Arrange
-		String latex = "";
+        // Arrange
+        String latex = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-3.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-3.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latex = sw.toString();
+            latex = sw.toString();
 
-		}
+        }
 
-		// Act
-		List<String> result = new FindPathsGrafikParser().findPaths(latex);
+        // Act
+        List<String> result = new FindPathsGrafikParser().findPaths(latex);
 
-		// Assert
-		assertEquals(2, result.size());
-		assertEquals("/resources/003/01036_0.eps", result.get(0));
-		assertEquals("/resources/003/01036_6.eps", result.get(1));
+        // Assert
+        assertEquals(2, result.size());
+        assertEquals("/resources/003/01036_0.eps", result.get(0));
+        assertEquals("/resources/003/01036_6.eps", result.get(1));
 
-	}
+    }
 
-	@Test
-	void should_returnGrafikPfadeSize2_when_zweiGrafikenInVerschedenenVerzeichnissen() throws Exception {
+    @Test
+    void should_returnGrafikPfadeSize2_when_zweiGrafikenInVerschedenenVerzeichnissen() throws Exception {
 
-		// Arrange
-		String latex = "";
+        // Arrange
+        String latex = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latex = sw.toString();
+            latex = sw.toString();
 
-		}
+        }
 
-		// Act
-		List<String> result = new FindPathsGrafikParser().findPaths(latex);
+        // Act
+        List<String> result = new FindPathsGrafikParser().findPaths(latex);
 
-		// Assert
-		assertEquals(2, result.size());
-		assertEquals("/resources/003/01138.eps", result.get(0));
-		assertEquals("/resources/001/00001.eps", result.get(1));
+        // Assert
+        assertEquals(2, result.size());
+        assertEquals("/resources/003/01138.eps", result.get(0));
+        assertEquals("/resources/001/00001.eps", result.get(1));
 
-	}
+    }
 
-	@Test
-	void should_returnGrafikPfadeSize3_when_dreiGrafikenVerschiedeneReladivePfade() throws Exception {
+    @Test
+    void should_returnGrafikPfadeSize3_when_dreiGrafikenVerschiedeneReladivePfade() throws Exception {
 
-		// Arrange
-		String latex = "";
+        // Arrange
+        String latex = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latex = sw.toString();
+            latex = sw.toString();
 
-		}
+        }
 
-		// Act
-		List<String> result = new FindPathsGrafikParser().findPaths(latex);
+        // Act
+        List<String> result = new FindPathsGrafikParser().findPaths(latex);
 
-		// Assert
-		assertEquals(3, result.size());
-		assertEquals("/resources/4/4d367e6c-76e9.eps", result.get(0));
-		assertEquals("/resources/001/00001.eps", result.get(1));
-		assertEquals("/resources/4/4d367e6c-02345.eps", result.get(2));
+        // Assert
+        assertEquals(3, result.size());
+        assertEquals("/resources/4/4d367e6c-76e9.eps", result.get(0));
+        assertEquals("/resources/001/00001.eps", result.get(1));
+        assertEquals("/resources/4/4d367e6c-02345.eps", result.get(2));
 
-	}
+    }
 
 }

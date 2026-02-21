@@ -9,17 +9,17 @@ package de.egladil.raetselbaukasten.domain.exceptions;
  */
 public class SessionExpiredException extends RuntimeException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param message
-	 */
-	public SessionExpiredException(final String message) {
+    /**
+     * @param message
+     */
+    public SessionExpiredException(final String message) {
 
-		super(message);
-	}
+        super(message);
+    }
 
 }
