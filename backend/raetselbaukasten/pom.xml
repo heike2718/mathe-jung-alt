@@ -23,20 +23,20 @@
 		<pitest-maven.version>1.20.1</pitest-maven.version>
 		<pitest-junit5-plugin.version>1.2.3</pitest-junit5-plugin.version>
 
-    <!-- Start mixin-properties -->
-    <pmd.failOnViolation>true</pmd.failOnViolation>
-    <spotbugs.failOnError>true</spotbugs.failOnError>
-    <jacoco.exclusion-1>**/*Dto*.class</jacoco.exclusion-1>
-    <jacoco.exclusion-2>**/*Application*.class</jacoco.exclusion-2>
-    <jacoco.exclusion-3>**/ResponseStatus.class</jacoco.exclusion-3>
-    <jacoco.exclusion-4>**/healthchecks/**</jacoco.exclusion-4>
+		<!-- Start mixin-properties -->
+		<pmd.failOnViolation>true</pmd.failOnViolation>
+		<spotbugs.failOnError>true</spotbugs.failOnError>
+		<jacoco.exclusion-1>**/*Dto*.class</jacoco.exclusion-1>
+		<jacoco.exclusion-2>**/*Application*.class</jacoco.exclusion-2>
+		<jacoco.exclusion-3>**/ResponseStatus.class</jacoco.exclusion-3>
+		<jacoco.exclusion-4>**/healthchecks/**</jacoco.exclusion-4>
 
-    <mixin-maven-plugin.version>1.0.6</mixin-maven-plugin.version>
-    <egladil-maven-mixins.version>1.0.0</egladil-maven-mixins.version>
-    <!-- Ende mixin-propetries -->
+		<mixin-maven-plugin.version>1.0.6</mixin-maven-plugin.version>
+		<egladil-maven-mixins.version>1.0.0</egladil-maven-mixins.version>
+		<!-- Ende mixin-propetries -->
 
-    <maven.compiler.release>21</maven.compiler.release>
-    <maven.compiler.parameters>true</maven.compiler.parameters>
+		<maven.compiler.release>21</maven.compiler.release>
+		<maven.compiler.parameters>true</maven.compiler.parameters>
 
 	</properties>
 
@@ -255,66 +255,67 @@
 				</executions>
 			</plugin>
 
-      <plugin>
-        <groupId>com.playtika.maven.plugins</groupId>
-        <artifactId>mixin-maven-plugin</artifactId>
-        <version>${mixin-maven-plugin.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-          <mixins>
-            <mixin>
-              <groupId>de.egladil</groupId>
-              <artifactId>java-core-mixin</artifactId>
-              <version>${egladil-maven-mixins.version}</version>
-            </mixin>
-            <mixin>
-              <groupId>de.egladil</groupId>
-              <artifactId>java-linting-mixin</artifactId>
-              <version>${egladil-maven-mixins.version}</version>
-            </mixin>
-            <mixin>
-              <groupId>de.egladil</groupId>
-              <artifactId>java-code-quality-mixin</artifactId>
-              <version>${egladil-maven-mixins.version}</version>
-            </mixin>
-            <mixin>
-              <groupId>de.egladil</groupId>
-              <artifactId>java-quarkustest-coverage-mixin</artifactId>
-              <version>${egladil-maven-mixins.version}</version>
-            </mixin>
-            <mixin>
-              <groupId>de.egladil</groupId>
-              <artifactId>java-security-mixin</artifactId>
-              <version>${egladil-maven-mixins.version}</version>
-            </mixin>
-          </mixins>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.rudikershaw.gitbuildhook</groupId>
-        <artifactId>git-build-hook-maven-plugin</artifactId>
-        <version>3.6.0</version>
-        <configuration>
-          <gitConfig>
-            <!-- The location of the directory you are using to store the Git hooks in your project. -->
-            <core.hooksPath>./git-hooks/</core.hooksPath>
-            <core.autoclrf>false</core.autoclrf>
-            <core.eol>lf</core.eol>
-            <core.safecrlf>true</core.safecrlf>
-            <!-- Some other project specific git config that you want to set. -->
-            <custom.configuration>true</custom.configuration>
-          </gitConfig>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <!-- Sets git config specified under configuration > gitConfig. -->
-              <goal>configure</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+			<plugin>
+				<groupId>com.playtika.maven.plugins</groupId>
+				<artifactId>mixin-maven-plugin</artifactId>
+				<version>${mixin-maven-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<mixins>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-core-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-linting-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-code-quality-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-quarkustest-coverage-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-security-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+					</mixins>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.rudikershaw.gitbuildhook</groupId>
+				<artifactId>git-build-hook-maven-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<gitConfig>
+						<!-- The location of the directory you are using to store the Git hooks in
+						your project. -->
+						<core.hooksPath>.git-hooks/</core.hooksPath>
+						<core.autoclrf>false</core.autoclrf>
+						<core.eol>lf</core.eol>
+						<core.safecrlf>true</core.safecrlf>
+						<!-- Some other project specific git config that you want to set. -->
+						<custom.configuration>true</custom.configuration>
+					</gitConfig>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<!-- Sets git config specified under configuration > gitConfig. -->
+							<goal>configure</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 
 	<profiles>
@@ -359,7 +360,8 @@
 								<param>XML</param>
 								<param>HTML</param>
 							</outputFormats>
-							<!--- Optimilisations to make tests faster. -->
+							<!---
+							Optimilisations to make tests faster. -->
 							<threads>4</threads>
 							<!--<mutationUnitSize>4</mutationUnitSize>-->
 							<timeoutConstant>20000</timeoutConstant>
