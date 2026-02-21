@@ -11,28 +11,28 @@ import java.util.List;
  */
 public class InvalidInputException extends RuntimeException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public final List<String> invalidInputs;
+    public final List<String> invalidInputs;
 
-	/**
-	 * @param message
-	 */
-	public InvalidInputException(final List<String> invalidInputs, final String message) {
+    /**
+     * @param message
+     */
+    public InvalidInputException(final List<String> invalidInputs, final String message) {
 
-		super(message);
-		this.invalidInputs = invalidInputs;
+        super(message);
+        this.invalidInputs = invalidInputs;
 
-	}
+    }
 
-	public String getInvalidInputs() {
+    public String getInvalidInputs() {
 
-		final StringBuilder sb = new StringBuilder();
-		invalidInputs.forEach(i -> sb.append(i));
-		return sb.toString();
-	}
+        final StringBuilder sb = new StringBuilder();
+        invalidInputs.forEach(i -> sb.append(i));
+        return sb.toString();
+    }
 
 }

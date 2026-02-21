@@ -1,0 +1,11 @@
+{
+  "name": "rbk-monorepo",
+  "private": true,
+  "scripts": {
+    "fe": "nx run frontend:serve",
+    "be": "nx run backend:dev"
+  },
+  "devDependencies": {
+    "nx": "22.5.2"
+  }
+}

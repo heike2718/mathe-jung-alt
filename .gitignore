@@ -1,28 +1,86 @@
-# Compiled class file
-*.class
+# ==========================
+# Node / Nx (Root)
+# ==========================
+/node_modules/
+/.nx/
+/dist/
+/package-lock.json
 
-# Log file
+# ==========================
+# Frontend Workspace
+# ==========================
+/frontend/rbk-ws/node_modules/
+/frontend/rbk-ws/dist/
+/frontend/rbk-ws/.nx/
+/frontend/rbk-ws/.angular/
+/frontend/rbk-ws/.sass-cache
+/frontend/rbk-ws/connect.lock
+/frontend/rbk-ws/coverage
+/frontend/rbk-ws/libpeerconnection.log
+/frontend/rbk-ws/npm-debug.log
+/frontend/rbk-ws/yarn-error.log
+/frontend/rbk-ws/testem.log
+/frontend/rbk-ws/typings
+/frontend/rbk-ws/*.bkp
+/frontend/rbk-ws/lint.log
+/frontend/rbk-ws/tmp/
+/frontend/rbk-ws/migrations.json
+
+# ==========================
+# Maven (alle Projekte unter backend/*)
+# ==========================
+/backend/**/target/
+**/pom.xml.tag
+**/pom.xml.releaseBackup
+**/pom.xml.versionsBackup
+**/release.properties
+**/maven.log
+
+/backend/**/.mvn/
+/backend/**/dependency-reduced-pom.xml
+/backend/**/log/
+/backend/**/ObjectStore/
+
+# ==========================
+# Quarkus (falls du Dinge generierst)
+# ==========================
+# Wenn du OpenAPI-Dateien wirklich generated und NICHT versionieren willst:
+/backend/raetselbaukasten/src/main/resources/META-INF/openapi/openapi.json
+/backend/raetselbaukasten/src/main/resources/META-INF/openapi/openapi.yaml
+/backend/raetselbaukasten/src/main/resources/META-INF/resources/
+
+# ==========================
+# IDE (global)
+# ==========================
+.project
+.classpath
+.settings/
+bin/
+.idea
+*.ipr
+*.iml
+*.iws
+nb-configuration.xml
+.factorypath
+
+# ==========================
+# OS / Misc
+# ==========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.orig
+*.rej
+.env
+.dbeaver/
+dbeaver-bak/
+*.pdf
+*.aux
+*.out
+*.dvi
 *.log
+*.png
+.project
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-# Angular
-.nx/
-
-.quarkus/
+/testfiles/02789.tex

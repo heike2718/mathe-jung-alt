@@ -16,6 +16,7 @@ import org.jboss.logging.Logger;
 import de.egladil.web.latex_service.LaTeXCommand;
 import de.egladil.web.latex_service.exception.InvalidInputException;
 import de.egladil.web.latex_service.exception.LaTeXClientException;
+
 import io.undertow.server.HttpServerExchange;
 
 /**
@@ -23,53 +24,55 @@ import io.undertow.server.HttpServerExchange;
  */
 public class HttpHandlerUtils {
 
-	private static final Logger LOGGER = Logger.getLogger(HttpHandlerUtils.class);
+    private static final Logger LOGGER = Logger.getLogger(HttpHandlerUtils.class);
 
-	public LaTeXCommand getCommand(final HttpServerExchange exchange) {
+    public LaTeXCommand getCommand(final HttpServerExchange exchange) {
 
-		String relativePath = exchange.getRelativePath();
-		LOGGER.debug("relativePath=" + relativePath);
+        String relativePath = exchange.getRelativePath();
+        LOGGER.debug("relativePath=" + relativePath);
 
-		LaTeXCommand cmd = LaTeXCommand.fromRelativePath(relativePath);
+        LaTeXCommand cmd = LaTeXCommand.fromRelativePath(relativePath);
 
-		return cmd;
-	}
+        return cmd;
+    }
 
-	public String getFileName(final HttpServerExchange exchange) throws LaTeXClientException {
+    public String getFileName(final HttpServerExchange exchange) throws LaTeXClientException {
 
-		try {
+        try {
 
-			Map<String, Deque<String>> queryParameters = exchange.getQueryParameters();
+            Map<String, Deque<String>> queryParameters = exchange.getQueryParameters();
 
-			String filename = null;
+            String filename = null;
 
-			if (queryParameters.isEmpty() || queryParameters.size() > 1) {
+            if (queryParameters.isEmpty() || queryParameters.size() > 1) {
 
-				throw new InvalidInputException(Collections.singletonList("query parameter"),
-					"es ist nur ein Query-Parameter namens 'filename' erlaubt");
-			}
+                throw new InvalidInputException(Collections.singletonList("query parameter"),
+                        "es ist nur ein Query-Parameter namens 'filename' erlaubt");
+            }
 
-			Optional<String> optKey = queryParameters.keySet().stream().filter(k -> "filename".equals(k)).findFirst();
+            Optional<String> optKey = queryParameters.keySet().stream().filter(k -> "filename".equals(k)).findFirst();
 
-			if (optKey.isEmpty()) {
+            if (optKey.isEmpty()) {
 
-				List<String> invalidInputs = new ArrayList<>(queryParameters.keySet());
+                List<String> invalidInputs = new ArrayList<>(queryParameters.keySet());
 
-				throw new InvalidInputException(invalidInputs, "es ist nur ein Query-Parameter namens 'filename' erlaubt");
-			}
+                throw new InvalidInputException(invalidInputs,
+                        "es ist nur ein Query-Parameter namens 'filename' erlaubt");
+            }
 
-			filename = queryParameters.get("filename").getFirst();
+            filename = queryParameters.get("filename").getFirst();
 
-			return filename;
+            return filename;
 
-		} catch (InvalidInputException e) {
+        } catch (InvalidInputException e) {
 
-			throw e;
-		} catch (Exception e) {
+            throw e;
+        } catch (Exception e) {
 
-			throw new LaTeXClientException("Exception beim ermitteln des Query-Parameters 'filename': " + e.getMessage(), e);
+            throw new LaTeXClientException(
+                    "Exception beim ermitteln des Query-Parameters 'filename': " + e.getMessage(), e);
 
-		}
-	}
+        }
+    }
 
 }

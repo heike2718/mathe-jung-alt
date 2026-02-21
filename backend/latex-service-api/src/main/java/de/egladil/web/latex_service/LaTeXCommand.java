@@ -9,71 +9,71 @@ package de.egladil.web.latex_service;
  */
 public enum LaTeXCommand {
 
-	PDF("/latex2pdf") {
+    PDF("/latex2pdf") {
 
-		@Override
-		public String getShellScript() {
+        @Override
+        public String getShellScript() {
 
-			return "/bin/latex2pdf.sh";
-		}
+            return "/bin/latex2pdf.sh";
+        }
 
-		@Override
-		public String getDescription() {
+        @Override
+        public String getDescription() {
 
-			return "transformiert ein .tex-File nach pdf. Das File und die erforderlichen Ressourcen müssen im gemounteten Verzeichnis /doc liegen.";
-		}
+            return "transformiert ein .tex-File nach pdf. Das File und die erforderlichen Ressourcen müssen im gemounteten Verzeichnis /doc liegen.";
+        }
 
-	},
-	PNG("/latex2png") {
-		@Override
-		public String getShellScript() {
+    },
+    PNG("/latex2png") {
+        @Override
+        public String getShellScript() {
 
-			return "/bin/latex2png.sh";
-		}
+            return "/bin/latex2png.sh";
+        }
 
-		@Override
-		public String getDescription() {
+        @Override
+        public String getDescription() {
 
-			return "transformiert ein .tex-File nach png. Das File und die erforderlichen Ressourcen müssen im gemounteten Verzeichnis /doc liegen.";
-		}
-	};
+            return "transformiert ein .tex-File nach png. Das File und die erforderlichen Ressourcen müssen im gemounteten Verzeichnis /doc liegen.";
+        }
+    };
 
-	private final String relativePath;
+    private final String relativePath;
 
-	/**
-	 * @param relativePath
-	 */
-	private LaTeXCommand(final String relativePath) {
+    /**
+     * @param relativePath
+     */
+    private LaTeXCommand(final String relativePath) {
 
-		this.relativePath = relativePath;
-	}
+        this.relativePath = relativePath;
+    }
 
-	public static LaTeXCommand fromRelativePath(final String path) {
+    public static LaTeXCommand fromRelativePath(final String path) {
 
-		for (LaTeXCommand cmd : LaTeXCommand.values()) {
+        for (LaTeXCommand cmd : LaTeXCommand.values()) {
 
-			if (cmd.relativePath.equals(path)) {
+            if (cmd.relativePath.equals(path)) {
 
-				return cmd;
-			}
-		}
+                return cmd;
+            }
+        }
 
-		return null;
+        return null;
 
-	}
+    }
 
-	public abstract String getShellScript();
+    public abstract String getShellScript();
 
-	public abstract String getDescription();
+    public abstract String getDescription();
 
-	public String getRelativePath() {
+    public String getRelativePath() {
 
-		return relativePath;
-	}
+        return relativePath;
+    }
 
-	// private String getEnvDoc() {
-	//
-	// System.getenv("PATH_DOC")
-	// }
+    // private String getEnvDoc() {
+    //
+    // System.getenv("PATH_DOC")
+    // }
 
 }

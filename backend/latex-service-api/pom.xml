@@ -20,12 +20,20 @@
 		<mockito.version>4.4.0</mockito.version>
 		<logback.version>1.3.0-beta0</logback.version>
 		<compiler-plugin.version>3.13.0</compiler-plugin.version>
-		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-		<dependency-check.version>12.1.0</dependency-check.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>21</maven.compiler.source>
-		<maven.compiler.target>21</maven.compiler.target>
+
+		<!-- Start mixin-properties -->
+		<pmd.failOnViolation>false</pmd.failOnViolation>
+		<spotbugs.failOnError>false</spotbugs.failOnError>
+
+		<dependency-check.version>12.2.0</dependency-check.version>
+
+		<mixin-maven-plugin.version>1.0.6</mixin-maven-plugin.version>
+		<egladil-maven-mixins.version>1.0.0</egladil-maven-mixins.version>
+		<!-- Ende mixin-propetries -->
+
+		<maven.compiler.release>21</maven.compiler.release>
 		<maven.compiler.parameters>true</maven.compiler.parameters>
+
 	</properties>
 
 	<dependencies>
@@ -93,39 +101,6 @@
 
 		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${compiler-plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>${dependency-check.version}</version>
-				<configuration>
-					<suppressionFiles>
-						<suppressionFile>./suppressions.xml</suppressionFile>
-					</suppressionFiles>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${surefire-plugin.version}</version>
-				<configuration>
-					<systemPropertyVariables>
-						<java.util.logging.manager>
-							org.jboss.logmanager.LogManager</java.util.logging.manager>
-						<maven.home>${maven.home}</maven.home>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>2.4.3</version>
@@ -150,6 +125,69 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>com.playtika.maven.plugins</groupId>
+				<artifactId>mixin-maven-plugin</artifactId>
+				<version>${mixin-maven-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<mixins>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-core-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-linting-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-code-quality-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-unittestcoverage-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+						<mixin>
+							<groupId>de.egladil</groupId>
+							<artifactId>java-security-mixin</artifactId>
+							<version>${egladil-maven-mixins.version}</version>
+						</mixin>
+					</mixins>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>com.rudikershaw.gitbuildhook</groupId>
+				<artifactId>git-build-hook-maven-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<gitConfig>
+						<!-- The location of the directory you are using to store the Git hooks in
+						your project. -->
+						<core.hooksPath>.git-hooks/</core.hooksPath>
+						<core.autoclrf>false</core.autoclrf>
+						<core.eol>lf</core.eol>
+						<core.safecrlf>true</core.safecrlf>
+						<!-- Some other project specific git config that you want to set. -->
+						<custom.configuration>true</custom.configuration>
+					</gitConfig>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<!-- Sets git config specified under configuration > gitConfig. -->
+							<goal>configure</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>

@@ -5,7 +5,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
 FRONTEND_DIR="frontend/rbk-ws"
-BACKEND_DIR="backend/raetselbaukasten"
+BACKEND_RBK_DIR="backend/raetselbaukasten"
+BACKEND_LATEX_DIR="backend/latex-service-api"
 
 echo "🚀 Running comprehensive pre-push checks..."
 
@@ -20,10 +21,16 @@ if [ -d "$FRONTEND_DIR" ]; then
   npm run test:ci
 fi
 
-# BACKEND: verify (Tests + Quality Gates)
-if [ -d "$BACKEND_DIR" ]; then
-  echo "☕ Backend: mvn verify (tests + quality gates)"
-  (cd "$BACKEND_DIR" && mvn -q verify)
+# BACKEND_RBK_DIR: verify (Tests + Quality Gates)
+if [ -d "$BACKEND_RBK_DIR" ]; then
+  echo "☕ backend/raetselbaukasten: mvn verify (tests + quality gates)"
+  (cd "$BACKEND_RBK_DIR" && mvn -q verify)
+fi
+
+# BACKEND_LATEX_DIR: verify (Tests + Quality Gates)
+if [ -d "$BACKEND_LATEX_DIR" ]; then
+  echo "☕ backend/latex-service-api: mvn verify (tests + quality gates)"
+  (cd "$BACKEND_RBK_BACKEND_LATEX_DIRDIR" && mvn -q verify)
 fi
 
 echo "✅ All pre-push checks passed!"

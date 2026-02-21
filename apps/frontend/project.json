@@ -1,0 +1,57 @@
+{
+  "name": "frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "frontend/rbk-ws",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "frontend/rbk-ws",
+        "command": "npx nx serve"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "frontend/rbk-ws",
+        "command": "npx nx test"
+      }
+    },
+    "graph": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "frontend/rbk-ws",
+        "command": "npx nx graph"
+      }
+    },
+    "build:local": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "frontend/rbk-ws",
+        "command": "npx nx build raetselbaukasten -c local --output-hashing=all --base-href /raetselbaukasten/ --skip-nx-cache"
+      }
+    },
+    "build:heikeqs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "frontend/rbk-ws",
+        "command": "npx nx build raetselbaukasten -c heikeqs --output-hashing=all --base-href /raetselbaukasten/ --skip-nx-cache"
+      }
+    },
+    "build:prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "frontend/rbk-ws",
+        "command": "npx nx run raetselbaukasten:build:production --output-hashing=all --base-href /raetselbaukasten/ --skip-nx-cache"
+      }
+    },
+    "full-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "frontend/rbk-ws",
+        "command": "npx nx run-s lint:all test:all build"
+      }
+    }
+  }
+}

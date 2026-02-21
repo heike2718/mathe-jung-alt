@@ -2,7 +2,8 @@
 set -e
 
 FRONTEND_DIR="frontend/rbk-ws"
-BACKEND_DIR="backend/raetselbaukasten"
+BACKEND_RBK_DIR="backend/raetselbaukasten"
+BACKEND_LATEX_DIR="backend/latex-service-api"
 
 # 1) Gestagte Dateien
 STAGED="$(git diff --cached --name-only --diff-filter=ACM || true)"
@@ -16,6 +17,14 @@ has_staged() {
 # CSV-Liste für Nx (kommagetrennt)
 STAGED_CSV="$(printf '%s\n' "$STAGED" | paste -sd, -)"
 
+# Helper: stage exakt die Java-Dateien, die staged waren und unter einem Projektpfad liegen
+stage_project_java() {
+  # $1 = project path prefix (z.B. backend/raetselbaukasten)
+  printf '%s\n' "$STAGED" \
+    | grep -E "^$1/.*\.java$" \
+    | xargs -r git add
+}
+
 # 2) FRONTEND – lint-staged (ESLint --fix + Prettier)
 #if has_staged '\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$'; then
 #  echo "🔧 lint-staged (frontend)"
@@ -28,14 +37,29 @@ STAGED_CSV="$(printf '%s\n' "$STAGED" | paste -sd, -)"
 #  (cd "$FRONTEND_DIR" && npx nx clear-cache && npx nx affected -t lint --files="$STAGED_CSV" --parallel=3)
 #fi
 
-# 4) Backend – Format + schneller Lint
-if echo "$STAGED" | grep -qE '\.java$'; then
-  echo "☕ sort and format (backend)"
-  (cd $BACKEND_DIR && mvn -Pformat-apply impsort:sort@impsort-sort formatter:format@format-apply)
-  git ls-files -m | grep -E '\.java$' | xargs -r git add
+# 4) BACKEND – Formatierung (nur wenn staged Java im jeweiligen Projekt liegt)
 
-#  echo "🔍 Checkstyle (schnell)"
-# (cd $BACKEND_DIR && mvn -q checkstyle:check)
+if has_staged '^backend/raetselbaukasten/.*\.java$'; then
+  echo "☕ sort and format (backend/raetselbaukasten)"
+  (cd "$BACKEND_RBK_DIR" && mvn -Pformat-apply impsort:sort@impsort-sort formatter:format@format-apply)
+  stage_project_java "backend/raetselbaukasten"
 fi
+
+if has_staged '^backend/latex-service-api/.*\.java$'; then
+  echo "☕ sort and format (backend/latex-service-api)"
+  (cd "$BACKEND_LATEX_DIR" && mvn -Pformat-apply impsort:sort@impsort-sort formatter:format@format-apply)
+  stage_project_java "backend/latex-service-api"
+fi
+
+# Optional: schneller Backend-Lint (pro Projekt) – aktuell auskommentiert
+#if has_staged '^backend/raetselbaukasten/.*\.java$'; then
+#  echo "🔍 Checkstyle (rbk)"
+#  (cd "$BACKEND_RBK_DIR" && mvn -q checkstyle:check)
+#fi
+#
+#if has_staged '^backend/latex-service-api/.*\.java$'; then
+#  echo "🔍 Checkstyle (latex-service-api)"
+#  (cd "$BACKEND_LATEX_DIR" && mvn -q checkstyle:check)
+#fi
 
 exit 0

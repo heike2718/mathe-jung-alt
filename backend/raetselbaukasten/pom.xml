@@ -31,6 +31,8 @@
 		<jacoco.exclusion-3>**/ResponseStatus.class</jacoco.exclusion-3>
 		<jacoco.exclusion-4>**/healthchecks/**</jacoco.exclusion-4>
 
+		<dependency-check.version>12.2.0</dependency-check.version>
+
 		<mixin-maven-plugin.version>1.0.6</mixin-maven-plugin.version>
 		<egladil-maven-mixins.version>1.0.0</egladil-maven-mixins.version>
 		<!-- Ende mixin-propetries -->

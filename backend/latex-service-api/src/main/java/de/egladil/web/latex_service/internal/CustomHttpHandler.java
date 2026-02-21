@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.egladil.web.latex_service.LaTeXCommand;
 import de.egladil.web.latex_service.MessagePayload;
 import de.egladil.web.latex_service.exception.InvalidInputException;
+
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
@@ -20,110 +21,117 @@ import io.undertow.util.Headers;
  */
 public class CustomHttpHandler implements HttpHandler {
 
-	private static final Logger LOGGER = Logger.getLogger(CustomHttpHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(CustomHttpHandler.class);
 
-	private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-	private final HttpHandlerUtils handlerUtils = new HttpHandlerUtils();
+    private final HttpHandlerUtils handlerUtils = new HttpHandlerUtils();
 
-	@Override
-	public void handleRequest(final HttpServerExchange exchange) throws Exception {
+    @Override
+    public void handleRequest(final HttpServerExchange exchange) throws Exception {
 
-		StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-		try {
+        try {
 
-			exchange.getResponseHeaders()
-				.put(Headers.CONTENT_TYPE, "application/json");
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
 
-			LaTeXCommand cmd = handlerUtils.getCommand(exchange);
+            LaTeXCommand cmd = handlerUtils.getCommand(exchange);
 
-			if (cmd == null) {
+            if (cmd == null) {
 
-				LOGGER.debug("baseUrl called");
+                LOGGER.debug("baseUrl called");
 
-				exchange.getResponseSender()
-					.send(objectMapper.writeValueAsString(MessagePayload.info("Hallo vom latex-client: usage: " + getUsage())));
+                exchange
+                        .getResponseSender()
+                        .send(objectMapper
+                                .writeValueAsString(
+                                        MessagePayload.info("Hallo vom latex-client: usage: " + getUsage())));
 
-			}
+            }
 
-			String filename = handlerUtils.getFileName(exchange);
-			LOGGER.info("====> calling " + cmd.getShellScript() + " for file " + filename);
+            String filename = handlerUtils.getFileName(exchange);
+            LOGGER.info("====> calling " + cmd.getShellScript() + " for file " + filename);
 
-			if (filename.endsWith(".tex")) {
+            if (filename.endsWith(".tex")) {
 
-				exchange.getResponseSender()
-					.send(objectMapper.writeValueAsString(MessagePayload.error("filename bitte ohne .tex!")));
+                exchange
+                        .getResponseSender()
+                        .send(objectMapper.writeValueAsString(MessagePayload.error("filename bitte ohne .tex!")));
 
-			}
+            }
 
-			int exitCode = 0;
-			sb.append(sayWhatWillBeDone(cmd, filename));
+            int exitCode = 0;
+            sb.append(sayWhatWillBeDone(cmd, filename));
 
-			exitCode = this.performCommand(cmd, filename);
-			LOGGER.info("====> " + cmd.getShellScript() + " " + filename + " exited with exitCode code " + exitCode);
+            exitCode = this.performCommand(cmd, filename);
+            LOGGER.info("====> " + cmd.getShellScript() + " " + filename + " exited with exitCode code " + exitCode);
 
-			sb.append(" - exitCode=");
-			sb.append(exitCode);
+            sb.append(" - exitCode=");
+            sb.append(exitCode);
 
-			MessagePayload mp = exitCode == 0 ? MessagePayload.info("fertig: " + sb.toString())
-				: MessagePayload.error("Es ist ein Fehler aufgetreten. Guckstu ins log");
+            MessagePayload mp = exitCode == 0 ? MessagePayload.info("fertig: " + sb.toString())
+                    : MessagePayload.error("Es ist ein Fehler aufgetreten. Guckstu ins log");
 
-			exchange.getResponseSender()
-				.send(objectMapper.writeValueAsString(mp));
+            exchange.getResponseSender().send(objectMapper.writeValueAsString(mp));
 
-		} catch (InvalidInputException e) {
+        } catch (InvalidInputException e) {
 
-			LOGGER.warn(sb.toString());
-			LOGGER.error(e.getMessage(), e);
+            LOGGER.warn(sb.toString());
+            LOGGER.error(e.getMessage(), e);
 
-			exchange.getResponseSender()
-				.send(objectMapper
-					.writeValueAsString(MessagePayload.warn("Request kann nicht verarbeitet werden: " + this.getUsage())));
+            exchange
+                    .getResponseSender()
+                    .send(objectMapper
+                            .writeValueAsString(
+                                    MessagePayload.warn("Request kann nicht verarbeitet werden: " + this.getUsage())));
 
-		} catch (Exception e) {
+        } catch (Exception e) {
 
-			LOGGER.warn(sb.toString());
-			LOGGER.error(e.getMessage(), e);
-			exchange.getResponseSender()
-				.send(objectMapper.writeValueAsString(MessagePayload.error("Es ist ein Fehler aufgetreten. Guckstu ins log")));
-		}
-	}
+            LOGGER.warn(sb.toString());
+            LOGGER.error(e.getMessage(), e);
+            exchange
+                    .getResponseSender()
+                    .send(objectMapper
+                            .writeValueAsString(
+                                    MessagePayload.error("Es ist ein Fehler aufgetreten. Guckstu ins log")));
+        }
+    }
 
-	private String sayWhatWillBeDone(final LaTeXCommand cmd, final String filename) {
+    private String sayWhatWillBeDone(final LaTeXCommand cmd, final String filename) {
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("execute command ");
-		sb.append(cmd);
-		sb.append(" on file ");
-		sb.append(filename);
-		return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("execute command ");
+        sb.append(cmd);
+        sb.append(" on file ");
+        sb.append(filename);
+        return sb.toString();
 
-	}
+    }
 
-	private int performCommand(final LaTeXCommand cmd, final String fileName) {
+    private int performCommand(final LaTeXCommand cmd, final String fileName) {
 
-		return new ProcessExecutionService().performCommand(cmd, fileName);
-	}
+        return new ProcessExecutionService().performCommand(cmd, fileName);
+    }
 
-	String getUsage() {
+    String getUsage() {
 
-		StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
-		sb.append("der latex-client bietet 2 commands:  ");
+        sb.append("der latex-client bietet 2 commands:  ");
 
-		for (LaTeXCommand cmd : LaTeXCommand.values()) {
+        for (LaTeXCommand cmd : LaTeXCommand.values()) {
 
-			sb.append(cmd.getRelativePath());
-			sb.append(": ");
-			sb.append(cmd.getDescription());
-			sb.append("   ");
-		}
+            sb.append(cmd.getRelativePath());
+            sb.append(": ");
+            sb.append(cmd.getDescription());
+            sb.append("   ");
+        }
 
-		sb.append("Das zu transformierende File wird als Query-Parameter 'filename' ohne Suffix .tex erwartet");
+        sb.append("Das zu transformierende File wird als Query-Parameter 'filename' ohne Suffix .tex erwartet");
 
-		sb.append("    Beispiel: /latex2pdf?filename=02819");
+        sb.append("    Beispiel: /latex2pdf?filename=02819");
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 }
