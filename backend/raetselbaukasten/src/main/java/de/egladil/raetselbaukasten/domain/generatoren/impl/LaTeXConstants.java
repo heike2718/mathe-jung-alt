@@ -9,44 +9,44 @@ package de.egladil.raetselbaukasten.domain.generatoren.impl;
  */
 public interface LaTeXConstants {
 
-	String VALUE_NEWPAGE = "\\newpage\n";
+    String VALUE_NEWPAGE = "\\newpage\n";
 
-	String VALUE_PAR = "\\par\n";
+    String VALUE_PAR = "\\par\n";
 
-	String VALUE_LINEBREAK = "\\\\\n";
+    String VALUE_LINEBREAK = "\\\\\n";
 
-	String HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE = "{\\bf \\color{{color}} Aufgabe {nummer} - {schluessel} ({punkte}) }\\\\\n";
+    String HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE = "{\\bf \\color{{color}} Aufgabe {nummer} - {schluessel} ({punkte}) }\\\\\n";
 
-	String HEADER_AUFGABE_SCHLUESSEL_PUNKTE = "{\\bf \\color{{color}} Aufgabe {schluessel} ({punkte}) }\\\\\n";
+    String HEADER_AUFGABE_SCHLUESSEL_PUNKTE = "{\\bf \\color{{color}} Aufgabe {schluessel} ({punkte}) }\\\\\n";
 
-	String HEADER_AUFGABE_NUMMER = "{\\bf Aufgabe {nummer} }\\\\\n";
+    String HEADER_AUFGABE_NUMMER = "{\\bf Aufgabe {nummer} }\\\\\n";
 
-	String HEADER_LOESUNG_NUMMER_SCHLUESSEL = "{\\bf Lösung {nummer} - {schluessel} }\\\\\n";
+    String HEADER_LOESUNG_NUMMER_SCHLUESSEL = "{\\bf Lösung {nummer} - {schluessel} }\\\\\n";
 
-	String HEADER_LOESUNG_SCHLUESSEL = "{\\bf Lösung {schluessel}}\\\\\n";
+    String HEADER_LOESUNG_SCHLUESSEL = "{\\bf Lösung {schluessel}}\\\\\n";
 
-	String HEADER_LOESUNG_NUMMER = "{\\bf Lösung {nummer} }\\\\\n";
+    String HEADER_LOESUNG_NUMMER = "{\\bf Lösung {nummer} }\\\\\n";
 
-	String ABSTAND_ITEMS = "\\par \n\\vspace{1ex}\n";
+    String ABSTAND_ITEMS = "\\par \n\\vspace{1ex}\n";
 
-	String INCLUDEGRAPHICS_START = "\\begin{center} \\includegraphics[width=0.5\\linewidth]{.";
+    String INCLUDEGRAPHICS_START = "\\begin{center} \\includegraphics[width=0.5\\linewidth]{.";
 
-	String INCLUDEGRAPHICS_END = "} \\end{center}";
+    String INCLUDEGRAPHICS_END = "} \\end{center}";
 
-	String INPUT_AUFGABE = "{\\bf Aufgabe {nummer} }\\\\ \\input{./{schluessel}}\\par\n";
+    String INPUT_AUFGABE = "{\\bf Aufgabe {nummer} }\\\\ \\input{./{schluessel}}\\par\n";
 
-	String INPUT_LOESUNG = "{\\bf Lösung {nummer} }\\\\ \\input{./{schluessel}_l}\\par\n";
+    String INPUT_LOESUNG = "{\\bf Lösung {nummer} }\\\\ \\input{./{schluessel}_l}\\par\n";
 
-	String QUELLENANGABE = "{\\bf [Aufgabe {nummer}]} {quellenangabe} \\\\\n";
+    String QUELLENANGABE = "{\\bf [Aufgabe {nummer}]} {quellenangabe} \\\\\n";
 
-	String CENTER_START = "\\begin{center}";
+    String CENTER_START = "\\begin{center}";
 
-	String CENTER_END = "\\end{center}";
+    String CENTER_END = "\\end{center}";
 
-	String TIKZ_START = "\\begin{tikzpicture}";
+    String TIKZ_START = "\\begin{tikzpicture}";
 
-	String TIKZ_END = "\\end{tikzpicture}";
+    String TIKZ_END = "\\end{tikzpicture}";
 
-	String INCLUDEGRAPHICS = "\\includegraphics[";
+    String INCLUDEGRAPHICS = "\\includegraphics[";
 
 }

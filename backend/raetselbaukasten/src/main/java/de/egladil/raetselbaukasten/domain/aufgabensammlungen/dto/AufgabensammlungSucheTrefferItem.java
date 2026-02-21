@@ -17,150 +17,152 @@ import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Schwierigkeitsgrad;
 @Schema(name = "AufgabensammlungSucheTrefferItem", description = "Ein Element einer Suchanfrage")
 public class AufgabensammlungSucheTrefferItem {
 
-	@JsonProperty
-	@Schema(description = "technische ID")
-	private String id;
+    @JsonProperty
+    @Schema(description = "technische ID")
+    private String id;
 
-	@JsonProperty
-	@Schema(description = "Name der Aufgabensammlung")
-	private String name;
+    @JsonProperty
+    @Schema(description = "Name der Aufgabensammlung")
+    private String name;
 
-	@JsonProperty
-	@Schema(description = "optionaler Kommentar")
-	private String kommentar;
+    @JsonProperty
+    @Schema(description = "optionaler Kommentar")
+    private String kommentar;
 
-	@JsonProperty
-	@Schema(name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Aufgabensammlung gedacht ist")
-	private Schwierigkeitsgrad schwierigkeitsgrad;
+    @JsonProperty
+    @Schema(name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Aufgabensammlung gedacht ist")
+    private Schwierigkeitsgrad schwierigkeitsgrad;
 
-	@JsonProperty
-	@Schema(description = "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz")
-	private Referenztyp referenztyp;
+    @JsonProperty
+    @Schema(
+            description = "Refernztyp - Verbindung zum alten Aufgabenarchiv, Kontext zur Interpretation des Attributs referenz")
+    private Referenztyp referenztyp;
 
-	@JsonProperty
-	@Schema(description = "ID einers Wettbwerbs oder einer Serie im alten Aufgabenarchiv")
-	private String referenz;
+    @JsonProperty
+    @Schema(description = "ID einers Wettbwerbs oder einer Serie im alten Aufgabenarchiv")
+    private String referenz;
 
-	@JsonProperty
-	@Schema(description = "Ob die Aufgabensammlung freigegeben ist. Nur freigegebene sind über die Open-Data-API abrufbar")
-	private boolean freigegeben;
+    @JsonProperty
+    @Schema(
+            description = "Ob die Aufgabensammlung freigegeben ist. Nur freigegebene sind über die Open-Data-API abrufbar")
+    private boolean freigegeben;
 
-	@JsonProperty
-	@Schema(description = "Ob die Aufgabensammlung privat ist, also keinem Autor gehört.")
-	private boolean privat;
+    @JsonProperty
+    @Schema(description = "Ob die Aufgabensammlung privat ist, also keinem Autor gehört.")
+    private boolean privat;
 
-	@JsonProperty
-	@Schema(description = "ID des Änderers")
-	private String geaendertDurch;
+    @JsonProperty
+    @Schema(description = "ID des Änderers")
+    private String geaendertDurch;
 
-	@JsonProperty
-	@Schema(description = "Anzahl der Elemente (also der Rätsel)")
-	private long anzahlElemente;
+    @JsonProperty
+    @Schema(description = "Anzahl der Elemente (also der Rätsel)")
+    private long anzahlElemente;
 
-	public String getId() {
+    public String getId() {
 
-		return id;
-	}
+        return id;
+    }
 
-	public void setId(final String id) {
+    public void setId(final String id) {
 
-		this.id = id;
-	}
+        this.id = id;
+    }
 
-	public String getName() {
+    public String getName() {
 
-		return name;
-	}
+        return name;
+    }
 
-	@Override
-	public String toString() {
+    @Override
+    public String toString() {
 
-		return super.toString();
-	}
+        return super.toString();
+    }
 
-	public void setName(final String name) {
+    public void setName(final String name) {
 
-		this.name = name;
-	}
+        this.name = name;
+    }
 
-	public String getKommentar() {
+    public String getKommentar() {
 
-		return kommentar;
-	}
+        return kommentar;
+    }
 
-	public void setKommentar(final String kommentar) {
+    public void setKommentar(final String kommentar) {
 
-		this.kommentar = kommentar;
-	}
+        this.kommentar = kommentar;
+    }
 
-	public Schwierigkeitsgrad getSchwierigkeitsgrad() {
+    public Schwierigkeitsgrad getSchwierigkeitsgrad() {
 
-		return schwierigkeitsgrad;
-	}
+        return schwierigkeitsgrad;
+    }
 
-	public void setSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
+    public void setSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
 
-		this.schwierigkeitsgrad = schwierigkeitsgrad;
-	}
+        this.schwierigkeitsgrad = schwierigkeitsgrad;
+    }
 
-	public Referenztyp getReferenztyp() {
+    public Referenztyp getReferenztyp() {
 
-		return referenztyp;
-	}
+        return referenztyp;
+    }
 
-	public void setReferenztyp(final Referenztyp referenztyp) {
+    public void setReferenztyp(final Referenztyp referenztyp) {
 
-		this.referenztyp = referenztyp;
-	}
+        this.referenztyp = referenztyp;
+    }
 
-	public String getReferenz() {
+    public String getReferenz() {
 
-		return referenz;
-	}
+        return referenz;
+    }
 
-	public void setReferenz(final String referenz) {
+    public void setReferenz(final String referenz) {
 
-		this.referenz = referenz;
-	}
+        this.referenz = referenz;
+    }
 
-	public long getAnzahlElemente() {
+    public long getAnzahlElemente() {
 
-		return anzahlElemente;
-	}
+        return anzahlElemente;
+    }
 
-	public void setAnzahlElemente(final long anzahlElemente) {
+    public void setAnzahlElemente(final long anzahlElemente) {
 
-		this.anzahlElemente = anzahlElemente;
-	}
+        this.anzahlElemente = anzahlElemente;
+    }
 
-	public String getGeaendertDurch() {
+    public String getGeaendertDurch() {
 
-		return geaendertDurch;
-	}
+        return geaendertDurch;
+    }
 
-	public void setGeaendertDurch(final String geaendertDurch) {
+    public void setGeaendertDurch(final String geaendertDurch) {
 
-		this.geaendertDurch = geaendertDurch;
-	}
+        this.geaendertDurch = geaendertDurch;
+    }
 
-	public boolean isFreigegeben() {
+    public boolean isFreigegeben() {
 
-		return freigegeben;
-	}
+        return freigegeben;
+    }
 
-	public void setFreigegeben(final boolean freigegeben) {
+    public void setFreigegeben(final boolean freigegeben) {
 
-		this.freigegeben = freigegeben;
-	}
+        this.freigegeben = freigegeben;
+    }
 
-	public boolean isPrivat() {
+    public boolean isPrivat() {
 
-		return privat;
-	}
+        return privat;
+    }
 
-	public void setPrivat(final boolean privat) {
+    public void setPrivat(final boolean privat) {
 
-		this.privat = privat;
-	}
+        this.privat = privat;
+    }
 
 }

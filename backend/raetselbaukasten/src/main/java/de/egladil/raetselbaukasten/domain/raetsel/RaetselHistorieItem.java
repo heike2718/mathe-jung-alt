@@ -13,64 +13,64 @@ import de.egladil.raetselbaukasten.domain.AbstractDomainEntity;
  */
 public class RaetselHistorieItem extends AbstractDomainEntity {
 
-	private String raetselUuid;
+    private String raetselUuid;
 
-	public String getRaetselUuid() {
+    public String getRaetselUuid() {
 
-		return raetselUuid;
-	}
+        return raetselUuid;
+    }
 
-	public void setRaetselUuid(final String raetselUuid) {
+    public void setRaetselUuid(final String raetselUuid) {
 
-		this.raetselUuid = raetselUuid;
-	}
+        this.raetselUuid = raetselUuid;
+    }
 
-	public String getFrage() {
+    public String getFrage() {
 
-		return frage;
-	}
+        return frage;
+    }
 
-	public void setFrage(final String frage) {
+    public void setFrage(final String frage) {
 
-		this.frage = frage;
-	}
+        this.frage = frage;
+    }
 
-	public String getLoesung() {
+    public String getLoesung() {
 
-		return loesung;
-	}
+        return loesung;
+    }
 
-	public void setLoesung(final String loesung) {
+    public void setLoesung(final String loesung) {
 
-		this.loesung = loesung;
-	}
+        this.loesung = loesung;
+    }
 
-	public Date getDatum() {
+    public Date getDatum() {
 
-		return datum;
-	}
+        return datum;
+    }
 
-	public void setDatum(final Date datum) {
+    public void setDatum(final Date datum) {
 
-		this.datum = datum;
-	}
+        this.datum = datum;
+    }
 
-	public String getGeaendertDurch() {
+    public String getGeaendertDurch() {
 
-		return geaendertDurch;
-	}
+        return geaendertDurch;
+    }
 
-	public void setGeaendertDurch(final String geaendertDurch) {
+    public void setGeaendertDurch(final String geaendertDurch) {
 
-		this.geaendertDurch = geaendertDurch;
-	}
+        this.geaendertDurch = geaendertDurch;
+    }
 
-	private String frage;
+    private String frage;
 
-	private String loesung;
+    private String loesung;
 
-	private Date datum;
+    private Date datum;
 
-	private String geaendertDurch;
+    private String geaendertDurch;
 
 }

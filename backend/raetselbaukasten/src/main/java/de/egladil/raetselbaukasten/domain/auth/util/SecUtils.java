@@ -9,37 +9,37 @@ package de.egladil.raetselbaukasten.domain.auth.util;
  */
 public final class SecUtils {
 
-	private SecUtils() {
+    private SecUtils() {
 
-	}
+    }
 
-	/**
-	 * Überschreibt das char[] mit 0
-	 *
-	 * @param chars
-	 */
-	public static void wipe(final char[] chars) {
+    /**
+     * Überschreibt das char[] mit 0
+     *
+     * @param chars
+     */
+    public static void wipe(final char[] chars) {
 
-		if (chars != null) {
+        if (chars != null) {
 
-			for (int i = 0; i < chars.length; i++) {
+            for (int i = 0; i < chars.length; i++) {
 
-				chars[i] = 0x00;
-			}
-		}
-	}
+                chars[i] = 0x00;
+            }
+        }
+    }
 
-	/**
-	 * Überschreibt den String mit 0
-	 *
-	 * @param chars
-	 */
-	public static String wipe(final String str) {
+    /**
+     * Überschreibt den String mit 0
+     *
+     * @param chars
+     */
+    public static String wipe(final String str) {
 
-		if (str != null) {
+        if (str != null) {
 
-			wipe(str.toCharArray());
-		}
-		return null;
-	}
+            wipe(str.toCharArray());
+        }
+        return null;
+    }
 }

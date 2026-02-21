@@ -9,59 +9,59 @@ package de.egladil.raetselbaukasten.domain.generatoren;
  */
 public enum Schriftgroesse {
 
-	HUGE {
+    HUGE {
 
-		@Override
-		public String getLaTeXReplacement() {
+        @Override
+        public String getLaTeXReplacement() {
 
-			return "\\LARGE";
-		}
+            return "\\LARGE";
+        }
 
-		@Override
-		public String getArrayStretch() {
+        @Override
+        public String getArrayStretch() {
 
-			return "\\renewcommand\\arraystretch{1.1}";
-		}
+            return "\\renewcommand\\arraystretch{1.1}";
+        }
 
-	},
-	NORMAL {
+    },
+    NORMAL {
 
-		@Override
-		public String getLaTeXReplacement() {
+        @Override
+        public String getLaTeXReplacement() {
 
-			return "";
-		}
+            return "";
+        }
 
-		@Override
-		public String getArrayStretch() {
+        @Override
+        public String getArrayStretch() {
 
-			return "\\renewcommand\\arraystretch{1.25}";
-		}
+            return "\\renewcommand\\arraystretch{1.25}";
+        }
 
-	},
-	LARGE {
+    },
+    LARGE {
 
-		@Override
-		public String getLaTeXReplacement() {
+        @Override
+        public String getLaTeXReplacement() {
 
-			return "\\Large";
-		}
+            return "\\Large";
+        }
 
-		@Override
-		public String getArrayStretch() {
+        @Override
+        public String getArrayStretch() {
 
-			return "\\renewcommand\\arraystretch{1.1}";
-		}
+            return "\\renewcommand\\arraystretch{1.1}";
+        }
 
-	};
+    };
 
-	public abstract String getLaTeXReplacement();
+    public abstract String getLaTeXReplacement();
 
-	/**
-	 * Die Abstände in Tabellen etc werden etwas vergrößert.
-	 *
-	 * @return String
-	 */
-	public abstract String getArrayStretch();
+    /**
+     * Die Abstände in Tabellen etc werden etwas vergrößert.
+     *
+     * @return String
+     */
+    public abstract String getArrayStretch();
 
 }

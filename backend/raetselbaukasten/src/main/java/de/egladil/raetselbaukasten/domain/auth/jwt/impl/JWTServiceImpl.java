@@ -13,6 +13,8 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
+import jakarta.enterprise.context.RequestScoped;
+
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
@@ -24,7 +26,6 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 
 import de.egladil.raetselbaukasten.domain.auth.jwt.JWTService;
 import de.egladil.raetselbaukasten.domain.exceptions.MjaAuthRuntimeException;
-import jakarta.enterprise.context.RequestScoped;
 
 /**
  * JWTServiceImpl
@@ -32,39 +33,44 @@ import jakarta.enterprise.context.RequestScoped;
 @RequestScoped
 public class JWTServiceImpl implements JWTService {
 
-	@Override
-	public DecodedJWT verify(final String jwt, final byte[] publicKeyData) throws JWTVerificationException {
+    @Override
+    public DecodedJWT verify(final String jwt, final byte[] publicKeyData) throws JWTVerificationException {
 
-		try {
+        try {
 
-			PublicKey publicKey = getPublicKeyRSA(publicKeyData);
+            PublicKey publicKey = getPublicKeyRSA(publicKeyData);
 
-			Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) publicKey, null);
+            Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) publicKey, null);
 
-			JWTVerifier verifier = JWT.require(algorithm).acceptLeeway(1).acceptExpiresAt(5).withIssuer("heike2718/authprovider")
-				.build();
+            JWTVerifier verifier = JWT
+                    .require(algorithm)
+                    .acceptLeeway(1)
+                    .acceptExpiresAt(5)
+                    .withIssuer("heike2718/authprovider")
+                    .build();
 
-			DecodedJWT result = verifier.verify(jwt);
+            DecodedJWT result = verifier.verify(jwt);
 
-			return result;
+            return result;
 
-		} catch (NoSuchAlgorithmException | InvalidKeySpecException | IOException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | IOException e) {
 
-			throw new MjaAuthRuntimeException("Fehler beim Verifizieren eines JWT: " + e.getMessage(), e);
+            throw new MjaAuthRuntimeException("Fehler beim Verifizieren eines JWT: " + e.getMessage(), e);
 
-		}
-	}
+        }
+    }
 
-	private PublicKey getPublicKeyRSA(final byte[] keyBytes) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+    private PublicKey getPublicKeyRSA(final byte[] keyBytes)
+            throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 
-		try (StringReader sr = new StringReader(new String(keyBytes)); PemReader pemReader = new PemReader(sr)) {
+        try (StringReader sr = new StringReader(new String(keyBytes)); PemReader pemReader = new PemReader(sr)) {
 
-			PemObject pem = pemReader.readPemObject();
-			byte[] pubKeyBytes = pem.getContent();
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(pubKeyBytes);
-			RSAPublicKey pubKey = (RSAPublicKey) keyFactory.generatePublic(pubSpec);
-			return pubKey;
-		}
-	}
+            PemObject pem = pemReader.readPemObject();
+            byte[] pubKeyBytes = pem.getContent();
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(pubKeyBytes);
+            RSAPublicKey pubKey = (RSAPublicKey) keyFactory.generatePublic(pubSpec);
+            return pubKey;
+        }
+    }
 }

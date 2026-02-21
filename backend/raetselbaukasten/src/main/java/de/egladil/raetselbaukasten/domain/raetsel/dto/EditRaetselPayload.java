@@ -7,6 +7,9 @@ package de.egladil.raetselbaukasten.domain.raetsel.dto;
 import java.util.List;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -18,8 +21,6 @@ import de.egladil.raetselbaukasten.domain.raetsel.RaetselHerkunftTyp;
 import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
 import de.egladil.raetselbaukasten.domain.validation.ValidAntwortvorschlaege;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Deskriptor;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 /**
  * EditRaetselPayload
@@ -27,233 +28,233 @@ import jakarta.validation.constraints.Size;
 @Schema(name = "EditRaetselPayload", description = "Payload zum Anlegen und Ändern eines Rätsels")
 public class EditRaetselPayload {
 
-	@Schema(description = "technische ID, 'neu' für neue Rätsel", example = "0870a50a-bef4-467f-bae2-f94761aa5f3b")
-	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "die id enthält ungültige Zeichen")
-	private String id;
-
-	@Schema(
-		description = "Flag, ob Änderungen im LaTeX-Code historisiert werden sollen. Ist nur bei inhaltlichen Änderungen sinnvoll.")
-	private boolean latexHistorisieren;
+    @Schema(description = "technische ID, 'neu' für neue Rätsel", example = "0870a50a-bef4-467f-bae2-f94761aa5f3b")
+    @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "die id enthält ungültige Zeichen")
+    private String id;
+
+    @Schema(
+            description = "Flag, ob Änderungen im LaTeX-Code historisiert werden sollen. Ist nur bei inhaltlichen Änderungen sinnvoll.")
+    private boolean latexHistorisieren;
 
-	@JsonProperty
-	@Schema(description = "fachlicher Schlüssel im Aufgabenarchiv.", example = "05463")
-	@Pattern(regexp = MjaRegexps.VALID_EDIT_PAYLOOAD_SCHLUESSEL, message = "falls schluessel, dann nur Ziffern")
-	@Size(max = 5, message = "schluessel darf nicht aus mehr als 5 Ziffern bestehen")
-	private String schluessel;
+    @JsonProperty
+    @Schema(description = "fachlicher Schlüssel im Aufgabenarchiv.", example = "05463")
+    @Pattern(regexp = MjaRegexps.VALID_EDIT_PAYLOOAD_SCHLUESSEL, message = "falls schluessel, dann nur Ziffern")
+    @Size(max = 5, message = "schluessel darf nicht aus mehr als 5 Ziffern bestehen")
+    private String schluessel;
 
-	@JsonProperty
-	@Schema(
-		description = "kurzer Titel zum Anzeigen in Suchergebnissen, volltextsuchfähig", required = true,
-		example = "Subtraktion")
-	@Pattern(regexp = MjaRegexps.VALID_TITEL, message = "name enthält ungültige Zeichen")
-	@Size(max = 100, message = "name darf nicht länger als 100 Zeichen sein")
-	private String name;
+    @JsonProperty
+    @Schema(
+            description = "kurzer Titel zum Anzeigen in Suchergebnissen, volltextsuchfähig",
+            required = true,
+            example = "Subtraktion")
+    @Pattern(regexp = MjaRegexps.VALID_TITEL, message = "name enthält ungültige Zeichen")
+    @Size(max = 100, message = "name darf nicht länger als 100 Zeichen sein")
+    private String name;
 
-	@JsonProperty
-	@Schema(description = "LaTeX-Code der Frage, volltextsuchfähig", required = true, example = "[\\1234-987=\\]")
-	private String frage;
+    @JsonProperty
+    @Schema(description = "LaTeX-Code der Frage, volltextsuchfähig", required = true, example = "[\\1234-987=\\]")
+    private String frage;
 
-	@JsonProperty
-	@Schema(
-		description = "LaTeX-Code der Lösung, volltextsuchfähig",
-		example = "237")
-	private String loesung;
+    @JsonProperty
+    @Schema(description = "LaTeX-Code der Lösung, volltextsuchfähig", example = "237")
+    private String loesung;
 
-	@JsonProperty
-	@Schema(description = "Kommentar, volltextsuchfähig", example = "Serie Serie-1, 1, Serie-65, 65")
-	@Pattern(regexp = MjaRegexps.VALID_KOMMENTAR, message = "kommentar enthält ungültige Zeichen")
-	@Size(max = 200, message = "kommentar darf nicht länger als 200 Zeichen sein")
-	private String kommentar;
+    @JsonProperty
+    @Schema(description = "Kommentar, volltextsuchfähig", example = "Serie Serie-1, 1, Serie-65, 65")
+    @Pattern(regexp = MjaRegexps.VALID_KOMMENTAR, message = "kommentar enthält ungültige Zeichen")
+    @Size(max = 200, message = "kommentar darf nicht länger als 200 Zeichen sein")
+    private String kommentar;
 
-	@JsonProperty
-	@Schema(description = "Autor der Lösung", example = "Super Solver")
-	@Pattern(regexp = MjaRegexps.VALID_PERSON, message = "autorLoesung enthält ungültige Zeichen")
-	@Size(max = 100, message = "autorLoesung darf nicht länger als 100 Zeichen sein")
-	private String autorLoesung;
+    @JsonProperty
+    @Schema(description = "Autor der Lösung", example = "Super Solver")
+    @Pattern(regexp = MjaRegexps.VALID_PERSON, message = "autorLoesung enthält ungültige Zeichen")
+    @Size(max = 100, message = "autorLoesung darf nicht länger als 100 Zeichen sein")
+    private String autorLoesung;
 
-	@JsonProperty
-	@Schema(description = "ob das Rätsel freigegeben ist.")
-	private boolean freigegeben;
+    @JsonProperty
+    @Schema(description = "ob das Rätsel freigegeben ist.")
+    private boolean freigegeben;
 
-	@JsonProperty
-	@Schema(description = "ob der Frage-Text die eventuell vorhandenen Antwortvorschläge bereits enthält.")
-	private boolean antwortvorschlaegeEingebettet;
+    @JsonProperty
+    @Schema(description = "ob der Frage-Text die eventuell vorhandenen Antwortvorschläge bereits enthält.")
+    private boolean antwortvorschlaegeEingebettet;
 
-	@JsonProperty
-	@Schema(description = "Herkunftstyp des Rätsels", required = true)
-	private RaetselHerkunftTyp herkunftstyp;
+    @JsonProperty
+    @Schema(description = "Herkunftstyp des Rätsels", required = true)
+    private RaetselHerkunftTyp herkunftstyp;
 
-	@JsonProperty
-	@Schema(
-		type = SchemaType.ARRAY, implementation = Antwortvorschlag.class,
-		description = "optionale Antwortvorschläge, wenn es für multiple choice genutzt werden kann")
-	@Valid
-	@ValidAntwortvorschlaege
-	private Antwortvorschlag[] antwortvorschlaege;
+    @JsonProperty
+    @Schema(
+            type = SchemaType.ARRAY,
+            implementation = Antwortvorschlag.class,
+            description = "optionale Antwortvorschläge, wenn es für multiple choice genutzt werden kann")
+    @Valid
+    @ValidAntwortvorschlaege
+    private Antwortvorschlag[] antwortvorschlaege;
 
-	@JsonProperty
-	@Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class, description = "Deskriptoren, für das Rätsel")
-	private List<Deskriptor> deskriptoren;
+    @JsonProperty
+    @Schema(type = SchemaType.ARRAY, implementation = Deskriptor.class, description = "Deskriptoren, für das Rätsel")
+    private List<Deskriptor> deskriptoren;
 
-	@Schema(description = "Die Quelle für dieses Rätsel", required = true)
-	private QuelleDto quelle;
+    @Schema(description = "Die Quelle für dieses Rätsel", required = true)
+    private QuelleDto quelle;
 
-	public String getId() {
+    public String getId() {
 
-		return id;
-	}
+        return id;
+    }
 
-	public EditRaetselPayload withId(final String id) {
+    public EditRaetselPayload withId(final String id) {
 
-		this.id = id;
-		return this;
-	}
+        this.id = id;
+        return this;
+    }
 
-	public boolean isLatexHistorisieren() {
+    public boolean isLatexHistorisieren() {
 
-		return latexHistorisieren;
-	}
+        return latexHistorisieren;
+    }
 
-	public EditRaetselPayload withLatexHistorisieren(final boolean latexHistorisieren) {
+    public EditRaetselPayload withLatexHistorisieren(final boolean latexHistorisieren) {
 
-		this.latexHistorisieren = latexHistorisieren;
-		return this;
-	}
+        this.latexHistorisieren = latexHistorisieren;
+        return this;
+    }
 
-	public QuelleDto getQuelle() {
+    public QuelleDto getQuelle() {
 
-		return quelle;
-	}
+        return quelle;
+    }
 
-	public EditRaetselPayload withQuelle(final QuelleDto quelle) {
+    public EditRaetselPayload withQuelle(final QuelleDto quelle) {
 
-		this.quelle = quelle;
-		return this;
-	}
+        this.quelle = quelle;
+        return this;
+    }
 
-	public void setSchluessel(final String schluessel) {
+    public void setSchluessel(final String schluessel) {
 
-		this.schluessel = schluessel;
-	}
+        this.schluessel = schluessel;
+    }
 
-	public String getSchluessel() {
+    public String getSchluessel() {
 
-		return schluessel;
-	}
+        return schluessel;
+    }
 
-	public EditRaetselPayload withSchluessel(final String schluessel) {
+    public EditRaetselPayload withSchluessel(final String schluessel) {
 
-		this.schluessel = schluessel;
-		return this;
-	}
+        this.schluessel = schluessel;
+        return this;
+    }
 
-	public String getName() {
+    public String getName() {
 
-		return name;
-	}
+        return name;
+    }
 
-	public EditRaetselPayload withName(final String name) {
+    public EditRaetselPayload withName(final String name) {
 
-		this.name = name;
-		return this;
-	}
+        this.name = name;
+        return this;
+    }
 
-	public String getFrage() {
+    public String getFrage() {
 
-		return frage;
-	}
+        return frage;
+    }
 
-	public EditRaetselPayload withFrage(final String frage) {
+    public EditRaetselPayload withFrage(final String frage) {
 
-		this.frage = frage;
-		return this;
-	}
+        this.frage = frage;
+        return this;
+    }
 
-	public String getLoesung() {
+    public String getLoesung() {
 
-		return loesung;
-	}
+        return loesung;
+    }
 
-	public EditRaetselPayload withLoesung(final String loesung) {
+    public EditRaetselPayload withLoesung(final String loesung) {
 
-		this.loesung = loesung;
-		return this;
-	}
+        this.loesung = loesung;
+        return this;
+    }
 
-	public String getKommentar() {
+    public String getKommentar() {
 
-		return kommentar;
-	}
+        return kommentar;
+    }
 
-	public EditRaetselPayload withKommentar(final String kommentar) {
+    public EditRaetselPayload withKommentar(final String kommentar) {
 
-		this.kommentar = kommentar;
-		return this;
-	}
+        this.kommentar = kommentar;
+        return this;
+    }
 
-	public boolean isFreigegeben() {
+    public boolean isFreigegeben() {
 
-		return freigegeben;
-	}
+        return freigegeben;
+    }
 
-	public EditRaetselPayload withFreigegeben(final boolean freigegeben) {
+    public EditRaetselPayload withFreigegeben(final boolean freigegeben) {
 
-		this.freigegeben = freigegeben;
-		return this;
-	}
+        this.freigegeben = freigegeben;
+        return this;
+    }
 
-	public RaetselHerkunftTyp getHerkunftstyp() {
+    public RaetselHerkunftTyp getHerkunftstyp() {
 
-		return herkunftstyp;
-	}
+        return herkunftstyp;
+    }
 
-	public EditRaetselPayload withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
+    public EditRaetselPayload withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
 
-		this.herkunftstyp = herkunftstyp;
-		return this;
-	}
+        this.herkunftstyp = herkunftstyp;
+        return this;
+    }
 
-	public Antwortvorschlag[] getAntwortvorschlaege() {
+    public Antwortvorschlag[] getAntwortvorschlaege() {
 
-		return antwortvorschlaege;
-	}
+        return antwortvorschlaege;
+    }
 
-	public EditRaetselPayload withAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
+    public EditRaetselPayload withAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
-		this.antwortvorschlaege = antwortvorschlaege;
-		return this;
-	}
+        this.antwortvorschlaege = antwortvorschlaege;
+        return this;
+    }
 
-	public List<Deskriptor> getDeskriptoren() {
+    public List<Deskriptor> getDeskriptoren() {
 
-		return deskriptoren;
-	}
+        return deskriptoren;
+    }
 
-	public EditRaetselPayload withDeskriptoren(final List<Deskriptor> deskriptoren) {
+    public EditRaetselPayload withDeskriptoren(final List<Deskriptor> deskriptoren) {
 
-		this.deskriptoren = deskriptoren;
-		return this;
-	}
+        this.deskriptoren = deskriptoren;
+        return this;
+    }
 
-	public boolean isAntwortvorschlaegeEingebettet() {
+    public boolean isAntwortvorschlaegeEingebettet() {
 
-		return antwortvorschlaegeEingebettet;
-	}
+        return antwortvorschlaegeEingebettet;
+    }
 
-	public EditRaetselPayload withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
+    public EditRaetselPayload withAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
 
-		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
-		return this;
-	}
+        this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
+        return this;
+    }
 
-	public String getAutorLoesung() {
+    public String getAutorLoesung() {
 
-		return autorLoesung;
-	}
+        return autorLoesung;
+    }
 
-	public EditRaetselPayload withAutorLoesung(final String autorLoesung) {
+    public EditRaetselPayload withAutorLoesung(final String autorLoesung) {
 
-		this.autorLoesung = autorLoesung;
-		return this;
-	}
+        this.autorLoesung = autorLoesung;
+        return this;
+    }
 }

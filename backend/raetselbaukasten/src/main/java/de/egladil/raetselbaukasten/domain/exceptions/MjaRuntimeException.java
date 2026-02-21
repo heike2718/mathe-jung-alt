@@ -9,25 +9,25 @@ package de.egladil.raetselbaukasten.domain.exceptions;
  */
 public class MjaRuntimeException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public MjaRuntimeException(final String message, final Throwable cause) {
+    /**
+     * @param message
+     * @param cause
+     */
+    public MjaRuntimeException(final String message, final Throwable cause) {
 
-		super(message, cause);
+        super(message, cause);
 
-	}
+    }
 
-	/**
-	 * @param message
-	 */
-	public MjaRuntimeException(final String message) {
+    /**
+     * @param message
+     */
+    public MjaRuntimeException(final String message) {
 
-		super(message);
+        super(message);
 
-	}
+    }
 
 }

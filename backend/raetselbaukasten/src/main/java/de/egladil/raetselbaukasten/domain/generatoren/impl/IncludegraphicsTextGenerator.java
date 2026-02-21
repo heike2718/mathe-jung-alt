@@ -9,16 +9,15 @@ package de.egladil.raetselbaukasten.domain.generatoren.impl;
  */
 public class IncludegraphicsTextGenerator {
 
-	/**
-	 * Generiert den \includegraphics - Befehl für LaTeX.
-	 *
-	 * @param  relativePath
-	 *                      String der relative Pfad zum EPS-File ohne Punkt
-	 * @return              String
-	 */
-	public String generateIncludegraphicsText(final String relativePath) {
+    /**
+     * Generiert den \includegraphics - Befehl für LaTeX.
+     *
+     * @param relativePath String der relative Pfad zum EPS-File ohne Punkt
+     * @return String
+     */
+    public String generateIncludegraphicsText(final String relativePath) {
 
-		return LaTeXConstants.INCLUDEGRAPHICS_START + relativePath + LaTeXConstants.INCLUDEGRAPHICS_END;
-	}
+        return LaTeXConstants.INCLUDEGRAPHICS_START + relativePath + LaTeXConstants.INCLUDEGRAPHICS_END;
+    }
 
 }

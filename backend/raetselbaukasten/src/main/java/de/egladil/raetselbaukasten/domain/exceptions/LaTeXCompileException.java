@@ -9,28 +9,28 @@ package de.egladil.raetselbaukasten.domain.exceptions;
  */
 public class LaTeXCompileException extends RuntimeException {
 
-	private static final long serialVersionUID = -5534311990730576744L;
+    private static final long serialVersionUID = -5534311990730576744L;
 
-	private String nameFile;
+    private String nameFile;
 
-	/**
-	 * @param message
-	 */
-	public LaTeXCompileException(final String message) {
+    /**
+     * @param message
+     */
+    public LaTeXCompileException(final String message) {
 
-		super(message);
+        super(message);
 
-	}
+    }
 
-	public String getNameFile() {
+    public String getNameFile() {
 
-		return nameFile;
-	}
+        return nameFile;
+    }
 
-	public LaTeXCompileException withNameFile(final String nameFile) {
+    public LaTeXCompileException withNameFile(final String nameFile) {
 
-		this.nameFile = nameFile;
-		return this;
-	}
+        this.nameFile = nameFile;
+        return this;
+    }
 
 }

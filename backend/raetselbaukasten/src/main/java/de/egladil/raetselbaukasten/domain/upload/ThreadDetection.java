@@ -11,31 +11,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class ThreadDetection {
 
-	@JsonProperty
-	private boolean securityThreadDetected;
+    @JsonProperty
+    private boolean securityThreadDetected;
 
-	@JsonProperty
-	private String securityCheckMessage;
+    @JsonProperty
+    private String securityCheckMessage;
 
-	public String getSecurityCheckMessage() {
+    public String getSecurityCheckMessage() {
 
-		return securityCheckMessage;
-	}
+        return securityCheckMessage;
+    }
 
-	public ThreadDetection withSecurityCheckMessage(final String securityCheckMessage) {
+    public ThreadDetection withSecurityCheckMessage(final String securityCheckMessage) {
 
-		this.securityCheckMessage = securityCheckMessage;
-		return this;
-	}
+        this.securityCheckMessage = securityCheckMessage;
+        return this;
+    }
 
-	public boolean isSecurityThreadDetected() {
+    public boolean isSecurityThreadDetected() {
 
-		return securityThreadDetected;
-	}
+        return securityThreadDetected;
+    }
 
-	public ThreadDetection withSecurityThreadDetected(final boolean securityThreadDetected) {
+    public ThreadDetection withSecurityThreadDetected(final boolean securityThreadDetected) {
 
-		this.securityThreadDetected = securityThreadDetected;
-		return this;
-	}
+        this.securityThreadDetected = securityThreadDetected;
+        return this;
+    }
 }

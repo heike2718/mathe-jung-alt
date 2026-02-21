@@ -9,6 +9,6 @@ package de.egladil.raetselbaukasten.domain.upload;
  */
 public enum FileType {
 
-	EPS;
+    EPS;
 
 }

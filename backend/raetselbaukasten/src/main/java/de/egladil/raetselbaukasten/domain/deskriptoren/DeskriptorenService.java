@@ -13,9 +13,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.raetselbaukasten.domain.auth.dto.MessagePayload;
 import de.egladil.raetselbaukasten.domain.auth.session.AuthenticatedUser;
@@ -25,11 +32,6 @@ import de.egladil.raetselbaukasten.domain.deskriptoren.impl.DeskriptorenReposito
 import de.egladil.raetselbaukasten.domain.semantik.DomainService;
 import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Deskriptor;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 
 /**
  * DeskriptorenService
@@ -38,166 +40,174 @@ import jakarta.ws.rs.core.Response.Status;
 @ApplicationScoped
 public class DeskriptorenService {
 
-	private static final DeskriptorenNameComparator DESKRIPTOREN_COMPARATOR = new DeskriptorenNameComparator();
+    private static final DeskriptorenNameComparator DESKRIPTOREN_COMPARATOR = new DeskriptorenNameComparator();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DeskriptorenService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeskriptorenService.class);
 
-	@Inject
-	AuthenticationContext authCtx;
+    @Inject
+    AuthenticationContext authCtx;
 
-	@Inject
-	DeskriptorenRepository deskriptorenRepository;
+    @Inject
+    DeskriptorenRepository deskriptorenRepository;
 
-	/**
-	 * @param deskriptorenIds
-	 * @return
-	 */
-	public List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds) {
+    /**
+     * @param deskriptorenIds
+     * @return
+     */
+    public List<Deskriptor> mapToDeskriptoren(final String deskriptorenIds) {
 
-		if (StringUtils.isBlank(deskriptorenIds)) {
+        if (StringUtils.isBlank(deskriptorenIds)) {
 
-			LOGGER.warn("deskriptorenIds blank => return an empty list");
-			return new ArrayList<>();
-		}
+            LOGGER.warn("deskriptorenIds blank => return an empty list");
+            return new ArrayList<>();
+        }
 
-		String[] tokens = StringUtils.split(deskriptorenIds, ',');
-		List<Long> ids = Arrays.stream(tokens).map(t -> Long.valueOf(t)).toList();
+        String[] tokens = StringUtils.split(deskriptorenIds, ',');
+        List<Long> ids = Arrays.stream(tokens).map(t -> Long.valueOf(t)).toList();
 
-		List<Deskriptor> alleDeskriptoren = deskriptorenRepository.listAll();
+        List<Deskriptor> alleDeskriptoren = deskriptorenRepository.listAll();
 
-		List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).toList();
+        List<Deskriptor> result = alleDeskriptoren.stream().filter(d -> ids.contains(d.id)).toList();
 
-		Benutzerart benutzerart = authCtx.getUser().getBenutzerart();
+        Benutzerart benutzerart = authCtx.getUser().getBenutzerart();
 
-		if (Benutzerart.ADMIN == benutzerart || Benutzerart.AUTOR == benutzerart) {
+        if (Benutzerart.ADMIN == benutzerart || Benutzerart.AUTOR == benutzerart) {
 
-			return result;
-		}
+            return result;
+        }
 
-		return result.stream().filter(d -> !d.admin).toList();
-	}
+        return result.stream().filter(d -> !d.admin).toList();
+    }
 
-	/**
-	 * Wandelt die kommaeparierten Namen von Deskriptoren in deren kommaseparierte IDs um.<br>
-	 * <br>
-	 * <strong>Achtung: </strong> Nicht vorhandenen Namen werden ignoriert.
-	 *
-	 * @param deskriptorenNames
-	 * @return String kommaseparierte IDs
-	 */
-	public String transformToDeskriptorenOrdinal(final String deskriptorenNames) {
+    /**
+     * Wandelt die kommaeparierten Namen von Deskriptoren in deren kommaseparierte
+     * IDs um.<br>
+     * <br>
+     * <strong>Achtung: </strong> Nicht vorhandenen Namen werden ignoriert.
+     *
+     * @param deskriptorenNames
+     * @return String kommaseparierte IDs
+     */
+    public String transformToDeskriptorenOrdinal(final String deskriptorenNames) {
 
-		List<Deskriptor> alleDeskriptoren = deskriptorenRepository.listAll();
+        List<Deskriptor> alleDeskriptoren = deskriptorenRepository.listAll();
 
-		List<String> namen = Arrays.asList(StringUtils.split(deskriptorenNames, ','));
+        List<String> namen = Arrays.asList(StringUtils.split(deskriptorenNames, ','));
 
-		// schmeißen die Duplikate raus
-		Set<String> namenAlsSet = namen.stream().collect(Collectors.toSet());
-		namen = new ArrayList<>(namenAlsSet);
+        // schmeißen die Duplikate raus
+        Set<String> namenAlsSet = namen.stream().collect(Collectors.toSet());
+        namen = new ArrayList<>(namenAlsSet);
 
-		List<Long> filteredIDs = new ArrayList<>();
+        List<Long> filteredIDs = new ArrayList<>();
 
-		namen.forEach(name -> {
+        namen.forEach(name -> {
 
-			Optional<Deskriptor> optDeskriptor = alleDeskriptoren.stream().filter(d -> name.equalsIgnoreCase(d.name.toLowerCase()))
-				.findFirst();
+            Optional<Deskriptor> optDeskriptor = alleDeskriptoren
+                    .stream()
+                    .filter(d -> name.equalsIgnoreCase(d.name.toLowerCase()))
+                    .findFirst();
 
-			if (optDeskriptor.isPresent()) {
+            if (optDeskriptor.isPresent()) {
 
-				filteredIDs.add(optDeskriptor.get().id);
-			}
-		});
+                filteredIDs.add(optDeskriptor.get().id);
+            }
+        });
 
-		Collections.sort(filteredIDs);
+        Collections.sort(filteredIDs);
 
-		return StringUtils.join(filteredIDs, ',');
-	}
+        return StringUtils.join(filteredIDs, ',');
+    }
 
-	/**
-	 * Läd die Deskriptoren für RAETSEL.
-	 *
-	 * @return List
-	 */
-	@SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
-	public List<DeskriptorUI> loadDeskriptoren() {
+    /**
+     * Läd die Deskriptoren für RAETSEL.
+     *
+     * @return List
+     */
+    @SuppressWarnings("resource") // ist false positive, weil der Container die Response schließt.
+    public List<DeskriptorUI> loadDeskriptoren() {
 
-		AuthenticatedUser user = authCtx.getUser();
+        AuthenticatedUser user = authCtx.getUser();
 
-		LOGGER.debug(">>>>>" + (user == null ? "null" : user.toString()) + " <<<<<");
+        LOGGER.debug(">>>>>" + (user == null ? "null" : user.toString()) + " <<<<<");
 
-		if (user == null || user.getBenutzerart() == Benutzerart.ANONYM) {
+        if (user == null || user.getBenutzerart() == Benutzerart.ANONYM) {
 
-			LOGGER.warn("loadDeskriptorenV2 wurde ohne oder mit anonymer Session aufgerufen");
+            LOGGER.warn("loadDeskriptorenV2 wurde ohne oder mit anonymer Session aufgerufen");
 
-			throw new WebApplicationException(
-				Response.status(Status.FORBIDDEN).entity(MessagePayload.error("verbotene URL aufgerufen")).build());
-		}
+            throw new WebApplicationException(
+                    Response.status(Status.FORBIDDEN).entity(MessagePayload.error("verbotene URL aufgerufen")).build());
+        }
 
-		boolean admin = user.isAdminOrAutor();
+        boolean admin = user.isAdminOrAutor();
 
-		List<Deskriptor> alle = deskriptorenRepository.listAll();
-		Collections.sort(alle, DESKRIPTOREN_COMPARATOR);
+        List<Deskriptor> alle = deskriptorenRepository.listAll();
+        Collections.sort(alle, DESKRIPTOREN_COMPARATOR);
 
-		if (admin) {
+        if (admin) {
 
-			List<DeskriptorUI> result = alle.stream().map(d -> new DeskriptorUI(d.id, d.name)).toList();
-			LOGGER.debug("Deskriptoren für admin: Anzahl={}", result.size());
-			return result;
-		}
+            List<DeskriptorUI> result = alle.stream().map(d -> new DeskriptorUI(d.id, d.name)).toList();
+            LOGGER.debug("Deskriptoren für admin: Anzahl={}", result.size());
+            return result;
+        }
 
-		List<DeskriptorUI> result = alle.stream().filter(d -> !d.admin).map(d -> new DeskriptorUI(d.id, d.name)).toList();
-		LOGGER.debug("Deskriptoren für public: Anzahl={}", result.size());
-		return result;
+        List<DeskriptorUI> result = alle
+                .stream()
+                .filter(d -> !d.admin)
+                .map(d -> new DeskriptorUI(d.id, d.name))
+                .toList();
+        LOGGER.debug("Deskriptoren für public: Anzahl={}", result.size());
+        return result;
 
-	}
+    }
 
-	/**
-	 * Sucht den Deskriptor anhand seines Namens.
-	 *
-	 * @param name String
-	 * @return Optional
-	 */
-	public Optional<Deskriptor> findByName(final String name) {
+    /**
+     * Sucht den Deskriptor anhand seines Namens.
+     *
+     * @param name String
+     * @return Optional
+     */
+    public Optional<Deskriptor> findByName(final String name) {
 
-		List<Deskriptor> alleDeskriptoren = deskriptorenRepository.listAll();
+        List<Deskriptor> alleDeskriptoren = deskriptorenRepository.listAll();
 
-		return alleDeskriptoren.stream().filter(d -> d.name.equalsIgnoreCase(name)).findFirst();
-	}
+        return alleDeskriptoren.stream().filter(d -> d.name.equalsIgnoreCase(name)).findFirst();
+    }
 
-	/**
-	 * Gibt alle Ids sortiert als kommaseparierten String zurück. Dubletten werden zuvor entfernt.
-	 *
-	 * @param deskriptoren
-	 * @return String oder null, wenn leere oder null-Liste
-	 */
-	public String sortAndStringifyIdsDeskriptoren(final List<Deskriptor> deskriptoren) {
+    /**
+     * Gibt alle Ids sortiert als kommaseparierten String zurück. Dubletten werden
+     * zuvor entfernt.
+     *
+     * @param deskriptoren
+     * @return String oder null, wenn leere oder null-Liste
+     */
+    public String sortAndStringifyIdsDeskriptoren(final List<Deskriptor> deskriptoren) {
 
-		if (deskriptoren == null || deskriptoren.isEmpty()) {
+        if (deskriptoren == null || deskriptoren.isEmpty()) {
 
-			return null;
-		}
+            return null;
+        }
 
-		List<Long> ids = getSortedIds(deskriptoren);
+        List<Long> ids = getSortedIds(deskriptoren);
 
-		return "," + StringUtils.join(ids, ",,") + ",";
-	}
+        return "," + StringUtils.join(ids, ",,") + ",";
+    }
 
-	private List<Long> removeDuplicates(final List<Long> ids) {
+    private List<Long> removeDuplicates(final List<Long> ids) {
 
-		Set<Long> set = new HashSet<>();
-		set.addAll(ids);
+        Set<Long> set = new HashSet<>();
+        set.addAll(ids);
 
-		return set.stream().collect(Collectors.toList());
+        return set.stream().collect(Collectors.toList());
 
-	}
+    }
 
-	private List<Long> getSortedIds(final List<Deskriptor> deskriptoren) {
+    private List<Long> getSortedIds(final List<Deskriptor> deskriptoren) {
 
-		List<Long> ids = deskriptoren.stream().map(d -> d.id).collect(Collectors.toList());
-		ids = removeDuplicates(ids);
-		Collections.sort(ids);
+        List<Long> ids = deskriptoren.stream().map(d -> d.id).collect(Collectors.toList());
+        ids = removeDuplicates(ids);
+        Collections.sort(ids);
 
-		return ids;
-	}
+        return ids;
+    }
 
 }

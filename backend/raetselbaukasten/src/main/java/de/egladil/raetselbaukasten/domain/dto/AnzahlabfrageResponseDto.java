@@ -14,17 +14,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Schema(name = "AnzahlabfrageResponseDto", description = "Ergebnis ist die Zahl, die die Anzahlabfrage ermittelt hat.")
 public class AnzahlabfrageResponseDto {
 
-	@JsonProperty
-	private long ergebnis;
+    @JsonProperty
+    private long ergebnis;
 
-	public long getErgebnis() {
+    public long getErgebnis() {
 
-		return ergebnis;
-	}
+        return ergebnis;
+    }
 
-	public void setErgebnis(final long ergebnis) {
+    public void setErgebnis(final long ergebnis) {
 
-		this.ergebnis = ergebnis;
-	}
+        this.ergebnis = ergebnis;
+    }
 
 }

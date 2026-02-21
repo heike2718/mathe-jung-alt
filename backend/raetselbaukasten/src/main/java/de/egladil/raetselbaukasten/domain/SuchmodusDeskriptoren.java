@@ -9,11 +9,10 @@ package de.egladil.raetselbaukasten.domain;
  */
 public enum SuchmodusDeskriptoren {
 
-	LIKE,
-	NOT_LIKE;
+    LIKE, NOT_LIKE;
 
-	public static SuchmodusDeskriptoren getDefault() {
+    public static SuchmodusDeskriptoren getDefault() {
 
-		return SuchmodusDeskriptoren.LIKE;
-	}
+        return SuchmodusDeskriptoren.LIKE;
+    }
 }

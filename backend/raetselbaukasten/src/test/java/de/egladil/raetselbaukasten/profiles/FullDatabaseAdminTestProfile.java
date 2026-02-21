@@ -11,11 +11,11 @@ import io.quarkus.test.junit.QuarkusTestProfile;
  */
 public class FullDatabaseAdminTestProfile implements QuarkusTestProfile {
 
-	@Override
-	public String getConfigProfile() {
+    @Override
+    public String getConfigProfile() {
 
-		// Präfix = _FULL-DB-ADMIN-TEST_ (siehe .env und templates/env-template)
-		return "full-db-admin-test";
-	}
+        // Präfix = _FULL-DB-ADMIN-TEST_ (siehe .env und templates/env-template)
+        return "full-db-admin-test";
+    }
 
 }

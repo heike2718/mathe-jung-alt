@@ -9,6 +9,5 @@ package de.egladil.raetselbaukasten.domain.dto;
  */
 public enum SortDirection {
 
-	asc,
-	desc;
+    asc, desc;
 }

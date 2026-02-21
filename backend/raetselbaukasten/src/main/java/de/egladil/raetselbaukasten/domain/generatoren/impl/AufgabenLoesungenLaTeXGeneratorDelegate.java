@@ -22,100 +22,108 @@ import de.egladil.raetselbaukasten.domain.utils.GeneratorUtils;
  */
 public class AufgabenLoesungenLaTeXGeneratorDelegate {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabenLoesungenLaTeXGeneratorDelegate.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AufgabenLoesungenLaTeXGeneratorDelegate.class);
 
-	String printContentAufgaben(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
+    String printContentAufgaben(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX,
+            final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
 
-		final Verwendungszweck verwendungszweck = input.getVerwendungszweck();
+        final Verwendungszweck verwendungszweck = input.getVerwendungszweck();
 
-		StringBuffer sb = new StringBuffer();
-		int count = 0;
+        StringBuffer sb = new StringBuffer();
+        int count = 0;
 
-		for (Quizaufgabe aufgabe : aufgaben) {
+        for (Quizaufgabe aufgabe : aufgaben) {
 
-			Optional<RaetselLaTeXDto> opt = raetselLaTeX.stream().filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
-				.findFirst();
+            Optional<RaetselLaTeXDto> opt = raetselLaTeX
+                    .stream()
+                    .filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
+                    .findFirst();
 
-			if (opt.isPresent()) {
+            if (opt.isPresent()) {
 
-				RaetselLaTeXDto raetsel = opt.get();
+                RaetselLaTeXDto raetsel = opt.get();
 
-				RaetselGeneratorinput raetselInput = new RaetselGeneratorinput()
-					.withAntwortvorschlaegeEingebettet(aufgabe.isAntwortvorschlaegeEingebettet())
-					.withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
-					.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
-					.withLayoutAntwortvorschlaege(input.getLayoutAntwortvorschlaege())
-					.withNummer(aufgabe.getNummer())
-					.withSchluessel(aufgabe.getSchluessel())
-					.withVerwendungszweck(verwendungszweck)
-					.withPunkten(aufgabe.getPunkte());
+                RaetselGeneratorinput raetselInput = new RaetselGeneratorinput()
+                        .withAntwortvorschlaegeEingebettet(aufgabe.isAntwortvorschlaegeEingebettet())
+                        .withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
+                        .withFrage(raetsel.getFrage())
+                        .withLoesung(raetsel.getLoesung())
+                        .withLayoutAntwortvorschlaege(input.getLayoutAntwortvorschlaege())
+                        .withNummer(aufgabe.getNummer())
+                        .withSchluessel(aufgabe.getSchluessel())
+                        .withVerwendungszweck(verwendungszweck)
+                        .withPunkten(aufgabe.getPunkte());
 
-				if (count > 0) {
+                if (count > 0) {
 
-					sb.append(LaTeXConstants.ABSTAND_ITEMS);
-				}
+                    sb.append(LaTeXConstants.ABSTAND_ITEMS);
+                }
 
-				boolean printAsMultipleChoice = GeneratorUtils.shouldPrintAntwortvorschlaege(input.getLayoutAntwortvorschlaege(),
-					aufgabe);
+                boolean printAsMultipleChoice = GeneratorUtils
+                        .shouldPrintAntwortvorschlaege(input.getLayoutAntwortvorschlaege(), aufgabe);
 
-				String text = quizitemLaTeXGenerator.generateLaTeXFrage(raetselInput, printAsMultipleChoice);
-				sb.append(text);
-				count++;
+                String text = quizitemLaTeXGenerator.generateLaTeXFrage(raetselInput, printAsMultipleChoice);
+                sb.append(text);
+                count++;
 
-			} else {
+            } else {
 
-				LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
-			}
+                LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
+            }
 
-		}
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	String printContentLoesungen(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX, final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
+    String printContentLoesungen(final List<Quizaufgabe> aufgaben, final List<RaetselLaTeXDto> raetselLaTeX,
+            final QuizitemLaTeXGenerator quizitemLaTeXGenerator, final AufgabensammlungGeneratorInput input) {
 
-		final Verwendungszweck verwendungszweck = input.getVerwendungszweck();
-		StringBuffer sb = new StringBuffer();
-		int count = 0;
+        final Verwendungszweck verwendungszweck = input.getVerwendungszweck();
+        StringBuffer sb = new StringBuffer();
+        int count = 0;
 
-		for (Quizaufgabe aufgabe : aufgaben) {
+        for (Quizaufgabe aufgabe : aufgaben) {
 
-			Optional<RaetselLaTeXDto> opt = raetselLaTeX.stream().filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
-				.findFirst();
+            Optional<RaetselLaTeXDto> opt = raetselLaTeX
+                    .stream()
+                    .filter(r -> aufgabe.getSchluessel().equals(r.getSchluessel()))
+                    .findFirst();
 
-			if (opt.isPresent()) {
+            if (opt.isPresent()) {
 
-				RaetselLaTeXDto raetsel = opt.get();
+                RaetselLaTeXDto raetsel = opt.get();
 
-				RaetselGeneratorinput raetselInput = new RaetselGeneratorinput()
-					.withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
-					.withFrage(raetsel.getFrage()).withLoesung(raetsel.getLoesung())
-					.withLayoutAntwortvorschlaege(input.getLayoutAntwortvorschlaege())
-					.withNummer(aufgabe.getNummer())
-					.withSchluessel(aufgabe.getSchluessel())
-					.withVerwendungszweck(verwendungszweck)
-					.withPunkten(aufgabe.getPunkte());
+                RaetselGeneratorinput raetselInput = new RaetselGeneratorinput()
+                        .withAntwortvorschlaege(aufgabe.getAntwortvorschlaege())
+                        .withFrage(raetsel.getFrage())
+                        .withLoesung(raetsel.getLoesung())
+                        .withLayoutAntwortvorschlaege(input.getLayoutAntwortvorschlaege())
+                        .withNummer(aufgabe.getNummer())
+                        .withSchluessel(aufgabe.getSchluessel())
+                        .withVerwendungszweck(verwendungszweck)
+                        .withPunkten(aufgabe.getPunkte());
 
-				boolean printAsMultipleChoice = GeneratorUtils.shouldPrintAntwortvorschlaege(input.getLayoutAntwortvorschlaege(),
-					aufgabe);
+                boolean printAsMultipleChoice = GeneratorUtils
+                        .shouldPrintAntwortvorschlaege(input.getLayoutAntwortvorschlaege(), aufgabe);
 
-				String text = quizitemLaTeXGenerator.generateLaTeXLoesung(raetselInput, printAsMultipleChoice);
-				sb.append(text);
+                String text = quizitemLaTeXGenerator.generateLaTeXLoesung(raetselInput, printAsMultipleChoice);
+                sb.append(text);
 
-				if (GeneratorUtils.shouldPrintTrenner(aufgaben.size(), count)) {
+                if (GeneratorUtils.shouldPrintTrenner(aufgaben.size(), count)) {
 
-					sb.append(LaTeXConstants.ABSTAND_ITEMS);
-				}
-				count++;
+                    sb.append(LaTeXConstants.ABSTAND_ITEMS);
+                }
+                count++;
 
-			} else {
+            } else {
 
-				LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
-			}
+                LOGGER.warn("Zu schuessel {} wurde kein RAETSEL in der DB gefunden");
+            }
 
-		}
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
 }

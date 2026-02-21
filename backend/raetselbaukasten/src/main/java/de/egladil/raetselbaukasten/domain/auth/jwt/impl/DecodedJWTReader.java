@@ -14,25 +14,25 @@ import com.auth0.jwt.interfaces.DecodedJWT;
  */
 public class DecodedJWTReader {
 
-	private final DecodedJWT decodedJWT;
+    private final DecodedJWT decodedJWT;
 
-	/**
-	 * @param decodedJWT
-	 */
-	public DecodedJWTReader(final DecodedJWT decodedJWT) {
+    /**
+     * @param decodedJWT
+     */
+    public DecodedJWTReader(final DecodedJWT decodedJWT) {
 
-		this.decodedJWT = decodedJWT;
-	}
+        this.decodedJWT = decodedJWT;
+    }
 
-	public String getFullName() {
+    public String getFullName() {
 
-		return decodedJWT.getClaim(Claims.full_name.name()).asString();
-	}
+        return decodedJWT.getClaim(Claims.full_name.name()).asString();
+    }
 
-	public String[] getGroups() {
+    public String[] getGroups() {
 
-		Claim groups = decodedJWT.getClaim(Claims.groups.name());
-		return !groups.isNull() ? groups.asList(String.class).toArray(new String[0]) : new String[0];
-	}
+        Claim groups = decodedJWT.getClaim(Claims.groups.name());
+        return !groups.isNull() ? groups.asList(String.class).toArray(new String[0]) : new String[0];
+    }
 
 }

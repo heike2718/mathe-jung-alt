@@ -11,10 +11,10 @@ import de.egladil.raetselbaukasten.domain.raetsel.Antwortvorschlag;
  */
 public class NoopAntwortvorschlagGeneratorStrategegy implements AntwortvorschlagGeneratorStrategegy {
 
-	@Override
-	public String generateLaTeXAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
+    @Override
+    public String generateLaTeXAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
-		return "";
-	}
+        return "";
+    }
 
 }

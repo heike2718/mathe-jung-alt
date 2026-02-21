@@ -14,10 +14,10 @@ import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Deskripto
  */
 public class DeskriptorenNameComparator implements Comparator<Deskriptor> {
 
-	@Override
-	public int compare(final Deskriptor o1, final Deskriptor o2) {
+    @Override
+    public int compare(final Deskriptor o1, final Deskriptor o2) {
 
-		return Collator.getInstance().compare(o1.name, o2.name);
-	}
+        return Collator.getInstance().compare(o1.name, o2.name);
+    }
 
 }

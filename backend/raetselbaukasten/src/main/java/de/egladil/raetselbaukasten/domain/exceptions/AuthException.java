@@ -9,25 +9,25 @@ package de.egladil.raetselbaukasten.domain.exceptions;
  */
 public class AuthException extends RuntimeException {
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public AuthException(final String message, final Throwable cause) {
+    /**
+     * @param message
+     * @param cause
+     */
+    public AuthException(final String message, final Throwable cause) {
 
-		super(message, cause);
+        super(message, cause);
 
-	}
+    }
 
-	/**
-	 * @param message
-	 */
-	public AuthException(final String message) {
+    /**
+     * @param message
+     */
+    public AuthException(final String message) {
 
-		super(message);
+        super(message);
 
-	}
+    }
 
-	private static final long serialVersionUID = -1906597753895801273L;
+    private static final long serialVersionUID = -1906597753895801273L;
 
 }

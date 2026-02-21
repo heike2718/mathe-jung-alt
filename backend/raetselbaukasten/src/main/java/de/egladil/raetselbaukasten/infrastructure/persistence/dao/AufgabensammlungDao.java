@@ -4,6 +4,22 @@
 // =====================================================
 package de.egladil.raetselbaukasten.infrastructure.persistence.dao;
 
+import java.util.List;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.commons.lang3.StringUtils;
+
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.AufgabensammlungenSuchparameter;
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Schwierigkeitsgrad;
@@ -13,19 +29,6 @@ import de.egladil.raetselbaukasten.domain.semantik.Repository;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistentesAufgabensammlungselement;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * AufgabensammlungDao
@@ -40,8 +43,9 @@ public class AufgabensammlungDao {
     EntityManager entityManager;
 
     /**
-     * Zählt die Treffermenge bei Anwendung des gegebenen Filters. Die Parameter können null sein. Bei name und kommentar wird mit
-     * like gesucht, alle anderen mit equal.
+     * Zählt die Treffermenge bei Anwendung des gegebenen Filters. Die Parameter
+     * können null sein. Bei name und kommentar wird mit like gesucht, alle anderen
+     * mit equal.
      *
      * @param suchparameter
      * @return long
@@ -66,8 +70,7 @@ public class AufgabensammlungDao {
         }
 
         @SuppressWarnings("unchecked")
-        List<Long> trefferliste = query
-                .getResultList();
+        List<Long> trefferliste = query.getResultList();
 
         int anzahl = trefferliste.get(0).intValue();
 
@@ -75,15 +78,17 @@ public class AufgabensammlungDao {
     }
 
     /**
-     * Sucht die Aufgabensammlung die den Filterkriterien entsprechen, sortiert nach name. Die Parameter können null sein. Bei name
-     * und kommentar wird mit like gesucht, alle anderen mit equal.
+     * Sucht die Aufgabensammlung die den Filterkriterien entsprechen, sortiert nach
+     * name. Die Parameter können null sein. Bei name und kommentar wird mit like
+     * gesucht, alle anderen mit equal.
      *
      * @param suchparameter
      * @param limit
      * @param offset
      * @return List
      */
-    public List<PersistenteAufgabensammlung> findByFilter(final AufgabensammlungenSuchparameter suchparameter, final int limit, final int offset) {
+    public List<PersistenteAufgabensammlung> findByFilter(final AufgabensammlungenSuchparameter suchparameter,
+            final int limit, final int offset) {
 
         String stmt = "select g from PersistenteAufgabensammlung g";
         String whereStmt = createWhereCondition(suchparameter);
@@ -98,8 +103,9 @@ public class AufgabensammlungDao {
 
         stmt += sortStmt;
 
-        TypedQuery<PersistenteAufgabensammlung> query = entityManager.createQuery(stmt,
-                        PersistenteAufgabensammlung.class).setFirstResult(offset)
+        TypedQuery<PersistenteAufgabensammlung> query = entityManager
+                .createQuery(stmt, PersistenteAufgabensammlung.class)
+                .setFirstResult(offset)
                 .setMaxResults(limit);
 
         setParameters(query, suchparameter);
@@ -210,7 +216,8 @@ public class AufgabensammlungDao {
 
         if (Benutzerart.STANDARD == suchparameter.benutzerart()) {
 
-            query.setParameter("freigegeben", true)
+            query
+                    .setParameter("freigegeben", true)
                     .setParameter("privatTrue", true)
                     .setParameter("privatFalse", false)
                     .setParameter("owner", suchparameter.owner());
@@ -228,7 +235,8 @@ public class AufgabensammlungDao {
      * @param schwierigkeitsgrad
      * @return PersistenteAufgabensammlung oder null
      */
-    public PersistenteAufgabensammlung findByUniqueKey(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
+    public PersistenteAufgabensammlung findByUniqueKey(final Referenztyp referenztyp, final String referenz,
+            final Schwierigkeitsgrad schwierigkeitsgrad) {
 
         LOGGER.debug(" ==> (2)");
         List<PersistenteAufgabensammlung> trefferliste = entityManager
@@ -242,8 +250,9 @@ public class AufgabensammlungDao {
 
         if (trefferliste.size() > 1) {
 
-            LOGGER.error("{} Treffer zu einem eigentlich eindeutigen key referenzty={}, referenz={}, schwierigkeitsgrad={}",
-                    trefferliste.size(), referenztyp, referenz, schwierigkeitsgrad);
+            LOGGER
+                    .error("{} Treffer zu einem eigentlich eindeutigen key referenzty={}, referenz={}, schwierigkeitsgrad={}",
+                            trefferliste.size(), referenztyp, referenz, schwierigkeitsgrad);
             throw new MjaRuntimeException("mehr als 1 Treffer zu einem eigentlich eindeutigen key");
         }
 
@@ -272,8 +281,7 @@ public class AufgabensammlungDao {
 
         if (trefferliste.size() > 1) {
 
-            LOGGER.error("{} Treffer mit dem Namen name={}",
-                    trefferliste.size(), name);
+            LOGGER.error("{} Treffer mit dem Namen name={}", trefferliste.size(), name);
             throw new MjaRuntimeException("mehr als 1 Treffer mit diesem Namen");
         }
 
@@ -291,7 +299,8 @@ public class AufgabensammlungDao {
         return entityManager
                 .createNamedQuery(PersistentesAufgabensammlungselement.LOAD_BY_AUFGABENSAMMLUNG,
                         PersistentesAufgabensammlungselement.class)
-                .setParameter("aufgabensammlungID", aufgabensammlungID).getResultList();
+                .setParameter("aufgabensammlungID", aufgabensammlungID)
+                .getResultList();
     }
 
     /**
@@ -303,12 +312,15 @@ public class AufgabensammlungDao {
     public List<PersistenteAufgabeReadonly> loadAufgabenByAufgabensammlung(final String aufgabensammlungID) {
 
         return entityManager
-                .createNamedQuery(PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG, PersistenteAufgabeReadonly.class)
-                .setParameter("sammlung", aufgabensammlungID).getResultList();
+                .createNamedQuery(PersistenteAufgabeReadonly.LOAD_AUFGABEN_IN_SAMMLUNG,
+                        PersistenteAufgabeReadonly.class)
+                .setParameter("sammlung", aufgabensammlungID)
+                .getResultList();
     }
 
     /**
-     * Speichert die gegebene Aufgabensammlung und gibt die gespeicherte Entity zurück.
+     * Speichert die gegebene Aufgabensammlung und gibt die gespeicherte Entity
+     * zurück.
      *
      * @param aufgabensammlung PersistenteAufgabensammlung
      * @return PersistenteAufgabensammlung
@@ -369,8 +381,8 @@ public class AufgabensammlungDao {
     @Transactional
     public void deleteElement(final String elementID) {
 
-        final PersistentesAufgabensammlungselement element = entityManager.find(PersistentesAufgabensammlungselement.class,
-                elementID);
+        final PersistentesAufgabensammlungselement element = entityManager
+                .find(PersistentesAufgabensammlungselement.class, elementID);
 
         if (element != null) {
 

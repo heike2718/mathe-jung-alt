@@ -14,45 +14,45 @@ import de.egladil.raetselbaukasten.domain.exceptions.MjaRuntimeException;
  */
 public class AntwortvorschlaegeMapper {
 
-	/**
-	 * @param  json
-	 * @return
-	 */
-	public static Antwortvorschlag[] deserializeAntwortvorschlaege(final String json) {
+    /**
+     * @param json
+     * @return
+     */
+    public static Antwortvorschlag[] deserializeAntwortvorschlaege(final String json) {
 
-		if (json == null) {
+        if (json == null) {
 
-			return new Antwortvorschlag[0];
-		}
+            return new Antwortvorschlag[0];
+        }
 
-		try {
+        try {
 
-			return new ObjectMapper().readValue(json, Antwortvorschlag[].class);
-		} catch (JsonProcessingException e) {
+            return new ObjectMapper().readValue(json, Antwortvorschlag[].class);
+        } catch (JsonProcessingException e) {
 
-			throw new MjaRuntimeException("konnte antwortvorschlaege nicht deserialisieren: " + e.getMessage(), e);
-		}
-	}
+            throw new MjaRuntimeException("konnte antwortvorschlaege nicht deserialisieren: " + e.getMessage(), e);
+        }
+    }
 
-	/**
-	 * @param  antwortvorschlaege
-	 * @return
-	 */
-	public static String antwortvorschlaegeAsJSON(final Antwortvorschlag[] antwortvorschlaege) {
+    /**
+     * @param antwortvorschlaege
+     * @return
+     */
+    public static String antwortvorschlaegeAsJSON(final Antwortvorschlag[] antwortvorschlaege) {
 
-		if (antwortvorschlaege == null) {
+        if (antwortvorschlaege == null) {
 
-			return null;
-		}
+            return null;
+        }
 
-		try {
+        try {
 
-			return new ObjectMapper().writeValueAsString(antwortvorschlaege);
-		} catch (JsonProcessingException e) {
+            return new ObjectMapper().writeValueAsString(antwortvorschlaege);
+        } catch (JsonProcessingException e) {
 
-			throw new MjaRuntimeException("konnte antwortvorschlaege nicht serialisieren: " + e.getMessage(), e);
+            throw new MjaRuntimeException("konnte antwortvorschlaege nicht serialisieren: " + e.getMessage(), e);
 
-		}
-	}
+        }
+    }
 
 }

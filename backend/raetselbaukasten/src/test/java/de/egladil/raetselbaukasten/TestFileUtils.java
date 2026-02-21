@@ -16,31 +16,31 @@ import de.egladil.raetselbaukasten.domain.raetsel.dto.EditRaetselPayload;
  */
 public class TestFileUtils {
 
-	public static Raetsel loadReaetsel() throws Exception {
+    public static Raetsel loadReaetsel() throws Exception {
 
-		try (InputStream in = TestFileUtils.class.getResourceAsStream("/payloads/Raetsel.json")) {
+        try (InputStream in = TestFileUtils.class.getResourceAsStream("/payloads/Raetsel.json")) {
 
-			Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
-			return raetsel;
-		}
+            Raetsel raetsel = new ObjectMapper().readValue(in, Raetsel.class);
+            return raetsel;
+        }
 
-	}
+    }
 
-	public static EditRaetselPayload loadEditRaetselPayload(final String classpath) throws Exception {
+    public static EditRaetselPayload loadEditRaetselPayload(final String classpath) throws Exception {
 
-		try (InputStream in = TestFileUtils.class.getResourceAsStream(classpath)) {
+        try (InputStream in = TestFileUtils.class.getResourceAsStream(classpath)) {
 
-			EditRaetselPayload result = new ObjectMapper().readValue(in, EditRaetselPayload.class);
-			return result;
-		}
+            EditRaetselPayload result = new ObjectMapper().readValue(in, EditRaetselPayload.class);
+            return result;
+        }
 
-	}
+    }
 
-	public static byte[] loadBytes(final String classpath) throws Exception {
+    public static byte[] loadBytes(final String classpath) throws Exception {
 
-		try (InputStream in = TestFileUtils.class.getResourceAsStream(classpath)) {
+        try (InputStream in = TestFileUtils.class.getResourceAsStream(classpath)) {
 
-			return in.readAllBytes();
-		}
-	}
+            return in.readAllBytes();
+        }
+    }
 }

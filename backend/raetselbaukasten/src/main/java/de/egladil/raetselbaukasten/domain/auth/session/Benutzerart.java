@@ -9,9 +9,6 @@ package de.egladil.raetselbaukasten.domain.auth.session;
  */
 public enum Benutzerart {
 
-	ADMIN,
-	ANONYM,
-	AUTOR,
-	STANDARD;
+    ADMIN, ANONYM, AUTOR, STANDARD;
 
 }

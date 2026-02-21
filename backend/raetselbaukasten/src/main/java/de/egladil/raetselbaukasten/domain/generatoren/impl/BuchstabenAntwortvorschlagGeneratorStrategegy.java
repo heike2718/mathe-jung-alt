@@ -11,52 +11,52 @@ import de.egladil.raetselbaukasten.domain.raetsel.Antwortvorschlag;
  */
 public class BuchstabenAntwortvorschlagGeneratorStrategegy implements AntwortvorschlagGeneratorStrategegy {
 
-	@Override
-	public String generateLaTeXAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
+    @Override
+    public String generateLaTeXAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
-		if (antwortvorschlaege == null || antwortvorschlaege.length == 0) {
+        if (antwortvorschlaege == null || antwortvorschlaege.length == 0) {
 
-			return "";
-		}
+            return "";
+        }
 
-		String tableType = PATTERN_TABLETYPE.replace("#", "" + antwortvorschlaege.length);
-		StringBuffer sb = new StringBuffer();
+        String tableType = PATTERN_TABLETYPE.replace("#", "" + antwortvorschlaege.length);
+        StringBuffer sb = new StringBuffer();
 
-		sb.append("\\begin{center}\n");
-		sb.append("\\begin{tabular}");
-		sb.append(tableType);
-		sb.append("\n\\hline\n");
+        sb.append("\\begin{center}\n");
+        sb.append("\\begin{tabular}");
+        sb.append(tableType);
+        sb.append("\n\\hline\n");
 
-		for (int i = 0; i < antwortvorschlaege.length; i++) {
+        for (int i = 0; i < antwortvorschlaege.length; i++) {
 
-			Antwortvorschlag antwortvorschlag = antwortvorschlaege[i];
+            Antwortvorschlag antwortvorschlag = antwortvorschlaege[i];
 
-			sb.append(antwortvorschlag.getBuchstabe());
+            sb.append(antwortvorschlag.getBuchstabe());
 
-			if (i < antwortvorschlaege.length - 1) {
+            if (i < antwortvorschlaege.length - 1) {
 
-				sb.append(" & ");
-			}
-		}
-		sb.append("\\\\\n\\hline\n");
+                sb.append(" & ");
+            }
+        }
+        sb.append("\\\\\n\\hline\n");
 
-		for (int i = 0; i < antwortvorschlaege.length; i++) {
+        for (int i = 0; i < antwortvorschlaege.length; i++) {
 
-			Antwortvorschlag antwortvorschlag = antwortvorschlaege[i];
+            Antwortvorschlag antwortvorschlag = antwortvorschlaege[i];
 
-			sb.append(antwortvorschlag.getText());
+            sb.append(antwortvorschlag.getText());
 
-			if (i < antwortvorschlaege.length - 1) {
+            if (i < antwortvorschlaege.length - 1) {
 
-				sb.append(" & ");
-			}
-		}
+                sb.append(" & ");
+            }
+        }
 
-		sb.append("\\\\\n\\hline\n");
-		sb.append("\\end{tabular}\n");
-		sb.append("\\end{center}\n");
+        sb.append("\\\\\n\\hline\n");
+        sb.append("\\end{tabular}\n");
+        sb.append("\\end{center}\n");
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
 }

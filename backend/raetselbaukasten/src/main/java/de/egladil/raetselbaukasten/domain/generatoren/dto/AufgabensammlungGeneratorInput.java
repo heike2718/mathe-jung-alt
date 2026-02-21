@@ -14,105 +14,109 @@ import de.egladil.raetselbaukasten.domain.raetsel.LayoutAntwortvorschlaege;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 
 /**
- * AufgabensammlungGeneratorInput kapselt die Parameter für den Auftrag zum Generieren einer Aufgabensammlung.
+ * AufgabensammlungGeneratorInput kapselt die Parameter für den Auftrag zum
+ * Generieren einer Aufgabensammlung.
  */
 public class AufgabensammlungGeneratorInput {
 
-	/**
-	 * aufgabensammlung PersistenteAufgabensammlung - die zu druckende Aufgabensammlung
-	 */
-	private PersistenteAufgabensammlung aufgabensammlung;
+    /**
+     * aufgabensammlung PersistenteAufgabensammlung - die zu druckende
+     * Aufgabensammlung
+     */
+    private PersistenteAufgabensammlung aufgabensammlung;
 
-	/**
-	 * aufgaben List - die Quizaufgaben, die gedruckt werden sollen.
-	 */
-	private List<Quizaufgabe> aufgaben;
+    /**
+     * aufgaben List - die Quizaufgaben, die gedruckt werden sollen.
+     */
+    private List<Quizaufgabe> aufgaben;
 
-	/**
-	 * layoutAntwortvorschlaege LayoutAntwortvorschlaege - wie die Antwortvorschläge gedruckt werden sollen. Bei NOOP werden keine
-	 * gedruckt.
-	 */
-	private LayoutAntwortvorschlaege layoutAntwortvorschlaege;
+    /**
+     * layoutAntwortvorschlaege LayoutAntwortvorschlaege - wie die Antwortvorschläge
+     * gedruckt werden sollen. Bei NOOP werden keine gedruckt.
+     */
+    private LayoutAntwortvorschlaege layoutAntwortvorschlaege;
 
-	/**
-	 * font FontName - Name des Fonts, mit dem gedruckt werden soll.
-	 */
-	private FontName font;
+    /**
+     * font FontName - Name des Fonts, mit dem gedruckt werden soll.
+     */
+    private FontName font;
 
-	/**
-	 * verwendungszweck Verwendungszweck - der Verwendungszweck
-	 */
-	private Verwendungszweck verwendungszweck;
+    /**
+     * verwendungszweck Verwendungszweck - der Verwendungszweck
+     */
+    private Verwendungszweck verwendungszweck;
 
-	/**
-	 * schriftgroesse Schriftgroesse in den LaTeX-Varianten '' (NORMAL), '\Large' (GROSS), '\LARGE' (HUGE).
-	 */
-	private Schriftgroesse schriftgroesse;
+    /**
+     * schriftgroesse Schriftgroesse in den LaTeX-Varianten '' (NORMAL), '\Large'
+     * (GROSS), '\LARGE' (HUGE).
+     */
+    private Schriftgroesse schriftgroesse;
 
-	public PersistenteAufgabensammlung getAufgabensammlung() {
+    public PersistenteAufgabensammlung getAufgabensammlung() {
 
-		return aufgabensammlung;
-	}
+        return aufgabensammlung;
+    }
 
-	public AufgabensammlungGeneratorInput withAufgabensammlung(final PersistenteAufgabensammlung aufgabensammlung) {
+    public AufgabensammlungGeneratorInput withAufgabensammlung(final PersistenteAufgabensammlung aufgabensammlung) {
 
-		this.aufgabensammlung = aufgabensammlung;
-		return this;
-	}
+        this.aufgabensammlung = aufgabensammlung;
+        return this;
+    }
 
-	public List<Quizaufgabe> getAufgaben() {
+    public List<Quizaufgabe> getAufgaben() {
 
-		return aufgaben;
-	}
+        return aufgaben;
+    }
 
-	public AufgabensammlungGeneratorInput withAufgaben(final List<Quizaufgabe> aufgaben) {
+    public AufgabensammlungGeneratorInput withAufgaben(final List<Quizaufgabe> aufgaben) {
 
-		this.aufgaben = aufgaben;
-		return this;
-	}
+        this.aufgaben = aufgaben;
+        return this;
+    }
 
-	public LayoutAntwortvorschlaege getLayoutAntwortvorschlaege() {
+    public LayoutAntwortvorschlaege getLayoutAntwortvorschlaege() {
 
-		return layoutAntwortvorschlaege;
-	}
+        return layoutAntwortvorschlaege;
+    }
 
-	public AufgabensammlungGeneratorInput withLayoutAntwortvorschlaege(final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
+    public AufgabensammlungGeneratorInput withLayoutAntwortvorschlaege(
+            final LayoutAntwortvorschlaege layoutAntwortvorschlaege) {
 
-		this.layoutAntwortvorschlaege = layoutAntwortvorschlaege;
-		return this;
-	}
+        this.layoutAntwortvorschlaege = layoutAntwortvorschlaege;
+        return this;
+    }
 
-	public FontName getFont() {
+    public FontName getFont() {
 
-		return font;
-	}
+        return font;
+    }
 
-	public AufgabensammlungGeneratorInput withFont(final FontName font) {
+    public AufgabensammlungGeneratorInput withFont(final FontName font) {
 
-		this.font = font;
-		return this;
-	}
+        this.font = font;
+        return this;
+    }
 
-	public Verwendungszweck getVerwendungszweck() {
+    public Verwendungszweck getVerwendungszweck() {
 
-		return verwendungszweck;
-	}
+        return verwendungszweck;
+    }
 
-	public AufgabensammlungGeneratorInput withVerwendungszweck(final Verwendungszweck verwendungszweck) {
+    public AufgabensammlungGeneratorInput withVerwendungszweck(final Verwendungszweck verwendungszweck) {
 
-		this.verwendungszweck = verwendungszweck;
-		return this;
-	}
+        this.verwendungszweck = verwendungszweck;
+        return this;
+    }
 
-	public Schriftgroesse getSchriftgroesse() {
+    public Schriftgroesse getSchriftgroesse() {
 
-		return schriftgroesse;
-	}
+        return schriftgroesse;
+    }
 
-	public AufgabensammlungGeneratorInput withSchriftgroesse(final Schriftgroesse schriftgroesse) {
+    public AufgabensammlungGeneratorInput withSchriftgroesse(final Schriftgroesse schriftgroesse) {
 
-		this.schriftgroesse = schriftgroesse;
-		return this;
-	}
+        this.schriftgroesse = schriftgroesse;
+        return this;
+    }
 
 }

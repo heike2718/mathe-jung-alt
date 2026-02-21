@@ -4,14 +4,16 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.generatoren.impl;
 
-import org.apache.commons.lang3.StringUtils;
+import jakarta.enterprise.context.ApplicationScoped;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.commons.lang3.StringUtils;
 
 import de.egladil.raetselbaukasten.domain.generatoren.TrennerartFrageLoesung;
 import de.egladil.raetselbaukasten.domain.generatoren.dto.RaetselGeneratorinput;
 import de.egladil.raetselbaukasten.domain.raetsel.Antwortvorschlag;
-import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * QuizitemLaTeXGenerator
@@ -19,223 +21,231 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class QuizitemLaTeXGenerator {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(QuizitemLaTeXGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuizitemLaTeXGenerator.class);
 
-	/**
-	 * Generiert ein Stück LaTeX, das in ein Dokument eingefügt werden kann. Es werden Frage und Lösung hintereinander eingefügt,
-	 * entweder mit kleinem Abstand oder mit Seitenumbruch.
-	 *
-	 * @param  input
-	 *               RaetselGeneratorinput die Texte des Rätsels, die gedruckt werden sollen.
-	 * @return       String
-	 */
-	public String generateLaTeXFrageLoesung(final RaetselGeneratorinput input, final TrennerartFrageLoesung trennerFrageLoesung, final boolean printAsMultipleChoice) {
+    /**
+     * Generiert ein Stück LaTeX, das in ein Dokument eingefügt werden kann. Es
+     * werden Frage und Lösung hintereinander eingefügt, entweder mit kleinem
+     * Abstand oder mit Seitenumbruch.
+     *
+     * @param input RaetselGeneratorinput die Texte des Rätsels, die gedruckt werden
+     *              sollen.
+     * @return String
+     */
+    public String generateLaTeXFrageLoesung(final RaetselGeneratorinput input,
+            final TrennerartFrageLoesung trennerFrageLoesung, final boolean printAsMultipleChoice) {
 
-		String template = new String(LaTeXTemplatesService.getInstance().getTemplatePDFRaetselFrageLoesung());
+        String template = new String(LaTeXTemplatesService.getInstance().getTemplatePDFRaetselFrageLoesung());
 
-		template = template.replace(LaTeXPlaceholder.COLOR.placeholder(), input.getTextColor());
-		template = template.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
+        template = template.replace(LaTeXPlaceholder.COLOR.placeholder(), input.getTextColor());
+        template = template.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
 
-		template = template.replace(LaTeXPlaceholder.HEADER_FRAGE.placeholder(), getHeaderFrage(input));
-		template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.placeholder(), input.getFrage());
+        template = template.replace(LaTeXPlaceholder.HEADER_FRAGE.placeholder(), getHeaderFrage(input));
+        template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.placeholder(), input.getFrage());
 
-		boolean isMultipleChoice = input.getAntwortvorschlaege() != null && input.getAntwortvorschlaege().length > 0;
+        boolean isMultipleChoice = input.getAntwortvorschlaege() != null && input.getAntwortvorschlaege().length > 0;
 
-		if (isGenerateAntwortvorschlaegeToLaTeX(input, printAsMultipleChoice, isMultipleChoice)) {
+        if (isGenerateAntwortvorschlaegeToLaTeX(input, printAsMultipleChoice, isMultipleChoice)) {
 
-			String antworten = AntwortvorschlagGeneratorStrategegy.create(input.getLayoutAntwortvorschlaege())
-				.generateLaTeXAntwortvorschlaege(input.getAntwortvorschlaege());
+            String antworten = AntwortvorschlagGeneratorStrategegy
+                    .create(input.getLayoutAntwortvorschlaege())
+                    .generateLaTeXAntwortvorschlaege(input.getAntwortvorschlaege());
 
-			template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), antworten);
+            template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), antworten);
 
-		} else {
+        } else {
 
-			template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), "");
-		}
+            template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), "");
+        }
 
-		if (StringUtils.isNotBlank(input.getLoesung())) {
+        if (StringUtils.isNotBlank(input.getLoesung())) {
 
-			template = template.replace(LaTeXPlaceholder.TRENNER_FRAGE_LOESUNG.placeholder(), trennerFrageLoesung.getLeTeX());
-			template = template.replace(LaTeXPlaceholder.HEADER_LOESUNG.placeholder(), getHeaderLoesung(input));
+            template = template
+                    .replace(LaTeXPlaceholder.TRENNER_FRAGE_LOESUNG.placeholder(), trennerFrageLoesung.getLeTeX());
+            template = template.replace(LaTeXPlaceholder.HEADER_LOESUNG.placeholder(), getHeaderLoesung(input));
 
-			if (isMultipleChoice && printAsMultipleChoice) {
+            if (isMultipleChoice && printAsMultipleChoice) {
 
-				String loesungsbuchstabe = getTextLoesungsbuchstabe(input.getAntwortvorschlaege());
+                String loesungsbuchstabe = getTextLoesungsbuchstabe(input.getAntwortvorschlaege());
 
-				if (StringUtils.isNotBlank(loesungsbuchstabe)) {
+                if (StringUtils.isNotBlank(loesungsbuchstabe)) {
 
-					template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), loesungsbuchstabe);
-				} else {
+                    template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), loesungsbuchstabe);
+                } else {
 
-					template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
-				}
+                    template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
+                }
 
-			} else {
+            } else {
 
-				template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
-			}
+                template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
+            }
 
-			template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), input.getLoesung());
+            template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), input.getLoesung());
 
-		} else {
+        } else {
 
-			template = template.replace(LaTeXPlaceholder.TRENNER_FRAGE_LOESUNG.placeholder(), "");
-			template = template.replace(LaTeXPlaceholder.HEADER_LOESUNG.placeholder(), "");
-			template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
-			template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), "");
-		}
+            template = template.replace(LaTeXPlaceholder.TRENNER_FRAGE_LOESUNG.placeholder(), "");
+            template = template.replace(LaTeXPlaceholder.HEADER_LOESUNG.placeholder(), "");
+            template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
+            template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), "");
+        }
 
-		return template;
-	}
+        return template;
+    }
 
-	/**
-	 * Generiert ein Stück LaTeX, das in ein Dokument eingefügt werden kann. Es wird nur die Frage eingefügt.
-	 *
-	 * @param  input
-	 *               RaetselGeneratorinput die Texte des Rätsels, die gedruckt werden sollen.
-	 * @return       String
-	 */
-	public String generateLaTeXFrage(final RaetselGeneratorinput input, final boolean printAsMultipleChoice) {
+    /**
+     * Generiert ein Stück LaTeX, das in ein Dokument eingefügt werden kann. Es wird
+     * nur die Frage eingefügt.
+     *
+     * @param input RaetselGeneratorinput die Texte des Rätsels, die gedruckt werden
+     *              sollen.
+     * @return String
+     */
+    public String generateLaTeXFrage(final RaetselGeneratorinput input, final boolean printAsMultipleChoice) {
 
-		String template = new String(LaTeXTemplatesService.getInstance().getTemplatePDFRaetselFrage());
+        String template = new String(LaTeXTemplatesService.getInstance().getTemplatePDFRaetselFrage());
 
-		template = template.replace(LaTeXPlaceholder.HEADER_FRAGE.placeholder(), getHeaderFrage(input));
-		template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.placeholder(), input.getFrage());
+        template = template.replace(LaTeXPlaceholder.HEADER_FRAGE.placeholder(), getHeaderFrage(input));
+        template = template.replace(LaTeXPlaceholder.CONTENT_FRAGE.placeholder(), input.getFrage());
 
-		boolean isMultipleChoice = input.getAntwortvorschlaege() != null && input.getAntwortvorschlaege().length > 0;
+        boolean isMultipleChoice = input.getAntwortvorschlaege() != null && input.getAntwortvorschlaege().length > 0;
 
-		if (isGenerateAntwortvorschlaegeToLaTeX(input, printAsMultipleChoice, isMultipleChoice)) {
+        if (isGenerateAntwortvorschlaegeToLaTeX(input, printAsMultipleChoice, isMultipleChoice)) {
 
-			String antworten = AntwortvorschlagGeneratorStrategegy.create(input.getLayoutAntwortvorschlaege())
-				.generateLaTeXAntwortvorschlaege(input.getAntwortvorschlaege());
+            String antworten = AntwortvorschlagGeneratorStrategegy
+                    .create(input.getLayoutAntwortvorschlaege())
+                    .generateLaTeXAntwortvorschlaege(input.getAntwortvorschlaege());
 
-			template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), antworten);
+            template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), antworten);
 
-		} else {
+        } else {
 
-			template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), "");
-		}
+            template = template.replace(LaTeXPlaceholder.ANTWORTVORSCHLAEGE.placeholder(), "");
+        }
 
-		return template;
-	}
+        return template;
+    }
 
-	/**
-	 * Wenn es überhaupt Antwortvorschläge gibt, diese nicht eingebettet sind und der Druckauftrag Antwortvorschläge verlangt, dann
-	 * true, anderenfalls false.
-	 *
-	 * @param  input
-	 * @param  printAsMultipleChoice
-	 * @param  isMultipleChoice
-	 * @return                       boolean
-	 */
-	boolean isGenerateAntwortvorschlaegeToLaTeX(final RaetselGeneratorinput input, final boolean printAsMultipleChoice, final boolean isMultipleChoice) {
+    /**
+     * Wenn es überhaupt Antwortvorschläge gibt, diese nicht eingebettet sind und
+     * der Druckauftrag Antwortvorschläge verlangt, dann true, anderenfalls false.
+     *
+     * @param input
+     * @param printAsMultipleChoice
+     * @param isMultipleChoice
+     * @return boolean
+     */
+    boolean isGenerateAntwortvorschlaegeToLaTeX(final RaetselGeneratorinput input, final boolean printAsMultipleChoice,
+            final boolean isMultipleChoice) {
 
-		return isMultipleChoice && printAsMultipleChoice && !input.isAntwortvorschlaegeEingebettet();
-	}
+        return isMultipleChoice && printAsMultipleChoice && !input.isAntwortvorschlaegeEingebettet();
+    }
 
-	/**
-	 * Generiert ein Stück LaTeX, das in ein Dokument eingefügt werden kann. Es wird nur die Frage eingefügt.
-	 *
-	 * @param  input
-	 *               RaetselGeneratorinput die Texte des Rätsels, die gedruckt werden sollen.
-	 * @return       String
-	 */
-	public String generateLaTeXLoesung(final RaetselGeneratorinput input, final boolean printAsMultipleChoice) {
+    /**
+     * Generiert ein Stück LaTeX, das in ein Dokument eingefügt werden kann. Es wird
+     * nur die Frage eingefügt.
+     *
+     * @param input RaetselGeneratorinput die Texte des Rätsels, die gedruckt werden
+     *              sollen.
+     * @return String
+     */
+    public String generateLaTeXLoesung(final RaetselGeneratorinput input, final boolean printAsMultipleChoice) {
 
-		if (StringUtils.isBlank(input.getLoesung())) {
+        if (StringUtils.isBlank(input.getLoesung())) {
 
-			LOGGER.warn("raetsel {} hat keine Loesung!", input.getSchluessel());
+            LOGGER.warn("raetsel {} hat keine Loesung!", input.getSchluessel());
 
-			return "";
-		}
+            return "";
+        }
 
-		String template = new String(LaTeXTemplatesService.getInstance().getTemplatePDFRaetselLoesung());
+        String template = new String(LaTeXTemplatesService.getInstance().getTemplatePDFRaetselLoesung());
 
-		template = template.replace(LaTeXPlaceholder.HEADER_LOESUNG.placeholder(), getHeaderLoesung(input));
+        template = template.replace(LaTeXPlaceholder.HEADER_LOESUNG.placeholder(), getHeaderLoesung(input));
 
-		boolean isMultipleChoice = input.getAntwortvorschlaege() != null && input.getAntwortvorschlaege().length > 0;
+        boolean isMultipleChoice = input.getAntwortvorschlaege() != null && input.getAntwortvorschlaege().length > 0;
 
-		if (isMultipleChoice && printAsMultipleChoice) {
+        if (isMultipleChoice && printAsMultipleChoice) {
 
-			String replacement = getTextLoesungsbuchstabe(input.getAntwortvorschlaege());
+            String replacement = getTextLoesungsbuchstabe(input.getAntwortvorschlaege());
 
-			template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), replacement);
+            template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), replacement);
 
-		} else {
+        } else {
 
-			template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
-		}
+            template = template.replace(LaTeXPlaceholder.LOESUNGSBUCHSTABE.placeholder(), "");
+        }
 
-		template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), input.getLoesung());
-		return template;
-	}
+        template = template.replace(LaTeXPlaceholder.CONTENT_LOESUNG.placeholder(), input.getLoesung());
+        return template;
+    }
 
-	String getTextLoesungsbuchstabe(final Antwortvorschlag[] antwortvorschlaege) {
+    String getTextLoesungsbuchstabe(final Antwortvorschlag[] antwortvorschlaege) {
 
-		return new LoesungsbuchstabeTextGenerator().getTextLoesungsbuchstabe(antwortvorschlaege);
+        return new LoesungsbuchstabeTextGenerator().getTextLoesungsbuchstabe(antwortvorschlaege);
 
-	}
+    }
 
-	String getHeaderFrage(final RaetselGeneratorinput input) {
+    String getHeaderFrage(final RaetselGeneratorinput input) {
 
-		String result = null;
+        String result = null;
 
-		if (!input.getVerwendungszweck().isHeadersWithNummerUndSchluessel()) {
+        if (!input.getVerwendungszweck().isHeadersWithNummerUndSchluessel()) {
 
-			result = LaTeXConstants.HEADER_AUFGABE_NUMMER;
-			result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
-			LOGGER.debug(result);
+            result = LaTeXConstants.HEADER_AUFGABE_NUMMER;
+            result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
+            LOGGER.debug(result);
 
-			return result;
-		}
+            return result;
+        }
 
-		if (input.getNummer().equals(input.getSchluessel())) {
+        if (input.getNummer().equals(input.getSchluessel())) {
 
-			result = LaTeXConstants.HEADER_AUFGABE_SCHLUESSEL_PUNKTE;
+            result = LaTeXConstants.HEADER_AUFGABE_SCHLUESSEL_PUNKTE;
 
-		} else {
+        } else {
 
-			result = LaTeXConstants.HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE;
-			result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
-		}
+            result = LaTeXConstants.HEADER_AUFGABE_NUMMER_SCHLUESSEL_PUNKTE;
+            result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
+        }
 
-		result = result.replace(LaTeXPlaceholder.COLOR.placeholder(), input.getTextColor());
-		result = result.replace(LaTeXPlaceholder.PUNKTE.placeholder(), input.getPunkte() + "");
-		result = result.replace(LaTeXPlaceholder.SCHLUESSEL.placeholder(), input.getSchluessel());
+        result = result.replace(LaTeXPlaceholder.COLOR.placeholder(), input.getTextColor());
+        result = result.replace(LaTeXPlaceholder.PUNKTE.placeholder(), input.getPunkte() + "");
+        result = result.replace(LaTeXPlaceholder.SCHLUESSEL.placeholder(), input.getSchluessel());
 
-		LOGGER.debug(result);
+        LOGGER.debug(result);
 
-		return result;
-	}
+        return result;
+    }
 
-	String getHeaderLoesung(final RaetselGeneratorinput input) {
+    String getHeaderLoesung(final RaetselGeneratorinput input) {
 
-		String result = null;
+        String result = null;
 
-		if (!input.getVerwendungszweck().isHeadersWithNummerUndSchluessel()) {
+        if (!input.getVerwendungszweck().isHeadersWithNummerUndSchluessel()) {
 
-			result = LaTeXConstants.HEADER_LOESUNG_NUMMER;
-			result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
-			LOGGER.debug(result);
+            result = LaTeXConstants.HEADER_LOESUNG_NUMMER;
+            result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
+            LOGGER.debug(result);
 
-			return result;
-		}
+            return result;
+        }
 
-		if (input.getNummer().equals(input.getSchluessel())) {
+        if (input.getNummer().equals(input.getSchluessel())) {
 
-			result = LaTeXConstants.HEADER_LOESUNG_SCHLUESSEL;
+            result = LaTeXConstants.HEADER_LOESUNG_SCHLUESSEL;
 
-		} else {
+        } else {
 
-			result = LaTeXConstants.HEADER_LOESUNG_NUMMER_SCHLUESSEL;
-			result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
-		}
+            result = LaTeXConstants.HEADER_LOESUNG_NUMMER_SCHLUESSEL;
+            result = result.replace(LaTeXPlaceholder.NUMMER.placeholder(), input.getNummer());
+        }
 
-		result = result.replace(LaTeXPlaceholder.SCHLUESSEL.placeholder(), input.getSchluessel());
+        result = result.replace(LaTeXPlaceholder.SCHLUESSEL.placeholder(), input.getSchluessel());
 
-		LOGGER.debug(result);
+        LOGGER.debug(result);
 
-		return result;
-	}
+        return result;
+    }
 
 }

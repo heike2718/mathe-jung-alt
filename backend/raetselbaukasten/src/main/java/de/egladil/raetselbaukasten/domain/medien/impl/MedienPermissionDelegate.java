@@ -4,16 +4,18 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.medien.impl;
 
-import de.egladil.raetselbaukasten.domain.auth.session.AuthenticatedUser;
-import de.egladil.raetselbaukasten.domain.auth.session.Benutzerart;
-import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
-import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistentesMedium;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response.Status;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import de.egladil.raetselbaukasten.domain.auth.session.AuthenticatedUser;
+import de.egladil.raetselbaukasten.domain.auth.session.Benutzerart;
+import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
+import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistentesMedium;
 
 /**
  * MedienPermissionDelegate
@@ -40,21 +42,21 @@ public class MedienPermissionDelegate {
 
         switch (benutzerart) {
 
-            case ANONYM:
-            case STANDARD: {
+        case ANONYM:
+        case STANDARD: {
 
-                LOGGER.warn("User {} mit Benutzerart {} hat keine Leseberechtigung für Medium {} mit Owner {}",
-                        user.getName(), benutzerart, ausDB.getUuid(),
-                        ausDB.getOwner());
-                throw new WebApplicationException(Status.FORBIDDEN);
-            }
+            LOGGER
+                    .warn("User {} mit Benutzerart {} hat keine Leseberechtigung für Medium {} mit Owner {}",
+                            user.getName(), benutzerart, ausDB.getUuid(), ausDB.getOwner());
+            throw new WebApplicationException(Status.FORBIDDEN);
+        }
 
-            case AUTOR:
-            case ADMIN:
-                return;
+        case AUTOR:
+        case ADMIN:
+            return;
 
-            default:
-                throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+        default:
+            throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
         }
     }
 
@@ -72,31 +74,31 @@ public class MedienPermissionDelegate {
 
         switch (benutzerart) {
 
-            case ANONYM:
-            case STANDARD: {
+        case ANONYM:
+        case STANDARD: {
 
-                LOGGER.warn("User {} mit Benutzerart {} hat keine Schreibberechtigung für Medium {} mit Owner {}",
-                        user.getName(), benutzerart, ausDB.getUuid(),
-                        ausDB.getOwner());
+            LOGGER
+                    .warn("User {} mit Benutzerart {} hat keine Schreibberechtigung für Medium {} mit Owner {}",
+                            user.getName(), benutzerart, ausDB.getUuid(), ausDB.getOwner());
+            throw new WebApplicationException(Status.FORBIDDEN);
+        }
+
+        case AUTOR: {
+
+            if (!user.getUuid().equals(ausDB.getOwner())) {
+
+                LOGGER
+                        .warn("Autor {} hat keine Schreibberechtigung für Medium {} mit Owner {}", user.getName(),
+                                ausDB.getUuid(), ausDB.getOwner());
                 throw new WebApplicationException(Status.FORBIDDEN);
             }
+        }
 
-            case AUTOR: {
+        case ADMIN:
+            return;
 
-                if (!user.getUuid().equals(ausDB.getOwner())) {
-
-                    LOGGER.warn("Autor {} hat keine Schreibberechtigung für Medium {} mit Owner {}",
-                            user.getName(), ausDB.getUuid(),
-                            ausDB.getOwner());
-                    throw new WebApplicationException(Status.FORBIDDEN);
-                }
-            }
-
-            case ADMIN:
-                return;
-
-            default:
-                throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+        default:
+            throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
         }
     }
 }

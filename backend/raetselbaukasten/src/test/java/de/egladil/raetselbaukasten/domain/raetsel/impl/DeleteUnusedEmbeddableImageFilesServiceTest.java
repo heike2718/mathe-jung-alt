@@ -4,22 +4,25 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.raetsel.impl;
 
+import java.io.InputStream;
+import java.io.StringWriter;
+
+import jakarta.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.junit.QuarkusTest;
+
+import org.apache.commons.io.IOUtils;
+
+import de.egladil.raetselbaukasten.domain.exceptions.MjaRuntimeException;
+import de.egladil.raetselbaukasten.domain.generatoren.RaetselFileService;
+
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.io.InputStream;
-import java.io.StringWriter;
-
-import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.Test;
-
-import de.egladil.raetselbaukasten.domain.exceptions.MjaRuntimeException;
-import de.egladil.raetselbaukasten.domain.generatoren.RaetselFileService;
-import io.quarkus.test.InjectMock;
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
 
 /**
  * DeleteUnusedEmbeddableImageFilesServiceTest
@@ -27,277 +30,310 @@ import jakarta.inject.Inject;
 @QuarkusTest
 public class DeleteUnusedEmbeddableImageFilesServiceTest {
 
-	@Inject
-	DeleteUnusedEmbeddableImageFilesService service;
+    @Inject
+    DeleteUnusedEmbeddableImageFilesService service;
 
-	@InjectMock
-	RaetselFileService raetselFileService;
+    @InjectMock
+    RaetselFileService raetselFileService;
 
-	@Test
-	void should_checkAndDeleteUnusedFiles_work() throws Exception {
+    @Test
+    void should_checkAndDeleteUnusedFiles_work() throws Exception {
 
-		// Arrange
-		String latexFrageDB = "";
+        // Arrange
+        String latexFrageDB = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageDB = sw.toString();
+            latexFrageDB = sw.toString();
 
-		}
+        }
 
-		String latexLoesungDB = "";
+        String latexLoesungDB = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexLoesungDB = sw.toString();
+            latexLoesungDB = sw.toString();
 
-		}
+        }
 
-		String latexFrageNeu = "";
+        String latexFrageNeu = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageNeu = sw.toString();
+            latexFrageNeu = sw.toString();
 
-		}
+        }
 
-		String latexLoesungNeu = "";
+        String latexLoesungNeu = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4-changed.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-4-changed.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexLoesungNeu = sw.toString();
+            latexLoesungNeu = sw.toString();
 
-		}
+        }
 
-		FragenUndLoesungenVO vo = new FragenUndLoesungenVO().withFrageAlt(latexFrageDB).withFrageNeu(latexFrageNeu)
-			.withLoesungAlt(latexLoesungDB).withLoesungNeu(latexLoesungNeu);
+        FragenUndLoesungenVO vo = new FragenUndLoesungenVO()
+                .withFrageAlt(latexFrageDB)
+                .withFrageNeu(latexFrageNeu)
+                .withLoesungAlt(latexLoesungDB)
+                .withLoesungNeu(latexLoesungNeu);
 
-		when(raetselFileService.deleteImageFile(anyString())).thenReturn(Boolean.TRUE);
+        when(raetselFileService.deleteImageFile(anyString())).thenReturn(Boolean.TRUE);
 
-		// Act
-		service.checkAndDeleteUnusedFiles(vo);
+        // Act
+        service.checkAndDeleteUnusedFiles(vo);
 
-		// Assert
-		verify(raetselFileService, times(2)).deleteImageFile(anyString());
+        // Assert
+        verify(raetselFileService, times(2)).deleteImageFile(anyString());
 
-	}
+    }
 
-	@Test
-	void should_checkAndDeleteUnusedFiles_work_whenFilesNotDeleted() throws Exception {
+    @Test
+    void should_checkAndDeleteUnusedFiles_work_whenFilesNotDeleted() throws Exception {
 
-		// Arrange
-		String latexFrageDB = "";
+        // Arrange
+        String latexFrageDB = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageDB = sw.toString();
+            latexFrageDB = sw.toString();
 
-		}
+        }
 
-		String latexLoesungDB = "";
+        String latexLoesungDB = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexLoesungDB = sw.toString();
+            latexLoesungDB = sw.toString();
 
-		}
+        }
 
-		String latexFrageNeu = "";
+        String latexFrageNeu = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageNeu = sw.toString();
+            latexFrageNeu = sw.toString();
 
-		}
+        }
 
-		String latexLoesungNeu = "";
+        String latexLoesungNeu = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4-changed.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-4-changed.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexLoesungNeu = sw.toString();
+            latexLoesungNeu = sw.toString();
 
-		}
+        }
 
-		when(raetselFileService.deleteImageFile(anyString())).thenReturn(Boolean.FALSE);
+        when(raetselFileService.deleteImageFile(anyString())).thenReturn(Boolean.FALSE);
 
-		FragenUndLoesungenVO vo = new FragenUndLoesungenVO().withFrageAlt(latexFrageDB).withFrageNeu(latexFrageNeu)
-			.withLoesungAlt(latexLoesungDB).withLoesungNeu(latexLoesungNeu);
+        FragenUndLoesungenVO vo = new FragenUndLoesungenVO()
+                .withFrageAlt(latexFrageDB)
+                .withFrageNeu(latexFrageNeu)
+                .withLoesungAlt(latexLoesungDB)
+                .withLoesungNeu(latexLoesungNeu);
 
-		// Act
-		service.checkAndDeleteUnusedFiles(vo);
+        // Act
+        service.checkAndDeleteUnusedFiles(vo);
 
-		// Assert
-		verify(raetselFileService, times(2)).deleteImageFile(anyString());
+        // Assert
+        verify(raetselFileService, times(2)).deleteImageFile(anyString());
 
-	}
+    }
 
-	@Test
-	void should_checkAndDeleteUnusedFiles_work_when_loesungNeuNull() throws Exception {
+    @Test
+    void should_checkAndDeleteUnusedFiles_work_when_loesungNeuNull() throws Exception {
 
-		// Arrange
-		String latexFrageDB = "";
+        // Arrange
+        String latexFrageDB = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageDB = sw.toString();
+            latexFrageDB = sw.toString();
 
-		}
+        }
 
-		String latexLoesungDB = "";
+        String latexLoesungDB = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexLoesungDB = sw.toString();
+            latexLoesungDB = sw.toString();
 
-		}
+        }
 
-		String latexFrageNeu = "";
+        String latexFrageNeu = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageNeu = sw.toString();
+            latexFrageNeu = sw.toString();
 
-		}
+        }
 
-		FragenUndLoesungenVO vo = new FragenUndLoesungenVO().withFrageAlt(latexFrageDB).withFrageNeu(latexFrageNeu)
-			.withLoesungAlt(latexLoesungDB);
+        FragenUndLoesungenVO vo = new FragenUndLoesungenVO()
+                .withFrageAlt(latexFrageDB)
+                .withFrageNeu(latexFrageNeu)
+                .withLoesungAlt(latexLoesungDB);
 
-		when(raetselFileService.deleteImageFile(anyString())).thenReturn(Boolean.TRUE);
+        when(raetselFileService.deleteImageFile(anyString())).thenReturn(Boolean.TRUE);
 
-		// Act
-		service.checkAndDeleteUnusedFiles(vo);
+        // Act
+        service.checkAndDeleteUnusedFiles(vo);
 
-		// Assert
-		verify(raetselFileService, times(2)).deleteImageFile(anyString());
+        // Assert
+        verify(raetselFileService, times(2)).deleteImageFile(anyString());
 
-	}
+    }
 
-	@Test
-	void should_checkAndDeleteUnusedFiles_work_when_loesungAltBlank() throws Exception {
+    @Test
+    void should_checkAndDeleteUnusedFiles_work_when_loesungAltBlank() throws Exception {
 
-		// Arrange
-		String latexFrageDB = "";
+        // Arrange
+        String latexFrageDB = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageDB = sw.toString();
+            latexFrageDB = sw.toString();
 
-		}
+        }
 
-		String latexLoesungDB = "";
+        String latexLoesungDB = "";
 
-		String latexFrageNeu = "";
+        String latexFrageNeu = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageNeu = sw.toString();
+            latexFrageNeu = sw.toString();
 
-		}
+        }
 
-		String latexLoesungNeu = "";
+        String latexLoesungNeu = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4-changed.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-4-changed.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexLoesungNeu = sw.toString();
+            latexLoesungNeu = sw.toString();
 
-		}
+        }
 
-		when(raetselFileService.deleteImageFile(anyString())).thenReturn(Boolean.TRUE);
+        when(raetselFileService.deleteImageFile(anyString())).thenReturn(Boolean.TRUE);
 
-		FragenUndLoesungenVO vo = new FragenUndLoesungenVO().withFrageAlt(latexFrageDB).withFrageNeu(latexFrageNeu)
-			.withLoesungAlt(latexLoesungDB).withLoesungNeu(latexLoesungNeu);
+        FragenUndLoesungenVO vo = new FragenUndLoesungenVO()
+                .withFrageAlt(latexFrageDB)
+                .withFrageNeu(latexFrageNeu)
+                .withLoesungAlt(latexLoesungDB)
+                .withLoesungNeu(latexLoesungNeu);
 
-		// Act
-		service.checkAndDeleteUnusedFiles(vo);
+        // Act
+        service.checkAndDeleteUnusedFiles(vo);
 
-		// Assert
-		verify(raetselFileService, times(1)).deleteImageFile(anyString());
+        // Assert
+        verify(raetselFileService, times(1)).deleteImageFile(anyString());
 
-	}
+    }
 
-	@Test
-	void should_checkAndDeleteUnusedFiles_onlyLogMjaRuntimeException() throws Exception {
+    @Test
+    void should_checkAndDeleteUnusedFiles_onlyLogMjaRuntimeException() throws Exception {
 
-		// Arrange
-		String latexFrageDB = "";
+        // Arrange
+        String latexFrageDB = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageDB = sw.toString();
+            latexFrageDB = sw.toString();
 
-		}
+        }
 
-		String latexLoesungDB = "";
+        String latexLoesungDB = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-4.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexLoesungDB = sw.toString();
+            latexLoesungDB = sw.toString();
 
-		}
+        }
 
-		String latexFrageNeu = "";
+        String latexFrageNeu = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-5-changed.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexFrageNeu = sw.toString();
+            latexFrageNeu = sw.toString();
 
-		}
+        }
 
-		String latexLoesungNeu = "";
+        String latexLoesungNeu = "";
 
-		try (InputStream in = getClass().getResourceAsStream("/latex/frage-4-changed.tex"); StringWriter sw = new StringWriter()) {
+        try (InputStream in = getClass().getResourceAsStream("/latex/frage-4-changed.tex");
+                StringWriter sw = new StringWriter()) {
 
-			IOUtils.copy(in, sw, "UTF-8");
+            IOUtils.copy(in, sw, "UTF-8");
 
-			latexLoesungNeu = sw.toString();
+            latexLoesungNeu = sw.toString();
 
-		}
+        }
 
-		FragenUndLoesungenVO vo = new FragenUndLoesungenVO().withFrageAlt(latexFrageDB).withFrageNeu(latexFrageNeu)
-			.withLoesungAlt(latexLoesungDB).withLoesungNeu(latexLoesungNeu);
+        FragenUndLoesungenVO vo = new FragenUndLoesungenVO()
+                .withFrageAlt(latexFrageDB)
+                .withFrageNeu(latexFrageNeu)
+                .withLoesungAlt(latexLoesungDB)
+                .withLoesungNeu(latexLoesungNeu);
 
-		when(raetselFileService.deleteImageFile(anyString())).thenThrow(new MjaRuntimeException("IOException beim Löschen"));
+        when(raetselFileService.deleteImageFile(anyString()))
+                .thenThrow(new MjaRuntimeException("IOException beim Löschen"));
 
-		// Act
-		service.checkAndDeleteUnusedFiles(vo);
+        // Act
+        service.checkAndDeleteUnusedFiles(vo);
 
-		// Assert
-		verify(raetselFileService, times(2)).deleteImageFile(anyString());
+        // Assert
+        verify(raetselFileService, times(2)).deleteImageFile(anyString());
 
-	}
+    }
 
 }

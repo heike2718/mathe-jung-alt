@@ -4,23 +4,27 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.raetsel;
 
+import java.util.List;
+import java.util.Optional;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.junit.QuarkusTest;
+
 import de.egladil.raetselbaukasten.domain.auth.session.AuthenticatedUser;
 import de.egladil.raetselbaukasten.domain.auth.session.Benutzerart;
 import de.egladil.raetselbaukasten.domain.raetsel.dto.GeneratedFile;
 import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
 import de.egladil.raetselbaukasten.infrastructure.persistence.dao.RaetselDao;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistentesRaetsel;
-import io.quarkus.test.InjectMock;
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -56,9 +60,12 @@ public class RaetselTexteServiceTest {
     @BeforeEach
     void setUp() {
 
-        admin = new AuthenticatedUser(ADMIN_UUID).withBenutzerart(Benutzerart.ADMIN).withRoles(new String[]{"ADMIN"});
-        autor = new AuthenticatedUser(AUTOR_UUID).withBenutzerart(Benutzerart.AUTOR)
-                .withRoles(new String[]{"AUTOR"});
+        admin = new AuthenticatedUser(ADMIN_UUID)
+                .withBenutzerart(Benutzerart.ADMIN)
+                .withRoles(new String[] { "ADMIN" });
+        autor = new AuthenticatedUser(AUTOR_UUID)
+                .withBenutzerart(Benutzerart.AUTOR)
+                .withRoles(new String[] { "AUTOR" });
 
         persistentesRaetsel = new PersistentesRaetsel();
         persistentesRaetsel.setUuid(RAETSEL_ID);
@@ -98,7 +105,10 @@ public class RaetselTexteServiceTest {
 
             String filenameFrage = SCHLUESSEL + "_l.tex";
 
-            Optional<GeneratedFile> optFile = result.stream().filter(f -> filenameFrage.equals(f.getFileName())).findFirst();
+            Optional<GeneratedFile> optFile = result
+                    .stream()
+                    .filter(f -> filenameFrage.equals(f.getFileName()))
+                    .findFirst();
             assertTrue(optFile.isPresent());
 
             GeneratedFile generatedFile = optFile.get();
@@ -161,7 +171,10 @@ public class RaetselTexteServiceTest {
 
             String filenameFrage = SCHLUESSEL + "_l.tex";
 
-            Optional<GeneratedFile> optFile = result.stream().filter(f -> filenameFrage.equals(f.getFileName())).findFirst();
+            Optional<GeneratedFile> optFile = result
+                    .stream()
+                    .filter(f -> filenameFrage.equals(f.getFileName()))
+                    .findFirst();
             assertTrue(optFile.isPresent());
 
             GeneratedFile generatedFile = optFile.get();

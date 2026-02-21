@@ -11,37 +11,36 @@ import de.egladil.raetselbaukasten.domain.medien.Medienart;
  */
 public enum Quellenart {
 
-	BUCH {
+    BUCH {
 
-		@Override
-		public Medienart getSuitableMedienart() {
+        @Override
+        public Medienart getSuitableMedienart() {
 
-			return Medienart.BUCH;
-		}
+            return Medienart.BUCH;
+        }
 
-	},
-	INTERNET {
+    },
+    INTERNET {
 
-		@Override
-		public Medienart getSuitableMedienart() {
+        @Override
+        public Medienart getSuitableMedienart() {
 
-			return Medienart.INTERNET;
-		}
+            return Medienart.INTERNET;
+        }
 
-	},
-	PERSON,
-	ZEITSCHRIFT {
+    },
+    PERSON, ZEITSCHRIFT {
 
-		@Override
-		public Medienart getSuitableMedienart() {
+        @Override
+        public Medienart getSuitableMedienart() {
 
-			return Medienart.ZEITSCHRIFT;
-		}
+            return Medienart.ZEITSCHRIFT;
+        }
 
-	};
+    };
 
-	public Medienart getSuitableMedienart() {
+    public Medienart getSuitableMedienart() {
 
-		return null;
-	}
+        return null;
+    }
 }

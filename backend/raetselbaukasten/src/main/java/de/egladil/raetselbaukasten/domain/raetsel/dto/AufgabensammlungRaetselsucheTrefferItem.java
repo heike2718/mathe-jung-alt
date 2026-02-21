@@ -14,127 +14,127 @@ import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Schwierigkeitsgrad;
  * AufgabensammlungRaetselsucheTrefferItem
  */
 @Schema(
-	name = "AufgabensammlungSucheTrefferItem",
-	description = "Ein Element einer Suche nach Aufgabensammlungen, in denen ein Rätsel vorkommt.")
+        name = "AufgabensammlungSucheTrefferItem",
+        description = "Ein Element einer Suche nach Aufgabensammlungen, in denen ein Rätsel vorkommt.")
 public class AufgabensammlungRaetselsucheTrefferItem {
 
-	@JsonProperty
-	@Schema(description = "technische ID")
-	private String id;
+    @JsonProperty
+    @Schema(description = "technische ID")
+    private String id;
 
-	@JsonProperty
-	@Schema(description = "Name der Aufgabensammlung")
-	private String name;
+    @JsonProperty
+    @Schema(description = "Name der Aufgabensammlung")
+    private String name;
 
-	@JsonProperty
-	@Schema(description = "Nummer, die das Rätsel in dieser Aufgabensammlung hat.")
-	private String nummer;
+    @JsonProperty
+    @Schema(description = "Nummer, die das Rätsel in dieser Aufgabensammlung hat.")
+    private String nummer;
 
-	@JsonProperty
-	@Schema(description = "Punkte für dieses Rätsel, multipliziert mit 100, um Rundungsfehler zu vermeiden.")
-	private int punkte;
+    @JsonProperty
+    @Schema(description = "Punkte für dieses Rätsel, multipliziert mit 100, um Rundungsfehler zu vermeiden.")
+    private int punkte;
 
-	@JsonProperty
-	@Schema(name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Aufgabensammlung gedacht ist")
-	private Schwierigkeitsgrad schwierigkeitsgrad;
+    @JsonProperty
+    @Schema(name = "schwierigkeitsgrad", description = "Klassenstufe, für die die Aufgabensammlung gedacht ist")
+    private Schwierigkeitsgrad schwierigkeitsgrad;
 
-	@JsonProperty
-	@Schema(description = "Ob die Aufgabensammlung freigegeben ist.")
-	private boolean freigegeben;
+    @JsonProperty
+    @Schema(description = "Ob die Aufgabensammlung freigegeben ist.")
+    private boolean freigegeben;
 
-	@JsonProperty
-	@Schema(description = "Ob die Aufgabensammlung privat ist, also keinem Autor gehört.")
-	private boolean privat;
+    @JsonProperty
+    @Schema(description = "Ob die Aufgabensammlung privat ist, also keinem Autor gehört.")
+    private boolean privat;
 
-	@JsonProperty
-	@Schema(description = "abgekürzte UUID des Owners")
-	private String owner;
+    @JsonProperty
+    @Schema(description = "abgekürzte UUID des Owners")
+    private String owner;
 
-	public String getId() {
+    public String getId() {
 
-		return id;
-	}
+        return id;
+    }
 
-	public AufgabensammlungRaetselsucheTrefferItem withId(final String id) {
+    public AufgabensammlungRaetselsucheTrefferItem withId(final String id) {
 
-		this.id = id;
-		return this;
-	}
+        this.id = id;
+        return this;
+    }
 
-	public String getName() {
+    public String getName() {
 
-		return name;
-	}
+        return name;
+    }
 
-	public AufgabensammlungRaetselsucheTrefferItem withName(final String name) {
+    public AufgabensammlungRaetselsucheTrefferItem withName(final String name) {
 
-		this.name = name;
-		return this;
-	}
+        this.name = name;
+        return this;
+    }
 
-	public Schwierigkeitsgrad getSchwierigkeitsgrad() {
+    public Schwierigkeitsgrad getSchwierigkeitsgrad() {
 
-		return schwierigkeitsgrad;
-	}
+        return schwierigkeitsgrad;
+    }
 
-	public AufgabensammlungRaetselsucheTrefferItem withSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
+    public AufgabensammlungRaetselsucheTrefferItem withSchwierigkeitsgrad(final Schwierigkeitsgrad schwierigkeitsgrad) {
 
-		this.schwierigkeitsgrad = schwierigkeitsgrad;
-		return this;
-	}
+        this.schwierigkeitsgrad = schwierigkeitsgrad;
+        return this;
+    }
 
-	public boolean isFreigegeben() {
+    public boolean isFreigegeben() {
 
-		return freigegeben;
-	}
+        return freigegeben;
+    }
 
-	public AufgabensammlungRaetselsucheTrefferItem withFreigegeben(final boolean freigegeben) {
+    public AufgabensammlungRaetselsucheTrefferItem withFreigegeben(final boolean freigegeben) {
 
-		this.freigegeben = freigegeben;
-		return this;
-	}
+        this.freigegeben = freigegeben;
+        return this;
+    }
 
-	public boolean isPrivat() {
+    public boolean isPrivat() {
 
-		return privat;
-	}
+        return privat;
+    }
 
-	public AufgabensammlungRaetselsucheTrefferItem withPrivat(final boolean privat) {
+    public AufgabensammlungRaetselsucheTrefferItem withPrivat(final boolean privat) {
 
-		this.privat = privat;
-		return this;
-	}
+        this.privat = privat;
+        return this;
+    }
 
-	public String getNummer() {
+    public String getNummer() {
 
-		return nummer;
-	}
+        return nummer;
+    }
 
-	public AufgabensammlungRaetselsucheTrefferItem withNummer(final String nummer) {
+    public AufgabensammlungRaetselsucheTrefferItem withNummer(final String nummer) {
 
-		this.nummer = nummer;
-		return this;
-	}
+        this.nummer = nummer;
+        return this;
+    }
 
-	public int getPunkte() {
+    public int getPunkte() {
 
-		return punkte;
-	}
+        return punkte;
+    }
 
-	public AufgabensammlungRaetselsucheTrefferItem withPunkte(final int punkte) {
+    public AufgabensammlungRaetselsucheTrefferItem withPunkte(final int punkte) {
 
-		this.punkte = punkte;
-		return this;
-	}
+        this.punkte = punkte;
+        return this;
+    }
 
-	public String getOwner() {
+    public String getOwner() {
 
-		return owner;
-	}
+        return owner;
+    }
 
-	public AufgabensammlungRaetselsucheTrefferItem withOwner(final String owner) {
+    public AufgabensammlungRaetselsucheTrefferItem withOwner(final String owner) {
 
-		this.owner = owner;
-		return this;
-	}
+        this.owner = owner;
+        return this;
+    }
 }

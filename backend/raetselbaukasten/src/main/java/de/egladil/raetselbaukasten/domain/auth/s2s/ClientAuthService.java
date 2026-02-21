@@ -6,13 +6,14 @@ package de.egladil.raetselbaukasten.domain.auth.s2s;
 
 import java.util.Base64;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * ClientAuthService
@@ -20,47 +21,50 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class ClientAuthService {
 
-	private static final String AUTH_METHOD_PREFIX = "Basic ";
+    private static final String AUTH_METHOD_PREFIX = "Basic ";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClientAuthService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientAuthService.class);
 
-	@Inject
-	MkGatewayAuthConfig mkGatewayAuthConfig;
+    @Inject
+    MkGatewayAuthConfig mkGatewayAuthConfig;
 
-	public Pair<String, Boolean> authorize(final String authorizationHeaderValue) {
+    public Pair<String, Boolean> authorize(final String authorizationHeaderValue) {
 
-		String headerValue = StringUtils.remove(authorizationHeaderValue, AUTH_METHOD_PREFIX);
-		LOGGER.debug("expect header={}, headerValue={}", StringUtils.abbreviate(mkGatewayAuthConfig.header(), 20),
-			StringUtils.abbreviate(headerValue, 20));
+        String headerValue = StringUtils.remove(authorizationHeaderValue, AUTH_METHOD_PREFIX);
+        LOGGER
+                .debug("expect header={}, headerValue={}", StringUtils.abbreviate(mkGatewayAuthConfig.header(), 20),
+                        StringUtils.abbreviate(headerValue, 20));
 
-		try {
+        try {
 
-			String decodedHeader = new String(Base64.getDecoder().decode(headerValue.getBytes()));
-			boolean authenticated = mkGatewayAuthConfig.header().equals(decodedHeader);
-			String clientId = extractClient(decodedHeader);
+            String decodedHeader = new String(Base64.getDecoder().decode(headerValue.getBytes()));
+            boolean authenticated = mkGatewayAuthConfig.header().equals(decodedHeader);
+            String clientId = extractClient(decodedHeader);
 
-			if (!authenticated) {
+            if (!authenticated) {
 
-				LOGGER.error("clientId={}, actual header decoded={}, authConfic.header={}", clientId,
-					StringUtils.abbreviate(decodedHeader, 20), StringUtils.abbreviate(mkGatewayAuthConfig.header(), 20));
-			}
-			return Pair.of(clientId, authenticated);
-		} catch (IllegalArgumentException e) {
+                LOGGER
+                        .error("clientId={}, actual header decoded={}, authConfic.header={}", clientId,
+                                StringUtils.abbreviate(decodedHeader, 20),
+                                StringUtils.abbreviate(mkGatewayAuthConfig.header(), 20));
+            }
+            return Pair.of(clientId, authenticated);
+        } catch (IllegalArgumentException e) {
 
-			LOGGER.error("Base64-Dekodierung des Authorization-Headers fehlgeschlagen: {}", e.getMessage());
-			return Pair.of("", false);
-		}
-	}
+            LOGGER.error("Base64-Dekodierung des Authorization-Headers fehlgeschlagen: {}", e.getMessage());
+            return Pair.of("", false);
+        }
+    }
 
-	String extractClient(final String decodedHeader) {
+    String extractClient(final String decodedHeader) {
 
-		String[] token = StringUtils.split(decodedHeader, ":");
+        String[] token = StringUtils.split(decodedHeader, ":");
 
-		if (token.length == 2) {
+        if (token.length == 2) {
 
-			return token[0];
-		}
+            return token[0];
+        }
 
-		return "client laesst sich nicht ermitteln. Trenner : fehlt oder ist zu oft vorhanden";
-	}
+        return "client laesst sich nicht ermitteln. Trenner : fehlt oder ist zu oft vorhanden";
+    }
 }

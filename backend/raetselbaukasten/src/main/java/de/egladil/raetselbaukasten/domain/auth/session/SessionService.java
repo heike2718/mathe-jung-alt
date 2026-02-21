@@ -11,10 +11,17 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang3.StringUtils;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Context;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -26,177 +33,185 @@ import de.egladil.raetselbaukasten.domain.auth.util.SecureTokenService;
 import de.egladil.raetselbaukasten.domain.exceptions.AuthException;
 import de.egladil.raetselbaukasten.domain.exceptions.SessionExpiredException;
 import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.core.Context;
 
 @ApplicationScoped
 public class SessionService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
 
-	private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
-	@ConfigProperty(name = "session.idle.timeout")
-	int sessionIdleTimeoutMinutes;
+    @ConfigProperty(name = "session.idle.timeout")
+    int sessionIdleTimeoutMinutes;
 
-	@Context
-	ContainerRequestContext requestContext;
+    @Context
+    ContainerRequestContext requestContext;
 
-	@Inject
-	AuthenticationContext authCtx;
+    @Inject
+    AuthenticationContext authCtx;
 
-	@Inject
-	JWTService jwtService;
+    @Inject
+    JWTService jwtService;
 
-	@Inject
-	SecureTokenService secureTokenService;
+    @Inject
+    SecureTokenService secureTokenService;
 
-	/**
-	 * Wenn das JWT sagt, ist kein Admin, dann wird eine anonyme Session angelegt.
-	 *
-	 * @param  jwt
-	 * @return
-	 */
-	public Session initSession(final String jwt) {
+    /**
+     * Wenn das JWT sagt, ist kein Admin, dann wird eine anonyme Session angelegt.
+     *
+     * @param jwt
+     * @return
+     */
+    public Session initSession(final String jwt) {
 
-		LOGGER.debug(jwt);
+        LOGGER.debug(jwt);
 
-		try {
+        try {
 
-			DecodedJWT decodedJWT = jwtService.verify(jwt, SessionUtils.getPublicKey());
+            DecodedJWT decodedJWT = jwtService.verify(jwt, SessionUtils.getPublicKey());
 
-			final DecodedJWTReader jwtReader = new DecodedJWTReader(decodedJWT);
+            final DecodedJWTReader jwtReader = new DecodedJWTReader(decodedJWT);
 
-			String[] groups = jwtReader.getGroups();
+            String[] groups = jwtReader.getGroups();
 
-			String uuid = decodedJWT.getSubject();
+            String uuid = decodedJWT.getSubject();
 
-			String fullName = jwtReader.getFullName();
+            String fullName = jwtReader.getFullName();
 
-			String userIdReference = uuid.substring(0, 8) + "_" + secureTokenService.createRandomToken();
+            String userIdReference = uuid.substring(0, 8) + "_" + secureTokenService.createRandomToken();
 
-			AuthenticatedUser authenticatedUser = new AuthenticatedUser(uuid).withFullName(fullName)
-				.withIdReference(userIdReference).withRoles(groups).withBenutzerart(getBenutzerart(groups));
+            AuthenticatedUser authenticatedUser = new AuthenticatedUser(uuid)
+                    .withFullName(fullName)
+                    .withIdReference(userIdReference)
+                    .withRoles(groups)
+                    .withBenutzerart(getBenutzerart(groups));
 
-			Session session = this.internalCreateAnonymousSession().withUser(authenticatedUser);
+            Session session = this.internalCreateAnonymousSession().withUser(authenticatedUser);
 
-			if (sessionIdleTimeoutMinutes == 0) {
+            if (sessionIdleTimeoutMinutes == 0) {
 
-				LOGGER.warn("session.idle.timeout=0 => verwenden default 120 min");
-				session.setExpiresAt(SessionUtils.getExpiresAt(120));
-			} else {
+                LOGGER.warn("session.idle.timeout=0 => verwenden default 120 min");
+                session.setExpiresAt(SessionUtils.getExpiresAt(120));
+            } else {
 
-				session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
-			}
+                session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
+            }
 
-			sessions.put(session.getSessionId(), session);
+            sessions.put(session.getSessionId(), session);
 
-			LOGGER.info("User eingeloggt: {}", session.getUser().toString());
+            LOGGER.info("User eingeloggt: {}", session.getUser().toString());
 
-			return session;
-		} catch (TokenExpiredException e) {
+            return session;
+        } catch (TokenExpiredException e) {
 
-			LOGGER.error("JWT expired");
-			throw new AuthException("JWT expired");
-		} catch (JWTVerificationException e) {
+            LOGGER.error("JWT expired");
+            throw new AuthException("JWT expired");
+        } catch (JWTVerificationException e) {
 
-			String msg = "Security Thread: JWT " + StringUtils.abbreviate(jwt, 20) + " invalid: " + e.getMessage();
-			LOGGER.warn(msg);
-			throw new AuthException("JWT invalid");
-		}
-	}
+            String msg = "Security Thread: JWT " + StringUtils.abbreviate(jwt, 20) + " invalid: " + e.getMessage();
+            LOGGER.warn(msg);
+            throw new AuthException("JWT invalid");
+        }
+    }
 
-	/**
-	 * @param  sessionId
-	 * @return           Session
-	 */
-	public Session getAndRefreshSessionIfValid(final String sessionId) {
+    /**
+     * @param sessionId
+     * @return Session
+     */
+    public Session getAndRefreshSessionIfValid(final String sessionId) {
 
-		Session session = sessions.get(sessionId);
+        Session session = sessions.get(sessionId);
 
-		if (session == null) {
+        if (session == null) {
 
-			return null;
-		}
+            return null;
+        }
 
-		LocalDateTime expireDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(session.getExpiresAt()),
-			ZoneId.systemDefault()).plusSeconds(5); // bissel Toleranz lassen, oder?
-		LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
+        LocalDateTime expireDateTime = LocalDateTime
+                .ofInstant(Instant.ofEpochMilli(session.getExpiresAt()), ZoneId.systemDefault())
+                .plusSeconds(5); // bissel Toleranz lassen, oder?
+        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
 
-		if (now.isAfter(expireDateTime)) {
+        if (now.isAfter(expireDateTime)) {
 
-			sessions.remove(sessionId);
-			throw new SessionExpiredException("Die Session ist abgelaufen. Bitte neu einloggen.");
-		}
+            sessions.remove(sessionId);
+            throw new SessionExpiredException("Die Session ist abgelaufen. Bitte neu einloggen.");
+        }
 
-		session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
+        session.setExpiresAt(SessionUtils.getExpiresAt(sessionIdleTimeoutMinutes));
 
-		return session;
-	}
+        return session;
+    }
 
-	public Session getSessionNullSave(final String sessionId) {
+    public Session getSessionNullSave(final String sessionId) {
 
-		return sessionId == null ? null : sessions.get(sessionId);
-	}
+        return sessionId == null ? null : sessions.get(sessionId);
+    }
 
-	public void invalidateSession(final String sessionId) {
+    public void invalidateSession(final String sessionId) {
 
-		if (sessionId == null) {
+        if (sessionId == null) {
 
-			LOGGER.debug("invalidateSession ohne sessionId aufgerufen");
-			return;
-		}
+            LOGGER.debug("invalidateSession ohne sessionId aufgerufen");
+            return;
+        }
 
-		Session session = this.sessions.remove(sessionId);
+        Session session = this.sessions.remove(sessionId);
 
-		if (session != null && !session.isAnonym()) {
+        if (session != null && !session.isAnonym()) {
 
-			LOGGER.info("User ausgeloggt: {}", session.getUser().toString());
-		}
-	}
+            LOGGER.info("User ausgeloggt: {}", session.getUser().toString());
+        }
+    }
 
-	private Session internalCreateAnonymousSession() {
+    private Session internalCreateAnonymousSession() {
 
-		String sessionId = secureTokenService.createRandomToken();
-		return Session.createAnonymous(sessionId);
-	}
+        String sessionId = secureTokenService.createRandomToken();
+        return Session.createAnonymous(sessionId);
+    }
 
-	Benutzerart getBenutzerart(final String[] roles) {
+    Benutzerart getBenutzerart(final String[] roles) {
 
-		if (roles == null || roles.length == 0) {
+        if (roles == null || roles.length == 0) {
 
-			return Benutzerart.ANONYM;
-		}
+            return Benutzerart.ANONYM;
+        }
 
-		Optional<String> optAdmin = Arrays.stream(roles).filter(r -> Benutzerart.ADMIN.toString().equalsIgnoreCase(r)).findFirst();
+        Optional<String> optAdmin = Arrays
+                .stream(roles)
+                .filter(r -> Benutzerart.ADMIN.toString().equalsIgnoreCase(r))
+                .findFirst();
 
-		if (optAdmin.isPresent()) {
+        if (optAdmin.isPresent()) {
 
-			return Benutzerart.ADMIN;
-		}
+            return Benutzerart.ADMIN;
+        }
 
-		Optional<String> optAutor = Arrays.stream(roles).filter(r -> Benutzerart.AUTOR.toString().equalsIgnoreCase(r)).findFirst();
+        Optional<String> optAutor = Arrays
+                .stream(roles)
+                .filter(r -> Benutzerart.AUTOR.toString().equalsIgnoreCase(r))
+                .findFirst();
 
-		if (optAutor.isPresent()) {
+        if (optAutor.isPresent()) {
 
-			return Benutzerart.AUTOR;
-		}
+            return Benutzerart.AUTOR;
+        }
 
-		Optional<String> optStandard = Arrays.stream(roles)
-			.filter(r -> Benutzerart.STANDARD.toString().equalsIgnoreCase(r) || "LEHRER".equalsIgnoreCase(r))
-			.findFirst();
+        Optional<String> optStandard = Arrays
+                .stream(roles)
+                .filter(r -> Benutzerart.STANDARD.toString().equalsIgnoreCase(r) || "LEHRER".equalsIgnoreCase(r))
+                .findFirst();
 
-		if (optStandard.isPresent()) {
+        if (optStandard.isPresent()) {
 
-			return Benutzerart.STANDARD;
-		}
+            return Benutzerart.STANDARD;
+        }
 
-		String theRollen = StringUtils.join(roles, ",");
-		LOGGER.warn("Rollen unerwartet: erwarten eins von ADMIN, AUTOR, LEHRER, STANDARD. aktuell={} => Benutzerart ANONYM",
-			theRollen);
+        String theRollen = StringUtils.join(roles, ",");
+        LOGGER
+                .warn("Rollen unerwartet: erwarten eins von ADMIN, AUTOR, LEHRER, STANDARD. aktuell={} => Benutzerart ANONYM",
+                        theRollen);
 
-		return Benutzerart.ANONYM;
-	}
+        return Benutzerart.ANONYM;
+    }
 }

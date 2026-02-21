@@ -10,208 +10,210 @@ import org.slf4j.LoggerFactory;
 import de.egladil.raetselbaukasten.domain.utils.MjaFileUtils;
 
 /**
- * LaTeXTemplatesService - Singleton. Bunkert die Templates im Heap zur Verringerung der IO-Zugriffszeit.
+ * LaTeXTemplatesService - Singleton. Bunkert die Templates im Heap zur
+ * Verringerung der IO-Zugriffszeit.
  */
 
 public class LaTeXTemplatesService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXTemplatesService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LaTeXTemplatesService.class);
 
-	private static LaTeXTemplatesService instance;
+    private static LaTeXTemplatesService instance;
 
-	private static final String TEMPLATE_PDF_RAETSEL_FRAGE = "/latex/template-pdf-frage.tex";
+    private static final String TEMPLATE_PDF_RAETSEL_FRAGE = "/latex/template-pdf-frage.tex";
 
-	private static final String TEMPLATE_PDF_RAETSEL_LOESUNG = "/latex/template-pdf-loesung.tex";
+    private static final String TEMPLATE_PDF_RAETSEL_LOESUNG = "/latex/template-pdf-loesung.tex";
 
-	private static final String TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG = "/latex/template-pdf-frage-loesung.tex";
+    private static final String TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG = "/latex/template-pdf-frage-loesung.tex";
 
-	private static final String TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN = "/latex/template-document-aufgabenblatt-mit-loesungen-pdf.tex";
+    private static final String TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN = "/latex/template-document-aufgabenblatt-mit-loesungen-pdf.tex";
 
-	private static final String TEMPLATE_MAIN_LATEX_DOCUMENT = "/latex/template-main-latex-document.tex";
+    private static final String TEMPLATE_MAIN_LATEX_DOCUMENT = "/latex/template-main-latex-document.tex";
 
-	private static final String TEMPLATE_PDF_KARTEI = "/latex/template-document-kartei-pdf.tex";
+    private static final String TEMPLATE_PDF_KARTEI = "/latex/template-document-kartei-pdf.tex";
 
-	private static final String TEMPLATE_DOCUMENT_RAETSEL_PDF = "/latex/template-document-raetsel-pdf.tex";
+    private static final String TEMPLATE_DOCUMENT_RAETSEL_PDF = "/latex/template-document-raetsel-pdf.tex";
 
-	private static final String TEMPLATE_DOCUMENT_RAETSEL_PNG = "/latex/template-document-raetsel-png.tex";
+    private static final String TEMPLATE_DOCUMENT_RAETSEL_PNG = "/latex/template-document-raetsel-png.tex";
 
-	private static final String LIZENZ_FONTS_FIBEL = "/latex/lizenz-fonts-fibel.tex";
+    private static final String LIZENZ_FONTS_FIBEL = "/latex/lizenz-fonts-fibel.tex";
 
-	private static final String LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK = "/latex/lizenz-fonts-by-wok.tex";
+    private static final String LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK = "/latex/lizenz-fonts-by-wok.tex";
 
-	private static final String QUELLENVERZEICHNIS = "/latex/template-pdf-quellenverzeichnis.tex";
+    private static final String QUELLENVERZEICHNIS = "/latex/template-pdf-quellenverzeichnis.tex";
 
-	private String templatePDFRaetselFrage;
+    private String templatePDFRaetselFrage;
 
-	private String templatePDFRaetselLoesung;
+    private String templatePDFRaetselLoesung;
 
-	private String templatePDFRaetselFrageLoesung;
+    private String templatePDFRaetselFrageLoesung;
 
-	private String templateDocumentPDFAufgabenblattMitLoesungen;
+    private String templateDocumentPDFAufgabenblattMitLoesungen;
 
-	private String templateLaTeXMaster;
+    private String templateLaTeXMaster;
 
-	private String templateDocumentPDFKartei;
+    private String templateDocumentPDFKartei;
 
-	private String templateDocumentRaetselPDF;
+    private String templateDocumentRaetselPDF;
 
-	private String templateDocumentRaetselPNG;
+    private String templateDocumentRaetselPNG;
 
-	private String lizenzFontsFibel;
+    private String lizenzFontsFibel;
 
-	private String lizenzFontsDruckschrift;
+    private String lizenzFontsDruckschrift;
 
-	private String templateQuellenverzeichnis;
+    private String templateQuellenverzeichnis;
 
-	/**
-	 *
-	 */
-	private LaTeXTemplatesService() {
+    /**
+     *
+     */
+    private LaTeXTemplatesService() {
 
-		super();
+        super();
 
-	}
+    }
 
-	public static LaTeXTemplatesService getInstance() {
+    public static LaTeXTemplatesService getInstance() {
 
-		if (instance == null) {
+        if (instance == null) {
 
-			instance = new LaTeXTemplatesService();
-		}
+            instance = new LaTeXTemplatesService();
+        }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	public synchronized String getTemplateDocumentPDFAufgabenblattMitLoesungen() {
+    public synchronized String getTemplateDocumentPDFAufgabenblattMitLoesungen() {
 
-		if (templateDocumentPDFAufgabenblattMitLoesungen == null) {
+        if (templateDocumentPDFAufgabenblattMitLoesungen == null) {
 
-			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN);
+            LOGGER.debug("Lade Template {}", TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN);
 
-			templateDocumentPDFAufgabenblattMitLoesungen = MjaFileUtils.loadTemplate(TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN);
-		}
+            templateDocumentPDFAufgabenblattMitLoesungen = MjaFileUtils
+                    .loadTemplate(TEMPLATE_PDF_AUFGABENBLATT_MIT_LOESUNGEN);
+        }
 
-		return templateDocumentPDFAufgabenblattMitLoesungen;
-	}
+        return templateDocumentPDFAufgabenblattMitLoesungen;
+    }
 
-	public synchronized String getTemplateMainLaTeXDocument() {
+    public synchronized String getTemplateMainLaTeXDocument() {
 
-		if (templateLaTeXMaster == null) {
+        if (templateLaTeXMaster == null) {
 
-			LOGGER.debug("Lade Template {}", TEMPLATE_MAIN_LATEX_DOCUMENT);
+            LOGGER.debug("Lade Template {}", TEMPLATE_MAIN_LATEX_DOCUMENT);
 
-			templateLaTeXMaster = MjaFileUtils.loadTemplate(TEMPLATE_MAIN_LATEX_DOCUMENT);
-		}
+            templateLaTeXMaster = MjaFileUtils.loadTemplate(TEMPLATE_MAIN_LATEX_DOCUMENT);
+        }
 
-		return templateLaTeXMaster;
-	}
+        return templateLaTeXMaster;
+    }
 
-	public synchronized String getTemplateDocumentPDFKartei() {
+    public synchronized String getTemplateDocumentPDFKartei() {
 
-		LOGGER.debug("Lade Template {}", TEMPLATE_PDF_KARTEI);
+        LOGGER.debug("Lade Template {}", TEMPLATE_PDF_KARTEI);
 
-		if (templateDocumentPDFKartei == null) {
+        if (templateDocumentPDFKartei == null) {
 
-			templateDocumentPDFKartei = MjaFileUtils.loadTemplate(TEMPLATE_PDF_KARTEI);
-		}
+            templateDocumentPDFKartei = MjaFileUtils.loadTemplate(TEMPLATE_PDF_KARTEI);
+        }
 
-		return templateDocumentPDFKartei;
-	}
+        return templateDocumentPDFKartei;
+    }
 
-	public synchronized String getTemplatePDFRaetselFrage() {
+    public synchronized String getTemplatePDFRaetselFrage() {
 
-		if (templatePDFRaetselFrage == null) {
+        if (templatePDFRaetselFrage == null) {
 
-			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_RAETSEL_FRAGE);
+            LOGGER.debug("Lade Template {}", TEMPLATE_PDF_RAETSEL_FRAGE);
 
-			templatePDFRaetselFrage = MjaFileUtils.loadTemplate(TEMPLATE_PDF_RAETSEL_FRAGE);
-		}
-		return templatePDFRaetselFrage;
-	}
+            templatePDFRaetselFrage = MjaFileUtils.loadTemplate(TEMPLATE_PDF_RAETSEL_FRAGE);
+        }
+        return templatePDFRaetselFrage;
+    }
 
-	public synchronized String getTemplatePDFRaetselFrageLoesung() {
+    public synchronized String getTemplatePDFRaetselFrageLoesung() {
 
-		if (templatePDFRaetselFrageLoesung == null) {
+        if (templatePDFRaetselFrageLoesung == null) {
 
-			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG);
+            LOGGER.debug("Lade Template {}", TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG);
 
-			templatePDFRaetselFrageLoesung = MjaFileUtils.loadTemplate(TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG);
-		}
-		return templatePDFRaetselFrageLoesung;
-	}
+            templatePDFRaetselFrageLoesung = MjaFileUtils.loadTemplate(TEMPLATE_PDF_RAETSEL_FRAGE_LOESUNG);
+        }
+        return templatePDFRaetselFrageLoesung;
+    }
 
-	public synchronized String getTemplatePDFRaetselLoesung() {
+    public synchronized String getTemplatePDFRaetselLoesung() {
 
-		if (templatePDFRaetselLoesung == null) {
+        if (templatePDFRaetselLoesung == null) {
 
-			LOGGER.debug("Lade Template {}", TEMPLATE_PDF_RAETSEL_LOESUNG);
+            LOGGER.debug("Lade Template {}", TEMPLATE_PDF_RAETSEL_LOESUNG);
 
-			templatePDFRaetselLoesung = MjaFileUtils.loadTemplate(TEMPLATE_PDF_RAETSEL_LOESUNG);
-		}
+            templatePDFRaetselLoesung = MjaFileUtils.loadTemplate(TEMPLATE_PDF_RAETSEL_LOESUNG);
+        }
 
-		return templatePDFRaetselLoesung;
-	}
+        return templatePDFRaetselLoesung;
+    }
 
-	public synchronized String getTemplateDocumentRaetselPDF() {
+    public synchronized String getTemplateDocumentRaetselPDF() {
 
-		if (templateDocumentRaetselPDF == null) {
+        if (templateDocumentRaetselPDF == null) {
 
-			LOGGER.debug("Lade Template {}", TEMPLATE_DOCUMENT_RAETSEL_PDF);
+            LOGGER.debug("Lade Template {}", TEMPLATE_DOCUMENT_RAETSEL_PDF);
 
-			templateDocumentRaetselPDF = MjaFileUtils.loadTemplate(TEMPLATE_DOCUMENT_RAETSEL_PDF);
+            templateDocumentRaetselPDF = MjaFileUtils.loadTemplate(TEMPLATE_DOCUMENT_RAETSEL_PDF);
 
-		}
+        }
 
-		return templateDocumentRaetselPDF;
-	}
+        return templateDocumentRaetselPDF;
+    }
 
-	public synchronized String getTemplateDocumentRaetselPNG() {
+    public synchronized String getTemplateDocumentRaetselPNG() {
 
-		if (templateDocumentRaetselPNG == null) {
+        if (templateDocumentRaetselPNG == null) {
 
-			LOGGER.debug("Lade Template {}", TEMPLATE_DOCUMENT_RAETSEL_PNG);
+            LOGGER.debug("Lade Template {}", TEMPLATE_DOCUMENT_RAETSEL_PNG);
 
-			templateDocumentRaetselPNG = MjaFileUtils.loadTemplate(TEMPLATE_DOCUMENT_RAETSEL_PNG);
+            templateDocumentRaetselPNG = MjaFileUtils.loadTemplate(TEMPLATE_DOCUMENT_RAETSEL_PNG);
 
-		}
+        }
 
-		return templateDocumentRaetselPNG;
-	}
+        return templateDocumentRaetselPNG;
+    }
 
-	public synchronized String getLizenzFontsFibel() {
+    public synchronized String getLizenzFontsFibel() {
 
-		if (lizenzFontsFibel == null) {
+        if (lizenzFontsFibel == null) {
 
-			LOGGER.debug("Lade Template {}", LIZENZ_FONTS_FIBEL);
+            LOGGER.debug("Lade Template {}", LIZENZ_FONTS_FIBEL);
 
-			lizenzFontsFibel = MjaFileUtils.loadTemplate(LIZENZ_FONTS_FIBEL);
+            lizenzFontsFibel = MjaFileUtils.loadTemplate(LIZENZ_FONTS_FIBEL);
 
-		}
-		return lizenzFontsFibel;
-	}
+        }
+        return lizenzFontsFibel;
+    }
 
-	public synchronized String getLizenzFontsDruckschrift() {
+    public synchronized String getLizenzFontsDruckschrift() {
 
-		if (lizenzFontsDruckschrift == null) {
+        if (lizenzFontsDruckschrift == null) {
 
-			LOGGER.debug("Lade Template {}", LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK);
+            LOGGER.debug("Lade Template {}", LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK);
 
-			lizenzFontsDruckschrift = MjaFileUtils.loadTemplate(LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK);
-		}
+            lizenzFontsDruckschrift = MjaFileUtils.loadTemplate(LIZENZ_FONTS_DRUCKSCHRIFT_BY_WOK);
+        }
 
-		return lizenzFontsDruckschrift;
-	}
+        return lizenzFontsDruckschrift;
+    }
 
-	public synchronized String getTemplateQuellenverzeichnis() {
+    public synchronized String getTemplateQuellenverzeichnis() {
 
-		if (templateQuellenverzeichnis == null) {
+        if (templateQuellenverzeichnis == null) {
 
-			LOGGER.debug("Lade Template {}", QUELLENVERZEICHNIS);
+            LOGGER.debug("Lade Template {}", QUELLENVERZEICHNIS);
 
-			templateQuellenverzeichnis = MjaFileUtils.loadTemplate(QUELLENVERZEICHNIS);
-		}
+            templateQuellenverzeichnis = MjaFileUtils.loadTemplate(QUELLENVERZEICHNIS);
+        }
 
-		return templateQuellenverzeichnis;
-	}
+        return templateQuellenverzeichnis;
+    }
 
 }

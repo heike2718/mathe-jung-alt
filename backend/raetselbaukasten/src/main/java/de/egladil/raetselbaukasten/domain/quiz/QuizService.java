@@ -4,6 +4,16 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.quiz;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Referenztyp;
 import de.egladil.raetselbaukasten.domain.aufgabensammlungen.Schwierigkeitsgrad;
 import de.egladil.raetselbaukasten.domain.generatoren.RaetselFileService;
@@ -19,14 +29,6 @@ import de.egladil.raetselbaukasten.infrastructure.persistence.dao.QuellenReposit
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteAufgabeReadonly;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteAufgabensammlung;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteQuelleReadonly;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * QuizService
@@ -46,18 +48,21 @@ public class QuizService {
     QuellenRepository quellenRepository;
 
     /**
-     * Sucht alle Aufgaben des durch die Parameter eindeutig bestimmten Quiz zur Präsentation im Browser. Es werden nur die
-     * Gruppen mit Status FREIGEGEBEN gefunden.
+     * Sucht alle Aufgaben des durch die Parameter eindeutig bestimmten Quiz zur
+     * Präsentation im Browser. Es werden nur die Gruppen mit Status FREIGEGEBEN
+     * gefunden.
      *
      * @param referenztyp        Referenztyp
      * @param referenz           String
      * @param schwierigkeitsgrad Schwierigkeitsgrad
      * @return Optional
      */
-    public Optional<Quiz> generateQuiz(final Referenztyp referenztyp, final String referenz, final Schwierigkeitsgrad schwierigkeitsgrad) {
+    public Optional<Quiz> generateQuiz(final Referenztyp referenztyp, final String referenz,
+            final Schwierigkeitsgrad schwierigkeitsgrad) {
 
         LOGGER.debug(" ==> (1)");
-        PersistenteAufgabensammlung dbResult = aufgabensammlungDao.findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
+        PersistenteAufgabensammlung dbResult = aufgabensammlungDao
+                .findByUniqueKey(referenztyp, referenz, schwierigkeitsgrad);
 
         LOGGER.debug(" ==> (4)");
 
@@ -69,7 +74,8 @@ public class QuizService {
 
         List<Quizaufgabe> aufgaben = getItemsAsQuizaufgaben(dbResult.getUuid());
 
-        Quiz quiz = new Quiz().withKlassenstufe(dbResult.getSchwierigkeitsgrad().getLabel())
+        Quiz quiz = new Quiz()
+                .withKlassenstufe(dbResult.getSchwierigkeitsgrad().getLabel())
                 .withName(dbResult.getName());
         quiz.setAufgaben(aufgaben);
 
@@ -78,7 +84,8 @@ public class QuizService {
 
     public List<Quizaufgabe> getItemsAsQuizaufgaben(final String aufgabensammlungID) {
 
-        List<PersistenteAufgabeReadonly> aufgabenReadonly = aufgabensammlungDao.loadAufgabenByAufgabensammlung(aufgabensammlungID);
+        List<PersistenteAufgabeReadonly> aufgabenReadonly = aufgabensammlungDao
+                .loadAufgabenByAufgabensammlung(aufgabensammlungID);
         List<Quizaufgabe> aufgaben = new ArrayList<>();
 
         aufgabenReadonly.forEach(aufgabeDB -> {
@@ -96,10 +103,14 @@ public class QuizService {
     Quizaufgabe mapFromDB(final PersistenteAufgabeReadonly dbAufgabe) {
 
         Quizaufgabe aufgabe = new Quizaufgabe();
-        aufgabe.setAntwortvorschlaege(AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(dbAufgabe.getAntwortvorschlaege()));
+        aufgabe
+                .setAntwortvorschlaege(
+                        AntwortvorschlaegeMapper.deserializeAntwortvorschlaege(dbAufgabe.getAntwortvorschlaege()));
         aufgabe.setAntwortvorschlaegeEingebettet(dbAufgabe.isAntwortvorschlaegeEingebettet());
         aufgabe.setSchluessel(dbAufgabe.getSchluessel());
-        aufgabe.setImages(raetselFileService.findImages(dbAufgabe.getFilenameVorschauFrage(), dbAufgabe.getFilenameVorschauLoesung()));
+        aufgabe
+                .setImages(raetselFileService
+                        .findImages(dbAufgabe.getFilenameVorschauFrage(), dbAufgabe.getFilenameVorschauLoesung()));
         aufgabe.setQuelle(getQuellenangabe(dbAufgabe));
         aufgabe.setNummer(dbAufgabe.getNummer());
         aufgabe.setPunkte(dbAufgabe.getPunkte());

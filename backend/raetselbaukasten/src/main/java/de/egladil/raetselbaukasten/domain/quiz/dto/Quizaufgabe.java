@@ -19,174 +19,176 @@ import de.egladil.raetselbaukasten.domain.raetsel.dto.Images;
 /**
  * Quizaufgabe.
  */
-@Schema(
-	name = "Quizaufgabe",
-	description = "Ein Rätsel, also ein Element eines Quiz zum Anzeigen in einer GUI.")
+@Schema(name = "Quizaufgabe", description = "Ein Rätsel, also ein Element eines Quiz zum Anzeigen in einer GUI.")
 public class Quizaufgabe {
 
-	@JsonProperty
-	@Schema(description = "Nummer der Quizaufgabe. Ist eindeutig innerhalb der Quiz und streng aufsteigend sortierbar")
-	private String nummer;
+    @JsonProperty
+    @Schema(description = "Nummer der Quizaufgabe. Ist eindeutig innerhalb der Quiz und streng aufsteigend sortierbar")
+    private String nummer;
 
-	@JsonProperty
-	@Schema(description = "fachlich eindeutiger Schlüssel des verwendeten Rätsels")
-	private String schluessel;
+    @JsonProperty
+    @Schema(description = "fachlich eindeutiger Schlüssel des verwendeten Rätsels")
+    private String schluessel;
 
-	@JsonProperty
-	@Schema(description = "Quelle der Quizaufgabe für eine Zitatsection")
-	private String quelle;
+    @JsonProperty
+    @Schema(description = "Quelle der Quizaufgabe für eine Zitatsection")
+    private String quelle;
 
-	@JsonProperty
-	@Schema(
-		description = "Anzahl Punkte, die es für diese Aufgabe bei gibt. Um Rundungsfehler zu vermeiden, wird mit 100 mulzipliziert, also 300 statt 3")
-	private int punkte;
+    @JsonProperty
+    @Schema(
+            description = "Anzahl Punkte, die es für diese Aufgabe bei gibt. Um Rundungsfehler zu vermeiden, wird mit 100 mulzipliziert, also 300 statt 3")
+    private int punkte;
 
-	@JsonProperty
-	@Schema(
-		description = "Anzahl Strafpunkte, die man bei einer falschen Antwort bekommt. Um Rundungsfehler zu vermeiden, wird mit 100 multipliziert, also 75 statt 0,75")
-	private int strafpunkte;
+    @JsonProperty
+    @Schema(
+            description = "Anzahl Strafpunkte, die man bei einer falschen Antwort bekommt. Um Rundungsfehler zu vermeiden, wird mit 100 multipliziert, also 75 statt 0,75")
+    private int strafpunkte;
 
-	@JsonProperty
-	@Schema(description = "ob der Frage-Text die eventuell vorhandenen Antwortvorschläge bereits enthält.")
-	private boolean antwortvorschlaegeEingebettet;
+    @JsonProperty
+    @Schema(description = "ob der Frage-Text die eventuell vorhandenen Antwortvorschläge bereits enthält.")
+    private boolean antwortvorschlaegeEingebettet;
 
-	@JsonProperty
-	@Schema(
-		type = SchemaType.ARRAY, implementation = Antwortvorschlag.class,
-		description = "optionale Antwortvorschläge, wenn es sich um beim Quiz um multiple choice handelt")
-	private Antwortvorschlag[] antwortvorschlaege;
+    @JsonProperty
+    @Schema(
+            type = SchemaType.ARRAY,
+            implementation = Antwortvorschlag.class,
+            description = "optionale Antwortvorschläge, wenn es sich um beim Quiz um multiple choice handelt")
+    private Antwortvorschlag[] antwortvorschlaege;
 
-	@JsonProperty
-	@Schema(description = "Images, die angezeigt werden können")
-	private Images images;
+    @JsonProperty
+    @Schema(description = "Images, die angezeigt werden können")
+    private Images images;
 
-	@Override
-	public int hashCode() {
+    @Override
+    public int hashCode() {
 
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((nummer == null) ? 0 : nummer.hashCode());
-		return result;
-	}
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((nummer == null) ? 0 : nummer.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
 
-		if (this == obj) {
+        if (this == obj) {
 
-			return true;
-		}
+            return true;
+        }
 
-		if (!(obj instanceof Quizaufgabe)) {
+        if (!(obj instanceof Quizaufgabe)) {
 
-			return false;
-		}
-		Quizaufgabe other = (Quizaufgabe) obj;
+            return false;
+        }
+        Quizaufgabe other = (Quizaufgabe) obj;
 
-		if (nummer == null) {
+        if (nummer == null) {
 
-			if (other.nummer != null) {
+            if (other.nummer != null) {
 
-				return false;
-			}
-		} else if (!nummer.equals(other.nummer)) {
+                return false;
+            }
+        } else if (!nummer.equals(other.nummer)) {
 
-			return false;
-		}
-		return true;
-	}
+            return false;
+        }
+        return true;
+    }
 
-	@JsonIgnore
-	public String getLoesungsbuchstabe() {
+    @JsonIgnore
+    public String getLoesungsbuchstabe() {
 
-		if (antwortvorschlaege == null) {
+        if (antwortvorschlaege == null) {
 
-			return null;
-		}
+            return null;
+        }
 
-		Optional<String> optAntwortvorschlag = Arrays.stream(antwortvorschlaege).filter(a -> a.isKorrekt())
-			.map(a -> a.getBuchstabe()).findFirst();
+        Optional<String> optAntwortvorschlag = Arrays
+                .stream(antwortvorschlaege)
+                .filter(a -> a.isKorrekt())
+                .map(a -> a.getBuchstabe())
+                .findFirst();
 
-		return optAntwortvorschlag.isEmpty() ? null : optAntwortvorschlag.get();
-	}
+        return optAntwortvorschlag.isEmpty() ? null : optAntwortvorschlag.get();
+    }
 
-	public String getNummer() {
+    public String getNummer() {
 
-		return nummer;
-	}
+        return nummer;
+    }
 
-	public void setNummer(final String nummer) {
+    public void setNummer(final String nummer) {
 
-		this.nummer = nummer;
-	}
+        this.nummer = nummer;
+    }
 
-	public String getSchluessel() {
+    public String getSchluessel() {
 
-		return schluessel;
-	}
+        return schluessel;
+    }
 
-	public void setSchluessel(final String schluessel) {
+    public void setSchluessel(final String schluessel) {
 
-		this.schluessel = schluessel;
-	}
+        this.schluessel = schluessel;
+    }
 
-	public String getQuelle() {
+    public String getQuelle() {
 
-		return quelle;
-	}
+        return quelle;
+    }
 
-	public void setQuelle(final String quelle) {
+    public void setQuelle(final String quelle) {
 
-		this.quelle = quelle;
-	}
+        this.quelle = quelle;
+    }
 
-	public Antwortvorschlag[] getAntwortvorschlaege() {
+    public Antwortvorschlag[] getAntwortvorschlaege() {
 
-		return antwortvorschlaege;
-	}
+        return antwortvorschlaege;
+    }
 
-	public void setAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
+    public void setAntwortvorschlaege(final Antwortvorschlag[] antwortvorschlaege) {
 
-		this.antwortvorschlaege = antwortvorschlaege;
-	}
+        this.antwortvorschlaege = antwortvorschlaege;
+    }
 
-	public Images getImages() {
+    public Images getImages() {
 
-		return images;
-	}
+        return images;
+    }
 
-	public void setImages(final Images images) {
+    public void setImages(final Images images) {
 
-		this.images = images;
-	}
+        this.images = images;
+    }
 
-	public int getPunkte() {
+    public int getPunkte() {
 
-		return punkte;
-	}
+        return punkte;
+    }
 
-	public void setPunkte(final int punkte) {
+    public void setPunkte(final int punkte) {
 
-		this.punkte = punkte;
-	}
+        this.punkte = punkte;
+    }
 
-	public int getStrafpunkte() {
+    public int getStrafpunkte() {
 
-		return strafpunkte;
-	}
+        return strafpunkte;
+    }
 
-	public void setStrafpunkte(final int strafpunkte) {
+    public void setStrafpunkte(final int strafpunkte) {
 
-		this.strafpunkte = strafpunkte;
-	}
+        this.strafpunkte = strafpunkte;
+    }
 
-	public boolean isAntwortvorschlaegeEingebettet() {
+    public boolean isAntwortvorschlaegeEingebettet() {
 
-		return antwortvorschlaegeEingebettet;
-	}
+        return antwortvorschlaegeEingebettet;
+    }
 
-	public void setAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
+    public void setAntwortvorschlaegeEingebettet(final boolean antwortvorschlaegeEingebettet) {
 
-		this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
-	}
+        this.antwortvorschlaegeEingebettet = antwortvorschlaegeEingebettet;
+    }
 }

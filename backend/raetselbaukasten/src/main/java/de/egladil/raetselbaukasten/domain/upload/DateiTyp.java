@@ -9,49 +9,49 @@ package de.egladil.raetselbaukasten.domain.upload;
  */
 public enum DateiTyp {
 
-	EPS("application/postscript", ".eps") {
-		@Override
-		public FileType getFileType() {
+    EPS("application/postscript", ".eps") {
+        @Override
+        public FileType getFileType() {
 
-			return FileType.EPS;
-		}
+            return FileType.EPS;
+        }
 
-	};
+    };
 
-	private final String tikaName;
+    private final String tikaName;
 
-	private final String suffixWithPoint;
+    private final String suffixWithPoint;
 
-	private DateiTyp(final String tikaName, final String suffixWithPoint) {
+    private DateiTyp(final String tikaName, final String suffixWithPoint) {
 
-		this.tikaName = tikaName;
-		this.suffixWithPoint = suffixWithPoint;
-	}
+        this.tikaName = tikaName;
+        this.suffixWithPoint = suffixWithPoint;
+    }
 
-	public String getTikaName() {
+    public String getTikaName() {
 
-		return tikaName;
-	}
+        return tikaName;
+    }
 
-	public static DateiTyp valueOfTikaName(final String tikaName) {
+    public static DateiTyp valueOfTikaName(final String tikaName) {
 
-		for (DateiTyp dateiTyp : DateiTyp.values()) {
+        for (DateiTyp dateiTyp : DateiTyp.values()) {
 
-			if (dateiTyp.tikaName.equalsIgnoreCase(tikaName)) {
+            if (dateiTyp.tikaName.equalsIgnoreCase(tikaName)) {
 
-				return dateiTyp;
-			}
-		}
+                return dateiTyp;
+            }
+        }
 
-		return null;
+        return null;
 
-	}
+    }
 
-	public String getSuffixWithPoint() {
+    public String getSuffixWithPoint() {
 
-		return suffixWithPoint;
-	}
+        return suffixWithPoint;
+    }
 
-	public abstract FileType getFileType();
+    public abstract FileType getFileType();
 
 }

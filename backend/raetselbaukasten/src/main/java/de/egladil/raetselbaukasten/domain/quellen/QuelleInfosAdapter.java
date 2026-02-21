@@ -15,6 +15,7 @@ public class QuelleInfosAdapter {
 
     /**
      * Adaptiert eine PersistenteQuelleReadonly
+     *
      * @param quelle PersistenteQuelleReadonly
      * @return IQuellenangabeDaten
      */
@@ -80,6 +81,7 @@ public class QuelleInfosAdapter {
 
     /**
      * Adaptiert ein PersistentesRaetselMediensucheItemReadonly
+     *
      * @param quelle PersistentesRaetselMediensucheItemReadonly
      * @return IQuellenangabeDaten
      */
@@ -104,17 +106,17 @@ public class QuelleInfosAdapter {
 
                 switch (quelle.getMedienart()) {
 
-                    case BUCH:
-                        return Quellenart.BUCH;
+                case BUCH:
+                    return Quellenart.BUCH;
 
-                    case INTERNET:
-                        return Quellenart.INTERNET;
+                case INTERNET:
+                    return Quellenart.INTERNET;
 
-                    case ZEITSCHRIFT:
-                        return Quellenart.ZEITSCHRIFT;
+                case ZEITSCHRIFT:
+                    return Quellenart.ZEITSCHRIFT;
 
-                    default:
-                        throw new IllegalArgumentException("Unexpected medienart: " + quelle.getMediumTitel());
+                default:
+                    throw new IllegalArgumentException("Unexpected medienart: " + quelle.getMediumTitel());
                 }
             }
 
@@ -159,6 +161,7 @@ public class QuelleInfosAdapter {
 
     /**
      * Adaptiert eine PersistenteAufgabeReadonly
+     *
      * @param ausDB PersistenteAufgabeReadonly
      * @return IQuellenangabeDaten
      */

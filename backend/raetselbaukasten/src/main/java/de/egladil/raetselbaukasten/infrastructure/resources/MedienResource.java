@@ -7,26 +7,6 @@ package de.egladil.raetselbaukasten.infrastructure.resources;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
-import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
-import org.eclipse.microprofile.openapi.annotations.media.Content;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-
-import de.egladil.raetselbaukasten.domain.auth.dto.MessagePayload;
-import de.egladil.raetselbaukasten.domain.medien.MedienService;
-import de.egladil.raetselbaukasten.domain.medien.Medienart;
-import de.egladil.raetselbaukasten.domain.medien.Mediensuchmodus;
-import de.egladil.raetselbaukasten.domain.medien.dto.MediensucheResult;
-import de.egladil.raetselbaukasten.domain.medien.dto.MediumDto;
-import de.egladil.raetselbaukasten.domain.medien.dto.MediumQuelleDto;
-import de.egladil.raetselbaukasten.domain.medien.dto.RaetselMediensucheTrefferItem;
-import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -47,6 +27,28 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
+import org.apache.commons.lang3.StringUtils;
+
+import de.egladil.raetselbaukasten.domain.auth.dto.MessagePayload;
+import de.egladil.raetselbaukasten.domain.medien.MedienService;
+import de.egladil.raetselbaukasten.domain.medien.Medienart;
+import de.egladil.raetselbaukasten.domain.medien.Mediensuchmodus;
+import de.egladil.raetselbaukasten.domain.medien.dto.MediensucheResult;
+import de.egladil.raetselbaukasten.domain.medien.dto.MediumDto;
+import de.egladil.raetselbaukasten.domain.medien.dto.MediumQuelleDto;
+import de.egladil.raetselbaukasten.domain.medien.dto.RaetselMediensucheTrefferItem;
+import de.egladil.raetselbaukasten.domain.validation.MjaRegexps;
+
 /**
  * MedienResource
  */
@@ -55,46 +57,69 @@ import jakarta.ws.rs.core.Response.Status;
 @Tag(name = "Medien")
 public class MedienResource {
 
-	@Inject
-	MedienService medienService;
+    @Inject
+    MedienService medienService;
 
-	@GET
-	@Path("{id}/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Operation(operationId = "getMedium", summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen.")
-	@Parameters({ @Parameter(in = ParameterIn.PATH, name = "id", description = "technische ID eines Mediums"), })
-	@APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MediensucheResult.class)))
-	@APIResponse(name = "BadRequestResponse", responseCode = "400", description = "fehlgeschlagene Input-Validierung")
-	@APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
-	@APIResponse(name = "NotFound", responseCode = "404", content = @Content(mediaType = "application/json"))
-	@APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
-	public Response getMedium(@PathParam(value = "id")
-	@Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält unerlaubte Zeichen")
-	final String id) {
+    @GET
+    @Path("{id}/v1")
+    @RolesAllowed({ "ADMIN", "AUTOR" })
+    @Operation(
+            operationId = "getMedium",
+            summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen.")
+    @Parameters({ @Parameter(in = ParameterIn.PATH, name = "id", description = "technische ID eines Mediums"), })
+    @APIResponse(
+            name = "OKResponse",
+            responseCode = "200",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MediensucheResult.class)))
+    @APIResponse(name = "BadRequestResponse", responseCode = "400", description = "fehlgeschlagene Input-Validierung")
+    @APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+    @APIResponse(name = "NotFound", responseCode = "404", content = @Content(mediaType = "application/json"))
+    @APIResponse(
+            name = "ServerError",
+            description = "server error",
+            responseCode = "500",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+    public Response getMedium(@PathParam(value = "id")
+    @Pattern(regexp = MjaRegexps.VALID_DOMAIN_OBJECT_ID, message = "id enthält unerlaubte Zeichen") final String id) {
 
-		Optional<MediumDto> opt = medienService.getMediumWithId(id);
+        Optional<MediumDto> opt = medienService.getMediumWithId(id);
 
-		if (opt.isEmpty()) {
+        if (opt.isEmpty()) {
 
-			return Response.status(Status.NOT_FOUND).build();
-		}
+            return Response.status(Status.NOT_FOUND).build();
+        }
 
-		return Response.ok(opt.get()).build();
-	}
+        return Response.ok(opt.get()).build();
+    }
 
-	@GET
-	@Path("/v1")
-	@RolesAllowed({ "ADMIN", "AUTOR" })
-	@Operation(operationId = "findMedien", summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen. Admins sehen alle, Autoren nur die eigenen")
-	@Parameters({
-		@Parameter(in = ParameterIn.QUERY, name = "suchstring", description = "Freitext zum Suchen. Es erfolgt eine Suche mit like titel or like kommentar. Sortiert wird nach titel. Wenn nicht angegeben, werden alle aus der page geladen"),
-		@Parameter(in = ParameterIn.QUERY, name = "limit", description = "Pagination: pageSize"),
-		@Parameter(in = ParameterIn.QUERY, name = "offset", description = "Pagination: pageIndex"), })
-	@APIResponse(name = "OKResponse", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MediensucheResult.class)))
-	@APIResponse(name = "BadRequestResponse", responseCode = "400", description = "fehlgeschlagene Input-Validierung")
-	@APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
-	@APIResponse(name = "ServerError", description = "server error", responseCode = "500", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
-	// @formatter:off
+    @GET
+    @Path("/v1")
+    @RolesAllowed({ "ADMIN", "AUTOR" })
+    @Operation(
+            operationId = "findMedien",
+            summary = "Gibt alle Medien zurück, die auf den suchmodus und die gegebene Suchanfrage passen. Admins sehen alle, Autoren nur die eigenen")
+    @Parameters({ @Parameter(
+            in = ParameterIn.QUERY,
+            name = "suchstring",
+            description = "Freitext zum Suchen. Es erfolgt eine Suche mit like titel or like kommentar. Sortiert wird nach titel. Wenn nicht angegeben, werden alle aus der page geladen"),
+            @Parameter(in = ParameterIn.QUERY, name = "limit", description = "Pagination: pageSize"),
+            @Parameter(in = ParameterIn.QUERY, name = "offset", description = "Pagination: pageIndex"), })
+    @APIResponse(
+            name = "OKResponse",
+            responseCode = "200",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MediensucheResult.class)))
+    @APIResponse(name = "BadRequestResponse", responseCode = "400", description = "fehlgeschlagene Input-Validierung")
+    @APIResponse(name = "NotAuthorized", responseCode = "401", content = @Content(mediaType = "application/json"))
+    @APIResponse(
+            name = "ServerError",
+            description = "server error",
+            responseCode = "500",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessagePayload.class)))
+    // @formatter:off
 	public Response findMedien(
 		@QueryParam(value = "suchstring") @Size(max = 200, message = "suchstring darf höchstens 100 Zeichen lang sein")  @Pattern(
 			regexp = MjaRegexps.VALID_SUCHSTRING,

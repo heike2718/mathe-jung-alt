@@ -9,7 +9,6 @@ package de.egladil.raetselbaukasten.domain.embeddable_images.dto;
  */
 public enum Textart {
 
-	FRAGE,
-	LOESUNG;
+    FRAGE, LOESUNG;
 
 }

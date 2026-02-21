@@ -16,117 +16,118 @@ import de.egladil.raetselbaukasten.domain.raetsel.RaetselHerkunftTyp;
 @Schema(name = "Aufgabensammlungselement", description = "Element einer Aufgabensammlung")
 public class Aufgabensammlungselement {
 
-	@JsonProperty
-	@Schema(description = "technische ID, 'neu' für neues Element")
-	private String id;
+    @JsonProperty
+    @Schema(description = "technische ID, 'neu' für neues Element")
+    private String id;
 
-	@JsonProperty
-	@Schema(description = "Nummer als Titel der Aufgabe in der Aufgabensammlung.")
-	private String nummer;
+    @JsonProperty
+    @Schema(description = "Nummer als Titel der Aufgabe in der Aufgabensammlung.")
+    private String nummer;
 
-	@JsonProperty
-	@Schema(description = "Punkte für dieses Rätsel, multipliziert mit 100, um Rundungsfehler zu vermeiden.")
-	private int punkte;
+    @JsonProperty
+    @Schema(description = "Punkte für dieses Rätsel, multipliziert mit 100, um Rundungsfehler zu vermeiden.")
+    private int punkte;
 
-	@JsonProperty
-	@Schema(description = "fachlicher SCHLUESSEL des Rätsels, nicht Teil der persistenten Daten. Nützlich für die Anzeige")
-	private String raetselSchluessel;
+    @JsonProperty
+    @Schema(
+            description = "fachlicher SCHLUESSEL des Rätsels, nicht Teil der persistenten Daten. Nützlich für die Anzeige")
+    private String raetselSchluessel;
 
-	@JsonProperty
-	@Schema(description = "Name des Rätsels, nicht Teil der Daten des Elements. Nützlich für die Anzeige")
-	private String name;
+    @JsonProperty
+    @Schema(description = "Name des Rätsels, nicht Teil der Daten des Elements. Nützlich für die Anzeige")
+    private String name;
 
-	@JsonProperty
-	@Schema(description = "Loesungsbuchstabe, falls vorhanden. Kann null sein")
-	private String loesungsbuchstabe;
+    @JsonProperty
+    @Schema(description = "Loesungsbuchstabe, falls vorhanden. Kann null sein")
+    private String loesungsbuchstabe;
 
-	@JsonProperty
-	@Schema(description = "Vorschautext aus Teilen der Frage")
-	private String vorschautext;
+    @JsonProperty
+    @Schema(description = "Vorschautext aus Teilen der Frage")
+    private String vorschautext;
 
-	@JsonProperty
-	@Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
-	private RaetselHerkunftTyp herkunftstyp;
+    @JsonProperty
+    @Schema(description = "Der Herkunftstyp: EIGENKREATION, ZITAT, ADAPTION")
+    private RaetselHerkunftTyp herkunftstyp;
 
-	@JsonProperty
-	@Schema(description = "Ob das referenzierte Rätsel freigegeben ist.")
-	private boolean freigegeben;
+    @JsonProperty
+    @Schema(description = "Ob das referenzierte Rätsel freigegeben ist.")
+    private boolean freigegeben;
 
-	public String getNummer() {
+    public String getNummer() {
 
-		return nummer;
-	}
+        return nummer;
+    }
 
-	public String getId() {
+    public String getId() {
 
-		return id;
-	}
+        return id;
+    }
 
-	public int getPunkte() {
+    public int getPunkte() {
 
-		return punkte;
-	}
+        return punkte;
+    }
 
-	public String getRaetselSchluessel() {
+    public String getRaetselSchluessel() {
 
-		return raetselSchluessel;
-	}
+        return raetselSchluessel;
+    }
 
-	public String getName() {
+    public String getName() {
 
-		return name;
-	}
+        return name;
+    }
 
-	public Aufgabensammlungselement withId(final String id) {
+    public Aufgabensammlungselement withId(final String id) {
 
-		this.id = id;
-		return this;
-	}
+        this.id = id;
+        return this;
+    }
 
-	public Aufgabensammlungselement withNummer(final String nummer) {
+    public Aufgabensammlungselement withNummer(final String nummer) {
 
-		this.nummer = nummer;
-		return this;
-	}
+        this.nummer = nummer;
+        return this;
+    }
 
-	public Aufgabensammlungselement withPunkte(final int punkte) {
+    public Aufgabensammlungselement withPunkte(final int punkte) {
 
-		this.punkte = punkte;
-		return this;
-	}
+        this.punkte = punkte;
+        return this;
+    }
 
-	public Aufgabensammlungselement withRaetselSchluessel(final String raetselSchluessel) {
+    public Aufgabensammlungselement withRaetselSchluessel(final String raetselSchluessel) {
 
-		this.raetselSchluessel = raetselSchluessel;
-		return this;
-	}
+        this.raetselSchluessel = raetselSchluessel;
+        return this;
+    }
 
-	public Aufgabensammlungselement withName(final String name) {
+    public Aufgabensammlungselement withName(final String name) {
 
-		this.name = name;
-		return this;
-	}
+        this.name = name;
+        return this;
+    }
 
-	public void setLoesungsbuchstabe(final String loesungsbuchstabe) {
+    public void setLoesungsbuchstabe(final String loesungsbuchstabe) {
 
-		this.loesungsbuchstabe = loesungsbuchstabe;
-	}
+        this.loesungsbuchstabe = loesungsbuchstabe;
+    }
 
-	public Aufgabensammlungselement withVorschautext(final String vorschautext) {
+    public Aufgabensammlungselement withVorschautext(final String vorschautext) {
 
-		this.vorschautext = vorschautext;
-		return this;
-	}
+        this.vorschautext = vorschautext;
+        return this;
+    }
 
-	public Aufgabensammlungselement withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
+    public Aufgabensammlungselement withHerkunftstyp(final RaetselHerkunftTyp herkunftstyp) {
 
-		this.herkunftstyp = herkunftstyp;
-		return this;
-	}
+        this.herkunftstyp = herkunftstyp;
+        return this;
+    }
 
-	public Aufgabensammlungselement withFreigegeben(final boolean freigegeben) {
+    public Aufgabensammlungselement withFreigegeben(final boolean freigegeben) {
 
-		this.freigegeben = freigegeben;
-		return this;
-	}
+        this.freigegeben = freigegeben;
+        return this;
+    }
 }

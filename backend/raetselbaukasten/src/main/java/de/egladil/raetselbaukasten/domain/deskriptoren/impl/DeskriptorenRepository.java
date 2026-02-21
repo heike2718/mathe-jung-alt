@@ -6,11 +6,12 @@ package de.egladil.raetselbaukasten.domain.deskriptoren.impl;
 
 import java.util.List;
 
-import de.egladil.raetselbaukasten.domain.semantik.Repository;
-import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Deskriptor;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+
+import de.egladil.raetselbaukasten.domain.semantik.Repository;
+import de.egladil.raetselbaukasten.infrastructure.persistence.entities.Deskriptor;
 
 /**
  * DeskriptorenRepository
@@ -19,15 +20,15 @@ import jakarta.persistence.EntityManager;
 @ApplicationScoped
 public class DeskriptorenRepository {
 
-	@Inject
-	EntityManager entityManager;
+    @Inject
+    EntityManager entityManager;
 
-	/**
-	 * @return
-	 */
-	public List<Deskriptor> listAll() {
+    /**
+     * @return
+     */
+    public List<Deskriptor> listAll() {
 
-		return entityManager.createNamedQuery(Deskriptor.LIST_ALL, Deskriptor.class).getResultList();
-	}
+        return entityManager.createNamedQuery(Deskriptor.LIST_ALL, Deskriptor.class).getResultList();
+    }
 
 }

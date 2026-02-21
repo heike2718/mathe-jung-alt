@@ -16,78 +16,78 @@ import de.egladil.raetselbaukasten.domain.raetsel.dto.Images;
 @Schema(description = "Eine Aufgabe eines Minkänguru-Wettbewerbs")
 public class MinikaenguruAufgabe {
 
-	@JsonProperty
-	@Schema(description = "Nummer der Aufgabe")
-	private String nummer;
+    @JsonProperty
+    @Schema(description = "Nummer der Aufgabe")
+    private String nummer;
 
-	@JsonProperty
-	@Schema(description = "Punkte für diese Aufgabe.")
-	private int punkte;
+    @JsonProperty
+    @Schema(description = "Punkte für diese Aufgabe.")
+    private int punkte;
 
-	@JsonProperty
-	@Schema(description = "der korrekte Lösungsbuchstabe")
-	private String loesungsbuchstabe;
+    @JsonProperty
+    @Schema(description = "der korrekte Lösungsbuchstabe")
+    private String loesungsbuchstabe;
 
-	@JsonProperty
-	@Schema(description = "Quelle ür eine Zitatsection")
-	private String quelle;
+    @JsonProperty
+    @Schema(description = "Quelle ür eine Zitatsection")
+    private String quelle;
 
-	@JsonProperty
-	@Schema(description = "Images, die angezeigt werden können. Frage und optionale Lösung")
-	private Images images;
+    @JsonProperty
+    @Schema(description = "Images, die angezeigt werden können. Frage und optionale Lösung")
+    private Images images;
 
-	public String getNummer() {
+    public String getNummer() {
 
-		return nummer;
-	}
+        return nummer;
+    }
 
-	public MinikaenguruAufgabe withNummer(final String nummer) {
+    public MinikaenguruAufgabe withNummer(final String nummer) {
 
-		this.nummer = nummer;
-		return this;
-	}
+        this.nummer = nummer;
+        return this;
+    }
 
-	public int getPunkte() {
+    public int getPunkte() {
 
-		return punkte;
-	}
+        return punkte;
+    }
 
-	public MinikaenguruAufgabe withPunkte(final int punkte) {
+    public MinikaenguruAufgabe withPunkte(final int punkte) {
 
-		this.punkte = punkte;
-		return this;
-	}
+        this.punkte = punkte;
+        return this;
+    }
 
-	public String getLoesungsbuchstabe() {
+    public String getLoesungsbuchstabe() {
 
-		return loesungsbuchstabe;
-	}
+        return loesungsbuchstabe;
+    }
 
-	public MinikaenguruAufgabe withLoesungsbuchstabe(final String loesungsbuchstabe) {
+    public MinikaenguruAufgabe withLoesungsbuchstabe(final String loesungsbuchstabe) {
 
-		this.loesungsbuchstabe = loesungsbuchstabe;
-		return this;
-	}
+        this.loesungsbuchstabe = loesungsbuchstabe;
+        return this;
+    }
 
-	public Images getImages() {
+    public Images getImages() {
 
-		return images;
-	}
+        return images;
+    }
 
-	public MinikaenguruAufgabe withImages(final Images images) {
+    public MinikaenguruAufgabe withImages(final Images images) {
 
-		this.images = images;
-		return this;
-	}
+        this.images = images;
+        return this;
+    }
 
-	public String getQuelle() {
+    public String getQuelle() {
 
-		return quelle;
-	}
+        return quelle;
+    }
 
-	public MinikaenguruAufgabe withQuelle(final String quelle) {
+    public MinikaenguruAufgabe withQuelle(final String quelle) {
 
-		this.quelle = quelle;
-		return this;
-	}
+        this.quelle = quelle;
+        return this;
+    }
 }

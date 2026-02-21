@@ -4,6 +4,11 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.aufgabensammlungen.impl;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response.Status;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,10 +16,6 @@ import de.egladil.raetselbaukasten.domain.auth.session.AuthenticatedUser;
 import de.egladil.raetselbaukasten.domain.auth.session.Benutzerart;
 import de.egladil.raetselbaukasten.infrastructure.cdi.AuthenticationContext;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteAufgabensammlung;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response.Status;
 
 /**
  * AufgabensammlungPermissionDelegate
@@ -22,157 +23,160 @@ import jakarta.ws.rs.core.Response.Status;
 @ApplicationScoped
 public class AufgabensammlungPermissionDelegate {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungPermissionDelegate.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AufgabensammlungPermissionDelegate.class);
 
-	@Inject
-	AuthenticationContext authCtx;
+    @Inject
+    AuthenticationContext authCtx;
 
-	/**
-	 * Prüft, ob der eingeloggte User Leseberechtigung für die gegebene Aufgabensammlung hat.
-	 *
-	 * @param ausDB
-	 *              PersistenteAufgabensammlung
-	 */
-	public void checkReadPermission(final PersistenteAufgabensammlung ausDB) throws WebApplicationException, IllegalArgumentException {
+    /**
+     * Prüft, ob der eingeloggte User Leseberechtigung für die gegebene
+     * Aufgabensammlung hat.
+     *
+     * @param ausDB PersistenteAufgabensammlung
+     */
+    public void checkReadPermission(final PersistenteAufgabensammlung ausDB)
+            throws WebApplicationException, IllegalArgumentException {
 
-		AuthenticatedUser user = authCtx.getUser();
+        AuthenticatedUser user = authCtx.getUser();
 
-		Benutzerart benutzerart = user.getBenutzerart();
+        Benutzerart benutzerart = user.getBenutzerart();
 
-		switch (benutzerart) {
+        switch (benutzerart) {
 
-		case ANONYM: {
+        case ANONYM: {
 
-			LOGGER.warn("anonymer User {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
-				user.getName(), ausDB.getUuid(),
-				ausDB.getOwner());
-			throw new WebApplicationException(Status.FORBIDDEN);
-		}
+            LOGGER
+                    .warn("anonymer User {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
+                            user.getName(), ausDB.getUuid(), ausDB.getOwner());
+            throw new WebApplicationException(Status.FORBIDDEN);
+        }
 
-		case STANDARD:
-			if (readForbiddenForSTANDARD(ausDB, user)) {
+        case STANDARD:
+            if (readForbiddenForSTANDARD(ausDB, user)) {
 
-				LOGGER.warn("User {} mit Benutzerart {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
-					user.getName(), benutzerart, ausDB.getUuid(),
-					ausDB.getOwner());
-				throw new WebApplicationException(Status.FORBIDDEN);
-			}
-		case AUTOR:
-			if (readForbiddenForAUTOR(ausDB, user)) {
+                LOGGER
+                        .warn("User {} mit Benutzerart {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
+                                user.getName(), benutzerart, ausDB.getUuid(), ausDB.getOwner());
+                throw new WebApplicationException(Status.FORBIDDEN);
+            }
+        case AUTOR:
+            if (readForbiddenForAUTOR(ausDB, user)) {
 
-				LOGGER.warn("User {} mit Benutzerart {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
-					user.getName(), benutzerart, ausDB.getUuid(),
-					ausDB.getOwner());
-				throw new WebApplicationException(Status.FORBIDDEN);
+                LOGGER
+                        .warn("User {} mit Benutzerart {} hat hat keine Leseberechtigung für Aufgabensammlung {} mit Owner {}",
+                                user.getName(), benutzerart, ausDB.getUuid(), ausDB.getOwner());
+                throw new WebApplicationException(Status.FORBIDDEN);
 
-			}
-		case ADMIN:
-			return;
+            }
+        case ADMIN:
+            return;
 
-		default:
-			throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
-		}
+        default:
+            throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+        }
 
-	}
+    }
 
-	/**
-	 * Prüft, ob der eingeloggte User Schreibberechtigung für die gegebene Aufgabensammlung hat.
-	 *
-	 * @param ausDB
-	 *              PersistenteAufgabensammlung
-	 */
-	public void checkWritePermission(final PersistenteAufgabensammlung ausDB) {
+    /**
+     * Prüft, ob der eingeloggte User Schreibberechtigung für die gegebene
+     * Aufgabensammlung hat.
+     *
+     * @param ausDB PersistenteAufgabensammlung
+     */
+    public void checkWritePermission(final PersistenteAufgabensammlung ausDB) {
 
-		AuthenticatedUser user = authCtx.getUser();
+        AuthenticatedUser user = authCtx.getUser();
 
-		Benutzerart benutzerart = user.getBenutzerart();
+        Benutzerart benutzerart = user.getBenutzerart();
 
-		switch (benutzerart) {
+        switch (benutzerart) {
 
-		case ANONYM: {
+        case ANONYM: {
 
-			LOGGER.warn("anonymer User {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
-				user.getName(), ausDB.getUuid(),
-				ausDB.getOwner());
-			throw new WebApplicationException(Status.FORBIDDEN);
-		}
+            LOGGER
+                    .warn("anonymer User {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
+                            user.getName(), ausDB.getUuid(), ausDB.getOwner());
+            throw new WebApplicationException(Status.FORBIDDEN);
+        }
 
-		case STANDARD:
-		case AUTOR:
-			// privat oder nicht privat muss nicht gesondert behandelt werden, da Standarduser
-			// nicht owner von public Aufgabensammlungen sein können
-			if (!ausDB.getOwner().equals(user.getUuid())) {
+        case STANDARD:
+        case AUTOR:
+            // privat oder nicht privat muss nicht gesondert behandelt werden, da
+            // Standarduser
+            // nicht owner von public Aufgabensammlungen sein können
+            if (!ausDB.getOwner().equals(user.getUuid())) {
 
-				LOGGER.warn("User {} mit Benutzerart {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
-					user.getName(), benutzerart, ausDB.getUuid(),
-					ausDB.getOwner());
-				throw new WebApplicationException("keine Schreibberechtigung für Aufgabensammlung", Status.FORBIDDEN);
-			}
-		case ADMIN:
-			return;
+                LOGGER
+                        .warn("User {} mit Benutzerart {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
+                                user.getName(), benutzerart, ausDB.getUuid(), ausDB.getOwner());
+                throw new WebApplicationException("keine Schreibberechtigung für Aufgabensammlung", Status.FORBIDDEN);
+            }
+        case ADMIN:
+            return;
 
-		default:
-			throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
-		}
-	}
+        default:
+            throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+        }
+    }
 
-	public boolean isSchreibgeschuetztFuerUser(final PersistenteAufgabensammlung ausDB) {
+    public boolean isSchreibgeschuetztFuerUser(final PersistenteAufgabensammlung ausDB) {
 
-		AuthenticatedUser user = authCtx.getUser();
+        AuthenticatedUser user = authCtx.getUser();
 
-		Benutzerart benutzerart = user.getBenutzerart();
+        Benutzerart benutzerart = user.getBenutzerart();
 
-		switch (benutzerart) {
+        switch (benutzerart) {
 
-		case ANONYM: {
+        case ANONYM: {
 
-			LOGGER.warn("anonymer User {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
-				user.getName(), ausDB.getUuid(),
-				ausDB.getOwner());
-			return true;
-		}
+            LOGGER
+                    .warn("anonymer User {} hat keine Schreibberechtigung für Aufgabensammlung {} mit Owner {}",
+                            user.getName(), ausDB.getUuid(), ausDB.getOwner());
+            return true;
+        }
 
-		case STANDARD:
-		case AUTOR:
-			// privat oder nicht privat muss nicht gesondert behandelt werden, da Standarduser
-			// nicht owner von public Aufgabensammlungen sein können
-			return !ausDB.getOwner().equals(user.getUuid());
+        case STANDARD:
+        case AUTOR:
+            // privat oder nicht privat muss nicht gesondert behandelt werden, da
+            // Standarduser
+            // nicht owner von public Aufgabensammlungen sein können
+            return !ausDB.getOwner().equals(user.getUuid());
 
-		case ADMIN:
-			return false;
+        case ADMIN:
+            return false;
 
-		default:
-			throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
-		}
-	}
+        default:
+            throw new IllegalArgumentException("Unexpected benutzerart: " + benutzerart);
+        }
+    }
 
-	/**
-	 * @param  ausDB
-	 * @param  user
-	 * @return
-	 */
-	private boolean readForbiddenForSTANDARD(final PersistenteAufgabensammlung ausDB, final AuthenticatedUser user) {
+    /**
+     * @param ausDB
+     * @param user
+     * @return
+     */
+    private boolean readForbiddenForSTANDARD(final PersistenteAufgabensammlung ausDB, final AuthenticatedUser user) {
 
-		if (ausDB.isPrivat()) {
+        if (ausDB.isPrivat()) {
 
-			return !ausDB.getOwner().equals(user.getUuid());
-		}
+            return !ausDB.getOwner().equals(user.getUuid());
+        }
 
-		return !ausDB.isFreigegeben();
-	}
+        return !ausDB.isFreigegeben();
+    }
 
-	/**
-	 * @param  ausDB
-	 * @param  user
-	 * @return
-	 */
-	private boolean readForbiddenForAUTOR(final PersistenteAufgabensammlung ausDB, final AuthenticatedUser user) {
+    /**
+     * @param ausDB
+     * @param user
+     * @return
+     */
+    private boolean readForbiddenForAUTOR(final PersistenteAufgabensammlung ausDB, final AuthenticatedUser user) {
 
-		if (ausDB.isPrivat()) {
+        if (ausDB.isPrivat()) {
 
-			return !ausDB.getOwner().equals(user.getUuid());
-		}
+            return !ausDB.getOwner().equals(user.getUuid());
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

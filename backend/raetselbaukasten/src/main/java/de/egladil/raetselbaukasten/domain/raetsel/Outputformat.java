@@ -9,26 +9,26 @@ package de.egladil.raetselbaukasten.domain.raetsel;
  */
 public enum Outputformat {
 
-	PDF {
+    PDF {
 
-		@Override
-		public String getFilenameExtension() {
+        @Override
+        public String getFilenameExtension() {
 
-			return ".pdf";
-		}
+            return ".pdf";
+        }
 
-	},
+    },
 
-	PNG {
+    PNG {
 
-		@Override
-		public String getFilenameExtension() {
+        @Override
+        public String getFilenameExtension() {
 
-			return ".png";
-		}
+            return ".png";
+        }
 
-	};
+    };
 
-	public abstract String getFilenameExtension();
+    public abstract String getFilenameExtension();
 
 }

@@ -9,22 +9,21 @@ package de.egladil.raetselbaukasten.domain.medien;
  */
 public enum Mediensuchmodus {
 
-	NOOP("kein suchstring, mit pagination"),
-	SEARCHSTRING("nach titel oder kommentar mit pagination");
+    NOOP("kein suchstring, mit pagination"), SEARCHSTRING("nach titel oder kommentar mit pagination");
 
-	private final String description;
+    private final String description;
 
-	/**
-	 * @param description
-	 */
-	private Mediensuchmodus(final String description) {
+    /**
+     * @param description
+     */
+    private Mediensuchmodus(final String description) {
 
-		this.description = description;
-	}
+        this.description = description;
+    }
 
-	public String getDescription() {
+    public String getDescription() {
 
-		return description;
-	}
+        return description;
+    }
 
 }

@@ -1,0 +1,50 @@
+# raetselbaukasten
+### local / restricted / local: get minikänguru - 200
+GET http://localhost:9210/raetselbaukasten/api/restricted/minikaenguru/2020/EINS
+Authorization: bWstZ2F0ZXdheTpjaGFuZ2VtZQ==
+X-CLIENT-ID: mk-gateway
+
+### local / restricted / local: get minikänguru - 401 - unexpected ClientId-Header
+GET http://localhost:9210/raetselbaukasten/api/restricted/minikaenguru/2024/EINS
+Authorization: bWstZ2F0ZXdheTpjaGFuZ2VtZQ==
+X-CLIENT-ID: raetselbaukasten
+
+### local / restricted / local: get minikänguru - 401 - Authorization-Header not base64
+GET http://localhost:9210/raetselbaukasten/api/restricted/minikaenguru/2024/EINS
+Authorization: bWstZ2F0ZXdheTpjaGFuZ2VtZQ==L
+X-CLIENT-ID: mk-gateway
+
+### local / restricted / local: get minikänguru - 401 - Authorization-Header invalid
+GET http://localhost:9210/raetselbaukasten/api/restricted/minikaenguru/2024/EINS
+Authorization: bWstZ2F0ZXdheTpzaG91bGQtYmUtY2hhbmdlZA==
+X-STATUS-WETTBEWERB: BEENDET
+
+### local / public / local: get minikänguru - 200
+GET http://localhost:9210/raetselbaukasten/api/public/minikaenguru/2020/EINS
+
+### local / public / local: get minikänguru - 404 wegen level
+GET http://localhost:9210/raetselbaukasten/api/public/minikaenguru/2020/FUENF
+X-CLIENT-ID: mkbiza
+
+### local / public / local: get minikänguru - 404 wegen Status
+GET http://localhost:9210/raetselbaukasten/api/public/minikaenguru/2024/IKID
+
+### local / public / local: get anzahl freigegebene raetsel - 200
+GET http://localhost:9210/raetselbaukasten/api/public/raetsel/anzahl/v1
+
+### local / public / local: get quizz minikänguru - 200
+GET http://localhost:9210/raetselbaukasten/api/public/quizz/minikaenguru/2020/EINS/v1
+X-CLIENT-ID: mkbiza
+
+### local / public / local: get quizz minikänguru - 404 - path traversal
+GET http://localhost:9210/raetselbaukasten/api/public/quizz/minikaenguru/2020/cd ..%2f../2005
+
+### local / AboutResource Copy / local : about
+GET http://localhost:9210/raetselbaukasten/api/about
+
+### prod / public / prod raetselbaukasten/api: aufgabenvorschau - 200
+GET https://mathe-jung-alt.de/raetselbaukasten/api/public/minikaenguru/2023/IKID
+
+### prod / public / prod raetselbaukasten/api: quizz - 200
+GET https://mathe-jung-alt.de/raetselbaukasten/api/public/quizz/minikaenguru/2022/ZWEI/v1
+

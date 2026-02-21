@@ -4,12 +4,12 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.quiz;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * QuizServiceTest
@@ -17,93 +17,93 @@ import io.quarkus.test.junit.QuarkusTest;
 @QuarkusTest
 public class QuizServiceTest {
 
-	QuizService service = new QuizService();
+    QuizService service = new QuizService();
 
-	@Nested
-	class BerechneStrafpunkteTests {
+    @Nested
+    class BerechneStrafpunkteTests {
 
-		@Test
-		void should_return0_when_keineAntwortvorschlaege() {
+        @Test
+        void should_return0_when_keineAntwortvorschlaege() {
 
-			// Arrange
-			int punkte = 100;
-			int anzahlAntwortvorschlaege = 0;
+            // Arrange
+            int punkte = 100;
+            int anzahlAntwortvorschlaege = 0;
 
-			// Act
-			int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
+            // Act
+            int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
 
-			// Assert
-			assertEquals(0, strafpunkte);
-		}
+            // Assert
+            assertEquals(0, strafpunkte);
+        }
 
-		@Test
-		void should_return0_when_nurEinAntwortvorschlag() {
+        @Test
+        void should_return0_when_nurEinAntwortvorschlag() {
 
-			// Arrange
-			int punkte = 100;
-			int anzahlAntwortvorschlaege = 1;
+            // Arrange
+            int punkte = 100;
+            int anzahlAntwortvorschlaege = 1;
 
-			// Act
-			int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
+            // Act
+            int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
 
-			// Assert
-			assertEquals(0, strafpunkte);
-		}
+            // Assert
+            assertEquals(0, strafpunkte);
+        }
 
-		@Test
-		void should_returnPunkte_when_zweiAntwortvorschlaege() {
+        @Test
+        void should_returnPunkte_when_zweiAntwortvorschlaege() {
 
-			// Arrange
-			int punkte = 100;
-			int anzahlAntwortvorschlaege = 2;
+            // Arrange
+            int punkte = 100;
+            int anzahlAntwortvorschlaege = 2;
 
-			// Act
-			int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
+            // Act
+            int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
 
-			// Assert
-			assertEquals(punkte, strafpunkte);
-		}
+            // Assert
+            assertEquals(punkte, strafpunkte);
+        }
 
-		@Test
-		void should_returnHaelftePunkte_when_dreiAntwortvorschlaege() {
+        @Test
+        void should_returnHaelftePunkte_when_dreiAntwortvorschlaege() {
 
-			// Arrange
-			int punkte = 300;
-			int anzahlAntwortvorschlaege = 3;
+            // Arrange
+            int punkte = 300;
+            int anzahlAntwortvorschlaege = 3;
 
-			// Act
-			int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
+            // Act
+            int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
 
-			// Assert
-			assertEquals(150, strafpunkte);
-		}
+            // Assert
+            assertEquals(150, strafpunkte);
+        }
 
-		@Test
-		void should_returnViertelPunkte_when_fuenfAntwortvorschlaege() {
+        @Test
+        void should_returnViertelPunkte_when_fuenfAntwortvorschlaege() {
 
-			// Arrange
-			int punkte = 500;
-			int anzahlAntwortvorschlaege = 5;
+            // Arrange
+            int punkte = 500;
+            int anzahlAntwortvorschlaege = 5;
 
-			// Act
-			int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
+            // Act
+            int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
 
-			// Assert
-			assertEquals(125, strafpunkte);
-		}
+            // Assert
+            assertEquals(125, strafpunkte);
+        }
 
-		@Test
-		void should_returnFuenftelPunkte_when_sechsAntwortvorschlaege() {
+        @Test
+        void should_returnFuenftelPunkte_when_sechsAntwortvorschlaege() {
 
-			// Arrange
-			int punkte = 300;
-			int anzahlAntwortvorschlaege = 6;
+            // Arrange
+            int punkte = 300;
+            int anzahlAntwortvorschlaege = 6;
 
-			// Act
-			int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
+            // Act
+            int strafpunkte = service.berechneStrafpunkte(punkte, anzahlAntwortvorschlaege);
 
-			// Assert
-			assertEquals(60, strafpunkte);
-		}
-	}
+            // Assert
+            assertEquals(60, strafpunkte);
+        }
+    }
 }

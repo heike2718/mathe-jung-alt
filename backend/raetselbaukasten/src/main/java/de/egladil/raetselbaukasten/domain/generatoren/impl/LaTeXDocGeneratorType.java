@@ -9,8 +9,6 @@ package de.egladil.raetselbaukasten.domain.generatoren.impl;
  */
 public enum LaTeXDocGeneratorType {
 
-	MAIN_AUFGABEN,
-	MAIN_LOESUNGEN,
-	SELFCONTAINED,
+    MAIN_AUFGABEN, MAIN_LOESUNGEN, SELFCONTAINED,
 
 }

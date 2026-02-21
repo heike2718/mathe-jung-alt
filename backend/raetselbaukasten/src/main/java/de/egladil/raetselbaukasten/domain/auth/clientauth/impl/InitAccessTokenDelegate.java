@@ -4,8 +4,14 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.auth.clientauth.impl;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+
 import org.eclipse.microprofile.rest.client.RestClientDefinitionException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,10 +19,6 @@ import de.egladil.raetselbaukasten.domain.auth.dto.OAuthClientCredentials;
 import de.egladil.raetselbaukasten.domain.auth.dto.ResponsePayload;
 import de.egladil.raetselbaukasten.domain.exceptions.MjaAuthRuntimeException;
 import de.egladil.raetselbaukasten.infrastructure.restclient.AuthproviderRestClient;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 
 /**
  * InitAccessTokenDelegate kapselt den Aufruf des RestClients.
@@ -24,38 +26,38 @@ import jakarta.ws.rs.core.Response;
 @ApplicationScoped
 public class InitAccessTokenDelegate {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(InitAccessTokenDelegate.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InitAccessTokenDelegate.class);
 
-	@Inject
-	@RestClient
-	AuthproviderRestClient authProviderRestClient;
+    @Inject
+    @RestClient
+    AuthproviderRestClient authProviderRestClient;
 
-	/**
-	 * @param  clientSecrets
-	 * @return
-	 */
-	public ResponsePayload authenticateClient(final OAuthClientCredentials credentials) {
+    /**
+     * @param clientSecrets
+     * @return
+     */
+    public ResponsePayload authenticateClient(final OAuthClientCredentials credentials) {
 
-		Response authResponse = null;
+        Response authResponse = null;
 
-		try {
+        try {
 
-			authResponse = authProviderRestClient.authenticateClient(credentials);
+            authResponse = authProviderRestClient.authenticateClient(credentials);
 
-			ResponsePayload responsePayload = authResponse.readEntity(ResponsePayload.class);
+            ResponsePayload responsePayload = authResponse.readEntity(ResponsePayload.class);
 
-			return responsePayload;
-		} catch (IllegalStateException | RestClientDefinitionException | WebApplicationException e) {
+            return responsePayload;
+        } catch (IllegalStateException | RestClientDefinitionException | WebApplicationException e) {
 
-			String msg = "Unerwarteter Fehler beim Anfordern eines client-accessTokens: " + e.getMessage();
-			LOGGER.error(msg, e);
-			throw new MjaAuthRuntimeException(msg, e);
-		} finally {
+            String msg = "Unerwarteter Fehler beim Anfordern eines client-accessTokens: " + e.getMessage();
+            LOGGER.error(msg, e);
+            throw new MjaAuthRuntimeException(msg, e);
+        } finally {
 
-			if (authResponse != null) {
+            if (authResponse != null) {
 
-				authResponse.close();
-			}
-		}
-	}
+                authResponse.close();
+            }
+        }
+    }
 }

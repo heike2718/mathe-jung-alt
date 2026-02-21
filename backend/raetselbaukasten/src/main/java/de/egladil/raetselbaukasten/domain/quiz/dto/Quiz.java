@@ -12,60 +12,61 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Quiz. Zusammenstellung von Rätseln zu einer Gruppe, die direkt in einer GUI dargestellt werden kann.
+ * Quiz. Zusammenstellung von Rätseln zu einer Gruppe, die direkt in einer GUI
+ * dargestellt werden kann.
  */
 @Schema(
-	name = "Quiz",
-	description = "Ein Quiz, also eine Zusammenstellung von Rätseln, die direkt in einer GUI dargestellt werden kann.")
+        name = "Quiz",
+        description = "Ein Quiz, also eine Zusammenstellung von Rätseln, die direkt in einer GUI dargestellt werden kann.")
 public class Quiz {
 
-	@JsonProperty
-	@Schema(description = "der Name der Quiz")
-	private String name;
+    @JsonProperty
+    @Schema(description = "der Name der Quiz")
+    private String name;
 
-	@JsonProperty
-	@Schema(description = "die Klassenstufe, für die diese Quiz gedacht ist")
-	private String klassenstufe;
+    @JsonProperty
+    @Schema(description = "die Klassenstufe, für die diese Quiz gedacht ist")
+    private String klassenstufe;
 
-	@JsonProperty
-	@Schema(
-		description = "Anzahl Punkte, mit dem man in das Quiz startet. Der Wert wird so berechnet, dass man bei 0 Punkten landet, wenn man alle Aufgaben falsch löst. Um Rundungsfehler zu vermeiden, wird mit 100 multipliziert, also 1200 statt 12.")
-	private int startpunkte;
+    @JsonProperty
+    @Schema(
+            description = "Anzahl Punkte, mit dem man in das Quiz startet. Der Wert wird so berechnet, dass man bei 0 Punkten landet, wenn man alle Aufgaben falsch löst. Um Rundungsfehler zu vermeiden, wird mit 100 multipliziert, also 1200 statt 12.")
+    private int startpunkte;
 
-	@JsonProperty
-	@Schema(type = SchemaType.ARRAY, implementation = Quizaufgabe.class)
-	private List<Quizaufgabe> aufgaben;
+    @JsonProperty
+    @Schema(type = SchemaType.ARRAY, implementation = Quizaufgabe.class)
+    private List<Quizaufgabe> aufgaben;
 
-	public String getName() {
+    public String getName() {
 
-		return name;
-	}
+        return name;
+    }
 
-	public Quiz withName(final String name) {
+    public Quiz withName(final String name) {
 
-		this.name = name;
-		return this;
-	}
+        this.name = name;
+        return this;
+    }
 
-	public String getKlassenstufe() {
+    public String getKlassenstufe() {
 
-		return klassenstufe;
-	}
+        return klassenstufe;
+    }
 
-	public Quiz withKlassenstufe(final String klassenstufe) {
+    public Quiz withKlassenstufe(final String klassenstufe) {
 
-		this.klassenstufe = klassenstufe;
-		return this;
-	}
+        this.klassenstufe = klassenstufe;
+        return this;
+    }
 
-	public List<Quizaufgabe> getAufgaben() {
+    public List<Quizaufgabe> getAufgaben() {
 
-		return aufgaben;
-	}
+        return aufgaben;
+    }
 
-	public void setAufgaben(final List<Quizaufgabe> aufgaben) {
+    public void setAufgaben(final List<Quizaufgabe> aufgaben) {
 
-		this.aufgaben = aufgaben;
-	}
+        this.aufgaben = aufgaben;
+    }
 
 }

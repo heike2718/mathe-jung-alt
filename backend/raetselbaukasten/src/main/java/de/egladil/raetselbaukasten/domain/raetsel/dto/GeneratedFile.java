@@ -11,56 +11,54 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * GeneratedFile
  */
-@Schema(
-	name = "GeneratedFile",
-	description = "Generierte Binärdatei.")
+@Schema(name = "GeneratedFile", description = "Generierte Binärdatei.")
 public class GeneratedFile {
 
-	@JsonProperty
-	@Schema(description = "Name der Datei")
-	private String fileName;
+    @JsonProperty
+    @Schema(description = "Name der Datei")
+    private String fileName;
 
-	@JsonProperty
-	@Schema(description = "Daten der Datei")
-	private byte[] fileData;
+    @JsonProperty
+    @Schema(description = "Daten der Datei")
+    private byte[] fileData;
 
-	/**
-	 *
-	 */
-	public GeneratedFile() {
+    /**
+     *
+     */
+    public GeneratedFile() {
 
-		super();
+        super();
 
-	}
+    }
 
-	/**
-	 * @param fileName
-	 * @param fileData
-	 */
-	public GeneratedFile(final String fileName, final byte[] fileData) {
+    /**
+     * @param fileName
+     * @param fileData
+     */
+    public GeneratedFile(final String fileName, final byte[] fileData) {
 
-		super();
-		this.fileName = fileName;
-		this.fileData = fileData;
-	}
+        super();
+        this.fileName = fileName;
+        this.fileData = fileData;
+    }
 
-	public String getFileName() {
+    public String getFileName() {
 
-		return fileName;
-	}
+        return fileName;
+    }
 
-	public void setFileName(final String filename) {
+    public void setFileName(final String filename) {
 
-		this.fileName = filename;
-	}
+        this.fileName = filename;
+    }
 
-	public byte[] getFileData() {
+    public byte[] getFileData() {
 
-		return fileData;
-	}
+        return fileData;
+    }
 
-	public void setFileData(final byte[] fileData) {
+    public void setFileData(final byte[] fileData) {
 
-		this.fileData = fileData;
-	}
+        this.fileData = fileData;
+    }
 }

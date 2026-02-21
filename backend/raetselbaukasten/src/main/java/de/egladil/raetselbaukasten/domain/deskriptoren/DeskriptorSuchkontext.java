@@ -12,37 +12,34 @@ import java.util.List;
  */
 public enum DeskriptorSuchkontext {
 
-	BILDER,
-	MEDIEN,
-	NOOP {
+    BILDER, MEDIEN, NOOP {
 
-		@Override
-		public boolean freigegebenFuerAlle() {
+        @Override
+        public boolean freigegebenFuerAlle() {
 
-			return true;
-		}
+            return true;
+        }
 
-	},
-	QUELLEN,
-	RAETSEL {
+    },
+    QUELLEN, RAETSEL {
 
-		@Override
-		public boolean freigegebenFuerAlle() {
+        @Override
+        public boolean freigegebenFuerAlle() {
 
-			return true;
-		}
+            return true;
+        }
 
-	};
+    };
 
-	public boolean freigegebenFuerAlle() {
+    public boolean freigegebenFuerAlle() {
 
-		return false;
-	}
+        return false;
+    }
 
-	public static List<DeskriptorSuchkontext> getFreigegebe() {
+    public static List<DeskriptorSuchkontext> getFreigegebe() {
 
-		return Arrays.stream(DeskriptorSuchkontext.values()).filter((ds -> ds.freigegebenFuerAlle())).toList();
+        return Arrays.stream(DeskriptorSuchkontext.values()).filter((ds -> ds.freigegebenFuerAlle())).toList();
 
-	}
+    }
 
 }

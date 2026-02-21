@@ -4,15 +4,16 @@
 // =====================================================
 package de.egladil.raetselbaukasten.domain.quellen;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.junit.QuarkusTest;
 
 import de.egladil.raetselbaukasten.domain.exceptions.MjaRuntimeException;
 import de.egladil.raetselbaukasten.domain.quellen.impl.PersonquelleNameStrategie;
 import de.egladil.raetselbaukasten.infrastructure.persistence.entities.PersistenteQuelleReadonly;
-import io.quarkus.test.junit.QuarkusTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * PersonquelleNameStrategieTest
@@ -20,62 +21,62 @@ import io.quarkus.test.junit.QuarkusTest;
 @QuarkusTest
 public class PersonquelleNameStrategieTest {
 
-	PersonquelleNameStrategie strategie = new PersonquelleNameStrategie();
+    PersonquelleNameStrategie strategie = new PersonquelleNameStrategie();
 
-	QuelleInfosAdapter quelleAdapter = new QuelleInfosAdapter();
+    QuelleInfosAdapter quelleAdapter = new QuelleInfosAdapter();
 
-	@Test
-	void should_getNameThrowIllegalStateException_when_QuellenartNichtPerson() {
+    @Test
+    void should_getNameThrowIllegalStateException_when_QuellenartNichtPerson() {
 
-		// Arrange
-		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.setQuellenart(Quellenart.BUCH);
+        // Arrange
+        PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
+        quelle.setQuellenart(Quellenart.BUCH);
 
-		// Act
-		try {
+        // Act
+        try {
 
-			strategie.getText(quelleAdapter.adapt(quelle));
-			fail("keine IllegalStateException");
-		} catch (IllegalStateException e) {
+            strategie.getText(quelleAdapter.adapt(quelle));
+            fail("keine IllegalStateException");
+        } catch (IllegalStateException e) {
 
-			assertEquals("Funktioniert nur für Quellenart PERSON", e.getMessage());
-		}
+            assertEquals("Funktioniert nur für Quellenart PERSON", e.getMessage());
+        }
 
-	}
+    }
 
-	@Test
-	void should_getNameThrowMjaRuntimeException_when_PersonBlank() {
+    @Test
+    void should_getNameThrowMjaRuntimeException_when_PersonBlank() {
 
-		// Arrange
-		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.setQuellenart(Quellenart.PERSON);
-		quelle.setPerson(" ");
+        // Arrange
+        PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
+        quelle.setQuellenart(Quellenart.PERSON);
+        quelle.setPerson(" ");
 
-		// Act
-		try {
+        // Act
+        try {
 
-			strategie.getText(quelleAdapter.adapt(quelle));
-			fail("keine MjaRuntimeException");
-		} catch (MjaRuntimeException e) {
+            strategie.getText(quelleAdapter.adapt(quelle));
+            fail("keine MjaRuntimeException");
+        } catch (MjaRuntimeException e) {
 
-			assertEquals("Bei Quellenart PERSON darf person nicht blank sein.", e.getMessage());
-		}
+            assertEquals("Bei Quellenart PERSON darf person nicht blank sein.", e.getMessage());
+        }
 
-	}
+    }
 
-	@Test
-	void should_getNameReturnThePerson() {
+    @Test
+    void should_getNameReturnThePerson() {
 
-		// Arrange
-		PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
-		quelle.setQuellenart(Quellenart.PERSON);
+        // Arrange
+        PersistenteQuelleReadonly quelle = QuellenNameTestUtils.createQuelleAlleAttributeOhneQuellenart();
+        quelle.setQuellenart(Quellenart.PERSON);
 
-		// Act
-		String name = strategie.getText(quelleAdapter.adapt(quelle));
+        // Act
+        String name = strategie.getText(quelleAdapter.adapt(quelle));
 
-		// Assert
-		assertEquals("Hans Manz", name);
+        // Assert
+        assertEquals("Hans Manz", name);
 
-	}
+    }
 
 }
