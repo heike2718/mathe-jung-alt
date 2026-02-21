@@ -2,8 +2,9 @@
   "name": "rbk-monorepo",
   "private": true,
   "scripts": {
-    "fe": "nx run frontend:serve",
-    "be": "nx run backend:dev"
+    "fe": "npx nx run frontend:serve",
+    "be": "npx nx run raetselbaukasten-api:dev",
+    "latex": "npx nx run latex-service-api:build"
   },
   "devDependencies": {
     "nx": "22.5.2"

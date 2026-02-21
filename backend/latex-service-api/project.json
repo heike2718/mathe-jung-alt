@@ -1,0 +1,29 @@
+{
+  "name": "latex-service-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "backend/latex-service-api/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "backend/latex-service-api",
+        "command": "mvn -DskipTests package"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "backend/latex-service-api",
+        "command": "mvn test"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "backend/latex-service-api",
+        "command": "mvn -Pformat-apply impsort:sort@impsort-sort formatter:format@format-apply"
+      }
+    }
+  }
+}
