@@ -1,0 +1,28 @@
+#!/bin/sh
+# Purpose: Ensure git blame ignores formatting-only commits via .git-blame-ignore-revs
+# Place this file as:
+#   .git/hooks/post-checkout
+# and/or
+#   .git/hooks/post-merge
+# and make it executable.
+
+set -eu
+
+IGNORE_FILE=".git-blame-ignore-revs"
+
+# Only run inside a real git worktree
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0
+
+# Only if the file exists in the working tree
+[ -f "$IGNORE_FILE" ] || exit 0
+
+# Skip if already set correctly
+current="$(git config --get blame.ignoreRevsFile 2>/dev/null || true)"
+if [ "$current" = "$IGNORE_FILE" ]; then
+  exit 0
+fi
+
+# Set repo-local config
+echo "config blame.ignoreRevsFile"
+git config blame.ignoreRevsFile "$IGNORE_FILE" || true
+exit 0

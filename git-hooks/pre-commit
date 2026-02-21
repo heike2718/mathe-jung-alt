@@ -1,0 +1,41 @@
+#!/usr/bin/env sh
+set -e
+
+FRONTEND_DIR="frontend/rbk-ws"
+BACKEND_DIR="backend/raetselbaukasten"
+
+# 1) Gestagte Dateien
+STAGED="$(git diff --cached --name-only --diff-filter=ACM || true)"
+[ -z "$STAGED" ] && exit 0
+
+# Hilfsfunktion: prüft, ob gestagte Dateien ein Pattern matchen
+has_staged() {
+  echo "$STAGED" | grep -E "$1" >/dev/null 2>&1
+}
+
+# CSV-Liste für Nx (kommagetrennt)
+STAGED_CSV="$(printf '%s\n' "$STAGED" | paste -sd, -)"
+
+# 2) FRONTEND – lint-staged (ESLint --fix + Prettier)
+#if has_staged '\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$'; then
+#  echo "🔧 lint-staged (frontend)"
+#  (cd "$FRONTEND_DIR" && npx nx clear-cache && npx lint-staged --quiet)
+#fi
+
+# 3) FRONTEND – projektweit linten (Tag-/Layer-Regeln etc.)
+#if has_staged '\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$'; then
+#  echo "🔎 nx affected -t lint (frontend, projektweit)"
+#  (cd "$FRONTEND_DIR" && npx nx clear-cache && npx nx affected -t lint --files="$STAGED_CSV" --parallel=3)
+#fi
+
+# 4) Backend – Format + schneller Lint
+if echo "$STAGED" | grep -qE '\.java$'; then
+  echo "☕ sort and format (backend)"
+  (cd $BACKEND_DIR && mvn -Pformat-apply impsort:sort@impsort-sort formatter:format@format-apply)
+  git ls-files -m | grep -E '\.java$' | xargs -r git add
+
+#  echo "🔍 Checkstyle (schnell)"
+# (cd $BACKEND_DIR && mvn -q checkstyle:check)
+fi
+
+exit 0
