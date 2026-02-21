@@ -2,11 +2,17 @@
   "name": "rbk-monorepo",
   "private": true,
   "scripts": {
-    "fe": "npx nx run frontend:serve",
+    "check-node": "node -e \"if(!process.version.startsWith('v22.')){console.error('\\n❌ Node 22 required. Current:',process.version,'\\n');process.exit(1)}\"",
+    "preinstall": "npm run -s check-node",
+    "fe": "npm run check-node && npx nx run frontend:serve",
     "be": "npx nx run raetselbaukasten-api:dev",
+    "be-debug": "npx nx run raetselbaukasten-api:debug",
     "latex": "npx nx run latex-service-api:build"
   },
   "devDependencies": {
     "nx": "22.5.2"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
