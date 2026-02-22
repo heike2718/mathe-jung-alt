@@ -48,21 +48,21 @@
       "options": {
         "parallel": false,
         "commands": [
-          "rm -rf /home/heike/deployments/x300-heikeqs/raetselbaukasten/quarkus-app",
-          "mv backend/raetselbaukasten/target/quarkus-app /home/heike/deployments/x300-heikeqs/raetselbaukasten"
+          "rm -rf /home/heike/deployments/x300-heikeqs/mathe-jung-alt/raetselbaukasten/quarkus-app",
+          "mv backend/raetselbaukasten/target/quarkus-app /home/heike/deployments/x300-heikeqs/mathe-jung-alt/raetselbaukasten"
         ]
       },
       "configurations": {
         "heikeqs": {
           "commands": [
-            "rm -rf /home/heike/deployments/x300-heikeqs/raetselbaukasten/quarkus-app",
-            "mv backend/raetselbaukasten/target/quarkus-app /home/heike/deployments/x300-heikeqs/raetselbaukasten"
+            "rm -rf /home/heike/deployments/x300-heikeqs/mathe-jung-alt/raetselbaukasten/quarkus-app",
+            "mv backend/raetselbaukasten/target/quarkus-app /home/heike/deployments/x300-heikeqs/mathe-jung-alt/raetselbaukasten"
           ]
         },
         "prod": {
           "commands": [
-            "rm -rf /home/heike/deployments/vserver1/raetselbaukasten/quarkus-app",
-            "mv backend/raetselbaukasten/target/quarkus-app /home/heike/deployments/vserver1/raetselbaukasten"
+            "rm -rf /home/heike/deployments/vserver1/mathe-jung-alt/raetselbaukasten/quarkus-app",
+            "mv backend/raetselbaukasten/target/quarkus-app /home/heike/deployments/vserver1/mathe-jung-alt/raetselbaukasten"
           ]
         }
       }

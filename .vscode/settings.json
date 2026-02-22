@@ -1,33 +1,57 @@
 {
-    "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#034bd1",
-        "activityBar.activeBorder": "#fa45d4",
-        "activityBar.background": "#034bd1",
-        "activityBar.foreground": "#15202b",
-        "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#fa45d4",
-        "activityBarBadge.foreground": "#15202b",
-        "sash.hoverBorder": "#034bd1",
-        "statusBar.background": "#034bd1",
-        "statusBar.foreground": "#15202b",
-        "statusBarItem.hoverBackground": "#2fcefa",
-        "statusBarItem.remoteBackground": "#034bd1",
-        "statusBarItem.remoteForeground": "#15202b",
-        "titleBar.activeBackground": "#61dafb",
-        "titleBar.activeForeground": "#15202b",
-        "titleBar.inactiveBackground": "#61dafb99",
-        "titleBar.inactiveForeground": "#15202b99",
-        "commandCenter.border": "#15202b99"
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#034bd1",
+    "activityBar.activeBorder": "#fa45d4",
+    "activityBar.background": "#034bd1",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#fa45d4",
+    "activityBarBadge.foreground": "#15202b",
+    "sash.hoverBorder": "#034bd1",
+    "statusBar.background": "#034bd1",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#2fcefa",
+    "statusBarItem.remoteBackground": "#034bd1",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#61dafb",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#61dafb99",
+    "titleBar.inactiveForeground": "#15202b99",
+    "commandCenter.border": "#15202b99"
+  },
+  "peacock.color": "#61dafb",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/target": true,
+    "**/node_modules": true
+  },
+  "hide-files.files": [],
+  "exportall.config.relExclusion": [],
+
+  /* --- Terminal Profile für dein Monorepo --- */
+  "terminal.integrated.profiles.linux": {
+    "Raetselbaukasten-Backend": {
+      "path": "/bin/bash",
+      "cwd": "${workspaceFolder}/backend/raetselbaukasten",
+      "icon": "server",
+      "color": "terminal.ansiBlue"
     },
-    "peacock.color": "#61dafb",
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/Thumbs.db": true
-    },
-    "hide-files.files": [],
-    "exportall.config.relExclusion": []
+    "RBK-Frontend": {
+      "path": "/bin/bash",
+      "cwd": "${workspaceFolder}/frontend/rbk-ws",
+      "icon": "globe",
+      "color": "terminal.ansiMagenta"
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "bash",
+
+  /* --- Java Minimalismus (kein automatischer Build-Stress) --- */
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.autobuild.enabled": false,
+  "java.import.maven.enabled": true
 }
