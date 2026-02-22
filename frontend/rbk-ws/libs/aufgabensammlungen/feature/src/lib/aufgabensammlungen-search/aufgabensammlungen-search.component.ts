@@ -340,7 +340,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
 
     const pageDefinition: PageDefinition = {
       pageIndex: this.paginator ? this.paginator.pageIndex : this.#pageIndex,
-      pageSize: this.paginator ? this.paginator.pageSize : 20,
+      pageSize: this.paginator ? this.paginator.pageSize : 100,
       sortDirection: this.sort ? this.sort.direction : this.#sortDirection,
     };
 

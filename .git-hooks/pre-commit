@@ -5,17 +5,14 @@ FRONTEND_DIR="frontend/rbk-ws"
 BACKEND_RBK_DIR="backend/raetselbaukasten"
 BACKEND_LATEX_DIR="backend/latex-service-api"
 
-# 1) Gestagte Dateien
+# 1) Gestagte Dateien (nur Added/Copied/Modified)
 STAGED="$(git diff --cached --name-only --diff-filter=ACM || true)"
 [ -z "$STAGED" ] && exit 0
 
 # Hilfsfunktion: prüft, ob gestagte Dateien ein Pattern matchen
 has_staged() {
-  echo "$STAGED" | grep -E "$1" >/dev/null 2>&1
+  printf '%s\n' "$STAGED" | grep -E "$1" >/dev/null 2>&1
 }
-
-# CSV-Liste für Nx (kommagetrennt)
-STAGED_CSV="$(printf '%s\n' "$STAGED" | paste -sd, -)"
 
 # Helper: stage exakt die Java-Dateien, die staged waren und unter einem Projektpfad liegen
 stage_project_java() {
@@ -25,19 +22,38 @@ stage_project_java() {
     | xargs -r git add
 }
 
-# 2) FRONTEND – lint-staged (ESLint --fix + Prettier)
-if has_staged '\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$'; then
-  echo "🔧 lint-staged (frontend)"
-  (cd "$FRONTEND_DIR" && npx nx clear-cache && npx lint-staged --quiet)
+# Helper: stage exakt die Frontend-Dateien, die staged waren
+stage_frontend_files() {
+  printf '%s\n' "$STAGED" \
+    | grep -E "^$FRONTEND_DIR/.*\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$" \
+    | xargs -r git add
+}
+
+# --- FRONTEND: staged format (prettier) -> staged lint fix (eslint) -> project lint (nx) ---
+
+FRONTEND_STAGED="$(printf '%s\n' "$STAGED" \
+  | grep -E "^$FRONTEND_DIR/.*\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$" || true)"
+
+# Pfade relativ zum Frontend-Workspace, damit prettier/eslint sie versteht
+FRONTEND_STAGED_REL="$(printf '%s\n' "$FRONTEND_STAGED" | sed "s#^$FRONTEND_DIR/##")"
+
+if [ -n "$FRONTEND_STAGED_REL" ]; then
+  echo "🎨 prettier --write (frontend staged)"
+  (cd "$FRONTEND_DIR" && npx prettier --write $FRONTEND_STAGED_REL)
+  stage_frontend_files
+
+  echo "🔧 eslint --fix (frontend staged)"
+  # eslint soll nur die staged files anfassen
+  (cd "$FRONTEND_DIR" && npx eslint --fix $FRONTEND_STAGED_REL)
+  stage_frontend_files
+
+  echo "🔎 nx affected -t lint (frontend projektweit)"
+  # Nx erwartet --files relativ zum WorkspaceRoot (= FRONTEND_DIR)
+  FRONTEND_STAGED_CSV="$(printf '%s\n' "$FRONTEND_STAGED_REL" | paste -sd, -)"
+  (cd "$FRONTEND_DIR" && npx nx affected -t lint --files="$FRONTEND_STAGED_CSV" --parallel=3)
 fi
 
-# 3) FRONTEND – projektweit linten (Tag-/Layer-Regeln etc.)
-if has_staged '\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$'; then
-  echo "🔎 nx affected -t lint (frontend, projektweit)"
-  (cd "$FRONTEND_DIR" && npx nx clear-cache && npx nx affected -t lint --files="$STAGED_CSV" --parallel=3)
-fi
-
-# 4) BACKEND – Formatierung (nur wenn staged Java im jeweiligen Projekt liegt)
+# --- BACKEND: Formatierung nur wenn staged Java im jeweiligen Projekt liegt ---
 
 if has_staged '^backend/raetselbaukasten/.*\.java$'; then
   echo "☕ sort and format (backend/raetselbaukasten)"
@@ -50,16 +66,5 @@ if has_staged '^backend/latex-service-api/.*\.java$'; then
   (cd "$BACKEND_LATEX_DIR" && mvn -Pformat-apply impsort:sort@impsort-sort formatter:format@format-apply)
   stage_project_java "backend/latex-service-api"
 fi
-
-# Optional: schneller Backend-Lint (pro Projekt) – aktuell auskommentiert
-#if has_staged '^backend/raetselbaukasten/.*\.java$'; then
-#  echo "🔍 Checkstyle (rbk)"
-#  (cd "$BACKEND_RBK_DIR" && mvn -q checkstyle:check)
-#fi
-#
-#if has_staged '^backend/latex-service-api/.*\.java$'; then
-#  echo "🔍 Checkstyle (latex-service-api)"
-#  (cd "$BACKEND_LATEX_DIR" && mvn -q checkstyle:check)
-#fi
 
 exit 0
