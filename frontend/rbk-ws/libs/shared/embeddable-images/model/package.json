@@ -2,7 +2,7 @@
   "name": "@rbk-ws/embeddable-images/model",
   "version": "0.0.1",
   "peerDependencies": {
-    "@rbk-ws/core/model": "4.0.1"
+    "@rbk-ws/core/model": "0.0.1"
   },
   "dependencies": {},
   "sideEffects": false

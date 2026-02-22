@@ -7,21 +7,17 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Configuration } from '@rbk-ws/shared/config';
 
 @Component({
-    selector: 'rbk-frage-loesung-images',
-    imports: [
-    CdkAccordionModule,
-    MatExpansionModule
-],
-    templateUrl: './frage-loesung-images.component.html',
-    styleUrls: ['./frage-loesung-images.component.scss']
+  selector: 'rbk-frage-loesung-images',
+  imports: [CdkAccordionModule, MatExpansionModule],
+  templateUrl: './frage-loesung-images.component.html',
+  styleUrls: ['./frage-loesung-images.component.scss'],
 })
 export class FrageLoesungImagesComponent implements OnInit {
-
   @Input()
   images!: GeneratedImages;
 
-  imageFrage: { data: string, width: string } | undefined;
-  imageLoesung: { data: string, width: string } | undefined;
+  imageFrage: { data: string; width: string } | undefined;
+  imageLoesung: { data: string; width: string } | undefined;
 
   maxWidth = 500; // Maximum width to scale down to
   minWidth = 300; // Minimum width to prevent smaller images from being too tiny
@@ -33,13 +29,11 @@ export class FrageLoesungImagesComponent implements OnInit {
 
   constructor(private cdr: ChangeDetectorRef) {}
 
-
   get isHandset(): boolean {
     return this.#breakpointObserver.isMatched(Breakpoints.Handset);
   }
 
   ngOnInit(): void {
-
     if (this.images.imageFrage) {
       this.imageFrage = { data: this.images.imageFrage.data, width: this.images.imageFrage.width + 'px' };
     }
@@ -51,7 +45,7 @@ export class FrageLoesungImagesComponent implements OnInit {
 
   calculateScale(width: number): string {
     if (this.isHandset) {
-      return `${80}%`
+      return `${80}%`;
     } else {
       const maxWidth = 500;
       // if (width <= maxWidth) {
@@ -63,10 +57,9 @@ export class FrageLoesungImagesComponent implements OnInit {
   }
 
   adjustImageFrageSize(event: Event) {
-
     const imgElement = event.target as HTMLImageElement;
 
-    console.log(`Natural Width Frage: ${imgElement.naturalWidth}`);  // Debug: log natural width
+    console.log(`Natural Width Frage: ${imgElement.naturalWidth}`); // Debug: log natural width
     if (this.imageFrage) {
       if (imgElement.naturalWidth > this.maxWidth) {
         this.imageFrage.width = `${this.maxWidth}px`;

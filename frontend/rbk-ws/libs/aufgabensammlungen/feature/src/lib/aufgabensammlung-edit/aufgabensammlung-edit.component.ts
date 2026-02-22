@@ -19,29 +19,28 @@ import {
   initialGuiSchwierigkeitsgrad,
   initialGuiReferenztyp,
   GuiSchwierigkeitsgrad,
-  GuiRefereztyp
+  GuiRefereztyp,
 } from '@rbk-ws/aufgabensammlungen/model';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'rbk-aufgabensammlung-edit',
-    imports: [
-        CommonModule,
-        MatCardModule,
-        MatButtonModule,
-        MatGridListModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatListModule,
-        FormsModule,
-        TextFieldModule,
-        ReactiveFormsModule
-    ],
-    templateUrl: './aufgabensammlung-edit.component.html',
-    styleUrls: ['./aufgabensammlung-edit.component.scss']
+  selector: 'rbk-aufgabensammlung-edit',
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatGridListModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatListModule,
+    FormsModule,
+    TextFieldModule,
+    ReactiveFormsModule,
+  ],
+  templateUrl: './aufgabensammlung-edit.component.html',
+  styleUrls: ['./aufgabensammlung-edit.component.scss'],
 })
 export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
-
   aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
 
   selectStatusInput: string[] = ['ERFASST', 'FREIGEGEBEN'];
@@ -62,13 +61,12 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
-    this.#aufgabensammlungBasisdatenSubscription = this.aufgabensammlungenFacade.aufgabensammlungBasisdaten$.subscribe((basisdaten) => {
-
-      this.#aufgabensammlungBasisdaten = basisdaten;
-      this.#initForm();
-
-    });
+    this.#aufgabensammlungBasisdatenSubscription = this.aufgabensammlungenFacade.aufgabensammlungBasisdaten$.subscribe(
+      basisdaten => {
+        this.#aufgabensammlungBasisdaten = basisdaten;
+        this.#initForm();
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -77,7 +75,7 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
 
   aufgabensammlungDataError = (controlName: string, errorName: string) => {
     return this.form.controls[controlName].hasError(errorName);
-  }
+  };
 
   submit(): void {
     const EditAufgabensammlungPayload: EditAufgabensammlungPayload = this.#readFormValues();
@@ -98,7 +96,6 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
   }
 
   formInvalid(): boolean {
-
     const selectedLevel = this.form.controls['schwierigkeitsgrad'].value;
     const selectedRefTyp = this.form.controls['referenztyp'].value;
     const referenz = this.form.controls['referenz'].value;
@@ -115,7 +112,6 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
   }
 
   #createForm(): void {
-
     // TODO: checkbox privat muss noch in die form
 
     this.form = this.#formBuilder.group({
@@ -126,23 +122,29 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
       kommentar: ['', [Validators.maxLength(200)]],
       schwierigkeitsgrad: [initialGuiSchwierigkeitsgrad.label, [Validators.required]],
       referenztyp: [initialGuiReferenztyp.label],
-      referenz: ['']
+      referenz: [''],
     });
   }
 
   #initForm() {
-
     const theStatus: string = this.#aufgabensammlungBasisdaten.freigegeben ? 'FREIGEGEBEN' : 'ERFASST';
 
     this.form.controls['id'].setValue(this.#aufgabensammlungBasisdaten.id);
-    this.form.controls['user'].setValue(this.#aufgabensammlungBasisdaten.geaendertDurch ? this.#aufgabensammlungBasisdaten.geaendertDurch : ' ');
-    this.form.controls['name'].setValue(this.#aufgabensammlungBasisdaten.name ? this.#aufgabensammlungBasisdaten.name : '');
+    this.form.controls['user'].setValue(
+      this.#aufgabensammlungBasisdaten.geaendertDurch ? this.#aufgabensammlungBasisdaten.geaendertDurch : ' '
+    );
+    this.form.controls['name'].setValue(
+      this.#aufgabensammlungBasisdaten.name ? this.#aufgabensammlungBasisdaten.name : ''
+    );
     this.form.controls['status'].setValue(theStatus);
-    this.form.controls['kommentar'].setValue(this.#aufgabensammlungBasisdaten.kommentar ? this.#aufgabensammlungBasisdaten.kommentar : '');
+    this.form.controls['kommentar'].setValue(
+      this.#aufgabensammlungBasisdaten.kommentar ? this.#aufgabensammlungBasisdaten.kommentar : ''
+    );
 
-
-    const guiSchwierigkeitsrad: GuiSchwierigkeitsgrad = this.#aufgabensammlungBasisdaten && this.#aufgabensammlungBasisdaten.schwierigkeitsgrad ? new GuiSchwierigkeitsgradeMap().getGuiSchwierigkeitsgrade(this.#aufgabensammlungBasisdaten.schwierigkeitsgrad)
-      : initialGuiSchwierigkeitsgrad;
+    const guiSchwierigkeitsrad: GuiSchwierigkeitsgrad =
+      this.#aufgabensammlungBasisdaten && this.#aufgabensammlungBasisdaten.schwierigkeitsgrad
+        ? new GuiSchwierigkeitsgradeMap().getGuiSchwierigkeitsgrade(this.#aufgabensammlungBasisdaten.schwierigkeitsgrad)
+        : initialGuiSchwierigkeitsgrad;
     this.form.controls['schwierigkeitsgrad'].setValue(guiSchwierigkeitsrad.label);
 
     let guiReferenztyp: GuiRefereztyp = initialGuiReferenztyp;
@@ -153,28 +155,32 @@ export class AufgabensammlungEditComponent implements OnInit, OnDestroy {
 
     this.form.controls['referenztyp'].setValue(guiReferenztyp.label);
 
-    this.form.controls['referenz'].setValue(this.#aufgabensammlungBasisdaten.referenz ? this.#aufgabensammlungBasisdaten.referenz : '');
+    this.form.controls['referenz'].setValue(
+      this.#aufgabensammlungBasisdaten.referenz ? this.#aufgabensammlungBasisdaten.referenz : ''
+    );
   }
 
   #readFormValues(): EditAufgabensammlungPayload {
-
     const formValue = this.form.value;
 
     const referenztyp: Referenztyp = new GuiReferenztypenMap().getReferenztypOfLabel(formValue['referenztyp']);
-    const schwierigkeitsgrad: Schwierigkeitsgrad = new GuiSchwierigkeitsgradeMap().getSchwierigkeitsgradOfLabel(formValue['schwierigkeitsgrad']);
+    const schwierigkeitsgrad: Schwierigkeitsgrad = new GuiSchwierigkeitsgradeMap().getSchwierigkeitsgradOfLabel(
+      formValue['schwierigkeitsgrad']
+    );
 
     const payload: EditAufgabensammlungPayload = {
       id: this.#aufgabensammlungBasisdaten.id,
       name: formValue['name'].trim(),
-      referenz: formValue['referenz'] && formValue['referenz'].trim().length > 0 ? formValue['referenz'].trim() : undefined,
+      referenz:
+        formValue['referenz'] && formValue['referenz'].trim().length > 0 ? formValue['referenz'].trim() : undefined,
       referenztyp: referenztyp === 'NOOP' ? undefined : referenztyp,
       schwierigkeitsgrad: schwierigkeitsgrad,
       freigegeben: formValue['status'] === 'FREIGEGEBEN',
       privat: false,
-      kommentar: formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined
+      kommentar:
+        formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined,
     };
 
     return payload;
-
   }
 }

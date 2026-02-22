@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,7 +25,7 @@ import {
   PaginationState,
   Referenztyp,
   Schwierigkeitsgrad,
-  User
+  User,
 } from '@rbk-ws/core/model';
 
 import {
@@ -29,7 +38,7 @@ import {
   initialAufgabensammlungenSuchparameter,
   isInitialAufgabensammlungenSuchparameter,
   AufgabensammlungenSuchparameter,
-  AufgabensammlungTrefferItem
+  AufgabensammlungTrefferItem,
 } from '@rbk-ws/aufgabensammlungen/model';
 
 import { MatSelectModule } from '@angular/material/select';
@@ -42,28 +51,26 @@ const REFERENZTYP = 'referenztyp';
 const REFERENZ = 'referenz';
 
 @Component({
-    selector: 'rbk-aufgabensammlungen-search',
-    imports: [
-        CommonModule,
-        MatTableModule,
-        MatButtonModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatIconModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        FormsModule,
-        ReactiveFormsModule,
-    ],
-    templateUrl: './aufgabensammlungen-search.component.html',
-    styleUrls: ['./aufgabensammlungen-search.component.scss']
+  selector: 'rbk-aufgabensammlungen-search',
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
+  templateUrl: './aufgabensammlungen-search.component.html',
+  styleUrls: ['./aufgabensammlungen-search.component.scss'],
 })
 export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit, OnDestroy {
-
   dataSource = inject(AufgabensammlungenDataSource);
-  anzahlSammlungen: number = 0;
-
+  anzahlSammlungen = 0;
 
   suchparameterStr = '';
 
@@ -95,7 +102,6 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   #userSubscription = new Subscription();
   #suchparameterSubscription = new Subscription();
 
-
   #suchparameter: AufgabensammlungenSuchparameter = initialAufgabensammlungenSuchparameter;
   #paginationState: PaginationState = initialPaginationState;
   #pageIndex = 0;
@@ -117,7 +123,6 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   ngOnInit(): void {
-
     this.#paginationStateSubscription = this.#aufgabensammlungenFacade.paginationState$.subscribe(
       (state: PaginationState) => {
         this.anzahlSammlungen = state.anzahlTreffer;
@@ -126,135 +131,142 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
       }
     );
 
-    this.#suchparameterSubscription = this.#aufgabensammlungenFacade.suchparameter$.subscribe(
-      (suchparameter) => {
-        this.#suchparameter = suchparameter;
+    this.#suchparameterSubscription = this.#aufgabensammlungenFacade.suchparameter$.subscribe(suchparameter => {
+      this.#suchparameter = suchparameter;
 
-        // Achtung: niemals emitEvent vergessen, sonst infinite loop xO
+      // Achtung: niemals emitEvent vergessen, sonst infinite loop xO
 
-        this.nameFilterControl.patchValue(this.#suchparameter.name, { emitEvent: false });
-        this.referenzFilterControl.patchValue(this.#suchparameter.referenz, { emitEvent: false });
+      this.nameFilterControl.patchValue(this.#suchparameter.name, { emitEvent: false });
+      this.referenzFilterControl.patchValue(this.#suchparameter.referenz, { emitEvent: false });
 
-        const theSchwierigkeitsgrad: GuiSchwierigkeitsgrad = this.#suchparameter.schwierigkeitsgrad ? new GuiSchwierigkeitsgradeMap().getGuiSchwierigkeitsgrade(this.#suchparameter.schwierigkeitsgrad) : initialGuiSchwierigkeitsgrad;
-        const theReferenztyp: GuiRefereztyp = this.#suchparameter.referenztyp ? new GuiReferenztypenMap().getGuiRefereztyp(this.#suchparameter.referenztyp) : initialGuiReferenztyp;
- 
-        this.schwierigkeitsgradSelectFilterControl.patchValue(theSchwierigkeitsgrad.label, {emitEvent: false});
-        this.referenztypSelectFilterControl.patchValue(theReferenztyp.label, {emitEvent: false});
-      }
-    );
+      const theSchwierigkeitsgrad: GuiSchwierigkeitsgrad = this.#suchparameter.schwierigkeitsgrad
+        ? new GuiSchwierigkeitsgradeMap().getGuiSchwierigkeitsgrade(this.#suchparameter.schwierigkeitsgrad)
+        : initialGuiSchwierigkeitsgrad;
+      const theReferenztyp: GuiRefereztyp = this.#suchparameter.referenztyp
+        ? new GuiReferenztypenMap().getGuiRefereztyp(this.#suchparameter.referenztyp)
+        : initialGuiReferenztyp;
 
-    this.#userSubscription = this.#authFacade.user$.subscribe((user) => this.user = user);
+      this.schwierigkeitsgradSelectFilterControl.patchValue(theSchwierigkeitsgrad.label, { emitEvent: false });
+      this.referenztypSelectFilterControl.patchValue(theReferenztyp.label, { emitEvent: false });
+    });
+
+    this.#userSubscription = this.#authFacade.user$.subscribe(user => (this.user = user));
 
     this.#triggerSearch();
   }
 
   ngAfterViewInit(): void {
-
-    // fixes NG0100: Expression has changed after it was checked 
+    // fixes NG0100: Expression has changed after it was checked
     // https://angular.io/errors/NG0100
     setTimeout(() => {
-
       // this.#initPaginator();
       // hier den init-Kram oder
     }, 0);
 
-
     this.#initPaginator();
 
-    merge(this.sort.sortChange, this.paginator.page).pipe(
-      tap(() => {
-        this.#paginationState = { ...this.#paginationState, pageDefinition: { ...this.#paginationState.pageDefinition, sortDirection: this.#sortDirection } };
-        this.#triggerSearch();
-      })
-    ).subscribe();
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        tap(() => {
+          this.#paginationState = {
+            ...this.#paginationState,
+            pageDefinition: { ...this.#paginationState.pageDefinition, sortDirection: this.#sortDirection },
+          };
+          this.#triggerSearch();
+        })
+      )
+      .subscribe();
 
-    this.#nameFilterSubscription = this.nameFilterControl.valueChanges.pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      tap((name) => {
-
-        if (name) {
-          if (name.trim().length > 0) {
-            this.#suchparameter = { ...this.#suchparameter, name: name };
+    this.#nameFilterSubscription = this.nameFilterControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap(name => {
+          if (name) {
+            if (name.trim().length > 0) {
+              this.#suchparameter = { ...this.#suchparameter, name: name };
+            } else {
+              this.#suchparameter = { ...this.#suchparameter, name: null };
+            }
           } else {
             this.#suchparameter = { ...this.#suchparameter, name: null };
           }
-        } else {
-          this.#suchparameter = { ...this.#suchparameter, name: null };
-        }
 
-        // reset Paginator
-        this.paginator.pageIndex = 0;
-        this.suchparameterStr = JSON.stringify(this.#suchparameter);
-        this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
-        this.#triggerSearch();
-      })
-    ).subscribe();
+          // reset Paginator
+          this.paginator.pageIndex = 0;
+          this.suchparameterStr = JSON.stringify(this.#suchparameter);
+          this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
+          this.#triggerSearch();
+        })
+      )
+      .subscribe();
 
-    this.#schwierigkeitsgradFilterSubscription = this.schwierigkeitsgradSelectFilterControl.valueChanges.pipe(
+    this.#schwierigkeitsgradFilterSubscription = this.schwierigkeitsgradSelectFilterControl.valueChanges
+      .pipe(
+        tap((level: string) => {
+          const schwierigkeitsgrad: Schwierigkeitsgrad = new GuiSchwierigkeitsgradeMap().getSchwierigkeitsgradOfLabel(
+            level
+          );
 
-      tap((level: string) => {
+          if (schwierigkeitsgrad !== 'NOOP') {
+            this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: schwierigkeitsgrad };
+          } else {
+            this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: null };
+          }
+          // reset Paginator
+          this.paginator.pageIndex = 0;
+          this.suchparameterStr = JSON.stringify(this.#suchparameter);
+          this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
+          this.#triggerSearch();
+        })
+      )
+      .subscribe();
 
-        const schwierigkeitsgrad: Schwierigkeitsgrad = new GuiSchwierigkeitsgradeMap().getSchwierigkeitsgradOfLabel(level);
+    this.#referenztypFilterSubscription = this.referenztypSelectFilterControl.valueChanges
+      .pipe(
+        tap((reftyp: string) => {
+          const referenztyp: Referenztyp = new GuiReferenztypenMap().getReferenztypOfLabel(reftyp);
+          if (referenztyp !== 'NOOP') {
+            this.#suchparameter = { ...this.#suchparameter, referenztyp: referenztyp };
+          } else {
+            this.#suchparameter = { ...this.#suchparameter, referenztyp: null };
+          }
+          // reset Paginator
+          this.paginator.pageIndex = 0;
+          this.suchparameterStr = JSON.stringify(this.#suchparameter);
+          this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
+          this.#triggerSearch();
+        })
+      )
+      .subscribe();
 
-        if (schwierigkeitsgrad !== 'NOOP') {
-          this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: schwierigkeitsgrad };
-        } else {
-          this.#suchparameter = { ...this.#suchparameter, schwierigkeitsgrad: null };
-        }
-        // reset Paginator
-        this.paginator.pageIndex = 0;
-        this.suchparameterStr = JSON.stringify(this.#suchparameter);
-        this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
-        this.#triggerSearch();
-      })
-    ).subscribe();
-
-    this.#referenztypFilterSubscription = this.referenztypSelectFilterControl.valueChanges.pipe(
-      tap((reftyp: string) => {
-
-        const referenztyp: Referenztyp = new GuiReferenztypenMap().getReferenztypOfLabel(reftyp);
-        if (referenztyp !== 'NOOP') {
-          this.#suchparameter = { ...this.#suchparameter, referenztyp: referenztyp}
-        } else {
-          this.#suchparameter = { ...this.#suchparameter, referenztyp: null }
-        }
-        // reset Paginator
-        this.paginator.pageIndex = 0;
-        this.suchparameterStr = JSON.stringify(this.#suchparameter);
-        this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
-        this.#triggerSearch();
-      })
-    ).subscribe();
-
-    this.#referenzFilterSubscription = this.referenzFilterControl.valueChanges.pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      tap((referenz) => {
-
-
-        if (referenz) {
-          if (referenz.trim().length > 0) {
-            this.#suchparameter = { ...this.#suchparameter, referenz: referenz };
+    this.#referenzFilterSubscription = this.referenzFilterControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap(referenz => {
+          if (referenz) {
+            if (referenz.trim().length > 0) {
+              this.#suchparameter = { ...this.#suchparameter, referenz: referenz };
+            } else {
+              this.#suchparameter = { ...this.#suchparameter, referenz: null };
+            }
           } else {
             this.#suchparameter = { ...this.#suchparameter, referenz: null };
           }
-        } else {
-          this.#suchparameter = { ...this.#suchparameter, referenz: null };
-        }
 
-        // reset Paginator
-        this.paginator.pageIndex = 0;
-        this.suchparameterStr = JSON.stringify(this.#suchparameter);
-        this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
-        this.#triggerSearch();
-      })
-    ).subscribe();
+          // reset Paginator
+          this.paginator.pageIndex = 0;
+          this.suchparameterStr = JSON.stringify(this.#suchparameter);
+          this.#aufgabensammlungenFacade.changeSuchparameter(this.#suchparameter);
+          this.#triggerSearch();
+        })
+      )
+      .subscribe();
 
     // oder explizit nochmal changeDetection triggern
     this.changeDetector.detectChanges();
   }
-
 
   ngOnDestroy(): void {
     this.#nameFilterSubscription.unsubscribe();
@@ -275,7 +287,7 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   getDisplayedColumns(): string[] {
     if (this.scrWidth > 959) {
       if (this.user.isAdmin) {
-      return [NAME, LEVEL, REFERENZTYP, REFERENZ];
+        return [NAME, LEVEL, REFERENZTYP, REFERENZ];
       } else {
         return [NAME, LEVEL];
       }
@@ -285,7 +297,6 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   buttonResetAllFiltersDisabled(): boolean {
-
     if (isInitialAufgabensammlungenSuchparameter(this.#suchparameter)) {
       return true;
     }
@@ -306,7 +317,6 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   resetAllFilters(): void {
-
     this.#adjusting = true;
 
     this.nameFilterControl.patchValue('');
@@ -317,15 +327,13 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
   }
 
   #initPaginator(): void {
-
     this.paginator.pageIndex = this.#pageIndex;
     this.sort.direction = this.#sortDirection;
-    // reset Paginator when sort changed    
-    this.#matSortChangedSubscription = this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    // reset Paginator when sort changed
+    this.#matSortChangedSubscription = this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
 
   #triggerSearch(): void {
-
     if (this.#adjusting) {
       return;
     }
@@ -333,9 +341,9 @@ export class AufgabensammlungenSearchComponent implements OnInit, AfterViewInit,
     const pageDefinition: PageDefinition = {
       pageIndex: this.paginator ? this.paginator.pageIndex : this.#pageIndex,
       pageSize: this.paginator ? this.paginator.pageSize : 20,
-      sortDirection: this.sort ? this.sort.direction : this.#sortDirection
-    }
+      sortDirection: this.sort ? this.sort.direction : this.#sortDirection,
+    };
 
-    this.#aufgabensammlungenFacade.triggerSearch(this.#suchparameter, pageDefinition)
+    this.#aufgabensammlungenFacade.triggerSearch(this.#suchparameter, pageDefinition);
   }
 }

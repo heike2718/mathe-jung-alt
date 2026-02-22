@@ -6,18 +6,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-    selector: 'rbk-linked-as',
-    imports: [
-        CommonModule,
-        MatBadgeModule,
-        MatButtonModule,
-        MatCardModule
-    ],
-    templateUrl: './linked-aufgabensammlungen.component.html',
-    styleUrl: './linked-aufgabensammlungen.component.scss'
+  selector: 'rbk-linked-as',
+  imports: [CommonModule, MatBadgeModule, MatButtonModule, MatCardModule],
+  templateUrl: './linked-aufgabensammlungen.component.html',
+  styleUrl: './linked-aufgabensammlungen.component.scss',
 })
 export class LinkedAufgabensammlungenComponent {
-
   @Input()
   aufgabensammlung!: LinkedAufgabensammlung;
 
@@ -27,5 +21,4 @@ export class LinkedAufgabensammlungenComponent {
   showDetails(): void {
     this.detailsClicked.emit(this.aufgabensammlung);
   }
-
 }

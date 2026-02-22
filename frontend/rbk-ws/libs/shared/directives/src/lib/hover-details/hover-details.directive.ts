@@ -1,13 +1,12 @@
-import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject, Input, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[mjaHoverDetails]',
+  selector: '[libHoverDetails]',
   standalone: true,
 })
 export class HoverDetailsDirective {
-
   @Input()
-  mjaHoverDetails!: string;
+  libHoverDetails!: string;
 
   @HostListener('mouseover', ['$event']) onMouseOver(event: MouseEvent) {
     this.#showDetails(event);
@@ -17,16 +16,16 @@ export class HoverDetailsDirective {
     this.#hideDetails();
   }
 
-  constructor(private el: ElementRef, private renderer: Renderer2) { }
+  private renderer = inject(Renderer2);
+
+  private el = inject(ElementRef);
 
   #showDetails(event: MouseEvent) {
-
-
-    if (this.mjaHoverDetails && this.mjaHoverDetails.trim().length > 0) {
+    if (this.libHoverDetails && this.libHoverDetails.trim().length > 0) {
       // Use Renderer2 to manipulate the DOM
       const detailsElement = this.renderer.createElement('div');
       this.renderer.addClass(detailsElement, 'hover-details');
-      const text = this.renderer.createText(this.mjaHoverDetails);
+      const text = this.renderer.createText(this.libHoverDetails);
       this.renderer.appendChild(detailsElement, text);
       this.renderer.appendChild(this.el.nativeElement, detailsElement);
 

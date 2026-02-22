@@ -10,17 +10,12 @@ import { InfoDialogComponent, InfoDialogModel } from '@rbk-ws/shared/components'
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'rbk-embeddable-image-info',
-    imports: [
-    MatIconModule,
-    MatButtonModule,
-    MatDialogModule
-],
-    templateUrl: './embeddable-image-info.component.html',
-    styleUrls: ['./embeddable-image-info.component.scss']
+  selector: 'rbk-embeddable-image-info',
+  imports: [MatIconModule, MatButtonModule, MatDialogModule],
+  templateUrl: './embeddable-image-info.component.html',
+  styleUrls: ['./embeddable-image-info.component.scss'],
 })
 export class EmbeddableImageInfoComponent implements OnInit, OnDestroy {
-
   @Input()
   embeddableImageInfo!: EmbeddableImageInfo;
 
@@ -34,10 +29,9 @@ export class EmbeddableImageInfoComponent implements OnInit, OnDestroy {
   #selectedInfoSubscription: Subscription = new Subscription();
 
   ngOnInit(): void {
-
-    this.#selectedInfoSubscription = this.#embeddableImagesFacade.selectedEmbeddableImageInfo$.subscribe((info) => {
-      if(info.existiert && info.pfad === this.embeddableImageInfo.pfad) {
-        this.#embeddableImagesFacade.vorschauLaden(info);               
+    this.#selectedInfoSubscription = this.#embeddableImagesFacade.selectedEmbeddableImageInfo$.subscribe(info => {
+      if (info.existiert && info.pfad === this.embeddableImageInfo.pfad) {
+        this.#embeddableImagesFacade.vorschauLaden(info);
       }
     });
   }
@@ -48,16 +42,17 @@ export class EmbeddableImageInfoComponent implements OnInit, OnDestroy {
   }
 
   expand() {
-
     this.#embeddableImagesFacade.handleEmbeddableImageInfoExpanded(this.embeddableImageInfo);
 
     if (!this.embeddableImageInfo.existiert) {
-
       const dialogData: InfoDialogModel = {
         ueberschrift: 'Grafikdatei nicht gefunden',
-        text: 'Die Grafikdatei mit dem Pfad ' + this.embeddableImageInfo.pfad + ' existiert nicht. Bitte im Bearbeitungsmodus die Datei hochladen. '
-          + 'Dabei werden vom System ein neuer Dateiname sowie der dazu passende \\includegraphics-Befehl generiert. Ersetzen Sie anschließend den '
-          + 'ungültigen \\includegraphics-Befehll durch den neu generierten.'
+        text:
+          'Die Grafikdatei mit dem Pfad ' +
+          this.embeddableImageInfo.pfad +
+          ' existiert nicht. Bitte im Bearbeitungsmodus die Datei hochladen. ' +
+          'Dabei werden vom System ein neuer Dateiname sowie der dazu passende \\includegraphics-Befehl generiert. Ersetzen Sie anschließend den ' +
+          'ungültigen \\includegraphics-Befehll durch den neu generierten.',
       };
 
       this.#openInfoDialog(dialogData);
@@ -65,18 +60,15 @@ export class EmbeddableImageInfoComponent implements OnInit, OnDestroy {
   }
 
   #openInfoDialog(model: InfoDialogModel): void {
-
     const dialogRef = this.dialog.open(InfoDialogComponent, {
       height: '300px',
       width: '600px',
       data: model,
-      disableClose: true
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe(() => {
       // nothing
     });
-
-
   }
 }

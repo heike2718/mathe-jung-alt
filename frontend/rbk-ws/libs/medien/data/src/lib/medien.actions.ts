@@ -5,18 +5,18 @@ import { LinkedRaetsel, MediensucheResult, MediensucheTrefferItem, MediumDto } f
 export const medienActions = createActionGroup({
   source: 'medien',
   events: {
-    'EDIT_MEDIUM': props<{medium: MediumDto, nextUrl: string}>(),
-    'FIND_LINKED_RAETSEL': props<{mediumId: string}>(),
-    'LINKED_RAETSEL_FOUND': props<{raetsel: LinkedRaetsel[]}>(),
-    'FIND_MEDIEN': props<{suchstring: string, pageDefinition: PageDefinition}>(),
-    'FIND_MEDIENDETAILS': props<{suchstring: string}>(),
-    'MEDIEN_FOUND': props<{result: MediensucheResult}>(),
-    'MEDIEN_SELECT_PAGE': props<{pageDefinition: PageDefinition}>(),
-    'MEDIEN_SUCHSTRING_CHANGED': props<{suchstring: string}>(),
-    'MEDIUM_SAVED': props<{medium: MediumDto}>(),
-    'MEDIUMDETAILS_LOADED': props<{details: MediumDto, nextUrl: string}>(),
-    'SELECT_MEDIUM': props<{medium: MediensucheTrefferItem}>(),
-    'SAVE_MEDIUM': props<{medium: MediumDto}>(),
-    'UNSELECT_MEDIUM': emptyProps()
-  }
+    EDIT_MEDIUM: props<{ medium: MediumDto; nextUrl: string }>(),
+    FIND_LINKED_RAETSEL: props<{ mediumId: string }>(),
+    LINKED_RAETSEL_FOUND: props<{ raetsel: LinkedRaetsel[] }>(),
+    FIND_MEDIEN: props<{ suchstring: string; pageDefinition: PageDefinition }>(),
+    FIND_MEDIENDETAILS: props<{ suchstring: string }>(),
+    MEDIEN_FOUND: props<{ result: MediensucheResult }>(),
+    MEDIEN_SELECT_PAGE: props<{ pageDefinition: PageDefinition }>(),
+    MEDIEN_SUCHSTRING_CHANGED: props<{ suchstring: string }>(),
+    MEDIUM_SAVED: props<{ medium: MediumDto }>(),
+    MEDIUMDETAILS_LOADED: props<{ details: MediumDto; nextUrl: string }>(),
+    SELECT_MEDIUM: props<{ medium: MediensucheTrefferItem }>(),
+    SAVE_MEDIUM: props<{ medium: MediumDto }>(),
+    UNSELECT_MEDIUM: emptyProps(),
+  },
 });

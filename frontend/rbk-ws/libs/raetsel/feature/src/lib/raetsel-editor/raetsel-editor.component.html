@@ -1,458 +1,490 @@
 <div class="mja-container">
-    @if ((raetselFacade.editRaetselPayload$ | async); as guiEditRaetselPayload) {
+  @if (raetselFacade.editRaetselPayload$ | async; as guiEditRaetselPayload) {
     <mat-card>
-        <mat-card-header>
-            <mat-card-title>Rätseleditor</mat-card-title>
-        </mat-card-header>
+      <mat-card-header>
+        <mat-card-title>Rätseleditor</mat-card-title>
+      </mat-card-header>
 
-        <mat-card-content>
-            <form [formGroup]="form" novalidate>
-                <div class="mja-form">
+      <mat-card-content>
+        <form [formGroup]="form" novalidate>
+          <div class="mja-form">
+            <!-- SCHLUESSEL -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Schlüssel</mat-label>
+                <input matInput maxlength="5" inputmode="tel" formControlName="schluessel" #schluesselInput />
 
-                    <!-- SCHLUESSEL -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Schlüssel</mat-label>
-                            <input matInput maxlength="5" inputmode="tel" formControlName="schluessel" #schluesselInput>
+                @if (isRoot) {
+                  <mat-hint>für neue Rätsel beim Speichern generieren</mat-hint>
+                } @else {
+                  <mat-hint>wird vom System generiert</mat-hint>
+                }
 
-                            @if (isRoot) {
-                            <mat-hint>für neue Rätsel beim Speichern generieren</mat-hint>
-                            } @else {
-                            <mat-hint>wird vom System generiert</mat-hint>
-                            }
+                @if (raetselDataError('schluessel', 'pattern')) {
+                  <mat-error>genau 5 Ziffern - nach links mit 0 auffüllen</mat-error>
+                }
+              </mat-form-field>
+            </div>
 
-                            @if (raetselDataError('schluessel', 'pattern')) {
-                            <mat-error>genau 5 Ziffern - nach links mit 0 auffüllen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
+            <!-- Name -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput maxlength="100" formControlName="name" #nameInput />
+                <mat-hint>wird in der Tabelle angezeigt</mat-hint>
+                <mat-hint align="end">{{ nameInput.value.length }}/100</mat-hint>
+                @if (raetselDataError('ausgabe', 'required')) {
+                  <mat-error>Name ist erforderlich</mat-error>
+                }
+                @if (raetselDataError('name', 'maxLength')) {
+                  <mat-error>maximal 100 Zeichen</mat-error>
+                }
+              </mat-form-field>
+            </div>
 
-                    <!-- Name -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Name</mat-label>
-                            <input matInput maxlength="100" formControlName="name" #nameInput>
-                            <mat-hint>wird in der Tabelle angezeigt</mat-hint>
-                            <mat-hint align="end">{{nameInput.value.length}}/100</mat-hint>
-                            @if (raetselDataError('ausgabe', 'required')) {
-                            <mat-error>Name ist erforderlich</mat-error>
-                            }
-                            @if (raetselDataError('name', 'maxLength')) {
-                            <mat-error>maximal 100 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
+            <!-- Kommentar -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Kommentar</mat-label>
+                <input matInput maxlength="200" formControlName="kommentar" #kommentarInput />
+                <mat-hint>Kommentare sind in Volltextsuche eingebunden</mat-hint>
+                <mat-hint align="end">{{ kommentarInput.value.length }}/200</mat-hint>
 
-                    <!-- Kommentar -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Kommentar</mat-label>
-                            <input matInput maxlength="200" formControlName="kommentar" #kommentarInput>
-                            <mat-hint>Kommentare sind in Volltextsuche eingebunden</mat-hint>
-                            <mat-hint align="end">{{kommentarInput.value.length}}/200</mat-hint>
+                @if (raetselDataError('kommentar', 'maxLength')) {
+                  <mat-error>maximal 200 Zeichen</mat-error>
+                }
+              </mat-form-field>
+            </div>
 
-                            @if (raetselDataError('kommentar', 'maxLength')) {
-                            <mat-error>maximal 200 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
+            <!-- Herkunftstyp -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Herkunftstyp</mat-label>
+                <mat-hint>{{ guiEditRaetselPayload.quellenangabe }}</mat-hint>
+                <mat-select
+                  matNativeControl
+                  formControlName="herkunftstyp"
+                  #herkunftstypInput
+                  (selectionChange)="onSelectHerkunftstyp($event.value)">
+                  @for (herkunftstyp of selectHerkunftstypInput; track $index) {
+                    <mat-option [value]="herkunftstyp">{{ herkunftstyp }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-                    <!-- Herkunftstyp -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Herkunftstyp</mat-label>
-                            <mat-hint>{{guiEditRaetselPayload.quellenangabe}}</mat-hint>
-                            <mat-select matNativeControl formControlName="herkunftstyp" #herkunftstypInput
-                                (selectionChange)="onSelectHerkunftstyp($event.value)">
+            <!-- Quelle -->
+            @if (selectedHerkunftstyp !== 'EIGENKREATION') {
+              <h2>Quellenangaben</h2>
 
-                                @for (herkunftstyp of selectHerkunftstypInput; track $index) {
-                                <mat-option [value]="herkunftstyp">{{herkunftstyp}}</mat-option>
-                                }
+              @if (selectedMedium !== undefined) {
+                <p>{{ selectedMedium.titel }}</p>
+              }
 
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <!-- Quelle -->
-                    @if (selectedHerkunftstyp !== 'EIGENKREATION') {
-                    <h2>Quellenangaben</h2>
-
-                    @if (selectedMedium !== undefined) {
-                    <p>{{selectedMedium.titel}}</p>
+              <!-- Quellenart -->
+              <div class="mb-2">
+                <mat-form-field>
+                  <mat-label>Quellenart</mat-label>
+                  <mat-hint>{{ guiEditRaetselPayload.editRaetselPayload.quelle.quellenart }}</mat-hint>
+                  <mat-select
+                    matNativeControl
+                    formControlName="quellenart"
+                    #quellenartInput
+                    (selectionChange)="onSelectQuellenart($event.value)">
+                    @for (quellenart of selectQuellenartInput; track $index) {
+                      <mat-option [value]="quellenart">{{ quellenart }}</mat-option>
                     }
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-                    <!-- Quellenart -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Quellenart</mat-label>
-                            <mat-hint>{{guiEditRaetselPayload.editRaetselPayload.quelle.quellenart}}</mat-hint>
-                            <mat-select matNativeControl formControlName="quellenart" #quellenartInput
-                                (selectionChange)="onSelectQuellenart($event.value)">
-
-                                @for (quellenart of selectQuellenartInput; track $index) {
-                                <mat-option [value]="quellenart">{{quellenart}}</mat-option>
-                                }
-
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <!-- Mediensuche -->
-                    @if (showMediensuche) {
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Medien</mat-label>
-                            <mat-select matNativeControl formControlName="medium" #mediumInput
-                                [compareWith]="compareMedia" (selectionChange)="onSelectMedium($event.value)">
-
-                                @for (medium of medienForQuelle; track $index) {
-                                <mat-option [value]="medium">{{ medium.titel }}</mat-option>
-                                }
-
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    }
-
-                    <!-- Person -->
-                    @if (showPerson) {
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Person(en)</mat-label>
-                            <input matInput maxlength="100" formControlName="person" #personInput>
-                            <mat-hint align="end">{{personInput.value.length}}/100</mat-hint>
-                            @if (raetselDataError('person', 'maxLength')) {
-                            <mat-error>maximal 100 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
-                    }
-
-                    <!-- Jahr -->
-                    @if (showJahr) {
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Jahr</mat-label>
-                            <input matInput maxlength="4" formControlName="jahr" #jahrInput>
-                            <mat-hint align="end">{{jahrInput.value.length}}/4</mat-hint>
-                            @if (raetselDataError('jahr', 'maxLength')) {
-                            <mat-error>maximal 4 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
-                    }
-
-                    <!-- Ausgabe -->
-                    @if (showAusgabe) {
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Ausgabe</mat-label>
-                            <input matInput maxlength="10" formControlName="ausgabe" #ausgabeInput>
-                            <mat-hint align="end">{{ausgabeInput.value.length}}/10</mat-hint>
-                            @if (raetselDataError('ausgabe', 'maxLength')) {
-                            <mat-error>maximal 10 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
-                    }
-
-                    <!-- Seite -->
-                    @if (showSeite) {
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Seite</mat-label>
-                            <input matInput maxlength="10" formControlName="seite" #seiteInput>
-                            <mat-hint align="end">{{seiteInput.value.length}}/10</mat-hint>
-                            @if (raetselDataError('seite', 'maxLength')) {
-                            <mat-error>maximal 10 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
-                    }
-
-                    <!-- Klasse -->
-                    @if (showKlasse) {
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Klasse</mat-label>
-                            <input matInput maxlength="20" formControlName="klasse" #klasseInput>
-                            <mat-hint align="end">{{klasseInput.value.length}}/20</mat-hint>
-                            @if (raetselDataError('klasse', 'maxLength')) {
-                            <mat-error>maximal 20 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
-                    }
-
-                    <!-- Stufe -->
-                    @if (showStufe) {
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Stufe</mat-label>
-                            <input matInput maxlength="10" formControlName="stufe" #stufeInput>
-                            <mat-hint align="end">{{stufeInput.value.length}}/10</mat-hint>
-
-                            @if (raetselDataError('stufe', 'maxLength')) {
-                            <mat-error>maximal 10 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
-                    }
-
-
-                    <!-- Pfad -->
-                    @if (showPfad) {
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Pfad</mat-label>
-                            <input matInput maxlength="255" formControlName="pfad" #pfadInput>
-                            <mat-hint align="end">{{pfadInput.value.length}}/255</mat-hint>
-
-                            @if (raetselDataError('pfad', 'maxLength')) {
-                            <mat-error>maximal 255 Zeichen</mat-error>
-                            }
-
-                        </mat-form-field>
-                    </div>
-                    }
-
-
-                    }
-
-                    <!-- freigegeben -->
-                    <div class="mb-2">
-                        <mat-slide-toggle formControlName="freigegeben" color="primary">
-                            freigegeben
-                        </mat-slide-toggle>
-                    </div>
-
-                    <!-- antwortvorschlaege eingebettet -->
-                    <div class="mb-2">
-                        <mat-slide-toggle formControlName="antwortvorschlaegeEingebettet" color="primary">
-                            Antwortvorschläge eingebettet
-                        </mat-slide-toggle>
-                        <div class="formcontrol-hint mt-1">aktivieren, wenn es eine multiple choice Frage ist und der Text die
-                            Antwortvorschläge bereits enthält</div>
-                    </div>
-
-                    <!-- Frage -->
-                    <h2>Frage</h2>
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Frage</mat-label>
-                            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                [cdkAutosizeMinRows]="5" [cdkAutosizeMaxRows]="15" placeholder="Frage"
-                                formControlName="frage" #frageInput></textarea>
-                            <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
-                            @if (raetselDataError('frage', 'required')) {
-                            <mat-error>Frage ist erforderlich</mat-error>
-                            }
-
-                        </mat-form-field>
-                    </div>
-
-
-                    <!-- Frage - Grafiken -->
-                    <mat-expansion-panel (opened)="panelGrafikenFrageOpen=true"
-                        (closed)="panelGrafikenFrageOpen = false">
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Grafiken Frage (eingebundene Bilder anzeigen oder neue hochladen)
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-
-
-                        @if (embeddableImageInfosFrage.length > 0) {
-                        <h2>Eingebundene Bilder</h2>
-                        <mat-nav-list>
-
-                            @for (embeddableImageInfo of embeddableImageInfosFrage; track $index) {
-
-                            <mat-list-item>
-                                <rbk-embeddable-image-info
-                                    [embeddableImageInfo]="embeddableImageInfo"></rbk-embeddable-image-info>
-                            </mat-list-item>
-                            }
-
-
-                        </mat-nav-list>
-                        }
-
-                        <div class="mb-2">
-
-                            @if (!fileInfoFrage) {
-                            <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-                            <rbk-select-file [selectFileModel]="selectFileFrageModel"
-                                (fileSelected)="onFileSelected($event, 'FRAGE')"></rbk-select-file>
-                            } @else {
-                            <rbk-file-info [titel]="selectFileFrageModel.titel"
-                                [beschreibung]="selectFileFrageModel.beschreibung" [fileName]="fileInfoFrage.file.name"
-                                [maxSizeBytes]="selectFileFrageModel.maxSizeBytes"
-                                [actualFileSize]="fileInfoFrage.fileSize">
-                            </rbk-file-info>
-
-                            <button mat-raised-button color="primary" title="gewählte Datei hochladen"
-                                (click)="uploadFile('FRAGE')">Datei hochladen</button>
-                            }
-                        </div>
-                    </mat-expansion-panel>
-
-                    <!-- Lösung -->
-                    <h2>Lösung</h2>
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Lösung</mat-label>
-                            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                [cdkAutosizeMinRows]="5" [cdkAutosizeMaxRows]="15" placeholder="Lösung"
-                                formControlName="loesung" #loesungInput></textarea>
-                            <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
-                        </mat-form-field>
-                    </div>
-
-                    <!-- Lösung - Grafiken -->
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Grafiken Lösung (eingebundene Bilder anzeigen oder neue hochladen)
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-
-                        @if (embeddableImageInfosLoesung.length > 0) {
-                        <mat-nav-list>
-
-                            @for (embeddableImageInfo of embeddableImageInfosLoesung; track $index) {
-                            <mat-list-item>
-                                <rbk-embeddable-image-info
-                                    [embeddableImageInfo]="embeddableImageInfo"></rbk-embeddable-image-info>
-                            </mat-list-item>
-                            }
-
-                        </mat-nav-list>
-                        }
-
-                        <div class="mb-2">
-
-                            @if (!fileInfoLoesung) {
-                            <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
-                            <rbk-select-file [selectFileModel]="selectFileLoesungModel"
-                                (fileSelected)="onFileSelected($event, 'LOESUNG')"></rbk-select-file>
-                            } @else {
-                            <rbk-file-info [titel]="selectFileLoesungModel.titel"
-                                [beschreibung]="selectFileLoesungModel.beschreibung"
-                                [fileName]="fileInfoLoesung.file.name"
-                                [maxSizeBytes]="selectFileLoesungModel.maxSizeBytes"
-                                [actualFileSize]="fileInfoLoesung.fileSize">
-                            </rbk-file-info>
-
-                            <button mat-raised-button color="primary" title="gewählte Datei hochladen"
-                                (click)="uploadFile('LOESUNG')">Datei
-                                hochladen</button>
-                            }
-                        </div>
-                    </mat-expansion-panel>
-
-                    <!-- Autor Lösung -->
-                    <div class="mb-2 mt-2">
-                        <mat-form-field>
-                            <mat-label>Autor:in Lösung</mat-label>
-                            <input matInput maxlength="100" formControlName="autorLoesung" #autorLoesungInput>
-                            <mat-hint>Nur ausfüllen, wenn Sie nicht selbst Autor:in der Lösung sind.</mat-hint>
-                            <mat-hint align="end">{{autorLoesungInput.value.length}}/100</mat-hint>
-
-                            @if (raetselDataError('autorLoesung', 'maxLength')) {
-                            <mat-error>maximal 100 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
-
-                    <!-- Antwortvorschläge - Anzahl -->
-
-                    <div class="mb-2 mt-2">
-                        <mat-form-field>
-                            <mat-label>Anzahl Antwortvorschläge</mat-label>
-                            <select matNativeControl formControlName="anzahlAntwortvorschlaege"
-                                #anzahlAntwortvorschlaegeInput (change)="onChangeAnzahlAntwortvorschlaege($event)">
-
-                                @for (anz of anzahlenAntwortvorschlaege; track $index) {
-                                <option [value]="anz">{{anz}}</option>
-                                }
-
-                            </select>
-                        </mat-form-field>
-                    </div>
-
-                    <!-- Antwortvorschlag- Controls -->
-                    @for (antwortvorschlag of antwortvorschlaegeFormGroup; track $index) {
-                    <div>
-                        <h3>Antwortvorschlag {{getBuchstabe($index)}}</h3>
-
-                        <div [formGroup]="antwortvorschlag">
-                            <div class="mb-2">
-                                <mat-form-field>
-                                    <mat-label>Text</mat-label>
-                                    <input matInput maxlength="30" formControlName="text" #textInput>
-                                    <mat-hint>Text des Antwortvorschlags - Wort oder kurze Wortgruppe</mat-hint>
-                                </mat-form-field>
-                            </div>
-
-                            <div class="mb-2">
-                                <mat-slide-toggle formControlName="korrekt" #korrektInput color="primary"> korrekt
-                                    (nein/ja)</mat-slide-toggle>
-                            </div>
-                        </div>
-                    </div>
-                    }
-
-                    @if (antwortvorschlaegeErrors()) {
-                    <mat-error>Antwortvorschläge sind noch fehlerhaft: genau einer muss korrekt sein.</mat-error>
-                    }
-
+              <!-- Mediensuche -->
+              @if (showMediensuche) {
+                <div class="mb-2">
+                  <mat-form-field>
+                    <mat-label>Medien</mat-label>
+                    <mat-select
+                      matNativeControl
+                      formControlName="medium"
+                      #mediumInput
+                      [compareWith]="compareMedia"
+                      (selectionChange)="onSelectMedium($event.value)">
+                      @for (medium of medienForQuelle; track $index) {
+                        <mat-option [value]="medium">{{ medium.titel }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
                 </div>
-            </form>
+              }
 
-            <!-- Deskriptoren -->
+              <!-- Person -->
+              @if (showPerson) {
+                <div class="mb-2">
+                  <mat-form-field>
+                    <mat-label>Person(en)</mat-label>
+                    <input matInput maxlength="100" formControlName="person" #personInput />
+                    <mat-hint align="end">{{ personInput.value.length }}/100</mat-hint>
+                    @if (raetselDataError('person', 'maxLength')) {
+                      <mat-error>maximal 100 Zeichen</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
 
-            @if (SelectItemsComponentModel) {
-            <rbk-select-items [model]="SelectItemsComponentModel"
-                (modelChanged)="onSelectItemsComponentModelChanged($event)"></rbk-select-items>
+              <!-- Jahr -->
+              @if (showJahr) {
+                <div class="mb-2">
+                  <mat-form-field>
+                    <mat-label>Jahr</mat-label>
+                    <input matInput maxlength="4" formControlName="jahr" #jahrInput />
+                    <mat-hint align="end">{{ jahrInput.value.length }}/4</mat-hint>
+                    @if (raetselDataError('jahr', 'maxLength')) {
+                      <mat-error>maximal 4 Zeichen</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+
+              <!-- Ausgabe -->
+              @if (showAusgabe) {
+                <div class="mb-2">
+                  <mat-form-field>
+                    <mat-label>Ausgabe</mat-label>
+                    <input matInput maxlength="10" formControlName="ausgabe" #ausgabeInput />
+                    <mat-hint align="end">{{ ausgabeInput.value.length }}/10</mat-hint>
+                    @if (raetselDataError('ausgabe', 'maxLength')) {
+                      <mat-error>maximal 10 Zeichen</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+
+              <!-- Seite -->
+              @if (showSeite) {
+                <div class="mb-2">
+                  <mat-form-field>
+                    <mat-label>Seite</mat-label>
+                    <input matInput maxlength="10" formControlName="seite" #seiteInput />
+                    <mat-hint align="end">{{ seiteInput.value.length }}/10</mat-hint>
+                    @if (raetselDataError('seite', 'maxLength')) {
+                      <mat-error>maximal 10 Zeichen</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+
+              <!-- Klasse -->
+              @if (showKlasse) {
+                <div class="mb-2">
+                  <mat-form-field>
+                    <mat-label>Klasse</mat-label>
+                    <input matInput maxlength="20" formControlName="klasse" #klasseInput />
+                    <mat-hint align="end">{{ klasseInput.value.length }}/20</mat-hint>
+                    @if (raetselDataError('klasse', 'maxLength')) {
+                      <mat-error>maximal 20 Zeichen</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+
+              <!-- Stufe -->
+              @if (showStufe) {
+                <div class="mb-2">
+                  <mat-form-field>
+                    <mat-label>Stufe</mat-label>
+                    <input matInput maxlength="10" formControlName="stufe" #stufeInput />
+                    <mat-hint align="end">{{ stufeInput.value.length }}/10</mat-hint>
+
+                    @if (raetselDataError('stufe', 'maxLength')) {
+                      <mat-error>maximal 10 Zeichen</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+
+              <!-- Pfad -->
+              @if (showPfad) {
+                <div class="mb-2">
+                  <mat-form-field>
+                    <mat-label>Pfad</mat-label>
+                    <input matInput maxlength="255" formControlName="pfad" #pfadInput />
+                    <mat-hint align="end">{{ pfadInput.value.length }}/255</mat-hint>
+
+                    @if (raetselDataError('pfad', 'maxLength')) {
+                      <mat-error>maximal 255 Zeichen</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
             }
-        </mat-card-content>
 
-        <mat-card-actions>
-            <button mat-raised-button color="primary" [disabled]="!form.valid || antwortvorschlaegeErrors()"
-                (click)="submit()">speichern</button>
-            <button mat-raised-button color="primary" [disabled]="generierenDiabled()"
-                matTooltip="PNG Frage und Lösung generieren" (click)="printPNG()">PNG
-                generieren</button>
+            <!-- freigegeben -->
+            <div class="mb-2">
+              <mat-slide-toggle formControlName="freigegeben" color="primary"> freigegeben </mat-slide-toggle>
+            </div>
 
-            @if (raetselFacade.generateLatexError$ | async) {
-            <button mat-raised-button color="primary" matTooltip="LaTeX: Logdateien herunterladen"
-                (click)="downloadLatexLogs()">LaTeX-Logs</button>
+            <!-- antwortvorschlaege eingebettet -->
+            <div class="mb-2">
+              <mat-slide-toggle formControlName="antwortvorschlaegeEingebettet" color="primary">
+                Antwortvorschläge eingebettet
+              </mat-slide-toggle>
+              <div class="formcontrol-hint mt-1">
+                aktivieren, wenn es eine multiple choice Frage ist und der Text die Antwortvorschläge bereits enthält
+              </div>
+            </div>
+
+            <!-- Frage -->
+            <h2>Frage</h2>
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Frage</mat-label>
+                <textarea
+                  matInput
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  [cdkAutosizeMinRows]="5"
+                  [cdkAutosizeMaxRows]="15"
+                  placeholder="Frage"
+                  formControlName="frage"
+                  #frageInput></textarea>
+                <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
+                @if (raetselDataError('frage', 'required')) {
+                  <mat-error>Frage ist erforderlich</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <!-- Frage - Grafiken -->
+            <mat-expansion-panel (opened)="panelGrafikenFrageOpen = true" (closed)="panelGrafikenFrageOpen = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title> Grafiken Frage (eingebundene Bilder anzeigen oder neue hochladen) </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              @if (embeddableImageInfosFrage.length > 0) {
+                <h2>Eingebundene Bilder</h2>
+                <mat-nav-list>
+                  @for (embeddableImageInfo of embeddableImageInfosFrage; track $index) {
+                    <mat-list-item>
+                      <rbk-embeddable-image-info
+                        [embeddableImageInfo]="embeddableImageInfo"></rbk-embeddable-image-info>
+                    </mat-list-item>
+                  }
+                </mat-nav-list>
+              }
+
+              <div class="mb-2">
+                @if (!fileInfoFrage) {
+                  <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
+                  <rbk-select-file
+                    [selectFileModel]="selectFileFrageModel"
+                    (fileSelected)="onFileSelected($event, 'FRAGE')"></rbk-select-file>
+                } @else {
+                  <rbk-file-info
+                    [titel]="selectFileFrageModel.titel"
+                    [beschreibung]="selectFileFrageModel.beschreibung"
+                    [fileName]="fileInfoFrage.file.name"
+                    [maxSizeBytes]="selectFileFrageModel.maxSizeBytes"
+                    [actualFileSize]="fileInfoFrage.fileSize">
+                  </rbk-file-info>
+
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    title="gewählte Datei hochladen"
+                    (click)="uploadFile('FRAGE')">
+                    Datei hochladen
+                  </button>
+                }
+              </div>
+            </mat-expansion-panel>
+
+            <!-- Lösung -->
+            <h2>Lösung</h2>
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Lösung</mat-label>
+                <textarea
+                  matInput
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  [cdkAutosizeMinRows]="5"
+                  [cdkAutosizeMaxRows]="15"
+                  placeholder="Lösung"
+                  formControlName="loesung"
+                  #loesungInput></textarea>
+                <mat-hint>LaTeX-Schnipsel ohne Präambel und document-Umgebung</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <!-- Lösung - Grafiken -->
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Grafiken Lösung (eingebundene Bilder anzeigen oder neue hochladen) </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              @if (embeddableImageInfosLoesung.length > 0) {
+                <mat-nav-list>
+                  @for (embeddableImageInfo of embeddableImageInfosLoesung; track $index) {
+                    <mat-list-item>
+                      <rbk-embeddable-image-info
+                        [embeddableImageInfo]="embeddableImageInfo"></rbk-embeddable-image-info>
+                    </mat-list-item>
+                  }
+                </mat-nav-list>
+              }
+
+              <div class="mb-2">
+                @if (!fileInfoLoesung) {
+                  <!-- fileSelected transportiert ein FileInfoModel- Objekt -->
+                  <rbk-select-file
+                    [selectFileModel]="selectFileLoesungModel"
+                    (fileSelected)="onFileSelected($event, 'LOESUNG')"></rbk-select-file>
+                } @else {
+                  <rbk-file-info
+                    [titel]="selectFileLoesungModel.titel"
+                    [beschreibung]="selectFileLoesungModel.beschreibung"
+                    [fileName]="fileInfoLoesung.file.name"
+                    [maxSizeBytes]="selectFileLoesungModel.maxSizeBytes"
+                    [actualFileSize]="fileInfoLoesung.fileSize">
+                  </rbk-file-info>
+
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    title="gewählte Datei hochladen"
+                    (click)="uploadFile('LOESUNG')">
+                    Datei hochladen
+                  </button>
+                }
+              </div>
+            </mat-expansion-panel>
+
+            <!-- Autor Lösung -->
+            <div class="mb-2 mt-2">
+              <mat-form-field>
+                <mat-label>Autor:in Lösung</mat-label>
+                <input matInput maxlength="100" formControlName="autorLoesung" #autorLoesungInput />
+                <mat-hint>Nur ausfüllen, wenn Sie nicht selbst Autor:in der Lösung sind.</mat-hint>
+                <mat-hint align="end">{{ autorLoesungInput.value.length }}/100</mat-hint>
+
+                @if (raetselDataError('autorLoesung', 'maxLength')) {
+                  <mat-error>maximal 100 Zeichen</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <!-- Antwortvorschläge - Anzahl -->
+
+            <div class="mb-2 mt-2">
+              <mat-form-field>
+                <mat-label>Anzahl Antwortvorschläge</mat-label>
+                <select
+                  matNativeControl
+                  formControlName="anzahlAntwortvorschlaege"
+                  #anzahlAntwortvorschlaegeInput
+                  (change)="onChangeAnzahlAntwortvorschlaege($event)">
+                  @for (anz of anzahlenAntwortvorschlaege; track $index) {
+                    <option [value]="anz">{{ anz }}</option>
+                  }
+                </select>
+              </mat-form-field>
+            </div>
+
+            <!-- Antwortvorschlag- Controls -->
+            @for (antwortvorschlag of antwortvorschlaegeFormGroup; track $index) {
+              <div>
+                <h3>Antwortvorschlag {{ getBuchstabe($index) }}</h3>
+
+                <div [formGroup]="antwortvorschlag">
+                  <div class="mb-2">
+                    <mat-form-field>
+                      <mat-label>Text</mat-label>
+                      <input matInput maxlength="30" formControlName="text" #textInput />
+                      <mat-hint>Text des Antwortvorschlags - Wort oder kurze Wortgruppe</mat-hint>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="mb-2">
+                    <mat-slide-toggle formControlName="korrekt" #korrektInput color="primary">
+                      korrekt (nein/ja)</mat-slide-toggle
+                    >
+                  </div>
+                </div>
+              </div>
             }
 
-            @if (guiEditRaetselPayload.editRaetselPayload.id !== 'neu') {
-            <button mat-raised-button color="primary" matTooltip="zurück zur Detailansicht"
-                (click)="cancelEdit()">Abbruch/Details</button>
+            @if (antwortvorschlaegeErrors()) {
+              <mat-error>Antwortvorschläge sind noch fehlerhaft: genau einer muss korrekt sein.</mat-error>
             }
+          </div>
+        </form>
 
-            <button mat-raised-button color="primary" matTooltip="zurück zur Suche"
-                (click)="gotoSuche()">Rätselsuche</button>
+        <!-- Deskriptoren -->
 
-        </mat-card-actions>
-
-        @if (!form.valid || antwortvorschlaegeErrors()) {
-        <mat-card-footer>
-            <mat-error>
-                Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
-                Pflichtangaben und so.
-            </mat-error>
-        </mat-card-footer>
+        @if (SelectItemsComponentModel) {
+          <rbk-select-items
+            [model]="SelectItemsComponentModel"
+            (modelChanged)="onSelectItemsComponentModelChanged($event)"></rbk-select-items>
         }
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!form.valid || antwortvorschlaegeErrors()"
+          (click)="submit()">
+          speichern
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="generierenDiabled()"
+          matTooltip="PNG Frage und Lösung generieren"
+          (click)="printPNG()">
+          PNG generieren
+        </button>
+
+        @if (raetselFacade.generateLatexError$ | async) {
+          <button
+            mat-raised-button
+            color="primary"
+            matTooltip="LaTeX: Logdateien herunterladen"
+            (click)="downloadLatexLogs()">
+            LaTeX-Logs
+          </button>
+        }
+
+        @if (guiEditRaetselPayload.editRaetselPayload.id !== 'neu') {
+          <button mat-raised-button color="primary" matTooltip="zurück zur Detailansicht" (click)="cancelEdit()">
+            Abbruch/Details
+          </button>
+        }
+
+        <button mat-raised-button color="primary" matTooltip="zurück zur Suche" (click)="gotoSuche()">
+          Rätselsuche
+        </button>
+      </mat-card-actions>
+
+      @if (!form.valid || antwortvorschlaegeErrors()) {
+        <mat-card-footer>
+          <mat-error>
+            Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
+            Pflichtangaben und so.
+          </mat-error>
+        </mat-card-footer>
+      }
     </mat-card>
-    } @else {
+  } @else {
     <h1>Rätsel Details</h1>
     <p>kein Rätsel gewählt</p>
-    <button class="label" mat-raised-button color="primary" matTooltip="zurück zur Suche"
-        (click)="gotoRaetselUebersicht()">Rätselsuche</button>
-    }
+    <button
+      class="label"
+      mat-raised-button
+      color="primary"
+      matTooltip="zurück zur Suche"
+      (click)="gotoRaetselUebersicht()">
+      Rätselsuche
+    </button>
+  }
 </div>

@@ -1,21 +1,21 @@
 <h2>Tags</h2>
-@if(selectItemsFacade.selectableItemsModel$ | async; as model){
-    <div class="mb-2">
-        <mat-chip-listbox [selectable]="false">
-            @for (item of model.vorrat; track item.id) {
-            <mat-chip-option (click)="auswaehlen(item)">
-                {{ item.name }}
-            </mat-chip-option>
-            } @empty {
-            <!-- Optional: Fallback when vorrat is empty -->
-            <mat-chip-option disabled>Keine Einträge vorhanden</mat-chip-option>
-            }
-        </mat-chip-listbox>
-        <h2>{{model.ueberschriftGewaehlteItems}}</h2>
-        <mat-chip-listbox [selectable]="false">
-            @for (item of model.gewaehlteItems; track item.id){
-            <mat-chip-option (click)="verwerfen(item)">{{item.name}}</mat-chip-option>
-            }
-        </mat-chip-listbox>
-    </div>
+@if (selectItemsFacade.selectableItemsModel$ | async; as model) {
+  <div class="mb-2">
+    <mat-chip-listbox [selectable]="false">
+      @for (item of model.vorrat; track item.id) {
+        <mat-chip-option (click)="auswaehlen(item)">
+          {{ item.name }}
+        </mat-chip-option>
+      } @empty {
+        <!-- Optional: Fallback when vorrat is empty -->
+        <mat-chip-option disabled>Keine Einträge vorhanden</mat-chip-option>
+      }
+    </mat-chip-listbox>
+    <h2>{{ model.ueberschriftGewaehlteItems }}</h2>
+    <mat-chip-listbox [selectable]="false">
+      @for (item of model.gewaehlteItems; track item.id) {
+        <mat-chip-option (click)="verwerfen(item)">{{ item.name }}</mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </div>
 }

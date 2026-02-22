@@ -26,16 +26,16 @@ stage_project_java() {
 }
 
 # 2) FRONTEND – lint-staged (ESLint --fix + Prettier)
-#if has_staged '\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$'; then
-#  echo "🔧 lint-staged (frontend)"
-#  (cd "$FRONTEND_DIR" && npx nx clear-cache && npx lint-staged --quiet)
-#fi
+if has_staged '\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$'; then
+  echo "🔧 lint-staged (frontend)"
+  (cd "$FRONTEND_DIR" && npx nx clear-cache && npx lint-staged --quiet)
+fi
 
 # 3) FRONTEND – projektweit linten (Tag-/Layer-Regeln etc.)
-#if has_staged '\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$'; then
-#  echo "🔎 nx affected -t lint (frontend, projektweit)"
-#  (cd "$FRONTEND_DIR" && npx nx clear-cache && npx nx affected -t lint --files="$STAGED_CSV" --parallel=3)
-#fi
+if has_staged '\.(html|js|ts|jsx|tsx|css|scss|json|md|yml|yaml)$'; then
+  echo "🔎 nx affected -t lint (frontend, projektweit)"
+  (cd "$FRONTEND_DIR" && npx nx clear-cache && npx nx affected -t lint --files="$STAGED_CSV" --parallel=3)
+fi
 
 # 4) BACKEND – Formatierung (nur wenn staged Java im jeweiligen Projekt liegt)
 

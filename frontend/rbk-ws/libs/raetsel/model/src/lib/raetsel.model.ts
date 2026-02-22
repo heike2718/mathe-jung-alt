@@ -1,10 +1,17 @@
-import { DeskriptorUI, GeneratedImages, Herkunftstyp, Medienart, QuelleDto, Quellenart, Schwierigkeitsgrad, initialQuelleDto } from "@rbk-ws/core/model";
-import { EmbeddableImageInfo } from "@rbk-ws/embeddable-images/model";
+import {
+  DeskriptorUI,
+  GeneratedImages,
+  Herkunftstyp,
+  Medienart,
+  QuelleDto,
+  Quellenart,
+  Schwierigkeitsgrad,
+  initialQuelleDto,
+} from '@rbk-ws/core/model';
+import { EmbeddableImageInfo } from '@rbk-ws/embeddable-images/model';
 
 export type ModusVolltextsuche = 'UNION' | 'INTERSECTION';
 export type ModusSucheMitDeskriptoren = 'LIKE' | 'NOT_LIKE';
-
-
 
 export interface MediumQuelleDto {
   readonly id: string;
@@ -17,25 +24,25 @@ export interface RaetselSuchfilter {
   readonly deskriptoren: DeskriptorUI[];
   readonly modeFullTextSearch: ModusVolltextsuche;
   readonly searchModeForDescriptors: ModusSucheMitDeskriptoren;
-};
+}
 
 export const initialRaetselSuchfilter: RaetselSuchfilter = {
   suchstring: '',
   deskriptoren: [],
   modeFullTextSearch: 'UNION',
-  searchModeForDescriptors: 'LIKE'
+  searchModeForDescriptors: 'LIKE',
 };
 
 export interface Antwortvorschlag {
   readonly buchstabe: string;
   readonly text: string | undefined;
   readonly korrekt: boolean;
-};
+}
 
 export interface RaetselsucheTreffer {
   readonly trefferGesamt: number;
   readonly treffer: Raetsel[];
-};
+}
 
 /** Minimalset an Attributen, die bei einer Suche geladen werden sollen */
 export interface Raetsel {
@@ -47,7 +54,7 @@ export interface Raetsel {
   readonly herkunft: Herkunftstyp;
   readonly vorschautext: string;
   readonly deskriptoren: DeskriptorUI[];
-};
+}
 
 /**
  * Details eines Rätsels zum Anzeigen in der Detailansicht
@@ -68,12 +75,12 @@ export interface RaetselDetails {
   readonly images: GeneratedImages | null;
   readonly raetselPDF: Blob | null;
   readonly embeddableImageInfos: EmbeddableImageInfo[];
-  readonly quelle: QuelleDto,
-  readonly quellenangabe: string,
+  readonly quelle: QuelleDto;
+  readonly quellenangabe: string;
   readonly autorLoesung: string | undefined;
-};
+}
 
-export interface LinkedAufgabensammlung  {
+export interface LinkedAufgabensammlung {
   readonly id: string;
   readonly name: string;
   readonly nummer: string;
@@ -82,11 +89,11 @@ export interface LinkedAufgabensammlung  {
   readonly freigegeben: boolean;
   readonly privat: boolean;
   readonly owner: string;
-};
+}
 
-/** 
+/**
  * Payload zum Anlegen oder Ändern eines Rätsels
-*/
+ */
 export const initialRaetselDetails: RaetselDetails = {
   id: 'neu',
   schluessel: '',
@@ -105,7 +112,7 @@ export const initialRaetselDetails: RaetselDetails = {
   embeddableImageInfos: [],
   quelle: initialQuelleDto,
   quellenangabe: '',
-  autorLoesung: ''
+  autorLoesung: '',
 };
 
 export interface EditRaetselPayload {
@@ -123,16 +130,15 @@ export interface EditRaetselPayload {
   readonly deskriptoren: DeskriptorUI[];
   readonly quelle: QuelleDto;
   readonly autorLoesung: string | undefined;
-};
+}
 
 export interface GUIEditRaetselPayload {
   readonly editRaetselPayload: EditRaetselPayload;
   readonly quellenangabe: string;
   readonly embeddableImageInfos: EmbeddableImageInfo[];
-};
+}
 
 export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {
-
   if (deskriptoren.length === 0) {
     return '';
   }
@@ -140,22 +146,20 @@ export function deskriptorenToString(deskriptoren: DeskriptorUI[]): string {
   let result = '';
 
   for (let index = 0; index < deskriptoren.length; index++) {
-
     const deskriptor = deskriptoren[index];
     if (index < deskriptoren.length - 1) {
-      result += deskriptor.name + ", ";
+      result += deskriptor.name + ', ';
     } else {
       result += deskriptor.name;
     }
-
   }
 
   return result;
-};
+}
 
 export function isSuchfilterEmpty(suchfilter: RaetselSuchfilter): boolean {
   return suchfilter.suchstring === '' && suchfilter.deskriptoren.length === 0;
-};
+}
 
 export function createEditRaetselPayload(raetselDetails: RaetselDetails): GUIEditRaetselPayload {
   const editRaetselPayload: EditRaetselPayload = {
@@ -172,12 +176,16 @@ export function createEditRaetselPayload(raetselDetails: RaetselDetails): GUIEdi
     name: raetselDetails.name,
     schluessel: raetselDetails.schluessel.length > 0 ? raetselDetails.schluessel : null,
     quelle: raetselDetails.quelle,
-    autorLoesung: raetselDetails.autorLoesung
+    autorLoesung: raetselDetails.autorLoesung,
   };
 
   const quellenangabe = raetselDetails.quellenangabe;
 
-  return {editRaetselPayload: editRaetselPayload, quellenangabe: quellenangabe, embeddableImageInfos: raetselDetails.embeddableImageInfos};
+  return {
+    editRaetselPayload: editRaetselPayload,
+    quellenangabe: quellenangabe,
+    embeddableImageInfos: raetselDetails.embeddableImageInfos,
+  };
 }
 
 // ////////////////////////////////////////////////////////////////////////////////////
@@ -187,19 +195,17 @@ export function createEditRaetselPayload(raetselDetails: RaetselDetails): GUIEdi
 export interface GuiQuellenart {
   readonly id: Quellenart;
   readonly label: string;
-};
+}
 
 export const initialGuiQuellenart: GuiQuellenart = {
   id: 'PERSON',
-  label: ''
+  label: '',
 };
 export class GuiQuellenartenMap {
-
   #quellenarten: Map<Quellenart, string> = new Map();
   #quellenartenInvers: Map<string, Quellenart> = new Map();
 
   constructor() {
-
     this.#quellenarten.set('BUCH', 'Buch');
     this.#quellenarten.set('INTERNET', 'Internet');
     this.#quellenarten.set('PERSON', 'Person');
@@ -212,7 +218,6 @@ export class GuiQuellenartenMap {
   }
 
   public getQuellenartOfLabel(label: string): Quellenart {
-
     const value: Quellenart | undefined = this.#quellenartenInvers.get(label);
     return value ? value : 'PERSON';
   }
@@ -223,9 +228,7 @@ export class GuiQuellenartenMap {
   }
 
   public getGuiQuellenart(refTyp: Quellenart): GuiQuellenart {
-
     if (this.#quellenarten.has(refTyp)) {
-
       const label = this.#quellenarten.get(refTyp);
 
       if (label) {
@@ -239,7 +242,6 @@ export class GuiQuellenartenMap {
   }
 
   public toGuiArray(): GuiQuellenart[] {
-
     const result: GuiQuellenart[] = [];
     this.#quellenarten.forEach((l: string, key: Quellenart) => {
       result.push({ id: key, label: l });
@@ -249,33 +251,29 @@ export class GuiQuellenartenMap {
   }
 
   public getLabelsSorted(): string[] {
-
     const result: string[] = [];
 
     this.toGuiArray().forEach(element => result.push(element.label));
     return result;
   }
-
-};
+}
 
 // ////////////////////////////
 
 export interface GuiHerkunfsttyp {
   readonly id: Herkunftstyp;
   readonly label: string;
-};
+}
 
 export const initialGuiHerkunftstyp: GuiHerkunfsttyp = {
   id: 'EIGENKREATION',
-  label: ''
+  label: '',
 };
 export class GuiHerkunftstypenMap {
-
   #herkunftstypen: Map<Herkunftstyp, string> = new Map();
   #herkunftstypenInvers: Map<string, Herkunftstyp> = new Map();
 
   constructor() {
-
     this.#herkunftstypen.set('EIGENKREATION', 'Eigenkreation');
     this.#herkunftstypen.set('ADAPTION', 'Adaption');
     this.#herkunftstypen.set('ZITAT', 'Zitat');
@@ -286,15 +284,12 @@ export class GuiHerkunftstypenMap {
   }
 
   public getHerkunftstypOfLabel(label: string): Herkunftstyp {
-
     const value: Herkunftstyp | undefined = this.#herkunftstypenInvers.get(label);
     return value ? value : 'EIGENKREATION';
   }
 
   public getGuiHerkunftstyp(refTyp: Herkunftstyp): GuiHerkunfsttyp {
-
     if (this.#herkunftstypen.has(refTyp)) {
-
       const label = this.#herkunftstypen.get(refTyp);
 
       if (label) {
@@ -308,7 +303,6 @@ export class GuiHerkunftstypenMap {
   }
 
   public toGuiArray(): GuiHerkunfsttyp[] {
-
     const result: GuiHerkunfsttyp[] = [];
     this.#herkunftstypen.forEach((l: string, key: Herkunftstyp) => {
       result.push({ id: key, label: l });
@@ -318,11 +312,9 @@ export class GuiHerkunftstypenMap {
   }
 
   public getLabelsSorted(): string[] {
-
     const result: string[] = [];
 
     this.toGuiArray().forEach(element => result.push(element.label));
     return result;
   }
-
-};
+}

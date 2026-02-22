@@ -1,1 +1,1 @@
-export * from "./embeddable-images.model";
+export * from './embeddable-images.model';

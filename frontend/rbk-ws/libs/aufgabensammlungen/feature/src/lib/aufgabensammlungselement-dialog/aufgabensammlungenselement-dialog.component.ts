@@ -7,22 +7,17 @@ import { AufgabensammlungselementDialogData } from './aufgabensammlungselement-d
 import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'rbk-Aufgabensammlungselement',
-    imports: [
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule,
-    FormsModule
-],
-    templateUrl: './aufgabensammlungenselement-dialog.component.html',
-    styleUrls: ['./aufgabensammlungenselement-dialog.component.scss']
+  selector: 'rbk-Aufgabensammlungselement',
+  imports: [MatButtonModule, MatDialogModule, MatInputModule, FormsModule],
+  templateUrl: './aufgabensammlungenselement-dialog.component.html',
+  styleUrls: ['./aufgabensammlungenselement-dialog.component.scss'],
 })
 export class AufgabensammlungselementDialogComponent {
-
-
-  constructor(public dialogRef: MatDialogRef<AufgabensammlungselementDialogData>,
-    @Inject(MAT_DIALOG_DATA) public data: AufgabensammlungselementDialogData) {
-      this.dialogRef.disableClose = true;
+  constructor(
+    public dialogRef: MatDialogRef<AufgabensammlungselementDialogData>,
+    @Inject(MAT_DIALOG_DATA) public data: AufgabensammlungselementDialogData
+  ) {
+    this.dialogRef.disableClose = true;
   }
 
   save(): void {
@@ -34,15 +29,14 @@ export class AufgabensammlungselementDialogComponent {
   }
 
   submitDisabled(): boolean {
-
     if (!this.#isSchluesselValid()) {
       return true;
     }
     if (!this.#isNummerValid()) {
-      return true
+      return true;
     }
     if (!this.#isPunkteValid()) {
-      return true
+      return true;
     }
 
     return false;
@@ -64,7 +58,6 @@ export class AufgabensammlungselementDialogComponent {
   }
 
   #isPunkteValid(): boolean {
-
     if (!this.data.punkte) {
       return false;
     }
@@ -76,5 +69,4 @@ export class AufgabensammlungselementDialogComponent {
     const punkteAsString = '' + this.data.punkte;
     return punkteAsString.endsWith('00');
   }
-
 }

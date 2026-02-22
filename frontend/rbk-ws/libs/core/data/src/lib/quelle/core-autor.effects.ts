@@ -7,22 +7,21 @@ import { switchMap, map } from 'rxjs';
 import { coreQuelleActions } from './core-autor.actions';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class CoreAutorEffects {
+  #actions = inject(Actions);
+  #httpClient = inject(HttpClient);
 
-    #actions = inject(Actions);
-    #httpClient = inject(HttpClient);
-
-
-    loadQuelleAdmin$ = createEffect(() => {
-
-        return this.#actions.pipe(
-            ofType(coreQuelleActions.lOAD_AUTOR),
-            switchMap(() =>
-                this.#httpClient.get<QuelleDto>('/raetselbaukasten/api/quellen/autor/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
-            ),
-            map((quelle: QuelleDto) => coreQuelleActions.cORE_AUTOR_LOADED({ quelle }))
-        );
-    });
+  loadQuelleAdmin$ = createEffect(() => {
+    return this.#actions.pipe(
+      ofType(coreQuelleActions.lOAD_AUTOR),
+      switchMap(() =>
+        this.#httpClient.get<QuelleDto>('/raetselbaukasten/api/quellen/autor/v2', {
+          context: new HttpContext().set(SILENT_LOAD_CONTEXT, true),
+        })
+      ),
+      map((quelle: QuelleDto) => coreQuelleActions.cORE_AUTOR_LOADED({ quelle }))
+    );
+  });
 }

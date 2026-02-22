@@ -1,12 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  inject,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,13 +13,7 @@ import { User } from '@rbk-ws/core/model';
   selector: 'rbk-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    AsyncPipe,
-    RouterLinkWithHref,
-  ],
+  imports: [MatButtonModule, MatIconModule, MatToolbarModule, AsyncPipe, RouterLinkWithHref],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output()
@@ -41,9 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   #userSubscription = new Subscription();
 
   ngOnInit(): void {
-    this.#userSubscription = this.authFacade.user$.subscribe(
-      (user) => (this.user = user),
-    );
+    this.#userSubscription = this.authFacade.user$.subscribe(user => (this.user = user));
   }
 
   ngOnDestroy(): void {

@@ -2,7 +2,7 @@
   "name": "embeddable-images-data",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/embeddable-images/data/src",
-  "prefix": "mja-ws",
+  "prefix": "lib",
   "projectType": "library",
   "tags": ["type:data"],
   "targets": {

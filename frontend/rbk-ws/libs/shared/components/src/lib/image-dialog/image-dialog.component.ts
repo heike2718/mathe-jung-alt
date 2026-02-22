@@ -6,18 +6,14 @@ import { ImageDialogModel } from './image-dialog.model';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-    selector: 'rbk-image-dialog',
-    imports: [
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule
-],
-    templateUrl: './image-dialog.component.html',
-    styleUrls: ['./image-dialog.component.scss']
+  selector: 'rbk-image-dialog',
+  imports: [MatButtonModule, MatDialogModule, MatInputModule],
+  templateUrl: './image-dialog.component.html',
+  styleUrls: ['./image-dialog.component.scss'],
 })
 export class ImageDialogComponent {
-
-  constructor(public dialogRef: MatDialogRef<ImageDialogModel>,
-    @Inject(MAT_DIALOG_DATA) public data: ImageDialogModel) { }
-
+  constructor(
+    public dialogRef: MatDialogRef<ImageDialogModel>,
+    @Inject(MAT_DIALOG_DATA) public data: ImageDialogModel
+  ) {}
 }

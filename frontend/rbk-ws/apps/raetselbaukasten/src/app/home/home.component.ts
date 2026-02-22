@@ -34,19 +34,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   #subscriptions = new Subscription();
 
   ngOnInit(): void {
-    this.imageSourceLogo =
-      this.#configService.assetsPath + 'mja_logo_2-gruen.svg';
+    this.imageSourceLogo = this.#configService.assetsPath + 'mja_logo_2-gruen.svg';
     this.#coreFacade.loadAnzahlPublicRaetsel();
 
-    const userSubscription = this.authFacade.user$.subscribe(
-      (user) => (this.user = user),
-    );
+    const userSubscription = this.authFacade.user$.subscribe(user => (this.user = user));
     this.#subscriptions.add(userSubscription);
 
-    const anzahlRaetselSubscription =
-      this.#coreFacade.anzahlPublicRaetsel$.subscribe(
-        (anzahl) => (this.anzahlRaetsel = anzahl),
-      );
+    const anzahlRaetselSubscription = this.#coreFacade.anzahlPublicRaetsel$.subscribe(
+      anzahl => (this.anzahlRaetsel = anzahl)
+    );
     this.#subscriptions.add(anzahlRaetselSubscription);
   }
 

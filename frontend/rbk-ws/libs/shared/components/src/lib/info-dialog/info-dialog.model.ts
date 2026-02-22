@@ -1,4 +1,4 @@
 export interface InfoDialogModel {
-    readonly ueberschrift: string;
-    readonly text: string;
-};
+  readonly ueberschrift: string;
+  readonly text: string;
+}

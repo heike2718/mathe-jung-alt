@@ -4,42 +4,37 @@ import { authActions } from './auth.actions';
 import { Session, anonymousSession } from '@rbk-ws/core/model';
 
 export interface AuthState {
-    readonly session: Session;
-    readonly sessionExists: boolean;
-};
+  readonly session: Session;
+  readonly sessionExists: boolean;
+}
 
 export const initialState: AuthState = {
-    session: anonymousSession,
-    sessionExists: false
+  session: anonymousSession,
+  sessionExists: false,
 };
 
 export const authFeature = createFeature({
-    name: 'mjaAuth',
-    reducer: createReducer<AuthState>(
-        initialState,
-        on(
-            authActions.sESSION_CREATED,
-            (state, { session: session }): AuthState => {
+  name: 'mjaAuth',
+  reducer: createReducer<AuthState>(
+    initialState,
+    on(authActions.sESSION_CREATED, (state, { session: session }): AuthState => {
+      const correlationId = generateUUID();
 
-                const correlationId = generateUUID();
+      localStorage.setItem('mjaCorellationId', correlationId);
 
-                localStorage.setItem('mjaCorellationId', correlationId);
-
-
-                return {
-                    ...state,
-                    session: session,
-                    sessionExists: true
-                };
-            }
-        ),
-        on(authActions.lOGGED_OUT, (state, action) => {
-            swallowEmptyArgument(action, false);
-            return {
-                ...state,
-                session: anonymousSession,
-                sessionExists: false
-            }
-        })
-    )
+      return {
+        ...state,
+        session: session,
+        sessionExists: true,
+      };
+    }),
+    on(authActions.lOGGED_OUT, (state, action) => {
+      swallowEmptyArgument(action, false);
+      return {
+        ...state,
+        session: anonymousSession,
+        sessionExists: false,
+      };
+    })
+  ),
 });

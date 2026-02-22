@@ -1,27 +1,15 @@
 import { ApplicationConfig } from '@angular/core';
 import { authDataProvider } from '@rbk-ws/core/api';
-import {
-  coreDeskriptorenDataProvider,
-  coreQuelleDataProvider,
-  coreStatistikDataProvider,
-} from '@rbk-ws/core/api';
+import { coreDeskriptorenDataProvider, coreQuelleDataProvider, coreStatistikDataProvider } from '@rbk-ws/core/api';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
-import {
-  LocalStorageEffects,
-  localStorageReducer,
-  loggedOutMetaReducer,
-} from '@rbk-ws/local-storage-data';
+import { LocalStorageEffects, localStorageReducer, loggedOutMetaReducer } from '@rbk-ws/local-storage-data';
 import { environment } from '../environments/environment';
-import {
-  enableProdMode,
-  ErrorHandler,
-  LOCALE_ID,
-} from '@angular/core';
+import { enableProdMode, ErrorHandler, LOCALE_ID } from '@angular/core';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
@@ -69,7 +57,7 @@ export const appConfig: ApplicationConfig = {
       },
       {
         metaReducers: allMetaReducers,
-      },
+      }
     ),
     provideEffects(LocalStorageEffects),
     environment.providers,
@@ -81,7 +69,7 @@ export const appConfig: ApplicationConfig = {
       withXsrfConfiguration({
         cookieName: 'XSRF-TOKEN',
         headerName: 'X-XSRF-TOKEN',
-      }),
+      })
     ),
     {
       provide: Configuration,
@@ -91,7 +79,7 @@ export const appConfig: ApplicationConfig = {
           environment.assetsPath,
           environment.withCredentials,
           'raetselbaukasten',
-          environment.production,
+          environment.production
         ),
     },
 

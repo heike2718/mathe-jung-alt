@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/raetselbaukasten/src",
-  "prefix": "raetselbaukasten",
+  "prefix": "rbk",
   "tags": ["type:app"],
   "targets": {
     "build": {
@@ -16,14 +16,8 @@
         "polyfills": "apps/raetselbaukasten/src/polyfills.ts",
         "tsConfig": "apps/raetselbaukasten/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/raetselbaukasten/src/favicon.ico",
-          "apps/raetselbaukasten/src/assets"
-        ],
-        "styles": [
-          "apps/raetselbaukasten/src/styles.scss",
-          "node_modules/material-icons/iconfont/material-icons.scss"
-        ],
+        "assets": ["apps/raetselbaukasten/src/favicon.ico", "apps/raetselbaukasten/src/assets"],
+        "styles": ["apps/raetselbaukasten/src/styles.scss", "node_modules/material-icons/iconfont/material-icons.scss"],
         "allowedCommonJsDependencies": ["angular2-uuid", "deepmerge"],
         "scripts": []
       },
