@@ -7,7 +7,9 @@
     "fe": "npm run check-node && npx nx run frontend:serve",
     "be": "npx nx run raetselbaukasten-api:dev",
     "be-debug": "npx nx run raetselbaukasten-api:debug",
-    "latex": "npx nx run latex-service-api:build"
+    "latex": "npx nx run latex-service-api:build",
+    "prepare:heikeqs": "npm run check-node && npx nx run orchestrator:deploy --configuration=heikeqs",
+    "prepare:prod": "npm run check-node && npx nx run orchestrator:deploy --configuration=prod"
   },
   "devDependencies": {
     "nx": "22.5.2"

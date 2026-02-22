@@ -1,0 +1,71 @@
+{
+  "name": "orchestrator",
+  "targets": {
+    "build-frontend": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "frontend/rbk-ws",
+        "command": "npm run build"
+      },
+      "configurations": {
+        "heikeqs": {
+          "command": "npm run build:heikeqs"
+        },
+        "prod": {
+          "command": "npm run build:prod"
+        }
+      },
+      "outputs": ["{workspaceRoot}/frontend/rbk-ws/dist/apps/raetselbaukasten"]
+    },
+
+    "copy-frontend-into-backend": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build-frontend"],
+      "options": {
+        "parallel": false,
+        "commands": [
+          "rm -rf backend/raetselbaukasten/src/main/resources/META-INF/resources/raetselbaukasten",
+          "mkdir -p backend/raetselbaukasten/src/main/resources/META-INF/resources/raetselbaukasten",
+          "rsync -a --delete frontend/rbk-ws/dist/apps/raetselbaukasten/ backend/raetselbaukasten/src/main/resources/META-INF/resources/raetselbaukasten/"
+        ]
+      }
+    },
+
+    "package-backend": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["copy-frontend-into-backend"],
+      "options": {
+        "cwd": "backend/raetselbaukasten",
+        "envFile": ".secrets/secrets",
+        "command": "mvn clean package -Dmaven.test.skip=true -DnvdApiDelay=8000 -DnvdApiKeyEnvironmentVariable=NVD_API_KEY"
+      },
+      "outputs": ["{workspaceRoot}/backend/raetselbaukasten/target/quarkus-app"]
+    },
+
+    "deploy": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["package-backend"],
+      "options": {
+        "parallel": false,
+        "commands": [
+          "rm -rf /home/heike/deployments/x300-heikeqs/raetselbaukasten/quarkus-app",
+          "mv backend/raetselbaukasten/target/quarkus-app /home/heike/deployments/x300-heikeqs/raetselbaukasten"
+        ]
+      },
+      "configurations": {
+        "heikeqs": {
+          "commands": [
+            "rm -rf /home/heike/deployments/x300-heikeqs/raetselbaukasten/quarkus-app",
+            "mv backend/raetselbaukasten/target/quarkus-app /home/heike/deployments/x300-heikeqs/raetselbaukasten"
+          ]
+        },
+        "prod": {
+          "commands": [
+            "rm -rf /home/heike/deployments/vserver1/raetselbaukasten/quarkus-app",
+            "mv backend/raetselbaukasten/target/quarkus-app /home/heike/deployments/vserver1/raetselbaukasten"
+          ]
+        }
+      }
+    }
+  }
+}

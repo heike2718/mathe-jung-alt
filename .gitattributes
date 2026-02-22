@@ -1,0 +1,18 @@
+# Standard: alle Textdateien als Text behandeln und LF erzwingen
+* text=auto eol=lf
+
+# Binärdateien explizit markieren (keine Line-Ending-Normalisierung)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.jar binary
+*.war binary
+*.class binary
+*.woff binary
+*.woff2 binary
+*.ttf binary

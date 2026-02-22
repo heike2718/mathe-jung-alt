@@ -5,6 +5,7 @@
 /.nx/
 /dist/
 /package-lock.json
+/.secrets/
 
 # ==========================
 # Frontend Workspace
