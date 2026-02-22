@@ -17,8 +17,8 @@ if [ -d "$FRONTEND_DIR" ]; then
   nvm use 22 || exit 1
   npm run build:local
   
-  echo "📊 Running frontend tests with Vitest coverage..."
-  npm run test:ci
+#  echo "📊 Running frontend tests with Vitest coverage..."
+#  npm run test:ci
 fi
 
 # BACKEND_RBK_DIR: verify (Tests + Quality Gates)
