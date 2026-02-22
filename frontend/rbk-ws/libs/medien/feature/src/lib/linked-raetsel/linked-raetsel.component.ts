@@ -1,23 +1,17 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { LinkedRaetsel } from '@rbk-ws/medien/model';
 import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
-    selector: 'rbk-linked-raetsel',
-    imports: [
-        CommonModule,
-        MatBadgeModule,
-        MatButtonModule,
-        MatCardModule
-    ],
-    templateUrl: './linked-raetsel.component.html',
-    styleUrl: './linked-raetsel.component.scss'
+  selector: 'rbk-linked-raetsel',
+  imports: [CommonModule, MatBadgeModule, MatButtonModule, MatCardModule],
+  templateUrl: './linked-raetsel.component.html',
+  styleUrl: './linked-raetsel.component.scss',
 })
 export class LinkedRaetselComponent {
-
   @Input()
   raetsel!: LinkedRaetsel;
 
@@ -25,7 +19,6 @@ export class LinkedRaetselComponent {
   detailsClicked: EventEmitter<LinkedRaetsel> = new EventEmitter<LinkedRaetsel>();
 
   showDetails(): void {
-    this.detailsClicked.emit(this.raetsel);   
+    this.detailsClicked.emit(this.raetsel);
   }
-
 }

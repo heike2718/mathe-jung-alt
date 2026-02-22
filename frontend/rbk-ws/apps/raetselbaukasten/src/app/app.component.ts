@@ -6,10 +6,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavComponent } from './navigation/sidenav/sidenav.component';
 import { AuthFacade } from '@rbk-ws/core/api';
-import {
-  LoadingIndicatorComponent,
-  MessageComponent,
-} from '@rbk-ws/shared/messaging/ui';
+import { LoadingIndicatorComponent, MessageComponent } from '@rbk-ws/shared/messaging/ui';
 
 @Component({
   selector: 'rbk-root',

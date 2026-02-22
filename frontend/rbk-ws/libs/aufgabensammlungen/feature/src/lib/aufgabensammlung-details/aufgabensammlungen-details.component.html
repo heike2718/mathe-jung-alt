@@ -1,26 +1,25 @@
 <div class="mja-container">
-    @if (aufgabensammlungenFacade.aufgabensammlungDetails$ | async) {
-
-    <h2>Aufgabensammlung {{sammlung.name}} <span matBadge={{sammlung.elemente.length}} matBadgeColor="accent"
-            class="ml-1"></span></h2>
+  @if (aufgabensammlungenFacade.aufgabensammlungDetails$ | async) {
+    <h2>
+      Aufgabensammlung {{ sammlung.name }}
+      <span matBadge="{{ sammlung.elemente.length }}" matBadgeColor="accent" class="ml-1"></span>
+    </h2>
 
     <div class="grid-container-2 mt-2 mb-2">
-
-        @if (user.isAdmin) {
+      @if (user.isAdmin) {
         <label>ID:</label>
         <div>
-            {{sammlung.id}}
+          {{ sammlung.id }}
         </div>
-
 
         <label>Kommentar:</label>
         <div>
-            {{sammlung.kommentar}}
+          {{ sammlung.kommentar }}
         </div>
 
         <label>geändert durch:</label>
         <div>
-            {{sammlung.geaendertDurch}}
+          {{ sammlung.geaendertDurch }}
         </div>
 
         <label>freigegeben:</label>
@@ -31,80 +30,93 @@
 
         <label> Referenztyp:</label>
         <div>
-            {{sammlung.referenztyp}}
+          {{ sammlung.referenztyp }}
         </div>
 
         <label>Referenz:</label>
         <div>
-            {{sammlung.referenz}}
+          {{ sammlung.referenz }}
         </div>
-        }
+      }
     </div>
 
     <div class="button-container">
-
-        @if (!(sammlung.schreibgeschuetzt)) {
-        <button mat-raised-button color="primary" [disabled]="!getAufgabensammlungID()"
-            (click)="openNeuesAufgabensammlungselementDialog()">neues Element</button>
+      @if (!sammlung.schreibgeschuetzt) {
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!getAufgabensammlungID()"
+          (click)="openNeuesAufgabensammlungselementDialog()">
+          neues Element
+        </button>
 
         <button mat-raised-button color="primary" (click)="startEdit()">bearbeiten</button>
-        }
+      }
 
-        @if (user.isAdmin) {
-        <button mat-raised-button color="primary" [disabled]="buttonsGenerierenDisabled()"
-            (click)="openGenerateDialog()">PDF / LaTeX</button>
-        } @else {
-        <button mat-raised-button color="primary" [disabled]="buttonsGenerierenDisabled()"
-            (click)="openGenerateDialog()">herunterladen</button>
-        }
+      @if (user.isAdmin) {
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="buttonsGenerierenDisabled()"
+          (click)="openGenerateDialog()">
+          PDF / LaTeX
+        </button>
+      } @else {
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="buttonsGenerierenDisabled()"
+          (click)="openGenerateDialog()">
+          herunterladen
+        </button>
+      }
 
-        @if (user.isAdmin) {
+      @if (user.isAdmin) {
         <button mat-raised-button color="primary" (click)="reload()">aktualisieren</button>
-        }
+      }
 
-        <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
-
+      <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
     </div>
 
     <h2>Elemente</h2>
 
     <p>Klicken Sie auf die Nummer. Die Aufgabe wird dann am Ende der Tabelle angezeigt.</p>
 
-    <rbk-aufgabensammlungselement [aufgabensammlung]="sammlung" [benutzerart]="user.benutzerart"
-        (showImages)="onShowImagesElement($event)" (editElement)="onEditElement($event)"
-        (deleteElement)="onDeleteElement($event)">
+    <rbk-aufgabensammlungselement
+      [aufgabensammlung]="sammlung"
+      [benutzerart]="user.benutzerart"
+      (showImages)="onShowImagesElement($event)"
+      (editElement)="onEditElement($event)"
+      (deleteElement)="onDeleteElement($event)">
     </rbk-aufgabensammlungselement>
 
     @if (schluessel.length > 0) {
-
-    @if (!selectedElement) {
-    <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
-    <div class="mb-2">
-        <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
-    </div>
-    } @else {
-    <h2>Vorschau {{nummer}} ({{schluessel}})</h2>
-    <div class="mb-2">
-        <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{schluessel}}</button>
-        <button mat-raised-button color="primary" class="ml-2" (click)="onShowImagesElement(selectedElement)">neu
-            laden</button>
-    </div>
-    }
-
+      @if (!selectedElement) {
+        <h2>Vorschau {{ nummer }} ({{ schluessel }})</h2>
+        <div class="mb-2">
+          <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{ schluessel }}</button>
+        </div>
+      } @else {
+        <h2>Vorschau {{ nummer }} ({{ schluessel }})</h2>
+        <div class="mb-2">
+          <button mat-raised-button color="primary" (click)="gotoRaetselDetails()">{{ schluessel }}</button>
+          <button mat-raised-button color="primary" class="ml-2" (click)="onShowImagesElement(selectedElement)">
+            neu laden
+          </button>
+        </div>
+      }
     }
 
     @if (images) {
-    <rbk-frage-loesung-images [images]="images"></rbk-frage-loesung-images>
+      <rbk-frage-loesung-images [images]="images"></rbk-frage-loesung-images>
     } @else {
-    <p>Entweder wurde die Vorschau nicht geladen oder sie existiert nicht</p>
+      <p>Entweder wurde die Vorschau nicht geladen oder sie existiert nicht</p>
     }
-
-    } @else {
+  } @else {
     <h2>Aufgabensammlung Details</h2>
     <p>keine Aufgabensammlung ausgewählt</p>
     <div>
-        <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
+      <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
     </div>
-    }
-
+  }
 </div>

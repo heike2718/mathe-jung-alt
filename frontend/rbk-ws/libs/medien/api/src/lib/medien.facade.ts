@@ -1,28 +1,30 @@
-import { Injectable, inject } from "@angular/core";
-import { Router } from "@angular/router";
-import { PageDefinition, PaginationState } from "@rbk-ws/core/model";
-import { fromMedien, medienActions } from "@rbk-ws/medien/data";
-import { LinkedRaetsel, MediensucheTrefferItem, MediumDto, initialMediumDto } from "@rbk-ws/medien/model";
-import { filterDefined } from "@rbk-ws/shared/util";
-import { Store } from "@ngrx/store";
-import { Observable } from "rxjs";
+import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { PageDefinition, PaginationState } from '@rbk-ws/core/model';
+import { fromMedien, medienActions } from '@rbk-ws/medien/data';
+import { LinkedRaetsel, MediensucheTrefferItem, MediumDto, initialMediumDto } from '@rbk-ws/medien/model';
+import { filterDefined } from '@rbk-ws/shared/util';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MedienFacade {
-
   #store = inject(Store);
   #router = inject(Router);
 
   page$: Observable<MediensucheTrefferItem[]> = this.#store.select(fromMedien.page);
   anzahlTrefferGesamt: Observable<number> = this.#store.select(fromMedien.anzahlTrefferGesamt);
   paginationState$: Observable<PaginationState> = this.#store.select(fromMedien.paginationState);
-  selectedTrefferItem$: Observable<MediensucheTrefferItem> = this.#store.select(fromMedien.selectedTrefferItem).pipe(filterDefined);
-  selectedMediumDetails$: Observable<MediumDto> = this.#store.select(fromMedien.selectedMediumDetails).pipe(filterDefined);
+  selectedTrefferItem$: Observable<MediensucheTrefferItem> = this.#store
+    .select(fromMedien.selectedTrefferItem)
+    .pipe(filterDefined);
+  selectedMediumDetails$: Observable<MediumDto> = this.#store
+    .select(fromMedien.selectedMediumDetails)
+    .pipe(filterDefined);
   allMedienDetails$: Observable<MediumDto[]> = this.#store.select(fromMedien.allMedienDetails);
   linkedRaetsel$: Observable<LinkedRaetsel[]> = this.#store.select(fromMedien.linkedRaetsel);
-
 
   triggerSearch(suchstring: string, pageDefinition: PageDefinition): void {
     this.#store.dispatch(medienActions.mEDIEN_SELECT_PAGE({ pageDefinition }));
@@ -43,7 +45,6 @@ export class MedienFacade {
   }
 
   cancelEdit(medium: MediumDto): void {
-
     if (medium.id === 'neu') {
       this.#store.dispatch(medienActions.uNSELECT_MEDIUM());
     } else {
@@ -51,8 +52,8 @@ export class MedienFacade {
         id: medium.id,
         kommentar: medium.kommentar,
         medienart: medium.medienart ? medium.medienart : 'BUCH',
-        titel: ''
-      }
+        titel: '',
+      };
       this.#store.dispatch(medienActions.sELECT_MEDIUM({ medium: item }));
     }
   }
@@ -66,11 +67,10 @@ export class MedienFacade {
   }
 
   createAndEditMedium(): void {
-
     this.#store.dispatch(medienActions.eDIT_MEDIUM({ medium: initialMediumDto, nextUrl: 'medien/editor' }));
   }
 
   findLinkedRaetsel(mediumId: string): void {
-    this.#store.dispatch(medienActions.fIND_LINKED_RAETSEL({mediumId}));
+    this.#store.dispatch(medienActions.fIND_LINKED_RAETSEL({ mediumId }));
   }
 }

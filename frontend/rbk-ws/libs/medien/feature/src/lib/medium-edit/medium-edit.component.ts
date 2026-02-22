@@ -14,24 +14,23 @@ import { MediumDto, GuiMedienartenMap, GuiMedienart, initialGuiMedienart } from 
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'rbk-medium-edit',
-    imports: [
-        CommonModule,
-        MatCardModule,
-        MatButtonModule,
-        MatGridListModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatListModule,
-        FormsModule,
-        TextFieldModule,
-        ReactiveFormsModule
-    ],
-    templateUrl: './medium-edit.component.html',
-    styleUrl: './medium-edit.component.scss'
+  selector: 'rbk-medium-edit',
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatGridListModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatListModule,
+    FormsModule,
+    TextFieldModule,
+    ReactiveFormsModule,
+  ],
+  templateUrl: './medium-edit.component.html',
+  styleUrl: './medium-edit.component.scss',
 })
 export class MediumEditComponent implements OnInit, OnDestroy {
-
   medienFacade = inject(MedienFacade);
   selectStatusInput: string[] = ['ERFASST', 'FREIGEGEBEN'];
   selectMedienartenInput: string[] = new GuiMedienartenMap().getLabelsSorted();
@@ -41,7 +40,6 @@ export class MediumEditComponent implements OnInit, OnDestroy {
 
   #formBuilder = inject(FormBuilder);
 
-
   #mediumSubscription = new Subscription();
 
   constructor() {
@@ -49,12 +47,10 @@ export class MediumEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
-    this.#mediumSubscription = this.medienFacade.selectedMediumDetails$.subscribe((medium) => {
+    this.#mediumSubscription = this.medienFacade.selectedMediumDetails$.subscribe(medium => {
       this.medium = medium;
       this.#initForm();
     });
-
   }
 
   ngOnDestroy(): void {
@@ -63,7 +59,7 @@ export class MediumEditComponent implements OnInit, OnDestroy {
 
   mediumDataError = (controlName: string, errorName: string) => {
     return this.form.controls[controlName].hasError(errorName);
-  }
+  };
 
   submit(): void {
     const payload: MediumDto = this.#readFormValues();
@@ -87,7 +83,6 @@ export class MediumEditComponent implements OnInit, OnDestroy {
   }
 
   formInvalid(): boolean {
-
     const selectedMedienart = this.form.controls['medienart'].value;
 
     if (selectedMedienart === '') {
@@ -97,22 +92,20 @@ export class MediumEditComponent implements OnInit, OnDestroy {
     return !this.form.valid;
   }
 
-
   #createForm(): void {
-
     this.form = this.#formBuilder.group({
       titel: ['', [Validators.required, Validators.maxLength(100)]],
       medienart: [initialGuiMedienart.label, [Validators.required]],
       autor: ['', [Validators.maxLength(100)]],
       url: ['', [Validators.maxLength(255)]],
-      kommentar: ['', [Validators.maxLength(200)]]
+      kommentar: ['', [Validators.maxLength(200)]],
     });
   }
 
   #initForm() {
-
     const medienart: Medienart | undefined = this.medium.medienart;
-    const theGuiMedienart: GuiMedienart = medienart === undefined ? initialGuiMedienart : new GuiMedienartenMap().getGuiMedienart(medienart);
+    const theGuiMedienart: GuiMedienart =
+      medienart === undefined ? initialGuiMedienart : new GuiMedienartenMap().getGuiMedienart(medienart);
 
     this.form.controls['titel'].setValue(this.medium.titel ? this.medium.titel : '');
     this.form.controls['medienart'].setValue(theGuiMedienart.label);
@@ -122,25 +115,22 @@ export class MediumEditComponent implements OnInit, OnDestroy {
   }
 
   #readFormValues(): MediumDto {
-
     const formValue = this.form.value;
 
     const medienart: Medienart = new GuiMedienartenMap().getMedienartOfLabel(formValue['medienart']);
-
-
 
     const payload: MediumDto = {
       id: this.medium.id,
       titel: formValue['titel'].trim(),
       medienart: medienart === 'NOOP' ? undefined : medienart,
-      kommentar: formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined,
+      kommentar:
+        formValue['kommentar'] && formValue['kommentar'].trim().length > 0 ? formValue['kommentar'].trim() : undefined,
       autor: formValue['autor'] && formValue['autor'].trim().length > 0 ? formValue['autor'].trim() : undefined,
       url: formValue['url'] && formValue['url'].trim().length > 0 ? formValue['url'].trim() : '',
       schreibgeschuetzt: false,
-      ownMedium: true
+      ownMedium: true,
     };
 
     return payload;
-
   }
 }

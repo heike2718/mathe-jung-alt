@@ -16,10 +16,7 @@ mat-toolbar a {
   align-items: center;
   padding: 10px 15px;
   color: mat.m2-get-color-from-palette(theme.$primary-palette, 700);
-  background-color: mat.m2-get-contrast-color-from-palette(
-    theme.$primary-palette,
-    700
-  );
+  background-color: mat.m2-get-contrast-color-from-palette(theme.$primary-palette, 700);
   text-decoration: none;
   transition:
     background-color 0.3s,
@@ -32,10 +29,7 @@ mat-toolbar a {
 mat-toolbar a:hover,
 mat-toolbar a:active {
   color: mat.m2-get-color-from-palette(theme.$primary-palette, 700);
-  background-color: mat.m2-get-contrast-color-from-palette(
-    theme.$primary-palette,
-    700
-  );
+  background-color: mat.m2-get-contrast-color-from-palette(theme.$primary-palette, 700);
   border-radius: 8px;
 }
 

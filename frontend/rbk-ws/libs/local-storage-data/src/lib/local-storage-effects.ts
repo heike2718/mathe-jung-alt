@@ -11,7 +11,7 @@ export class LocalStorageEffects {
       map(evt => evt.key),
       // pluck('key'),
       filterDefined,
-      map((featureState) => syncLocalStorage({ featureState }))
+      map(featureState => syncLocalStorage({ featureState }))
     );
   });
 }

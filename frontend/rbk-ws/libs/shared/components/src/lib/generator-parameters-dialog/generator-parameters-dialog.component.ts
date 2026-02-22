@@ -8,19 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { SelectGeneratorParametersUIModel } from '@rbk-ws/core/model';
 
 @Component({
-    selector: 'rbk-generator-parameters-dialog',
-    imports: [
-    FormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule
-],
-    templateUrl: './generator-parameters-dialog.component.html',
-    styleUrls: ['./generator-parameters-dialog.component.scss']
+  selector: 'rbk-generator-parameters-dialog',
+  imports: [FormsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule],
+  templateUrl: './generator-parameters-dialog.component.html',
+  styleUrls: ['./generator-parameters-dialog.component.scss'],
 })
 export class GeneratorParametersDialogComponent {
-
   public dialogRef: MatDialogRef<GeneratorParametersDialogComponent> = inject(MatDialogRef);
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: SelectGeneratorParametersUIModel) {

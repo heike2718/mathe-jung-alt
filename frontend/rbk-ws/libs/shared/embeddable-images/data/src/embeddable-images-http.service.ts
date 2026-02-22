@@ -1,42 +1,42 @@
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Injectable, inject } from "@angular/core";
-import { CreateEmbeddableImageRequestDto, EmbeddableImageResponseDto, EmbeddableImageVorschau, ReplaceEmbeddableImageRequestDto } from "@rbk-ws/embeddable-images/model";
-import { Observable } from "rxjs";
-
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import {
+  CreateEmbeddableImageRequestDto,
+  EmbeddableImageResponseDto,
+  EmbeddableImageVorschau,
+  ReplaceEmbeddableImageRequestDto,
+} from '@rbk-ws/embeddable-images/model';
+import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class EmbeddableImagesHttpService {
+  #url = '/raetselbaukasten/api/embeddable-images';
+  #httpClient = inject(HttpClient);
 
-    #url = '/raetselbaukasten/api/embeddable-images';
-    #httpClient = inject(HttpClient);
+  loadGrafik(relativerPfad: string): Observable<EmbeddableImageVorschau> {
+    const headers = new HttpHeaders().set('Accept', 'application/json');
 
-    loadGrafik(relativerPfad: string): Observable<EmbeddableImageVorschau> {
+    let params = new HttpParams();
+    params = params.set('pfad', relativerPfad);
 
-        const headers = new HttpHeaders().set('Accept', 'application/json');
+    return this.#httpClient.get<EmbeddableImageVorschau>(this.#url + '/v1', { headers: headers, params: params });
+  }
 
-        let params = new HttpParams();
-        params = params.set('pfad', relativerPfad);
+  createEmbeddableImage(requestDto: CreateEmbeddableImageRequestDto): Observable<EmbeddableImageResponseDto> {
+    const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        return this.#httpClient.get<EmbeddableImageVorschau>(this.#url + '/v1', { headers: headers, params: params });
-    }
+    return this.#httpClient.post<EmbeddableImageResponseDto>(this.#url + '/v1', requestDto, {
+      headers: headers,
+    });
+  }
 
-    createEmbeddableImage(requestDto: CreateEmbeddableImageRequestDto): Observable<EmbeddableImageResponseDto> {
+  replaceEmbeddableImage(requestDto: ReplaceEmbeddableImageRequestDto): Observable<EmbeddableImageResponseDto> {
+    const headers = new HttpHeaders().set('Accept', 'application/json');
 
-        const headers = new HttpHeaders().set('Accept', 'application/json');
-
-        return this.#httpClient.post<EmbeddableImageResponseDto>(this.#url + '/v1', requestDto, {
-            headers: headers
-        });
-    }
-
-    replaceEmbeddableImage(requestDto: ReplaceEmbeddableImageRequestDto): Observable<EmbeddableImageResponseDto> {
-
-        const headers = new HttpHeaders().set('Accept', 'application/json');
-
-        return this.#httpClient.put<EmbeddableImageResponseDto>(this.#url + '/v1', requestDto, {
-            headers: headers
-        });
-    }
+    return this.#httpClient.put<EmbeddableImageResponseDto>(this.#url + '/v1', requestDto, {
+      headers: headers,
+    });
+  }
 }

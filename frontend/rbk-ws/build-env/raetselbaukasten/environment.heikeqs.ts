@@ -12,7 +12,5 @@ export const environment = {
   baseUrl: '',
   withCredentials: true,
   assetsPath: '/raetselbaukasten/assets/',
-  providers: [
-    provideStoreDevtools({ maxAge: 25 , connectInZone: true})
-  ],
+  providers: [provideStoreDevtools({ maxAge: 25, connectInZone: true })],
 };

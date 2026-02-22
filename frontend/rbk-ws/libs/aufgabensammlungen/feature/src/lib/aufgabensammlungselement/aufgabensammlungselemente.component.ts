@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, inject, Input, Output, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  HostListener,
+  inject,
+  Input,
+  Output,
+  ViewChild,
+  CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { AufgabensammlungDetails, Aufgabensammlungselement } from '@rbk-ws/aufgabensammlungen/model';
@@ -9,20 +19,13 @@ import { Benutzerart } from '@rbk-ws/core/model';
 import { HoverDetailsDirective } from 'shared/directives';
 
 @Component({
-    selector: 'rbk-aufgabensammlungselement',
-    imports: [
-        CommonModule,
-        MatBadgeModule,
-        MatButtonModule,
-        MatTableModule,
-        HoverDetailsDirective
-    ],
-    templateUrl: './aufgabensammlungselemente.component.html',
-    styleUrls: ['./aufgabensammlungselemente.component.scss'],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  selector: 'rbk-aufgabensammlungselement',
+  imports: [CommonModule, MatBadgeModule, MatButtonModule, MatTableModule, HoverDetailsDirective],
+  templateUrl: './aufgabensammlungselemente.component.html',
+  styleUrls: ['./aufgabensammlungselemente.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AufgabensammlungselementeComponent implements AfterViewInit {
-
   @Input()
   aufgabensammlung!: AufgabensammlungDetails;
 
@@ -30,7 +33,7 @@ export class AufgabensammlungselementeComponent implements AfterViewInit {
   benutzerart!: Benutzerart;
 
   @ViewChild(MatTable)
-  table!: MatTable<Aufgabensammlungselement>
+  table!: MatTable<Aufgabensammlungselement>;
 
   // Declare height and width variables
   #scrWidth!: number;
@@ -56,17 +59,14 @@ export class AufgabensammlungselementeComponent implements AfterViewInit {
   }
 
   getDisplayedColumns(): string[] {
-
     if (this.aufgabensammlung.schreibgeschuetzt) {
       return ['schluessel', 'nummer', 'name'];
-
     } else {
       return ['schluessel', 'nummer', 'loesungsbuchstabe', 'name', 'edit', 'delete'];
     }
   }
 
   getHeaderSchluessel(): string {
-
     if (this.#scrWidth > 959) {
       return 'SCHLUESSEL';
     } else {

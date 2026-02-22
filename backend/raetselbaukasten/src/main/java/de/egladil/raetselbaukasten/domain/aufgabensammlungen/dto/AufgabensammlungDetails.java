@@ -70,6 +70,7 @@ public class AufgabensammlungDetails {
 
     @JsonProperty
     @Schema(description = "Zeigt an, ob die Person, die das Rätsel geladen hat, änderungsberechtigt ist.")
+    @Builder.Default
     private boolean schreibgeschuetzt = true; // erstmal immer schreibgeschuetzt. Beim Laden der Details wird
                                               // entschieden, ob es
                                               // durch den User

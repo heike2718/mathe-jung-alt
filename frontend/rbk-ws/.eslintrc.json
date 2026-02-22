@@ -42,13 +42,7 @@
               },
               {
                 "sourceTag": "type:api",
-                "onlyDependOnLibsWithTags": [
-                  "type:data",
-                  "type:model",
-                  "type:core:api",
-                  "type:core:model",
-                  "type:util"
-                ]
+                "onlyDependOnLibsWithTags": ["type:data", "type:model", "type:core:api", "type:core:model", "type:util"]
               },
               {
                 "sourceTag": "type:data",
@@ -72,12 +66,7 @@
               },
               {
                 "sourceTag": "type:core:data",
-                "onlyDependOnLibsWithTags": [
-                  "type:shared:ui",
-                  "type:shared:api",
-                  "type:core:model",
-                  "type:util"
-                ]
+                "onlyDependOnLibsWithTags": ["type:shared:ui", "type:shared:api", "type:core:model", "type:util"]
               },
               {
                 "sourceTag": "type:shared:ui",
@@ -91,11 +80,7 @@
               },
               {
                 "sourceTag": "type:shared:http",
-                "onlyDependOnLibsWithTags": [
-                  "type:config",
-                  "type:util",
-                  "type:shared:api"
-                ]
+                "onlyDependOnLibsWithTags": ["type:config", "type:util", "type:shared:api"]
               },
               {
                 "sourceTag": "type:model",
@@ -126,16 +111,16 @@
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nx/typescript"],
       "rules": {
-        "@typescript-eslint/no-extra-semi": "error",
-        "no-extra-semi": "off"
+        "semi": ["error", "always"],
+        "no-extra-semi": "error"
       }
     },
     {
       "files": ["*.js", "*.jsx"],
       "extends": ["plugin:@nx/javascript"],
       "rules": {
-        "@typescript-eslint/no-extra-semi": "error",
-        "no-extra-semi": "off"
+        "semi": ["error", "always"],
+        "no-extra-semi": "error"
       }
     },
     {

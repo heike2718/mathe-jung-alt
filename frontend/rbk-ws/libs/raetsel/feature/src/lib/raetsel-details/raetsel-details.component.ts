@@ -28,7 +28,7 @@ import {
   Schriftgroesse,
   schriftgroessenSelectInput,
   SelectGeneratorParametersUIModel,
-  User
+  User,
 } from '@rbk-ws/core/model';
 import { EmbeddableImagesFacade } from '@rbk-ws/embeddable-images/api';
 import { Configuration } from '@rbk-ws/shared/config';
@@ -40,32 +40,31 @@ import { LinkedAufgabensammlungenComponent } from '../linked-aufgabensammlungen/
 import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
-    selector: 'rbk-raetsel-details',
-    imports: [
-        CommonModule,
-        CdkAccordionModule,
-        FormsModule,
-        MatExpansionModule,
-        MatBadgeModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatChipsModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatListModule,
-        MatTooltipModule,
-        TextFieldModule,
-        FrageLoesungImagesComponent,
-        AntwortvorschlagComponent,
-        EmbeddableImageVorschauComponent,
-        EmbeddableImageInfoComponent,
-        LinkedAufgabensammlungenComponent
-    ],
-    templateUrl: './raetsel-details.component.html',
-    styleUrls: ['./raetsel-details.component.scss']
+  selector: 'rbk-raetsel-details',
+  imports: [
+    CommonModule,
+    CdkAccordionModule,
+    FormsModule,
+    MatExpansionModule,
+    MatBadgeModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatListModule,
+    MatTooltipModule,
+    TextFieldModule,
+    FrageLoesungImagesComponent,
+    AntwortvorschlagComponent,
+    EmbeddableImageVorschauComponent,
+    EmbeddableImageInfoComponent,
+    LinkedAufgabensammlungenComponent,
+  ],
+  templateUrl: './raetsel-details.component.html',
+  styleUrls: ['./raetsel-details.component.scss'],
 })
 export class RaetselDetailsComponent implements OnInit, OnDestroy {
-
   raetselFacade = inject(RaetselFacade);
   aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
   #authFacade = inject(AuthFacade);
@@ -86,23 +85,25 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   #selectedAufgabensammlung: AufgabensammlungDetails | undefined;
 
-  ngOnInit(): void {  
+  ngOnInit(): void {
+    this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$
+      .pipe(
+        tap((details: RaetselDetails) => {
+          this.#raetselDetails = details;
+          this.freigegeben = this.#raetselDetails.freigegeben;
 
-    this.#raetselDetailsSubscription = this.raetselFacade.raetselDetails$.pipe(
-      tap((details: RaetselDetails) => {
-        this.#raetselDetails = details;
-        this.freigegeben = this.#raetselDetails.freigegeben;
+          if (this.#raetselDetails) {
+            this.raetselFacade.findLinkedAufgabensammlungen(this.#raetselDetails.id);
+          }
+        })
+      )
+      .subscribe();
 
-        if (this.#raetselDetails) {
-          this.raetselFacade.findLinkedAufgabensammlungen(this.#raetselDetails.id);
-        }
-      })
-    ).subscribe();
+    this.#aufgabensammlungDetailsSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$.subscribe(
+      aufgabensammlung => (this.#selectedAufgabensammlung = aufgabensammlung)
+    );
 
-    this.#aufgabensammlungDetailsSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$
-      .subscribe((aufgabensammlung) => this.#selectedAufgabensammlung = aufgabensammlung);
-
-      this.#userSubscription = this.#authFacade.user$.subscribe((user) => this.user = user);
+    this.#userSubscription = this.#authFacade.user$.subscribe(user => (this.user = user));
   }
 
   ngOnDestroy(): void {
@@ -119,13 +120,11 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   printPNG(): void {
-
     const outputformat: OutputFormat = 'PNG';
     this.#openPrintDialog(outputformat);
   }
 
   printPDF(): void {
-
     const outputformat: OutputFormat = 'PDF';
     this.#openPrintDialog(outputformat);
   }
@@ -135,7 +134,6 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
   }
 
   gotoAufgabensammlung(): void {
-
     if (this.#selectedAufgabensammlung) {
       const trefferitem: AufgabensammlungTrefferItem = {
         anzahlElemente: this.#selectedAufgabensammlung.elemente.length,
@@ -146,22 +144,24 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
         referenztyp: this.#selectedAufgabensammlung.referenztyp,
         schwierigkeitsgrad: this.#selectedAufgabensammlung.schwierigkeitsgrad,
         freigegeben: this.#selectedAufgabensammlung.freigegeben,
-        privat: this.#selectedAufgabensammlung.privat
+        privat: this.#selectedAufgabensammlung.privat,
       };
-      this.aufgabensammlungenFacade.selectAufgabensammlung(trefferitem.id)
+      this.aufgabensammlungenFacade.selectAufgabensammlung(trefferitem.id);
     } else {
       this.#router.navigateByUrl('aufgabensammlungen');
     }
   }
 
   generierenDiabled(): boolean {
-    const mbeddableImageInfosOhneFile: EmbeddableImageInfo[] = this.#raetselDetails.embeddableImageInfos.filter(gi => !gi.existiert);
+    const mbeddableImageInfosOhneFile: EmbeddableImageInfo[] = this.#raetselDetails.embeddableImageInfos.filter(
+      gi => !gi.existiert
+    );
     return mbeddableImageInfosOhneFile.length > 0;
   }
 
   downloadLatexLogs(): void {
     if (this.#raetselDetails) {
-      this.raetselFacade.downloadLatexLogs(this.#raetselDetails.schluessel)
+      this.raetselFacade.downloadLatexLogs(this.#raetselDetails.schluessel);
     }
   }
 
@@ -179,11 +179,10 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
   aufgabenammlungDetailsClicked($event: LinkedAufgabensammlung): void {
     console.log('jetzt navigieren zu Aufgabensammlung ' + $event.name);
-    this.aufgabensammlungenFacade.selectAufgabensammlung($event.id)
+    this.aufgabensammlungenFacade.selectAufgabensammlung($event.id);
   }
 
   #openPrintDialog(outputformat: OutputFormat): void {
-
     const dialogData: SelectGeneratorParametersUIModel = {
       titel: outputformat + ' generieren',
       showVerwendungszwecke: false,
@@ -195,27 +194,30 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
       selectedFontName: undefined,
       schriftgroessen: schriftgroessenSelectInput,
       selectedSchriftgroesse: undefined,
-      submitLabel: 'generieren'
+      submitLabel: 'generieren',
     };
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogComponent, {
       height: 'auto',
       width: '700px',
-      data: dialogData
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
       if (result) {
-
         let layout: LaTeXLayoutAntwortvorschlaege = 'NOOP';
 
         if (dialogData.selectedLayoutAntwortvorschlaege) {
-
           switch (dialogData.selectedLayoutAntwortvorschlaege) {
-            case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
-            case 'Buchstaben': layout = 'BUCHSTABEN'; break;
-            case 'Liste': layout = 'DESCRIPTION'; break;
+            case 'Ankreuztabelle':
+              layout = 'ANKREUZTABELLE';
+              break;
+            case 'Buchstaben':
+              layout = 'BUCHSTABEN';
+              break;
+            case 'Liste':
+              layout = 'DESCRIPTION';
+              break;
           }
         }
 
@@ -224,16 +226,26 @@ export class RaetselDetailsComponent implements OnInit, OnDestroy {
 
         if (dialogData.selectedFontName) {
           switch (dialogData.selectedFontName) {
-            case 'Druckschrift (Leseanfänger)': font = 'DRUCK_BY_WOK'; break;
-            case 'Fibel Nord': font = 'FIBEL_NORD'; break;
-            case 'Fibel Süd': font = 'FIBEL_SUED'; break;
+            case 'Druckschrift (Leseanfänger)':
+              font = 'DRUCK_BY_WOK';
+              break;
+            case 'Fibel Nord':
+              font = 'FIBEL_NORD';
+              break;
+            case 'Fibel Süd':
+              font = 'FIBEL_SUED';
+              break;
           }
         }
 
         if (dialogData.selectedSchriftgroesse) {
           switch (dialogData.selectedSchriftgroesse) {
-            case 'sehr groß': schriftgroesse = 'HUGE'; break;
-            case 'groß': schriftgroesse = 'LARGE'; break;
+            case 'sehr groß':
+              schriftgroesse = 'HUGE';
+              break;
+            case 'groß':
+              schriftgroesse = 'LARGE';
+              break;
           }
         }
 

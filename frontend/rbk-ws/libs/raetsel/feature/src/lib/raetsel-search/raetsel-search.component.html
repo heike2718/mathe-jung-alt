@@ -1,79 +1,88 @@
 <h1>Rätsel</h1>
 
 @if (isAutor) {
-<div class="grid-container-1">
-    <rbk-raetsel-suchfilter-admin [SelectItemsComponentModel]="SelectItemsComponentModel"
-        (inputChanged)="onSuchfilterSuchstringChanged($event)"
-        (selectableItemsChanged)="onSelectItemsComponentModelChanged($event)"></rbk-raetsel-suchfilter-admin>
+  <div class="grid-container-1">
+    <rbk-raetsel-suchfilter-admin
+      [SelectItemsComponentModel]="SelectItemsComponentModel"
+      (inputChanged)="onSuchfilterSuchstringChanged($event)"
+      (selectableItemsChanged)="onSelectItemsComponentModelChanged($event)"></rbk-raetsel-suchfilter-admin>
 
-    <mat-checkbox [(ngModel)]="modeFullTextSearchUnion" (change)="onSuchmodusChanged($event.checked)">Volltextsuche mit
-        OR? (sonst AND)</mat-checkbox>
-    <mat-checkbox [(ngModel)]="searchModeForDescriptorsLike" (change)="onSuchmodusChanged($event.checked)">Suche nach
-        Deskriptoren mit LIKE? (sonst NOT LIKE)</mat-checkbox>
+    <mat-checkbox [(ngModel)]="modeFullTextSearchUnion" (change)="onSuchmodusChanged($event.checked)"
+      >Volltextsuche mit OR? (sonst AND)</mat-checkbox
+    >
+    <mat-checkbox [(ngModel)]="searchModeForDescriptorsLike" (change)="onSuchmodusChanged($event.checked)"
+      >Suche nach Deskriptoren mit LIKE? (sonst NOT LIKE)</mat-checkbox
+    >
 
-    <p>Suchkriterien: {{suchfilter | json}}</p>
-</div>
+    <p>Suchkriterien: {{ suchfilter | json }}</p>
+  </div>
 } @else {
-    <h2>Wählen Sie ein oder mehrere Tags, um nach Rätseln zu suchen.</h2>
-<div class="grid-container-1">
-    <rbk-select-items [model]="SelectItemsComponentModel"
-        (modelChanged)="onSelectItemsComponentModelChanged($event)"></rbk-select-items>
-</div>
+  <h2>Wählen Sie ein oder mehrere Tags, um nach Rätseln zu suchen.</h2>
+  <div class="grid-container-1">
+    <rbk-select-items
+      [model]="SelectItemsComponentModel"
+      (modelChanged)="onSelectItemsComponentModelChanged($event)"></rbk-select-items>
+  </div>
 }
 
 <div class="button-container mt-2 mb-2">
-    <button mat-raised-button color="primary" (click)="neueSuche()" [disabled]="buttonNeueSucheDisabled()">neue
-        Suche</button>
+  <button mat-raised-button color="primary" (click)="neueSuche()" [disabled]="buttonNeueSucheDisabled()">
+    neue Suche
+  </button>
 
-    @if (isAutor) {
-    <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues
-        Rätsel</button>
-    } @else {
+  @if (isAutor) {
+    <button mat-raised-button color="primary" (click)="neuesRaetsel()">neues Rätsel</button>
+  } @else {
     <div>Bitte nehmen Sie Kontakt mit mir auf, wenn Sie Autor:in werden und selbst Rätsel erstellen möchten.</div>
-    }
+  }
 </div>
 
-<mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[100,150,200]" showFirstLastButtons></mat-paginator>
+<mat-paginator [length]="anzahlRaetsel" [pageSizeOptions]="[100, 150, 200]" showFirstLastButtons></mat-paginator>
 
-<mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortActive="schluessel" matSortDirection="asc"
-    matSortDisableClear>
+<mat-table
+  [dataSource]="dataSource"
+  class="mat-elevation-z8"
+  matSort
+  matSortActive="schluessel"
+  matSortDirection="asc"
+  matSortDisableClear>
+  <ng-container matColumnDef="schluessel">
+    <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell__2">{{
+      getHeaderSchluessel()
+    }}</mat-header-cell>
+    <mat-cell *matCellDef="let raetsel" class="mat-cell__2" [mjaHoverDetails]="raetsel.vorschautext">
+      @if (isAutor) {
+        <div
+          [ngClass]="{
+            'badge-green': raetsel.herkunft === 'EIGENKREATION',
+            'badge-blue': raetsel.herkunft === 'ADAPTION',
+            'badge-orange': raetsel.herkunft === 'ZITAT',
+          }">
+          {{ raetsel.schluessel }}
+        </div>
+      } @else {
+        {{ raetsel.schluessel }}
+      }
+    </mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="schluessel">
-        <mat-header-cell *matHeaderCellDef mat-sort-header
-            class="mat-header-cell__2">{{getHeaderSchluessel()}}</mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" class="mat-cell__2"  [mjaHoverDetails]="raetsel.vorschautext">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__3">Name</mat-header-cell>
+    <mat-cell *matCellDef="let raetsel" class="mat-cell__3">
+      {{ raetsel.name }}
+    </mat-cell>
+  </ng-container>
 
+  <ng-container matColumnDef="kommentar">
+    <mat-header-cell *matHeaderCellDef class="mat-header-cell__4">Kommentar</mat-header-cell>
+    <mat-cell *matCellDef="let raetsel" class="mat-cell__4"> {{ raetsel.kommentar }} </mat-cell>
+  </ng-container>
 
-            @if (isAutor) {
-            <div [ngClass]="{
-                    'badge-green': raetsel.herkunft === 'EIGENKREATION',
-                    'badge-blue': raetsel.herkunft === 'ADAPTION',
-                    'badge-orange': raetsel.herkunft === 'ZITAT'
-                }">
-                {{raetsel.schluessel}}
-            </div>
-            } @else {
-            {{raetsel.schluessel}}
-            }
-
-        </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef class="mat-header-cell__3">Name</mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" class="mat-cell__3">
-            {{raetsel.name}}
-        </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="kommentar">
-        <mat-header-cell *matHeaderCellDef class="mat-header-cell__4">Kommentar</mat-header-cell>
-        <mat-cell *matCellDef="let raetsel" class="mat-cell__4"> {{raetsel.kommentar}} </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: getDisplayedColumns()" [ngClass]="{
-        'bg-beige': !row.freigegeben
-      }" (click)="onRowClicked(row)"></mat-row>
-
+  <mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></mat-header-row>
+  <mat-row
+    *matRowDef="let row; columns: getDisplayedColumns()"
+    [ngClass]="{
+      'bg-beige': !row.freigegeben,
+    }"
+    (click)="onRowClicked(row)"></mat-row>
 </mat-table>

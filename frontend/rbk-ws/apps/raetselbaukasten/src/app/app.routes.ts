@@ -12,20 +12,15 @@ export const appRoutes: Routes = [
       },
       {
         path: 'raetsel',
-        loadChildren: () =>
-          import('@rbk-ws/raetsel/feature').then((m) => m.raetselRoutes),
+        loadChildren: () => import('@rbk-ws/raetsel/feature').then(m => m.raetselRoutes),
       },
       {
         path: 'aufgabensammlungen',
-        loadChildren: () =>
-          import('@rbk-ws/aufgabensammlungen/feature').then(
-            (m) => m.aufgabensammlungenRoutes,
-          ),
+        loadChildren: () => import('@rbk-ws/aufgabensammlungen/feature').then(m => m.aufgabensammlungenRoutes),
       },
       {
         path: 'medien',
-        loadChildren: () =>
-          import('@rbk-ws/medien/feature').then((m) => m.medienRoutes),
+        loadChildren: () => import('@rbk-ws/medien/feature').then(m => m.medienRoutes),
       },
     ],
   },

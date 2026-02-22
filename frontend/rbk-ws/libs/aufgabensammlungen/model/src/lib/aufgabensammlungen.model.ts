@@ -1,10 +1,9 @@
 import { Herkunftstyp, Referenztyp, Schwierigkeitsgrad } from '@rbk-ws/core/model';
 
-
 export interface GuiRefereztyp {
   readonly id: Referenztyp;
   readonly label: string;
-};
+}
 
 export const initialGuiReferenztyp: GuiRefereztyp = { id: 'NOOP', label: '' };
 
@@ -18,7 +17,7 @@ export interface AufgabensammlungBasisdaten {
   readonly freigegeben: boolean;
   readonly privat: boolean;
   readonly geaendertDurch: string | undefined;
-};
+}
 
 export interface AufgabensammlungTrefferItem {
   readonly id: string;
@@ -30,12 +29,12 @@ export interface AufgabensammlungTrefferItem {
   readonly privat: boolean;
   readonly geaendertDurch: string | undefined;
   readonly anzahlElemente: number;
-};
+}
 
 export interface AufgabensammlungenTreffer {
   readonly trefferGesamt: number;
   readonly items: AufgabensammlungTrefferItem[];
-};
+}
 
 export interface AufgabensammlungenSuchparameter {
   name: string | null;
@@ -43,7 +42,7 @@ export interface AufgabensammlungenSuchparameter {
   referenztyp: Referenztyp | null;
   referenz: string | null;
   sortAttribute: string;
-};
+}
 
 export const initialAufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter = {
   name: null,
@@ -62,14 +61,14 @@ export interface EditAufgabensammlungPayload {
   readonly referenz: string | undefined;
   readonly freigegeben: boolean;
   readonly privat: boolean;
-};
+}
 
 export interface EditAufgabensammlungselementPayload {
   readonly id: string;
   readonly nummer: string;
   readonly punkte: number;
   readonly raetselSchluessel: string;
-};
+}
 
 export interface Aufgabensammlungselement extends EditAufgabensammlungselementPayload {
   readonly name: string;
@@ -77,13 +76,13 @@ export interface Aufgabensammlungselement extends EditAufgabensammlungselementPa
   readonly loesungsbuchstabe: string | undefined;
   readonly freigegeben: boolean;
   readonly vorschautext: string;
-};
+}
 
 export interface AufgabensammlungDetails extends EditAufgabensammlungPayload {
   readonly elemente: Aufgabensammlungselement[];
   readonly geaendertDurch: string;
   readonly schreibgeschuetzt: boolean;
-};
+}
 
 export const initialAufgabensammlungDetails: AufgabensammlungDetails = {
   id: 'neu',
@@ -96,12 +95,12 @@ export const initialAufgabensammlungDetails: AufgabensammlungDetails = {
   referenz: undefined,
   referenztyp: 'NOOP',
   schreibgeschuetzt: false,
-  schwierigkeitsgrad: 'NOOP'
+  schwierigkeitsgrad: 'NOOP',
 };
 
-export function isInitialAufgabensammlungenSuchparameter(aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter): boolean {
-
-
+export function isInitialAufgabensammlungenSuchparameter(
+  aufgabensammlungenSuchparameter: AufgabensammlungenSuchparameter
+): boolean {
   if (aufgabensammlungenSuchparameter.name !== initialAufgabensammlungenSuchparameter.name) {
     return false;
   }
@@ -111,7 +110,9 @@ export function isInitialAufgabensammlungenSuchparameter(aufgabensammlungenSuchp
   if (aufgabensammlungenSuchparameter.referenztyp !== initialAufgabensammlungenSuchparameter.referenztyp) {
     return false;
   }
-  if (aufgabensammlungenSuchparameter.schwierigkeitsgrad !== initialAufgabensammlungenSuchparameter.schwierigkeitsgrad) {
+  if (
+    aufgabensammlungenSuchparameter.schwierigkeitsgrad !== initialAufgabensammlungenSuchparameter.schwierigkeitsgrad
+  ) {
     return false;
   }
 
@@ -123,7 +124,6 @@ export function isInitialAufgabensammlungenSuchparameter(aufgabensammlungenSuchp
 // ////////////////////////////////////////////////////////////////////////////////////
 
 export class GuiReferenztypenMap {
-
   #referenztypen: Map<Referenztyp, string> = new Map();
   #referenztypenInvers: Map<string, Referenztyp> = new Map();
 
@@ -138,13 +138,11 @@ export class GuiReferenztypenMap {
   }
 
   public getReferenztypOfLabel(label: string): Referenztyp {
-
     const value = this.#referenztypenInvers.get(label);
     return value ? value : 'NOOP';
   }
 
   public getGuiRefereztyp(refTyp: Referenztyp): GuiRefereztyp {
-
     if (this.#referenztypen.has(refTyp)) {
       const label = this.#referenztypen.get(refTyp);
 
@@ -153,14 +151,12 @@ export class GuiReferenztypenMap {
       } else {
         return initialGuiReferenztyp;
       }
-
     }
 
     return initialGuiReferenztyp;
   }
 
   public toGuiArray(): GuiRefereztyp[] {
-
     const result: GuiRefereztyp[] = [];
     this.#referenztypen.forEach((l: string, key: Referenztyp) => {
       result.push({ id: key, label: l });
@@ -170,25 +166,21 @@ export class GuiReferenztypenMap {
   }
 
   public getLabelsSorted(): string[] {
-
     const result: string[] = [];
 
     this.toGuiArray().forEach(element => result.push(element.label));
     return result;
   }
-
-
-};
+}
 
 export interface GuiSchwierigkeitsgrad {
   readonly id: Schwierigkeitsgrad;
   readonly label: string;
-};
+}
 
 export const initialGuiSchwierigkeitsgrad: GuiSchwierigkeitsgrad = { id: 'NOOP', label: '' };
 
 export class GuiSchwierigkeitsgradeMap {
-
   #schwierigkeitsgrade: Map<Schwierigkeitsgrad, string> = new Map();
   #schwierigkeitsgradeInvers: Map<string, Schwierigkeitsgrad> = new Map();
 
@@ -225,15 +217,12 @@ export class GuiSchwierigkeitsgradeMap {
   }
 
   public getSchwierigkeitsgradOfLabel(label: string): Schwierigkeitsgrad {
-
     const value: Schwierigkeitsgrad | undefined = this.#schwierigkeitsgradeInvers.get(label);
     return value ? value : 'NOOP';
   }
 
   public getGuiSchwierigkeitsgrade(refTyp: Schwierigkeitsgrad): GuiSchwierigkeitsgrad {
-
     if (this.#schwierigkeitsgrade.has(refTyp)) {
-
       const label = this.#schwierigkeitsgrade.get(refTyp);
 
       if (label) {
@@ -247,7 +236,6 @@ export class GuiSchwierigkeitsgradeMap {
   }
 
   public toGuiArray(): GuiSchwierigkeitsgrad[] {
-
     const result: GuiSchwierigkeitsgrad[] = [];
     this.#schwierigkeitsgrade.forEach((l: string, key: Schwierigkeitsgrad) => {
       result.push({ id: key, label: l });
@@ -257,7 +245,6 @@ export class GuiSchwierigkeitsgradeMap {
   }
 
   public getLabelsSorted(): string[] {
-
     const result: string[] = [];
 
     this.toGuiArray().forEach(element => result.push(element.label));

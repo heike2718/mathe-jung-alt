@@ -13,24 +13,23 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { RaetselFacade } from '@rbk-ws/raetsel/api';
 
 @Component({
-    selector: 'rbk-medium-details',
-    imports: [
-        CommonModule,
-        FormsModule,
-        MatBadgeModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatTooltipModule,
-        LinkedRaetselComponent
-    ],
-    templateUrl: './medium-details.component.html',
-    styleUrl: './medium-details.component.scss'
+  selector: 'rbk-medium-details',
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatBadgeModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    LinkedRaetselComponent,
+  ],
+  templateUrl: './medium-details.component.html',
+  styleUrl: './medium-details.component.scss',
 })
 export class MediumDetailsComponent implements OnInit, OnDestroy {
-
   medienFacade = inject(MedienFacade);
 
-  authFacade = inject(AuthFacade);  
+  authFacade = inject(AuthFacade);
 
   owner = false;
 
@@ -39,7 +38,7 @@ export class MediumDetailsComponent implements OnInit, OnDestroy {
   #mediumSubscription = new Subscription();
 
   ngOnInit(): void {
-    this.#mediumSubscription = this.medienFacade.selectedMediumDetails$.subscribe((medium) => {
+    this.#mediumSubscription = this.medienFacade.selectedMediumDetails$.subscribe(medium => {
       if (medium && medium.ownMedium) {
         this.owner = true;
       }

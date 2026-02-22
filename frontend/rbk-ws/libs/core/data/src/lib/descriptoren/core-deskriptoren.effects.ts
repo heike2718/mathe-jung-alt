@@ -7,22 +7,21 @@ import { switchMap, map } from 'rxjs';
 import { coreDeskriptorenActions } from './core-deskriptoren.actions';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class CoreDeskriptorUIEffects {
+  #actions = inject(Actions);
+  #httpClient = inject(HttpClient);
 
-    #actions = inject(Actions);
-    #httpClient = inject(HttpClient);
-
-    loadDeskriptoren$ = createEffect(() => {
-
-        return this.#actions.pipe(
-            ofType(coreDeskriptorenActions.lOAD_DESKRIPTOREN),
-            switchMap(() =>
-                this.#httpClient.get<DeskriptorUI[]>('/raetselbaukasten/api/deskriptoren/v2', {context: new HttpContext().set(SILENT_LOAD_CONTEXT, true)})
-            ),
-            map((deskriptoren: DeskriptorUI[]) => coreDeskriptorenActions.cORE_DESKRIPTOREN_LOADED({ deskriptoren }))
-        )
-    });
-
+  loadDeskriptoren$ = createEffect(() => {
+    return this.#actions.pipe(
+      ofType(coreDeskriptorenActions.lOAD_DESKRIPTOREN),
+      switchMap(() =>
+        this.#httpClient.get<DeskriptorUI[]>('/raetselbaukasten/api/deskriptoren/v2', {
+          context: new HttpContext().set(SILENT_LOAD_CONTEXT, true),
+        })
+      ),
+      map((deskriptoren: DeskriptorUI[]) => coreDeskriptorenActions.cORE_DESKRIPTOREN_LOADED({ deskriptoren }))
+    );
+  });
 }

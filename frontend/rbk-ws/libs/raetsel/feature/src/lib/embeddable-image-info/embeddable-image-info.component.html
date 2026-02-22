@@ -1,20 +1,23 @@
 @if (devMode) {
-<span class="hint">embeddableImageInfo</span>
+  <span class="hint">embeddableImageInfo</span>
 }
 
 @if (embeddableImageInfo.existiert) {
-<span>{{embeddableImageInfo.pfad}} - {{embeddableImageInfo.textart}}</span>
+  <span>{{ embeddableImageInfo.pfad }} - {{ embeddableImageInfo.textart }}</span>
 
-<button matTooltip="Vorschau laden oder Grafikdatei ersetzen" aria-label="Vorschau laden oder Grafikdatei ersetzen"
-    mat-icon-button (click)="expand()">
+  <button
+    matTooltip="Vorschau laden oder Grafikdatei ersetzen"
+    aria-label="Vorschau laden oder Grafikdatei ersetzen"
+    mat-icon-button
+    (click)="expand()">
     <mat-icon>image</mat-icon>
-</button>
+  </button>
 }
 
 @if (!embeddableImageInfo.existiert) {
-<span class="notFound">{{embeddableImageInfo.pfad}} - {{embeddableImageInfo.textart}}</span>
+  <span class="notFound">{{ embeddableImageInfo.pfad }} - {{ embeddableImageInfo.textart }}</span>
 
-<button matTooltip="Grafikdatei hochladen" aria-label="Grafikdatei hochladen" mat-icon-button (click)="expand()">
+  <button matTooltip="Grafikdatei hochladen" aria-label="Grafikdatei hochladen" mat-icon-button (click)="expand()">
     <mat-icon>warning</mat-icon>
-</button>
+  </button>
 }

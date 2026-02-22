@@ -1,141 +1,130 @@
 <div class="mja-container">
-    @if (aufgabensammlungenFacade.editorContent$ | async) {
-
+  @if (aufgabensammlungenFacade.editorContent$ | async) {
     <mat-card>
-        <mat-card-header>
-            <mat-card-title>Aufgabensammlung Basisdaten</mat-card-title>
-        </mat-card-header>
+      <mat-card-header>
+        <mat-card-title>Aufgabensammlung Basisdaten</mat-card-title>
+      </mat-card-header>
 
-        <mat-card-content>
-            <form [formGroup]="form" novalidate>
+      <mat-card-content>
+        <form [formGroup]="form" novalidate>
+          <div class="mja-form">
+            <!-- Name -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput maxlength="100" formControlName="name" #nameInput />
+                <mat-hint>für Übersicht und Quiz</mat-hint>
+                <mat-hint align="end">{{ nameInput.value.length }}/100</mat-hint>
 
-                <div class="mja-form">
+                @if (aufgabensammlungDataError('name', 'required')) {
+                  <mat-error>Name ist erforderlich</mat-error>
+                }
 
-                    <!-- Name -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Name</mat-label>
-                            <input matInput maxlength="100" formControlName="name" #nameInput>
-                            <mat-hint>für Übersicht und Quiz</mat-hint>
-                            <mat-hint align="end">{{nameInput.value.length}}/100</mat-hint>
+                @if (aufgabensammlungDataError('name', 'maxLength')) {
+                  <mat-error>maximal 100 Zeichen</mat-error>
+                }
+              </mat-form-field>
+            </div>
 
-                            @if (aufgabensammlungDataError('name', 'required')) {
-                            <mat-error>Name ist erforderlich</mat-error>
-                            }
+            <!-- Kommentar -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Kommentar</mat-label>
+                <input matInput maxlength="200" formControlName="kommentar" #kommentarInput />
+                <mat-hint align="end">{{ kommentarInput.value.length }}/200</mat-hint>
+                @if (aufgabensammlungDataError('kommentar', 'maxLength')) {
+                  <mat-error>maximal 100 Zeichen</mat-error>
+                }
+              </mat-form-field>
+            </div>
 
-                            @if (aufgabensammlungDataError('name', 'maxLength')) {
-                            <mat-error>maximal 100 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
+            <!-- Status -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Status</mat-label>
+                <select matNativeControl formControlName="status" #statusInput>
+                  @for (status of selectStatusInput; track $index) {
+                    <option [value]="status">{{ status }}</option>
+                  }
+                </select>
+              </mat-form-field>
+            </div>
 
-                    <!-- Kommentar -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Kommentar</mat-label>
-                            <input matInput maxlength="200" formControlName="kommentar" #kommentarInput>
-                            <mat-hint align="end">{{kommentarInput.value.length}}/200</mat-hint>
-                            @if (aufgabensammlungDataError('kommentar', 'maxLength')) {
-                            <mat-error>maximal 100 Zeichen</mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
+            <!-- Schwierigkeitsgrade -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Level</mat-label>
+                <select matNativeControl formControlName="schwierigkeitsgrad" #schwierigkeitsgradInput>
+                  @for (level of selectSchwierigkeitsgradeInput; track $index) {
+                    <option [value]="level">
+                      {{ level }}
+                    </option>
+                  }
+                </select>
+              </mat-form-field>
+            </div>
 
-                    <!-- Status -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Status</mat-label>
-                            <select matNativeControl formControlName="status" #statusInput>
+            <!-- Referenztypen -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Referenztyp</mat-label>
+                <select matNativeControl formControlName="referenztyp" #referenztypInput>
+                  @for (reftyp of selectReferenztypenSelectContent; track $index) {
+                    <option [value]="reftyp">
+                      {{ reftyp }}
+                    </option>
+                  }
+                </select>
+              </mat-form-field>
+            </div>
 
-                                @for (status of selectStatusInput; track $index) {
-                                <option [value]="status">{{status}}
-                                </option>
-                                }
-                            </select>
-                        </mat-form-field>
-                    </div>
+            <!-- Referenz -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>Referenz</mat-label>
+                <input matInput maxlength="36" formControlName="referenz" #referenzInput />
+                <mat-hint>Referenz auf ID im alten Aufgabenarchiv. Pflicht, wenn Referenztyp gewählt</mat-hint>
+                <mat-hint align="end">{{ referenzInput.value.length }}/36</mat-hint>
+              </mat-form-field>
+            </div>
+            <!-- ID -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>ID</mat-label>
+                <input matInput formControlName="id" #idInput [readonly]="true" />
+              </mat-form-field>
+            </div>
 
-                    <!-- Schwierigkeitsgrade -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Level</mat-label>
-                            <select matNativeControl formControlName="schwierigkeitsgrad" #schwierigkeitsgradInput>
-                                @for (level of selectSchwierigkeitsgradeInput; track $index) {
-                                <option [value]="level">
-                                    {{level}}</option>
-                                }
-                            </select>
-                        </mat-form-field>
-                    </div>
+            <!-- user -->
+            <div class="mb-2">
+              <mat-form-field>
+                <mat-label>geändert durch</mat-label>
+                <input matInput formControlName="user" #userInput [readonly]="true" />
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" [disabled]="formInvalid()" (click)="submit()">speichern</button>
+        <button mat-raised-button color="primary" (click)="cancelEdit()">abbrechen (Details)</button>
+        <button mat-raised-button color="primary" (click)="gotoUebersicht()">abbrechen (Übersicht)</button>
+      </mat-card-actions>
 
-                    <!-- Referenztypen -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Referenztyp</mat-label>
-                            <select matNativeControl formControlName="referenztyp" #referenztypInput>
-                                @for (reftyp of selectReferenztypenSelectContent; track $index) {
-                                <option [value]="reftyp">
-                                    {{reftyp}}
-                                </option>
-                                }
-                            </select>
-                        </mat-form-field>
-                    </div>
-
-                    <!-- Referenz -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>Referenz</mat-label>
-                            <input matInput maxlength="36" formControlName="referenz" #referenzInput>
-                            <mat-hint>Referenz auf ID im alten Aufgabenarchiv. Pflicht, wenn Referenztyp
-                                gewählt</mat-hint>
-                            <mat-hint align="end">{{referenzInput.value.length}}/36</mat-hint>
-                        </mat-form-field>
-                    </div>
-                    <!-- ID -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>ID</mat-label>
-                            <input matInput formControlName="id" #idInput [readonly]="true">
-                        </mat-form-field>
-                    </div>
-
-                    <!-- user -->
-                    <div class="mb-2">
-                        <mat-form-field>
-                            <mat-label>geändert durch</mat-label>
-                            <input matInput formControlName="user" #userInput [readonly]="true">
-                        </mat-form-field>
-                    </div>
-
-                </div>
-            </form>
-        </mat-card-content>
-        <mat-card-actions>
-            <button mat-raised-button color="primary" [disabled]="formInvalid()" (click)="submit()">speichern
-            </button>
-            <button mat-raised-button color="primary" (click)="cancelEdit()">abbrechen
-                (Details)</button>
-            <button mat-raised-button color="primary" (click)="gotoUebersicht()">abbrechen
-                (Übersicht)</button>
-        </mat-card-actions>
-
-        @if (!form.valid) {
+      @if (!form.valid) {
         <mat-card-footer>
-            <mat-error>
-                Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
-                Pflichtangaben und so.
-            </mat-error>
+          <mat-error>
+            Tja, das kann so noch nicht gespeichert werden. Es gibt noch Validierungsfehler, z.B. fehlende
+            Pflichtangaben und so.
+          </mat-error>
         </mat-card-footer>
-        }
-
+      }
     </mat-card>
-
-    } @else {
+  } @else {
     <h2>Aufgabensammlung anlegen oder ändern</h2>
     <p>keine Aufgabensammlung ausgewählt</p>
     <div>
-        <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
+      <button mat-raised-button color="primary" (click)="gotoUebersicht()">zur Übersicht</button>
     </div>
-    }
+  }
 </div>

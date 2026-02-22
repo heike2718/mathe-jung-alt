@@ -1,12 +1,12 @@
-<h2>{{titel}}</h2>
+<h2>{{ titel }}</h2>
 @if (devMode) {
-<div class="hint">file-info.component</div>
+  <div class="hint">file-info.component</div>
 }
 
 @if (beschreibung) {
-<div class="hint">{{beschreibung}}</div>
+  <div class="hint">{{ beschreibung }}</div>
 }
 
 <div class="row mt-3">
-    <p>{{fileName}} ({{fileSize}})</p>
+  <p>{{ fileName }} ({{ fileSize }})</p>
 </div>

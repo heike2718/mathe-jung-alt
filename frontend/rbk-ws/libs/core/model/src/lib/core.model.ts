@@ -25,7 +25,7 @@ export interface QuelleDto {
   pfad: string | undefined;
   person: string | undefined;
   mediumUuid: string | undefined;
-};
+}
 
 export const initialQuelleDto: QuelleDto = {
   id: 'neu',
@@ -37,92 +37,92 @@ export const initialQuelleDto: QuelleDto = {
   seite: undefined,
   stufe: undefined,
   pfad: undefined,
-  mediumUuid: undefined
+  mediumUuid: undefined,
 };
 
 export type Schwierigkeitsgrad =
-  'NOOP' |
-  'ALLE' |
-  'AB_NEUN' |
-  'DREI_VIER' |
-  'EINS' |
-  'EINS_ZWEI' |
-  'FUENF_SECHS' |
-  'GRUNDSCHULE' |
-  'IKID' |
-  'SEK_1' |
-  'SEK_2' |
-  'SIEBEN_ACHT' |
-  'VORSCHULE' |
-  'ZWEI';
+  | 'NOOP'
+  | 'ALLE'
+  | 'AB_NEUN'
+  | 'DREI_VIER'
+  | 'EINS'
+  | 'EINS_ZWEI'
+  | 'FUENF_SECHS'
+  | 'GRUNDSCHULE'
+  | 'IKID'
+  | 'SEK_1'
+  | 'SEK_2'
+  | 'SIEBEN_ACHT'
+  | 'VORSCHULE'
+  | 'ZWEI';
 
 export interface SelectableItem {
   readonly id: string | number;
   readonly name: string;
   // readonly selected: boolean;
-};
+}
 
 export interface SelectItemsComponentModel {
   ueberschriftAuswahlliste: string;
   ueberschriftGewaehlteItems: string;
   vorrat: SelectableItem[];
   gewaehlteItems: SelectableItem[];
-};
+}
 
 export const initialSelectItemsComponentModel: SelectItemsComponentModel = {
   ueberschriftAuswahlliste: '',
   ueberschriftGewaehlteItems: 'gewählt:',
   vorrat: [],
-  gewaehlteItems: []
+  gewaehlteItems: [],
 };
 
 export interface UploadedFile {
   readonly name: string;
-  readonly dataBase64: string
-};
+  readonly dataBase64: string;
+}
 
 export const initialUploadedFile: UploadedFile = {
   name: '',
-  dataBase64: ''
+  dataBase64: '',
 };
 
 export interface DeskriptorUI {
   readonly id: number;
   readonly name: string;
-};
+}
 
 export interface PageDefinition {
-  pageSize: number,
-  pageIndex: number,
-  sortDirection: string
-};
+  pageSize: number;
+  pageIndex: number;
+  sortDirection: string;
+}
 
 export interface PaginationState {
   anzahlTreffer: number;
-  pageDefinition: PageDefinition
-};
+  pageDefinition: PageDefinition;
+}
 
 export const initialPageDefinition: PageDefinition = {
   pageSize: 100,
   pageIndex: 0,
-  sortDirection: 'asc'
+  sortDirection: 'asc',
 };
 
 export const initialPaginationState: PaginationState = {
   anzahlTreffer: 0,
-  pageDefinition: initialPageDefinition
+  pageDefinition: initialPageDefinition,
 };
 
 export interface GeneratedImage {
   readonly width: number;
   readonly height: number;
   readonly data: string;
-};
+}
 
 export interface GeneratedImages {
   readonly imageFrage: GeneratedImage | undefined;
   readonly imageLoesung: GeneratedImage | undefined;
-};
+}
 
 // #### PrintDialoge
 export type OutputFormat = 'PDF' | 'PNG' | 'LATEX';
@@ -131,39 +131,25 @@ export type FontName = 'DRUCK_BY_WOK' | 'FIBEL_NORD' | 'FIBEL_SUED' | 'STANDARD'
 export type Verwendungszweck = 'ARBEITSBLATT' | 'KARTEI' | 'LATEX' | 'VORSCHAU';
 export type Schriftgroesse = 'HUGE' | 'LARGE' | 'NORMAL';
 
-export const anzeigeAntwortvorschlaegeSelectInput: string[] = [
-  'Ankreuztabelle', 'Buchstaben', 'Liste'
-];
+export const anzeigeAntwortvorschlaegeSelectInput: string[] = ['Ankreuztabelle', 'Buchstaben', 'Liste'];
 
 export const fontNamenSelectInput: string[] = [
   'Druckschrift (Leseanfänger)',
   'Fibel Nord',
   'Fibel Süd',
-  'Standardfont (LaTeX)'
+  'Standardfont (LaTeX)',
 ];
 
-export const verwendungszweckePublicSelectInput: string[] = [
-  'Kartei',
-  'Arbeitsblatt'
-];
+export const verwendungszweckePublicSelectInput: string[] = ['Kartei', 'Arbeitsblatt'];
 
-export const verwendungszweckeAutorenSelectInput: string[] = [
-  'Arbeitsblatt',
-  'Kartei',
-  'LaTeX',
-  'Vorschau'
-];
+export const verwendungszweckeAutorenSelectInput: string[] = ['Arbeitsblatt', 'Kartei', 'LaTeX', 'Vorschau'];
 
-export const schriftgroessenSelectInput: string[] = [
-  'normal',
-  'groß',
-  'sehr groß'
-];
+export const schriftgroessenSelectInput: string[] = ['normal', 'groß', 'sehr groß'];
 
 export interface GeneratedFile {
-  readonly fileName: string,
-  readonly fileData: Blob
-};
+  readonly fileName: string;
+  readonly fileData: Blob;
+}
 
 // dies sind die Parameter für Dialoge zum Generieren von Aufgabensammlungen oder Rätseln
 // Es muss gewählt werden können zwischen verschiedenen Antwortvorschlag-Layouts und Fonts
@@ -179,14 +165,14 @@ export interface SelectGeneratorParametersUIModel {
   schriftgroessen: string[];
   selectedSchriftgroesse: undefined;
   submitLabel: string;
-};
+}
 
 // //////////////////////////////////
 
 // Statistik
 export interface AnzahlabfrageErgebnis {
   readonly ergebnis: number;
-};
+}
 
 export function sortByName(items: SelectableItem[]): SelectableItem[] {
   return [...items].sort((a, b) => a.name.localeCompare(b.name, 'de'));

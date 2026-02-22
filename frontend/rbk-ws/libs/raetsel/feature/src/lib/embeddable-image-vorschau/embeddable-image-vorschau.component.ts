@@ -4,22 +4,21 @@ import { FileInfoComponent, FileInfoModel, SelectFileComponent, SelectFileModel 
 import { MatButtonModule } from '@angular/material/button';
 import { EmbeddableImagesFacade } from '@rbk-ws/embeddable-images/api';
 import { combineLatest, Subscription } from 'rxjs';
-import { EmbeddableImageContext, EmbeddableImageInfo, EmbeddableImageVorschau, Textart } from '@rbk-ws/embeddable-images/model';
+import {
+  EmbeddableImageContext,
+  EmbeddableImageInfo,
+  EmbeddableImageVorschau,
+  Textart,
+} from '@rbk-ws/embeddable-images/model';
 import { Configuration } from '@rbk-ws/shared/config';
 
 @Component({
-    selector: 'rbk-embeddable-image-vorschau',
-    imports: [
-        CommonModule,
-        MatButtonModule,
-        SelectFileComponent,
-        FileInfoComponent
-    ],
-    templateUrl: './embeddable-image-vorschau.component.html',
-    styleUrls: ['./embeddable-image-vorschau.component.scss']
+  selector: 'rbk-embeddable-image-vorschau',
+  imports: [CommonModule, MatButtonModule, SelectFileComponent, FileInfoComponent],
+  templateUrl: './embeddable-image-vorschau.component.html',
+  styleUrls: ['./embeddable-image-vorschau.component.scss'],
 })
 export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
-
   embeddableImagesFacade = inject(EmbeddableImagesFacade);
 
   @Input()
@@ -47,31 +46,29 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
     acceptMessage: 'erlaubte Dateitypen: eps',
     titel: 'Grafikdatei hochladen',
     beschreibung: 'Die neue Datei ersetzt die aktuell mittels \\includegraphics in LaTeX importierte Grafik.',
-    hinweis: undefined
+    hinweis: undefined,
   };
 
   #combinedSelectionSubscription: Subscription = new Subscription();
   #embeddableImageResponseSubscription: Subscription = new Subscription();
 
   ngOnInit(): void {
+    this.#combinedSelectionSubscription = combineLatest([
+      this.embeddableImagesFacade.selectedEmbeddableImageInfo$,
+      this.embeddableImagesFacade.selectedEmbeddableImageVorschau$,
+    ]).subscribe(([imageInfo, imageVorschau]) => {
+      this.#selectedEmbeddableImageInfo = imageInfo;
+      this.#selectedEmbeddableImageVorschau = imageVorschau;
+    });
 
-    this.#combinedSelectionSubscription = combineLatest([this.embeddableImagesFacade.selectedEmbeddableImageInfo$, this.embeddableImagesFacade.selectedEmbeddableImageVorschau$])
-      .subscribe(([imageInfo, imageVorschau]) => {
-        this.#selectedEmbeddableImageInfo = imageInfo;
-        this.#selectedEmbeddableImageVorschau = imageVorschau;
-      });
-
-
-
-    this.#embeddableImageResponseSubscription = this.embeddableImagesFacade.embeddableImageResponse$.subscribe(
-      () => {
-        if (this.#selectedEmbeddableImageInfo && this.#selectedEmbeddableImageVorschau) {
-          this.embeddableImagesFacade.vorschauLaden(this.#selectedEmbeddableImageInfo);
-        }
+    this.#embeddableImageResponseSubscription = this.embeddableImagesFacade.embeddableImageResponse$.subscribe(() => {
+      if (this.#selectedEmbeddableImageInfo && this.#selectedEmbeddableImageVorschau) {
+        this.embeddableImagesFacade.vorschauLaden(this.#selectedEmbeddableImageInfo);
       }
-    )
+    });
 
-    this.hinweisNichtExistierendeGrafik = 'Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen. Zum Hochladen bitte Rätsel bearbeiten.';
+    this.hinweisNichtExistierendeGrafik =
+      'Falls der Pfad stimmt, wurde die Datei noch nicht hochgeladen. Zum Hochladen bitte Rätsel bearbeiten.';
   }
 
   ngOnDestroy(): void {
@@ -81,7 +78,6 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
   }
 
   showSelectFileComponent(): boolean {
-
     if (this.fileInfo) {
       return false;
     }
@@ -95,13 +91,16 @@ export class EmbeddableImageVorschauComponent implements OnInit, OnDestroy {
 
   uploadFile(): void {
     if (this.fileInfo) {
-
       const textart: Textart = this.#selectedEmbeddableImageInfo ? this.#selectedEmbeddableImageInfo.textart : 'FRAGE';
 
       const context: EmbeddableImageContext = { raetselId: this.raetselId, textart: textart };
 
       if (this.#selectedEmbeddableImageVorschau) {
-        this.embeddableImagesFacade.replaceEmbeddableImage(this.#selectedEmbeddableImageVorschau.pfad, context, this.fileInfo.file);
+        this.embeddableImagesFacade.replaceEmbeddableImage(
+          this.#selectedEmbeddableImageVorschau.pfad,
+          context,
+          this.fileInfo.file
+        );
       }
       this.fileInfo = undefined;
     }

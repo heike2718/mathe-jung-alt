@@ -1,1 +1,1 @@
-export { medienRoutes } from './lib/medien.routes'; 
+export { medienRoutes } from './lib/medien.routes';

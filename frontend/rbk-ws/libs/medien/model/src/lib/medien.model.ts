@@ -9,7 +9,7 @@ export interface MediumDto {
   readonly kommentar: string | undefined;
   readonly schreibgeschuetzt: boolean;
   readonly ownMedium: boolean;
-};
+}
 
 export const initialMediumDto: MediumDto = {
   id: 'neu',
@@ -19,21 +19,20 @@ export const initialMediumDto: MediumDto = {
   url: undefined,
   kommentar: undefined,
   schreibgeschuetzt: true,
-  ownMedium: true
+  ownMedium: true,
 };
-
 
 export interface MediensucheTrefferItem {
   readonly id: string;
   readonly medienart: Medienart;
   readonly titel: string;
   readonly kommentar: string | undefined;
-};
+}
 
 export interface MediensucheResult {
   readonly trefferGesamt: number;
   readonly treffer: MediensucheTrefferItem[];
-};
+}
 
 export interface LinkedRaetsel {
   readonly id: string;
@@ -43,8 +42,7 @@ export interface LinkedRaetsel {
   readonly herkunftstyp: Herkunftstyp;
   readonly quellenangabe: string;
   readonly pfad: string;
-};
-
+}
 
 // ////////////////////////////////////////////////////////////////////////////////////
 //    helper classes for the mapping between Java enums and UI-Models
@@ -53,19 +51,17 @@ export interface LinkedRaetsel {
 export interface GuiMedienart {
   readonly id: Medienart;
   readonly label: string;
-};
+}
 
 export const initialGuiMedienart: GuiMedienart = {
   id: 'NOOP',
-  label: ''
+  label: '',
 };
 export class GuiMedienartenMap {
-
   #medienarten: Map<Medienart, string> = new Map();
   #medienartenInvers: Map<string, Medienart> = new Map();
 
   constructor() {
-
     this.#medienarten.set('NOOP', '');
     this.#medienarten.set('BUCH', 'Buch');
     this.#medienarten.set('INTERNET', 'Internet');
@@ -78,15 +74,12 @@ export class GuiMedienartenMap {
   }
 
   public getMedienartOfLabel(label: string): Medienart {
-
     const value: Medienart | undefined = this.#medienartenInvers.get(label);
     return value ? value : 'NOOP';
   }
 
   public getGuiMedienart(refTyp: Medienart): GuiMedienart {
-
     if (this.#medienarten.has(refTyp)) {
-
       const label = this.#medienarten.get(refTyp);
 
       if (label) {
@@ -100,7 +93,6 @@ export class GuiMedienartenMap {
   }
 
   public toGuiArray(): GuiMedienart[] {
-
     const result: GuiMedienart[] = [];
     this.#medienarten.forEach((l: string, key: Medienart) => {
       result.push({ id: key, label: l });
@@ -110,11 +102,9 @@ export class GuiMedienartenMap {
   }
 
   public getLabelsSorted(): string[] {
-
     const result: string[] = [];
 
     this.toGuiArray().forEach(element => result.push(element.label));
     return result;
   }
-
-};
+}

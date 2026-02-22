@@ -2,7 +2,7 @@
   "name": "embeddable-images-api",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/embeddable-images/api/src",
-  "prefix": "mja-ws",
+  "prefix": "lib",
   "projectType": "library",
   "tags": ["type:api"],
   "targets": {

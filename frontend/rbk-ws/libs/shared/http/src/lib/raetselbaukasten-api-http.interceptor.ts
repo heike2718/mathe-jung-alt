@@ -6,21 +6,18 @@ import { generateUUID } from '@rbk-ws/shared/util';
 
 @Injectable()
 export class RaetselbaukastenAPIHttpInterceptor implements HttpInterceptor {
-
   #config = inject(Configuration);
 
-  intercept(
-    req: HttpRequest<unknown>,
-    next: HttpHandler
-  ): Observable<HttpEvent<unknown>> {
-
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const url = this.#config.baseUrl + req.url;
 
     const auth = localStorage.getItem('mjaCorellationId');
-    
+
     const correlationId = auth ? auth : generateUUID();
 
-    const headers: HttpHeaders = req.headers.append('X-CLIENT-ID', this.#config.clientId).append('X-CORRELATION-ID', correlationId);
+    const headers: HttpHeaders = req.headers
+      .append('X-CLIENT-ID', this.#config.clientId)
+      .append('X-CORRELATION-ID', correlationId);
 
     // console.log('correlationId=' + correlationId);
 

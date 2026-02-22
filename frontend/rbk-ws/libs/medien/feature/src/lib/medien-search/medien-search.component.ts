@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,24 +22,23 @@ import { Subscription, of, tap } from 'rxjs';
 import { MediensucheTrefferItem } from '@rbk-ws/medien/model';
 
 @Component({
-    selector: 'rbk-medien-search',
-    imports: [
-        CommonModule,
-        MatTableModule,
-        MatButtonModule,
-        MatPaginatorModule,
-        MatIconModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatSelectModule
-    ],
-    templateUrl: './medien-search.component.html',
-    styleUrl: './medien-search.component.scss'
+  selector: 'rbk-medien-search',
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+  ],
+  templateUrl: './medien-search.component.html',
+  styleUrl: './medien-search.component.scss',
 })
 export class MedienSearchComponent implements OnInit, AfterViewInit, OnDestroy {
-
   dataSource = inject(MedienDataSource);
-  anzahlMedien: number = 0;
+  anzahlMedien = 0;
   suchstring = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -47,8 +55,7 @@ export class MedienSearchComponent implements OnInit, AfterViewInit, OnDestroy {
   #matPaginatorSubscription: Subscription = new Subscription();
   #paginationStateSubscription: Subscription = new Subscription();
 
-  constructor(private changeDetector: ChangeDetectorRef) {
-  }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   @HostListener('window:resize', ['$event'])
   getScreenSize() {
@@ -56,25 +63,19 @@ export class MedienSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.#scrWidth = window.innerWidth;
   }
 
-
   ngOnInit(): void {
-
-    this.#paginationStateSubscription = this.#medienFacade.paginationState$.subscribe(
-      (state: PaginationState) => {
-        this.anzahlMedien = state.anzahlTreffer;
-        this.#pageIndex = state.pageDefinition.pageIndex;
-      }
-    );
+    this.#paginationStateSubscription = this.#medienFacade.paginationState$.subscribe((state: PaginationState) => {
+      this.anzahlMedien = state.anzahlTreffer;
+      this.#pageIndex = state.pageDefinition.pageIndex;
+    });
 
     this.#triggerSearch();
   }
 
   ngAfterViewInit(): void {
-
-    // fixes NG0100: Expression has changed after it was checked 
+    // fixes NG0100: Expression has changed after it was checked
     // https://angular.io/errors/NG0100
     setTimeout(() => {
-
       // this.#initPaginator();
       // hier den init-Kram oder
     }, 0);
@@ -82,52 +83,45 @@ export class MedienSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     // oder explizit nochmal changeDetection triggern
     this.#initPaginator();
 
-    this.#matPaginatorSubscription = of(this.paginator.page).pipe(
-      tap(() => {
-        this.#paginationState = { ...this.#paginationState, pageDefinition: { ...this.#paginationState.pageDefinition, sortDirection: 'asc' } };
-        this.#triggerSearch();
-      })
-    ).subscribe();
+    this.#matPaginatorSubscription = of(this.paginator.page)
+      .pipe(
+        tap(() => {
+          this.#paginationState = {
+            ...this.#paginationState,
+            pageDefinition: { ...this.#paginationState.pageDefinition, sortDirection: 'asc' },
+          };
+          this.#triggerSearch();
+        })
+      )
+      .subscribe();
 
     // oder explizit nochmal changeDetection triggern
     this.changeDetector.detectChanges();
   }
 
   ngOnDestroy(): void {
-
     this.#matPaginatorSubscription.unsubscribe();
     this.#paginationStateSubscription.unsubscribe();
   }
 
-  resetFilter(): void {
-
-  }
-
   neuesMedium(): void {
-
     this.#medienFacade.createAndEditMedium();
-
   }
 
   getDisplayedColumns(): string[] {
-
     return ['medienart', 'titel', 'kommentar'];
   }
 
   onRowClicked(medium: MediensucheTrefferItem): void {
-
     // const medium: Raetsel = <Raetsel>row;
     this.#medienFacade.selectMedium(medium);
   }
 
   #initPaginator(): void {
-
     this.paginator.pageIndex = this.#pageIndex;
   }
 
-
   #triggerSearch(): void {
-
     if (this.#adjusting) {
       return;
     }
@@ -135,8 +129,8 @@ export class MedienSearchComponent implements OnInit, AfterViewInit, OnDestroy {
     const pageDefinition: PageDefinition = {
       pageIndex: this.paginator ? this.paginator.pageIndex : this.#pageIndex,
       pageSize: this.paginator ? this.paginator.pageSize : 20,
-      sortDirection: 'asc'
-    }
+      sortDirection: 'asc',
+    };
 
     this.#medienFacade.triggerSearch(this.suchstring, pageDefinition);
   }

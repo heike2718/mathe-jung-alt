@@ -1,10 +1,11 @@
 <h2>Suchfilter</h2>
 
 <mat-form-field>
-    <mat-label>Text</mat-label>
-    <input matInput placeholder="Text" #input class="mb-2 p-5">
+  <mat-label>Text</mat-label>
+  <input matInput placeholder="Text" #input class="mb-2 p-5" />
 </mat-form-field>
 <ng-container>
-    <rbk-select-items [model]="SelectItemsComponentModel"
-        (modelChanged)="onSelectItemsComponentModelChanged($event)"></rbk-select-items>
+  <rbk-select-items
+    [model]="SelectItemsComponentModel"
+    (modelChanged)="onSelectItemsComponentModelChanged($event)"></rbk-select-items>
 </ng-container>

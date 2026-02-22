@@ -5,21 +5,34 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { FrageLoesungImagesComponent, JaNeinDialogComponent, JaNeinDialogData, GeneratorParametersDialogComponent } from '@rbk-ws/shared/components';
 import {
-  anzeigeAntwortvorschlaegeSelectInput, FontName, fontNamenSelectInput, GeneratedImages, LaTeXLayoutAntwortvorschlaege,
+  FrageLoesungImagesComponent,
+  JaNeinDialogComponent,
+  JaNeinDialogData,
+  GeneratorParametersDialogComponent,
+} from '@rbk-ws/shared/components';
+import {
+  anzeigeAntwortvorschlaegeSelectInput,
+  FontName,
+  fontNamenSelectInput,
+  GeneratedImages,
+  LaTeXLayoutAntwortvorschlaege,
   Schriftgroesse,
   schriftgroessenSelectInput,
   SelectGeneratorParametersUIModel,
   User,
   verwendungszweckeAutorenSelectInput,
-  verwendungszweckePublicSelectInput
+  verwendungszweckePublicSelectInput,
 } from '@rbk-ws/core/model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Subscription } from 'rxjs';
-import { EditAufgabensammlungselementPayload, Aufgabensammlungselement, AufgabensammlungDetails } from '@rbk-ws/aufgabensammlungen/model';
+import {
+  EditAufgabensammlungselementPayload,
+  Aufgabensammlungselement,
+  AufgabensammlungDetails,
+} from '@rbk-ws/aufgabensammlungen/model';
 import { AufgabensammlungselementDialogData } from '../aufgabensammlungselement-dialog/aufgabensammlungselement-dialog.data';
 import { AufgabensammlungselementDialogComponent } from '../aufgabensammlungselement-dialog/aufgabensammlungenselement-dialog.component';
 import { AufgabensammlungselementeComponent } from '../aufgabensammlungselement/aufgabensammlungselemente.component';
@@ -30,34 +43,33 @@ import { FormsModule } from '@angular/forms';
 import { AuthFacade } from '@rbk-ws/core/api';
 
 @Component({
-    selector: 'rbk-aufgabensammlungen-details',
-    imports: [
-        CommonModule,
-        FormsModule,
-        MatBadgeModule,
-        MatButtonModule,
-        MatCardModule,
-        MatCheckboxModule,
-        MatDialogModule,
-        MatGridListModule,
-        MatInputModule,
-        MatListModule,
-        MatFormFieldModule,
-        FrageLoesungImagesComponent,
-        AufgabensammlungselementeComponent
-    ],
-    templateUrl: './aufgabensammlungen-details.component.html',
-    styleUrls: ['./aufgabensammlungen-details.component.scss']
+  selector: 'rbk-aufgabensammlungen-details',
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatBadgeModule,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatGridListModule,
+    MatInputModule,
+    MatListModule,
+    MatFormFieldModule,
+    FrageLoesungImagesComponent,
+    AufgabensammlungselementeComponent,
+  ],
+  templateUrl: './aufgabensammlungen-details.component.html',
+  styleUrls: ['./aufgabensammlungen-details.component.scss'],
 })
 export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
-
   aufgabensammlungenFacade = inject(AufgabensammlungenFacade);
-  
+
   user!: User;
 
-  sammlung!: AufgabensammlungDetails;  
+  sammlung!: AufgabensammlungDetails;
 
-  selectedElement: Aufgabensammlungselement | undefined
+  selectedElement: Aufgabensammlungselement | undefined;
 
   dialog = inject(MatDialog);
 
@@ -73,24 +85,22 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   #raetselFacade = inject(RaetselFacade);
   #authFacade = inject(AuthFacade);
 
-  
-
   #aufgabensammlungSubscription = new Subscription();
   #imagesSubscription = new Subscription();
   #aufgabensammlungselementSubscription = new Subscription();
   #userSubscription = new Subscription();
 
   ngOnInit(): void {
-
     this.#aufgabensammlungSubscription = this.aufgabensammlungenFacade.aufgabensammlungDetails$.subscribe(
-      (aufgabensammlung) => {
+      aufgabensammlung => {
         this.sammlung = aufgabensammlung;
         this.freigegeben = aufgabensammlung.freigegeben;
         this.privat = aufgabensammlung.privat;
-      });
+      }
+    );
 
-    this.#aufgabensammlungselementSubscription = this.aufgabensammlungenFacade.selectedAufgabensammlungselement$.subscribe(
-      (element) => {
+    this.#aufgabensammlungselementSubscription =
+      this.aufgabensammlungenFacade.selectedAufgabensammlungselement$.subscribe(element => {
         this.selectedElement = element;
         if (element) {
           this.schluessel = element.raetselSchluessel;
@@ -101,12 +111,13 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
           this.nummer = '';
           this.punkte = '';
         }
-      }
+      });
+
+    this.#userSubscription = this.#authFacade.user$.subscribe(user => (this.user = user));
+
+    this.#imagesSubscription = this.aufgabensammlungenFacade.selectedElementImages$.subscribe(
+      images => (this.images = images)
     );
-
-    this.#userSubscription = this.#authFacade.user$.subscribe(user => this.user = user);
-
-    this.#imagesSubscription = this.aufgabensammlungenFacade.selectedElementImages$.subscribe((images) => this.images = images);
   }
 
   ngOnDestroy(): void {
@@ -125,15 +136,12 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   gotoRaetselDetails(): void {
-
     if (this.schluessel) {
       this.#raetselFacade.selectRaetsel(this.schluessel);
     }
-
   }
 
   openGenerateDialog(): void {
-
     if (this.getAufgabensammlungID().length === 0) {
       return;
     }
@@ -149,51 +157,73 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
       selectedFontName: undefined,
       schriftgroessen: schriftgroessenSelectInput,
       selectedSchriftgroesse: undefined,
-      submitLabel: 'herunterladen'
-    }
+      submitLabel: 'herunterladen',
+    };
 
     const dialogRef = this.dialog.open(GeneratorParametersDialogComponent, {
       height: 'auto',
       width: '700px',
-      data: dialogData
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
       if (result && dialogData.selectedVerwendungszweck) {
-
         let font: FontName = 'STANDARD';
         let size: Schriftgroesse = 'NORMAL';
         let layout: LaTeXLayoutAntwortvorschlaege = 'NOOP';
 
         if (dialogData.selectedLayoutAntwortvorschlaege) {
           switch (dialogData.selectedLayoutAntwortvorschlaege) {
-            case 'Ankreuztabelle': layout = 'ANKREUZTABELLE'; break;
-            case 'Buchstaben': layout = 'BUCHSTABEN'; break;
-            case 'Liste': layout = 'DESCRIPTION'; break;
+            case 'Ankreuztabelle':
+              layout = 'ANKREUZTABELLE';
+              break;
+            case 'Buchstaben':
+              layout = 'BUCHSTABEN';
+              break;
+            case 'Liste':
+              layout = 'DESCRIPTION';
+              break;
           }
         }
 
         if (dialogData.selectedSchriftgroesse) {
           switch (dialogData.selectedSchriftgroesse) {
-            case 'groß': size = 'LARGE'; break;
-            case 'sehr groß': size = 'HUGE'; break;
+            case 'groß':
+              size = 'LARGE';
+              break;
+            case 'sehr groß':
+              size = 'HUGE';
+              break;
           }
         }
 
         if (dialogData.selectedFontName) {
           switch (dialogData.selectedFontName) {
-            case 'Druckschrift (Leseanfänger)': font = 'DRUCK_BY_WOK'; break;
-            case 'Fibel Nord': font = 'FIBEL_NORD'; break;
-            case 'Fibel Süd': font = 'FIBEL_SUED'; break;
+            case 'Druckschrift (Leseanfänger)':
+              font = 'DRUCK_BY_WOK';
+              break;
+            case 'Fibel Nord':
+              font = 'FIBEL_NORD';
+              break;
+            case 'Fibel Süd':
+              font = 'FIBEL_SUED';
+              break;
           }
         }
 
         switch (dialogData.selectedVerwendungszweck) {
-          case 'Arbeitsblatt': this.aufgabensammlungenFacade.generiereArbeitsblatt(this.getAufgabensammlungID(), font, size, layout); break;
-          case 'Kartei': this.aufgabensammlungenFacade.generiereKnobelkartei(this.getAufgabensammlungID(), font, size, layout); break;
-          case 'Vorschau': this.aufgabensammlungenFacade.generiereVorschau(this.getAufgabensammlungID(), font, size, layout); break;
-          case 'LaTeX': this.aufgabensammlungenFacade.generiereLaTeX(this.getAufgabensammlungID(), font, size, layout); break;
+          case 'Arbeitsblatt':
+            this.aufgabensammlungenFacade.generiereArbeitsblatt(this.getAufgabensammlungID(), font, size, layout);
+            break;
+          case 'Kartei':
+            this.aufgabensammlungenFacade.generiereKnobelkartei(this.getAufgabensammlungID(), font, size, layout);
+            break;
+          case 'Vorschau':
+            this.aufgabensammlungenFacade.generiereVorschau(this.getAufgabensammlungID(), font, size, layout);
+            break;
+          case 'LaTeX':
+            this.aufgabensammlungenFacade.generiereLaTeX(this.getAufgabensammlungID(), font, size, layout);
+            break;
         }
       }
     });
@@ -212,14 +242,13 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   openNeuesAufgabensammlungselementDialog(): void {
-
     const dialogData: AufgabensammlungselementDialogData = {
       titel: 'Neues Element',
       id: 'neu',
       modusAendern: false,
       nummer: '',
       schluessel: '',
-      punkte: 0
+      punkte: 0,
     };
 
     this.#initAndOpenEditElementDialog(dialogData);
@@ -230,14 +259,13 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   onEditElement($element: Aufgabensammlungselement): void {
-
     const dialogData: AufgabensammlungselementDialogData = {
       titel: 'Element ändern',
       id: $element.id,
       modusAendern: true,
       nummer: $element.nummer,
       schluessel: $element.raetselSchluessel,
-      punkte: $element.punkte
+      punkte: $element.punkte,
     };
 
     this.#initAndOpenEditElementDialog(dialogData);
@@ -248,7 +276,6 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   onShowImagesElement($element: Aufgabensammlungselement): void {
-
     this.aufgabensammlungenFacade.selectAufgabensammlungselement($element);
   }
 
@@ -256,11 +283,10 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AufgabensammlungselementDialogComponent, {
       height: 'auto',
       width: '500px',
-      data: dialogData
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
       if (result && this.sammlung) {
         const data: AufgabensammlungselementDialogData = result as AufgabensammlungselementDialogData;
         this.#saveElement(data);
@@ -269,29 +295,26 @@ export class AufgabensammlungDetailsComponent implements OnInit, OnDestroy {
   }
 
   #saveElement(data: AufgabensammlungselementDialogData): void {
-
     const payload: EditAufgabensammlungselementPayload = {
       id: data.id,
       raetselSchluessel: data.schluessel,
       nummer: data.nummer,
-      punkte: data.punkte
+      punkte: data.punkte,
     };
 
     this.aufgabensammlungenFacade.saveAufgabensammlungselement(this.getAufgabensammlungID(), payload);
-
   }
 
   #openConfirmLoeschenDialog(element: Aufgabensammlungselement): void {
-
     const dialogData: JaNeinDialogData = {
       frage: 'Soll das Element der Aufgabensammlung wirklich gelöscht werden?',
-      hinweis: 'weg ist weg'
-    }
+      hinweis: 'weg ist weg',
+    };
 
     const dialogRef = this.dialog.open(JaNeinDialogComponent, {
       height: '300px',
       width: '700px',
-      data: dialogData
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe(result => {

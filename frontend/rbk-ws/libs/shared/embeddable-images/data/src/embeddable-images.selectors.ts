@@ -1,37 +1,34 @@
-import { createSelector } from "@ngrx/store";
-import { embeddableImagesFeature } from './embeddable-images.reducer'
+import { createSelector } from '@ngrx/store';
+import { embeddableImagesFeature } from './embeddable-images.reducer';
 
 const { selectEmbeddableImagesState } = embeddableImagesFeature;
 
-const embeddableImagesResponse = createSelector(
-    selectEmbeddableImagesState,
-    ((state) => state.embeddableImagesResponse)
-);
+const embeddableImagesResponse = createSelector(selectEmbeddableImagesState, state => state.embeddableImagesResponse);
 
 const embeddableImageVorschauGeladen = createSelector(
-    selectEmbeddableImagesState,
-    (state) => state.embeddableImageVorschauGeladen
+  selectEmbeddableImagesState,
+  state => state.embeddableImageVorschauGeladen
 );
 
 const embeddableImageVorschauPfad = createSelector(
-    selectEmbeddableImagesState,
-    (state) => state.embeddableImageVorschauPfad
+  selectEmbeddableImagesState,
+  state => state.embeddableImageVorschauPfad
 );
 
 const selectedEmbeddableImageInfo = createSelector(
-    selectEmbeddableImagesState,
-    (state) => state.selectedEmbeddableImageInfo
+  selectEmbeddableImagesState,
+  state => state.selectedEmbeddableImageInfo
 );
 
 const selectedEmbeddableImageVorschau = createSelector(
-    selectEmbeddableImagesState,
-    (state) => state.selectedEmbeddableImageVorschau
+  selectEmbeddableImagesState,
+  state => state.selectedEmbeddableImageVorschau
 );
 
 export const fromEmbeddableImages = {
-    embeddableImagesResponse,
-    embeddableImageVorschauGeladen,
-    embeddableImageVorschauPfad,
-    selectedEmbeddableImageInfo,
-    selectedEmbeddableImageVorschau
+  embeddableImagesResponse,
+  embeddableImageVorschauGeladen,
+  embeddableImageVorschauPfad,
+  selectedEmbeddableImageInfo,
+  selectedEmbeddableImageVorschau,
 };

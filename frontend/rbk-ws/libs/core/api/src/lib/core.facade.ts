@@ -1,90 +1,86 @@
-import { inject, Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { coreDeskriptorenActions, coreAutorActions, fromCoreAutor, fromCoreDeskriptoren, ImagesHttpService, fromStatistik, coreStatistikActions } from "@rbk-ws/core/data";
-import { DeskriptorUI, GeneratedImages, QuelleDto } from "@rbk-ws/core/model";
-import { Store } from "@ngrx/store";
-import { Observable, tap } from "rxjs";
+import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import {
+  coreDeskriptorenActions,
+  coreAutorActions,
+  fromCoreAutor,
+  fromCoreDeskriptoren,
+  ImagesHttpService,
+  fromStatistik,
+  coreStatistikActions,
+} from '@rbk-ws/core/data';
+import { DeskriptorUI, GeneratedImages, QuelleDto } from '@rbk-ws/core/model';
+import { Store } from '@ngrx/store';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class CoreFacade {
+  #store = inject(Store);
+  #router = inject(Router);
+  #imagesHttpService = inject(ImagesHttpService);
 
-    #store = inject(Store);
-    #router = inject(Router);
-    #imagesHttpService = inject(ImagesHttpService);
+  #deskriptorenLoaded = false;
+  #autorLoaded = false;
 
-    #deskriptorenLoaded = false;
-    #autorLoaded = false;
+  existsQuelleEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.existsQuelleEigenkreation);
+  notExistsQuelleEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.notExistsQuelleEigenkreation);
 
-    existsQuelleEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.existsQuelleEigenkreation);
-    notExistsQuelleEigenkreation$: Observable<boolean> = this.#store.select(fromCoreAutor.notExistsQuelleEigenkreation);    
+  autorLoaded$: Observable<boolean> = this.#store.select(fromCoreAutor.quelleEigenkreationLoaded);
+  autor$: Observable<QuelleDto> = this.#store.select(fromCoreAutor.quelleEigenkreation);
 
-    autorLoaded$: Observable<boolean> = this.#store.select(fromCoreAutor.quelleEigenkreationLoaded);
-        autor$: Observable<QuelleDto> = this.#store.select(fromCoreAutor.quelleEigenkreation);
+  deskriptorenUILoaded$: Observable<boolean> = this.#store.select(fromCoreDeskriptoren.isDeskriptorenUILoaded);
+  alleDeskriptoren$: Observable<DeskriptorUI[]> = this.#store.select(fromCoreDeskriptoren.deskriptotrenUI);
 
+  anzahlPublicRaetselLoaded$: Observable<boolean> = this.#store.select(fromStatistik.isAnzahlPublicRaetselLoaded);
+  anzahlPublicRaetsel$: Observable<number> = this.#store.select(fromStatistik.anzahlPublicRaetsel);
 
-    deskriptorenUILoaded$: Observable<boolean> = this.#store.select(fromCoreDeskriptoren.isDeskriptorenUILoaded);
-    alleDeskriptoren$: Observable<DeskriptorUI[]> = this.#store.select(fromCoreDeskriptoren.deskriptotrenUI);
+  constructor() {
+    this.deskriptorenUILoaded$.pipe(tap((loaded: boolean) => (this.#deskriptorenLoaded = loaded))).subscribe();
 
-    anzahlPublicRaetselLoaded$: Observable<boolean> = this.#store.select(fromStatistik.isAnzahlPublicRaetselLoaded);
-    anzahlPublicRaetsel$: Observable<number> = this.#store.select(fromStatistik.anzahlPublicRaetsel);
+    this.autorLoaded$.pipe(tap(loaded => (this.#autorLoaded = loaded))).subscribe();
+  }
 
-
-
-    constructor() {
-        this.deskriptorenUILoaded$.pipe(
-            tap((loaded: boolean) => this.#deskriptorenLoaded = loaded)
-        ).subscribe();
-
-        this.autorLoaded$.pipe(
-            tap((loaded) => this.#autorLoaded = loaded)
-        ).subscribe();
-       
+  public loadAutor(): void {
+    if (this.#autorLoaded) {
+      return;
     }
 
-    public loadAutor(): void {
+    this.#store.dispatch(coreAutorActions.lOAD_AUTOR());
+  }
 
-        if (this.#autorLoaded) {
-            return;
-        }
+  public replaceAutor(quelle: QuelleDto): void {
+    this.#store.dispatch(coreAutorActions.cORE_AUTOR_REPLACED({ quelle: quelle }));
+  }
 
-        this.#store.dispatch(coreAutorActions.lOAD_AUTOR());
+  public loadDeskriptoren(): void {
+    if (this.#deskriptorenLoaded) {
+      return;
     }
+    this.#store.dispatch(coreDeskriptorenActions.lOAD_DESKRIPTOREN());
+  }
 
-    public replaceAutor(quelle: QuelleDto): void {
+  public loadAnzahlPublicRaetsel(): void {
+    this.#store.dispatch(coreStatistikActions.lOAD_ANZAHL_RAETSEL_PUBLIC());
+  }
 
-        this.#store.dispatch(coreAutorActions.cORE_AUTOR_REPLACED({quelle: quelle}));
-    }
+  public handleLogout(): void {
+    this.#removeCoreDeskriptoren();
+    this.#removeAutor();
+    this.#router.navigateByUrl('/');
+  }
 
-    public loadDeskriptoren(): void {
-        if (this.#deskriptorenLoaded) {
-            return;
-        }
-        this.#store.dispatch(coreDeskriptorenActions.lOAD_DESKRIPTOREN());
-    }
+  public loadRaetselPNGs(schluessel: string): Observable<GeneratedImages> {
+    return this.#imagesHttpService.loadRaetselPNGs(schluessel);
+  }
 
-    public loadAnzahlPublicRaetsel(): void{
-        this.#store.dispatch(coreStatistikActions.lOAD_ANZAHL_RAETSEL_PUBLIC());
-    }
+  #removeAutor(): void {
+    this.#store.dispatch(coreAutorActions.rEMOVE_AUTOR());
+    console.log('coreQuelleActions.rEMOVE_AUTOR() called');
+  }
 
-    public handleLogout(): void {        
-        this.#removeCoreDeskriptoren();
-        this.#removeAutor;
-        this.#router.navigateByUrl('/');
-    }
-
-    public loadRaetselPNGs(schluessel: string): Observable<GeneratedImages> {
-        return this.#imagesHttpService.loadRaetselPNGs(schluessel);
-    }
-
-    #removeAutor(): void {
-        this.#store.dispatch(coreAutorActions.rEMOVE_AUTOR());
-        console.log('coreQuelleActions.rEMOVE_AUTOR() called')
-    }
-
-    #removeCoreDeskriptoren(): void {       
-        this.#store.dispatch(coreDeskriptorenActions.cORE_DESKRIPTOREN_REMOVE());
-        
-    }
+  #removeCoreDeskriptoren(): void {
+    this.#store.dispatch(coreDeskriptorenActions.cORE_DESKRIPTOREN_REMOVE());
+  }
 }
